@@ -83,6 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
 | `kustomizeController.enabled`                                           | Enable Kustomize Controller                                                                                                                                     | `true`                                        |
 | `kustomizeController.installCRDs`                                       | Flag to install Kustomize Controller CRDs                                                                                                                       | `true`                                        |
+| `kustomizeController.watchAllNamespaces`                                | Watch for custom resources in all namespaces                                                                                                                    | `true`                                        |
 | `kustomizeController.image.registry`                                    | Kustomize Controller image registry                                                                                                                             | `REGISTRY_NAME`                               |
 | `kustomizeController.image.repository`                                  | Kustomize Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-kustomize-controller` |
 | `kustomizeController.image.digest`                                      | Kustomize Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                          |
@@ -121,7 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kustomizeController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                     | `[]`                                          |
 | `kustomizeController.podSecurityContext.fsGroup`                        | Set Kustomize Controller pod's Security Context fsGroup                                                                                                         | `1001`                                        |
 | `kustomizeController.containerSecurityContext.enabled`                  | Enabled Kustomize Controller containers' Security Context                                                                                                       | `true`                                        |
-| `kustomizeController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                | `{}`                                          |
+| `kustomizeController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                | `nil`                                         |
 | `kustomizeController.containerSecurityContext.runAsUser`                | Set Kustomize Controller containers' Security Context runAsUser                                                                                                 | `1001`                                        |
 | `kustomizeController.containerSecurityContext.runAsNonRoot`             | Set Kustomize Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                        |
 | `kustomizeController.containerSecurityContext.privileged`               | Set Kustomize Controller containers' Security Context privileged                                                                                                | `false`                                       |
@@ -131,6 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kustomizeController.containerSecurityContext.seccompProfile.type`      | Set Kustomize Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                              |
 | `kustomizeController.command`                                           | Override default container command (useful when using custom images)                                                                                            | `[]`                                          |
 | `kustomizeController.args`                                              | Override default container args (useful when using custom images)                                                                                               | `[]`                                          |
+| `kustomizeController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                              | `true`                                        |
 | `kustomizeController.hostAliases`                                       | Kustomize Controller pods host aliases                                                                                                                          | `[]`                                          |
 | `kustomizeController.podLabels`                                         | Extra labels for Kustomize Controller pods                                                                                                                      | `{}`                                          |
 | `kustomizeController.podAnnotations`                                    | Annotations for Kustomize Controller pods                                                                                                                       | `{}`                                          |
@@ -166,14 +168,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kustomize Controller RBAC Parameters
 
-| Name                                                              | Description                                                      | Value  |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `kustomizeController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `kustomizeController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `kustomizeController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `kustomizeController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `kustomizeController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `kustomizeController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                              | Description                                                      | Value   |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `kustomizeController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `kustomizeController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `kustomizeController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `kustomizeController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `kustomizeController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `kustomizeController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Kustomize Controller Metrics Parameters
 
@@ -209,6 +211,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `helmController.enabled`                                           | Enable Helm Controller                                                                                                                                     | `true`                                   |
 | `helmController.installCRDs`                                       | Flag to install Helm Controller CRDs                                                                                                                       | `true`                                   |
+| `helmController.watchAllNamespaces`                                | Watch for custom resources in all namespaces                                                                                                               | `true`                                   |
 | `helmController.image.registry`                                    | Helm Controller image registry                                                                                                                             | `REGISTRY_NAME`                          |
 | `helmController.image.repository`                                  | Helm Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-helm-controller` |
 | `helmController.image.digest`                                      | Helm Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                     |
@@ -247,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `helmController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                | `[]`                                     |
 | `helmController.podSecurityContext.fsGroup`                        | Set Helm Controller pod's Security Context fsGroup                                                                                                         | `1001`                                   |
 | `helmController.containerSecurityContext.enabled`                  | Enabled Helm Controller containers' Security Context                                                                                                       | `true`                                   |
-| `helmController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                           | `{}`                                     |
+| `helmController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                           | `nil`                                    |
 | `helmController.containerSecurityContext.runAsUser`                | Set Helm Controller containers' Security Context runAsUser                                                                                                 | `1001`                                   |
 | `helmController.containerSecurityContext.runAsNonRoot`             | Set Helm Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                   |
 | `helmController.containerSecurityContext.privileged`               | Set Helm Controller containers' Security Context privileged                                                                                                | `false`                                  |
@@ -257,6 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `helmController.containerSecurityContext.seccompProfile.type`      | Set Helm Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                         |
 | `helmController.command`                                           | Override default container command (useful when using custom images)                                                                                       | `[]`                                     |
 | `helmController.args`                                              | Override default container args (useful when using custom images)                                                                                          | `[]`                                     |
+| `helmController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                         | `true`                                   |
 | `helmController.hostAliases`                                       | Helm Controller pods host aliases                                                                                                                          | `[]`                                     |
 | `helmController.podLabels`                                         | Extra labels for Helm Controller pods                                                                                                                      | `{}`                                     |
 | `helmController.podAnnotations`                                    | Annotations for Helm Controller pods                                                                                                                       | `{}`                                     |
@@ -292,14 +296,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Helm Controller RBAC Parameters
 
-| Name                                                         | Description                                                      | Value  |
-| ------------------------------------------------------------ | ---------------------------------------------------------------- | ------ |
-| `helmController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `helmController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `helmController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `helmController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `helmController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `helmController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                         | Description                                                      | Value   |
+| ------------------------------------------------------------ | ---------------------------------------------------------------- | ------- |
+| `helmController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `helmController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `helmController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `helmController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `helmController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `helmController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Helm Controller Metrics Parameters
 
@@ -335,6 +339,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
 | `sourceController.enabled`                                           | Enable Source Controller                                                                                                                                     | `true`                                     |
 | `sourceController.installCRDs`                                       | Flag to install Source Controller CRDs                                                                                                                       | `true`                                     |
+| `sourceController.watchAllNamespaces`                                | Watch for custom resources in all namespaces                                                                                                                 | `true`                                     |
 | `sourceController.image.registry`                                    | Source Controller image registry                                                                                                                             | `REGISTRY_NAME`                            |
 | `sourceController.image.repository`                                  | Source Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-source-controller` |
 | `sourceController.image.digest`                                      | Source Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                       |
@@ -374,7 +379,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sourceController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                  | `[]`                                       |
 | `sourceController.podSecurityContext.fsGroup`                        | Set Source Controller pod's Security Context fsGroup                                                                                                         | `1001`                                     |
 | `sourceController.containerSecurityContext.enabled`                  | Enabled Source Controller containers' Security Context                                                                                                       | `true`                                     |
-| `sourceController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                             | `{}`                                       |
+| `sourceController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                             | `nil`                                      |
 | `sourceController.containerSecurityContext.runAsUser`                | Set Source Controller containers' Security Context runAsUser                                                                                                 | `1001`                                     |
 | `sourceController.containerSecurityContext.runAsNonRoot`             | Set Source Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                     |
 | `sourceController.containerSecurityContext.privileged`               | Set Source Controller containers' Security Context privileged                                                                                                | `false`                                    |
@@ -384,6 +389,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sourceController.containerSecurityContext.seccompProfile.type`      | Set Source Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                           |
 | `sourceController.command`                                           | Override default container command (useful when using custom images)                                                                                         | `[]`                                       |
 | `sourceController.args`                                              | Override default container args (useful when using custom images)                                                                                            | `[]`                                       |
+| `sourceController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                           | `true`                                     |
 | `sourceController.hostAliases`                                       | Source Controller pods host aliases                                                                                                                          | `[]`                                       |
 | `sourceController.podLabels`                                         | Extra labels for Source Controller pods                                                                                                                      | `{}`                                       |
 | `sourceController.podAnnotations`                                    | Annotations for Source Controller pods                                                                                                                       | `{}`                                       |
@@ -457,14 +463,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Source Controller RBAC Parameters
 
-| Name                                                           | Description                                                      | Value  |
-| -------------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `sourceController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `sourceController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `sourceController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `sourceController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `sourceController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `sourceController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                           | Description                                                      | Value   |
+| -------------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `sourceController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `sourceController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `sourceController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `sourceController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `sourceController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `sourceController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Source Controller Metrics Parameters
 
@@ -500,6 +506,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
 | `notificationController.enabled`                                           | Enable Notification Controller                                                                                                                                     | `true`                                           |
 | `notificationController.installCRDs`                                       | Flag to install Notification Controller CRDs                                                                                                                       | `true`                                           |
+| `notificationController.watchAllNamespaces`                                | Watch for custom resources in all namespaces                                                                                                                       | `true`                                           |
 | `notificationController.image.registry`                                    | Notification Controller image registry                                                                                                                             | `REGISTRY_NAME`                                  |
 | `notificationController.image.repository`                                  | Notification Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-notification-controller` |
 | `notificationController.image.digest`                                      | Notification Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                             |
@@ -538,7 +545,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notificationController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                        | `[]`                                             |
 | `notificationController.podSecurityContext.fsGroup`                        | Set Notification Controller pod's Security Context fsGroup                                                                                                         | `1001`                                           |
 | `notificationController.containerSecurityContext.enabled`                  | Enabled Notification Controller containers' Security Context                                                                                                       | `true`                                           |
-| `notificationController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                   | `{}`                                             |
+| `notificationController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                   | `nil`                                            |
 | `notificationController.containerSecurityContext.runAsUser`                | Set Notification Controller containers' Security Context runAsUser                                                                                                 | `1001`                                           |
 | `notificationController.containerSecurityContext.runAsNonRoot`             | Set Notification Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                           |
 | `notificationController.containerSecurityContext.readOnlyRootFilesystem`   | Set Notification Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                           |
@@ -548,6 +555,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notificationController.containerSecurityContext.seccompProfile.type`      | Set Notification Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                                 |
 | `notificationController.command`                                           | Override default container command (useful when using custom images)                                                                                               | `[]`                                             |
 | `notificationController.args`                                              | Override default container args (useful when using custom images)                                                                                                  | `[]`                                             |
+| `notificationController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                 | `true`                                           |
 | `notificationController.hostAliases`                                       | Notification Controller pods host aliases                                                                                                                          | `[]`                                             |
 | `notificationController.podLabels`                                         | Extra labels for Notification Controller pods                                                                                                                      | `{}`                                             |
 | `notificationController.podAnnotations`                                    | Annotations for Notification Controller pods                                                                                                                       | `{}`                                             |
@@ -583,14 +591,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Notification Controller RBAC Parameters
 
-| Name                                                                 | Description                                                      | Value  |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `notificationController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `notificationController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `notificationController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `notificationController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `notificationController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `notificationController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                                 | Description                                                      | Value   |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `notificationController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `notificationController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `notificationController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `notificationController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `notificationController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `notificationController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Notification Controller Metrics Parameters
 
@@ -626,6 +634,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `imageAutomationController.enabled`                                           | Enable Image Automation Controller                                                                                                                                     | `true`                                               |
 | `imageAutomationController.installCRDs`                                       | Flag to install Image Automation Controller CRDs                                                                                                                       | `true`                                               |
+| `imageAutomationController.watchAllNamespaces`                                | Watch for custom resources in all namespaces                                                                                                                           | `true`                                               |
 | `imageAutomationController.image.registry`                                    | Image Automation Controller image registry                                                                                                                             | `REGISTRY_NAME`                                      |
 | `imageAutomationController.image.repository`                                  | Image Automation Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-image-automation-controller` |
 | `imageAutomationController.image.digest`                                      | Image Automation Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                                 |
@@ -664,7 +673,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imageAutomationController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                                                 |
 | `imageAutomationController.podSecurityContext.fsGroup`                        | Set Image Automation Controller pod's Security Context fsGroup                                                                                                         | `1001`                                               |
 | `imageAutomationController.containerSecurityContext.enabled`                  | Enabled Image Automation Controller containers' Security Context                                                                                                       | `true`                                               |
-| `imageAutomationController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                                                 |
+| `imageAutomationController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `nil`                                                |
 | `imageAutomationController.containerSecurityContext.runAsUser`                | Set Image Automation Controller containers' Security Context runAsUser                                                                                                 | `1001`                                               |
 | `imageAutomationController.containerSecurityContext.runAsNonRoot`             | Set Image Automation Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                               |
 | `imageAutomationController.containerSecurityContext.readOnlyRootFilesystem`   | Set Image Automation Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                               |
@@ -674,6 +683,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imageAutomationController.containerSecurityContext.seccompProfile.type`      | Set Image Automation Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                                     |
 | `imageAutomationController.command`                                           | Override default container command (useful when using custom images)                                                                                                   | `[]`                                                 |
 | `imageAutomationController.args`                                              | Override default container args (useful when using custom images)                                                                                                      | `[]`                                                 |
+| `imageAutomationController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                     | `true`                                               |
 | `imageAutomationController.hostAliases`                                       | Image Automation Controller pods host aliases                                                                                                                          | `[]`                                                 |
 | `imageAutomationController.podLabels`                                         | Extra labels for Image Automation Controller pods                                                                                                                      | `{}`                                                 |
 | `imageAutomationController.podAnnotations`                                    | Annotations for Image Automation Controller pods                                                                                                                       | `{}`                                                 |
@@ -709,14 +719,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Image Automation Controller RBAC Parameters
 
-| Name                                                                    | Description                                                      | Value  |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `imageAutomationController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `imageAutomationController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `imageAutomationController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `imageAutomationController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `imageAutomationController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `imageAutomationController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                                    | Description                                                      | Value   |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `imageAutomationController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `imageAutomationController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `imageAutomationController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `imageAutomationController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `imageAutomationController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `imageAutomationController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Image Automation Controller Metrics Parameters
 
@@ -752,6 +762,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | `imageReflectorController.enabled`                                           | Enable Image Reflector Controller                                                                                                                                     | `true`                                              |
 | `imageReflectorController.installCRDs`                                       | Flag to install Image Reflector Controller CRDs                                                                                                                       | `true`                                              |
+| `imageReflectorController.watchAllNamespaces`                                | Watch for custom resources in all namespaces                                                                                                                          | `true`                                              |
 | `imageReflectorController.image.registry`                                    | Image Reflector Controller image registry                                                                                                                             | `REGISTRY_NAME`                                     |
 | `imageReflectorController.image.repository`                                  | Image Reflector Controller image repository                                                                                                                           | `REPOSITORY_NAME/fluxcd-image-reflector-controller` |
 | `imageReflectorController.image.digest`                                      | Image Reflector Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                                |
@@ -790,7 +801,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imageReflectorController.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                           | `[]`                                                |
 | `imageReflectorController.podSecurityContext.fsGroup`                        | Set Image Reflector Controller pod's Security Context fsGroup                                                                                                         | `1001`                                              |
 | `imageReflectorController.containerSecurityContext.enabled`                  | Enabled Image Reflector Controller containers' Security Context                                                                                                       | `true`                                              |
-| `imageReflectorController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                      | `{}`                                                |
+| `imageReflectorController.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                      | `nil`                                               |
 | `imageReflectorController.containerSecurityContext.runAsUser`                | Set Image Reflector Controller containers' Security Context runAsUser                                                                                                 | `1001`                                              |
 | `imageReflectorController.containerSecurityContext.runAsNonRoot`             | Set Image Reflector Controller containers' Security Context runAsNonRoot                                                                                              | `true`                                              |
 | `imageReflectorController.containerSecurityContext.privileged`               | Set Image Reflector Controller containers' Security Context privileged                                                                                                | `false`                                             |
@@ -800,6 +811,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imageReflectorController.containerSecurityContext.seccompProfile.type`      | Set Image Reflector Controller container's Security Context seccomp profile                                                                                           | `RuntimeDefault`                                    |
 | `imageReflectorController.command`                                           | Override default container command (useful when using custom images)                                                                                                  | `[]`                                                |
 | `imageReflectorController.args`                                              | Override default container args (useful when using custom images)                                                                                                     | `[]`                                                |
+| `imageReflectorController.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                    | `true`                                              |
 | `imageReflectorController.hostAliases`                                       | Image Reflector Controller pods host aliases                                                                                                                          | `[]`                                                |
 | `imageReflectorController.podLabels`                                         | Extra labels for Image Reflector Controller pods                                                                                                                      | `{}`                                                |
 | `imageReflectorController.podAnnotations`                                    | Annotations for Image Reflector Controller pods                                                                                                                       | `{}`                                                |
@@ -850,14 +862,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Image Reflector Controller RBAC Parameters
 
-| Name                                                                   | Description                                                      | Value  |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `imageReflectorController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `imageReflectorController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `imageReflectorController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `imageReflectorController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `imageReflectorController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `imageReflectorController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                                                   | Description                                                      | Value   |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `imageReflectorController.rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `imageReflectorController.rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `imageReflectorController.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `imageReflectorController.serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `imageReflectorController.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `imageReflectorController.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 ### Image Reflector Controller Metrics Parameters
 
@@ -895,7 +907,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                                | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`                              | The requested resources for the init container                                                                     | `{}`                       |
 | `volumePermissions.containerSecurityContext.enabled`                | Enable init container's Security Context                                                                           | `true`                     |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`         | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`         | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`              | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 There are cases where you may want to deploy extra objects, such as HelmRelease, Kustomization, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.

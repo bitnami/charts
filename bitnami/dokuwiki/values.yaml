@@ -61,7 +61,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/dokuwiki
-  tag: 20230404.1.0-debian-11-r106
+  tag: 20230404.1.0-debian-11-r108
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -80,6 +80,9 @@ image:
   ## It turns BASH and/or NAMI debugging in the image
   ##
   debug: false
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -178,7 +181,7 @@ podSecurityContext:
   fsGroup: 1001
 ## SecurityContext configuration for the container
 ## @param containerSecurityContext.enabled Enabled Dokuwiki containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Dokuwiki containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -189,7 +192,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -362,6 +365,26 @@ terminationGracePeriodSeconds: ""
 containerPorts:
   http: 8080
   https: 8443
+
+## Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+
 ## @section Traffic Exposure Parameters
 ##
 
@@ -545,7 +568,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -596,7 +619,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.3-debian-11-r2
+    tag: 1.0.5-debian-11-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -669,7 +692,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r95
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

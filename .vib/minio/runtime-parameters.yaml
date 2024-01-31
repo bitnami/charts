@@ -21,4 +21,4 @@ persistence:
   mountPath: /bitnami/minio/data
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true

@@ -24,8 +24,6 @@ This chart bootstraps a [ClickHouse](https://github.com/clickhouse/clickhouse) D
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -140,7 +138,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`                         |
 | `podSecurityContext.fsGroup`                        | Set ClickHouse pod's Security Context fsGroup                                                              | `1001`                       |
 | `containerSecurityContext.enabled`                  | Enable containers' Security Context                                                                        | `true`                       |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                         |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                        |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`                       |
 | `containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                              | `true`                       |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set read only root file system pod's                                                                       | `false`                      |
@@ -173,6 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `startdbScriptsSecret`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                    | `""`                    |
 | `command`                       | Override default container command (useful when using custom images)                                                     | `["/scripts/setup.sh"]` |
 | `args`                          | Override default container args (useful when using custom images)                                                        | `[]`                    |
+| `automountServiceAccountToken`  | Mount Service Account token in pod                                                                                       | `false`                 |
 | `hostAliases`                   | ClickHouse pods host aliases                                                                                             | `[]`                    |
 | `podLabels`                     | Extra labels for ClickHouse pods                                                                                         | `{}`                    |
 | `podAnnotations`                | Annotations for ClickHouse pods                                                                                          | `{}`                    |
@@ -312,7 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
@@ -358,6 +357,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.image.registry`       | Zookeeper image registry      | `REGISTRY_NAME`             |
 | `zookeeper.image.repository`     | Zookeeper image repository    | `REPOSITORY_NAME/zookeeper` |
 | `zookeeper.image.pullPolicy`     | Zookeeper image pull policy   | `IfNotPresent`              |
+
+### Network Policies
+
+| Name                                    | Description                                                | Value  |
+| --------------------------------------- | ---------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `true` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`   |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
@@ -414,7 +424,41 @@ externalZookeeper.port=3306
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/administration/enable-tls-ingress/)).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Persistence
 
@@ -435,7 +479,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as ClickHouse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as ClickHouse (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Ingress without TLS
 

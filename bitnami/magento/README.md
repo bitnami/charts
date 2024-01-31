@@ -90,6 +90,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                  | Magento image pull policy                                                                                            | `IfNotPresent`            |
 | `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                     | `[]`                      |
 | `image.debug`                                       | Specify if debug logs should be enabled                                                                              | `false`                   |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                   | `false`                   |
 | `hostAliases`                                       | Add deployment host aliases                                                                                          | `[]`                      |
 | `replicaCount`                                      | Number of Magento Pods to run                                                                                        | `1`                       |
 | `magentoSkipInstall`                                | Skip Magento installation wizard. Useful for migrations and restoring from SQL dump                                  | `false`                   |
@@ -140,7 +141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                          | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Magento pods' group ID                                                                                               | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                 | `true`                    |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `{}`                      |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                     | `nil`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                           | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                        | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                          | `false`                   |
@@ -252,16 +253,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                                               | Value                      |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
-| `volumePermissions.resources.limits`   | The resources limits for the init container                                                                                                               | `{}`                       |
-| `volumePermissions.resources.requests` | The requested resourcesc for the init container                                                                                                           | `{}`                       |
+| Name                                          | Description                                                                                                                                               | Value                      |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                                                               | `{}`                       |
+| `volumePermissions.resources.requests`        | The requested resourcesc for the init container                                                                                                           | `{}`                       |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                                                                       | `true`                     |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                    | `""`                       |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                    | `false`                    |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                                      | `{}`                       |
 
 ### Traffic Exposure Parameters
 

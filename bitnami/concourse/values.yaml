@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.0-debian-11-r11
+  tag: 7.11.1-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -462,16 +462,19 @@ web:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.containerSecurityContext.enabled Enabled web containers' Security Context
-  ## @param web.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set web containers' Security Context runAsUser
   ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param web.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param web.hostAliases Concourse web pod host aliases
   ##
   hostAliases: []
@@ -608,7 +611,7 @@ web:
     ## @param web.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param web.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
@@ -759,17 +762,20 @@ worker:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
   ## @param worker.containerSecurityContext.privileged Set worker containers' Security Context with privileged or not
-  ## @param worker.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context user
   ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     privileged: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"
+  ## @param worker.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param worker.hostAliases Concourse worker pod host aliases
   ##
   hostAliases: []
@@ -991,7 +997,7 @@ worker:
     ## @param worker.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param worker.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
@@ -1234,7 +1240,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1255,13 +1261,13 @@ volumePermissions:
     requests: {}
   ## Init container' Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enabled init container Security Context
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"

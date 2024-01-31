@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.sysctls`             | Set kernel settings using the sysctl interface                                                                           | `[]`                        |
 | `podSecurityContext.supplementalGroups`  | Set filesystem extra groups                                                                                              | `[]`                        |
 | `podSecurityContext.fsGroup`             | Set Discourse pod's Security Context fsGroup                                                                             | `0`                         |
+| `automountServiceAccountToken`           | Mount Service Account token in pod                                                                                       | `false`                     |
 | `hostAliases`                            | Add deployment host aliases                                                                                              | `[]`                        |
 | `podAnnotations`                         | Additional pod annotations                                                                                               | `{}`                        |
 | `podLabels`                              | Additional pod labels                                                                                                    | `{}`                        |
@@ -169,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `discourse.resources.limits`                             | The resources limits for the Discourse containers                                            | `{}`             |
 | `discourse.resources.requests`                           | The requested resources for the Discourse containers                                         | `{}`             |
 | `discourse.containerSecurityContext.enabled`             | Enabled Discourse containers' Security Context                                               | `true`           |
-| `discourse.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                             | `{}`             |
+| `discourse.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                             | `nil`            |
 | `discourse.containerSecurityContext.runAsUser`           | Set Discourse containers' Security Context runAsUser                                         | `0`              |
 | `discourse.containerSecurityContext.runAsNonRoot`        | Set Discourse containers' Security Context runAsNonRoot                                      | `false`          |
 | `discourse.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                             | `RuntimeDefault` |
@@ -217,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.resources.limits`                             | The resources limits for the Sidekiq containers                                            | `{}`                                                |
 | `sidekiq.resources.requests`                           | The requested resources for the Sidekiq containers                                         | `{}`                                                |
 | `sidekiq.containerSecurityContext.enabled`             | Enabled Sidekiq containers' Security Context                                               | `true`                                              |
-| `sidekiq.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                           | `{}`                                                |
+| `sidekiq.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                           | `nil`                                               |
 | `sidekiq.containerSecurityContext.runAsUser`           | Set Sidekiq containers' Security Context runAsUser                                         | `0`                                                 |
 | `sidekiq.containerSecurityContext.runAsNonRoot`        | Set Sidekiq containers' Security Context runAsNonRoot                                      | `false`                                             |
 | `sidekiq.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                           | `RuntimeDefault`                                    |
@@ -266,7 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                  | `RuntimeDefault`           |
 
@@ -477,13 +478,55 @@ externalRedis.port=5432
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application. To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/discourse/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/discourse/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Setting Pod's affinity
 
@@ -518,9 +561,188 @@ NOTE: Due to an error in our release process, Redis&reg;' chart versions higher 
 
 This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
 
-### To any previous version
+### To 8.0.0
 
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/discourse/administration/upgrade/).
+This major update the Redis&reg; subchart to its newest major, 17.0.0, which updates Redis&reg; from its version 6.2 to the latest 7.0.
+
+### To 7.0.0
+
+This major upgrades the Discourse version to _2.8.0_.
+
+#### What changes were introduced in this major version?
+
+This version includes a breaking change in the _lazy-yt_ plugin, and the recommendation is to remove it, or manually upgrade it.
+
+#### Upgrading Instructions
+
+To upgrade to _7.0.0_ from _6.x_, follow these steps below:
+
+1. Upgrade to the latest version of the _bitnami/discourse_ chart with Diagnostics mode:
+
+```console
+helm upgrade --set diagnosticMode.enabled=true [...] bitnami/discourse
+```
+
+1. Remove or upgrade the _lazy-yt_ plugin. To remove it, execute the following command inside the _discourse_ container's shell:
+
+```console
+rm -rf /bitnami/discourse/plugins/lazy-yt
+```
+
+1. Ensure that the initialization scripts work:
+
+```console
+/opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/setup.sh
+```
+
+1. Upgrade the Helm deployment without Diagnostics mode.
+
+### To 6.0.0
+
+This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Additionally updates the PostgreSQL & Redis subcharts to their newest major 11.x.x and 16.x.x, respectively, which contain similar changes.
+
+- _discourse.host_ and _discourse.siteName_ were renamed to _host_ and _siteName_, respectively.
+- _discourse.username_, _discourse.email_, _discourse.password_ and _discourse.existingSecret_ were regrouped under the _discourse.auth_ map.
+- _discourse.smtp_ map has been renamed to _smtp_.
+- _service.port_ and _service.nodePort_ were regrouped under the _service.ports_ and _service.nodePorts_ maps, respectively.
+- _ingress_ map is completely redefined.
+
+#### How to upgrade to version 6.0.0
+
+To upgrade to _6.0.0_ from _5.x_, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _discourse_ and the release namespace _default_):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the PostgreSQL statefulset (notice the option _--cascade=false_) and secret:
+
+```console
+kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+kubectl delete secret postgresql --namespace default
+```
+
+1. Upgrade your release using the same PostgreSQL version:
+
+```console
+CURRENT_PG_VERSION=$(kubectl exec discourse-postgresql-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
+helm upgrade discourse bitnami/discourse \
+  --set loadExamples=true \
+  --set web.baseUrl=http://127.0.0.1:8080 \
+  --set auth.password=$DISCOURSE_PASSWORD \
+  --set postgresql.image.tag=$CURRENT_VERSION \
+  --set postgresql.auth.password=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set redis.password=$REDIS_PASSWORD
+```
+
+1. Delete the existing PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod discourse-postgresql-0
+```
+
+### To 5.0.0
+
+This major update the Redis&reg; subchart to its newest major, 15.0.0. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&reg; upgrade notes.](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1500).
+
+### To 4.0.0
+
+The [Bitnami Discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image was refactored and now the source code is published in GitHub in the `rootfs` folder of the container image repository.
+
+#### How to upgrade to version 4.0.0
+
+Upgrades from previous versions require to specify `--set volumePermissions.enabled=true` in order for all features to work properly:
+
+```console
+helm upgrade discourse bitnami/discourse \
+    --set discourse.host=$DISCOURSE_HOST \
+    --set discourse.password=$DISCOURSE_PASSWORD \
+    --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+    --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+    --set volumePermissions.enabled=true
+```
+
+Full compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected aside from the ones mentioned above.
+
+### To 3.0.0
+
+This major updates the Redis&reg; subchart to it newest major, 14.0.0, which contains breaking changes. For more information on this subchart's major and the steps needed to migrate your data from your previous release, please refer to [Redis&reg; upgrade notes.](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1400).
+
+### To 2.0.0
+
+[On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+- Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running _helm dependency update_, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Chart.
+
+#### Considerations when upgrading to this version
+
+- If you want to upgrade to this version using Helm v2, this scenario is not supported as this version does not support Helm v2 anymore.
+- If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3.
+
+#### Useful links
+
+- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
+- [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
+
+#### How to upgrade to version 2.0.0
+
+To upgrade to _2.0.0_ from _1.x_, it should be done reusing the PVC(s) used to hold the data on your previous release. To do so, follow the instructions below (the following example assumes that the release name is _discourse_ and the release namespace _default_):
+
+> NOTE: Please, create a backup of your database before running any of those actions.
+
+1. Obtain the credentials and the names of the PVCs used to hold the data on your current release:
+
+```console
+export DISCOURSE_PASSWORD=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-password}" | base64 --decode)
+export DISCOURSE_FERNET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-fernetKey}" | base64 --decode)
+export DISCOURSE_SECRET_KEY=$(kubectl get secret --namespace default discourse -o jsonpath="{.data.discourse-secretKey}" | base64 --decode)
+export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace default discourse-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -o jsonpath="{.data.redis-password}" | base64 --decode)
+export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
+```
+
+1. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
+
+```console
+kubectl delete statefulsets.apps --cascade=false discourse-postgresql
+kubectl delete statefulsets.apps --cascade=false discourse-worker
+```
+
+1. Upgrade your release:
+
+> NOTE: Please remember to migrate all the values to its new path following the above notes, e.g: `discourse.loadExamples` -> `loadExamples` or `discourse.baseUrl=http://127.0.0.1:8080` -> `web.baseUrl=http://127.0.0.1:8080`.
+
+```console
+helm upgrade discourse bitnami/discourse \
+  --set loadExamples=true \
+  --set web.baseUrl=http://127.0.0.1:8080 \
+  --set auth.password=$DISCOURSE_PASSWORD \
+  --set auth.fernetKey=$DISCOURSE_FERNET_KEY \
+  --set auth.secretKey=$DISCOURSE_SECRET_KEY \
+  --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC \
+  --set redis.password=$REDIS_PASSWORD \
+  --set redis.cluster.enabled=true
+```
+
+1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+
+```console
+kubectl delete pod discourse-postgresql-0
+kubectl delete pod discourse-worker-0
+```
 
 ## License
 

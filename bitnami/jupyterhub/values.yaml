@@ -71,7 +71,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r68
+    tag: 4.0.2-debian-11-r70
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -196,7 +196,10 @@ hub:
       {{- if .Values.singleuser.podSecurityContext.enabled }}
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
+      containerSecurityContext: {{- omit .Values.singleuser.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+      podSecurityContext: {{- omit .Values.singleuser.podSecurityContext "enabled" | toYaml | nindent 4 }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.singleuser.automountServiceAccountToken }}
       storage:
         {{- if .Values.singleuser.persistence.enabled }}
         type: dynamic
@@ -343,7 +346,7 @@ hub:
   ## hub containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param hub.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param hub.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param hub.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param hub.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param hub.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param hub.containerSecurityContext.privileged Set container's Security Context privileged
@@ -354,7 +357,7 @@ hub:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -381,6 +384,9 @@ hub:
   ## @param hub.lifecycleHooks LifecycleHooks for the Hub container to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param hub.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param hub.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -511,7 +517,7 @@ hub:
     ## @param hub.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
     ## Can be set to false if pods using this serviceAccount do not need to use K8s API
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param hub.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
@@ -667,7 +673,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.1-debian-11-r1
+    tag: 4.6.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -780,7 +786,7 @@ proxy:
   ## Proxy containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param proxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -791,7 +797,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -820,6 +826,9 @@ proxy:
   lifecycleHooks: {}
   ## Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ## @param proxy.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param proxy.hostAliases Add deployment host aliases
   ##
   hostAliases: []
@@ -1325,7 +1334,7 @@ imagePuller:
   ## ImagePuller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imagePuller.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param imagePuller.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param imagePuller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imagePuller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param imagePuller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param imagePuller.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1336,7 +1345,7 @@ imagePuller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1466,6 +1475,23 @@ imagePuller:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## ServiceAccount parameters
+  ##
+  serviceAccount:
+    ## @param imagePuller.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param imagePuller.serviceAccount.name Override image puller service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param imagePuller.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: false
+    ## @param imagePuller.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
 
 ## @section Singleuser deployment parameters
 ##
@@ -1484,7 +1510,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.2-debian-11-r69
+    tag: 4.0.2-debian-11-r72
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1507,6 +1533,9 @@ singleuser:
   ##
   allowPrivilegeEscalation: false
   ## Command for running the container (set to default if not set). Use array form
+  ## @param singleuser.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param singleuser.command Override Single User default command
   ##
   command: []
@@ -1528,7 +1557,7 @@ singleuser:
   ## singleuser containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param singleuser.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param singleuser.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param singleuser.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param singleuser.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param singleuser.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param singleuser.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1539,7 +1568,7 @@ singleuser:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1700,7 +1729,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r93
+  tag: 11-debian-11-r95
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

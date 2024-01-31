@@ -58,6 +58,7 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -216,7 +217,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
-                  key: rabbitmq-erlang-cookie
+                  key: {{ template "rabbitmq.secretErlangKey" . }}
             {{- if and .Values.clustering.rebalance (gt (.Values.replicaCount | int) 1) }}
             - name: RABBITMQ_CLUSTER_REBALANCE
               value: "true"

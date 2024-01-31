@@ -38,6 +38,7 @@ spec:
     spec:
       serviceAccountName: {{ template "flux.notification-controller.serviceAccountName" . }}
       {{- include "flux.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.notificationController.automountServiceAccountToken }}
       {{- if .Values.notificationController.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -92,7 +93,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - --watch-all-namespaces
+            - --watch-all-namespaces={{ .Values.notificationController.watchAllNamespaces }}
             {{- if .Values.notificationController.image.debug }}
             - --log-level=debug
             {{- else }}

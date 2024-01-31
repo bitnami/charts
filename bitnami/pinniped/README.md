@@ -24,8 +24,6 @@ This chart bootstraps a [Pinniped](https://pinniped.dev/) Deployment in a [Kuber
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -126,7 +124,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `concierge.podSecurityContext.fsGroup`                        | Set Concierge pod's Security Context fsGroup                                                                             | `1001`           |
 | `concierge.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `concierge.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `concierge.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `concierge.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `concierge.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `concierge.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -138,6 +136,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `concierge.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `concierge.deployAPIService`                                  | Deploy the APIService objects                                                                                            | `true`           |
+| `concierge.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `concierge.hostAliases`                                       | Concierge pods host aliases                                                                                              | `[]`             |
 | `concierge.podLabels`                                         | Extra labels for Concierge pods                                                                                          | `{}`             |
 | `concierge.podAnnotations`                                    | Annotations for Concierge pods                                                                                           | `{}`             |
@@ -165,38 +164,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Concierge RBAC settings
 
-| Name                                                                         | Description                                                                   | Value  |
-| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------ |
-| `concierge.rbac.create`                                                      | Create Concierge RBAC objects                                                 | `true` |
-| `concierge.serviceAccount.concierge.name`                                    | Name of an existing Service Account for the Concierge Deployment              | `""`   |
-| `concierge.serviceAccount.concierge.create`                                  | Create a Service Account for the Concierge Deployment                         | `true` |
-| `concierge.serviceAccount.concierge.automountServiceAccountToken`            | Auto mount token for the Concierge Deployment Service Account                 | `true` |
-| `concierge.serviceAccount.concierge.annotations`                             | Annotations for the Concierge Service Account                                 | `{}`   |
-| `concierge.serviceAccount.impersonationProxy.name`                           | Name of an existing Service Account for the Concierge Impersonator            | `""`   |
-| `concierge.serviceAccount.impersonationProxy.create`                         | Create a Service Account for the Concierge Impersonator                       | `true` |
-| `concierge.serviceAccount.impersonationProxy.automountServiceAccountToken`   | Auto mount token for the Concierge Impersonator Service Account               | `true` |
-| `concierge.serviceAccount.impersonationProxy.annotations`                    | Annotations for the Concierge Service Account                                 | `{}`   |
-| `concierge.serviceAccount.kubeCertAgentService.name`                         | Name of an existing Service Account for the Concierge kube-cert-agent-service | `""`   |
-| `concierge.serviceAccount.kubeCertAgentService.create`                       | Create a Service Account for the Concierge kube-cert-agent-service            | `true` |
-| `concierge.serviceAccount.kubeCertAgentService.automountServiceAccountToken` | Auto mount token for the Concierge kube-cert-agent-service Service Account    | `true` |
-| `concierge.serviceAccount.kubeCertAgentService.annotations`                  | Annotations for the Concierge Service Account                                 | `{}`   |
+| Name                                                                         | Description                                                                   | Value   |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ------- |
+| `concierge.rbac.create`                                                      | Create Concierge RBAC objects                                                 | `true`  |
+| `concierge.serviceAccount.concierge.name`                                    | Name of an existing Service Account for the Concierge Deployment              | `""`    |
+| `concierge.serviceAccount.concierge.create`                                  | Create a Service Account for the Concierge Deployment                         | `true`  |
+| `concierge.serviceAccount.concierge.automountServiceAccountToken`            | Auto mount token for the Concierge Deployment Service Account                 | `false` |
+| `concierge.serviceAccount.concierge.annotations`                             | Annotations for the Concierge Service Account                                 | `{}`    |
+| `concierge.serviceAccount.impersonationProxy.name`                           | Name of an existing Service Account for the Concierge Impersonator            | `""`    |
+| `concierge.serviceAccount.impersonationProxy.create`                         | Create a Service Account for the Concierge Impersonator                       | `true`  |
+| `concierge.serviceAccount.impersonationProxy.automountServiceAccountToken`   | Auto mount token for the Concierge Impersonator Service Account               | `false` |
+| `concierge.serviceAccount.impersonationProxy.annotations`                    | Annotations for the Concierge Service Account                                 | `{}`    |
+| `concierge.serviceAccount.kubeCertAgentService.name`                         | Name of an existing Service Account for the Concierge kube-cert-agent-service | `""`    |
+| `concierge.serviceAccount.kubeCertAgentService.create`                       | Create a Service Account for the Concierge kube-cert-agent-service            | `true`  |
+| `concierge.serviceAccount.kubeCertAgentService.automountServiceAccountToken` | Auto mount token for the Concierge kube-cert-agent-service Service Account    | `false` |
+| `concierge.serviceAccount.kubeCertAgentService.annotations`                  | Annotations for the Concierge Service Account                                 | `{}`    |
 
 ### Concierge Traffic Exposure Parameters
 
-| Name                                         | Description                                                                          | Value       |
-| -------------------------------------------- | ------------------------------------------------------------------------------------ | ----------- |
-| `concierge.service.type`                     | Concierge service type                                                               | `ClusterIP` |
-| `concierge.service.ports.https`              | Concierge service HTTPS port                                                         | `443`       |
-| `concierge.service.nodePorts.https`          | Node port for HTTPS                                                                  | `""`        |
-| `concierge.service.clusterIP`                | Concierge service Cluster IP                                                         | `""`        |
-| `concierge.service.labels`                   | Add labels to the service                                                            | `{}`        |
-| `concierge.service.loadBalancerIP`           | Concierge service Load Balancer IP                                                   | `""`        |
-| `concierge.service.loadBalancerSourceRanges` | Concierge service Load Balancer sources                                              | `[]`        |
-| `concierge.service.externalTrafficPolicy`    | Concierge service external traffic policy                                            | `Cluster`   |
-| `concierge.service.annotations`              | Additional custom annotations for Concierge service                                  | `{}`        |
-| `concierge.service.extraPorts`               | Extra ports to expose in Concierge service (normally used with the `sidecars` value) | `[]`        |
-| `concierge.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                     | `None`      |
-| `concierge.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                          | `{}`        |
+| Name                                              | Description                                                                                        | Value       |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| `concierge.service.type`                          | Concierge service type                                                                             | `ClusterIP` |
+| `concierge.service.ports.https`                   | Concierge service HTTPS port                                                                       | `443`       |
+| `concierge.service.nodePorts.https`               | Node port for HTTPS                                                                                | `""`        |
+| `concierge.service.clusterIP`                     | Concierge service Cluster IP                                                                       | `""`        |
+| `concierge.service.labels`                        | Add labels to the service                                                                          | `{}`        |
+| `concierge.service.loadBalancerIP`                | Concierge service Load Balancer IP                                                                 | `""`        |
+| `concierge.service.loadBalancerSourceRanges`      | Concierge service Load Balancer sources                                                            | `[]`        |
+| `concierge.service.externalTrafficPolicy`         | Concierge service external traffic policy                                                          | `Cluster`   |
+| `concierge.service.annotations`                   | Additional custom annotations for Concierge service                                                | `{}`        |
+| `concierge.service.extraPorts`                    | Extra ports to expose in Concierge service (normally used with the `sidecars` value)               | `[]`        |
+| `concierge.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                   | `None`      |
+| `concierge.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                        | `{}`        |
+| `concierge.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                | `true`      |
+| `concierge.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
+| `concierge.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
+| `concierge.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
+| `concierge.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
+| `concierge.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
+| `concierge.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
 
 ### Supervisor Parameters
 
@@ -236,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `supervisor.podSecurityContext.fsGroup`                        | Set Supervisor pod's Security Context fsGroup                                                                            | `1001`           |
 | `supervisor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `supervisor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `supervisor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `supervisor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `supervisor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `supervisor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -247,6 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Supervisor                                          | `""`             |
 | `supervisor.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `supervisor.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `supervisor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `true`           |
 | `supervisor.hostAliases`                                       | Supervisor pods host aliases                                                                                             | `[]`             |
 | `supervisor.podLabels`                                         | Extra labels for Supervisor pods                                                                                         | `{}`             |
 | `supervisor.podAnnotations`                                    | Annotations for Supervisor pods                                                                                          | `{}`             |
@@ -274,13 +281,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supervisor RBAC settings
 
-| Name                                                     | Description                                                       | Value  |
-| -------------------------------------------------------- | ----------------------------------------------------------------- | ------ |
-| `supervisor.rbac.create`                                 | Create Supervisor RBAC objects                                    | `true` |
-| `supervisor.serviceAccount.name`                         | Name of an existing Service Account for the Supervisor Deployment | `""`   |
-| `supervisor.serviceAccount.create`                       | Create a Service Account for the Supervisor Deployment            | `true` |
-| `supervisor.serviceAccount.automountServiceAccountToken` | Auto mount token for the Supervisor Deployment Service Account    | `true` |
-| `supervisor.serviceAccount.annotations`                  | Annotations for the Supervisor Service Account                    | `{}`   |
+| Name                                                     | Description                                                       | Value   |
+| -------------------------------------------------------- | ----------------------------------------------------------------- | ------- |
+| `supervisor.rbac.create`                                 | Create Supervisor RBAC objects                                    | `true`  |
+| `supervisor.serviceAccount.name`                         | Name of an existing Service Account for the Supervisor Deployment | `""`    |
+| `supervisor.serviceAccount.create`                       | Create a Service Account for the Supervisor Deployment            | `true`  |
+| `supervisor.serviceAccount.automountServiceAccountToken` | Auto mount token for the Supervisor Deployment Service Account    | `false` |
+| `supervisor.serviceAccount.annotations`                  | Annotations for the Supervisor Service Account                    | `{}`    |
 
 ### Supervisor Traffic Exposure Parameters
 
@@ -311,6 +318,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.service.public.extraPorts`               | Extra ports to expose in Supervisor service (normally used with the `sidecars` value)                                            | `[]`                        |
 | `supervisor.service.public.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                      |
 | `supervisor.service.public.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                        |
+| `supervisor.networkPolicy.enabled`                   | Specifies whether a NetworkPolicy should be created                                                                              | `true`                      |
+| `supervisor.networkPolicy.kubeAPIServerPorts`        | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                        |
+| `supervisor.networkPolicy.allowExternal`             | Don't require server label for connections                                                                                       | `true`                      |
+| `supervisor.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                        |
+| `supervisor.networkPolicy.extraEgress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                        |
+| `supervisor.networkPolicy.ingressNSMatchLabels`      | Labels to match to allow traffic from other namespaces                                                                           | `{}`                        |
+| `supervisor.networkPolicy.ingressNSPodMatchLabels`   | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                        |
 | `supervisor.ingress.enabled`                         | Enable ingress record generation for Pinniped Supervisor                                                                         | `false`                     |
 | `supervisor.ingress.pathType`                        | Ingress path type                                                                                                                | `ImplementationSpecific`    |
 | `supervisor.ingress.apiVersion`                      | Force Ingress API version (automatically detected if not set)                                                                    | `""`                        |
@@ -378,7 +392,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

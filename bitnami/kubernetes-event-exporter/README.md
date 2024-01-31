@@ -87,6 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.digest`                                      | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                        |
 | `image.pullPolicy`                                  | Container image pull policy                                                                                               | `IfNotPresent`                              |
 | `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                          | `[]`                                        |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                        | `true`                                      |
 | `hostAliases`                                       | Add deployment host aliases                                                                                               | `[]`                                        |
 | `config.logLevel`                                   | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)                                              | `debug`                                     |
 | `config.logFormat`                                  | How the logs are formatted. Allowed values: `pretty` or `json`                                                            | `pretty`                                    |
@@ -96,7 +97,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.rules`                                        | List of rules for the cluster role                                                                                        | `[]`                                        |
 | `serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                      | `true`                                      |
 | `serviceAccount.name`                               | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                        |
-| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                            | `true`                                      |
+| `serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                            | `false`                                     |
 | `serviceAccount.annotations`                        | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`                                        |
 | `podAnnotations`                                    | Pod annotations                                                                                                           | `{}`                                        |
 | `podLabels`                                         | Pod labels                                                                                                                | `{}`                                        |
@@ -106,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                               | `[]`                                        |
 | `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                | `1001`                                      |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                      | `true`                                      |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `{}`                                        |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `nil`                                       |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                | `1001`                                      |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                             | `true`                                      |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                               | `false`                                     |
@@ -208,7 +209,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/kubernetes-event-exporter/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Set Pod affinity
 

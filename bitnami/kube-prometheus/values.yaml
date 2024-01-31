@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.71.0-debian-11-r0
+    tag: 0.71.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -138,6 +138,9 @@ operator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param operator.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param operator.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -155,7 +158,7 @@ operator:
     name: ""
     ## @param operator.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     ## @param operator.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
@@ -189,7 +192,7 @@ operator:
   ## Prometheus Operator containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param operator.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
@@ -200,7 +203,7 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -465,7 +468,7 @@ operator:
     ## Prometheus config reload container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
@@ -476,7 +479,7 @@ operator:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -544,7 +547,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.48.1-debian-11-r1
+    tag: 2.49.1-debian-11-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -572,7 +575,7 @@ prometheus:
     annotations: {}
     ## @param prometheus.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
   ## Prometheus pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param prometheus.podSecurityContext.enabled Enable security context
@@ -590,7 +593,7 @@ prometheus:
   ## Prometheus containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param prometheus.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param prometheus.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
@@ -601,7 +604,7 @@ prometheus:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1234,7 +1237,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.33.0-debian-11-r1
+      tag: 0.33.0-debian-11-r2
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1251,7 +1254,7 @@ prometheus:
     ## Thanos Sidecar container's securityContext
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param prometheus.thanos.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param prometheus.thanos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1262,7 +1265,7 @@ prometheus:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1641,7 +1644,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r46
+    tag: 0.26.0-debian-11-r48
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1685,7 +1688,7 @@ alertmanager:
   ## Prometheus Alertmanager container's securityContext
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param alertmanager.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param alertmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1696,7 +1699,7 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2258,7 +2261,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r143
+    tag: 0.24.0-debian-11-r144
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2437,7 +2440,7 @@ blackboxExporter:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param blackboxExporter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param blackboxExporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2448,7 +2451,7 @@ blackboxExporter:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2461,6 +2464,9 @@ blackboxExporter:
   ## @param blackboxExporter.lifecycleHooks for the blackboxExporter container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param blackboxExporter.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param blackboxExporter.hostAliases blackboxExporter pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

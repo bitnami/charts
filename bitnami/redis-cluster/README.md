@@ -101,7 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`                                          | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`                  |
 | `image.pullSecrets`                                         | Specify docker-registry secret names as an array                                                                                                    | `[]`                            |
 | `image.debug`                                               | Enable image debug mode                                                                                                                             | `false`                         |
-| `networkPolicy.enabled`                                     | Enable NetworkPolicy                                                                                                                                | `false`                         |
+| `networkPolicy.enabled`                                     | Enable NetworkPolicy                                                                                                                                | `true`                          |
 | `networkPolicy.allowExternal`                               | The Policy model to apply. Don't require client label for connections                                                                               | `true`                          |
 | `networkPolicy.ingressNSMatchLabels`                        | Allow connections from other namespacess. Just set label for namespace and set label for pods (optional).                                           | `{}`                            |
 | `networkPolicy.ingressNSPodMatchLabels`                     | For other namespaces match by pod labels and namespace labels                                                                                       | `{}`                            |
@@ -120,7 +120,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `minAvailable`                                              | Min number of pods that must still be available after the eviction                                                                                  | `""`                            |
 | `maxUnavailable`                                            | Max number of pods that can be unavailable after the eviction                                                                                       | `""`                            |
 | `containerSecurityContext.enabled`                          | Enabled containers' Security Context                                                                                                                | `true`                          |
-| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                    | `{}`                            |
+| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                    | `nil`                           |
 | `containerSecurityContext.runAsUser`                        | Set containers' Security Context runAsUser                                                                                                          | `1001`                          |
 | `containerSecurityContext.runAsNonRoot`                     | Set container's Security Context runAsNonRoot                                                                                                       | `true`                          |
 | `containerSecurityContext.privileged`                       | Set container's Security Context privileged                                                                                                         | `false`                         |
@@ -174,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`                  |
 | `volumePermissions.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                                                    | `[]`                            |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable Containers' Security Context                                                                                                                 | `true`                          |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                    | `{}`                            |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                    | `nil`                           |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the containers.                                                                                                                         | `0`                             |
 | `volumePermissions.containerSecurityContext.privileged`     | Run container as privileged                                                                                                                         | `false`                         |
 | `volumePermissions.resources.limits`                        | The resources limits for the container                                                                                                              | `{}`                            |
@@ -190,6 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.updateStrategy.type`                    | Argo Workflows statefulset strategy type                                                                   | `RollingUpdate` |
 | `redis.updateStrategy.rollingUpdate.partition` | Partition update strategy                                                                                  | `0`             |
 | `redis.podManagementPolicy`                    | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join         | `Parallel`      |
+| `redis.automountServiceAccountToken`           | Mount Service Account token in pod                                                                         | `false`         |
 | `redis.hostAliases`                            | Deployment pod host aliases                                                                                | `[]`            |
 | `redis.hostNetwork`                            | Host networking requested for this pod. Use the host's network namespace.                                  | `false`         |
 | `redis.useAOFPersistence`                      | Whether to use AOF Persistence mode or not                                                                 | `yes`           |
@@ -246,33 +247,34 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cluster update job parameters
 
-| Name                                  | Description                                                                                                    | Value          |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- |
-| `updateJob.activeDeadlineSeconds`     | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`          |
-| `updateJob.command`                   | Container command (using container default if not set)                                                         | `[]`           |
-| `updateJob.args`                      | Container args (using container default if not set)                                                            | `[]`           |
-| `updateJob.hostAliases`               | Deployment pod host aliases                                                                                    | `[]`           |
-| `updateJob.helmHook`                  | Job Helm hook                                                                                                  | `post-upgrade` |
-| `updateJob.annotations`               | Job annotations                                                                                                | `{}`           |
-| `updateJob.podAnnotations`            | Job pod annotations                                                                                            | `{}`           |
-| `updateJob.podLabels`                 | Pod extra labels                                                                                               | `{}`           |
-| `updateJob.extraEnvVars`              | An array to add extra environment variables                                                                    | `[]`           |
-| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `""`           |
-| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `""`           |
-| `updateJob.extraVolumes`              | Extra volumes to add to the deployment                                                                         | `[]`           |
-| `updateJob.extraVolumeMounts`         | Extra volume mounts to add to the container                                                                    | `[]`           |
-| `updateJob.initContainers`            | Extra init containers to add to the deployment                                                                 | `[]`           |
-| `updateJob.podAffinityPreset`         | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`           |
-| `updateJob.podAntiAffinityPreset`     | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`         |
-| `updateJob.nodeAffinityPreset.type`   | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`           |
-| `updateJob.nodeAffinityPreset.key`    | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`           |
-| `updateJob.nodeAffinityPreset.values` | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`           |
-| `updateJob.affinity`                  | Affinity for update job pods assignment                                                                        | `{}`           |
-| `updateJob.nodeSelector`              | Node labels for update job pods assignment                                                                     | `{}`           |
-| `updateJob.tolerations`               | Tolerations for update job pods assignment                                                                     | `[]`           |
-| `updateJob.priorityClassName`         | Priority class name                                                                                            | `""`           |
-| `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`           |
-| `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`           |
+| Name                                     | Description                                                                                                    | Value          |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- |
+| `updateJob.activeDeadlineSeconds`        | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`          |
+| `updateJob.command`                      | Container command (using container default if not set)                                                         | `[]`           |
+| `updateJob.args`                         | Container args (using container default if not set)                                                            | `[]`           |
+| `updateJob.automountServiceAccountToken` | Mount Service Account token in pod                                                                             | `false`        |
+| `updateJob.hostAliases`                  | Deployment pod host aliases                                                                                    | `[]`           |
+| `updateJob.helmHook`                     | Job Helm hook                                                                                                  | `post-upgrade` |
+| `updateJob.annotations`                  | Job annotations                                                                                                | `{}`           |
+| `updateJob.podAnnotations`               | Job pod annotations                                                                                            | `{}`           |
+| `updateJob.podLabels`                    | Pod extra labels                                                                                               | `{}`           |
+| `updateJob.extraEnvVars`                 | An array to add extra environment variables                                                                    | `[]`           |
+| `updateJob.extraEnvVarsCM`               | ConfigMap containing extra environment variables                                                               | `""`           |
+| `updateJob.extraEnvVarsSecret`           | Secret containing extra environment variables                                                                  | `""`           |
+| `updateJob.extraVolumes`                 | Extra volumes to add to the deployment                                                                         | `[]`           |
+| `updateJob.extraVolumeMounts`            | Extra volume mounts to add to the container                                                                    | `[]`           |
+| `updateJob.initContainers`               | Extra init containers to add to the deployment                                                                 | `[]`           |
+| `updateJob.podAffinityPreset`            | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`           |
+| `updateJob.podAntiAffinityPreset`        | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`         |
+| `updateJob.nodeAffinityPreset.type`      | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`           |
+| `updateJob.nodeAffinityPreset.key`       | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`           |
+| `updateJob.nodeAffinityPreset.values`    | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`           |
+| `updateJob.affinity`                     | Affinity for update job pods assignment                                                                        | `{}`           |
+| `updateJob.nodeSelector`                 | Node labels for update job pods assignment                                                                     | `{}`           |
+| `updateJob.tolerations`                  | Tolerations for update job pods assignment                                                                     | `[]`           |
+| `updateJob.priorityClassName`            | Priority class name                                                                                            | `""`           |
+| `updateJob.resources.limits`             | The resources limits for the container                                                                         | `{}`           |
+| `updateJob.resources.requests`           | The requested resources for the container                                                                      | `{}`           |
 
 ### Cluster management parameters
 
@@ -308,6 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources`                                         | Metrics exporter resource requests and limits                                                                                      | `{}`                             |
 | `metrics.extraArgs`                                         | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter)                                | `{}`                             |
 | `metrics.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; exporter                                                               | `[]`                             |
+| `metrics.containerPorts.http`                               | Metrics HTTP container port                                                                                                        | `9121`                           |
 | `metrics.podAnnotations`                                    | Additional annotations for Metrics exporter pod                                                                                    | `{}`                             |
 | `metrics.podLabels`                                         | Additional labels for Metrics exporter pod                                                                                         | `{}`                             |
 | `metrics.containerSecurityContext.enabled`                  | Enable Metrics Containers' Security Context                                                                                        | `false`                          |
@@ -331,6 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerIP`                            | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                                                   | `""`                             |
 | `metrics.service.annotations`                               | Annotations for the services to monitor.                                                                                           | `{}`                             |
 | `metrics.service.labels`                                    | Additional labels for the metrics service                                                                                          | `{}`                             |
+| `metrics.service.ports.http`                                | Metrics HTTP service port                                                                                                          | `9121`                           |
 | `metrics.service.clusterIP`                                 | Service Cluster IP                                                                                                                 | `""`                             |
 
 ### Sysctl Image parameters
@@ -346,7 +350,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.pullSecrets`                             | Specify docker-registry secret names as an array                                                                     | `[]`                       |
 | `sysctlImage.mountHostSys`                            | Mount the host `/sys` folder to `/host-sys`                                                                          | `false`                    |
 | `sysctlImage.containerSecurityContext.enabled`        | Enable Containers' Security Context                                                                                  | `true`                     |
-| `sysctlImage.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                     | `{}`                       |
+| `sysctlImage.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                     | `nil`                      |
 | `sysctlImage.containerSecurityContext.runAsUser`      | User ID for the containers.                                                                                          | `0`                        |
 | `sysctlImage.containerSecurityContext.privileged`     | Run privileged as privileged                                                                                         | `true`                     |
 | `sysctlImage.resources.limits`                        | The resources limits for the container                                                                               | `{}`                       |
@@ -386,7 +390,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different Redis&reg; version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/redis-cluster/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Cluster topology
 
@@ -630,6 +634,19 @@ OK
 ```
 
 See [#15075](https://github.com/bitnami/charts/issues/15075)
+
+## Backup and restore
+
+To back up and restore Redis Cluster Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool.
+
+These are the steps you will usually follow to back up and restore your Redis Cluster database cluster data:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring Redis Cluster deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-redis-cluster-kubernetes/) for more information.
 
 ## NetworkPolicy
 

@@ -44,6 +44,7 @@ spec:
     spec:
       serviceAccountName: {{ include "mlflow.v0.tracking.serviceAccountName" . }}
       {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
+      automountServiceAccountToken: {{ .Values.tracking.automountServiceAccountToken }}
       {{- if .Values.tracking.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -172,6 +173,7 @@ spec:
                   key: {{ include "mlflow.v0.database.passwordKey" . | quote }}
             {{- end }}
             {{- if (include "mlflow.v0.s3.enabled" .) }}
+            {{- if .Values.externalS3.useCredentialsInSecret }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -182,6 +184,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "mlflow.v0.s3.secretName" . }}
                   key: {{ include "mlflow.v0.s3.secretAccessKeyKey" . | quote }}
+            {{- end }}
             - name: MLFLOW_S3_ENDPOINT_URL
               value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
             {{- end }}

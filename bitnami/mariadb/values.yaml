@@ -185,6 +185,9 @@ primary:
   ## @param primary.lifecycleHooks for the MariaDB Primary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param primary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param primary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -327,7 +330,7 @@ primary:
   ## MariaDB primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
-  ## @param primary.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MariaDB primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -337,7 +340,7 @@ primary:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -597,6 +600,9 @@ secondary:
   ## @param secondary.lifecycleHooks for the MariaDB Secondary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param secondary.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param secondary.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -737,7 +743,7 @@ secondary:
   ## MariaDB secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
-  ## @param secondary.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param secondary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MariaDB secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
@@ -747,7 +753,7 @@ secondary:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1132,7 +1138,7 @@ metrics:
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
-  ## @param metrics.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MariaDB metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set metrics container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
@@ -1150,7 +1156,7 @@ metrics:
     enabled: false
     privileged: false
     runAsNonRoot: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     allowPrivilegeEscalation: false
     capabilities:

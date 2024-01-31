@@ -58,6 +58,19 @@ helm delete --purge my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Differences between the the Bitnami MariaDB Galera and Bitnami MariaDB Helm charts
+
+There are two different ways to deploy a MariaDB cluster, using the MariaDB Helm chart or the MariaDB Galera Helm chart. Both solutions provide a simply and reliable way to run MariaDB in a production environment. Keep reading to discover the differences between them and check which one better suits your needs.
+
+- The MariaDB Galera Helm chart configures a cluster with three nodes by default, all of them acting as master nodes with writing / reading permissions. The MariaDB Helm chart deploys one node that you can use as a single-node application database.
+- The MariaDB Galera Helm chart provides a cluster with both read and write scalability since all nodes acts as master nodes (multi-master topology) while a cluster comprised of several MariaDB nodes will establish the master-slave topology.
+- The MariaDB Galera Helm chart deploys a cluster with synchronous replication, avoiding data loss if any node fails.
+- The MariaDB Galera Helm chart cluster ensures high-availability thanks to automatic membership control, failed nodes are drop from the cluster.
+
+The following diagram shows you the options you have for using Bitnami's MariaDB solutions in your deployments: either as a single-node database (MariaDB) or as a multi-master cluster (MariaDB Galera).
+
+![A diagram comparing a single node MariaDB solution versus a multi-master node distributed database with MariaDB Galera](img/mariadb-galera-topology.png)
+
 ## Parameters
 
 ### Global parameters
@@ -96,6 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`                                         | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                              |
 | `image.debug`                                               | Specify if debug logs should be enabled                                                                                                                                                       | `false`                           |
 | `podManagementPolicy`                                       | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel | `OrderedReady`                    |
+| `automountServiceAccountToken`                              | Mount Service Account token in pod                                                                                                                                                            | `false`                           |
 | `hostAliases`                                               | Add deployment host aliases                                                                                                                                                                   | `[]`                              |
 | `service.type`                                              | Kubernetes service type                                                                                                                                                                       | `ClusterIP`                       |
 | `service.clusterIP`                                         | Specific cluster IP when service type is cluster IP. Use `None` for headless service                                                                                                          | `""`                              |
@@ -127,7 +141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`                     | Set filesystem extra groups                                                                                                                                                                   | `[]`                              |
 | `podSecurityContext.fsGroup`                                | Group ID for the container filesystem                                                                                                                                                         | `1001`                            |
 | `containerSecurityContext.enabled`                          | Enabled containers' Security Context                                                                                                                                                          | `true`                            |
-| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                              | `{}`                              |
+| `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                              | `nil`                             |
 | `containerSecurityContext.runAsUser`                        | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`                            |
 | `containerSecurityContext.runAsNonRoot`                     | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`                            |
 | `containerSecurityContext.privileged`                       | Set container's Security Context privileged                                                                                                                                                   | `false`                           |
@@ -243,7 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | The resources limits for the container                                                                                                                                                        | `{}`                              |
 | `metrics.resources.requests`                                | The requested resources for the container                                                                                                                                                     | `{}`                              |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                          | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `{}`                              |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`                            |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                   | `false`                           |
@@ -420,7 +434,7 @@ initdbScripts:
      fi
 ```
 
-## Extra Init Containers
+### Extra Init Containers
 
 The feature allows for specifying a template string for a initContainer in the pod. Usecases include situations when you need some pre-run setup. For example, in IKS (IBM Cloud Kubernetes Service), non-root users do not have write permission on the volume mount path for NFS-powered file storage. So, you could use a initcontainer to `chown` the mount. See a example below, where we add an initContainer on the pod that reports to an external resource that the db is going to starting.
 `values.yaml`
@@ -434,7 +448,7 @@ extraInitContainers:
     - install_packages curl && curl http://api-service.local/db/starting;
 ```
 
-## Extra Containers
+### Extra Containers
 
 The feature allows for specifying additional containers in the pod. Usecases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
 `values.yaml`
@@ -572,11 +586,46 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb-galera \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-## Persistence
+### Persistence
 
 The [Bitnami MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) image stores the MariaDB data and configurations at the `/bitnami/mariadb` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can be defined.
+
+### Backup and restore MariaDB Galera deployments
+
+Two different approaches are available to back up and restore Bitnami MariaDB Galera Helm chart deployments on Kubernetes:
+
+- Back up the data from the source deployment and restore it in a new deployment using MariaDB Galera built-in backup/restore tools.
+- Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
+
+#### Method 1: Backup and restore data using MariaDB Galera built-in tools
+
+This method involves the following steps:
+
+- Use the *mysqldump* tool to create a snapshot of the data in the source cluster.
+- Create a new MariaDB Galera Cluster deployment and forward the MariaDB Galera Cluster service port for the new deployment.
+- Create and start a MariaDB Galera container image to mount a directory containing the backup file as a volume.
+- Restore the data using the *mysql* client tool to import the backup to the new cluster.
+
+> NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
+
+#### Method 2: Back up and restore persistent data volumes
+
+This method involves copying the persistent data volumes for the MariaDB Galera nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
+
+- The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
+- Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
+- The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
+
+This method involves the following steps:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring MariaDB Galera chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mariadb-galera-kubernetes/), which covers both these approaches, for more information.
 
 ### Setting Pod's affinity
 
@@ -601,7 +650,7 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb-galera \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-| Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+| Note: you need to substitute the placeholders *[ROOT_PASSWORD]*, *[MARIADB_PASSWORD]* and *[MARIABACKUP_PASSWORD]* with the values obtained from instructions in the installation notes.
 
 ### To 9.0.0
 
@@ -658,7 +707,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 #### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 #### Considerations when upgrading to this version
 
@@ -685,17 +734,14 @@ Consequences:
 - Backwards compatibility is not guaranteed.
 - Environment variables related to LDAP configuration were renamed removing the `MARIADB_` prefix. For instance, to indicate the LDAP URI to use, you must set `LDAP_URI` instead of `MARIADB_LDAP_URI`
 
-To upgrade to `1.0.0`, install a new release of the MariaDB Galera chart, and migrate your data by creating a backup of the database, and restoring it on the new release. In the link below you can find a guide that explain the whole process:
-
-- [Create And Restore MySQL/MariaDB Backups](https://docs.bitnami.com/general/infrastructure/mariadb/administration/backup-restore-mysql-mariadb/)
+To upgrade to `1.0.0`, install a new release of the MariaDB Galera chart, and migrate your data by creating a backup of the database, and restoring it on the new release.
 
 ## Bitnami Kubernetes Documentation
 
 Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
 
-- [Documentation for MariaDB Galera Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/mariadb-galera/)
+- [Documentation for MariaDB Galera Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera)
 - [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
-- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
 

@@ -41,6 +41,7 @@ spec:
     spec:
       serviceAccountName: {{ template "jupyterhub.hubServiceAccountName" . }}
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.hub.automountServiceAccountToken }}
       {{- if .Values.hub.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hub.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -74,7 +75,6 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.hub.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if .Values.postgresql.enabled }}
         # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use os-shell if
         # it had the binary wait-for-port.
         # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
@@ -114,7 +114,7 @@ spec:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
               value: {{ ternary (include "jupyterhub.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_NAME
-              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.port .Values.postgresql.enabled }}
+              value: {{ ternary .Values.postgresql.auth.database .Values.externalDatabase.database .Values.postgresql.enabled }}
             - name: POSTGRESQL_CLIENT_DATABASE_PORT_NUMBER
               value: {{ ternary "5432" .Values.externalDatabase.port .Values.postgresql.enabled | quote }}
             - name: POSTGRESQL_CLIENT_CREATE_DATABASE_PASSWORD
@@ -123,8 +123,7 @@ spec:
                   name: {{ include "jupyterhub.databaseSecretName" . }}
                   key: {{ include "jupyterhub.databaseSecretKey" . }}
             - name: POSTGRESQL_CLIENT_POSTGRES_USER
-              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.host .Values.postgresql.enabled | quote }}
-        {{- end }}
+              value: {{ ternary .Values.postgresql.auth.username .Values.externalDatabase.user .Values.postgresql.enabled | quote }}
         {{- if .Values.hub.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hub.initContainers "context" $) | nindent 8 }}
         {{- end }}

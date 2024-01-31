@@ -80,20 +80,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NGINX parameters
 
-| Name                 | Description                                                                                           | Value                   |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`     | NGINX image registry                                                                                  | `REGISTRY_NAME`         |
-| `image.repository`   | NGINX image repository                                                                                | `REPOSITORY_NAME/nginx` |
-| `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`          |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                    |
-| `image.debug`        | Set to true if you would like to see extra information on logs                                        | `false`                 |
-| `hostAliases`        | Deployment pod host aliases                                                                           | `[]`                    |
-| `command`            | Override default container command (useful when using custom images)                                  | `[]`                    |
-| `args`               | Override default container args (useful when using custom images)                                     | `[]`                    |
-| `extraEnvVars`       | Extra environment variables to be set on NGINX containers                                             | `[]`                    |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                            | `""`                    |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                               | `""`                    |
+| Name                           | Description                                                                                           | Value                   |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`               | NGINX image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`             | NGINX image repository                                                                                | `REPOSITORY_NAME/nginx` |
+| `image.digest`                 | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`             | NGINX image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`            | Specify docker-registry secret names as an array                                                      | `[]`                    |
+| `image.debug`                  | Set to true if you would like to see extra information on logs                                        | `false`                 |
+| `automountServiceAccountToken` | Mount Service Account token in pod                                                                    | `false`                 |
+| `hostAliases`                  | Deployment pod host aliases                                                                           | `[]`                    |
+| `command`                      | Override default container command (useful when using custom images)                                  | `[]`                    |
+| `args`                         | Override default container args (useful when using custom images)                                     | `[]`                    |
+| `extraEnvVars`                 | Extra environment variables to be set on NGINX containers                                             | `[]`                    |
+| `extraEnvVarsCM`               | ConfigMap with extra environment variables                                                            | `""`                    |
+| `extraEnvVarsSecret`           | Secret with extra environment variables                                                               | `""`                    |
 
 ### NGINX deployment parameters
 
@@ -125,7 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                  | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the NGINX pods                                                         | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -207,49 +208,56 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Service type                                                                                                                     | `LoadBalancer`           |
-| `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
-| `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
-| `service.nodePorts`                | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.                                                | `{}`                     |
-| `service.targetPort`               | Target port reference value for the Loadbalancer service types can be specified explicitly.                                      | `{}`                     |
-| `service.clusterIP`                | NGINX service Cluster IP                                                                                                         | `""`                     |
-| `service.loadBalancerIP`           | LoadBalancer service IP address                                                                                                  | `""`                     |
-| `service.loadBalancerSourceRanges` | NGINX service Load Balancer sources                                                                                              | `[]`                     |
-| `service.loadBalancerClass`        | service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                         | `""`                     |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.annotations`              | Service annotations                                                                                                              | `{}`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `nginx.local`            |
-| `ingress.path`                     | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.ingressClassName`         | Set the ingerssClassName on the ingress record for k8s 1.18+                                                                     | `""`                     |
-| `ingress.tls`                      | Create TLS Secret                                                                                                                | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.extraRules`               | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
-| `healthIngress.enabled`            | Set to true to enable health ingress record generation                                                                           | `false`                  |
-| `healthIngress.selfSigned`         | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `healthIngress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created                                                      | `example.local`          |
-| `healthIngress.path`               | Default path for the ingress record                                                                                              | `/`                      |
-| `healthIngress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `healthIngress.tls`                | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter                                          | `false`                  |
-| `healthIngress.extraHosts`         | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `healthIngress.extraPaths`         | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `healthIngress.extraTls`           | TLS configuration for additional hostnames to be covered                                                                         | `[]`                     |
-| `healthIngress.secrets`            | TLS Secret configuration                                                                                                         | `[]`                     |
-| `healthIngress.ingressClassName`   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `healthIngress.extraRules`         | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Service type                                                                                                                     | `LoadBalancer`           |
+| `service.ports.http`                    | Service HTTP port                                                                                                                | `80`                     |
+| `service.ports.https`                   | Service HTTPS port                                                                                                               | `443`                    |
+| `service.nodePorts`                     | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.                                                | `{}`                     |
+| `service.targetPort`                    | Target port reference value for the Loadbalancer service types can be specified explicitly.                                      | `{}`                     |
+| `service.clusterIP`                     | NGINX service Cluster IP                                                                                                         | `""`                     |
+| `service.loadBalancerIP`                | LoadBalancer service IP address                                                                                                  | `""`                     |
+| `service.loadBalancerSourceRanges`      | NGINX service Load Balancer sources                                                                                              | `[]`                     |
+| `service.loadBalancerClass`             | service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)                                         | `""`                     |
+| `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.annotations`                   | Service annotations                                                                                                              | `{}`                     |
+| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress resource                                                                                            | `nginx.local`            |
+| `ingress.path`                          | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.ingressClassName`              | Set the ingerssClassName on the ingress record for k8s 1.18+                                                                     | `""`                     |
+| `ingress.tls`                           | Create TLS Secret                                                                                                                | `false`                  |
+| `ingress.extraHosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`                    | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`                    | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
+| `healthIngress.enabled`                 | Set to true to enable health ingress record generation                                                                           | `false`                  |
+| `healthIngress.selfSigned`              | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `healthIngress.pathType`                | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `healthIngress.hostname`                | When the health ingress is enabled, a host pointing to this will be created                                                      | `example.local`          |
+| `healthIngress.path`                    | Default path for the ingress record                                                                                              | `/`                      |
+| `healthIngress.annotations`             | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `healthIngress.tls`                     | Enable TLS configuration for the hostname defined at `healthIngress.hostname` parameter                                          | `false`                  |
+| `healthIngress.extraHosts`              | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `healthIngress.extraPaths`              | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `healthIngress.extraTls`                | TLS configuration for additional hostnames to be covered                                                                         | `[]`                     |
+| `healthIngress.secrets`                 | TLS Secret configuration                                                                                                         | `[]`                     |
+| `healthIngress.ingressClassName`        | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `healthIngress.extraRules`              | The list of additional rules to be added to this ingress record. Evaluated as a template                                         | `[]`                     |
 
 ### Metrics parameters
 
@@ -266,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerPorts.metrics`           | Prometheus exporter container port                                                                                                        | `9113`                           |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                             |
 | `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                       | `false`                          |
-| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                          | `{}`                             |
+| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                          | `nil`                            |
 | `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                 | `1001`                           |
 | `metrics.service.port`                     | NGINX Prometheus exporter service port                                                                                                    | `9113`                           |
 | `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                                           | `{}`                             |
@@ -318,7 +326,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different NGINX version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/infrastructure/nginx/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Deploying your custom web application
 
@@ -478,9 +486,8 @@ kubectl patch deployment nginx --type=json -p='[{"op": "remove", "path": "/spec/
 
 Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](https://docs.bitnami.com/). You can find there the following resources:
 
-- [Documentation for NGINX Helm chart](https://docs.bitnami.com/kubernetes/infrastructure/nginx/)
+- [Documentation for NGINX Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/nginx)
 - [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
-- [Bitnami Helm charts documentation](https://docs.bitnami.com/kubernetes/apps/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
 - [Kubernetes Developer guides](https://docs.bitnami.com/tutorials/)
 

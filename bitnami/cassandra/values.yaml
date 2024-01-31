@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.1.3-debian-11-r78
+  tag: 4.1.3-debian-11-r84
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -214,6 +214,9 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -293,7 +296,7 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Cassandra containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Cassandra containers' Security Context runAsUser
 ## @param containerSecurityContext.allowPrivilegeEscalation Set Cassandra containers' Security Context allowPrivilegeEscalation
 ## @param containerSecurityContext.capabilities.drop Set Cassandra containers' Security Context capabilities to be dropped
@@ -304,7 +307,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -636,7 +639,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -672,7 +675,7 @@ volumePermissions:
   ## Init container Security Context
   ## Note: the chown of the data folder is done to securityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
-  ## @param volumePermissions.securityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the init container
   ##
   ## When runAsUser is set to special value "auto", init container will try to chwon the
@@ -682,7 +685,7 @@ volumePermissions:
   ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
   ##
   securityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Metrics parameters
@@ -706,7 +709,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r431
+    tag: 2.3.8-debian-11-r435
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

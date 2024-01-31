@@ -1,4 +1,6 @@
-# !kustomize build https://github.com/grafana-operator/grafana-operator/blob/v5.0.2/deploy/helm/grafana-operator/crds/
+# Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanadashboards.yaml
+# Version: 5.6.1
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -14,204 +16,222 @@ spec:
     singular: grafanadashboard
   scope: Namespaced
   versions:
-    - additionalPrinterColumns:
-        - jsonPath: .status.NoMatchingInstances
-          name: No matching instances
-          type: boolean
-        - format: date-time
-          jsonPath: .status.lastResync
-          name: Last resync
-          type: date
-        - jsonPath: .metadata.creationTimestamp
-          name: Age
-          type: date
-      name: v1beta1
-      schema:
-        openAPIV3Schema:
-          properties:
-            apiVersion:
-              type: string
-            kind:
-              type: string
-            metadata:
-              type: object
-            spec:
-              properties:
-                allowCrossNamespaceImport:
-                  type: boolean
-                configMapRef:
+  - additionalPrinterColumns:
+    - jsonPath: .status.NoMatchingInstances
+      name: No matching instances
+      type: boolean
+    - format: date-time
+      jsonPath: .status.lastResync
+      name: Last resync
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              allowCrossNamespaceImport:
+                type: boolean
+              configMapRef:
+                properties:
+                  key:
+                    type: string
+                  name:
+                    type: string
+                  optional:
+                    type: boolean
+                required:
+                - key
+                type: object
+                x-kubernetes-map-type: atomic
+              contentCacheDuration:
+                type: string
+              datasources:
+                items:
                   properties:
-                    key:
+                    datasourceName:
                       type: string
+                    inputName:
+                      type: string
+                  required:
+                  - datasourceName
+                  - inputName
+                  type: object
+                type: array
+              envFrom:
+                items:
+                  properties:
+                    configMapKeyRef:
+                      properties:
+                        key:
+                          type: string
+                        name:
+                          type: string
+                        optional:
+                          type: boolean
+                      required:
+                      - key
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    secretKeyRef:
+                      properties:
+                        key:
+                          type: string
+                        name:
+                          type: string
+                        optional:
+                          type: boolean
+                      required:
+                      - key
+                      type: object
+                      x-kubernetes-map-type: atomic
+                  type: object
+                type: array
+              envs:
+                items:
+                  properties:
                     name:
                       type: string
-                    optional:
-                      type: boolean
-                  required:
-                    - key
-                  type: object
-                  x-kubernetes-map-type: atomic
-                contentCacheDuration:
-                  type: string
-                datasources:
-                  items:
-                    properties:
-                      datasourceName:
-                        type: string
-                      inputName:
-                        type: string
-                    required:
-                      - datasourceName
-                      - inputName
-                    type: object
-                  type: array
-                envFrom:
-                  items:
-                    properties:
-                      configMapKeyRef:
-                        properties:
-                          key:
-                            type: string
-                          name:
-                            type: string
-                          optional:
-                            type: boolean
-                        required:
-                          - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      secretKeyRef:
-                        properties:
-                          key:
-                            type: string
-                          name:
-                            type: string
-                          optional:
-                            type: boolean
-                        required:
-                          - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                    type: object
-                  type: array
-                envs:
-                  items:
-                    properties:
-                      configMapKeyRef:
-                        properties:
-                          key:
-                            type: string
-                          name:
-                            type: string
-                          optional:
-                            type: boolean
-                        required:
-                          - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      name:
-                        type: string
-                      secretKeyRef:
-                        properties:
-                          key:
-                            type: string
-                          name:
-                            type: string
-                          optional:
-                            type: boolean
-                        required:
-                          - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      value:omitempty:
-                        type: string
-                    required:
-                      - name
-                    type: object
-                  type: array
-                folder:
-                  type: string
-                grafanaCom:
-                  properties:
-                    id:
-                      type: integer
-                    revision:
-                      type: integer
-                  required:
-                    - id
-                  type: object
-                gzipJson:
-                  format: byte
-                  type: string
-                instanceSelector:
-                  properties:
-                    matchExpressions:
-                      items:
-                        properties:
-                          key:
-                            type: string
-                          operator:
-                            type: string
-                          values:
-                            items:
+                    value:
+                      type: string
+                    valueFrom:
+                      properties:
+                        configMapKeyRef:
+                          properties:
+                            key:
                               type: string
-                            type: array
-                        required:
+                            name:
+                              type: string
+                            optional:
+                              type: boolean
+                          required:
                           - key
-                          - operator
-                        type: object
-                      type: array
-                    matchLabels:
-                      additionalProperties:
-                        type: string
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        secretKeyRef:
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              type: string
+                            optional:
+                              type: boolean
+                          required:
+                          - key
+                          type: object
+                          x-kubernetes-map-type: atomic
                       type: object
+                  required:
+                  - name
                   type: object
-                  x-kubernetes-map-type: atomic
-                json:
-                  type: string
-                jsonnet:
-                  type: string
-                plugins:
-                  items:
-                    properties:
-                      name:
-                        type: string
-                      version:
-                        type: string
-                    required:
-                      - name
-                      - version
+                type: array
+              folder:
+                type: string
+              grafanaCom:
+                properties:
+                  id:
+                    type: integer
+                  revision:
+                    type: integer
+                required:
+                - id
+                type: object
+              gzipJson:
+                format: byte
+                type: string
+              instanceSelector:
+                properties:
+                  matchExpressions:
+                    items:
+                      properties:
+                        key:
+                          type: string
+                        operator:
+                          type: string
+                        values:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
                     type: object
-                  type: array
-                resyncPeriod:
-                  type: string
-                url:
-                  type: string
-              required:
-                - instanceSelector
-              type: object
-            status:
-              properties:
-                NoMatchingInstances:
-                  type: boolean
-                contentCache:
-                  format: byte
-                  type: string
-                contentTimestamp:
-                  format: date-time
-                  type: string
-                contentUrl:
-                  type: string
-                hash:
-                  type: string
-                lastResync:
-                  format: date-time
-                  type: string
-                uid:
-                  type: string
-              type: object
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                type: object
+                x-kubernetes-map-type: atomic
+              json:
+                type: string
+              jsonnet:
+                type: string
+              jsonnetLib:
+                properties:
+                  fileName:
+                    type: string
+                  gzipJsonnetProject:
+                    format: byte
+                    type: string
+                  jPath:
+                    items:
+                      type: string
+                    type: array
+                required:
+                - fileName
+                - gzipJsonnetProject
+                type: object
+              plugins:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    version:
+                      type: string
+                  required:
+                  - name
+                  - version
+                  type: object
+                type: array
+              resyncPeriod:
+                type: string
+              url:
+                type: string
+            required:
+            - instanceSelector
+            type: object
+          status:
+            properties:
+              NoMatchingInstances:
+                type: boolean
+              contentCache:
+                format: byte
+                type: string
+              contentTimestamp:
+                format: date-time
+                type: string
+              contentUrl:
+                type: string
+              hash:
+                type: string
+              lastResync:
+                format: date-time
+                type: string
+              uid:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

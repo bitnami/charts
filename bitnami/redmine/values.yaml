@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.1.1-debian-11-r6
+  tag: 5.1.1-debian-11-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -203,13 +203,13 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled Redmine containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Redmine container's Security Context runAsUser
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 0
   seccompProfile:
     type: "RuntimeDefault"
@@ -275,6 +275,9 @@ customStartupProbe: {}
 ## @param lifecycleHooks LifecycleHooks to set additional configuration at startup
 ##
 lifecycleHooks: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases Redmine pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -596,12 +599,12 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section RBAC Parameters
@@ -831,13 +834,13 @@ mailReceiver:
   ## @param
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param mailReceiver.containerSecurityContext.enabled mailReceiver Container securityContext
-  ## @param mailReceiver.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param mailReceiver.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param mailReceiver.containerSecurityContext.runAsUser User ID for the mailReceiver container
   ## @param mailReceiver.containerSecurityContext.runAsNonRoot Whether to run the mailReceiver container as a non-root user
   ##
   containerSecurityContext:
     enabled: false
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
   ## @param mailReceiver.podAnnotations Additional pod annotations
@@ -966,7 +969,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r95
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -155,7 +155,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configAsCode.autoReload.extraEnvVarsCM`                                    |                                                                                                         | `""`                            |
 | `configAsCode.autoReload.extraVolumeMounts`                                 |                                                                                                         | `[]`                            |
 | `configAsCode.autoReload.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`                          |
-| `configAsCode.autoReload.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`                            |
+| `configAsCode.autoReload.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`                           |
 | `configAsCode.autoReload.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`                          |
 | `configAsCode.autoReload.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`                          |
 | `configAsCode.autoReload.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`                         |
@@ -183,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.resources.limits`                                                    | The resources limits for the Jenkins container                                                          | `{}`                            |
 | `agent.resources.requests`                                                  | The requested resources for the Jenkins container                                                       | `{}`                            |
 | `agent.containerSecurityContext.enabled`                                    | Enable container security context                                                                       | `false`                         |
-| `agent.containerSecurityContext.seLinuxOptions`                             | Set SELinux options in container                                                                        | `{}`                            |
+| `agent.containerSecurityContext.seLinuxOptions`                             | Set SELinux options in container                                                                        | `nil`                           |
 | `agent.containerSecurityContext.runAsUser`                                  | User ID for the agent container                                                                         | `""`                            |
 | `agent.containerSecurityContext.runAsGroup`                                 | User ID for the agent container                                                                         | `""`                            |
 | `agent.containerSecurityContext.privileged`                                 | Decide if the container runs privileged.                                                                | `false`                         |
@@ -196,6 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                 | Jenkins pod priority class name                                                           | `""`             |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`             |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                        | `true`           |
 | `hostAliases`                                       | Jenkins pod host aliases                                                                  | `[]`             |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for Jenkins pods                      | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Jenkins container(s)         | `[]`             |
@@ -223,7 +224,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Jenkins pod's Security Context fsGroup                                                | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -316,19 +317,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`              | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`               | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`             | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.securityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
 
-| Name                                          | Description                                                      | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------- | ------ |
-| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true` |
-| `rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`   |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true` |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
-| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
+| Name                                          | Description                                                      | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------- | ------- |
+| `rbac.create`                                 | Specifies whether RBAC resources should be created               | `true`  |
+| `rbac.rules`                                  | Custom RBAC rules to set                                         | `[]`    |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created             | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`    |
+| `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `false` |
 
 The above parameters map to the env variables defined in [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins). For more information please refer to the [bitnami/jenkins](https://github.com/bitnami/containers/tree/main/bitnami/jenkins) image documentation.
 
@@ -366,13 +367,55 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/jenkins/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### Configure TLS Secrets for use with Ingress
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/jenkins/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Configure extra environment variables
 
@@ -388,9 +431,43 @@ Alternatively, use a ConfigMap or a Secret with the environment variables. To do
 
 ### Configure Sidecars and Init Containers
 
-If additional containers are needed in the same pod as Jenkins (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. Similarly, you can add extra init containers using the `initContainers` parameter.
+If additional containers are needed in the same pod as Jenkins (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
-[Learn more about configuring and using sidecar and init containers](https://docs.bitnami.com/kubernetes/apps/jenkins/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Deploy extra resources
 
@@ -479,8 +556,6 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 ### To 6.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/jenkins/administration/upgrade-helm3/).
 
 ### To 5.0.0
 

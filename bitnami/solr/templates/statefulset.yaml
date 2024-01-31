@@ -12,7 +12,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
 spec:
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
@@ -42,6 +42,7 @@ spec:
     spec:
       serviceAccountName: {{ include "solr.serviceAccountName" . }}
       {{- include "solr.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}

@@ -17,7 +17,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.postgresql.replicaCount }}
-  podManagementPolicy: Parallel
+  podManagementPolicy: {{ .Values.postgresql.podManagementPolicy | quote }}
   serviceName: {{ printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
   updateStrategy: {{- toYaml .Values.postgresql.updateStrategy | nindent 4 }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.postgresql.podLabels .Values.commonLabels ) "context" . ) }}
@@ -41,6 +41,7 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.postgresql.automountServiceAccountToken }}
       {{- if .Values.postgresql.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.hostAliases "context" $) | nindent 8 }}
       {{- end }}

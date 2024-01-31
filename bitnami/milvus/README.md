@@ -24,8 +24,6 @@ This chart bootstraps a [Milvus](https://github.com/grafana/loki) Deployment in 
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/milvus/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -123,7 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                           | `[]`             |
 | `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                              | `""`             |
 | `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                      | `true`           |
-| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `{}`             |
+| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `nil`            |
 | `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                | `1001`           |
 | `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                             | `true`           |
 | `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                               | `false`          |
@@ -142,6 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`. | `[]`             |
 | `initJob.resources.limits`                                  | The resources limits for the container                                                                                    | `{}`             |
 | `initJob.resources.requests`                                | The requested resources for the container                                                                                 | `{}`             |
+| `initJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                        | `false`          |
 | `initJob.hostAliases`                                       | Add deployment host aliases                                                                                               | `[]`             |
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                     | `{}`             |
@@ -193,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `dataCoord.podSecurityContext.fsGroup`                        | Set Data Coordinator pod's Security Context fsGroup                                                        | `1001`           |
 | `dataCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `dataCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `dataCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `dataCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `dataCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `dataCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -203,6 +202,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `dataCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `dataCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `dataCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `dataCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `dataCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `dataCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -337,7 +337,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `rootCoord.podSecurityContext.fsGroup`                        | Set Root Coordinator pod's Security Context fsGroup                                                        | `1001`           |
 | `rootCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `rootCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `rootCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `rootCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `rootCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `rootCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -347,6 +347,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `rootCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `rootCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `rootCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `rootCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `rootCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `rootCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -481,7 +482,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `queryCoord.podSecurityContext.fsGroup`                        | Set Query Coordinator pod's Security Context fsGroup                                                       | `1001`           |
 | `queryCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `queryCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `queryCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `queryCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `queryCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `queryCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -491,6 +492,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `queryCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `queryCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `queryCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `queryCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `queryCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `queryCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -625,7 +627,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `indexCoord.podSecurityContext.fsGroup`                        | Set Index Coordinator pod's Security Context fsGroup                                                       | `1001`           |
 | `indexCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `indexCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `indexCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `indexCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `indexCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `indexCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -635,6 +637,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `indexCoord.lifecycleHooks`                                    | for the data coordinator container(s) to automate configuration before or after startup                    | `{}`             |
 | `indexCoord.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                             | `""`             |
+| `indexCoord.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `indexCoord.hostAliases`                                       | data coordinator pods host aliases                                                                         | `[]`             |
 | `indexCoord.podLabels`                                         | Extra labels for data coordinator pods                                                                     | `{}`             |
 | `indexCoord.podAnnotations`                                    | Annotations for data coordinator pods                                                                      | `{}`             |
@@ -769,7 +772,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `dataNode.podSecurityContext.fsGroup`                        | Set Data Node pod's Security Context fsGroup                                                        | `1001`           |
 | `dataNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `dataNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `dataNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `dataNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `dataNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `dataNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -779,6 +782,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `dataNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `dataNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
+| `dataNode.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `dataNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
 | `dataNode.podLabels`                                         | Extra labels for data node pods                                                                     | `{}`             |
 | `dataNode.podAnnotations`                                    | Annotations for data node pods                                                                      | `{}`             |
@@ -913,7 +917,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `queryNode.podSecurityContext.fsGroup`                        | Set Query Node pod's Security Context fsGroup                                                       | `1001`           |
 | `queryNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `queryNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `queryNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `queryNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `queryNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `queryNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -923,6 +927,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `queryNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `queryNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
+| `queryNode.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `queryNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
 | `queryNode.podLabels`                                         | Extra labels for data node pods                                                                     | `{}`             |
 | `queryNode.podAnnotations`                                    | Annotations for data node pods                                                                      | `{}`             |
@@ -1057,7 +1062,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `indexNode.podSecurityContext.fsGroup`                        | Set Index Node pod's Security Context fsGroup                                                       | `1001`           |
 | `indexNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `indexNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `indexNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `indexNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `indexNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `indexNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -1067,6 +1072,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `indexNode.lifecycleHooks`                                    | for the data node container(s) to automate configuration before or after startup                    | `{}`             |
 | `indexNode.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                      | `""`             |
+| `indexNode.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `indexNode.hostAliases`                                       | data node pods host aliases                                                                         | `[]`             |
 | `indexNode.podLabels`                                         | Extra labels for data node pods                                                                     | `{}`             |
 | `indexNode.podAnnotations`                                    | Annotations for data node pods                                                                      | `{}`             |
@@ -1213,7 +1219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                     | `[]`             |
 | `proxy.podSecurityContext.fsGroup`                        | Set Proxy pod's Security Context fsGroup                                                        | `1001`           |
 | `proxy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                            | `true`           |
-| `proxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `{}`             |
+| `proxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `nil`            |
 | `proxy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                      | `1001`           |
 | `proxy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                   | `true`           |
 | `proxy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                     | `false`          |
@@ -1223,6 +1229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                | `RuntimeDefault` |
 | `proxy.lifecycleHooks`                                    | for the proxy container(s) to automate configuration before or after startup                    | `{}`             |
 | `proxy.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                  | `""`             |
+| `proxy.automountServiceAccountToken`                      | Mount Service Account token in pod                                                              | `false`          |
 | `proxy.hostAliases`                                       | proxy pods host aliases                                                                         | `[]`             |
 | `proxy.podLabels`                                         | Extra labels for proxy pods                                                                     | `{}`             |
 | `proxy.podAnnotations`                                    | Annotations for proxy pods                                                                      | `{}`             |
@@ -1358,7 +1365,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`                   |
 | `attu.podSecurityContext.fsGroup`                        | Set Attu pod's Security Context fsGroup                                                              | `1001`                 |
 | `attu.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`                 |
-| `attu.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`                   |
+| `attu.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `nil`                  |
 | `attu.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`                 |
 | `attu.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`                 |
 | `attu.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`                |
@@ -1368,6 +1375,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                     | `RuntimeDefault`       |
 | `attu.lifecycleHooks`                                    | for the attu container(s) to automate configuration before or after startup                          | `{}`                   |
 | `attu.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                       | `""`                   |
+| `attu.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                   | `false`                |
 | `attu.hostAliases`                                       | attu pods host aliases                                                                               | `[]`                   |
 | `attu.podLabels`                                         | Extra labels for attu pods                                                                           | `{}`                   |
 | `attu.podAnnotations`                                    | Annotations for attu pods                                                                            | `{}`                   |
@@ -1460,7 +1468,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
 | `waitContainer.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                       |
+| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `nil`                      |
 | `waitContainer.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                    | `1001`                     |
 | `waitContainer.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                 | `true`                     |
 | `waitContainer.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                   | `false`                    |
@@ -1632,7 +1640,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/milvus/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -1677,13 +1721,55 @@ externalS3.accessKeySecret=secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `attu.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `attu.ingress.enabled` to `true`. The `attu.ingress.hostname` property can be used to set the host name. The `attu.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `attu.ingress.hostname` property can be used to set the host name. The `attu.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `attu.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `attu.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `attu.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Upgrading
 

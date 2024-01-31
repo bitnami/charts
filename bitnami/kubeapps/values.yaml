@@ -208,7 +208,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.25.3-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -301,7 +301,7 @@ frontend:
   ## Configure Container Security Context for NGINX
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param frontend.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param frontend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param frontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param frontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param frontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param frontend.containerSecurityContext.privileged Set container's Security Context privileged
@@ -312,7 +312,7 @@ frontend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -442,6 +442,9 @@ frontend:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param frontend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param frontend.hostAliases Custom host aliases for frontend pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -547,7 +550,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.9.0-debian-11-r19
+    tag: 2.9.0-debian-11-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -672,7 +675,7 @@ dashboard:
   ## Configure Container Security Context for Dashboard
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dashboard.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
@@ -683,7 +686,7 @@ dashboard:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -815,6 +818,9 @@ dashboard:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param dashboard.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param dashboard.hostAliases Custom host aliases for Dashboard pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -874,7 +880,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.9.0-debian-11-r13
+    tag: 2.9.0-debian-11-r17
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -901,7 +907,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.9.0-debian-11-r14
+    tag: 2.9.0-debian-11-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1039,7 +1045,7 @@ apprepository:
   ## Configure Container Security Context for App Repository jobs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param apprepository.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param apprepository.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param apprepository.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param apprepository.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param apprepository.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param apprepository.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1050,7 +1056,7 @@ apprepository:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1146,6 +1152,9 @@ apprepository:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param apprepository.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param apprepository.hostAliases Custom host aliases for AppRepository Controller pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1181,7 +1190,7 @@ apprepository:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
 ## @section Auth Proxy parameters
@@ -1205,7 +1214,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.5.1-debian-11-r12
+    tag: 7.5.1-debian-11-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1301,7 +1310,7 @@ authProxy:
   ## Configure Container Security Context for Auth Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param authProxy.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param authProxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param authProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param authProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param authProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param authProxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1312,7 +1321,7 @@ authProxy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1357,7 +1366,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.9.0-debian-11-r12
+    tag: 2.9.0-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1427,7 +1436,7 @@ pinnipedProxy:
   ## Configure Container Security Context for Pinniped Proxy
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param pinnipedProxy.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param pinnipedProxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param pinnipedProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param pinnipedProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param pinnipedProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param pinnipedProxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1438,7 +1447,7 @@ pinnipedProxy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1664,7 +1673,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.9.0-debian-11-r14
+    tag: 2.9.0-debian-11-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1754,7 +1763,7 @@ kubeappsapis:
   ## Configure Container Security Context for Kubeapps APIs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kubeappsapis.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param kubeappsapis.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param kubeappsapis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param kubeappsapis.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param kubeappsapis.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param kubeappsapis.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1765,7 +1774,7 @@ kubeappsapis:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1903,6 +1912,9 @@ kubeappsapis:
   ## The value is evaluated as a template
   ##
   topologySpreadConstraints: []
+  ## @param kubeappsapis.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param kubeappsapis.hostAliases Custom host aliases for KubeappsAPIs pods
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1948,7 +1960,7 @@ kubeappsapis:
   serviceAccount:
     create: true
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
 ## @section OCI Catalog chart configuration
@@ -1969,7 +1981,7 @@ ociCatalog:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-oci-catalog
-    tag: 2.9.0-debian-11-r8
+    tag: 2.9.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2024,7 +2036,7 @@ ociCatalog:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ociCatalog.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param ociCatalog.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param ociCatalog.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ociCatalog.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param ociCatalog.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ociCatalog.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2035,7 +2047,7 @@ ociCatalog:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

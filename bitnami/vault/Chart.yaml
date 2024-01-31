@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r93
+      image: docker.io/bitnami/os-shell:11-debian-11-r94
     - name: vault-csi-provider
       image: docker.io/bitnami/vault-csi-provider:1.4.1-debian-11-r5
     - name: vault-k8s
@@ -35,4 +35,4 @@ maintainers:
 name: vault
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 0.5.0
+version: 0.7.1

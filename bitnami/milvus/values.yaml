@@ -319,7 +319,7 @@ initJob:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param initJob.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -330,7 +330,7 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -378,6 +378,9 @@ initJob:
   resources:
     limits: {}
     requests: {}
+  ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param initJob.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -527,7 +530,7 @@ dataCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dataCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dataCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -538,7 +541,7 @@ dataCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -555,6 +558,9 @@ dataCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param dataCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dataCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1023,7 +1029,7 @@ rootCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param rootCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param rootCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1034,7 +1040,7 @@ rootCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1051,6 +1057,9 @@ rootCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param rootCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param rootCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1518,7 +1527,7 @@ queryCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1529,7 +1538,7 @@ queryCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1546,6 +1555,9 @@ queryCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param queryCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2014,7 +2026,7 @@ indexCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param indexCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param indexCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2025,7 +2037,7 @@ indexCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2042,6 +2054,9 @@ indexCoord:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param indexCoord.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param indexCoord.hostAliases data coordinator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2510,7 +2525,7 @@ dataNode:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dataNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2521,7 +2536,7 @@ dataNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2538,6 +2553,9 @@ dataNode:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param dataNode.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param dataNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3006,7 +3024,7 @@ queryNode:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3017,7 +3035,7 @@ queryNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3034,6 +3052,9 @@ queryNode:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param queryNode.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param queryNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -3502,7 +3523,7 @@ indexNode:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param indexNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param indexNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3513,7 +3534,7 @@ indexNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3530,6 +3551,9 @@ indexNode:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param indexNode.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param indexNode.hostAliases data node pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4027,7 +4051,7 @@ proxy:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param proxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4038,7 +4062,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4055,6 +4079,9 @@ proxy:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param proxy.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param proxy.hostAliases proxy pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4535,7 +4562,7 @@ attu:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param attu.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param attu.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param attu.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param attu.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param attu.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4546,7 +4573,7 @@ attu:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4563,6 +4590,9 @@ attu:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param attu.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param attu.hostAliases attu pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -4981,7 +5011,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param waitContainer.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4992,7 +5022,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

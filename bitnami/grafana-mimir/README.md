@@ -24,8 +24,6 @@ This chart bootstraps a [Grafana Mimir](https://github.com/grafana/mimir) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-mimir/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -147,7 +145,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                            | `[]`                |
 | `alertmanager.podSecurityContext.fsGroup`                        | Set Alertmanager pod's Security Context fsGroup                                                        | `1001`              |
 | `alertmanager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                   | `true`              |
-| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                       | `{}`                |
+| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                       | `nil`               |
 | `alertmanager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                             | `1001`              |
 | `alertmanager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                          | `true`              |
 | `alertmanager.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                            | `false`             |
@@ -156,6 +154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                     | `["ALL"]`           |
 | `alertmanager.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                       | `RuntimeDefault`    |
 | `alertmanager.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                        | `{}`                |
+| `alertmanager.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                     | `false`             |
 | `alertmanager.hostAliases`                                       | ingester pods host aliases                                                                             | `[]`                |
 | `alertmanager.podLabels`                                         | Extra labels for ingester pods                                                                         | `{}`                |
 | `alertmanager.podAnnotations`                                    | Annotations for ingester pods                                                                          | `{}`                |
@@ -250,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`                |
 | `compactor.podSecurityContext.fsGroup`                        | Set Compactor pod's Security Context fsGroup                                                        | `1001`              |
 | `compactor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`              |
-| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`                |
+| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`               |
 | `compactor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`              |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`              |
 | `compactor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`             |
@@ -259,6 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                  | `["ALL"]`           |
 | `compactor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault`    |
 | `compactor.lifecycleHooks`                                    | for the compactor container(s) to automate configuration before or after startup                    | `{}`                |
+| `compactor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`             |
 | `compactor.hostAliases`                                       | compactor pods host aliases                                                                         | `[]`                |
 | `compactor.podLabels`                                         | Extra labels for compactor pods                                                                     | `{}`                |
 | `compactor.podAnnotations`                                    | Annotations for compactor pods                                                                      | `{}`                |
@@ -349,7 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`             |
 | `distributor.podSecurityContext.fsGroup`                        | Set Distributor pod's Security Context fsGroup                                                        | `1001`           |
 | `distributor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`           |
-| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`             |
+| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `nil`            |
 | `distributor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`           |
 | `distributor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`           |
 | `distributor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`          |
@@ -358,6 +358,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                    | `["ALL"]`        |
 | `distributor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                      | `RuntimeDefault` |
 | `distributor.lifecycleHooks`                                    | for the distributor container(s) to automate configuration before or after startup                    | `{}`             |
+| `distributor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`          |
 | `distributor.hostAliases`                                       | distributor pods host aliases                                                                         | `[]`             |
 | `distributor.podLabels`                                         | Extra labels for distributor pods                                                                     | `{}`             |
 | `distributor.podAnnotations`                                    | Annotations for distributor pods                                                                      | `{}`             |
@@ -454,7 +455,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`                    |
 | `gateway.podSecurityContext.fsGroup`                        | Set Gateway pod's Security Context fsGroup                                                            | `1001`                  |
 | `gateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`                  |
-| `gateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`                    |
+| `gateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `nil`                   |
 | `gateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`                  |
 | `gateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`                  |
 | `gateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`                 |
@@ -463,6 +464,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                    | `["ALL"]`               |
 | `gateway.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                      | `RuntimeDefault`        |
 | `gateway.lifecycleHooks`                                    | for the gateway container(s) to automate configuration before or after startup                        | `{}`                    |
+| `gateway.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`                 |
 | `gateway.hostAliases`                                       | gateway pods host aliases                                                                             | `[]`                    |
 | `gateway.podLabels`                                         | Extra labels for gateway pods                                                                         | `{}`                    |
 | `gateway.podAnnotations`                                    | Annotations for gateway pods                                                                          | `{}`                    |
@@ -557,7 +559,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`                |
 | `ingester.podSecurityContext.fsGroup`                        | Set Ingester pod's Security Context fsGroup                                                        | `1001`              |
 | `ingester.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                               | `true`              |
-| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `{}`                |
+| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `nil`               |
 | `ingester.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                         | `1001`              |
 | `ingester.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                      | `true`              |
 | `ingester.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                        | `false`             |
@@ -566,6 +568,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                 | `["ALL"]`           |
 | `ingester.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                   | `RuntimeDefault`    |
 | `ingester.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                    | `{}`                |
+| `ingester.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                 | `false`             |
 | `ingester.hostAliases`                                       | ingester pods host aliases                                                                         | `[]`                |
 | `ingester.podLabels`                                         | Extra labels for ingester pods                                                                     | `{}`                |
 | `ingester.podAnnotations`                                    | Annotations for ingester pods                                                                      | `{}`                |
@@ -653,7 +656,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                 | `[]`             |
 | `overridesExporter.podSecurityContext.fsGroup`                        | Set Overrides Exporter pod's Security Context fsGroup                                                       | `1001`           |
 | `overridesExporter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                        | `true`           |
-| `overridesExporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `{}`             |
+| `overridesExporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                            | `nil`            |
 | `overridesExporter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                  | `1001`           |
 | `overridesExporter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                               | `true`           |
 | `overridesExporter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                 | `false`          |
@@ -662,6 +665,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                          | `["ALL"]`        |
 | `overridesExporter.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                            | `RuntimeDefault` |
 | `overridesExporter.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                             | `{}`             |
+| `overridesExporter.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                          | `false`          |
 | `overridesExporter.hostAliases`                                       | ingester pods host aliases                                                                                  | `[]`             |
 | `overridesExporter.podLabels`                                         | Extra labels for ingester pods                                                                              | `{}`             |
 | `overridesExporter.podAnnotations`                                    | Annotations for ingester pods                                                                               | `{}`             |
@@ -746,7 +750,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                       | `[]`             |
 | `querier.podSecurityContext.fsGroup`                        | Set Querier pod's Security Context fsGroup                                                        | `1001`           |
 | `querier.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
-| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `{}`             |
+| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `nil`            |
 | `querier.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `querier.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `querier.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -755,6 +759,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                | `["ALL"]`        |
 | `querier.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                  | `RuntimeDefault` |
 | `querier.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                   | `{}`             |
+| `querier.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                | `false`          |
 | `querier.hostAliases`                                       | ingester pods host aliases                                                                        | `[]`             |
 | `querier.podLabels`                                         | Extra labels for ingester pods                                                                    | `{}`             |
 | `querier.podAnnotations`                                    | Annotations for ingester pods                                                                     | `{}`             |
@@ -839,7 +844,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`             |
 | `queryFrontend.podSecurityContext.fsGroup`                        | Set Query Frontend pod's Security Context fsGroup                                                       | `1001`           |
 | `queryFrontend.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`           |
-| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`             |
+| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`            |
 | `queryFrontend.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`           |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`           |
 | `queryFrontend.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`          |
@@ -848,6 +853,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                      | `["ALL"]`        |
 | `queryFrontend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                        | `RuntimeDefault` |
 | `queryFrontend.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                         | `{}`             |
+| `queryFrontend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`          |
 | `queryFrontend.hostAliases`                                       | ingester pods host aliases                                                                              | `[]`             |
 | `queryFrontend.podLabels`                                         | Extra labels for ingester pods                                                                          | `{}`             |
 | `queryFrontend.podAnnotations`                                    | Annotations for ingester pods                                                                           | `{}`             |
@@ -928,7 +934,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                              | `[]`             |
 | `queryScheduler.podSecurityContext.fsGroup`                        | Set Query Scheduler pod's Security Context fsGroup                                                       | `1001`           |
 | `queryScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                     | `true`           |
-| `queryScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                         | `{}`             |
+| `queryScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                         | `nil`            |
 | `queryScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                               | `1001`           |
 | `queryScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                            | `true`           |
 | `queryScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                              | `false`          |
@@ -937,6 +943,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                       | `["ALL"]`        |
 | `queryScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                         | `RuntimeDefault` |
 | `queryScheduler.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                          | `{}`             |
+| `queryScheduler.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                       | `false`          |
 | `queryScheduler.hostAliases`                                       | ingester pods host aliases                                                                               | `[]`             |
 | `queryScheduler.podLabels`                                         | Extra labels for ingester pods                                                                           | `{}`             |
 | `queryScheduler.podAnnotations`                                    | Annotations for ingester pods                                                                            | `{}`             |
@@ -1022,7 +1029,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                            | `[]`                |
 | `storeGateway.podSecurityContext.fsGroup`                        | Set Store Gateway pod's Security Context fsGroup                                                       | `1001`              |
 | `storeGateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                   | `true`              |
-| `storeGateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                       | `{}`                |
+| `storeGateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                       | `nil`               |
 | `storeGateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                             | `1001`              |
 | `storeGateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                          | `true`              |
 | `storeGateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                            | `false`             |
@@ -1031,6 +1038,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                     | `["ALL"]`           |
 | `storeGateway.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                       | `RuntimeDefault`    |
 | `storeGateway.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                        | `{}`                |
+| `storeGateway.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                     | `false`             |
 | `storeGateway.hostAliases`                                       | ingester pods host aliases                                                                             | `[]`                |
 | `storeGateway.podLabels`                                         | Extra labels for ingester pods                                                                         | `{}`                |
 | `storeGateway.podAnnotations`                                    | Annotations for ingester pods                                                                          | `{}`                |
@@ -1126,7 +1134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                     | `[]`             |
 | `ruler.podSecurityContext.fsGroup`                        | Set Ruler pod's Security Context fsGroup                                                        | `1001`           |
 | `ruler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                            | `true`           |
-| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `{}`             |
+| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `nil`            |
 | `ruler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                      | `1001`           |
 | `ruler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                   | `true`           |
 | `ruler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                     | `false`          |
@@ -1134,6 +1142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                       | `false`          |
 | `ruler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                              | `["ALL"]`        |
 | `ruler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                | `RuntimeDefault` |
+| `ruler.automountServiceAccountToken`                      | Mount Service Account token in pod                                                              | `false`          |
 | `ruler.hostAliases`                                       | ruler pods host aliases                                                                         | `[]`             |
 | `ruler.podLabels`                                         | Extra labels for ruler pods                                                                     | `{}`             |
 | `ruler.podAnnotations`                                    | Annotations for ruler pods                                                                      | `{}`             |
@@ -1201,7 +1210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters

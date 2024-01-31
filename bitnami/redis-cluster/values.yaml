@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.2.4-debian-11-r0
+  tag: 7.2.4-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -98,7 +98,7 @@ image:
 ## @param networkPolicy.ingressNSPodMatchLabels For other namespaces match by pod labels and namespace labels
 ##
 networkPolicy:
-  enabled: false
+  enabled: true
   ## When set to false, only pods with the correct
   ## client label will have network access to the port Redis&reg; is listening
   ## on. When true, Redis&reg; will accept connections from any source
@@ -171,7 +171,7 @@ minAvailable: ""
 maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -182,7 +182,7 @@ maxUnavailable: ""
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -375,7 +375,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r94
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -388,13 +388,13 @@ volumePermissions:
     pullSecrets: []
   ## Containers Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enable Containers' Security Context
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the containers.
   ## @param volumePermissions.containerSecurityContext.privileged Run container as privileged
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     privileged: false
   ## Container resource requests and limits
@@ -450,6 +450,9 @@ redis:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: Parallel
+  ## @param redis.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param redis.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -665,6 +668,9 @@ updateJob:
   ## @param updateJob.args Container args (using container default if not set)
   ##
   args: []
+  ## @param updateJob.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
   ## @param updateJob.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -867,7 +873,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.56.0-debian-11-r0
+    tag: 1.56.0-debian-11-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -894,11 +900,16 @@ metrics:
   ##     value: "bar"
   ##
   extraEnvVars: []
+
+  ## @param metrics.containerPorts.http Metrics HTTP container port
+  ##
+  containerPorts:
+    http: 9121
   ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9121"
+    prometheus.io/port: "{{ .Values.metrics.containerPorts.http }}"
   ## @param metrics.podLabels Additional labels for Metrics exporter pod
   ##
   podLabels: {}
@@ -1005,6 +1016,10 @@ metrics:
   ##
   service:
     type: ClusterIP
+    ## @param metrics.service.ports.http Metrics HTTP service port
+    ##
+    ports:
+      http: 9121
     ## @param metrics.service.clusterIP Service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1036,7 +1051,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r93
+  tag: 11-debian-11-r94
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1052,13 +1067,13 @@ sysctlImage:
   mountHostSys: false
   ## Containers Security Context
   ## @param sysctlImage.containerSecurityContext.enabled Enable Containers' Security Context
-  ## @param sysctlImage.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param sysctlImage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sysctlImage.containerSecurityContext.runAsUser User ID for the containers.
   ## @param sysctlImage.containerSecurityContext.privileged Run privileged as privileged
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     privileged: true
   ## Container resource requests and limits

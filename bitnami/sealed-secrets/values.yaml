@@ -64,7 +64,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets-controller
-  tag: 0.24.5-debian-11-r2
+  tag: 0.25.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -219,7 +219,7 @@ podSecurityContext:
 ## @param containerSecurityContext.capabilities.drop Which privileges to drop in the Sealed Secret container
 ## @param containerSecurityContext.readOnlyRootFilesystem Whether the Sealed Secret container has a read-only root filesystem
 ## @param containerSecurityContext.runAsNonRoot Indicates that the Sealed Secret container must run as a non-root user
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Sealed Secret containers' Security Context runAsUser
 ## @param containerSecurityContext.seccompProfile.type Set Sealed Secret container's Security Context seccompProfile type
 ##
@@ -231,10 +231,13 @@ containerSecurityContext:
     - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   seccompProfile:
     type: RuntimeDefault
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases [array] Sealed Secret pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -574,7 +577,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/

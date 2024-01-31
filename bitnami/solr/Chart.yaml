@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r93
+      image: docker.io/bitnami/os-shell:11-debian-11-r94
     - name: solr
-      image: docker.io/bitnami/solr:9.4.0-debian-11-r3
+      image: docker.io/bitnami/solr:9.4.1-debian-11-r0
 apiVersion: v2
-appVersion: 9.4.0
+appVersion: 9.4.1
 dependencies:
 - condition: zookeeper.enabled
   name: zookeeper
@@ -34,4 +34,4 @@ maintainers:
 name: solr
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/solr
-version: 8.4.0
+version: 8.6.0

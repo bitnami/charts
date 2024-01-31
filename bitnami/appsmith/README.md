@@ -24,8 +24,6 @@ This chart bootstraps an [Appsmith](https://www.appsmith.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/appsmith/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -124,7 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Appsmith client pod's Security Context fsGroup                                                                       | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Appsmith client containers' Security Context                                                                     | `true`           |
-| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `client.containerSecurityContext.runAsUser`                | Set Appsmith client containers' Security Context runAsUser                                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `true`           |
 | `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith client containers' Security Context runAsNonRoot                                                            | `false`          |
@@ -134,6 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `client.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `client.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `client.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `client.hostAliases`                                       | Appsmith client pods host aliases                                                                                        | `[]`             |
 | `client.podLabels`                                         | Extra labels for Appsmith client pods                                                                                    | `{}`             |
 | `client.podAnnotations`                                    | Annotations for Appsmith client pods                                                                                     | `{}`             |
@@ -158,6 +157,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith client container(s)                            | `[]`             |
 | `client.sidecars`                                          | Add additional sidecar containers to the Appsmith client pod(s)                                                          | `[]`             |
 | `client.initContainers`                                    | Add additional init containers to the Appsmith client pod(s)                                                             | `[]`             |
+
+### Appsmith Client Network Policies
+
+| Name                                           | Description                                                | Value   |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `client.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith Client Traffic Exposure Parameters
 
@@ -233,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `backend.podSecurityContext.fsGroup`                        | Set Appsmith backend pod's Security Context fsGroup                                                                      | `1001`                |
 | `backend.containerSecurityContext.enabled`                  | Enabled Appsmith backend containers' Security Context                                                                    | `true`                |
-| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
+| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                 |
 | `backend.containerSecurityContext.runAsUser`                | Set Appsmith backend containers' Security Context runAsUser                                                              | `1001`                |
 | `backend.containerSecurityContext.runAsNonRoot`             | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `true`                |
 | `backend.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith backend containers' Security Context runAsNonRoot                                                           | `false`               |
@@ -243,6 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault`      |
 | `backend.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
 | `backend.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `backend.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`               |
 | `backend.hostAliases`                                       | Appsmith backend pods host aliases                                                                                       | `[]`                  |
 | `backend.podLabels`                                         | Extra labels for Appsmith backend pods                                                                                   | `{}`                  |
 | `backend.podAnnotations`                                    | Annotations for Appsmith backend pods                                                                                    | `{}`                  |
@@ -267,6 +278,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backend.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith backend container(s)                           | `[]`                  |
 | `backend.sidecars`                                          | Add additional sidecar containers to the Appsmith backend pod(s)                                                         | `[]`                  |
 | `backend.initContainers`                                    | Add additional init containers to the Appsmith backend pod(s)                                                            | `[]`                  |
+
+### Appsmith Backend Network Policies
+
+| Name                                            | Description                                                | Value   |
+| ----------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
+| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith Backend Traffic Exposure Parameters
 
@@ -335,7 +357,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `rts.podSecurityContext.fsGroup`                        | Set Appsmith rts pod's Security Context fsGroup                                                                          | `1001`           |
 | `rts.containerSecurityContext.enabled`                  | Enabled Appsmith rts containers' Security Context                                                                        | `true`           |
-| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `rts.containerSecurityContext.runAsUser`                | Set Appsmith rts containers' Security Context runAsUser                                                                  | `1001`           |
 | `rts.containerSecurityContext.runAsNonRoot`             | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `true`           |
 | `rts.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith rts containers' Security Context runAsNonRoot                                                               | `false`          |
@@ -345,6 +367,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `rts.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`             |
 | `rts.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
+| `rts.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                       | `false`          |
 | `rts.hostAliases`                                       | Appsmith rts pods host aliases                                                                                           | `[]`             |
 | `rts.podLabels`                                         | Extra labels for Appsmith rts pods                                                                                       | `{}`             |
 | `rts.podAnnotations`                                    | Annotations for Appsmith rts pods                                                                                        | `{}`             |
@@ -369,6 +392,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rts.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Appsmith rts container(s)                               | `[]`             |
 | `rts.sidecars`                                          | Add additional sidecar containers to the Appsmith rts pod(s)                                                             | `[]`             |
 | `rts.initContainers`                                    | Add additional init containers to the Appsmith rts pod(s)                                                                | `[]`             |
+
+### Appsmith RTS Network Policies
+
+| Name                                        | Description                                                | Value   |
+| ------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
+| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
+| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
+| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
+| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
 
 ### Appsmith RTS Traffic Exposure Parameters
 
@@ -397,7 +431,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                     | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                  | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
@@ -518,13 +552,55 @@ externalDatabase.port=3306
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `client.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `client.ingress.enabled` to `true`. The `client.ingress.hostname` property can be used to set the host name. The `client.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `client.ingress.hostname` property can be used to set the host name. The `client.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `client.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `client.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `client.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Persistence
 
@@ -546,7 +622,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as appsmith (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `client`, `backend` and `rts` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as appsmith (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `client`, `backend` and `rts` sections.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -569,10 +681,6 @@ This major updates the MongoDB&reg; subchart to its newest major, [14.0.0](https
 This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
 
 NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
-
-### To any previous version
-
-Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/upgrade/).
 
 ## License
 
