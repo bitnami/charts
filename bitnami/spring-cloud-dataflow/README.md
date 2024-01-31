@@ -60,15 +60,15 @@ helm uninstall my-release
 
 ### Common parameters
 
-| Name                | Description                                                                           | Value           |
-| ------------------- | ------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`      | String to partially override scdf.fullname template (will maintain the release name). | `""`            |
-| `fullnameOverride`  | String to fully override scdf.fullname template.                                      | `""`            |
-| `commonAnnotations` | Annotations to add to all deployed objects                                            | `{}`            |
-| `commonLabels`      | Labels to add to all deployed objects                                                 | `{}`            |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                  | `""`            |
-| `clusterDomain`     | Default Kubernetes cluster domain                                                     | `cluster.local` |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                     | `[]`            |
+| Name                | Description                                                                                   | Value           |
+| ------------------- | --------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name). | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template.                                      | `""`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                    | `{}`            |
+| `commonLabels`      | Labels to add to all deployed objects                                                         | `{}`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                          | `""`            |
+| `clusterDomain`     | Default Kubernetes cluster domain                                                             | `cluster.local` |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                             | `[]`            |
 
 ### Dataflow Server parameters
 
@@ -94,6 +94,8 @@ helm uninstall my-release
 | `server.configuration.metricsDashboard`                    | Endpoint to the metricsDashboard instance                                                                                                  | `""`                                                         |
 | `server.configuration.defaultSpringApplicationJSON`        | Injects default values for environment variable SPRING_APPLICATION_JSON                                                                    | `true`                                                       |
 | `server.existingConfigmap`                                 | ConfigMap with Spring Cloud Dataflow Server Configuration                                                                                  | `""`                                                         |
+| `server.containerPorts.http`                               | Container HTTP port                                                                                                                        | `8080`                                                       |
+| `server.containerPorts.jdwp`                               | Container JDWP port                                                                                                                        | `5005`                                                       |
 | `server.command`                                           | Override default container command (useful when using custom images)                                                                       | `[]`                                                         |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                                          | `[]`                                                         |
 | `server.lifecycleHooks`                                    | for the Dataflow server container(s) to automate configuration before or after startup                                                     | `{}`                                                         |
@@ -103,7 +105,6 @@ helm uninstall my-release
 | `server.replicaCount`                                      | Number of Dataflow server replicas to deploy                                                                                               | `1`                                                          |
 | `server.podAffinityPreset`                                 | Dataflow server pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                                         |
 | `server.podAntiAffinityPreset`                             | Dataflow server pod anti-affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                            | `soft`                                                       |
-| `server.containerPort`                                     | Dataflow server port                                                                                                                       | `8080`                                                       |
 | `server.nodeAffinityPreset.type`                           | Dataflow server node affinity preset type. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                                         |
 | `server.nodeAffinityPreset.key`                            | Dataflow server node label key to match Ignored if `server.affinity` is set.                                                               | `""`                                                         |
 | `server.nodeAffinityPreset.values`                         | Dataflow server node label values to match. Ignored if `server.affinity` is set.                                                           | `[]`                                                         |
@@ -153,8 +154,15 @@ helm uninstall my-release
 | `server.customStartupProbe`                                | Override default startup probe                                                                                                             | `{}`                                                         |
 | `server.customLivenessProbe`                               | Override default liveness probe                                                                                                            | `{}`                                                         |
 | `server.customReadinessProbe`                              | Override default readiness probe                                                                                                           | `{}`                                                         |
+| `server.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                        | `true`                                                       |
+| `server.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                                                 | `true`                                                       |
+| `server.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                         | `[]`                                                         |
+| `server.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                               | `[]`                                                         |
+| `server.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                               | `[]`                                                         |
+| `server.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                     | `{}`                                                         |
+| `server.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                 | `{}`                                                         |
 | `server.service.type`                                      | Kubernetes service type                                                                                                                    | `ClusterIP`                                                  |
-| `server.service.port`                                      | Service HTTP port                                                                                                                          | `8080`                                                       |
+| `server.service.ports.http`                                | Server HTTP port                                                                                                                           | `8080`                                                       |
 | `server.service.nodePort`                                  | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                 | `""`                                                         |
 | `server.service.clusterIP`                                 | Dataflow server service cluster IP                                                                                                         | `""`                                                         |
 | `server.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                                       | `Cluster`                                                    |
@@ -211,6 +219,8 @@ helm uninstall my-release
 | `skipper.configuration.accountName`                         | The name of the account to configure for the Kubernetes platform                                                     | `default`                              |
 | `skipper.configuration.trustK8sCerts`                       | Trust K8s certificates when querying the Kubernetes API                                                              | `false`                                |
 | `skipper.existingConfigmap`                                 | Name of existing ConfigMap with Skipper server configuration                                                         | `""`                                   |
+| `skipper.containerPorts.http`                               | Container HTTP port                                                                                                  | `7577`                                 |
+| `skipper.containerPorts.jdwp`                               | Container JDWP port                                                                                                  | `5005`                                 |
 | `skipper.command`                                           | Override default container command (useful when using custom images)                                                 | `[]`                                   |
 | `skipper.args`                                              | Override default container args (useful when using custom images)                                                    | `[]`                                   |
 | `skipper.lifecycleHooks`                                    | for the Skipper container(s) to automate configuration before or after startup                                       | `{}`                                   |
@@ -269,8 +279,15 @@ helm uninstall my-release
 | `skipper.customStartupProbe`                                | Override default startup probe                                                                                       | `{}`                                   |
 | `skipper.customLivenessProbe`                               | Override default liveness probe                                                                                      | `{}`                                   |
 | `skipper.customReadinessProbe`                              | Override default readiness probe                                                                                     | `{}`                                   |
+| `skipper.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                  | `true`                                 |
+| `skipper.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                           | `true`                                 |
+| `skipper.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                   | `[]`                                   |
+| `skipper.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                         | `[]`                                   |
+| `skipper.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                         | `[]`                                   |
+| `skipper.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                               | `{}`                                   |
+| `skipper.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                           | `{}`                                   |
 | `skipper.service.type`                                      | Kubernetes service type                                                                                              | `ClusterIP`                            |
-| `skipper.service.port`                                      | Service HTTP port                                                                                                    | `80`                                   |
+| `skipper.service.ports.http`                                | Skipper HTTP port                                                                                                    | `80`                                   |
 | `skipper.service.nodePort`                                  | Service HTTP node port                                                                                               | `""`                                   |
 | `skipper.service.clusterIP`                                 | Skipper server service cluster IP                                                                                    | `""`                                   |
 | `skipper.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                 | `Cluster`                              |
@@ -319,13 +336,13 @@ helm uninstall my-release
 
 ### RBAC parameters
 
-| Name                                          | Description                                                                                                             | Value   |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods                                     | `true`  |
-| `serviceAccount.name`                         | Name of the created serviceAccount. If not set and create is true, a name is generated using the scdf.fullname template | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                          | `false` |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                              | `{}`    |
-| `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                         | `true`  |
+| Name                                          | Description                                                                                                                     | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable the creation of a ServiceAccount for Dataflow server and Skipper server pods                                             | `true`  |
+| `serviceAccount.name`                         | Name of the created serviceAccount. If not set and create is true, a name is generated using the common.names.fullname template | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                  | `false` |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                      | `{}`    |
+| `rbac.create`                                 | Whether to create and use RBAC resources or not                                                                                 | `true`  |
 
 ### Metrics parameters
 
@@ -403,6 +420,12 @@ helm uninstall my-release
 | `metrics.priorityClassName`                                 | Prometheus Rsocket Proxy pods' priority.                                                                                   | `""`                                       |
 | `metrics.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                             | `""`                                       |
 | `metrics.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                             | `[]`                                       |
+| `metrics.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                        | `true`                                     |
+| `metrics.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                                 | `true`                                     |
+| `metrics.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                               | `[]`                                       |
+| `metrics.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                               | `[]`                                       |
+| `metrics.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                     | `{}`                                       |
+| `metrics.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                 | `{}`                                       |
 | `metrics.service.type`                                      | Prometheus Proxy service type                                                                                              | `ClusterIP`                                |
 | `metrics.service.ports.http`                                | Prometheus Rsocket Proxy HTTP port                                                                                         | `8080`                                     |
 | `metrics.service.ports.rsocket`                             | Prometheus Rsocket Proxy Rsocket port                                                                                      | `7001`                                     |
