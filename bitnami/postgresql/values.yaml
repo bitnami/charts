@@ -616,6 +616,9 @@ primary:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param primary.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param primary.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1043,6 +1046,9 @@ readReplicas:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param readReplicas.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param readReplicas.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
