@@ -34,7 +34,7 @@ spec:
   {{- end }}
   ports:
     - name: http-metrics
-      port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
+      port: {{ .Values.metrics.service.port }}
       protocol: TCP
       targetPort: metrics
     {{- if .Values.metrics.service.extraPorts }}
