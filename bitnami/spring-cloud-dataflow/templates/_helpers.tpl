@@ -208,7 +208,7 @@ Return the database scheme
 Return the JDBC URL parameters
 */}}
 {{- define "scdf.database.jdbc.parameters" -}}
-  {{- if .Values.mariadb.enabled -}}
+  {{- if and .Values.mariadb.enabled .Values.mariadb.jdbcParameter.useMysqlMetadata -}}
     {{- printf "?useMysqlMetadata=true" -}}
   {{- else -}}
     {{- printf "" -}}
