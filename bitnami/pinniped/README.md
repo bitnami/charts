@@ -199,6 +199,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `concierge.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                | `true`      |
 | `concierge.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
 | `concierge.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
+| `concierge.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                    | `true`      |
 | `concierge.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
 | `concierge.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `concierge.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
@@ -321,6 +322,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.networkPolicy.enabled`                   | Specifies whether a NetworkPolicy should be created                                                                              | `true`                      |
 | `supervisor.networkPolicy.kubeAPIServerPorts`        | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                        |
 | `supervisor.networkPolicy.allowExternal`             | Don't require server label for connections                                                                                       | `true`                      |
+| `supervisor.networkPolicy.allowExternalEgress`       | Allow the pod to access any range of port and all destinations.                                                                  | `true`                      |
 | `supervisor.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                        |
 | `supervisor.networkPolicy.extraEgress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                        |
 | `supervisor.networkPolicy.ingressNSMatchLabels`      | Labels to match to allow traffic from other namespaces                                                                           | `{}`                        |
