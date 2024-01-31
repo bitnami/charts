@@ -22,6 +22,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.storegateway.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -51,6 +55,7 @@ spec:
     {{- if .Values.storegateway.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.storegateway.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.storegateway.containerPorts.http }}
