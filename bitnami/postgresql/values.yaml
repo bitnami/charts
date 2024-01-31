@@ -236,10 +236,10 @@ ldap:
   ## Ref: https://www.postgresql.org/docs/current/auth-ldap.html
   ##
   uri: ""
-## @param primaryDataDir PostgreSQL data dir folder
+## @param postgresqlDataDir PostgreSQL data dir folder
 ##
 postgresqlDataDir: /bitnami/postgresql/data
-## @param primarySharedPreloadLibraries Shared preload libraries (comma-separated list)
+## @param postgresqlSharedPreloadLibraries Shared preload libraries (comma-separated list)
 ##
 postgresqlSharedPreloadLibraries: "pgaudit"
 ## Start PostgreSQL pod(s) without limitations on shm memory.
