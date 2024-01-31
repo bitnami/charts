@@ -2057,6 +2057,11 @@
                     "description": "External S3 port number",
                     "default": 443
                 },
+                "useCredentialsInSecret": {
+                    "type": "boolean",
+                    "description": "Whether to use a secret to store the S3 credentials",
+                    "default": true
+                },
                 "accessKeyID": {
                     "type": "string",
                     "description": "External S3 access key ID",
