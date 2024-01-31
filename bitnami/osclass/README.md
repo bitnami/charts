@@ -108,6 +108,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                 | Description                                                                                                     | Value                                    |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `automountServiceAccountToken`                       | Mount Service Account token in pod                                                                              | `false`                                  |
 | `hostAliases`                                        | Osclass pod host aliases                                                                                        | `[]`                                     |
 | `podSecurityContext.enabled`                         | Enabled Osclass pods' Security Context                                                                          | `true`                                   |
 | `podSecurityContext.fsGroupChangePolicy`             | Set filesystem group change policy                                                                              | `Always`                                 |
@@ -115,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`              | Set filesystem extra groups                                                                                     | `[]`                                     |
 | `podSecurityContext.fsGroup`                         | Set Osclass pod's Security Context fsGroup                                                                      | `1001`                                   |
 | `containerSecurityContext.enabled`                   | Enabled containers' Security Context                                                                            | `true`                                   |
-| `containerSecurityContext.seLinuxOptions`            | Set SELinux options in container                                                                                | `{}`                                     |
+| `containerSecurityContext.seLinuxOptions`            | Set SELinux options in container                                                                                | `nil`                                    |
 | `containerSecurityContext.runAsUser`                 | Set containers' Security Context runAsUser                                                                      | `1001`                                   |
 | `containerSecurityContext.runAsNonRoot`              | Set container's Security Context runAsNonRoot                                                                   | `true`                                   |
 | `containerSecurityContext.privileged`                | Set container's Security Context privileged                                                                     | `false`                                  |
@@ -194,6 +195,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `priorityClassName`                                  | Osclass pods' priorityClassName                                                                                 | `""`                                     |
 | `schedulerName`                                      | Name of the k8s scheduler (other than default)                                                                  | `""`                                     |
 | `topologySpreadConstraints`                          | Topology Spread Constraints for pod assignment                                                                  | `[]`                                     |
+| `serviceAccount.create`                              | Enable creation of ServiceAccount for Osclass pod                                                               | `true`                                   |
+| `serviceAccount.name`                                | The name of the ServiceAccount to use.                                                                          | `""`                                     |
+| `serviceAccount.automountServiceAccountToken`        | Allows auto mount of ServiceAccountToken on the serviceAccount created                                          | `false`                                  |
+| `serviceAccount.annotations`                         | Additional custom annotations for the ServiceAccount                                                            | `{}`                                     |
 
 ### Traffic Exposure Parameters
 
@@ -407,13 +412,55 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Troubleshooting
 

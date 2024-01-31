@@ -23,7 +23,7 @@ containerSecurityContext:
   runAsUser: 1002
 serviceAccount:
   create: true
-  automountServiceAccountToken: true
+automountServiceAccountToken: true
 service:
   type: LoadBalancer
   ports:
@@ -38,3 +38,13 @@ sidecars:
     ports:
       - name: web
         containerPort: 8080
+    securityContext:
+      runAsUser: 1001
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"

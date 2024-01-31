@@ -1,0 +1,109 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if or .Values.skipper.enabled .Values.skipper.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ include "scdf.skipper.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: skipper
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.skipper.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: skipper
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        {{- if .Values.waitForBackends.enabled }}
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.skipper.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+        {{- end }}
+    {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
+    # Allow connection to RabbitMQ
+    - ports:
+        - port: {{ include "scdf.rabbitmq.port" . }}
+      {{- if .Values.rabbitmq.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: rabbitmq
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- end }}
+    {{- if or (.Values.kafka.enabled) (.Values.externalKafka.enabled) }}
+    # Allow connection to RabbitMQ
+    - ports:
+        - port: {{ include "scdf.kafka.port" . | int }}
+      {{- if .Values.kafka.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: kafka
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- end }}
+    # Allow connection to MariaDB
+    - ports:
+        - port: {{ include "scdf.database.port" . | int }}
+      {{- if .Values.mariadb.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mariadb
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- if .Values.skipper.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.skipper.containerPorts.http }}
+        - port: {{ coalesce .Values.skipper.service.ports.http .Values.skipper.service.port }}
+        {{- if .Values.skipper.jdwp.enabled }}
+        - port: {{ coalesce .Values.skipper.containerPorts.jdwp .Values.skipper.jdwp.port }}
+        {{- end }}
+      {{- if not .Values.skipper.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "scdf.skipper.fullname" . }}-client: "true"
+        {{- if .Values.skipper.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.skipper.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.skipper.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.skipper.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.skipper.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

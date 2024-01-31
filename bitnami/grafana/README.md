@@ -222,6 +222,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------- |
 | `grafana.replicaCount`                                      | Number of Grafana nodes                                                                                 | `1`              |
 | `grafana.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                        | `RollingUpdate`  |
+| `grafana.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                      | `false`          |
 | `grafana.hostAliases`                                       | Add deployment host aliases                                                                             | `[]`             |
 | `grafana.schedulerName`                                     | Alternative scheduler                                                                                   | `""`             |
 | `grafana.terminationGracePeriodSeconds`                     | In seconds, time the given to the Grafana pod needs to terminate gracefully                             | `""`             |
@@ -245,7 +246,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                             | `[]`             |
 | `grafana.podSecurityContext.fsGroup`                        | Group to configure permissions for volumes                                                              | `1001`           |
 | `grafana.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                    | `true`           |
-| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `{}`             |
+| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                        | `nil`            |
 | `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                              | `1001`           |
 | `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                           | `true`           |
 | `grafana.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                             | `false`          |
@@ -380,7 +381,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Diagnostic Mode Parameters

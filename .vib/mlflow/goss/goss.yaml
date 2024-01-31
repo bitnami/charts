@@ -100,7 +100,7 @@ command:
     - "CapBnd:	0000000000000000"
     - "CapAmb:	0000000000000000"
   {{- end }}
-  {{ if .Vars.tracking.serviceAccount.automountServiceAccountToken }}
+  {{ if .Vars.tracking.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0

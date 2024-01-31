@@ -96,6 +96,7 @@ helm delete --purge my-release
 | `raftMultiplier`                | Multiplier used to scale key Raft timing parameters                                                              | `1`                      |
 | `gossipKey`                     | Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)               | `""`                     |
 | `tlsEncryptionSecretName`       | Name of existing secret with TLS encryption data                                                                 | `""`                     |
+| `automountServiceAccountToken`  | Mount Service Account token in pod                                                                               | `false`                  |
 | `hostAliases`                   | Deployment pod host aliases                                                                                      | `[]`                     |
 | `configuration`                 | HashiCorp Consul configuration to be injected as ConfigMap                                                       | `""`                     |
 | `existingConfigmap`             | ConfigMap with HashiCorp Consul configuration                                                                    | `""`                     |
@@ -140,7 +141,7 @@ helm delete --purge my-release
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                       | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled Consul containers' Security Context                                               | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set Consul containers' Security Context runAsUser                                         | `1001`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set Consul containers' Security Context allowPrivilegeEscalation                          | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set Argo CD containers' repo server Security Context capabilities to be dropped           | `["ALL"]`        |
@@ -178,6 +179,10 @@ helm delete --purge my-release
 | `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                           | `false`          |
 | `pdb.minAvailable`                                  | Minimum number of pods that must still be available after the eviction                    | `1`              |
 | `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction                             | `""`             |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                       | `true`           |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                    | `""`             |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                    | `false`          |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                      | `{}`             |
 
 ### Exposure parameters
 
@@ -246,7 +251,7 @@ helm delete --purge my-release
 | `metrics.image.pullPolicy`                        | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                       | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                              |
 | `metrics.containerSecurityContext.enabled`        | HashiCorp Consul Prometheus Exporter securityContext                                                                                 | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                     | `{}`                              |
+| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                     | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`      | User ID for the HashiCorp Consul Prometheus Exporter                                                                                 | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`   | Force the container to be run as non root                                                                                            | `true`                            |
 | `metrics.service.type`                            | Kubernetes Service type                                                                                                              | `ClusterIP`                       |

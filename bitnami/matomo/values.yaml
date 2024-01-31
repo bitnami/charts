@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.0.1-debian-11-r0
+  tag: 5.0.1-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -152,6 +152,9 @@ schedulerName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases [array] Add deployment host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -346,7 +349,7 @@ podSecurityContext:
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -357,7 +360,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -706,7 +709,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -759,7 +762,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.5-debian-11-r2
+    tag: 1.0.5-debian-11-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -830,7 +833,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r95
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -965,7 +968,7 @@ cronjobs:
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cronjobs.taskScheduler.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cronjobs.taskScheduler.containerSecurityContext.privileged Set container's Security Context privileged
@@ -976,7 +979,7 @@ cronjobs:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1016,7 +1019,7 @@ cronjobs:
     ## @param
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param cronjobs.archive.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param cronjobs.archive.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param cronjobs.archive.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cronjobs.archive.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cronjobs.archive.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1027,7 +1030,7 @@ cronjobs:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
