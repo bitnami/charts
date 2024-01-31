@@ -544,6 +544,9 @@ networkPolicy:
   ## (with the correct destination port).
   ##
   allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
   ## e.g:
   ## extraIngress:
