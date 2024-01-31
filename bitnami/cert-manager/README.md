@@ -169,6 +169,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                             | `false`                        |
 | `controller.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                        | `true`                         |
 | `controller.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                 | `true`                         |
+| `controller.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                            | `true`                         |
 | `controller.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                               | `[]`                           |
 | `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                               | `[]`                           |
 | `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                     | `{}`                           |
@@ -256,6 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `webhook.hostNetwork`                                       | Specifies hostNetwork value                                                                             | `false`                                |
 | `webhook.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                     | `true`                                 |
 | `webhook.networkPolicy.allowExternal`                       | Don't require client label for connections                                                              | `true`                                 |
+| `webhook.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                         | `true`                                 |
 | `webhook.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)      | `[]`                                   |
 | `webhook.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                            | `[]`                                   |
 | `webhook.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                            | `[]`                                   |
