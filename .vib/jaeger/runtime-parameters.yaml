@@ -2,7 +2,7 @@ query:
   sidecars:
     - name: hotrod-example
       image: davidbhlm/hotrod-example:1.53
-      command: all
+      args: ['all']
       env:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: http://jaeger-collector:4318
