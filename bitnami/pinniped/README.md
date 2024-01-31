@@ -182,20 +182,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Concierge Traffic Exposure Parameters
 
-| Name                                         | Description                                                                          | Value       |
-| -------------------------------------------- | ------------------------------------------------------------------------------------ | ----------- |
-| `concierge.service.type`                     | Concierge service type                                                               | `ClusterIP` |
-| `concierge.service.ports.https`              | Concierge service HTTPS port                                                         | `443`       |
-| `concierge.service.nodePorts.https`          | Node port for HTTPS                                                                  | `""`        |
-| `concierge.service.clusterIP`                | Concierge service Cluster IP                                                         | `""`        |
-| `concierge.service.labels`                   | Add labels to the service                                                            | `{}`        |
-| `concierge.service.loadBalancerIP`           | Concierge service Load Balancer IP                                                   | `""`        |
-| `concierge.service.loadBalancerSourceRanges` | Concierge service Load Balancer sources                                              | `[]`        |
-| `concierge.service.externalTrafficPolicy`    | Concierge service external traffic policy                                            | `Cluster`   |
-| `concierge.service.annotations`              | Additional custom annotations for Concierge service                                  | `{}`        |
-| `concierge.service.extraPorts`               | Extra ports to expose in Concierge service (normally used with the `sidecars` value) | `[]`        |
-| `concierge.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                     | `None`      |
-| `concierge.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                          | `{}`        |
+| Name                                              | Description                                                                                        | Value       |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| `concierge.service.type`                          | Concierge service type                                                                             | `ClusterIP` |
+| `concierge.service.ports.https`                   | Concierge service HTTPS port                                                                       | `443`       |
+| `concierge.service.nodePorts.https`               | Node port for HTTPS                                                                                | `""`        |
+| `concierge.service.clusterIP`                     | Concierge service Cluster IP                                                                       | `""`        |
+| `concierge.service.labels`                        | Add labels to the service                                                                          | `{}`        |
+| `concierge.service.loadBalancerIP`                | Concierge service Load Balancer IP                                                                 | `""`        |
+| `concierge.service.loadBalancerSourceRanges`      | Concierge service Load Balancer sources                                                            | `[]`        |
+| `concierge.service.externalTrafficPolicy`         | Concierge service external traffic policy                                                          | `Cluster`   |
+| `concierge.service.annotations`                   | Additional custom annotations for Concierge service                                                | `{}`        |
+| `concierge.service.extraPorts`                    | Extra ports to expose in Concierge service (normally used with the `sidecars` value)               | `[]`        |
+| `concierge.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                   | `None`      |
+| `concierge.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                        | `{}`        |
+| `concierge.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                | `true`      |
+| `concierge.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
+| `concierge.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
+| `concierge.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
+| `concierge.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
+| `concierge.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
+| `concierge.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
 
 ### Supervisor Parameters
 
@@ -311,6 +318,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `supervisor.service.public.extraPorts`               | Extra ports to expose in Supervisor service (normally used with the `sidecars` value)                                            | `[]`                        |
 | `supervisor.service.public.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                      |
 | `supervisor.service.public.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                        |
+| `supervisor.networkPolicy.enabled`                   | Specifies whether a NetworkPolicy should be created                                                                              | `true`                      |
+| `supervisor.networkPolicy.kubeAPIServerPorts`        | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                        |
+| `supervisor.networkPolicy.allowExternal`             | Don't require server label for connections                                                                                       | `true`                      |
+| `supervisor.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                        |
+| `supervisor.networkPolicy.extraEgress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                        |
+| `supervisor.networkPolicy.ingressNSMatchLabels`      | Labels to match to allow traffic from other namespaces                                                                           | `{}`                        |
+| `supervisor.networkPolicy.ingressNSPodMatchLabels`   | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                        |
 | `supervisor.ingress.enabled`                         | Enable ingress record generation for Pinniped Supervisor                                                                         | `false`                     |
 | `supervisor.ingress.pathType`                        | Ingress path type                                                                                                                | `ImplementationSpecific`    |
 | `supervisor.ingress.apiVersion`                      | Force Ingress API version (automatically detected if not set)                                                                    | `""`                        |
