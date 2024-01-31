@@ -158,7 +158,7 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
-          # Updating CRDs stored at 'bitnami/$CHART/crds' (not 'bitnami/$CHART/templates/crds')
+          # Updating CRDs stored at 'bitnami/$CHART/crds' and 'bitnami/$CHART/templates/crds'
           mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
           for file in "${crd_files[@]}"; do
             # Automatically update CRDs that use the '# Source' header
@@ -174,14 +174,14 @@ jobs:
               # Conditional - Adds a conditional {{if}}/{{end}} to the downloaded upstream CRD
               # VersionOf - Name of a subcomponent, its version will be used for CRD tracking instead of the main component version
               # UseKustomize - If set to true, uses Kustomize to render the CRDs
-              # SplitFile - If set to true, uses yq to filter resources having 'kind: CustomResourceDefinition', useful when using 'install.yaml' file as upstream source
+              # RequiresFilter - If set to true, uses yq to filter resources having 'kind: CustomResourceDefinition', useful when using 'install.yaml' file as upstream source
               continue=true
               line_n=2
               extra_headers=""
               CONDITIONAL=""
               SUBCOMPONENT=""
               USE_KUSTOMIZE=""
-              SPLIT_FILE=""
+              REQUIRES_FILTER=""
               while [ "$continue" = true ]; do
                 line_n=$((line_n+1))
                 line="$(head -n $line_n $file | tail -n 1)"
@@ -193,8 +193,8 @@ jobs:
                     SUBCOMPONENT="$(echo $line | sed -E 's|^# ?VersionOf: ?||')"
                   elif [[ $line =~ ^#\ ?UseKustomize:\ ? ]]; then
                     USE_KUSTOMIZE="$(echo $line | sed -E 's|^# ?UseKustomize: ?||' || true)"
-                  elif [[ $line =~ ^#\ ?SplitFile:\ ? ]]; then
-                    SPLIT_FILE="$(echo $line | sed -E 's|^# ?SplitFile: ?||' || true)"
+                  elif [[ $line =~ ^#\ ?RequiresFilter:\ ? ]]; then
+                    REQUIRES_FILTER="$(echo $line | sed -E 's|^# ?RequiresFilter: ?||' || true)"
                   else
                     echo "error=Header ${line} not recognized'"
                     exit 1
@@ -219,7 +219,7 @@ jobs:
                 else
                   curl -Lks --fail -o $file "$source_url"
                 fi
-                if [[ "$SPLIT_FILE" = "true" ]]; then
+                if [[ "$REQUIRES_FILTER" = "true" ]]; then
                   yq -i e '. | select(.kind == "CustomResourceDefinition") | ... head_comment=""' $file
                 fi
                 sed -i "1s|^|# Source: ${source_url_tpl}\n# Version: ${APP_VERSION}\n${extra_headers}${CONDITIONAL}|" $file
