@@ -264,6 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiIngress.extraRules`                 | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
 | `networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
