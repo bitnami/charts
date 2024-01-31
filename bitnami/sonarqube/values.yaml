@@ -402,8 +402,8 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type SonarQube&trade; statefulset strategy type
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+## @param updateStrategy.type SonarQube&trade; deployment strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ##
 updateStrategy:
   ## StrategyType
