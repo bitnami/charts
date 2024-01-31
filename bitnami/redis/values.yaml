@@ -1412,7 +1412,7 @@ serviceBindings:
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
+  enabled: true
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## When set to false, only pods with the correct client label will have network access to the ports
   ## Redis&reg; is listening on. When true, Redis&reg; will accept connections from any source
@@ -1589,6 +1589,11 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+
+  ## @param metrics.containerPorts.http Metrics HTTP container port
+  ##
+  containerPorts:
+    http: 9121
   ## Configure extra options for Redis&reg; containers' liveness, readiness & startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   ## @param metrics.startupProbe.enabled Enable startupProbe on Redis&reg; replicas nodes
@@ -1712,12 +1717,16 @@ metrics:
   ## Redis&reg; exporter service parameters
   ##
   service:
+    ## @param metrics.service.enabled Create Service resource(s) for scraping metrics using PrometheusOperator ServiceMonitor, can be disabled when using a PodMonitor
+    ##
+    enabled: true
     ## @param metrics.service.type Redis&reg; exporter service type
     ##
     type: ClusterIP
-    ## @param metrics.service.port Redis&reg; exporter service port
+    ## @param metrics.service.ports.http Redis&reg; exporter service port
     ##
-    port: 9121
+    ports:
+      http: 9121
     ## @param metrics.service.externalTrafficPolicy Redis&reg; exporter service external traffic policy
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
