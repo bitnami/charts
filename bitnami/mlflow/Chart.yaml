@@ -8,7 +8,7 @@ annotations:
     - name: git
       image: docker.io/bitnami/git:2.43.0-debian-11-r8
     - name: mlflow
-      image: docker.io/bitnami/mlflow:2.10.0-debian-11-r1
+      image: docker.io/bitnami/mlflow:2.10.0-debian-11-r2
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r95
 apiVersion: v2
