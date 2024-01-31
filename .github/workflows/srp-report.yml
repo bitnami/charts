@@ -43,7 +43,7 @@ jobs:
             --version "1.0" --all-ephemeral true --build-type release
           echo "uid=${SRP_UID}" >> $GITHUB_OUTPUT
       - name: Archive SRP report
-        uses: actions/upload-artifact@694cdabd8bdb0f10b2cea11669e1bf5453eed0a6
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8
         with:
           name: source-provenance
           path: source-provenance.json

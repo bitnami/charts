@@ -7,12 +7,12 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "scdf.fullname" . }}-skipper
+  name: {{ include "scdf.skipper.fullname" . }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: skipper
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -114,7 +114,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.skipper.image.debug | quote }}
             - name: SERVER_PORT
-              value: "7577"
+              value: {{ .Values.skipper.containerPorts.http | quote }}
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
@@ -131,7 +131,7 @@ spec:
               value: {{ ternary "true" "false" .Values.skipper.configuration.trustK8sCerts | quote }}
             {{- if .Values.skipper.jdwp.enabled }}
             - name: JAVA_TOOL_OPTIONS
-              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.skipper.jdwp.port }}"
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ coalesce .Values.skipper.containerPorts.jdwp .Values.skipper.jdwp.port }}"
             {{- end }}
             {{- range $key, $value := .Values.skipper.extraEnvVars }}
             - name: {{ $value.name }}
@@ -150,11 +150,11 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 7577
+              containerPort: {{ .Values.skipper.containerPorts.http }}
               protocol: TCP
             {{- if .Values.skipper.jdwp.enabled }}
             - name: jdwp
-              containerPort: {{ .Values.skipper.jdwp.port }}
+              containerPort: {{ coalesce .Values.skipper.containerPorts.jdwp .Values.skipper.jdwp.port }}
               protocol: TCP
             {{- end }}
           {{- if .Values.skipper.customStartupProbe }}
@@ -235,7 +235,7 @@ spec:
         {{- if .Values.waitForBackends.enabled }}
         - name: scripts
           configMap:
-            name: {{ include "scdf.fullname" . }}-scripts
+            name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
         {{- if .Values.skipper.extraVolumes }}
