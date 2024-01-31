@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.indexNode.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -86,6 +90,7 @@ spec:
     {{- if .Values.indexNode.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.indexNode.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.indexNode.containerPorts.grpc }}

@@ -268,6 +268,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.service.extraPorts`                    | Extra ports to expose in the Data Coordinator service            | `[]`        |
 | `dataCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `dataCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `dataCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `dataCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -413,6 +414,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.service.extraPorts`                    | Extra ports to expose in the Root Coordinator service            | `[]`        |
 | `rootCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `rootCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `rootCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `rootCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `rootCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `rootCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -558,6 +560,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.service.extraPorts`                    | Extra ports to expose in the Query Coordinator service           | `[]`        |
 | `queryCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `queryCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `queryCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `queryCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -703,6 +706,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.service.extraPorts`                    | Extra ports to expose in the Index Coordinator service           | `[]`        |
 | `indexCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `indexCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `indexCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `indexCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -848,6 +852,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.service.extraPorts`                    | Extra ports to expose in the Data Node service                   | `[]`        |
 | `dataNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `dataNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `dataNode.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `dataNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataNode.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -993,6 +998,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.service.extraPorts`                    | Extra ports to expose in the Query Node service                  | `[]`        |
 | `queryNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `queryNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `queryNode.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `queryNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryNode.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -1138,6 +1144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.service.extraPorts`                    | Extra ports to expose in the Index Node service                  | `[]`        |
 | `indexNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `indexNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `indexNode.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `indexNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexNode.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -1295,6 +1302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.extraPorts`                    | Extra ports to expose in the Proxy service                       | `[]`           |
 | `proxy.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`         |
 | `proxy.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`         |
+| `proxy.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`         |
 | `proxy.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`           |
 | `proxy.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`           |
 | `proxy.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`           |
@@ -1453,6 +1461,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `attu.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
 | `attu.networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
+| `attu.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `attu.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `attu.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `attu.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
