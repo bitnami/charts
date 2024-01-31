@@ -23,7 +23,7 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.data.networkPolicy.allowExternalEgress }}
+  {{- if .Values.coordinating.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
