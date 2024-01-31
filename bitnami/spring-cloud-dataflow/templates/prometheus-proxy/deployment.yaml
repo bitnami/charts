@@ -7,10 +7,10 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "scdf.fullname" . }}-prometheus-proxy
+  name: {{ include "scdf.prometheus-proxy.fullname" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: prometheus-proxy
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -64,7 +64,7 @@ spec:
       priorityClassName: {{ .Values.metrics.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.metrics.initContainers }}
-        initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.initContainers "context" $) | trim | nindent 8 }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.initContainers "context" $) | trim | nindent 8 }}
       {{- end }}
       containers:
         - name: prometheus-proxy
