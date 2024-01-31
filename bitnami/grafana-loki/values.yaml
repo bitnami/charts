@@ -172,8 +172,8 @@ loki:
           service: http
         {{- end }}
       tsdb_shipper:
-        active_index_directory: {{ .Values.loki.dataDir }}/data/tsdb-index
-        cache_location: {{ .Values.loki.dataDir }}/data/tsdb-cache
+        active_index_directory: {{ .Values.loki.dataDir }}/loki/tsdb-index
+        cache_location: {{ .Values.loki.dataDir }}/loki/tsdb-cache
         {{- if .Values.indexGateway.enabled }}
         index_gateway_client:
           server_address: {{ (printf "dns:///%s:9095" (include "grafana-loki.index-gateway.fullname" .)) }}
