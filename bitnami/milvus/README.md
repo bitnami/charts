@@ -145,6 +145,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                     | `{}`             |
 | `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                | `{}`             |
+| `initJob.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                | `true`           |
+| `initJob.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                           | `true`           |
+| `initJob.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`             |
+| `initJob.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`             |
+| `initJob.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                    | `{}`             |
+| `initJob.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                | `{}`             |
 
 ### Data Coordinator Deployment Parameters
 
