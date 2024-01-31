@@ -63,9 +63,6 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/part-of: vault        
       {{- end }}
     {{- if .Values.dashboard.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dashboard.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
