@@ -645,6 +645,9 @@ tracking:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param tracking.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param tracking.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1075,6 +1078,9 @@ run:
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param run.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param run.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
