@@ -18,6 +18,7 @@ spec:
   {{- if not .Values.ruler.autoscaling.enabled }}
   replicas: {{ .Values.ruler.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ .Values.ruler.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.ruler.podManagementPolicy }}
   serviceName: {{ include "thanos.ruler.fullname" . }}-headless
   {{- if .Values.ruler.updateStrategy }}

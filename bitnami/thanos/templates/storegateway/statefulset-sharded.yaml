@@ -32,6 +32,7 @@ spec:
   {{- if not $.Values.storegateway.autoscaling.enabled }}
   replicas: {{ $.Values.storegateway.replicaCount }}
   {{- end }}
+  revisionHistoryLimit: {{ $.Values.storegateway.revisionHistoryLimit }}
   podManagementPolicy: {{ $.Values.storegateway.podManagementPolicy }}
   {{- $svcNamePrefix := printf "%s-storegateway" (include "common.names.fullname" $) | trunc 61 | trimSuffix "-" }}
   serviceName: {{ printf "%s-%s" $svcNamePrefix (toString $index) }}

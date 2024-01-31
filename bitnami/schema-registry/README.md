@@ -185,40 +185,46 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes service type                                                                               | `ClusterIP`              |
-| `service.ports.http`               | Service HTTP port                                                                                     | `8081`                   |
-| `service.nodePorts.http`           | Service HTTP node port                                                                                | `""`                     |
-| `service.clusterIP`                | Schema Registry service clusterIP IP                                                                  | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                  | `Cluster`                |
-| `service.loadBalancerIP`           | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
-| `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
-| `service.annotations`              | Annotations for Schema Registry service                                                               | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                           | `{}`                     |
-| `service.headless.annotations`     | Annotations for the headless service.                                                                 | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                                    | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                 | `schema-registry.local`  |
-| `ingress.annotations`              | Ingress annotations                                                                                   | `{}`                     |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Schema Registry                                                  | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `schema-registry.local`  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                         | `""`                     |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
+| Name                                    | Description                                                                                           | Value                    |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Kubernetes service type                                                                               | `ClusterIP`              |
+| `service.ports.http`                    | Service HTTP port                                                                                     | `8081`                   |
+| `service.nodePorts.http`                | Service HTTP node port                                                                                | `""`                     |
+| `service.clusterIP`                     | Schema Registry service clusterIP IP                                                                  | `""`                     |
+| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                                  | `Cluster`                |
+| `service.loadBalancerIP`                | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
+| `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
+| `service.annotations`                   | Annotations for Schema Registry service                                                               | `{}`                     |
+| `service.extraPorts`                    | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                     |
+| `service.headless.annotations`          | Annotations for the headless service.                                                                 | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                   | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                            | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                          | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                          | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                            | `{}`                     |
+| `ingress.enabled`                       | Enable ingress controller resource                                                                    | `false`                  |
+| `ingress.hostname`                      | Default host for the ingress resource                                                                 | `schema-registry.local`  |
+| `ingress.annotations`                   | Ingress annotations                                                                                   | `{}`                     |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `ingress.enabled`                       | Enable ingress record generation for Schema Registry                                                  | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                     | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                   | `schema-registry.local`  |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                         | `""`                     |
+| `ingress.path`                          | Default path for the ingress record                                                                   | `/`                      |
+| `ingress.annotations`                   | Additional custom annotations for the ingress record                                                  | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
 ### RBAC parameters
 
