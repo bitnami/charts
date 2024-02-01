@@ -704,24 +704,55 @@ ingress:
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
+  enabled: true
   ## @param networkPolicy.allowExternal The Policy model to apply
   ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
   ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.additionalRules Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.
-  ## Example:
-  ## additionalRules:
-  ##   - matchLabels:
-  ##       - role: frontend
-  ##   - matchExpressions:
-  ##       - key: role
-  ##         operator: In
-  ##         values:
-  ##           - frontend
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  additionalRules: {}
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
 
 ## @section Metrics parameters
 
@@ -757,9 +788,10 @@ metrics:
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
-  ## @param metrics.containerPort Prometheus metrics exporter port
+  ## @param metrics.containerPorts.http Prometheus metrics exporter port
   ##
-  containerPort: 7777
+  containerPorts:
+    http: 7777
   ## @param metrics.flags [array] Flags to be passed to Prometheus metrics
   ##
   flags:
