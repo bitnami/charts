@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: odoo
-      image: docker.io/bitnami/odoo:17.0.20240105-debian-11-r0
+      image: docker.io/bitnami/odoo:17.0.20240105-debian-11-r2
 apiVersion: v2
 appVersion: 17.0.20240105
 dependencies:
@@ -34,4 +34,4 @@ maintainers:
 name: odoo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/odoo
-version: 25.3.1
+version: 25.3.2

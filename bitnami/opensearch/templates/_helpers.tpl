@@ -422,7 +422,11 @@ Return true if an authentication credentials secret object should be created
 Return the Opensearch authentication credentials secret name
 */}}
 {{- define "opensearch.secretName" -}}
-{{- default (include "common.names.fullname" .) .Values.security.existingSecret  -}}
+{{- if .Values.security.existingSecret -}}
+    {{- printf "%s" (tpl .Values.security.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -438,7 +442,11 @@ Return true if a TLS password secret object should be created
 Return the Opensearch TLS password secret name
 */}}
 {{- define "opensearch.tlsPasswordsSecret" -}}
-{{- default (printf "%s-tls-pass" (include "common.names.fullname" .)) .Values.security.tls.passwordsSecret -}}
+{{- if .Values.security.tls.passwordsSecret -}}
+    {{- printf "%s" (tpl .Values.security.tls.passwordsSecret $) -}}
+{{- else -}}
+    {{- printf "%s-tls-pass" (include "common.names.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
