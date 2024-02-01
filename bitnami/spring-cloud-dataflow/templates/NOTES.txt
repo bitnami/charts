@@ -24,7 +24,7 @@ Spring Cloud Data Flow chart was deployed enabling the following components:
 
 Spring Cloud Data Flow can be accessed through the following DNS name from within your cluster:
 
-    {{ include "scdf.fullname" . }}-server.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.server.service.port }})
+    {{ include "scdf.server.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ coalesce .Values.server.service.ports.http .Values.server.service.port }})
 
 To access Spring Cloud Data Flow dashboard from outside the cluster execute the following commands:
 
@@ -42,23 +42,23 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 
 {{- if contains "NodePort" .Values.server.service.type }}
 
-    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "scdf.fullname" . }}-server)
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "scdf.server.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     echo "http://${NODE_IP}:${NODE_PORT}/dashboard"
 
 {{- else if contains "LoadBalancer" .Values.server.service.type }}
 
   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "scdf.fullname" . }}-server'
+        You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "scdf.server.fullname" . }}'
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "scdf.fullname" . }}-server)
-    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "scdf.fullname" . }}-server -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "scdf.server.fullname" . }})
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "scdf.server.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "http://${SERVICE_IP}:${SERVICE_PORT}/dashboard"
 
 {{- else if contains "ClusterIP" .Values.server.service.type }}
 
-    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "scdf.fullname" . }}-server)
-    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "scdf.fullname" . }}-server ${SERVICE_PORT}:${SERVICE_PORT} &
+    export SERVICE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].port}" services {{ include "scdf.server.fullname" . }})
+    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "scdf.server.fullname" . }} ${SERVICE_PORT}:${SERVICE_PORT} &
     echo "http://127.0.0.1:${SERVICE_PORT}/dashboard"
 
 {{- end }}
@@ -74,9 +74,9 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 
 {{- $passwordErrors := list -}}
 {{- $secretNameMariadb := include "scdf.mariadb.fullname" . -}}
-{{- $secretNameExternalDb := printf "%s-%s" (include "scdf.fullname" .) "externaldb" -}}
+{{- $secretNameExternalDb := printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
 {{- $secretNameRabbitmq := include "scdf.rabbitmq.fullname" . -}}
-{{- $secretNameExternalRabbitmq := printf "%s-%s" (include "scdf.fullname" .) "externalrabbitmq" -}}
+{{- $secretNameExternalRabbitmq := printf "%s-%s" (include "common.names.fullname" .) "externalrabbitmq" -}}
 
 {{/* Mysql required password */}}
 {{- $passwordMysqlErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $secretNameMariadb "subchart" true "context" $) -}}

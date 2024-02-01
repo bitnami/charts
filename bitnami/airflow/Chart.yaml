@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: airflow-exporter
-      image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-11-r444
+      image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-11-r446
     - name: airflow-scheduler
-      image: docker.io/bitnami/airflow-scheduler:2.8.1-debian-11-r0
+      image: docker.io/bitnami/airflow-scheduler:2.8.1-debian-11-r2
     - name: airflow-worker
-      image: docker.io/bitnami/airflow-worker:2.8.1-debian-11-r0
+      image: docker.io/bitnami/airflow-worker:2.8.1-debian-11-r2
     - name: airflow
-      image: docker.io/bitnami/airflow:2.8.1-debian-11-r0
+      image: docker.io/bitnami/airflow:2.8.1-debian-11-r2
     - name: git
-      image: docker.io/bitnami/git:2.43.0-debian-11-r6
+      image: docker.io/bitnami/git:2.43.0-debian-11-r8
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r95
 apiVersion: v2
@@ -47,4 +47,4 @@ maintainers:
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 16.5.1
+version: 16.5.2
