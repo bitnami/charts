@@ -46,12 +46,18 @@ To get the password for {{ (include "postgresql-ha.postgresqlRepmgrUsername" .) 
 
 To connect to your database run the following command:
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{- end }} \
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql-ha.postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" {{ if and (.Values.pgpool.networkPolicy.enabled) (not .Values.pgpool.networkPolicy.allowExternal) }}--labels="{{ include "common.names.fullname" . }}-client=true" {{- end }} \
         --command -- psql -h {{ include "postgresql-ha.pgpool" . }} -p {{ .Values.service.ports.postgresql }} -U {{ include "postgresql-ha.postgresqlUsername" . }}{{- if not (empty (include "postgresql-ha.postgresqlDatabase" .)) }} -d {{ include "postgresql-ha.postgresqlDatabase" . }}{{- end }}
 
-{{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+{{- if and (.Values.postgresql.networkPolicy.enabled) (not .Values.postgresql.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "common.names.fullname" . }}-client=true" will be able to connect to this PostgreSQL cluster.
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.postgresql" . }}-client=true" can access postgresql will be able to connect to PostgreSQL.
+
+{{- end }}
+
+{{- if and (.Values.pgpool.networkPolicy.enabled) (not .Values.pgpool.networkPolicy.allowExternal) }}
+
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgppol" . }}-client=true" can access postgresql will be able to connect PgPool.
 
 {{- end }}
 

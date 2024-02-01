@@ -402,12 +402,12 @@ nodeSelector: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type SonarQube&trade; statefulset strategy type
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+## @param updateStrategy.type SonarQube&trade; deployment strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ##
 updateStrategy:
   ## StrategyType
-  ## Can be set to RollingUpdate or OnDelete
+  ## Can be set to RollingUpdate or Recreate
   ##
   type: RollingUpdate
 ## @param priorityClassName SonarQube&trade; pods' priorityClassName

@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r94
+      image: docker.io/bitnami/os-shell:11-debian-11-r95
     - name: redis-cluster
-      image: docker.io/bitnami/redis-cluster:7.2.4-debian-11-r2
+      image: docker.io/bitnami/redis-cluster:7.2.4-debian-11-r4
     - name: redis-exporter
-      image: docker.io/bitnami/redis-exporter:1.56.0-debian-11-r1
+      image: docker.io/bitnami/redis-exporter:1.57.0-debian-11-r1
 apiVersion: v2
 appVersion: 7.2.4
 dependencies:
@@ -32,4 +32,4 @@ maintainers:
 name: redis-cluster
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
-version: 9.4.0
+version: 9.5.0
