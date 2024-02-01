@@ -150,6 +150,9 @@ spec:
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
           {{- end }}
+          {{- if .Values.tls.securityContext }}
+          securityContext: {{- toYaml .Values.tls.securityContext | nindent 12 }}
+          {{- end }}
         {{- end }}
       {{- end }}
       containers:
