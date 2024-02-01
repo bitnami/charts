@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r2
+      image: docker.io/bitnami/apache-exporter:1.0.5-debian-11-r4
     - name: phpmyadmin
-      image: docker.io/bitnami/phpmyadmin:5.2.1-debian-11-r128
+      image: docker.io/bitnami/phpmyadmin:5.2.1-debian-11-r130
 apiVersion: v2
 appVersion: 5.2.1
 dependencies:
@@ -36,4 +36,4 @@ maintainers:
 name: phpmyadmin
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/phpmyadmin
-version: 14.3.0
+version: 14.3.1
