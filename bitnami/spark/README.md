@@ -173,6 +173,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `master.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`           |
 | `master.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`           |
+| `master.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`           |
 | `master.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`             |
 | `master.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`             |
 | `master.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`             |
@@ -263,6 +264,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
 | `worker.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`           |
 | `worker.networkPolicy.allowExternal`                       | Don't require client label for connections                                                                               | `true`           |
+| `worker.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`           |
 | `worker.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`             |
 | `worker.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`             |
 | `worker.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`             |
