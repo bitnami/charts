@@ -1,4 +1,39 @@
 query:
+  sidecars:
+    - name: hotrod-example
+      image: davidbhlm/hotrod-example:1.53
+      args: ['all']
+      env:
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: http://jaeger-collector:4318
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ "ALL" ]
+        seccompProfile:
+          type: "RuntimeDefault"
+    - name: trace-generator
+      image: bitnami/os-shell:11-debian-11-r2
+      command:
+        - /bin/bash
+        - -ec
+        - |
+          #!/bin/bash
+          while true; do
+            # Sample taken from inspecting hotrod code
+            curl 'http://127.0.0.1:8080/dispatch?customer=392&nonse=0.45838884710501726'
+            sleep 5
+          done
+      securityContext:
+        runAsNonRoot: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: [ "ALL" ]
+        seccompProfile:
+          type: "RuntimeDefault"
   service:
     type: LoadBalancer
     ports:
@@ -24,39 +59,6 @@ agent:
   serviceAccount:
     create: true
     automountServiceAccountToken: true
-  sidecars:
-    - name: hotrod-example
-      image: davidbhlm/example-hotrod:1.39
-      args:
-        - all
-      securityContext:
-        runAsNonRoot: true
-        privileged: false
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop: ["ALL"]
-        seccompProfile:
-          type: "RuntimeDefault"
-    - name: trace-generator
-      image: bitnami/os-shell:11-debian-11-r2
-      command:
-        - /bin/bash
-        - -ec
-        - |
-          #!/bin/bash
-          while true; do
-            # Sample taken from inspecting hotrod code
-            curl 'http://127.0.0.1:8080/dispatch?customer=392&nonse=0.45838884710501726'
-            sleep 5
-          done
-      securityContext:
-        runAsNonRoot: true
-        privileged: false
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop: ["ALL"]
-        seccompProfile:
-          type: "RuntimeDefault"
 
 cassandra:
   enabled: true

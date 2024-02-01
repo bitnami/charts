@@ -1771,6 +1771,9 @@ mariadb:
   ## @param mariadb.enabled Enable/disable MariaDB chart installation
   ##
   enabled: true
+  jdbcParameter:
+    ## @param mariadb.jdbcParameter.useMysqlMetadata Use MariaDB useMysqlMetadata parameter.
+    useMysqlMetadata: true
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
   ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository

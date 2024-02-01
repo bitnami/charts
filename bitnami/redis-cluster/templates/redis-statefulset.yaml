@@ -342,7 +342,7 @@ spec:
               value: {{ template "redis-cluster.tlsCACert" . }}
             {{- end }}
             - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
-              value: {{ printf ":%d" .Values.metrics.contanierPorts.http }}
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.metrics.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -360,7 +360,7 @@ spec:
           {{- end }}
           ports:
             - name: http-metrics
-              containerPort: {{ .Values.metrics.contanierPorts.http }}
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           resources:
         {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}

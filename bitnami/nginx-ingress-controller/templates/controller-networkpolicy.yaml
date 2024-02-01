@@ -22,12 +22,19 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{/* As we cannot easily identify the targets of Oauhh2 Proxy we allow all egress traffic by default */}}
-  {{- if .Values.networkPolicy.extraEgress }}
-  egress: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
-  {{- else }}
+  {{- if .Values.networkPolicy.allowExternalEgress }}
   egress:
     - {}
+  {{- else }}
+  egress: 
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
   ingress:
     - ports:

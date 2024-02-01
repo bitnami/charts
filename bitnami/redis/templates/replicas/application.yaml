@@ -303,7 +303,7 @@ spec:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
             - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
-              value: {{ printf ":%d" .Values.metrics.containerPorts.http }}
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
