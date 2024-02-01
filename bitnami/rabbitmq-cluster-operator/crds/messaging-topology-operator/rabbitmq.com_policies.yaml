@@ -1,10 +1,12 @@
-# Taken from https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v1.12.2/config/crd/bases/rabbitmq.com_policies.yaml
+# Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_policies.yaml
+# Version: 1.13.0
+# VersionOf: rmq-messaging-topology-operator
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: policies.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -24,25 +26,32 @@ spec:
         description: Policy is the Schema for the policies API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           spec:
-            description: PolicySpec defines the desired state of Policy https://www.rabbitmq.com/parameters.html#policies
+            description: |-
+              PolicySpec defines the desired state of Policy
+              https://www.rabbitmq.com/parameters.html#policies
             properties:
               applyTo:
                 default: all
-                description: 'What this policy applies to: ''queues'', ''classic_queues'',
-                  ''quorum_queues'', ''streams'', ''exchanges'', or ''all''. Default
-                  to ''all''.'
+                description: |-
+                  What this policy applies to: 'queues', 'classic_queues', 'quorum_queues', 'streams', 'exchanges', or 'all'.
+                  Default to 'all'.
                 enum:
                 - queues
                 - classic_queues
@@ -59,37 +68,43 @@ spec:
                 description: Required property; cannot be updated
                 type: string
               pattern:
-                description: Regular expression pattern used to match queues and exchanges,
-                  e.g. "^amq.". Required property.
+                description: |-
+                  Regular expression pattern used to match queues and exchanges, e.g. "^amq.".
+                  Required property.
                 type: string
               priority:
                 default: 0
-                description: Default to '0'. In the event that more than one policy
-                  can match a given exchange or queue, the policy with the greatest
-                  priority applies.
+                description: |-
+                  Default to '0'.
+                  In the event that more than one policy can match a given exchange or queue, the policy with the greatest priority applies.
                 type: integer
               rabbitmqClusterReference:
-                description: Reference to the RabbitmqCluster that the exchange will
-                  be created in. Required property.
+                description: |-
+                  Reference to the RabbitmqCluster that the policy will be created in.
+                  Required property.
                 properties:
                   connectionSecret:
-                    description: Secret contains the http management uri for the RabbitMQ
-                      cluster. The Secret must contain the key `uri`, `username` and
-                      `password` or operator will error. Have to set either name or
-                      connectionSecret, but not both.
+                    description: |-
+                      Secret contains the http management uri for the RabbitMQ cluster.
+                      The Secret must contain the key `uri`, `username` and `password` or operator will error.
+                      Have to set either name or connectionSecret, but not both.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
                   name:
-                    description: The name of the RabbitMQ cluster to reference. Have
-                      to set either name or connectionSecret, but not both.
+                    description: |-
+                      The name of the RabbitMQ cluster to reference.
+                      Have to set either name or connectionSecret, but not both.
                     type: string
                   namespace:
-                    description: The namespace of the RabbitMQ cluster to reference.
+                    description: |-
+                      The namespace of the RabbitMQ cluster to reference.
                       Defaults to the namespace of the requested resource if omitted.
                     type: string
                 type: object
@@ -133,9 +148,9 @@ spec:
                   type: object
                 type: array
               observedGeneration:
-                description: observedGeneration is the most recent successful generation
-                  observed for this Policy. It corresponds to the Policy's generation,
-                  which is updated on mutation by the API Server.
+                description: |-
+                  observedGeneration is the most recent successful generation observed for this Policy. It corresponds to the
+                  Policy's generation, which is updated on mutation by the API Server.
                 format: int64
                 type: integer
             type: object

@@ -1,5 +1,7 @@
-# Taken from https://github.com/Kong/charts/blob/main/charts/kong/crds/custom-resource-definitions.yaml (version 2.31.0)
-# generated using: kubectl kustomize 'github.com/kong/kubernetes-ingress-controller/config/crd?ref=v3.0.0'
+# Source: https://github.com/kong/kubernetes-ingress-controller/config/crd?ref=v{version}
+# Version: 3.0.1
+# VersionOf: kong-ingress-controller
+# UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:

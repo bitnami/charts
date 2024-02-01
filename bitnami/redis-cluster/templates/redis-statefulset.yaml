@@ -360,7 +360,7 @@ spec:
           {{- end }}
           ports:
             - name: http-metrics
-              containerPort: {{ .Values.metrics.contanierPorts.http }}
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           resources:
         {{- toYaml .Values.metrics.resources | nindent 12 }}
         {{- end }}
