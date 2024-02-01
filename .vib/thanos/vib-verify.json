@@ -36,7 +36,7 @@
             "resources": {
               "path": "/.vib/thanos/cypress"
             },
-            "endpoint": "lb-thanos-query-frontend-http",
+            "endpoint": "lb-thanos-queryfrontend-http",
             "app_protocol": "HTTP",
             "env": {
               "storePort": "10903",
