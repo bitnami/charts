@@ -1,10 +1,12 @@
-# Taken from https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v1.12.2/config/crd/bases/rabbitmq.com_queues.yaml
+# Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_queues.yaml
+# Version: 1.13.0
+# VersionOf: rmq-messaging-topology-operator
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: queues.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -24,14 +26,19 @@ spec:
         description: Queue is the Schema for the queues API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -39,10 +46,9 @@ spec:
             description: QueueSpec defines the desired state of Queue
             properties:
               arguments:
-                description: 'Queue arguments in the format of KEY: VALUE. e.g. x-delivery-limit:
-                  10000. Configuring queues through arguments is not recommended because
-                  they cannot be updated once set; we recommend configuring queues
-                  through policies instead.'
+                description: |-
+                  Queue arguments in the format of KEY: VALUE. e.g. x-delivery-limit: 10000.
+                  Configuring queues through arguments is not recommended because they cannot be updated once set; we recommend configuring queues through policies instead.
                 type: object
                 x-kubernetes-preserve-unknown-fields: true
               autoDelete:
@@ -56,27 +62,32 @@ spec:
                 description: Name of the queue; required property.
                 type: string
               rabbitmqClusterReference:
-                description: Reference to the RabbitmqCluster that the queue will
-                  be created in. Required property.
+                description: |-
+                  Reference to the RabbitmqCluster that the queue will be created in.
+                  Required property.
                 properties:
                   connectionSecret:
-                    description: Secret contains the http management uri for the RabbitMQ
-                      cluster. The Secret must contain the key `uri`, `username` and
-                      `password` or operator will error. Have to set either name or
-                      connectionSecret, but not both.
+                    description: |-
+                      Secret contains the http management uri for the RabbitMQ cluster.
+                      The Secret must contain the key `uri`, `username` and `password` or operator will error.
+                      Have to set either name or connectionSecret, but not both.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
                   name:
-                    description: The name of the RabbitMQ cluster to reference. Have
-                      to set either name or connectionSecret, but not both.
+                    description: |-
+                      The name of the RabbitMQ cluster to reference.
+                      Have to set either name or connectionSecret, but not both.
                     type: string
                   namespace:
-                    description: The namespace of the RabbitMQ cluster to reference.
+                    description: |-
+                      The namespace of the RabbitMQ cluster to reference.
                       Defaults to the namespace of the requested resource if omitted.
                     type: string
                 type: object
@@ -120,9 +131,9 @@ spec:
                   type: object
                 type: array
               observedGeneration:
-                description: observedGeneration is the most recent successful generation
-                  observed for this Queue. It corresponds to the Queue's generation,
-                  which is updated on mutation by the API Server.
+                description: |-
+                  observedGeneration is the most recent successful generation observed for this Queue. It corresponds to the
+                  Queue's generation, which is updated on mutation by the API Server.
                 format: int64
                 type: integer
             type: object

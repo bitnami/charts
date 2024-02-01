@@ -296,6 +296,17 @@ tls:
     ##   memory: 128Mi
     ##
     requests: {}
+    ##
+  ## Init Container securityContext 
+  ## ref: https://kubernetes.io/docs/concepts/security/pod-security-policy/
+  ## @param tls.securityContext Init container generate-tls-cert Security context
+  ##
+  securityContext: {}
+    ## Example:
+    ## allowPrivilegeEscalation: false
+    ## capabilities:
+    ##   drop: ["ALL"]
+    ##
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
