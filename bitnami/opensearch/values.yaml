@@ -840,12 +840,15 @@ master:
   networkPolicy:
     ## @param master.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param master.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param master.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1251,12 +1254,15 @@ data:
   networkPolicy:
     ## @param data.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param data.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param data.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param data.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1624,12 +1630,15 @@ coordinating:
   networkPolicy:
     ## @param coordinating.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param coordinating.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param coordinating.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param coordinating.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1999,12 +2008,15 @@ ingest:
   networkPolicy:
     ## @param ingest.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param ingest.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param ingest.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param ingest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2825,12 +2837,15 @@ dashboards:
   networkPolicy:
     ## @param dashboards.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param dashboards.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param dashboards.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param dashboards.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
