@@ -395,6 +395,9 @@ postgresql:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param postgresql.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: false
     ## @param postgresql.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1408,6 +1411,9 @@ pgpool:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param pgpool.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: false
     ## @param pgpool.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
