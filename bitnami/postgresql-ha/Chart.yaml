@@ -10,9 +10,9 @@ annotations:
     - name: pgpool
       image: docker.io/bitnami/pgpool:4.5.0-debian-11-r3
     - name: postgres-exporter
-      image: docker.io/bitnami/postgres-exporter:0.15.0-debian-11-r6
+      image: docker.io/bitnami/postgres-exporter:0.15.0-debian-11-r7
     - name: postgresql-repmgr
-      image: docker.io/bitnami/postgresql-repmgr:16.1.0-debian-11-r19
+      image: docker.io/bitnami/postgresql-repmgr:16.1.0-debian-11-r20
 apiVersion: v2
 appVersion: 16.1.0
 dependencies:
