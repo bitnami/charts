@@ -152,6 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                               | Pod annotations                                                                                                       | `{}`                          |
 | `podLabels`                                    | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                          |
 | `networkPolicy.enabled`                        | Specifies whether a NetworkPolicy should be created                                                                   | `true`                        |
+| `networkPolicy.allowExternalEgress`            | Allow the pod to access any range of port and all destinations.                                                       | `true`                        |
 | `networkPolicy.extraIngress`                   | Add extra ingress rules to the NetworkPolice                                                                          | `[]`                          |
 | `networkPolicy.extraEgress`                    | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`                          |
 

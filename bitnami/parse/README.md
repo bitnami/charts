@@ -169,6 +169,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.extraPorts`                                | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                    |
 | `server.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                                         | `None`                  |
 | `server.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                              | `{}`                    |
+| `server.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                  |
+| `server.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                               | `true`                  |
+| `server.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`                  |
+| `server.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                    |
+| `server.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                    |
+| `server.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                    |
+| `server.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                    |
 
 ### Dashboard Parameters
 
@@ -261,6 +268,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.service.extraPorts`                                | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                              |
 | `dashboard.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                                         | `None`                            |
 | `dashboard.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                              | `{}`                              |
+| `dashboard.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                            |
+| `dashboard.networkPolicy.allowExternal`                       | Don't require label for connections                                                                                      | `true`                            |
+| `dashboard.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`                            |
+| `dashboard.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                              |
+| `dashboard.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                              |
+| `dashboard.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                              |
+| `dashboard.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                              |
 
 ### Traffic Exposure Parameters
 
