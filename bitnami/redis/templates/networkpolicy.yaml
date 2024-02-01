@@ -79,7 +79,7 @@ spec:
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
-        - port: {{ .Values.master.containerPorts.redis }}
+        - port: {{ .Values.metrics.containerPorts.http }}
       {{- if not .Values.networkPolicy.metrics.allowExternal }}
       from:
         {{- if or .Values.networkPolicy.metrics.ingressNSMatchLabels .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
