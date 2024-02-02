@@ -110,7 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                        | `[]`                            |
 | `podSecurityContext.fsGroup`                        | Set Node exporter pod's Security Context fsGroup                                                                                                                   | `1001`                          |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                               | `true`                          |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                   | `{}`                            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                   | `nil`                           |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                         | `1001`                          |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                      | `true`                          |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                        | `false`                         |
@@ -131,6 +131,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.labels`                                    | Additional labels for Node Exporter service                                                                                                                        | `{}`                            |
 | `service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                               | `None`                          |
 | `service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                        | `{}`                            |
+| `networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                | `true`                          |
+| `networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                         | `true`                          |
+| `networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                    | `true`                          |
+| `networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                                                       | `[]`                            |
+| `networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                       | `[]`                            |
+| `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                             | `{}`                            |
+| `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                         | `{}`                            |
 | `updateStrategy.type`                               | The update strategy type to apply to the DaemonSet                                                                                                                 | `RollingUpdate`                 |
 | `updateStrategy.rollingUpdate.maxUnavailable`       | Maximum number of pods that may be made unavailable                                                                                                                | `1`                             |
 | `hostNetwork`                                       | Expose the service to the host network                                                                                                                             | `true`                          |
@@ -247,8 +254,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 ### To 2.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/node-exporter/administration/upgrade-helm3/).
 
 ## License
 

@@ -24,8 +24,6 @@ This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -150,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `compactor.podSecurityContext.fsGroup`                        | Set Compactor pod's Security Context fsGroup                                                        | `1001`           |
 | `compactor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `compactor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `compactor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -236,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`             |
 | `distributor.podSecurityContext.fsGroup`                        | Set Distributor pod's Security Context fsGroup                                                        | `1001`           |
 | `distributor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`           |
-| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`             |
+| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `nil`            |
 | `distributor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`           |
 | `distributor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`           |
 | `distributor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`          |
@@ -325,7 +323,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metricsGenerator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `metricsGenerator.podSecurityContext.fsGroup`                        | Set metricsGenerator pod's Security Context fsGroup                                                        | `1001`           |
 | `metricsGenerator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `metricsGenerator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `metricsGenerator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `metricsGenerator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `metricsGenerator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `metricsGenerator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -413,7 +411,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`             |
 | `ingester.podSecurityContext.fsGroup`                        | Set Ingester pod's Security Context fsGroup                                                        | `1001`           |
 | `ingester.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                               | `true`           |
-| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `{}`             |
+| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `nil`            |
 | `ingester.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                         | `1001`           |
 | `ingester.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                      | `true`           |
 | `ingester.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                        | `false`          |
@@ -513,7 +511,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                       | `[]`             |
 | `querier.podSecurityContext.fsGroup`                        | Set Querier pod's Security Context fsGroup                                                        | `1001`           |
 | `querier.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
-| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `{}`             |
+| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `nil`            |
 | `querier.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `querier.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `querier.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -601,7 +599,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.podSecurityContext.supplementalGroups`                   | Set filesystem extra groups                                                                                         | `[]`                                  |
 | `queryFrontend.podSecurityContext.fsGroup`                              | Set queryFrontend pod's Security Context fsGroup                                                                    | `1001`                                |
 | `queryFrontend.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                                                                | `true`                                |
-| `queryFrontend.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                                                                    | `{}`                                  |
+| `queryFrontend.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                                                                    | `nil`                                 |
 | `queryFrontend.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                                                                          | `1001`                                |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                                                                       | `true`                                |
 | `queryFrontend.containerSecurityContext.privileged`                     | Set container's Security Context privileged                                                                         | `false`                               |
@@ -668,7 +666,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.query.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                  | `{}`                                  |
 | `queryFrontend.query.lifecycleHooks`                                    | for the query sidecar container(s) to automate configuration before or after startup                                | `{}`                                  |
 | `queryFrontend.query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                | `true`                                |
-| `queryFrontend.query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `{}`                                  |
+| `queryFrontend.query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `nil`                                 |
 | `queryFrontend.query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                          | `1001`                                |
 | `queryFrontend.query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                       | `true`                                |
 | `queryFrontend.query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                         | `false`                               |
@@ -744,7 +742,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`                                    |
 | `vulture.podSecurityContext.fsGroup`                        | Set Vulture pod's Security Context fsGroup                                                                      | `1001`                                  |
 | `vulture.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`                                  |
-| `vulture.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                                    |
+| `vulture.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`                                   |
 | `vulture.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`                                  |
 | `vulture.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                                  |
 | `vulture.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`                                 |
@@ -804,7 +802,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
@@ -926,7 +924,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

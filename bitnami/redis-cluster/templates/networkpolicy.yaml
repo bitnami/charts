@@ -20,9 +20,15 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
+      - port: 53
+        protocol: TCP
       - port: 53
         protocol: UDP
     # Allow outbound connections to other cluster pods
@@ -32,13 +38,23 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
   ingress:
     # Allow inbound connections
     - ports:
         - port: {{ .Values.redis.containerPorts.redis }}
         - port: {{ .Values.redis.containerPorts.bus }}
+        {{- if .Values.metrics.enabled }}
+        # Allow prometheus scrapes for metrics
+        - port: {{ .Values.metrics.containerPorts.http }}
+        {{- end }}
+      {{- if not .Values.networkPolicy.allowExternal }}
       from:
-        {{- if not .Values.networkPolicy.allowExternal }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
@@ -58,10 +74,8 @@ spec:
               {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-        {{- end }}
-    {{- if .Values.metrics.enabled }}
-    # Allow prometheus scrapes for metrics
-    - ports:
-        - port: 9121
+      {{- end }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

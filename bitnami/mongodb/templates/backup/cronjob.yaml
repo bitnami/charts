@@ -59,6 +59,7 @@ spec:
             {{- end }}
           {{- end }}
         spec:
+          {{- include "mongodb.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -106,6 +107,7 @@ spec:
           containers:
           - name: {{ include "mongodb.fullname" . }}-mongodump
             image: {{ include "mongodb.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
             env:
             {{- if .Values.auth.enabled }}
               - name: MONGODB_ROOT_USER

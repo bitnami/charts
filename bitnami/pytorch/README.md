@@ -117,7 +117,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Set Pytorch pods' Security Context fsGroup                                                                               | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                    |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                      |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                     |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                    |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                   |
@@ -170,20 +170,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                        | Value       |
-| ---------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes service type                                                            | `ClusterIP` |
-| `service.ports.pytorch`            | Scheduler Service port                                                             | `49875`     |
-| `service.nodePorts.pytorch`        | Node port for Pytorch                                                              | `""`        |
-| `service.clusterIP`                | Pytorch service Cluster IP                                                         | `""`        |
-| `service.loadBalancerIP`           | Pytorch service Load Balancer IP                                                   | `""`        |
-| `service.loadBalancerSourceRanges` | Pytorch service Load Balancer sources                                              | `[]`        |
-| `service.externalTrafficPolicy`    | Pytorch service external traffic policy                                            | `Cluster`   |
-| `service.annotations`              | Additional custom annotations for Pytorch service                                  | `{}`        |
-| `service.extraPorts`               | Extra ports to expose in Pytorch service (normally used with the `sidecars` value) | `[]`        |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                   | `None`      |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
-| `service.headless.annotations`     | Annotations for the headless service.                                              | `{}`        |
+| Name                                    | Description                                                                        | Value       |
+| --------------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| `service.type`                          | Kubernetes service type                                                            | `ClusterIP` |
+| `service.ports.pytorch`                 | Scheduler Service port                                                             | `49875`     |
+| `service.nodePorts.pytorch`             | Node port for Pytorch                                                              | `""`        |
+| `service.clusterIP`                     | Pytorch service Cluster IP                                                         | `""`        |
+| `service.loadBalancerIP`                | Pytorch service Load Balancer IP                                                   | `""`        |
+| `service.loadBalancerSourceRanges`      | Pytorch service Load Balancer sources                                              | `[]`        |
+| `service.externalTrafficPolicy`         | Pytorch service external traffic policy                                            | `Cluster`   |
+| `service.annotations`                   | Additional custom annotations for Pytorch service                                  | `{}`        |
+| `service.extraPorts`                    | Extra ports to expose in Pytorch service (normally used with the `sidecars` value) | `[]`        |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                   | `None`      |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                        | `{}`        |
+| `service.headless.annotations`          | Annotations for the headless service.                                              | `{}`        |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                | `true`      |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                         | `true`      |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                    | `true`      |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                       | `[]`        |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                       | `[]`        |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                             | `{}`        |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                         | `{}`        |
 
 ### Init Container Parameters
 
