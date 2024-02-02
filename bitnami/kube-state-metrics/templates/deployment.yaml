@@ -111,6 +111,9 @@ spec:
             {{- if .Values.kubeResources.jobs }}
             - --resources=jobs
             {{- end }}
+            {{- if .Values.kubeResources.leases }}
+            - --resources=leases
+            {{- end }}
             {{- if .Values.kubeResources.limitranges }}
             - --resources=limitranges
             {{- end }}
