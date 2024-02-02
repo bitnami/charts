@@ -342,6 +342,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.annotations`                                       | Annotations for the Exporter pod                                                                                                          | `{}`                              |
 | `metrics.extraArgs`                                         | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                              |
 | `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                              |
+| `metrics.containerPorts.http`                               | Container port for http                                                                                                                   | `9104`                            |
 | `metrics.containerSecurityContext.enabled`                  | Enable security context for MariaDB metrics container                                                                                     | `false`                           |
 | `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                          | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`                | User ID for the MariaDB metrics container                                                                                                 | `1001`                            |
@@ -381,22 +382,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NetworkPolicy parameters
 
-| Name                                                                   | Description                                                                                                                            | Value   |
-| ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                                | Enable network policies                                                                                                                | `false` |
-| `networkPolicy.metrics.enabled`                                        | Enable network policy for metrics (prometheus)                                                                                         | `false` |
-| `networkPolicy.metrics.namespaceSelector`                              | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                                 | `{}`    |
-| `networkPolicy.metrics.podSelector`                                    | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                             | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled`             | Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.                                         | `false` |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector`   | Namespace selector label that is allowed to access the primary node. This label will be used to identified the allowed namespace(s).   | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector`         | Pods selector label that is allowed to access the primary node. This label will be used to identified the allowed pod(s).              | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules`         | Custom network policy for the primary node.                                                                                            | `[]`    |
-| `networkPolicy.ingressRules.secondaryAccessOnlyFrom.enabled`           | Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.                                         | `false` |
-| `networkPolicy.ingressRules.secondaryAccessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to acces the secondary nodes. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector`       | Pods selector label that is allowed to access the secondary nodes. This label will be used to identified the allowed pod(s).           | `{}`    |
-| `networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules`       | Custom network policy for the secondary nodes.                                                                                         | `[]`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`                  | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                         | `false` |
-| `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                      | `true` |
+| `networkPolicy.allowExternal`           | The Policy model to apply                                       | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image documentation.
 
@@ -528,6 +522,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb --set auth.r
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
+
+### To 16.0.0
+
+This section enables NetworkPolicies by default to increase security of the application. It also adapts the values in the `networkPolicy` section to the current Bitnami standards. Check the Parameters table for the new structure.
 
 ### To 14.0.0
 
