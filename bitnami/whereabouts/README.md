@@ -122,7 +122,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                           | `[]`                          |
 | `podSecurityContext.fsGroup`                   | Whereabouts pods' group ID                                                                                            | `0`                           |
 | `containerSecurityContext.enabled`             | Enable Whereabouts containers' Security Context                                                                       | `true`                        |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `{}`                          |
+| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                      | `nil`                         |
 | `containerSecurityContext.runAsUser`           | Whereabouts containers' Security Context                                                                              | `0`                           |
 | `containerSecurityContext.runAsNonRoot`        | Set Whereabouts container's Security Context runAsNonRoot                                                             | `false`                       |
 | `containerSecurityContext.privileged`          | Set Whereabouts container's Security Context privileged                                                               | `true`                        |
@@ -152,6 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                               | Pod annotations                                                                                                       | `{}`                          |
 | `podLabels`                                    | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                          |
 | `networkPolicy.enabled`                        | Specifies whether a NetworkPolicy should be created                                                                   | `true`                        |
+| `networkPolicy.allowExternalEgress`            | Allow the pod to access any range of port and all destinations.                                                       | `true`                        |
 | `networkPolicy.extraIngress`                   | Add extra ingress rules to the NetworkPolice                                                                          | `[]`                          |
 | `networkPolicy.extraEgress`                    | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`                          |
 

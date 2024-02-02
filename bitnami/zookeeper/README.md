@@ -226,8 +226,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.headless.annotations`              | Annotations for the Headless Service                                                    | `{}`        |
 | `service.headless.publishNotReadyAddresses` | If the ZooKeeper headless service should publish DNS records for not ready pods         | `true`      |
 | `service.headless.servicenameOverride`      | String to partially override headless service name                                      | `""`        |
-| `networkPolicy.enabled`                     | Specifies whether a NetworkPolicy should be created                                     | `false`     |
+| `networkPolicy.enabled`                     | Specifies whether a NetworkPolicy should be created                                     | `true`      |
 | `networkPolicy.allowExternal`               | Don't require client label for connections                                              | `true`      |
+| `networkPolicy.allowExternalEgress`         | Allow the pod to access any range of port and all destinations.                         | `true`      |
+| `networkPolicy.extraIngress`                | Add extra ingress rules to the NetworkPolice                                            | `[]`        |
+| `networkPolicy.extraEgress`                 | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
+| `networkPolicy.ingressNSMatchLabels`        | Labels to match to allow traffic from other namespaces                                  | `{}`        |
+| `networkPolicy.ingressNSPodMatchLabels`     | Pod labels to match to allow traffic from other namespaces                              | `{}`        |
 
 ### Other Parameters
 

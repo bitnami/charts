@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                                          | Affinity for SonarQube&trade; pods assignment                                                  | `{}`             |
 | `nodeSelector`                                      | Node labels for SonarQube&trade; pods assignment                                               | `{}`             |
 | `tolerations`                                       | Tolerations for SonarQube&trade; pods assignment                                               | `[]`             |
-| `updateStrategy.type`                               | SonarQube&trade; statefulset strategy type                                                     | `RollingUpdate`  |
+| `updateStrategy.type`                               | SonarQube&trade; deployment strategy type                                                      | `RollingUpdate`  |
 | `priorityClassName`                                 | SonarQube&trade; pods' priorityClassName                                                       | `""`             |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default) for SonarQube&trade; pods                       | `""`             |
 | `lifecycleHooks`                                    | for the SonarQube&trade; container(s) to automate configuration before or after startup        | `{}`             |
@@ -199,36 +199,42 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | SonarQube&trade; service type                                                                                                    | `LoadBalancer`           |
-| `service.ports.http`               | SonarQube&trade; service HTTP port                                                                                               | `80`                     |
-| `service.ports.elastic`            | SonarQube&trade; service ElasticSearch port                                                                                      | `9001`                   |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `service.nodePorts.elastic`        | Node port for ElasticSearch                                                                                                      | `""`                     |
-| `service.clusterIP`                | SonarQube&trade; service Cluster IP                                                                                              | `""`                     |
-| `service.loadBalancerIP`           | SonarQube&trade; service Load Balancer IP                                                                                        | `""`                     |
-| `service.loadBalancerSourceRanges` | SonarQube&trade; service Load Balancer sources                                                                                   | `[]`                     |
-| `service.externalTrafficPolicy`    | SonarQube&trade; service external traffic policy                                                                                 | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for SonarQube&trade; service                                                                       | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)                                      | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for SonarQube&trade;                                                                            | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `sonarqube.local`        |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.labels`                   | Additional labels for the Ingress resource.                                                                                      | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | SonarQube&trade; service type                                                                                                    | `LoadBalancer`           |
+| `service.ports.http`                    | SonarQube&trade; service HTTP port                                                                                               | `80`                     |
+| `service.ports.elastic`                 | SonarQube&trade; service ElasticSearch port                                                                                      | `9001`                   |
+| `service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.elastic`             | Node port for ElasticSearch                                                                                                      | `""`                     |
+| `service.clusterIP`                     | SonarQube&trade; service Cluster IP                                                                                              | `""`                     |
+| `service.loadBalancerIP`                | SonarQube&trade; service Load Balancer IP                                                                                        | `""`                     |
+| `service.loadBalancerSourceRanges`      | SonarQube&trade; service Load Balancer sources                                                                                   | `[]`                     |
+| `service.externalTrafficPolicy`         | SonarQube&trade; service external traffic policy                                                                                 | `Cluster`                |
+| `service.annotations`                   | Additional custom annotations for SonarQube&trade; service                                                                       | `{}`                     |
+| `service.extraPorts`                    | Extra ports to expose in SonarQube&trade; service (normally used with the `sidecars` value)                                      | `[]`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                                       | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Enable ingress record generation for SonarQube&trade;                                                                            | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                                              | `sonarqube.local`        |
+| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.labels`                        | Additional labels for the Ingress resource.                                                                                      | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### SonarQube caCerts provisioning parameters
 

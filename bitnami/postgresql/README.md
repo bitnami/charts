@@ -213,7 +213,7 @@ kubectl delete pvc -l release=my-release
 | `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
 | `primary.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                |
-| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                 |
 | `primary.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                |
 | `primary.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`               |
@@ -248,6 +248,13 @@ kubectl delete pvc -l release=my-release
 | `primary.sidecars`                                          | Add additional sidecar containers to the PostgreSQL Primary pod(s)                                                       | `[]`                  |
 | `primary.initContainers`                                    | Add additional init containers to the PostgreSQL Primary pod(s)                                                          | `[]`                  |
 | `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL Primary pod(s)                                                       | `{}`                  |
+| `primary.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                |
+| `primary.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                               | `true`                |
+| `primary.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `false`               |
+| `primary.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                  |
+| `primary.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                  |
+| `primary.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                  |
+| `primary.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                  |
 | `primary.service.type`                                      | Kubernetes Service type                                                                                                  | `ClusterIP`           |
 | `primary.service.ports.postgresql`                          | PostgreSQL service port                                                                                                  | `5432`                |
 | `primary.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                 | `""`                  |
@@ -318,7 +325,7 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                  |
 | `readReplicas.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
 | `readReplicas.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                |
-| `readReplicas.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                  |
+| `readReplicas.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                 |
 | `readReplicas.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                |
 | `readReplicas.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                |
 | `readReplicas.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`               |
@@ -353,6 +360,13 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.sidecars`                                          | Add additional sidecar containers to the PostgreSQL read only pod(s)                                                     | `[]`                  |
 | `readReplicas.initContainers`                                    | Add additional init containers to the PostgreSQL read only pod(s)                                                        | `[]`                  |
 | `readReplicas.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL read only pod(s)                                                     | `{}`                  |
+| `readReplicas.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                |
+| `readReplicas.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                               | `true`                |
+| `readReplicas.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `false`               |
+| `readReplicas.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                  |
+| `readReplicas.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                  |
+| `readReplicas.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                  |
+| `readReplicas.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                  |
 | `readReplicas.service.type`                                      | Kubernetes Service type                                                                                                  | `ClusterIP`           |
 | `readReplicas.service.ports.postgresql`                          | PostgreSQL service port                                                                                                  | `5432`                |
 | `readReplicas.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                 | `""`                  |
@@ -399,7 +413,7 @@ kubectl delete pvc -l release=my-release
 | `backup.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                           | `[]`                                                                                                                                                                                 |
 | `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the CronJob                                                                                                              | `1001`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`                                                                                                                                                                               |
-| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                                                                                                                                                                                 |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `nil`                                                                                                                                                                                |
 | `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`                                                                                                                                                                               |
 | `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`                                                                                                                                                                              |
@@ -452,7 +466,7 @@ kubectl delete pvc -l release=my-release
 | `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                        |
 | `volumePermissions.containerSecurityContext.runAsGroup`          | Group ID for the init container                                                                                                   | `0`                        |
 | `volumePermissions.containerSecurityContext.runAsNonRoot`        | runAsNonRoot for the init container                                                                                               | `false`                    |
@@ -485,7 +499,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.customMetrics`                                     | Define additional custom metrics                                                                           | `{}`                                |
 | `metrics.extraEnvVars`                                      | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                                |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`                              |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`                                |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`                               |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`                              |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`                              |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`                             |
@@ -786,6 +800,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major version adapts the NetworkPolicy objects to the most recent Bitnami standards. Now there is a separate object for `primary` and for `readReplicas`, being located in their corresponding sections. It is also enabled by default in other to comply with the best security standards.
+
+Check the parameter section for the new value structure.
 
 ### To 13.0.0
 
