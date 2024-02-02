@@ -229,6 +229,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.sidekiq.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraVolumes "context" $) | nindent 10 }}
         {{- end }}
 {{- end }}
