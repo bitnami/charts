@@ -120,10 +120,10 @@ spec:
           command:
           {{- if .Values.command }}
           {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else if kindIs "invalid" .Values.command }}
+          {{- /* will use container container */ -}}
           {{- else if .Values.appFromExternalRepo.enabled }}
           {{- include "common.tplvalues.render" (dict "value" .Values.appFromExternalRepo.startCommand "context" $) | nindent 12 }}
-          {{- else if .Values.useContainerCommand }}
-            {{- /* left empty if use container command */ -}}
           {{- else }}
             - dotnet
           {{- end }}
