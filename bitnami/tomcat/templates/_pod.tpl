@@ -84,6 +84,8 @@ containers:
             key: tomcat-password
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+      - name: TOMCAT_HTTP_PORT_NUMBER
+        value: {{ .Values.containerPorts.http | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
         value: {{ include "tomcat.catalinaOpts" . | quote }}

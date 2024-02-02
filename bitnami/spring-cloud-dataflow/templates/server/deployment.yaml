@@ -3,18 +3,18 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $fullname := include "scdf.fullname" .  }}
-{{- $serverServicePort := int .Values.server.service.port }}
-{{- $skipperServicePort := int .Values.skipper.service.port }}
-{{- $releaseNamespace := .Release.Namespace }}
+{{- $fullname := include "common.names.fullname" .  }}
+{{- $serverServicePort := int (coalesce .Values.server.service.ports.http .Values.server.service.port) }}
+{{- $skipperServicePort := int (coalesce .Values.skipper.service.ports.http .Values.skipper.service.port) }}
+{{- $releaseNamespace := include "common.names.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "scdf.fullname" . }}-server
+  name: {{ include "common.names.fullname" . }}-server
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -116,7 +116,7 @@ spec:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.server.image.debug | quote }}
             - name: SERVER_PORT
-              value: "{{ .Values.server.containerPort }}"
+              value: {{ coalesce .Values.server.containerPorts.http .Values.server.containerPort | quote }}
             - name: SPRING_CLOUD_CONFIG_ENABLED
               value: "false"
             - name: SPRING_CLOUD_KUBERNETES_CONFIG_ENABLE_API
@@ -169,13 +169,12 @@ spec:
               value: {{ ternary "true" "false" .Values.server.configuration.trustK8sCerts | quote }}
             {{- if .Values.server.jdwp.enabled }}
             - name: JAVA_TOOL_OPTIONS
-              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ .Values.server.jdwp.port }}"
+              value: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address={{ coalesce .Values.server.containerPorts.jdwp .Values.server.jdwp.port }}"
             {{- end }}
             - name: SPRING_CLOUD_DATAFLOW_TASK_COMPOSEDTASKRUNNER_URI
               value: 'docker://{{ include "common.images.image" (dict "imageRoot" .Values.server.composedTaskRunner.image) }}'
-            {{- range $key, $value := .Values.server.extraEnvVars }}
-            - name: {{ $value.name }}
-              value: "{{ $value.value }}"
+            {{- if .Values.server.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           {{- if or .Values.server.extraEnvVarsCM .Values.server.extraEnvVarsSecret }}
           envFrom:
@@ -190,11 +189,11 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.server.containerPort }}
+              containerPort: {{ coalesce .Values.server.containerPorts.http .Values.server.containerPort }}
               protocol: TCP
             {{- if .Values.server.jdwp.enabled }}
             - name: jdwp
-              containerPort: {{ .Values.server.jdwp.port }}
+              containerPort: {{ coalesce .Values.server.containerPorts.jdwp .Values.server.jdwp.port }}
               protocol: TCP
             {{- end }}
           {{- if .Values.server.customStartupProbe }}
@@ -265,7 +264,7 @@ spec:
         {{- if .Values.waitForBackends.enabled }}
         - name: scripts
           configMap:
-            name: {{ include "scdf.fullname" . }}-scripts
+            name: {{ include "common.names.fullname" . }}-scripts
             defaultMode: 0755
         {{- end }}
         {{- if .Values.server.extraVolumes }}
