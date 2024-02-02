@@ -271,6 +271,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.service.annotations`                               | Annotations for the default backend service                                                                     | `{}`                    |
 | `defaultBackend.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                             | `true`                  |
 | `defaultBackend.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                      | `true`                  |
+| `defaultBackend.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                 | `true`                  |
 | `defaultBackend.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                    | `[]`                    |
 | `defaultBackend.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                    | `[]`                    |
 | `defaultBackend.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                          | `{}`                    |
@@ -302,6 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                            | `{}`           |
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                                    | `true`         |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                             | `true`         |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                        | `true`         |
 | `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                           | `[]`           |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                           | `[]`           |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                                 | `{}`           |

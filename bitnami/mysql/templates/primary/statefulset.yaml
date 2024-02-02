@@ -151,6 +151,8 @@ spec:
                   key: mysql-password
             {{- end }}
             {{- end }}
+            - name: MYSQL_PORT
+              value: {{ .Values.primary.containerPorts.mysql | quote}}
             {{- if and .Values.auth.createDatabase .Values.auth.database }}
             - name: MYSQL_DATABASE
               value: {{ .Values.auth.database | quote }}
@@ -299,11 +301,11 @@ spec:
               if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
               fi
-              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=root {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
+              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=root --web.listen-address=:{{ .Values.metrics.containerPorts.http }} {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9104
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
