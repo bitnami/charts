@@ -160,14 +160,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith Client Network Policies
 
-| Name                                           | Description                                                | Value   |
-| ---------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
-| `client.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
-| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
-| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
-| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
-| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+| Name                                           | Description                                                     | Value   |
+| ---------------------------------------------- | --------------------------------------------------------------- | ------- |
+| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `false` |
+| `client.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true`  |
+| `client.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true`  |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`    |
+| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`    |
+| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`    |
+| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`    |
 
 ### Appsmith Client Traffic Exposure Parameters
 
@@ -281,14 +282,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith Backend Network Policies
 
-| Name                                            | Description                                                | Value   |
-| ----------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
-| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
-| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                | `[]`    |
-| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
-| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
-| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+| Name                                            | Description                                                     | Value   |
+| ----------------------------------------------- | --------------------------------------------------------------- | ------- |
+| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `false` |
+| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true`  |
+| `backend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true`  |
+| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                     | `[]`    |
+| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`    |
+| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`    |
+| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`    |
 
 ### Appsmith Backend Traffic Exposure Parameters
 
@@ -395,14 +397,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith RTS Network Policies
 
-| Name                                        | Description                                                | Value   |
-| ------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `false` |
-| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
-| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`    |
-| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
-| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
-| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+| Name                                        | Description                                                     | Value   |
+| ------------------------------------------- | --------------------------------------------------------------- | ------- |
+| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `false` |
+| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true`  |
+| `rts.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true`  |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`    |
+| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`    |
+| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`    |
+| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`    |
 
 ### Appsmith RTS Traffic Exposure Parameters
 

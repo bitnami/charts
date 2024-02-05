@@ -333,7 +333,7 @@ data:
     if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
         if grep -q "broker.id" /bitnami/kafka/data/meta.properties; then
           ID="$(grep "broker.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
-          {{- if or (not .Values.broker.zookeeperMigrationMode) (and (not .Values.zookeeper.enabled) (not .Values.externalZookeeper.servers)) }}
+          {{- if or (and .Values.kraft.enabled (not .Values.broker.zookeeperMigrationMode)) (and (not .Values.zookeeper.enabled) (not .Values.externalZookeeper.servers)) }}
           kafka_conf_set "$KAFKA_CONFIG_FILE" "node.id" "$ID"
           {{- else }}
           kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.id" "$ID"
