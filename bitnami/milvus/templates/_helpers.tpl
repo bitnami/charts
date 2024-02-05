@@ -960,6 +960,8 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       #!/bin/bash
+      # Copy the default configuration files to ensure they are present in mounted configs directory
+      cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /opt/bitnami/milvus/configs/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
       {{- if (include "milvus.kafka.deployed" .context) }}
