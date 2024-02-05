@@ -38,7 +38,9 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.containerPorts.http }}
+        {{- if .Values.containerPorts.https }}
         - port: {{ .Values.containerPorts.https }}
+        {{- end }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.metrics.containerPorts.metrics }}
         {{- end }}
