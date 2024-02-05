@@ -118,6 +118,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.hostAliases`                                       | Deployment pod host aliases                                                                                     | `[]`                |
 | `primary.configuration`                                     | Configure MySQL Primary with a custom my.cnf file                                                               | `""`                |
 | `primary.existingConfigmap`                                 | Name of existing ConfigMap with MySQL Primary configuration.                                                    | `""`                |
+| `primary.containerPorts.mysql`                              | Container port for mysql                                                                                        | `3306`              |
 | `primary.updateStrategy.type`                               | Update strategy type for the MySQL primary statefulset                                                          | `RollingUpdate`     |
 | `primary.podAnnotations`                                    | Additional pod annotations for MySQL primary pods                                                               | `{}`                |
 | `primary.podAffinityPreset`                                 | MySQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
@@ -220,6 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.lifecycleHooks`                                    | for the MySQL Secondary container(s) to automate configuration before or after startup                              | `{}`                |
 | `secondary.configuration`                                     | Configure MySQL Secondary with a custom my.cnf file                                                                 | `""`                |
 | `secondary.existingConfigmap`                                 | Name of existing ConfigMap with MySQL Secondary configuration.                                                      | `""`                |
+| `secondary.containerPorts.mysql`                              | Container port for mysql                                                                                            | `3306`              |
 | `secondary.updateStrategy.type`                               | Update strategy type for the MySQL secondary statefulset                                                            | `RollingUpdate`     |
 | `secondary.podAnnotations`                                    | Additional pod annotations for MySQL secondary pods                                                                 | `{}`                |
 | `secondary.podAffinityPreset`                                 | MySQL secondary pod affinity preset. Ignored if `secondary.affinity` is set. Allowed values: `soft` or `hard`       | `""`                |
@@ -322,11 +324,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Network Policy
 
-| Name                                       | Description                                                                                                     | Value   |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                    | Enable creation of NetworkPolicy resources                                                                      | `false` |
-| `networkPolicy.allowExternal`              | The Policy model to apply.                                                                                      | `true`  |
-| `networkPolicy.explicitNamespacesSelector` | A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed to MySQL | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                      | `true` |
+| `networkPolicy.allowExternal`           | The Policy model to apply                                       | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 ### Volume Permissions parameters
 
@@ -354,6 +360,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                               | `nil`                             |
 | `metrics.containerSecurityContext.runAsUser`      | User ID for the MySQL metrics container                                                                                        | `1001`                            |
 | `metrics.containerSecurityContext.runAsNonRoot`   | Set MySQL metrics container's Security Context runAsNonRoot                                                                    | `true`                            |
+| `metrics.containerPorts.http`                     | Container port for http                                                                                                        | `9104`                            |
 | `metrics.service.type`                            | Kubernetes service type for MySQL Prometheus Exporter                                                                          | `ClusterIP`                       |
 | `metrics.service.clusterIP`                       | Kubernetes service clusterIP for MySQL Prometheus Exporter                                                                     | `""`                              |
 | `metrics.service.port`                            | MySQL Prometheus Exporter service port                                                                                         | `9104`                            |

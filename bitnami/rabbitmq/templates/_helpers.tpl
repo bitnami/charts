@@ -52,7 +52,7 @@ Get RabbitMQ password secret name.
 Get the password key to be retrieved from RabbitMQ secret.
 */}}
 {{- define "rabbitmq.secretPasswordKey" -}}
-    {{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
+    {{- if and .Values.auth.existingPasswordSecret .Values.auth.existingSecretPasswordKey -}}
         {{- printf "%s" (tpl .Values.auth.existingSecretPasswordKey $) -}}
     {{- else -}}
         {{- printf "rabbitmq-password" -}}
