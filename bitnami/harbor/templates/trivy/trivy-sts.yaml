@@ -66,6 +66,9 @@ spec:
       {{- if .Values.trivy.schedulerName }}
       schedulerName: {{ .Values.trivy.schedulerName }}
       {{- end }}
+      {{- if .Values.trivy.serviceAccountName }}
+      serviceAccountName: {{ .Values.trivy.serviceAccountName }}
+      {{- end }}
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.trivy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
