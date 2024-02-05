@@ -960,10 +960,17 @@ Init container definition for waiting for the database to be ready
     - -ec
     - |
       #!/bin/bash
-      # Copy the default configuration files to ensure they are present in mounted configs directory
+      # Remove previously existing files and copy the default configuration files to ensure they are present in mounted configs directory
+      if [[ -f /bitnami/milvus/rendered-conf/milvus.conf ]]; then
+        mv /bitnami/milvus/rendered-conf/milvus.conf /tmp/milvus.conf
+      fi
+      rm -rf /bitnami/milvus/rendered-conf/*
       cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
+      if [[ -f /tmp/milvus.conf ]]; then
+        mv /bitnami/milvus/rendered-conf/milvus.conf /tmp/milvus.conf
+      fi
       # Build final milvus.yaml with the sections of the different files
-      find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /opt/bitnami/milvus/configs/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
+      find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /bitnami/milvus/rendered-conf/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
       {{- if (include "milvus.kafka.deployed" .context) }}
       # HACK: In order to enable Kafka we need to remove all Pulsar settings from the configuration file
       # https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml#L110
@@ -976,6 +983,8 @@ Init container definition for waiting for the database to be ready
       yq e -i '.tls.caPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
       {{- end }}
+      {{- else -}}
+      mv /bitnami/milvus/rendered-conf/pre-render-config_00.yaml /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
       render-template /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/milvus.yaml
       rm /bitnami/milvus/rendered-conf/pre-render-config*
