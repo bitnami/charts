@@ -19,12 +19,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   policyTypes:
     - Ingress
+  {{- if not .Values.networkPolicy.allowExternalEgress }}
     - Egress
   egress:
-    {{- if .Values.networkPolicy.allowExternalEgress }}
-    - ports:
-        - {}
-    {{- else }}
     - ports:
         # Allow dns resolution
         - port: 53
@@ -34,7 +31,7 @@ spec:
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.containerPorts.http }}
