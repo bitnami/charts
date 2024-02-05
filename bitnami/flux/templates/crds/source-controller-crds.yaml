@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/source-controller/releases/download/v{version}/source-controller.crds.yaml
-# Version: 1.2.3
+# Version: 1.2.4
 # VersionOf: fluxcd-source-controller
 # Conditional: .Values.sourceController.installCRDs
 {{- if .Values.sourceController.installCRDs }}
