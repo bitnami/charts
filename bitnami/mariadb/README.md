@@ -527,7 +527,7 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb --set auth.r
 
 ### To 16.0.0
 
-This section enables NetworkPolicies by default to increase security of the application. It also adapts the values in the `networkPolicy` section to the current Bitnami standards. Check the Parameters table for the new structure.
+This section enables NetworkPolicies by default to increase security of the application. It also adapts the values in the `networkPolicy` section to the current Bitnami standards. The removed sections are `networkPolicy.metrics.*`, `networkPolicy.ingressRules.*` and `networkPolicy.egressRules.*`. Check the Parameters table for the new structure.
 
 ### To 14.0.0
 
