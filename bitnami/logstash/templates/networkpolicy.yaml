@@ -7,11 +7,10 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "mongodb.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: mongodb
   {{- if or .Values.annotations .Values.commonAnnotation }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
@@ -20,7 +19,6 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: mongodb
   policyTypes:
     - Ingress
     - Egress
@@ -35,9 +33,16 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Leaving 9200 open as many Logstash installations may use Kibana and we do not want to break them
+        - port: 9200
     # Allow connection to other cluster pods
     - ports:
-        - port: {{ .Values.containerPorts.mongodb }}
+        {{- range .Values.containerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+        {{- range .Values.service.ports }}
+        - port: {{ .port }}
+        {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -47,10 +52,9 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.containerPorts.mongodb }}
-      {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPort }}
-      {{- end }}
+        {{- range .Values.containerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -58,19 +62,16 @@ spec:
               {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: mongodb
-        {{- $ingressNSMatchLabels := coalesce .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.namespaceSelector }}
-        {{- if $ingressNSMatchLabels }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- range $key, $value := $ingressNSMatchLabels }}
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-          {{- $ingressNSPodMatchLabels := coalesce .Values.networkPolicy.ingressNSPodMatchLabels .Values.networkPolicy.podSelector }}
-          {{- if $ingressNSPodMatchLabels }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
             matchLabels:
-              {{- range $key, $value := $ingressNSPodMatchLabels }}
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
           {{- end }}

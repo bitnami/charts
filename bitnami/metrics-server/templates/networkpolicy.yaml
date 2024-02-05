@@ -31,13 +31,16 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        {{- range $port := .Values.networkPolicy.kubernetesPorts }}
+        - port: {{ $port }}
+        {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.containerPorts.metrics }}
+        - port: {{ .Values.containerPorts.https }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
