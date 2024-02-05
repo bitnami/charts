@@ -42,7 +42,6 @@ spec:
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/part-of: rabbitmq
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"

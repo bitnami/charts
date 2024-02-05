@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubernetes-event-exporter
-      image: docker.io/bitnami/kubernetes-event-exporter:1.6.1-debian-11-r6
+      image: docker.io/bitnami/kubernetes-event-exporter:1.6.1-debian-11-r7
 apiVersion: v2
 appVersion: 1.6.1
 dependencies:
