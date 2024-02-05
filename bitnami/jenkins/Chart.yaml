@@ -35,4 +35,4 @@ maintainers:
 name: jenkins
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jenkins
-version: 12.6.7
+version: 12.7.0
