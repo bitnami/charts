@@ -119,6 +119,27 @@ webhooks:
   - admissionReviewVersions:
       - v1
     clientConfig:
+      service:
+        name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: /validate-rabbitmq-com-v1beta1-operatorpolicy
+        port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
+    failurePolicy: Fail
+    name: voperatorpolicy.kb.io
+    rules:
+    - apiGroups:
+      - rabbitmq.com
+      apiVersions:
+      - v1beta1
+      operations:
+      - CREATE
+      - UPDATE
+      resources:
+      - operatorpolicies
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+    clientConfig:
       {{- if not .Values.useCertManager }}
       caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
