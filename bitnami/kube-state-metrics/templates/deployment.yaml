@@ -171,6 +171,8 @@ spec:
             {{- if .Values.namespaces }}
             - --namespaces={{- include "common.tplvalues.render" ( dict "value" .Values.namespaces "context" $ ) }}
             {{- end }}
+            - --port={{ .Values.containerPorts.http }}
+            - --telemetry-port={{ coalesce .Values.selfMonitor.telemetryPort .Values.containerPorts.telemetry }}
             {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
             - --{{ $key }}={{ $value }}
@@ -199,11 +201,11 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
             {{- if .Values.selfMonitor.enabled }}
             - name: metrics
-              containerPort: {{ .Values.selfMonitor.telemetryPort | default 8081 }}
+              containerPort: {{ coalesce .Values.selfMonitor.telemetryPort .Values.containerPorts.telemetry }}
               protocol: TCP
             {{- end }}   
           {{- if not .Values.diagnosticMode.enabled }}
