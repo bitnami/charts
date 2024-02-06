@@ -7,7 +7,7 @@ annotations:
   images: |
     - name: kube-state-metrics
       image: docker.io/bitnami/kube-state-metrics:2.10.1-debian-11-r7
-apiVe7sion: v2
+apiVersion: v2
 appVersion: 2.10.1
 dependencies:
 - name: common
