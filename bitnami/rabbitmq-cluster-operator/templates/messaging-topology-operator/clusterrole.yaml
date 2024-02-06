@@ -312,5 +312,23 @@ rules:
       - get
       - patch
       - update
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies/status
+    verbs:
+    - get
   {{- end }}
 {{- end }}
