@@ -93,12 +93,15 @@ spec:
               {{- end }}
 
               # copy installed gems to shared dir
+              cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
+            - name: extensions
+              mountPath: /extensions
             - name: gems
               mountPath: /gems
             - name: specifications
@@ -217,6 +220,8 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.aggregator.extraGems }}
+            - name: extensions
+              mountPath: /opt/bitnami/fluentd/extensions/
             - name: gems
               mountPath: /opt/bitnami/fluentd/gems/
             - name: specifications
@@ -260,6 +265,8 @@ spec:
           emptyDir: {}
         {{- end }}
         {{- if .Values.aggregator.extraGems }}
+        - name: extensions
+          emptyDir: {}
         - name: gems
           emptyDir: {}
         - name: specifications

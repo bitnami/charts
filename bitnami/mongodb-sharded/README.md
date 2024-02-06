@@ -145,6 +145,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`                            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                            |
 | `service.sessionAffinityConfig`                      | Additional settings for the sessionAffinity                                                                                                               | `{}`                              |
 | `service.headless.annotations`                       | Annotations for the headless service.                                                                                                                     | `{}`                              |
+| `networkPolicy.enabled`                              | Specifies whether a NetworkPolicy should be created                                                                                                       | `true`                            |
+| `networkPolicy.allowExternal`                        | Don't require server label for connections                                                                                                                | `true`                            |
+| `networkPolicy.allowExternalEgress`                  | Allow the pod to access any range of port and all destinations.                                                                                           | `true`                            |
+| `networkPolicy.extraIngress`                         | Add extra ingress rules to the NetworkPolice                                                                                                              | `[]`                              |
+| `networkPolicy.extraEgress`                          | Add extra ingress rules to the NetworkPolicy                                                                                                              | `[]`                              |
+| `networkPolicy.ingressNSMatchLabels`                 | Labels to match to allow traffic from other namespaces                                                                                                    | `{}`                              |
+| `networkPolicy.ingressNSPodMatchLabels`              | Pod labels to match to allow traffic from other namespaces                                                                                                | `{}`                              |
 
 ### Config Server parameters
 
