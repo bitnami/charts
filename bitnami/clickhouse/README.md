@@ -360,14 +360,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Network Policies
 
-| Name                                    | Description                                                | Value  |
-| --------------------------------------- | ---------------------------------------------------------- | ------ |
-| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created        | `true` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true` |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice               | `[]`   |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`   |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`   |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`   |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
