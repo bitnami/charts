@@ -234,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tracking.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `tracking.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `tracking.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `tracking.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
+| `tracking.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
 | `tracking.networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
 | `tracking.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `tracking.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
@@ -363,7 +363,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `run.sidecars`                                          | Add additional sidecar containers to the Run pod(s)                                             | `[]`             |
 | `run.enableDefaultInitContainers`                       | Deploy default init containers                                                                  | `true`           |
 | `run.initContainers`                                    | Add additional init containers to the Run pod(s)                                                | `[]`             |
-| `run.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                      | `false`          |
+| `run.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                      | `true`           |
 | `run.networkPolicy.allowExternal`                       | The Policy model to apply                                                                       | `true`           |
 | `run.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                 | `true`           |
 | `run.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                    | `[]`             |

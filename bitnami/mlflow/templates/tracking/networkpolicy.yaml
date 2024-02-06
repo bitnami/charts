@@ -24,7 +24,7 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.networkPolicy.allowExternalEgress }}
+  {{- if .Values.tracking.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
@@ -62,6 +62,7 @@ spec:
     - ports:
         - port: {{ include "mlflow.v0.s3.port" . }}
       {{- if .Values.minio.enabled }}
+        - port: {{ .Values.minio.containerPorts.api }}
       to:
         - podSelector:
             matchLabels:

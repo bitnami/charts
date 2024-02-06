@@ -639,7 +639,7 @@ tracking:
   networkPolicy:
     ## @param tracking.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param tracking.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
@@ -1072,7 +1072,7 @@ run:
   networkPolicy:
     ## @param run.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param run.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
