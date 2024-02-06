@@ -69,6 +69,9 @@ spec:
       {{- if .Values.jobservice.schedulerName }}
       schedulerName: {{ .Values.jobservice.schedulerName }}
       {{- end }}
+      {{- if .Values.jobservice.serviceAccountName }}
+      serviceAccountName: {{ .Values.jobservice.serviceAccountName }}
+      {{- end }}
       {{- if .Values.jobservice.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.jobservice.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
