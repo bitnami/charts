@@ -86,6 +86,22 @@ spec:
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.certificates.customCertificate.certificateSecret }}
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
+                  subPath: tls.crt
+                  readOnly: true
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.keyLocation }}
+                  subPath: tls.key
+                  readOnly: true
+                {{- if .Values.certificates.customCertificate.chainSecret }}
+                - name: custom-certificate-chain
+                  mountPath: {{ .Values.certificates.customCertificate.chainLocation }}
+                  subPath: {{ .Values.certificates.customCertificate.chainSecret.key }}
+                  readOnly: true
+                {{- end }}
+                {{- end }}
                 {{- if .Values.customPostInitScripts }}
                 - mountPath: /docker-entrypoint-init.d
                   name: custom-postinit
@@ -223,6 +239,26 @@ spec:
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.certificates.customCertificate.certificateSecret }}
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
+                  subPath: tls.crt
+                  readOnly: true
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.keyLocation }}
+                  subPath: tls.key
+                  readOnly: true
+                {{- if .Values.certificates.customCertificate.chainSecret }}
+                - name: custom-certificate-chain
+                  mountPath: {{ .Values.certificates.customCertificate.chainLocation }}
+                  subPath: {{ .Values.certificates.customCertificate.chainSecret.key }}
+                  readOnly: true
+                {{- end }}
+                {{- end }}
+                {{- if .Values.customPostInitScripts }}
+                - mountPath: /docker-entrypoint-init.d
+                  name: custom-postinit
+                {{- end }}
                 {{- if .Values.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
