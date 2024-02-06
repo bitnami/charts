@@ -132,7 +132,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                           | `[]`                       |
 | `podSecurityContext.fsGroup`                        | Set Logstash pod's Security Context fsGroup                                                                                           | `1001`                     |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`                     |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                       |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `nil`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`                     |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`                    |
@@ -176,6 +176,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                  | `None`                     |
 | `service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                           | `{}`                       |
 | `service.headless.annotations`                      | Annotations for the headless service.                                                                                                 | `{}`                       |
+| `networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                            | `true`                     |
+| `networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                             | `true`                     |
+| `networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                       | `true`                     |
+| `networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                          | `[]`                       |
+| `networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                          | `[]`                       |
+| `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                | `{}`                       |
+| `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                            | `{}`                       |
 | `persistence.enabled`                               | Enable Logstash data persistence using PVC                                                                                            | `false`                    |
 | `persistence.existingClaim`                         | A manually managed Persistent Volume and Claim                                                                                        | `""`                       |
 | `persistence.storageClass`                          | PVC Storage Class for Logstash data volume                                                                                            | `""`                       |
@@ -185,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.mountPath`                             | Mount path of the Logstash data volume                                                                                                | `/bitnami/logstash/data`   |
 | `persistence.selector`                              | Selector to match an existing Persistent Volume for WordPress data PVC                                                                | `{}`                       |
 | `volumePermissions.enabled`                         | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`                  | `false`                    |
-| `volumePermissions.securityContext.seLinuxOptions`  | Set SELinux options in container                                                                                                      | `{}`                       |
+| `volumePermissions.securityContext.seLinuxOptions`  | Set SELinux options in container                                                                                                      | `nil`                      |
 | `volumePermissions.securityContext.runAsUser`       | User ID for the volumePermissions init container                                                                                      | `0`                        |
 | `volumePermissions.image.registry`                  | Init container volume-permissions image registry                                                                                      | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                | Init container volume-permissions image repository                                                                                    | `REPOSITORY_NAME/os-shell` |
@@ -244,28 +251,71 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The service(s) created by the deployment can be exposed within or outside the cluster using any of the following approaches:
 
-- **Ingress**: Set `ingress.enabled=true` to expose Logstash through Ingress.
-- **ClusterIP**: Set `service.type=ClusterIP` to choose this service type.
-- **NodePort**: Set `service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Set `service.type=LoadBalancer` to choose this service type.
-
-For more information, refer to the [chart documentation on exposing the Logstash service](https://docs.bitnami.com/kubernetes/apps/logstash/get-started/expose-service/).
+- **Ingress**: This requires an Ingress controller to be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose the corresponding service(s) through Ingress.
+- **ClusterIP**: This exposes the service(s) on a cluster-internal IP address. This approach makes the corresponding service(s) reachable only from within the cluster. Set `service.type=ClusterIP` to choose this approach.
+- **NodePort**: This exposes the service() on each node's IP address at a static port (the NodePort). This approach makes the corresponding service(s) reachable from outside the cluster by requesting the static port using the node's IP address, such as *NODE-IP:NODE-PORT*. Set `service.type=NodePort` to choose this approach.
+- **LoadBalancer**: This exposes the service(s) externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this approach.
 
 ### Use custom configuration
 
 By default, this Helm chart provides a basic configuration for Logstash: listening to HTTP requests on port 8080 and writing them to the standard output.
 
-This Logstash configuration can be adjusted using the *input*, *filter*, and *output* parameters, which allow specification of the input, filter and output plugins configuration respectively. In addition to these options, the chart also supports reading configuration from an external ConfigMap via the *existingConfiguration* parameter.
-
-Refer to the [chart documentation for more information on customizing the Logstash deployment](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/customize-deployment/).
+This Logstash configuration can be adjusted using the *input*, *filter*, and *output* parameters, which allow specification of the input, filter and output plugins configuration respectively. In addition to these options, the chart also supports reading configuration from an external ConfigMap via the *existingConfiguration* parameter. Note that this will override the parameters discussed previously.
 
 ### Create and use multiple pipelines
 
-The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the *enableMultiplePipelines* parameter to *true*.
+The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the `enableMultiplePipelines` parameter to `true`.
 
-The chart supports setting an external ConfigMap with all the configuration files via the *existingConfiguration* parameter.
+To do this, place the `pipelines.yml` file in the `files/conf` directory, together with the rest of the desired configuration files. If the `enableMultiplePipelines` parameter is set to `true` but the `pipelines.yml` file does not exist in the mounted volume, a dummy file is created using the default configuration (a single pipeline).
 
-For more information and an example, refer to the chart documentation on [using multiple pipelines](https://docs.bitnami.com/kubernetes/apps/logstash/configuration/use-multiple-pipelines/).
+The chart also supports setting an external ConfigMap with all the configuration filesvia the `existingConfiguration` parameter.
+
+Here is an example of creating multiple pipelines using a ConfigMap:
+
+- Create a ConfigMap with the configuration files:
+
+  ```bash
+  $ cat bye.conf
+  input {
+    file {
+      path => "/tmp/bye"
+    }
+  }
+  output {
+    stdout { }
+  }
+
+  $ cat hello.conf
+  input {
+    file {
+      path => "/tmp/hello"
+    }
+  }
+  output {
+    stdout { }
+  }
+
+  $ cat pipelines.yml
+  - pipeline.id: hello
+    path.config: "/opt/bitnami/logstash/config/hello.conf"
+  - pipeline.id: bye
+    path.config: "/opt/bitnami/logstash/config/bye.conf"
+
+  $ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
+  ```
+
+- Deploy the Helm chart with the `enableMultiplePipelines` parameter:
+
+  ```bash
+  helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
+  ```
+
+- Create dummy events in the tracked files and check the result in the Logstash output:
+
+  ```bash
+  kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
+  kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
+  ```
 
 ### Add extra environment variables
 
@@ -336,8 +386,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 ### To 1.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). Subsequently, a major version of the chart was released to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/logstash/administration/upgrade-helm3/).
 
 ## License
 

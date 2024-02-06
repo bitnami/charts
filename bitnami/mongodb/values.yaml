@@ -126,7 +126,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 7.0.5-debian-11-r3
+  tag: 7.0.5-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -253,7 +253,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r4
+    tag: 1.25.3-debian-11-r7
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -296,6 +296,17 @@ tls:
     ##   memory: 128Mi
     ##
     requests: {}
+    ##
+  ## Init Container securityContext 
+  ## ref: https://kubernetes.io/docs/concepts/security/pod-security-policy/
+  ## @param tls.securityContext Init container generate-tls-cert Security context
+  ##
+  securityContext: {}
+    ## Example:
+    ## allowPrivilegeEscalation: false
+    ## capabilities:
+    ##   drop: ["ALL"]
+    ##
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
@@ -558,7 +569,7 @@ podSecurityContext:
 ## MongoDB(&reg;) containers' Security Context (main and metrics container).
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -569,7 +580,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -833,7 +844,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.29.0-debian-11-r2
+      tag: 1.29.1-debian-11-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1026,60 +1037,61 @@ externalAccess:
 ## @section Network policy parameters
 ##
 
-## Enable Network policies using Kubernetes Network Policies
-## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable MongoDB(&reg;) network policies
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-
-  ## Ingress rules - Allow incoming connections
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  ingress:
-    ## @param networkPolicy.ingress.namespaceSelector [object] Namespace selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed namespace(s).
-    ## @param networkPolicy.ingress.podSelector [object] Pod selector label that is allowed to access the MongoDB(&reg;) node. This label will be used to identify the allowed pod(s).
-    ## @param networkPolicy.ingress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
-    namespaceSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label1: value1
-    podSelector: {}
-    ## e.g:
-    ## podSelector:
-    ##   label2: value2
-    customRules: []
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##     - namespaceSelector:
-    ##         matchLabels:
-    ##            label1: value1
-    ##       podSelector:
-    ##         matchLabels:
-    ##            label2: value2
-  ## Egress rules - deny outgoing connections
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  egress:
-    ## @param networkPolicy.egress.customRules [array] Custom network policy for the MongoDB(&reg;) node.
-    ##
-    customRules: []
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##     - namespaceSelector:
-    ##         matchLabels:
-    ##            label1: value1
-    ##       podSelector:
-    ##         matchLabels:
-    ##            label2: value2
-
-## @section Persistence parameters
-##
-
-## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 persistence:
   ## @param persistence.enabled Enable MongoDB(&reg;) data persistence using PVC
   ##
@@ -1194,7 +1206,7 @@ backup:
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
-    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param backup.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
     ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1205,7 +1217,7 @@ backup:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -1385,7 +1397,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r96
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1429,11 +1441,11 @@ volumePermissions:
   ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
   ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
   ## podSecurityContext.enabled=false,containerSecurityContext.enabled=false and shmVolume.chmod.enabled=false
-  ## @param volumePermissions.securityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions container
   ##
   securityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 
 ## @section Arbiter parameters
@@ -1597,7 +1609,7 @@ arbiter:
   ## MongoDB(&reg;) Arbiter containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param arbiter.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param arbiter.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param arbiter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param arbiter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param arbiter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param arbiter.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1608,7 +1620,7 @@ arbiter:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1941,7 +1953,7 @@ hidden:
   ## MongoDB(&reg;) Hidden containers' Security Context (only main container).
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param hidden.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param hidden.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param hidden.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param hidden.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param hidden.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param hidden.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1952,7 +1964,7 @@ hidden:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2188,7 +2200,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.40.0-debian-11-r3
+    tag: 0.40.0-debian-11-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

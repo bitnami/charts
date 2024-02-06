@@ -52,7 +52,7 @@ Get RabbitMQ password secret name.
 Get the password key to be retrieved from RabbitMQ secret.
 */}}
 {{- define "rabbitmq.secretPasswordKey" -}}
-    {{- if and .Values.auth.existingSecret .Values.auth.existingSecretPasswordKey -}}
+    {{- if and .Values.auth.existingPasswordSecret .Values.auth.existingSecretPasswordKey -}}
         {{- printf "%s" (tpl .Values.auth.existingSecretPasswordKey $) -}}
     {{- else -}}
         {{- printf "rabbitmq-password" -}}
@@ -80,6 +80,28 @@ Get the erlang secret.
         {{- printf "%s" (include "common.names.fullname" .) -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Get the erlang cookie key to be retrieved from RabbitMQ secret.
+*/}}
+{{- define "rabbitmq.secretErlangKey" -}}
+    {{- if and .Values.auth.existingErlangSecret .Values.auth.existingSecretErlangKey -}}
+        {{- printf "%s" (tpl .Values.auth.existingSecretErlangKey $) -}}
+    {{- else -}}
+        {{- printf "rabbitmq-erlang-cookie" -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return RabbitMQ erlang cookie secret
+*/}}
+{{- define "rabbitmq.erlangCookie" -}}
+    {{- if not (empty .Values.auth.erlangCookie) -}}
+        {{- .Values.auth.erlangCookie -}}
+    {{- else -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "rabbitmq.secretErlangName" .) "Length" 32 "Key" (include "rabbitmq.secretErlangKey" .))  -}}
+    {{- end -}}
+{{- end }}
 
 {{/*
 Get the TLS secret.

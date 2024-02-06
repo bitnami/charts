@@ -96,7 +96,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.27.0-debian-11-r3
+    tag: 1.27.0-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -289,7 +289,7 @@ contour:
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param contour.containerSecurityContext.enabled Enabled contour containers' Security Context
-  ## @param contour.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param contour.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param contour.containerSecurityContext.runAsUser Set contour containers' Security Context runAsUser
   ## @param contour.containerSecurityContext.runAsNonRoot Set contour containers' Security Context runAsNonRoot
   ## @param contour.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -300,7 +300,7 @@ contour:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -534,7 +534,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.27.2-debian-11-r2
+    tag: 1.27.2-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -627,7 +627,7 @@ envoy:
     ## Shutdown Manager container security context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param envoy.shutdownManager.containerSecurityContext.enabled Enabled envoy shutdownManager containers' Security Context
-    ## @param envoy.shutdownManager.containerSecurityContext.seLinuxOptions Set SELinux options in container
+    ## @param envoy.shutdownManager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param envoy.shutdownManager.containerSecurityContext.runAsUser Set envoy shutdownManager containers' Security Context runAsUser
     ## @param envoy.shutdownManager.containerSecurityContext.runAsNonRoot Set envoy shutdownManager containers' Security Context runAsNonRoot
     ## @param envoy.shutdownManager.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -638,7 +638,7 @@ envoy:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -652,7 +652,7 @@ envoy:
   ## Envoy Initconfig initcontainer security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
-  ## @param envoy.initConfig.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param envoy.initConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param envoy.initConfig.containerSecurityContext.runAsUser Set envoy initConfig containers' Security Context runAsUser
   ## @param envoy.initConfig.containerSecurityContext.runAsNonRoot Set envoy initConfig containers' Security Context runAsNonRoot
   ## @param envoy.initConfig.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -664,7 +664,7 @@ envoy:
   initConfig:
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: {}
+      seLinuxOptions: null
       runAsUser: 1001
       runAsNonRoot: true
       privileged: false
@@ -778,7 +778,7 @@ envoy:
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.containerSecurityContext.enabled Enabled envoy containers' Security Context
-  ## @param envoy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param envoy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param envoy.containerSecurityContext.runAsUser Set envoy containers' Security Context runAsUser
   ## @param envoy.containerSecurityContext.runAsNonRoot Set envoy containers' Security Context runAsNonRoot
   ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -789,7 +789,7 @@ envoy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -890,6 +890,24 @@ envoy:
     ## @param envoy.service.name envoy service name
     ##
     name: ""
+    ## The multi az feature renders multiple service, so you could attach different service provider loadbalancer to it.
+    ## This feature is primarily used to achieve a high availability with multiple loadbalancer
+    ## @param envoy.service.multiAz.enabled enables the rendering of the multiple services
+    ## @param envoy.service.multiAz.zones defines different zones their annotations and loadBalancerIPs
+    ##
+    multiAz:
+      enabled: false
+      zones: []
+    ## Example
+    ## - name: "zone1"
+    ##   loadBalancerIP: "1.2.3.4"
+    ##   annotations:
+    ##    service.beta.kubernetes.io/loadbalancer-zone: zone1
+    ## - name: "zone2"
+    ##   loadBalancerIP: "5.6.7.8"
+    ##   annotations:
+    ##    service.beta.kubernetes.io/loadbalancer-zone: zone2
+    ##
     ## @param envoy.service.targetPorts [object] Map the controller service HTTP/HTTPS port
     ##
     targetPorts:
@@ -1065,7 +1083,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r3
+    tag: 1.25.3-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1163,7 +1181,7 @@ defaultBackend:
   ## Default backend containers' Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param defaultBackend.containerSecurityContext.enabled Enabled defaultBackend containers' Security Context
-  ## @param defaultBackend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser Set defaultBackend containers' Security Context runAsUser
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set defaultBackend containers' Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -1174,7 +1192,7 @@ defaultBackend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

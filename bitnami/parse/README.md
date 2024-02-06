@@ -98,7 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                    |
 | `server.podSecurityContext.fsGroup`                        | Set Parse Dashboard pod's Security Context fsGroup                                                                       | `1001`                  |
 | `server.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                  |
-| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                    |
+| `server.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                   |
 | `server.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                  |
 | `server.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                  |
 | `server.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                 |
@@ -169,6 +169,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.extraPorts`                                | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                    |
 | `server.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                                         | `None`                  |
 | `server.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                              | `{}`                    |
+| `server.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                  |
+| `server.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                               | `true`                  |
+| `server.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`                  |
+| `server.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                    |
+| `server.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                    |
+| `server.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                    |
+| `server.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                    |
 
 ### Dashboard Parameters
 
@@ -191,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`                              |
 | `dashboard.podSecurityContext.fsGroup`                        | Set Parse Dashboard pod's Security Context fsGroup                                                                       | `1001`                            |
 | `dashboard.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`                            |
-| `dashboard.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`                              |
+| `dashboard.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`                             |
 | `dashboard.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`                            |
 | `dashboard.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`                            |
 | `dashboard.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`                           |
@@ -261,6 +268,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.service.extraPorts`                                | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                              |
 | `dashboard.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                                         | `None`                            |
 | `dashboard.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                              | `{}`                              |
+| `dashboard.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                            |
+| `dashboard.networkPolicy.allowExternal`                       | Don't require label for connections                                                                                      | `true`                            |
+| `dashboard.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`                            |
+| `dashboard.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                              |
+| `dashboard.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                              |
+| `dashboard.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                              |
+| `dashboard.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                              |
 
 ### Traffic Exposure Parameters
 

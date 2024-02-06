@@ -107,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                               | `[]`                                        |
 | `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                | `1001`                                      |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                      | `true`                                      |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `{}`                                        |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `nil`                                       |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                | `1001`                                      |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                             | `true`                                      |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                               | `false`                                     |
@@ -120,6 +120,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | Lifecycle for the container to automate configuration before or after startup                                             | `{}`                                        |
 | `resources.limits`                                  | Specify resource limits which the container is not allowed to succeed.                                                    | `{}`                                        |
 | `resources.requests`                                | Specify resource requests which the container needs to spawn.                                                             | `{}`                                        |
+| `networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                       | `true`                                      |
+| `networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                        | `[]`                                        |
+| `networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                | `true`                                      |
+| `networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                           | `true`                                      |
+| `networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                              | `[]`                                        |
+| `networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`                                        |
+| `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                    | `{}`                                        |
+| `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                | `{}`                                        |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Kubernetes event exporter container                                                               | `true`                                      |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                   | `5`                                         |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                          | `5`                                         |
@@ -209,7 +217,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use a different version
 
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter. Refer to the [chart documentation for more information on these parameters and how to use them with images from a private registry](https://docs.bitnami.com/kubernetes/apps/kubernetes-event-exporter/configuration/change-image-version/).
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
 
 ### Set Pod affinity
 

@@ -223,8 +223,30 @@ spec:
     {{- if or .Values.compactor.persistence.enabled .Values.compactor.persistence.defaultEmptyDir }}
     - name: data
       {{- if .Values.compactor.persistence.enabled }}
+      {{- if .Values.compactor.persistence.ephemeral }}
+      ephemeral:
+        volumeClaimTemplate:
+          metadata:
+            {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.persistence.labels .Values.commonLabels ) "context" . ) }}
+            labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/component: compactor
+            {{- if or .Values.compactor.persistence.annotations .Values.commonAnnotations }}
+            {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+            annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 14 }}
+            {{- end }}
+          spec:
+            accessModes:
+            {{- range .Values.compactor.persistence.accessModes }}
+              - {{ . | quote }}
+            {{- end }}
+            {{- include "common.storage.class" (dict "persistence" .Values.compactor.persistence "global" .Values.global) | nindent 12 }}
+            resources:
+              requests:
+                storage: {{ .Values.compactor.persistence.size | quote }}
+      {{- else }}
       persistentVolumeClaim:
         claimName: {{ include "thanos.compactor.pvcName" . }}
+      {{- end }}
       {{- else }}
       emptyDir: {}
       {{- end }}

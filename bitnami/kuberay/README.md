@@ -129,7 +129,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                               |
 | `operator.podSecurityContext.fsGroup`                        | Set Kuberay Operator pod's Security Context fsGroup                                                                                                                    | `1001`                             |
 | `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`                             |
-| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                               |
+| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `nil`                              |
 | `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`                             |
 | `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`                             |
 | `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`                            |
@@ -181,33 +181,41 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay Operator Traffic Exposure Parameters
 
-| Name                                        | Description                                                                                                                      | Value                    |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `operator.service.type`                     | Kuberay Operator service type                                                                                                    | `ClusterIP`              |
-| `operator.service.ports.metrics`            | Kuberay Operator service HTTP port                                                                                               | `80`                     |
-| `operator.service.nodePorts.metrics`        | Node port for HTTP                                                                                                               | `""`                     |
-| `operator.service.clusterIP`                | Kuberay Operator service Cluster IP                                                                                              | `""`                     |
-| `operator.service.loadBalancerIP`           | Kuberay Operator service Load Balancer IP                                                                                        | `""`                     |
-| `operator.service.loadBalancerSourceRanges` | Kuberay Operator service Load Balancer sources                                                                                   | `[]`                     |
-| `operator.service.externalTrafficPolicy`    | Kuberay Operator service external traffic policy                                                                                 | `Cluster`                |
-| `operator.service.annotations`              | Additional custom annotations for Kuberay Operator service                                                                       | `{}`                     |
-| `operator.service.extraPorts`               | Extra ports to expose in Kuberay Operator service (normally used with the `sidecars` value)                                      | `[]`                     |
-| `operator.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
-| `operator.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `operator.ingress.enabled`                  | Enable ingress record generation for Kuberay                                                                                     | `false`                  |
-| `operator.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `operator.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `operator.ingress.hostname`                 | Default host for the ingress record                                                                                              | `kuberay-operator.local` |
-| `operator.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `operator.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `operator.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `operator.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                  |
-| `operator.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `operator.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `operator.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `operator.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `operator.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `operator.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                             | Description                                                                                                                      | Value                    |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `operator.service.type`                          | Kuberay Operator service type                                                                                                    | `ClusterIP`              |
+| `operator.service.ports.metrics`                 | Kuberay Operator service HTTP port                                                                                               | `80`                     |
+| `operator.service.nodePorts.metrics`             | Node port for HTTP                                                                                                               | `""`                     |
+| `operator.service.clusterIP`                     | Kuberay Operator service Cluster IP                                                                                              | `""`                     |
+| `operator.service.loadBalancerIP`                | Kuberay Operator service Load Balancer IP                                                                                        | `""`                     |
+| `operator.service.loadBalancerSourceRanges`      | Kuberay Operator service Load Balancer sources                                                                                   | `[]`                     |
+| `operator.service.externalTrafficPolicy`         | Kuberay Operator service external traffic policy                                                                                 | `Cluster`                |
+| `operator.service.annotations`                   | Additional custom annotations for Kuberay Operator service                                                                       | `{}`                     |
+| `operator.service.extraPorts`                    | Extra ports to expose in Kuberay Operator service (normally used with the `sidecars` value)                                      | `[]`                     |
+| `operator.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
+| `operator.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `operator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `operator.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
+| `operator.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `operator.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `operator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `operator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `operator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `operator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `operator.ingress.enabled`                       | Enable ingress record generation for Kuberay                                                                                     | `false`                  |
+| `operator.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `operator.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `operator.ingress.hostname`                      | Default host for the ingress record                                                                                              | `kuberay-operator.local` |
+| `operator.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `operator.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `operator.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `operator.ingress.tls`                           | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                  |
+| `operator.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `operator.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `operator.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `operator.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `operator.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `operator.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Kuberay Operator RBAC Parameters
 
@@ -283,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiserver.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                            | `[]`                                |
 | `apiserver.podSecurityContext.fsGroup`                        | Set Kuberay API Server pod's Security Context fsGroup                                                                                                                  | `1001`                              |
 | `apiserver.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                   | `true`                              |
-| `apiserver.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `{}`                                |
+| `apiserver.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                       | `nil`                               |
 | `apiserver.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                             | `1001`                              |
 | `apiserver.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                          | `true`                              |
 | `apiserver.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                            | `false`                             |
@@ -335,35 +343,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kuberay API Server Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                                                      | Value                     |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `apiserver.service.type`                     | Kuberay API Server service type                                                                                                  | `ClusterIP`               |
-| `apiserver.service.ports.http`               | Kuberay API Server service HTTP port                                                                                             | `80`                      |
-| `apiserver.service.ports.grpc`               | Kuberay API Server service HTTP port                                                                                             | `8887`                    |
-| `apiserver.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                      |
-| `apiserver.service.nodePorts.grpc`           | Node port for GRPC                                                                                                               | `""`                      |
-| `apiserver.service.clusterIP`                | Kuberay API Server service Cluster IP                                                                                            | `""`                      |
-| `apiserver.service.loadBalancerIP`           | Kuberay API Server service Load Balancer IP                                                                                      | `""`                      |
-| `apiserver.service.loadBalancerSourceRanges` | Kuberay API Server service Load Balancer sources                                                                                 | `[]`                      |
-| `apiserver.service.externalTrafficPolicy`    | Kuberay API Server service external traffic policy                                                                               | `Cluster`                 |
-| `apiserver.service.annotations`              | Additional custom annotations for Kuberay API Server service                                                                     | `{}`                      |
-| `apiserver.service.extraPorts`               | Extra ports to expose in Kuberay API Server service (normally used with the `sidecars` value)                                    | `[]`                      |
-| `apiserver.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                    |
-| `apiserver.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                      |
-| `apiserver.ingress.enabled`                  | Enable ingress record generation for Kuberay                                                                                     | `false`                   |
-| `apiserver.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific`  |
-| `apiserver.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                      |
-| `apiserver.ingress.hostname`                 | Default host for the ingress record                                                                                              | `kuberay-apiserver.local` |
-| `apiserver.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                      |
-| `apiserver.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                       |
-| `apiserver.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                      |
-| `apiserver.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                   |
-| `apiserver.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                   |
-| `apiserver.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                      |
-| `apiserver.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                      |
-| `apiserver.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                      |
-| `apiserver.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                      |
-| `apiserver.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                      |
+| Name                                              | Description                                                                                                                      | Value                     |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `apiserver.service.type`                          | Kuberay API Server service type                                                                                                  | `ClusterIP`               |
+| `apiserver.service.ports.http`                    | Kuberay API Server service HTTP port                                                                                             | `80`                      |
+| `apiserver.service.ports.grpc`                    | Kuberay API Server service HTTP port                                                                                             | `8887`                    |
+| `apiserver.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                      |
+| `apiserver.service.nodePorts.grpc`                | Node port for GRPC                                                                                                               | `""`                      |
+| `apiserver.service.clusterIP`                     | Kuberay API Server service Cluster IP                                                                                            | `""`                      |
+| `apiserver.service.loadBalancerIP`                | Kuberay API Server service Load Balancer IP                                                                                      | `""`                      |
+| `apiserver.service.loadBalancerSourceRanges`      | Kuberay API Server service Load Balancer sources                                                                                 | `[]`                      |
+| `apiserver.service.externalTrafficPolicy`         | Kuberay API Server service external traffic policy                                                                               | `Cluster`                 |
+| `apiserver.service.annotations`                   | Additional custom annotations for Kuberay API Server service                                                                     | `{}`                      |
+| `apiserver.service.extraPorts`                    | Extra ports to expose in Kuberay API Server service (normally used with the `sidecars` value)                                    | `[]`                      |
+| `apiserver.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                                                    | `None`                    |
+| `apiserver.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                      |
+| `apiserver.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                    |
+| `apiserver.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                      |
+| `apiserver.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                    |
+| `apiserver.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                    |
+| `apiserver.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                      |
+| `apiserver.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                      |
+| `apiserver.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                      |
+| `apiserver.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                      |
+| `apiserver.ingress.enabled`                       | Enable ingress record generation for Kuberay                                                                                     | `false`                   |
+| `apiserver.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific`  |
+| `apiserver.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                      |
+| `apiserver.ingress.hostname`                      | Default host for the ingress record                                                                                              | `kuberay-apiserver.local` |
+| `apiserver.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                      |
+| `apiserver.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                       |
+| `apiserver.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                      |
+| `apiserver.ingress.tls`                           | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                   |
+| `apiserver.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                   |
+| `apiserver.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                      |
+| `apiserver.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                      |
+| `apiserver.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                      |
+| `apiserver.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                      |
+| `apiserver.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                      |
 
 ### Kuberay API Server RBAC Parameters
 
@@ -414,7 +430,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `cluster.head.podSecurityContext.fsGroup`                        | Set Ray Cluster Worker (common) pod's Security Context fsGroup                                                           | `1001`           |
 | `cluster.head.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `cluster.head.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `cluster.head.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `cluster.head.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `cluster.head.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `cluster.head.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -469,7 +485,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
 | `cluster.worker.common.podSecurityContext.fsGroup`                        | Set Ray Cluster Worker (common) pod's Security Context fsGroup                                                           | `1001`           |
 | `cluster.worker.common.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `cluster.worker.common.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
+| `cluster.worker.common.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `nil`            |
 | `cluster.worker.common.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
 | `cluster.worker.common.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
 | `cluster.worker.common.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
@@ -555,9 +571,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as kuberay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/kuberay/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as KubeRay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections.
 
-If additional containers are needed in the same pod as kuberay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/kuberay/administration/configure-use-sidecars/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Deploying Ray Cluster
 
