@@ -485,6 +485,7 @@ helm uninstall my-release
 | Name                                      | Description                                                                                             | Value                     |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                               | `true`                    |
+| `mariadb.jdbcParameter.useMysqlMetadata`  | Use MariaDB useMysqlMetadata parameter.                                                                 | `true`                    |
 | `mariadb.image.registry`                  | MariaDB image registry                                                                                  | `REGISTRY_NAME`           |
 | `mariadb.image.repository`                | MariaDB image repository                                                                                | `REPOSITORY_NAME/mariadb` |
 | `mariadb.image.digest`                    | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |

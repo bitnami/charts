@@ -68,6 +68,9 @@ spec:
       {{- if .Values.registry.schedulerName }}
       schedulerName: {{ .Values.registry.schedulerName }}
       {{- end }}
+      {{- if .Values.registry.serviceAccountName }}
+      serviceAccountName: {{ .Values.registry.serviceAccountName }}
+      {{- end }}
       {{- if .Values.registry.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.registry.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

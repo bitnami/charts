@@ -136,6 +136,8 @@ spec:
               value: {{ .Values.primary.service.ports.mysql | quote }}
             - name: MYSQL_MASTER_ROOT_USER
               value: "root"
+            - name: MYSQL_PORT
+              value: {{ .Values.secondary.containerPorts.mysql | quote}}
             - name: MYSQL_REPLICATION_USER
               value: {{ .Values.auth.replicationUser | quote }}
             {{- if .Values.auth.usePasswordFiles }}
@@ -287,7 +289,7 @@ spec:
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9104
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}
