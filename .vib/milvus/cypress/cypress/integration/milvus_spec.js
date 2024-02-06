@@ -29,6 +29,9 @@ it('allows to create a collection', () => {
     // Create collection index and load
     cy.get('td [role="button"]').contains('Create Index').click({force: true});
     cy.get('[placeholder="Index name"]').type(`${c.collection.idName}{enter}`);
+    // Reload and wait for DOM content load
+    cy.visit('#/collections');
+    cy.wait(2000);
     cy.get('td [role="button"]').contains('unloaded').click({force: true});
     cy.get('button').contains('Load').click({force: true});
     cy.contains('loaded');
