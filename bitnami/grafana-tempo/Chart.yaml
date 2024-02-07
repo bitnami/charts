@@ -5,14 +5,27 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
   images: |
-    - name: grafana-tempo-query
-      image: docker.io/bitnami/grafana-tempo-query:2.3.1-debian-11-r8
-    - name: grafana-tempo-vulture
-      image: docker.io/bitnami/grafana-tempo-vulture:2.3.1-debian-11-r8
-    - name: grafana-tempo
-      image: docker.io/bitnami/grafana-tempo:2.3.1-debian-11-r7
-    - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r96
+    - g
+    - r
+    - a
+    - f
+    - a
+    - n
+    - a
+    - '-'
+    - t
+    - e
+    - m
+    - p
+    - o
+    - '-'
+    - v
+    - u
+    - l
+    - t
+    - u
+    - r
+    - e
 apiVersion: v2
 appVersion: 2.3.1
 dependencies:
@@ -39,4 +52,4 @@ maintainers:
 name: grafana-tempo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-tempo
-version: 2.7.4
+version: 2.7.5
