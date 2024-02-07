@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: ghost
-      image: docker.io/bitnami/ghost:5.78.0-debian-11-r0
+      image: docker.io/bitnami/ghost:5.79.0-debian-11-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r95
+      image: docker.io/bitnami/os-shell:11-debian-11-r96
 apiVersion: v2
-appVersion: 5.78.0
+appVersion: 5.79.0
 dependencies:
 - condition: mysql.enabled
   name: mysql
@@ -40,4 +40,4 @@ maintainers:
 name: ghost
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ghost
-version: 19.8.4
+version: 19.8.6

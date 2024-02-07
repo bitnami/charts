@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r94
+      image: docker.io/bitnami/os-shell:11-debian-11-r96
     - name: rabbitmq
-      image: docker.io/bitnami/rabbitmq:3.12.12-debian-11-r3
+      image: docker.io/bitnami/rabbitmq:3.12.12-debian-11-r7
 apiVersion: v2
 appVersion: 3.12.12
 dependencies:

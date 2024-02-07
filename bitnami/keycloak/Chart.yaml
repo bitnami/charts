@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: keycloak-config-cli
-      image: docker.io/bitnami/keycloak-config-cli:5.10.0-debian-11-r2
+      image: docker.io/bitnami/keycloak-config-cli:5.10.0-debian-11-r4
     - name: keycloak
-      image: docker.io/bitnami/keycloak:23.0.5-debian-11-r0
+      image: docker.io/bitnami/keycloak:23.0.6-debian-11-r0
 apiVersion: v2
-appVersion: 23.0.5
+appVersion: 23.0.6
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
@@ -33,4 +33,4 @@ maintainers:
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 18.3.3
+version: 18.4.0

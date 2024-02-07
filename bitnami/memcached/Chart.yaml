@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: memcached-exporter
-      image: docker.io/bitnami/memcached-exporter:0.14.2-debian-11-r4
+      image: docker.io/bitnami/memcached-exporter:0.14.2-debian-11-r5
     - name: memcached
-      image: docker.io/bitnami/memcached:1.6.23-debian-11-r2
+      image: docker.io/bitnami/memcached:1.6.23-debian-11-r3
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r95
+      image: docker.io/bitnami/os-shell:11-debian-11-r96
 apiVersion: v2
 appVersion: 1.6.23
 dependencies:
@@ -31,4 +31,4 @@ maintainers:
 name: memcached
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/memcached
-version: 6.9.3
+version: 6.10.1
