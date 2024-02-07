@@ -58,7 +58,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.9.5-debian-11-r5
+  tag: 1.9.6-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -509,7 +509,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r5
+    tag: 1.25.3-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -796,6 +796,9 @@ defaultBackend:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param defaultBackend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -943,6 +946,9 @@ networkPolicy:
   ## (with the correct destination port).
   ##
   allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
   ## e.g:
   ## extraIngress:

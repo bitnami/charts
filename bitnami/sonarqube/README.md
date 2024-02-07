@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                                          | Affinity for SonarQube&trade; pods assignment                                                  | `{}`             |
 | `nodeSelector`                                      | Node labels for SonarQube&trade; pods assignment                                               | `{}`             |
 | `tolerations`                                       | Tolerations for SonarQube&trade; pods assignment                                               | `[]`             |
-| `updateStrategy.type`                               | SonarQube&trade; statefulset strategy type                                                     | `RollingUpdate`  |
+| `updateStrategy.type`                               | SonarQube&trade; deployment strategy type                                                      | `RollingUpdate`  |
 | `priorityClassName`                                 | SonarQube&trade; pods' priorityClassName                                                       | `""`             |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default) for SonarQube&trade; pods                       | `""`             |
 | `lifecycleHooks`                                    | for the SonarQube&trade; container(s) to automate configuration before or after startup        | `{}`             |

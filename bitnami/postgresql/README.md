@@ -248,6 +248,13 @@ kubectl delete pvc -l release=my-release
 | `primary.sidecars`                                          | Add additional sidecar containers to the PostgreSQL Primary pod(s)                                                       | `[]`                  |
 | `primary.initContainers`                                    | Add additional init containers to the PostgreSQL Primary pod(s)                                                          | `[]`                  |
 | `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL Primary pod(s)                                                       | `{}`                  |
+| `primary.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                |
+| `primary.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                               | `true`                |
+| `primary.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `false`               |
+| `primary.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                  |
+| `primary.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                  |
+| `primary.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                  |
+| `primary.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                  |
 | `primary.service.type`                                      | Kubernetes Service type                                                                                                  | `ClusterIP`           |
 | `primary.service.ports.postgresql`                          | PostgreSQL service port                                                                                                  | `5432`                |
 | `primary.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                 | `""`                  |
@@ -353,6 +360,13 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.sidecars`                                          | Add additional sidecar containers to the PostgreSQL read only pod(s)                                                     | `[]`                  |
 | `readReplicas.initContainers`                                    | Add additional init containers to the PostgreSQL read only pod(s)                                                        | `[]`                  |
 | `readReplicas.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL read only pod(s)                                                     | `{}`                  |
+| `readReplicas.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                      | `true`                |
+| `readReplicas.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                               | `true`                |
+| `readReplicas.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `false`               |
+| `readReplicas.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                             | `[]`                  |
+| `readReplicas.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`                  |
+| `readReplicas.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`                  |
+| `readReplicas.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`                  |
 | `readReplicas.service.type`                                      | Kubernetes Service type                                                                                                  | `ClusterIP`           |
 | `readReplicas.service.ports.postgresql`                          | PostgreSQL service port                                                                                                  | `5432`                |
 | `readReplicas.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                 | `""`                  |
@@ -786,6 +800,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major version adapts the NetworkPolicy objects to the most recent Bitnami standards. Now there is a separate object for `primary` and for `readReplicas`, being located in their corresponding sections. It is also enabled by default in other to comply with the best security standards.
+
+Check the parameter section for the new value structure.
 
 ### To 13.0.0
 

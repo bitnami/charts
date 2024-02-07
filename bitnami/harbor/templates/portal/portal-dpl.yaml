@@ -64,6 +64,9 @@ spec:
       {{- if .Values.portal.schedulerName }}
       schedulerName: {{ .Values.portal.schedulerName }}
       {{- end }}
+      {{- if .Values.portal.serviceAccountName }}
+      serviceAccountName: {{ .Values.portal.serviceAccountName }}
+      {{- end }}
       {{- if .Values.portal.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}

@@ -234,6 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                              | `{}`        |
 | `auth.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                      | `true`      |
 | `auth.networkPolicy.allowExternal`           | Don't require client label for connections                                               | `true`      |
+| `auth.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                          | `true`      |
 | `auth.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                             | `[]`        |
 | `auth.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                             | `[]`        |
 | `auth.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                   | `{}`        |
@@ -337,6 +338,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                       | `{}`        |
 | `meta.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                               | `true`      |
 | `meta.networkPolicy.allowExternal`           | Don't require client label for connections                                                        | `true`      |
+| `meta.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                   | `true`      |
 | `meta.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                      | `[]`        |
 | `meta.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                      | `[]`        |
 | `meta.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                            | `{}`        |
@@ -443,6 +445,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                  | `{}`        |
 | `realtime.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                          | `true`      |
 | `realtime.networkPolicy.allowExternal`           | Don't require client label for connections                                                   | `true`      |
+| `realtime.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                              | `true`      |
 | `realtime.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                 | `[]`        |
 | `realtime.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                 | `[]`        |
 | `realtime.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                       | `{}`        |
@@ -546,6 +549,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                              | `{}`        |
 | `rest.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                      | `true`      |
 | `rest.networkPolicy.allowExternal`           | Don't require client label for connections                                               | `true`      |
+| `rest.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                          | `true`      |
 | `rest.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                             | `[]`        |
 | `rest.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                             | `[]`        |
 | `rest.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                   | `{}`        |
@@ -649,6 +653,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                 | `{}`        |
 | `storage.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                         | `true`      |
 | `storage.networkPolicy.allowExternal`           | Don't require client label for connections                                                  | `true`      |
+| `storage.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                             | `true`      |
 | `storage.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                | `[]`        |
 | `storage.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                | `[]`        |
 | `storage.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                      | `{}`        |
@@ -768,6 +773,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `studio.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `studio.networkPolicy.allowExternal`           | Don't require client label for connections                                                                                       | `true`                   |
+| `studio.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `studio.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
 | `studio.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `studio.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |

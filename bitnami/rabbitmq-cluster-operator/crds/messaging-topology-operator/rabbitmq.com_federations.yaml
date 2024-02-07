@@ -1,10 +1,12 @@
-# Taken from https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v1.12.2/config/crd/bases/rabbitmq.com_federations.yaml
+# Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_federations.yaml
+# Version: 1.13.0
+# VersionOf: rmq-messaging-topology-operator
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.13.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: federations.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -24,20 +26,26 @@ spec:
         description: Federation is the Schema for the federations API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           spec:
-            description: 'FederationSpec defines the desired state of Federation For
-              how to configure federation upstreams, see: https://www.rabbitmq.com/federation-reference.html.'
+            description: |-
+              FederationSpec defines the desired state of Federation
+              For how to configure federation upstreams, see: https://www.rabbitmq.com/federation-reference.html.
             properties:
               ackMode:
                 enum:
@@ -61,27 +69,32 @@ spec:
               queue:
                 type: string
               rabbitmqClusterReference:
-                description: Reference to the RabbitmqCluster that this federation
-                  upstream will be created in. Required property.
+                description: |-
+                  Reference to the RabbitmqCluster that this federation upstream will be created in.
+                  Required property.
                 properties:
                   connectionSecret:
-                    description: Secret contains the http management uri for the RabbitMQ
-                      cluster. The Secret must contain the key `uri`, `username` and
-                      `password` or operator will error. Have to set either name or
-                      connectionSecret, but not both.
+                    description: |-
+                      Secret contains the http management uri for the RabbitMQ cluster.
+                      The Secret must contain the key `uri`, `username` and `password` or operator will error.
+                      Have to set either name or connectionSecret, but not both.
                     properties:
                       name:
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
                   name:
-                    description: The name of the RabbitMQ cluster to reference. Have
-                      to set either name or connectionSecret, but not both.
+                    description: |-
+                      The name of the RabbitMQ cluster to reference.
+                      Have to set either name or connectionSecret, but not both.
                     type: string
                   namespace:
-                    description: The namespace of the RabbitMQ cluster to reference.
+                    description: |-
+                      The namespace of the RabbitMQ cluster to reference.
                       Defaults to the namespace of the requested resource if omitted.
                     type: string
                 type: object
@@ -90,13 +103,17 @@ spec:
               trustUserId:
                 type: boolean
               uriSecret:
-                description: Secret contains the AMQP URI(s) for the upstream. The
-                  Secret must contain the key `uri` or operator will error. `uri`
-                  should be one or multiple uris separated by ','. Required property.
+                description: |-
+                  Secret contains the AMQP URI(s) for the upstream.
+                  The Secret must contain the key `uri` or operator will error.
+                  `uri` should be one or multiple uris separated by ','.
+                  Required property.
                 properties:
                   name:
-                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    description: |-
+                      Name of the referent.
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?
                     type: string
                 type: object
                 x-kubernetes-map-type: atomic
@@ -139,9 +156,9 @@ spec:
                   type: object
                 type: array
               observedGeneration:
-                description: observedGeneration is the most recent successful generation
-                  observed for this Federation. It corresponds to the Federation's
-                  generation, which is updated on mutation by the API Server.
+                description: |-
+                  observedGeneration is the most recent successful generation observed for this Federation. It corresponds to the
+                  Federation's generation, which is updated on mutation by the API Server.
                 format: int64
                 type: integer
             type: object
