@@ -16,5 +16,5 @@ metadata:
   {{- end }}
 data:
   my.cnf: |-
-{{ .Values.primary.configuration | indent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.configuration "context" $ ) | nindent 4 }}
 {{- end -}}

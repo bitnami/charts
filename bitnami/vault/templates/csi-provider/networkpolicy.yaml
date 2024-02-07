@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.csiProvider.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     - ports:
         # Allow dns resolution
@@ -38,6 +42,7 @@ spec:
     {{- if .Values.csiProvider.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.csiProvider.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     {{- if .Values.csiProvider.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.csiProvider.networkPolicy.extraIngress "context" $ ) | nindent 4 }}

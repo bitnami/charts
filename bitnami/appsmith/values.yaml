@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/appsmith
-  tag: 1.9.61-debian-11-r3
+  tag: 1.9.61-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -347,6 +347,9 @@ client:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param client.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param client.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -826,6 +829,9 @@ backend:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param backend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param backend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolic
     ## e.g:
     ## extraIngress:
@@ -1224,6 +1230,9 @@ rts:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param rts.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param rts.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1339,7 +1348,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r95
+    tag: 11-debian-11-r96
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
