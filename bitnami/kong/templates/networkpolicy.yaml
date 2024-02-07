@@ -7,9 +7,10 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: server
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -17,6 +18,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: server
   policyTypes:
     - Ingress
     - Egress
@@ -24,43 +26,58 @@ spec:
   egress:
     - {}
   {{- else }}
-  egress:
-    # Allow dns resolution
+  egress: 
     - ports:
+        # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
-        {{- if .Values.rbac.create }}
+        {{- if .Values.ingressController.enabled }}
         # Allow access to kube-apiserver
         {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
         - port: {{ $port }}
         {{- end }}
         {{- end }}
-    # Allow internal communications between nodes
+    {{- if (eq .Values.database "postgresql") }}
+    # Allow connection to PostgreSQL
     - ports:
-        - port: {{ .Values.service.ports.epmd }}
-        - port: {{ .Values.service.ports.amqp }}
-        - port: {{ .Values.service.ports.amqpTls }}
-        - port: {{ .Values.service.ports.dist }}
-        - port: {{ .Values.service.ports.manager }}
+        - port: {{ include "kong.postgresql.port" . | trimAll "\"" | int }}
+      {{- if .Values.postgresql.enabled }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- end }}
+    {{- if (eq .Values.database "cassandra") }}
+    # Allow connection to Cassandra
+    - ports:
+        - port: {{ include "kong.cassandra.port" . | trimAll "\"" | int }}
+      {{- if .Values.cassandra.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cassandra
+              app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- end }}
+    {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
-    # Allow inbound connections to RabbitMQ
     - ports:
-        - port: {{ .Values.containerPorts.epmd }}
-        - port: {{ .Values.containerPorts.amqp }}
-        - port: {{ .Values.containerPorts.amqpTls }}
-        - port: {{ .Values.containerPorts.dist }}
-        - port: {{ .Values.containerPorts.manager }}
+        - port: {{ .Values.kong.containerPorts.proxyHttp }}
+        - port: {{ .Values.kong.containerPorts.proxyHttps }}
+        - port: {{ .Values.kong.containerPorts.adminHttp }}
+        - port: {{ .Values.kong.containerPorts.adminHttps }}
         {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.containerPorts.metrics }}
+        - port: {{ .Values.metrics.containerPorts.http }}
+        {{- end }}
+        {{- if .Values.ingressController.enabled }}
+        - port: {{ .Values.ingressController.containerPorts.health }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
@@ -68,9 +85,7 @@ spec:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         - podSelector:
             matchLabels:
-              {{ include "common.names.fullname" . }}-client: "true"
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              {{ template "common.names.fullname" . }}-client: "true"
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
