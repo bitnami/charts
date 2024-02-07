@@ -5,14 +5,14 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
   images: |
-    - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.26.0-debian-11-r53
-    - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r96
-    - name: prometheus
-      image: docker.io/bitnami/prometheus:2.49.1-debian-11-r4
-    - name: thanos
-      image: docker.io/bitnami/thanos:0.34.0-debian-11-r2
+    - o
+    - s
+    - '-'
+    - s
+    - h
+    - e
+    - l
+    - l
 apiVersion: v2
 appVersion: 2.49.1
 dependencies:
@@ -35,4 +35,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
 - https://github.com/prometheus/prometheus
 - https://github.com/prometheus-community/helm-charts
-version: 0.9.2
+version: 0.9.3
