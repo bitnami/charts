@@ -84,7 +84,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r53
+    tag: 0.26.0-debian-11-r54
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -661,7 +661,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.49.1-debian-11-r4
+    tag: 2.49.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
