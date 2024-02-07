@@ -43,6 +43,7 @@ spec:
         {{- end }}
     spec:
       hostNetwork: {{ .Values.redis.hostNetwork }}
+      dnsPolicy: {{ .Values.redis.dnsPolicy }}
       {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
       enableServiceLinks: false
       {{- end }}

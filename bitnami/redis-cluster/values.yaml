@@ -499,6 +499,10 @@ redis:
   ## https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core
   ##
   hostNetwork: false
+  ## @param redis.dnsPolicy, Pod's DNS Policy.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  ##
+  dnsPolicy: ClusterFirst
   ## @param redis.useAOFPersistence Whether to use AOF Persistence mode or not
   ## It is strongly recommended to use this type when dealing with clusters
   ## ref: https://redis.io/topics/persistence#append-only-file
