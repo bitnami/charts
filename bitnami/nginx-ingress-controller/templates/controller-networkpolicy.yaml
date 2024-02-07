@@ -54,11 +54,11 @@ spec:
         - port: {{ .Values.containerPorts.metrics }}
         {{- end }}
         {{- range $key, $_ := .Values.tcp }}
-        - port: {{ $key }}
+        - port: {{ $key | int }}
           protocol: TCP
         {{- end }}
         {{- range $key, $_ := .Values.udp }}
-        - port: {{ $key }}
+        - port: {{ $key | int }}
           protocol: UDP
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
