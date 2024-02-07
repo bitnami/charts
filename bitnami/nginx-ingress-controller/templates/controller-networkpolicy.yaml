@@ -32,6 +32,9 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        {{- range $port := .Values.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
         {{- range $_, $value := .Values.tcp }}
         {{- $port := regexFind ":[0-9]+" $value | trimAll ":" | int }}
         - port: {{ $port }}
