@@ -57,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.34.0-debian-11-r0
+  tag: 0.34.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2222,6 +2222,9 @@ compactor:
     ## @param compactor.persistence.enabled Enable data persistence using PVC(s) on Thanos Compactor pods
     ##
     enabled: true
+    ## @param compactor.persistence.ephemeral Use ephemeral volume for data persistence using PVC(s) on Thanos Compactor pods
+    ##
+    ephemeral: false
     ## @param compactor.persistence.defaultEmptyDir Defaults to emptyDir if persistence is disabled.
     ##
     defaultEmptyDir: true
@@ -4429,7 +4432,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r95
+    tag: 11-debian-11-r96
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

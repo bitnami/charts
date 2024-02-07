@@ -597,7 +597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -645,7 +645,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r4
+    tag: 1.25.3-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -818,6 +818,9 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param nginx.serviceAccountName Set the service account name for the NGINX pods
+  ## 
+  serviceAccountName: ""
   ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -931,7 +934,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.10.0-debian-11-r1
+    tag: 2.10.0-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1181,6 +1184,9 @@ portal:
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
+  ## @param portal.serviceAccountName Set the service account name for the Harbor Portal pods
+  ## 
+  serviceAccountName: ""
   ## @param portal.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
@@ -1211,7 +1217,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.10.0-debian-11-r1
+    tag: 2.10.0-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1520,6 +1526,9 @@ core:
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
+  ## @param core.serviceAccountName Set the service account name for the Harbor Core pods
+  ## 
+  serviceAccountName: ""
   ## @param core.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
@@ -1552,7 +1561,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.10.0-debian-11-r2
+    tag: 2.10.0-debian-11-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1823,6 +1832,9 @@ jobservice:
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
+  ## @param jobservice.serviceAccountName Set the service account name for the Harbor Jobservice pods
+  ## 
+  serviceAccountName: ""
   ## @param jobservice.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
@@ -2014,6 +2026,9 @@ registry:
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
+  ## @param registry.serviceAccountName Set the service account name for the Registry pods
+  ## 
+  serviceAccountName: ""
   ## @param registry.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
@@ -2033,7 +2048,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.10.0-debian-11-r1
+      tag: 2.10.0-debian-11-r6
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2194,7 +2209,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.10.0-debian-11-r1
+      tag: 2.10.0-debian-11-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2351,7 +2366,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.10.0-debian-11-r1
+    tag: 2.10.0-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2649,6 +2664,9 @@ trivy:
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
+  ## @param trivy.serviceAccountName Set the service account name for the Trivy pods
+  ## 
+  serviceAccountName: ""
   ## @param trivy.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: false
@@ -2679,7 +2697,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.10.0-debian-11-r1
+    tag: 2.10.0-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2948,7 +2966,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.13.0-debian-11-r22
+    tag: 13.13.0-debian-11-r29
     digest: ""
   auth:
     enablePostgresUser: true

@@ -188,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                                          | Affinity for SonarQube&trade; pods assignment                                                  | `{}`             |
 | `nodeSelector`                                      | Node labels for SonarQube&trade; pods assignment                                               | `{}`             |
 | `tolerations`                                       | Tolerations for SonarQube&trade; pods assignment                                               | `[]`             |
-| `updateStrategy.type`                               | SonarQube&trade; statefulset strategy type                                                     | `RollingUpdate`  |
+| `updateStrategy.type`                               | SonarQube&trade; deployment strategy type                                                      | `RollingUpdate`  |
 | `priorityClassName`                                 | SonarQube&trade; pods' priorityClassName                                                       | `""`             |
 | `schedulerName`                                     | Name of the k8s scheduler (other than default) for SonarQube&trade; pods                       | `""`             |
 | `lifecycleHooks`                                    | for the SonarQube&trade; container(s) to automate configuration before or after startup        | `{}`             |
@@ -216,6 +216,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `networkPolicy.allowExternal`           | Don't require client label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
