@@ -39,8 +39,8 @@ spec:
           protocol: TCP
     # Allow outbound connections to Milvus Proxy
     - ports:
-        - port: {{ .Values.proxy.service.ports.grpc }}
         - port: {{ .Values.proxy.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpcInternal }}
       to: 
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}

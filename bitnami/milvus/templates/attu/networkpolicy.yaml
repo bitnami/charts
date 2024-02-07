@@ -39,11 +39,13 @@ spec:
           protocol: TCP
     # Allow outbound connections to Milvus Proxy
     - ports:
-        - port: {{ .Values.proxy.service.ports.grpc }}
         - port: {{ .Values.proxy.containerPorts.grpc }}
+        - port: {{ .Values.proxy.containerPorts.grpcInternal }}
       to: 
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: milvus
+              app.kubernetes.io/component: proxy
     {{- if .Values.attu.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.attu.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
@@ -54,9 +56,11 @@ spec:
       {{- if not .Values.attu.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: milvus
+        - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-      {{- end }}
         {{- if .Values.attu.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -71,6 +75,7 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
+      {{- end }}
     {{- if .Values.attu.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.attu.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
