@@ -13,6 +13,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: init
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.initJob.annotations "context" $ ) | nindent 4 }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -23,6 +24,7 @@ spec:
     metadata:
       {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.initJob.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: init
       {{- if .Values.initJob.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.podAnnotations "context" $) | nindent 8 }}

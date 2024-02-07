@@ -183,41 +183,49 @@ helm delete my-release
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
-| `service.exposeAdmin`              | Add the Kong Admin ports to the service                                                                                          | `false`                  |
-| `service.disableHttpPort`          | Disable Kong proxy HTTP and Kong admin HTTP ports                                                                                | `false`                  |
-| `service.ports.proxyHttp`          | Kong proxy service HTTP port                                                                                                     | `80`                     |
-| `service.ports.proxyHttps`         | Kong proxy service HTTPS port                                                                                                    | `443`                    |
-| `service.ports.adminHttp`          | Kong admin service HTTP port (only if service.exposeAdmin=true)                                                                  | `8001`                   |
-| `service.ports.adminHttps`         | Kong admin service HTTPS port (only if service.exposeAdmin=true)                                                                 | `8444`                   |
-| `service.nodePorts.proxyHttp`      | NodePort for the Kong proxy HTTP endpoint                                                                                        | `""`                     |
-| `service.nodePorts.proxyHttps`     | NodePort for the Kong proxy HTTPS endpoint                                                                                       | `""`                     |
-| `service.nodePorts.adminHttp`      | NodePort for the Kong admin HTTP endpoint                                                                                        | `""`                     |
-| `service.nodePorts.adminHttps`     | NodePort for the Kong admin HTTPS endpoint                                                                                       | `""`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.clusterIP`                | Cluster internal IP of the service                                                                                               | `""`                     |
-| `service.externalTrafficPolicy`    | external traffic policy managing client source IP preservation                                                                   | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP if kong service type is `LoadBalancer`                                                                            | `""`                     |
-| `service.loadBalancerSourceRanges` | Kong service Load Balancer sources                                                                                               | `[]`                     |
-| `service.annotations`              | Annotations for Kong service                                                                                                     | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `kong.local`             |
-| `ingress.path`                     | Ingress path                                                                                                                     | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`               | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.exposeAdmin`                   | Add the Kong Admin ports to the service                                                                                          | `false`                  |
+| `service.disableHttpPort`               | Disable Kong proxy HTTP and Kong admin HTTP ports                                                                                | `false`                  |
+| `service.ports.proxyHttp`               | Kong proxy service HTTP port                                                                                                     | `80`                     |
+| `service.ports.proxyHttps`              | Kong proxy service HTTPS port                                                                                                    | `443`                    |
+| `service.ports.adminHttp`               | Kong admin service HTTP port (only if service.exposeAdmin=true)                                                                  | `8001`                   |
+| `service.ports.adminHttps`              | Kong admin service HTTPS port (only if service.exposeAdmin=true)                                                                 | `8444`                   |
+| `service.nodePorts.proxyHttp`           | NodePort for the Kong proxy HTTP endpoint                                                                                        | `""`                     |
+| `service.nodePorts.proxyHttps`          | NodePort for the Kong proxy HTTPS endpoint                                                                                       | `""`                     |
+| `service.nodePorts.adminHttp`           | NodePort for the Kong admin HTTP endpoint                                                                                        | `""`                     |
+| `service.nodePorts.adminHttps`          | NodePort for the Kong admin HTTPS endpoint                                                                                       | `""`                     |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.clusterIP`                     | Cluster internal IP of the service                                                                                               | `""`                     |
+| `service.externalTrafficPolicy`         | external traffic policy managing client source IP preservation                                                                   | `""`                     |
+| `service.loadBalancerIP`                | loadBalancerIP if kong service type is `LoadBalancer`                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges`      | Kong service Load Balancer sources                                                                                               | `[]`                     |
+| `service.annotations`                   | Annotations for Kong service                                                                                                     | `{}`                     |
+| `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress resource                                                                                            | `kong.local`             |
+| `ingress.path`                          | Ingress path                                                                                                                     | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`                    | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
+| `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Kong Ingress Controller Container Parameters
 
