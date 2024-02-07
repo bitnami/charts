@@ -142,3 +142,14 @@ Return the MariaDB Secret Name
     {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the Moodle Secret Name
+*/}}
+{{- define "moodle.secretName" -}}
+{{- if .Values.existingSecret }}
+    {{- printf "%s" .Values.existingSecret -}}
+{{- else -}}
+    {{- printf "%s" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
