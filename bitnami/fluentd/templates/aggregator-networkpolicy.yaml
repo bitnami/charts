@@ -49,7 +49,8 @@ spec:
         {{- end }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+            {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.forwarder.podLabels .Values.commonLabels ) "context" . ) }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: forwarder
     {{- if .Values.aggregator.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
