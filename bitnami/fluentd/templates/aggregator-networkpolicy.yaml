@@ -50,7 +50,7 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: forwarder    
+              app.kubernetes.io/component: forwarder
     {{- if .Values.aggregator.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
