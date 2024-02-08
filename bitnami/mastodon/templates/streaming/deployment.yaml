@@ -226,6 +226,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.streaming.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 10 }}
         {{- end }}
 {{- end }}

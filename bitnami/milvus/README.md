@@ -24,8 +24,6 @@ This chart bootstraps a [Milvus](https://github.com/grafana/loki) Deployment in 
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/milvus/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -123,7 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                           | `[]`             |
 | `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                              | `""`             |
 | `initJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                      | `true`           |
-| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `{}`             |
+| `initJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                          | `nil`            |
 | `initJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                | `1001`           |
 | `initJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                             | `true`           |
 | `initJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                               | `false`          |
@@ -147,6 +145,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                     | `{}`             |
 | `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                | `{}`             |
+| `initJob.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                | `true`           |
+| `initJob.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                           | `true`           |
+| `initJob.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`             |
+| `initJob.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`             |
+| `initJob.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                    | `{}`             |
+| `initJob.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                | `{}`             |
 
 ### Data Coordinator Deployment Parameters
 
@@ -194,7 +198,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `dataCoord.podSecurityContext.fsGroup`                        | Set Data Coordinator pod's Security Context fsGroup                                                        | `1001`           |
 | `dataCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `dataCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `dataCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `dataCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `dataCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `dataCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -268,8 +272,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataCoord.service.externalTrafficPolicy`         | Data Coordinator service external traffic policy                 | `Cluster`   |
 | `dataCoord.service.annotations`                   | Additional custom annotations for Data Coordinator service       | `{}`        |
 | `dataCoord.service.extraPorts`                    | Extra ports to expose in the Data Coordinator service            | `[]`        |
-| `dataCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `dataCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `dataCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `dataCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `dataCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -339,7 +344,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `rootCoord.podSecurityContext.fsGroup`                        | Set Root Coordinator pod's Security Context fsGroup                                                        | `1001`           |
 | `rootCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `rootCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `rootCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `rootCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `rootCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `rootCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -413,8 +418,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rootCoord.service.externalTrafficPolicy`         | Root Coordinator service external traffic policy                 | `Cluster`   |
 | `rootCoord.service.annotations`                   | Additional custom annotations for Root Coordinator service       | `{}`        |
 | `rootCoord.service.extraPorts`                    | Extra ports to expose in the Root Coordinator service            | `[]`        |
-| `rootCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `rootCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `rootCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `rootCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `rootCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `rootCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `rootCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -484,7 +490,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `queryCoord.podSecurityContext.fsGroup`                        | Set Query Coordinator pod's Security Context fsGroup                                                       | `1001`           |
 | `queryCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `queryCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `queryCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `queryCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `queryCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `queryCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -558,8 +564,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryCoord.service.externalTrafficPolicy`         | Query Coordinator service external traffic policy                | `Cluster`   |
 | `queryCoord.service.annotations`                   | Additional custom annotations for Query Coordinator service      | `{}`        |
 | `queryCoord.service.extraPorts`                    | Extra ports to expose in the Query Coordinator service           | `[]`        |
-| `queryCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `queryCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `queryCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `queryCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `queryCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -629,7 +636,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `indexCoord.podSecurityContext.fsGroup`                        | Set Index Coordinator pod's Security Context fsGroup                                                       | `1001`           |
 | `indexCoord.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `indexCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `indexCoord.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `indexCoord.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `indexCoord.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `indexCoord.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -703,8 +710,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexCoord.service.externalTrafficPolicy`         | Index Coordinator service external traffic policy                | `Cluster`   |
 | `indexCoord.service.annotations`                   | Additional custom annotations for Index Coordinator service      | `{}`        |
 | `indexCoord.service.extraPorts`                    | Extra ports to expose in the Index Coordinator service           | `[]`        |
-| `indexCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `indexCoord.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `indexCoord.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `indexCoord.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `indexCoord.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexCoord.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexCoord.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -774,7 +782,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `dataNode.podSecurityContext.fsGroup`                        | Set Data Node pod's Security Context fsGroup                                                        | `1001`           |
 | `dataNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `dataNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `dataNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `dataNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `dataNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `dataNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -848,8 +856,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataNode.service.externalTrafficPolicy`         | Data Node service external traffic policy                        | `Cluster`   |
 | `dataNode.service.annotations`                   | Additional custom annotations for Data Node service              | `{}`        |
 | `dataNode.service.extraPorts`                    | Extra ports to expose in the Data Node service                   | `[]`        |
-| `dataNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `dataNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `dataNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `dataNode.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `dataNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `dataNode.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -919,7 +928,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `queryNode.podSecurityContext.fsGroup`                        | Set Query Node pod's Security Context fsGroup                                                       | `1001`           |
 | `queryNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `queryNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `queryNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `queryNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `queryNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `queryNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -993,8 +1002,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryNode.service.externalTrafficPolicy`         | Query Node service external traffic policy                       | `Cluster`   |
 | `queryNode.service.annotations`                   | Additional custom annotations for Query Node service             | `{}`        |
 | `queryNode.service.extraPorts`                    | Extra ports to expose in the Query Node service                  | `[]`        |
-| `queryNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `queryNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `queryNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `queryNode.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `queryNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryNode.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -1064,7 +1074,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `indexNode.podSecurityContext.fsGroup`                        | Set Index Node pod's Security Context fsGroup                                                       | `1001`           |
 | `indexNode.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `indexNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `indexNode.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `indexNode.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `indexNode.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `indexNode.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -1138,8 +1148,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexNode.service.externalTrafficPolicy`         | Index Node service external traffic policy                       | `Cluster`   |
 | `indexNode.service.annotations`                   | Additional custom annotations for Index Node service             | `{}`        |
 | `indexNode.service.extraPorts`                    | Extra ports to expose in the Index Node service                  | `[]`        |
-| `indexNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`     |
+| `indexNode.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`      |
 | `indexNode.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`      |
+| `indexNode.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
 | `indexNode.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexNode.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexNode.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
@@ -1221,7 +1232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                     | `[]`             |
 | `proxy.podSecurityContext.fsGroup`                        | Set Proxy pod's Security Context fsGroup                                                        | `1001`           |
 | `proxy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                            | `true`           |
-| `proxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `{}`             |
+| `proxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                | `nil`            |
 | `proxy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                      | `1001`           |
 | `proxy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                   | `true`           |
 | `proxy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                     | `false`          |
@@ -1295,8 +1306,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.externalTrafficPolicy`         | Proxy service external traffic policy                            | `Cluster`      |
 | `proxy.service.annotations`                   | Additional custom annotations for Proxy service                  | `{}`           |
 | `proxy.service.extraPorts`                    | Extra ports to expose in the Proxy service                       | `[]`           |
-| `proxy.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `false`        |
+| `proxy.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                       | `true`         |
 | `proxy.networkPolicy.allowExternal`           | The Policy model to apply                                        | `true`         |
+| `proxy.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`         |
 | `proxy.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`           |
 | `proxy.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`           |
 | `proxy.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`           |
@@ -1367,7 +1379,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                          | `[]`                   |
 | `attu.podSecurityContext.fsGroup`                        | Set Attu pod's Security Context fsGroup                                                              | `1001`                 |
 | `attu.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                 | `true`                 |
-| `attu.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `{}`                   |
+| `attu.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                     | `nil`                  |
 | `attu.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                           | `1001`                 |
 | `attu.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                        | `true`                 |
 | `attu.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                          | `false`                |
@@ -1453,8 +1465,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `attu.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `attu.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `attu.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `false`                  |
+| `attu.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
 | `attu.networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
+| `attu.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `attu.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `attu.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `attu.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
@@ -1470,7 +1483,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
 | `waitContainer.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                          | `true`                     |
-| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `{}`                       |
+| `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                              | `nil`                      |
 | `waitContainer.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                    | `1001`                     |
 | `waitContainer.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                 | `true`                     |
 | `waitContainer.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                   | `false`                    |
@@ -1642,7 +1655,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/milvus/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `rootCoord`, `dataCoord`, `indexCoord`, `dataNode`, `indexNode`, `attu` and `queryNode` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -1687,13 +1736,55 @@ externalS3.accessKeySecret=secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `attu.ingress.enabled` to `true`.
 
-To enable Ingress integration, set `attu.ingress.enabled` to `true`. The `attu.ingress.hostname` property can be used to set the host name. The `attu.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `attu.ingress.hostname` property can be used to set the host name. The `attu.ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `attu.ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `attu.ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `attu.ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ## Upgrading
 

@@ -88,7 +88,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.1-debian-11-r3
+    tag: 1.2.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -115,6 +115,64 @@ kustomizeController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param kustomizeController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param kustomizeController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param kustomizeController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param kustomizeController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param kustomizeController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param kustomizeController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param kustomizeController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param kustomizeController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Kustomize Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param kustomizeController.livenessProbe.enabled Enable livenessProbe on Kustomize Controller containers
@@ -193,7 +251,7 @@ kustomizeController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
-  ## @param kustomizeController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param kustomizeController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
@@ -204,7 +262,7 @@ kustomizeController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -540,7 +598,7 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.37.2-debian-11-r1
+    tag: 0.37.3-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -567,6 +625,64 @@ helmController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param helmController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param helmController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param helmController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param helmController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param helmController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param helmController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param helmController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param helmController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Helm Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param helmController.livenessProbe.enabled Enable livenessProbe on Helm Controller containers
@@ -645,7 +761,7 @@ helmController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
-  ## @param helmController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param helmController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
@@ -656,7 +772,7 @@ helmController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -992,7 +1108,7 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.2.3-debian-11-r1
+    tag: 1.2.4-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1021,6 +1137,64 @@ sourceController:
     http: 9090
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param sourceController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param sourceController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param sourceController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param sourceController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param sourceController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param sourceController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param sourceController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Source Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param sourceController.livenessProbe.enabled Enable livenessProbe on Source Controller containers
@@ -1099,7 +1273,7 @@ sourceController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
-  ## @param sourceController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param sourceController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
@@ -1110,7 +1284,7 @@ sourceController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -1328,65 +1502,6 @@ sourceController:
     ##
     sessionAffinityConfig: {}
 
-  ## NetworkPolicy parameters
-  ##
-  networkPolicy:
-    ## @param sourceController.networkPolicy.enabled Enable the default NetworkPolicy policy
-    ##
-    enabled: false
-    ## @param sourceController.networkPolicy.allowExternal Don't require client label for connections
-    ## When set to false, only pods with the correct client label will have network access to the port MinIO&reg; is
-    ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
-    ##
-    allowExternal: true
-    ## @param sourceController.networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
-    ##
-    extraFromClauses: []
-    ## Example
-    ## extraFromClauses:
-    ## - podSelector:
-    ##     matchLabels:
-    ##       a: b
-    ##
-    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraIngress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     from:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraIngress: []
-    ## @param sourceController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
-    ## e.g:
-    ## extraEgress:
-    ##   - ports:
-    ##       - port: 1234
-    ##     to:
-    ##       - podSelector:
-    ##           - matchLabels:
-    ##               - role: frontend
-    ##       - podSelector:
-    ##           - matchExpressions:
-    ##               - key: role
-    ##                 operator: In
-    ##                 values:
-    ##                   - frontend
-    ##
-    extraEgress: []
-    ## @param sourceController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param sourceController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
-    ##
-    ingressNSMatchLabels: {}
-    ingressNSPodMatchLabels: {}
   ## @section Source Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1604,7 +1719,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.3-debian-11-r1
+    tag: 1.2.4-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1631,6 +1746,64 @@ notificationController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param notificationController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param notificationController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param notificationController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param notificationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param notificationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param notificationController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param notificationController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param notificationController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Notification Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param notificationController.livenessProbe.enabled Enable livenessProbe on Notification Controller containers
@@ -1709,7 +1882,7 @@ notificationController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
-  ## @param notificationController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param notificationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
@@ -1720,7 +1893,7 @@ notificationController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2056,7 +2229,7 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.37.0-debian-11-r1
+    tag: 0.37.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2083,6 +2256,64 @@ imageAutomationController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param imageAutomationController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param imageAutomationController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param imageAutomationController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param imageAutomationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param imageAutomationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param imageAutomationController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param imageAutomationController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param imageAutomationController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Image Automation Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param imageAutomationController.livenessProbe.enabled Enable livenessProbe on Image Automation Controller containers
@@ -2161,7 +2392,7 @@ imageAutomationController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
-  ## @param imageAutomationController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param imageAutomationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
@@ -2172,7 +2403,7 @@ imageAutomationController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
@@ -2508,7 +2739,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.1-debian-11-r1
+    tag: 0.31.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2535,6 +2766,64 @@ imageReflectorController:
   containerPorts:
     metrics: 8080
     health: 9440
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param imageReflectorController.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param imageReflectorController.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param imageReflectorController.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param imageReflectorController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param imageReflectorController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param imageReflectorController.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param imageReflectorController.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param imageReflectorController.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Configure extra options for Image Reflector Controller containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param imageReflectorController.livenessProbe.enabled Enable livenessProbe on Image Reflector Controller containers
@@ -2613,7 +2902,7 @@ imageReflectorController:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
-  ## @param imageReflectorController.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param imageReflectorController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
@@ -2624,7 +2913,7 @@ imageReflectorController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2998,7 +3287,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag:  11-debian-11-r94
+    tag:  11-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3020,10 +3309,10 @@ volumePermissions:
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0

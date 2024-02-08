@@ -170,7 +170,7 @@ server:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
-  ## @param server.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -181,7 +181,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -597,7 +597,7 @@ controller:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
-  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -608,7 +608,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1031,7 +1031,7 @@ executor:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
-  ## @param executor.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param executor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
   ## @param executor.containerSecurityContext.runAsNonRoot Set executor containers' Security Context runAsNonRoot
   ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
@@ -1042,7 +1042,7 @@ executor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false

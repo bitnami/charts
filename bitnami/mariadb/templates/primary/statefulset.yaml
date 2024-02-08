@@ -196,7 +196,7 @@ spec:
           {{- end }}
           ports:
             - name: mysql
-              containerPort: 3306
+              containerPort: {{ .Values.primary.containerPorts.mysql }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.primary.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
@@ -299,11 +299,11 @@ spec:
               if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
-              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=root {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
+              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:{{ .Values.primary.containerPorts.mysql }} --mysqld.username=root --web.listen-address=:{{ .Values.metrics.containerPorts.http }} {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9104
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- omit .Values.metrics.livenessProbe "enabled" | toYaml | nindent 12 }}

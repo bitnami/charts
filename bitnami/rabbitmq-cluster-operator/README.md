@@ -207,7 +207,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                              | `[]`                                             |
 | `clusterOperator.podSecurityContext.fsGroup`                        | Set RabbitMQ Cluster Operator pod's Security Context fsGroup                                                                             | `1001`                                           |
 | `clusterOperator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                     | `true`                                           |
-| `clusterOperator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                         | `{}`                                             |
+| `clusterOperator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                         | `nil`                                            |
 | `clusterOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                               | `1001`                                           |
 | `clusterOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                            | `true`                                           |
 | `clusterOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                              | `false`                                          |
@@ -240,8 +240,16 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the RabbitMQ Cluster Operator container(s)                                  | `[]`                                             |
 | `clusterOperator.sidecars`                                          | Add additional sidecar containers to the RabbitMQ Cluster Operator pod(s)                                                                | `[]`                                             |
 | `clusterOperator.initContainers`                                    | Add additional init containers to the RabbitMQ Cluster Operator pod(s)                                                                   | `[]`                                             |
+| `clusterOperator.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                      | `true`                                           |
+| `clusterOperator.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                       | `[]`                                             |
+| `clusterOperator.networkPolicy.allowExternal`                       | Don't require injector label for connections                                                                                             | `true`                                           |
+| `clusterOperator.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                             | `[]`                                             |
+| `clusterOperator.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                             | `[]`                                             |
+| `clusterOperator.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                   | `{}`                                             |
+| `clusterOperator.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                               | `{}`                                             |
 | `clusterOperator.rbac.create`                                       | Specifies whether RBAC resources should be created                                                                                       | `true`                                           |
 | `clusterOperator.rbac.clusterRole.customRules`                      | Define custom access rules for the ClusterRole                                                                                           | `[]`                                             |
+| `clusterOperator.rbac.clusterRole.extraRules`                       | Define extra access rules for the ClusterRole. This has no effect if customerRules is a non-empty array.                                 | `[]`                                             |
 | `clusterOperator.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                     | `true`                                           |
 | `clusterOperator.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                   | `""`                                             |
 | `clusterOperator.serviceAccount.annotations`                        | Add annotations                                                                                                                          | `{}`                                             |
@@ -337,7 +345,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                      | `[]`                                              |
 | `msgTopologyOperator.podSecurityContext.fsGroup`                        | Set RabbitMQ Messaging Topology Operator pod's Security Context fsGroup                                                                                                          | `1001`                                            |
 | `msgTopologyOperator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                             | `true`                                            |
-| `msgTopologyOperator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                 | `{}`                                              |
+| `msgTopologyOperator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                 | `nil`                                             |
 | `msgTopologyOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                       | `1001`                                            |
 | `msgTopologyOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                    | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                      | `false`                                           |
@@ -382,7 +390,16 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.service.annotations`                               | Additional custom annotations for RabbitMQ Messaging Topology Operator webhook service                                                                                           | `{}`                                              |
 | `msgTopologyOperator.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                             | `None`                                            |
 | `msgTopologyOperator.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                      | `{}`                                              |
+| `msgTopologyOperator.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                              | `true`                                            |
+| `msgTopologyOperator.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                                                               | `[]`                                              |
+| `msgTopologyOperator.networkPolicy.allowExternal`                       | Don't require injector label for connections                                                                                                                                     | `true`                                            |
+| `msgTopologyOperator.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                                                                     | `[]`                                              |
+| `msgTopologyOperator.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                     | `[]`                                              |
+| `msgTopologyOperator.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                           | `{}`                                              |
+| `msgTopologyOperator.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                       | `{}`                                              |
 | `msgTopologyOperator.rbac.create`                                       | Specifies whether RBAC resources should be created                                                                                                                               | `true`                                            |
+| `msgTopologyOperator.rbac.clusterRole.customRules`                      | Define custom access rules for the ClusterRole                                                                                                                                   | `[]`                                              |
+| `msgTopologyOperator.rbac.clusterRole.extraRules`                       | Define extra access rules for the ClusterRole. This has no effect if customerRules is a non-empty array.                                                                         | `[]`                                              |
 | `msgTopologyOperator.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                                                             | `true`                                            |
 | `msgTopologyOperator.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                           | `""`                                              |
 | `msgTopologyOperator.serviceAccount.annotations`                        | Add annotations                                                                                                                                                                  | `{}`                                              |
@@ -477,7 +494,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/rabbitmq-cluster-operator/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

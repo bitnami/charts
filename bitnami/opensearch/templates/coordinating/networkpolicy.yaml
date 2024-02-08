@@ -23,6 +23,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.coordinating.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -34,6 +38,8 @@ spec:
     - ports:
         - port: {{ .Values.service.ports.restAPI }}
         - port: {{ .Values.service.ports.transport }}
+        - port: {{ .Values.containerPorts.restAPI }}
+        - port: {{ .Values.containerPorts.transport }}
         - port: {{ .Values.dashboards.service.ports.http }}
       to:
         - podSelector:
@@ -41,10 +47,11 @@ spec:
     {{- if .Values.coordinating.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.coordinating.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.service.ports.restAPI }}
-        - port: {{ .Values.service.ports.transport }}
+        - port: {{ .Values.containerPorts.restAPI }}
+        - port: {{ .Values.containerPorts.transport }}
       {{- if not .Values.coordinating.networkPolicy.allowExternal }}
       from:
         - podSelector:

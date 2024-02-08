@@ -143,7 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                   | `[]`             |
 | `provisioning.podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                                                                                    | `1001`           |
 | `provisioning.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                          | `true`           |
-| `provisioning.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `{}`             |
+| `provisioning.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                              | `nil`            |
 | `provisioning.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`           |
 | `provisioning.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`           |
 | `provisioning.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                   | `false`          |
@@ -166,7 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`                          | Set filesystem extra groups                                                                                                                                                                   | `[]`             |
 | `podSecurityContext.fsGroupChangePolicy`                         | When K8s should preform chown on attached volumes                                                                                                                                             | `OnRootMismatch` |
 | `containerSecurityContext.enabled`                               | Enabled containers' Security Context                                                                                                                                                          | `true`           |
-| `containerSecurityContext.seLinuxOptions`                        | Set SELinux options in container                                                                                                                                                              | `{}`             |
+| `containerSecurityContext.seLinuxOptions`                        | Set SELinux options in container                                                                                                                                                              | `nil`            |
 | `containerSecurityContext.runAsUser`                             | Set containers' Security Context runAsUser                                                                                                                                                    | `1001`           |
 | `containerSecurityContext.runAsNonRoot`                          | Set container's Security Context runAsNonRoot                                                                                                                                                 | `true`           |
 | `containerSecurityContext.privileged`                            | Set container's Security Context privileged                                                                                                                                                   | `false`          |
@@ -186,6 +186,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tolerations`                                                    | Tolerations for pod assignment. Evaluated as a template.                                                                                                                                      | `[]`             |
 | `topologySpreadConstraints`                                      | Topology Spread Constraints for MinIO&reg; pods assignment spread across your cluster among failure-domains                                                                                   | `[]`             |
 | `priorityClassName`                                              | MinIO&reg; pods' priorityClassName                                                                                                                                                            | `""`             |
+| `runtimeClassName`                                               | Name of the runtime class to be used by MinIO&reg; pods'                                                                                                                                      | `""`             |
 | `resources.limits`                                               | The resources limits for the MinIO&reg; container                                                                                                                                             | `{}`             |
 | `resources.requests`                                             | The requested resources for the MinIO&reg; container                                                                                                                                          | `{}`             |
 | `livenessProbe.enabled`                                          | Enable livenessProbe                                                                                                                                                                          | `true`           |
@@ -217,53 +218,57 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | MinIO&reg; service type                                                                                                          | `ClusterIP`              |
-| `service.ports.api`                | MinIO&reg; API service port                                                                                                      | `9000`                   |
-| `service.ports.console`            | MinIO&reg; Console service port                                                                                                  | `9001`                   |
-| `service.nodePorts.api`            | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                                         | `""`                     |
-| `service.nodePorts.console`        | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
-| `service.clusterIP`                | Service Cluster IP                                                                                                               | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                                      | `""`                     |
-| `service.loadBalancerSourceRanges` | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
-| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
-| `service.annotations`              | Annotations for MinIO&reg; service                                                                                               | `{}`                     |
-| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource for MinIO Console                                                                             | `false`                  |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `minio.local`            |
-| `ingress.path`                     | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.servicePort`              | Service port to be used                                                                                                          | `minio-console`          |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`               | Any additional paths that may need to be added to the ingress under the main host                                                | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `apiIngress.enabled`               | Enable ingress controller resource for MinIO API                                                                                 | `false`                  |
-| `apiIngress.apiVersion`            | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `apiIngress.ingressClassName`      | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `apiIngress.hostname`              | Default host for the ingress resource                                                                                            | `minio.local`            |
-| `apiIngress.path`                  | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
-| `apiIngress.pathType`              | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `apiIngress.servicePort`           | Service port to be used                                                                                                          | `minio-api`              |
-| `apiIngress.annotations`           | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `apiIngress.tls`                   | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                                             | `false`                  |
-| `apiIngress.selfSigned`            | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `apiIngress.extraHosts`            | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `apiIngress.extraPaths`            | Any additional paths that may need to be added to the ingress under the main host                                                | `[]`                     |
-| `apiIngress.extraTls`              | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `apiIngress.secrets`               | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `apiIngress.extraRules`            | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                                                          | `false`                  |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
-| `networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | MinIO&reg; service type                                                                                                          | `ClusterIP`              |
+| `service.ports.api`                     | MinIO&reg; API service port                                                                                                      | `9000`                   |
+| `service.ports.console`                 | MinIO&reg; Console service port                                                                                                  | `9001`                   |
+| `service.nodePorts.api`                 | Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types                                         | `""`                     |
+| `service.nodePorts.console`             | Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types                                     | `""`                     |
+| `service.clusterIP`                     | Service Cluster IP                                                                                                               | `""`                     |
+| `service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)                                                      | `""`                     |
+| `service.loadBalancerSourceRanges`      | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
+| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.extraPorts`                    | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
+| `service.annotations`                   | Annotations for MinIO&reg; service                                                                                               | `{}`                     |
+| `service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
+| `ingress.enabled`                       | Enable ingress controller resource for MinIO Console                                                                             | `false`                  |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress resource                                                                                            | `minio.local`            |
+| `ingress.path`                          | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.servicePort`                   | Service port to be used                                                                                                          | `minio-console`          |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.extraHosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`                    | Any additional paths that may need to be added to the ingress under the main host                                                | `[]`                     |
+| `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `apiIngress.enabled`                    | Enable ingress controller resource for MinIO API                                                                                 | `false`                  |
+| `apiIngress.apiVersion`                 | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `apiIngress.ingressClassName`           | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `apiIngress.hostname`                   | Default host for the ingress resource                                                                                            | `minio.local`            |
+| `apiIngress.path`                       | The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                      | `/`                      |
+| `apiIngress.pathType`                   | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `apiIngress.servicePort`                | Service port to be used                                                                                                          | `minio-api`              |
+| `apiIngress.annotations`                | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `apiIngress.tls`                        | Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter                                             | `false`                  |
+| `apiIngress.selfSigned`                 | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `apiIngress.extraHosts`                 | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `apiIngress.extraPaths`                 | Any additional paths that may need to be added to the ingress under the main host                                                | `[]`                     |
+| `apiIngress.extraTls`                   | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `apiIngress.secrets`                    | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `apiIngress.extraRules`                 | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
+| `networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 
 ### Persistence parameters
 
@@ -289,7 +294,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                       |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                        |
 
 ### RBAC parameters
@@ -415,13 +420,55 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/minio/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/minio/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### Adding extra environment variables
 

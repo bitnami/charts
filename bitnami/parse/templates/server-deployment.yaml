@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ printf "%s-server" (include "common.names.fullname" .) }}
+  name: {{ include "parse.server.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server

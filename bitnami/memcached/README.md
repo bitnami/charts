@@ -134,7 +134,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                       | `[]`             |
 | `podSecurityContext.fsGroup`                        | Set Memcached pod's Security Context fsGroup                                                                                                                                                      | `1001`           |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                              | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                  | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                  | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                        | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                     | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                       | `false`          |
@@ -176,19 +176,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure parameters
 
-| Name                               | Description                                                                             | Value       |
-| ---------------------------------- | --------------------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes Service type                                                                 | `ClusterIP` |
-| `service.ports.memcached`          | Memcached service port                                                                  | `11211`     |
-| `service.nodePorts.memcached`      | Node port for Memcached                                                                 | `""`        |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                        | `""`        |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
-| `service.clusterIP`                | Memcached service Cluster IP                                                            | `""`        |
-| `service.loadBalancerIP`           | Memcached service Load Balancer IP                                                      | `""`        |
-| `service.loadBalancerSourceRanges` | Memcached service Load Balancer sources                                                 | `[]`        |
-| `service.externalTrafficPolicy`    | Memcached service external traffic policy                                               | `Cluster`   |
-| `service.annotations`              | Additional custom annotations for Memcached service                                     | `{}`        |
-| `service.extraPorts`               | Extra ports to expose in the Memcached service (normally used with the `sidecar` value) | `[]`        |
+| Name                                    | Description                                                                             | Value       |
+| --------------------------------------- | --------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                          | Kubernetes Service type                                                                 | `ClusterIP` |
+| `service.ports.memcached`               | Memcached service port                                                                  | `11211`     |
+| `service.nodePorts.memcached`           | Node port for Memcached                                                                 | `""`        |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                        | `""`        |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                             | `{}`        |
+| `service.clusterIP`                     | Memcached service Cluster IP                                                            | `""`        |
+| `service.loadBalancerIP`                | Memcached service Load Balancer IP                                                      | `""`        |
+| `service.loadBalancerSourceRanges`      | Memcached service Load Balancer sources                                                 | `[]`        |
+| `service.externalTrafficPolicy`         | Memcached service external traffic policy                                               | `Cluster`   |
+| `service.annotations`                   | Additional custom annotations for Memcached service                                     | `{}`        |
+| `service.extraPorts`                    | Extra ports to expose in the Memcached service (normally used with the `sidecar` value) | `[]`        |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                              | `true`      |
+| `networkPolicy.allowExternal`           | The Policy model to apply                                                               | `true`      |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                         | `true`      |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                  | `{}`        |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                              | `{}`        |
 
 ### Other Parameters
 
@@ -223,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                              | `[]`                                 |
 | `volumePermissions.resources.limits`                        | Init container volume-permissions resource limits                                                                                 | `{}`                                 |
 | `volumePermissions.resources.requests`                      | Init container volume-permissions resource requests                                                                               | `{}`                                 |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                                 |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                                |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                    | `0`                                  |
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                              | `false`                              |
 | `metrics.image.registry`                                    | Memcached exporter image registry                                                                                                 | `REGISTRY_NAME`                      |
@@ -235,7 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.resources.limits`                                  | Init container volume-permissions resource limits                                                                                 | `{}`                                 |
 | `metrics.resources.requests`                                | Init container volume-permissions resource requests                                                                               | `{}`                                 |
 | `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                              | `true`                               |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                  | `{}`                                 |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                  | `nil`                                |
 | `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                        | `1001`                               |
 | `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                     | `true`                               |
 | `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                       | `false`                              |
@@ -313,9 +320,43 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Use Sidecars and Init Containers
 
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter. Similarly, extra init containers can be added using the `initContainers` parameter.
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
 
-Refer to the chart documentation for more information on, and examples of, configuring and using [sidecars and init containers](https://docs.bitnami.com/kubernetes/infrastructure/memcached/configuration/configure-sidecar-init-containers/).
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Set Pod affinity
 
@@ -360,8 +401,6 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 ### To 5.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/infrastructure/memcached/administration/upgrade-helm3/).
 
 ### To 4.0.0
 

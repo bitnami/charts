@@ -136,7 +136,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Group ID for the container filesystem                                                                                                       | `1001`           |
 | `containerSecurityContext.enabled`                  | Enable Controller containers' Security Context                                                                                              | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the Controller container                                                                           | `false`          |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                            | `{}`             |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                            | `nil`            |
 | `containerSecurityContext.runAsUser`                | User ID for the Controller container                                                                                                        | `1001`           |
 | `containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                                            | `[]`             |
 | `containerSecurityContext.capabilities.add`         | Linux Kernel capabilities that should be added                                                                                              | `[]`             |
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.containerSecurityContext.enabled`                  | Enable Default backend containers' Security Context                                                             | `true`                  |
 | `defaultBackend.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities that should be dropped                                                                | `[]`                    |
 | `defaultBackend.containerSecurityContext.allowPrivilegeEscalation` | Switch to allow priviledge escalation on the container                                                          | `false`                 |
-| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                    |
+| `defaultBackend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`                   |
 | `defaultBackend.containerSecurityContext.runAsUser`                | User ID for the Default backend container                                                                       | `1001`                  |
 | `defaultBackend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                  |
 | `defaultBackend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`        |
@@ -269,31 +269,45 @@ The command removes all the Kubernetes components associated with the chart and 
 | `defaultBackend.service.type`                                      | Kubernetes Service type for default backend                                                                     | `ClusterIP`             |
 | `defaultBackend.service.ports.http`                                | Default backend service HTTP port                                                                               | `80`                    |
 | `defaultBackend.service.annotations`                               | Annotations for the default backend service                                                                     | `{}`                    |
+| `defaultBackend.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                             | `true`                  |
+| `defaultBackend.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                      | `true`                  |
+| `defaultBackend.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                 | `true`                  |
+| `defaultBackend.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                    | `[]`                    |
+| `defaultBackend.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                    | `[]`                    |
+| `defaultBackend.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                          | `{}`                    |
+| `defaultBackend.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                      | `{}`                    |
 | `defaultBackend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Default backend                                             | `false`                 |
 | `defaultBackend.pdb.minAvailable`                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                  | `1`                     |
 | `defaultBackend.pdb.maxUnavailable`                                | Maximum number/percentage of Default backend pods that may be made unavailable                                  | `""`                    |
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                                                            | Value          |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `service.type`                     | Kubernetes Service type for Controller                                                                                                 | `LoadBalancer` |
-| `service.ports`                    | Service ports                                                                                                                          | `{}`           |
-| `service.targetPorts`              | Map the controller service HTTP/HTTPS port                                                                                             | `{}`           |
-| `service.nodePorts`                | Specify the nodePort value(s) for the LoadBalancer and NodePort service types.                                                         | `{}`           |
-| `service.annotations`              | Annotations for controller service                                                                                                     | `{}`           |
-| `service.labels`                   | Labels for controller service                                                                                                          | `{}`           |
-| `service.clusterIP`                | Controller Internal Cluster Service IP (optional)                                                                                      | `""`           |
-| `service.externalIPs`              | Controller Service external IP addresses                                                                                               | `[]`           |
-| `service.ipFamilyPolicy`           | Controller Service ipFamilyPolicy (optional, cloud specific)                                                                           | `""`           |
-| `service.ipFamilies`               | Controller Service ipFamilies (optional, cloud specific)                                                                               | `[]`           |
-| `service.loadBalancerIP`           | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `""`           |
-| `service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported)                                                                        | `[]`           |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                         | `[]`           |
-| `service.externalTrafficPolicy`    | Set external traffic policy to: "Local" to preserve source IP on providers supporting it                                               | `""`           |
-| `service.healthCheckNodePort`      | Set this to the managed health-check port the kube-proxy will expose. If blank, a random port in the `NodePort` range will be assigned | `0`            |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                   | `None`         |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                            | `{}`           |
+| Name                                    | Description                                                                                                                            | Value          |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `service.type`                          | Kubernetes Service type for Controller                                                                                                 | `LoadBalancer` |
+| `service.ports`                         | Service ports                                                                                                                          | `{}`           |
+| `service.targetPorts`                   | Map the controller service HTTP/HTTPS port                                                                                             | `{}`           |
+| `service.nodePorts`                     | Specify the nodePort value(s) for the LoadBalancer and NodePort service types.                                                         | `{}`           |
+| `service.annotations`                   | Annotations for controller service                                                                                                     | `{}`           |
+| `service.labels`                        | Labels for controller service                                                                                                          | `{}`           |
+| `service.clusterIP`                     | Controller Internal Cluster Service IP (optional)                                                                                      | `""`           |
+| `service.externalIPs`                   | Controller Service external IP addresses                                                                                               | `[]`           |
+| `service.ipFamilyPolicy`                | Controller Service ipFamilyPolicy (optional, cloud specific)                                                                           | `""`           |
+| `service.ipFamilies`                    | Controller Service ipFamilies (optional, cloud specific)                                                                               | `[]`           |
+| `service.loadBalancerIP`                | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `""`           |
+| `service.loadBalancerSourceRanges`      | List of IP CIDRs allowed access to load balancer (if supported)                                                                        | `[]`           |
+| `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                         | `[]`           |
+| `service.externalTrafficPolicy`         | Set external traffic policy to: "Local" to preserve source IP on providers supporting it                                               | `""`           |
+| `service.healthCheckNodePort`           | Set this to the managed health-check port the kube-proxy will expose. If blank, a random port in the `NodePort` range will be assigned | `0`            |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                   | `None`         |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                            | `{}`           |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                                    | `true`         |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                             | `true`         |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                        | `true`         |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                           | `[]`           |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                           | `[]`           |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                                 | `{}`           |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                             | `{}`           |
 
 ### RBAC parameters
 

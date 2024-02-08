@@ -82,7 +82,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.2.14-debian-11-r37
+    tag: 2.3.8-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -266,7 +266,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.2-debian-11-r0
+    tag: 2.3.6-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -319,7 +319,7 @@ initJob:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param initJob.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
@@ -330,7 +330,7 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -401,6 +401,55 @@ initJob:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param initJob.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: true
+    ## @param initJob.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param initJob.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: []
+    ## @param initJob.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param initJob.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param initJob.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
 ## @section Data Coordinator Deployment Parameters
 ##
@@ -530,7 +579,7 @@ dataCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dataCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dataCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -541,7 +590,7 @@ dataCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -803,12 +852,15 @@ dataCoord:
   networkPolicy:
     ## @param dataCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param dataCoord.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param dataCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param dataCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -949,7 +1001,7 @@ rootCoord:
   ## @param rootCoord.containerPorts.grpc GRPC port for Root Coordinator
   ## @param rootCoord.containerPorts.metrics Metrics port for Root Coordinator
   containerPorts:
-    grpc: 19530
+    grpc: 19530 
     metrics: 9091
   ## Configure extra options for Root Coordinator containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -1029,7 +1081,7 @@ rootCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param rootCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param rootCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1040,7 +1092,7 @@ rootCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1302,12 +1354,15 @@ rootCoord:
   networkPolicy:
     ## @param rootCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param rootCoord.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param rootCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param rootCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1527,7 +1582,7 @@ queryCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1538,7 +1593,7 @@ queryCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1800,12 +1855,15 @@ queryCoord:
   networkPolicy:
     ## @param queryCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param queryCoord.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param queryCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param queryCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2026,7 +2084,7 @@ indexCoord:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param indexCoord.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param indexCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2037,7 +2095,7 @@ indexCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2299,12 +2357,15 @@ indexCoord:
   networkPolicy:
     ## @param indexCoord.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param indexCoord.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param indexCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param indexCoord.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2525,7 +2586,7 @@ dataNode:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param dataNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -2536,7 +2597,7 @@ dataNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -2798,12 +2859,15 @@ dataNode:
   networkPolicy:
     ## @param dataNode.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param dataNode.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param dataNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param dataNode.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -3024,7 +3088,7 @@ queryNode:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param queryNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param queryNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param queryNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3035,7 +3099,7 @@ queryNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3297,12 +3361,15 @@ queryNode:
   networkPolicy:
     ## @param queryNode.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param queryNode.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param queryNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param queryNode.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -3523,7 +3590,7 @@ indexNode:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param indexNode.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param indexNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
@@ -3534,7 +3601,7 @@ indexNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -3796,12 +3863,15 @@ indexNode:
   networkPolicy:
     ## @param indexNode.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param indexNode.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param indexNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param indexNode.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -4051,7 +4121,7 @@ proxy:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param proxy.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4062,7 +4132,7 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4324,12 +4394,15 @@ proxy:
   networkPolicy:
     ## @param proxy.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param proxy.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param proxy.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param proxy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -4441,7 +4514,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.2-debian-11-r1
+    tag: 2.3.8-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4562,7 +4635,7 @@ attu:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param attu.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param attu.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param attu.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param attu.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param attu.containerSecurityContext.privileged Set container's Security Context privileged
@@ -4573,7 +4646,7 @@ attu:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -4935,12 +5008,15 @@ attu:
   networkPolicy:
     ## @param attu.networkPolicy.enabled Enable creation of NetworkPolicy resources
     ##
-    enabled: false
+    enabled: true
     ## @param attu.networkPolicy.allowExternal The Policy model to apply
     ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
     ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
+    ## @param attu.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param attu.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -4993,7 +5069,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r96
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -5011,7 +5087,7 @@ waitContainer:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param waitContainer.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
@@ -5022,7 +5098,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
