@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ gt (.Values.replicaCount | int) 1 | ternary 1 .Values.replicaCount }}
   {{- if .Values.useStatefulSet }}
   serviceName: {{ include "mongodb.service.nameOverride" . }}
   {{- end }}
