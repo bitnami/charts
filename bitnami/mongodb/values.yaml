@@ -445,9 +445,10 @@ annotations: {}
 ## @param labels Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template
 ##
 labels: {}
-## @param replicaCount Number of MongoDB(&reg;) nodes 
+## @param replicaCount Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)
+## Ignored when mongodb.architecture=standalone
 ##
-replicaCount: 1
+replicaCount: 2
 ## @param updateStrategy.type Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false,
 ## this parameter will be applied on a deployment object. In other case it will be applied on a statefulset object
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
