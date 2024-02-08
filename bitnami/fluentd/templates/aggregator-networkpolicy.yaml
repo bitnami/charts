@@ -41,7 +41,7 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-              app.kubernetes.io/component: aggregator    
+              app.kubernetes.io/component: aggregator
     # Allow connection to other forwarder pods
     - ports:
         {{- range .Values.forwarder.containerPorts }}
