@@ -196,8 +196,12 @@ hub:
       {{- if .Values.singleuser.podSecurityContext.enabled }}
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.singleuser.containerSecurityContext.enabled }}
       containerSecurityContext: {{- omit .Values.singleuser.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.podSecurityContext.enabled }}
       podSecurityContext: {{- omit .Values.singleuser.podSecurityContext "enabled" | toYaml | nindent 4 }}
+      {{- end }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
       automountServiceAccountToken: {{ .Values.singleuser.automountServiceAccountToken }}
       storage:
