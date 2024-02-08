@@ -79,7 +79,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.11.0-debian-11-r7
+    tag: 2.11.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
