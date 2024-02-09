@@ -174,44 +174,51 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                                 | Value                    |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | WildFly service type                                                                                                                        | `LoadBalancer`           |
-| `service.ports.http`               | WildFly service HTTP port                                                                                                                   | `80`                     |
-| `service.ports.mgmt`               | WildFly service management console port                                                                                                     | `9990`                   |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                                                          | `""`                     |
-| `service.nodePorts.mgmt`           | Node port for Management console                                                                                                            | `""`                     |
-| `service.clusterIP`                | WildFly service Cluster IP                                                                                                                  | `""`                     |
-| `service.loadBalancerIP`           | WildFly service Load Balancer IP                                                                                                            | `""`                     |
-| `service.loadBalancerSourceRanges` | WildFly service Load Balancer sources                                                                                                       | `[]`                     |
-| `service.externalTrafficPolicy`    | WildFly service external traffic policy                                                                                                     | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for WildFly service                                                                                           | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose on WildFly service                                                                                                    | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                 | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WildFly                                                                                                | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                           | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                               | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                                         | `wildfly.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                                                         | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.            | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                               | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                                  | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                       | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                                         | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                                          | `[]`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                               | `""`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                                     | `[]`                     |
-| `mgmtIngress.enabled`              | Set to true to enable ingress record generation for the Management console                                                                  | `false`                  |
-| `mgmtIngress.pathType`             | Ingress path type                                                                                                                           | `ImplementationSpecific` |
-| `mgmtIngress.hostname`             | When the Management ingress is enabled, a host pointing to this will be created                                                             | `management.local`       |
-| `mgmtIngress.annotations`          | Additional annotations for the Management Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `mgmtIngress.tls`                  | Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter                                                       | `false`                  |
-| `mgmtIngress.extraHosts`           | The list of additional hostnames to be covered with this Management ingress record                                                          | `[]`                     |
-| `mgmtIngress.extraPaths`           | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                       | `[]`                     |
-| `mgmtIngress.extraTls`             | TLS configuration for additional hostnames to be covered                                                                                    | `[]`                     |
-| `mgmtIngress.secrets`              | TLS Secret configuration                                                                                                                    | `[]`                     |
-| `mgmtIngress.ingressClassName`     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                               | `""`                     |
+| Name                                    | Description                                                                                                                                 | Value                    |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | WildFly service type                                                                                                                        | `LoadBalancer`           |
+| `service.ports.http`                    | WildFly service HTTP port                                                                                                                   | `80`                     |
+| `service.ports.mgmt`                    | WildFly service management console port                                                                                                     | `9990`                   |
+| `service.nodePorts.http`                | Node port for HTTP                                                                                                                          | `""`                     |
+| `service.nodePorts.mgmt`                | Node port for Management console                                                                                                            | `""`                     |
+| `service.clusterIP`                     | WildFly service Cluster IP                                                                                                                  | `""`                     |
+| `service.loadBalancerIP`                | WildFly service Load Balancer IP                                                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges`      | WildFly service Load Balancer sources                                                                                                       | `[]`                     |
+| `service.externalTrafficPolicy`         | WildFly service external traffic policy                                                                                                     | `Cluster`                |
+| `service.annotations`                   | Additional custom annotations for WildFly service                                                                                           | `{}`                     |
+| `service.extraPorts`                    | Extra ports to expose on WildFly service                                                                                                    | `[]`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                 | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                                         | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                                                                  | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                             | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                                | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                                      | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`                     |
+| `ingress.enabled`                       | Enable ingress record generation for WildFly                                                                                                | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                                                           | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                               | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                                                         | `wildfly.local`          |
+| `ingress.path`                          | Default path for the ingress record                                                                                                         | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.            | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                               | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                                  | `[]`                     |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                       | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                                         | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                                          | `[]`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                               | `""`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                                     | `[]`                     |
+| `mgmtIngress.enabled`                   | Set to true to enable ingress record generation for the Management console                                                                  | `false`                  |
+| `mgmtIngress.pathType`                  | Ingress path type                                                                                                                           | `ImplementationSpecific` |
+| `mgmtIngress.hostname`                  | When the Management ingress is enabled, a host pointing to this will be created                                                             | `management.local`       |
+| `mgmtIngress.annotations`               | Additional annotations for the Management Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `mgmtIngress.tls`                       | Enable TLS configuration for the hostname defined at `mgmtIngress.hostname` parameter                                                       | `false`                  |
+| `mgmtIngress.extraHosts`                | The list of additional hostnames to be covered with this Management ingress record                                                          | `[]`                     |
+| `mgmtIngress.extraPaths`                | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                       | `[]`                     |
+| `mgmtIngress.extraTls`                  | TLS configuration for additional hostnames to be covered                                                                                    | `[]`                     |
+| `mgmtIngress.secrets`                   | TLS Secret configuration                                                                                                                    | `[]`                     |
+| `mgmtIngress.ingressClassName`          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                               | `""`                     |
 
 ### Persistence Parameters
 
