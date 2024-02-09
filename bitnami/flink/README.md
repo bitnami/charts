@@ -143,6 +143,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.service.annotations`                               | Provide any additional annotations which may be required.                                 | `{}`             |
 | `jobmanager.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`           |
 | `jobmanager.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                               | `{}`             |
+| `jobmanager.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                       | `true`           |
+| `jobmanager.networkPolicy.allowExternal`                       | Don't require server label for connections                                                | `true`           |
+| `jobmanager.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                           | `true`           |
+| `jobmanager.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                              | `[]`             |
+| `jobmanager.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                              | `[]`             |
+| `jobmanager.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                    | `{}`             |
+| `jobmanager.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                | `{}`             |
 | `jobmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `jobmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `jobmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
@@ -231,6 +238,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.service.annotations`                               | Provide any additional annotations which may be required.                                 | `{}`             |
 | `taskmanager.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`           |
 | `taskmanager.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                               | `{}`             |
+| `taskmanager.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                       | `true`           |
+| `taskmanager.networkPolicy.allowExternal`                       | Don't require server label for connections                                                | `true`           |
+| `taskmanager.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                           | `true`           |
+| `taskmanager.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                              | `[]`             |
+| `taskmanager.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                              | `[]`             |
+| `taskmanager.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                    | `{}`             |
+| `taskmanager.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                | `{}`             |
 | `taskmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `taskmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `taskmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
