@@ -13,8 +13,10 @@ it('allows adding a project and a quality gate', () => {
   // Step 1: Create a project
   cy.fixture('projects').then((projects) => {
     cy.contains('Create Project').click();
-    cy.get('#create-project-name').type(`${projects.newProject.name} ${random}`);
-    cy.get('#create-project-key').type(`${projects.newProject.key}${random}`);
+    cy.get('#project-name').type(`${projects.newProject.name} ${random}`);
+    cy.get('#project-key').type(`${projects.newProject.key}${random}`);
+    cy.get('[type="submit"]').contains('Next').click();
+    cy.get('span').contains('Use the global setting').click();
     cy.get('[type="submit"]').contains('Create').click();
 
     // Step 2: Create a Quality gate
