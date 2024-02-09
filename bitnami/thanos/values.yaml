@@ -495,7 +495,7 @@ query:
     allowExternal: true
     ## @param query.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1188,7 +1188,7 @@ queryFrontend:
     allowExternal: true
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1711,7 +1711,7 @@ bucketweb:
     allowExternal: true
     ## @param bucketweb.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param bucketweb.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -2236,7 +2236,7 @@ compactor:
     allowExternal: true
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -2782,7 +2782,7 @@ storegateway:
     allowExternal: true
     ## @param storegateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param storegateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -3503,7 +3503,7 @@ ruler:
     allowExternal: true
     ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -4095,7 +4095,7 @@ receive:
     allowExternal: true
     ## @param receive.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
-    allowExternalEgress: false
+    allowExternalEgress: true
     ## @param receive.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
