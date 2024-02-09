@@ -4,13 +4,15 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- /*
-Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+Generated from 'thanos-component-absent' group from https://github.com/thanos-io/thanos.git
+Do not change in-place! In order to change this file run the script in
+https://github.com/bitnami/charts/tree/main/bitnami/thanos/hack
 */ -}}
 {{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.absent_rules ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "common.names.fullname" . }}-component-absent
+  name: thanos-component-absent
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
@@ -32,8 +34,7 @@ spec:
         description: ThanosCompact has disappeared. Prometheus target for the component cannot be discovered.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactisdown
         summary: Thanos component has disappeared.
-      expr: |
-        absent(up{job=~".*thanos-compact.*"} == 1)
+      expr: absent(up{job=~".*thanos-compact.*"} == 1)
       for: 5m
       labels:
         severity: critical
@@ -50,8 +51,7 @@ spec:
         description: ThanosQuery has disappeared. Prometheus target for the component cannot be discovered.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosqueryisdown
         summary: Thanos component has disappeared.
-      expr: |
-        absent(up{job=~".*thanos-query.*"} == 1)
+      expr: absent(up{job=~".*thanos-query.*"} == 1)
       for: 5m
       labels:
         severity: critical
@@ -68,8 +68,7 @@ spec:
         description: ThanosReceive has disappeared. Prometheus target for the component cannot be discovered.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosreceiveisdown
         summary: Thanos component has disappeared.
-      expr: |
-        absent(up{job=~".*thanos-receive.*"} == 1)
+      expr: absent(up{job=~".*thanos-receive.*"} == 1)
       for: 5m
       labels:
         severity: critical
@@ -86,8 +85,7 @@ spec:
         description: ThanosRule has disappeared. Prometheus target for the component cannot be discovered.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosruleisdown
         summary: Thanos component has disappeared.
-      expr: |
-        absent(up{job=~".*thanos-rule.*"} == 1)
+      expr: absent(up{job=~".*thanos-rule.*"} == 1)
       for: 5m
       labels:
         severity: critical
@@ -104,8 +102,7 @@ spec:
         description: ThanosSidecar has disappeared. Prometheus target for the component cannot be discovered.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanossidecarisdown
         summary: Thanos component has disappeared.
-      expr: |
-        absent(up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 1)
+      expr: absent(up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 1)
       for: 5m
       labels:
         severity: critical
@@ -122,8 +119,7 @@ spec:
         description: ThanosStore has disappeared. Prometheus target for the component cannot be discovered.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosstoreisdown
         summary: Thanos component has disappeared.
-      expr: |
-        absent(up{job=~".*thanos-store.*"} == 1)
+      expr: absent(up{job=~".*thanos-store.*"} == 1)
       for: 5m
       labels:
         severity: critical

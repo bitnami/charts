@@ -4,13 +4,15 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- /*
-Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+Generated from 'thanos-bucket-replicate' group from https://github.com/thanos-io/thanos.git
+Do not change in-place! In order to change this file run the script in
+https://github.com/bitnami/charts/tree/main/bitnami/thanos/hack
 */ -}}
 {{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.replicate ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "common.names.fullname" . }}-replicate
+  name: thanos-bucket-replicate
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
@@ -29,10 +31,10 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Replicate is failing to run, {{`{{`}} $value | humanize {{`}}`}}% of attempts failed.
+        description: Thanos Replicate is failing to run, {{`{{`}}$value | humanize{{`}}`}}% of attempts failed.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosbucketreplicateerrorrate
         summary: Thanos Replicate is failing to run.
-      expr: |
+      expr: |-
         (
           sum by (job) (rate(thanos_replicate_replication_runs_total{result="error", job=~".*thanos-bucket-replicate.*"}[5m]))
         / on (job) group_left
@@ -51,10 +53,10 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Replicate {{`{{`}} $labels.job {{`}}`}} has a 99th percentile latency of {{`{{`}} $value {{`}}`}} seconds for the replicate operations.
+        description: Thanos Replicate {{`{{`}}$labels.job{{`}}`}} has a 99th percentile latency of {{`{{`}}$value{{`}}`}} seconds for the replicate operations.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanosbucketreplicaterunlatency
         summary: Thanos Replicate has a high latency for replicate operations.
-      expr: |
+      expr: |-
         (
           histogram_quantile(0.99, sum by (job) (rate(thanos_replicate_replication_run_duration_seconds_bucket{job=~".*thanos-bucket-replicate.*"}[5m]))) > 20
         and

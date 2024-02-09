@@ -4,13 +4,15 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- /*
-Generated from https://github.com/thanos-io/thanos/blob/main/examples/alerts/alerts.md
+Generated from 'thanos-compact' group from https://github.com/thanos-io/thanos.git
+Do not change in-place! In order to change this file run the script in
+https://github.com/bitnami/charts/tree/main/bitnami/thanos/hack
 */ -}}
 {{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.compaction ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ template "common.names.fullname" . }}-compact
+  name: thanos-compact
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
@@ -29,7 +31,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}} $value {{`}}`}} instances running.
+        description: No more than one Thanos Compact instance should be running at once. There are {{`{{`}}$value{{`}}`}} instances running.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactmultiplerunning
         summary: Thanos Compact has multiple instances running.
       expr: sum by (job) (up{job=~".*thanos-compact.*"}) > 1
@@ -46,7 +48,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} has failed to run and now is halted.
+        description: Thanos Compact {{`{{`}}$labels.job{{`}}`}} has failed to run and now is halted.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompacthalted
         summary: Thanos Compact has failed to run and is now halted.
       expr: thanos_compact_halted{job=~".*thanos-compact.*"} == 1
@@ -63,10 +65,10 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of compactions.
+        description: Thanos Compact {{`{{`}}$labels.job{{`}}`}} is failing to execute {{`{{`}}$value | humanize{{`}}`}}% of compactions.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompacthighcompactionfailures
         summary: Thanos Compact is failing to execute compactions.
-      expr: |
+      expr: |-
         (
           sum by (job) (rate(thanos_compact_group_compactions_failures_total{job=~".*thanos-compact.*"}[5m]))
         /
@@ -86,10 +88,10 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} Bucket is failing to execute {{`{{`}} $value | humanize {{`}}`}}% of operations.
+        description: Thanos Compact {{`{{`}}$labels.job{{`}}`}} Bucket is failing to execute {{`{{`}}$value | humanize{{`}}`}}% of operations.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompactbuckethighoperationfailures
         summary: Thanos Compact Bucket is having a high number of operation failures.
-      expr: |
+      expr: |-
         (
           sum by (job) (rate(thanos_objstore_bucket_operation_failures_total{job=~".*thanos-compact.*"}[5m]))
         /
@@ -109,7 +111,7 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
-        description: Thanos Compact {{`{{`}} $labels.job {{`}}`}} has not uploaded anything for 24 hours.
+        description: Thanos Compact {{`{{`}}$labels.job{{`}}`}} has not uploaded anything for 24 hours.
         runbook_url: {{ .Values.metrics.prometheusRule.runbookUrl }}thanoscompacthasnotrun
         summary: Thanos Compact has not uploaded anything for last 24 hours.
       expr: (time() - max by (job) (max_over_time(thanos_objstore_bucket_last_successful_upload_time{job=~".*thanos-compact.*"}[24h]))) / 60 / 60 > 24
