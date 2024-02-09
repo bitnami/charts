@@ -7,8 +7,8 @@
 
 it('lists and retrieves jaeger traces', () => {
 
-  // The container we use to create traces, uses 'redis' as a service name
-  const testService = 'redis';
+  // The container we use to create traces, uses 'frontend' as a service name
+  const testService = 'frontend';
   const currentDate = new Date();
   const timestampMillis = currentDate.getTime() * 1000;
 

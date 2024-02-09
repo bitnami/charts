@@ -25,7 +25,7 @@ addr:
   {{ end }}
 command:
   run-git-example:
-    exec: bash -c ". /opt/bitnami/scripts/deepspeed/entrypoint.sh && cd /app/benchmarks/communication/ && deepspeed all_reduce.py --mem-factor 0.0001"
+    exec: bash -c ". /opt/bitnami/scripts/deepspeed/entrypoint.sh && cd /app/compression/cifar/ && deepspeed resnet.py"
     exit-status: 0
     timeout: 900000
   {{- $uid := .Vars.client.containerSecurityContext.runAsUser }}
