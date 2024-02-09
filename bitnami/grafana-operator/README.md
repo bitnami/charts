@@ -258,6 +258,14 @@ The Operator will extend the Kubernetes API with the following objects: _Grafana
 | `operator.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                          | `1`                                |
 | `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                                |
 | `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                                |
+| `operator.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                       | `true`                             |
+| `operator.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                | `true`                             |
+| `operator.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                           | `true`                             |
+| `operator.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                        | `[]`                               |
+| `operator.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                              | `[]`                               |
+| `operator.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`                               |
+| `operator.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                    | `{}`                               |
+| `operator.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                | `{}`                               |
 
 ### Grafana parameters
 
