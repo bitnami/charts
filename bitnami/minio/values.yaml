@@ -61,7 +61,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2024.1.29-debian-11-r0
+  tag: 2024.2.6-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -89,7 +89,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.1.28-debian-11-r0
+  tag: 2024.1.31-debian-11-r2
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -935,24 +935,60 @@ apiIngress:
   ##             name: http
   ##
   extraRules: []
-## NetworkPolicy parameters
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable the default NetworkPolicy policy
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port MinIO&reg; is
-  ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
+  enabled: true
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+  ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
-  extraFromClauses: []
-  ## Example
-  ## extraFromClauses:
-  ## - podSelector:
-  ##     matchLabels:
-  ##       a: b
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 
 ## @section Persistence parameters
 
@@ -1007,7 +1043,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r95
+    tag: 11-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

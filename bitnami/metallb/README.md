@@ -84,9 +84,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `rbac.create`                           | Specifies whether to install and use RBAC rules                                                                                             | `true`  |
 | `psp.create`                            | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
-| `networkPolicy.enabled`                 | Enable NetworkPolicy                                                                                                                        | `false` |
-| `networkPolicy.ingressNSMatchLabels`    | Allow connections from other namespaces                                                                                                     | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | For other namespaces match by pod labels and namespace labels                                                                               | `{}`    |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                                  | `true`  |
+| `networkPolicy.allowExternal`           | The Policy model to apply                                                                                                                   | `true`  |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                             | `true`  |
+| `networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                          | `[]`    |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`    |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
 | `prometheusRule.enabled`                | Prometheus Operator alertmanager alerts are created                                                                                         | `false` |
 
 ### Controller parameters
@@ -207,6 +212,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.updateStrategy.type`                               | Speaker daemonset strategy type                                                                                                             | `RollingUpdate`                   |
 | `speaker.rbac.create`                                       | create specifies whether to install and use RBAC rules.                                                                                     | `true`                            |
 | `speaker.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                          | `true`                            |
+| `speaker.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                                  | `true`                            |
+| `speaker.networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                                   | `true`                            |
+| `speaker.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                             | `true`                            |
+| `speaker.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                          | `[]`                              |
+| `speaker.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`                              |
+| `speaker.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                | `[]`                              |
+| `speaker.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                      | `{}`                              |
+| `speaker.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`                              |
 | `speaker.hostAliases`                                       | Deployment pod host aliases                                                                                                                 | `[]`                              |
 | `speaker.psp.create`                                        | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true`                            |
 | `speaker.priorityClassName`                                 | Speaker pods' priorityClassName                                                                                                             | `""`                              |

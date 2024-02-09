@@ -90,7 +90,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 11.2.2-debian-11-r3
+  tag: 11.2.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -192,6 +192,10 @@ primary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param primary.containerPorts.mysql Container port for mysql
+  ##
+  containerPorts:
+    mysql: 3306
   ## @param primary.configuration [string] MariaDB Primary configuration to be injected as ConfigMap
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -202,7 +206,7 @@ primary:
     basedir=/opt/bitnami/mariadb
     datadir=/bitnami/mariadb/data
     plugin_dir=/opt/bitnami/mariadb/plugin
-    port=3306
+    port={{ .Values.primary.containerPorts.mysql }}
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
     max_allowed_packet=16M
@@ -607,6 +611,10 @@ secondary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param secondary.containerPorts.mysql Container port for mysql
+  ##
+  containerPorts:
+    mysql: 3306
   ## @param secondary.configuration [string] MariaDB Secondary configuration to be injected as ConfigMap
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
@@ -616,7 +624,7 @@ secondary:
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mariadb
     datadir=/bitnami/mariadb/data
-    port=3306
+    port={{ .Values.secondary.containerPorts.mysql }}
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
     max_allowed_packet=16M
@@ -1038,7 +1046,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1074,7 +1082,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-11-r2
+    tag: 0.15.1-debian-11-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1135,6 +1143,10 @@ metrics:
   extraVolumeMounts:
     primary: []
     secondary: []
+  ## @param metrics.containerPorts.http Container port for http
+  ##
+  containerPorts:
+    http: 9104
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
@@ -1285,100 +1297,57 @@ metrics:
     rules: []
 
 ## @section NetworkPolicy parameters
-##
-
-## Add networkpolicies
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
-  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector [object] Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector [object] Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+  ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
   ##
-  metrics:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: monitoring
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: monitoring
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access the primary node. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the primary node. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules Custom network policy for the primary node.
-  ## @param networkPolicy.ingressRules.secondaryAccessOnlyFrom.enabled Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.
-  ## @param networkPolicy.ingressRules.secondaryAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to acces the secondary nodes. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the secondary nodes. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules Custom network policy for the secondary nodes.
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingressRules:
-    ## Allow access to the primary node only from the indicated:
-    ##
-    primaryAccessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-      ## custom ingress rules
-      ## e.g:
-      ## customRules:
-      ##   - from:
-      ##       - namespaceSelector:
-      ##           matchLabels:
-      ##             label: example
-      ##
-      customRules: []
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 
-    ## Allow access to the secondary node only from the indicated:
-    ##
-    secondaryAccessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-      ## custom ingress rules
-      ## e.g:
-      ## CustomRules:
-      ##   - from:
-      ##       - namespaceSelector:
-      ##           matchLabels:
-      ##             label: example
-      ##
-      customRules: []
-
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules Custom network policy rule
-  ##
-  egressRules:
-    # Deny connections to external. This is not compatible with an external database.
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}

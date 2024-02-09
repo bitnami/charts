@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: external-dns
-      image: docker.io/bitnami/external-dns:0.14.0-debian-11-r7
+      image: docker.io/bitnami/external-dns:0.14.0-debian-11-r9
 apiVersion: v2
 appVersion: 0.14.0
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: external-dns
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/external-dns
-version: 6.31.4
+version: 6.32.0
