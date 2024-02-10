@@ -530,7 +530,7 @@ metrics:
     ##           annotations:
     ##             message: "Kubernetes Event Exporter instance in namespace {{ `{{` }} $labels.namespace {{ `}}` }} has reported too many watch errors in 5 minutes."
     ##           expr: |
-    ##             sum(watch_errors{namespace="{{ include "common.names.namespace" . }}"})
+    ##             sum(watch_errors{namespace="{{ include "common.names.namespace" . }}"}) >= 1
     ##           for: 5m
     ##           labels:
     ##             severity: critical
