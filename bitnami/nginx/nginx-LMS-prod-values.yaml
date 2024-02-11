@@ -498,7 +498,7 @@ serverBlock: |-
    server {
      listen 0.0.0.0:8080;
      location / {
-       proxy_pass http://172.27.15.9/;
+       proxy_pass http://172.27.15.67/;
      }
    }
 
