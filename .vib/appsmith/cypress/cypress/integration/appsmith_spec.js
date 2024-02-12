@@ -8,19 +8,25 @@ import {
   random,
 } from '../support/utils';
 
-it('allows to create a new project', () => {
+it('allows to create a new app from template', () => {
   cy.login();
-  // Go to the templates page
-  cy.get('[class*="templates-tab"]').click();
-  cy.contains('[data-testid="template-card"]', 'Product Catalog CRUD').within(() => {
-    cy.get('[class*="fork-button"]').click();
-  })
-  // Create an application from the Product Catalog CRUD template
-  cy.contains('Fork template').click();
-  cy.contains('Deploy');
-  // Check if the application exists in the applications page
-  cy.visit('/applications');
-  cy.contains('Product Catalog');
+  cy.fixture('app').then((app) => {
+    // Create new app
+    cy.contains('Create New').click();
+    cy.contains('New app').click();
+    // Rename application
+    cy.get('.t--application-name').click();
+    cy.contains('Rename').click();
+    cy.get('.t--application-name').type(`${app.appName}-${random}{enter}`);
+    // Go to the templates page
+    cy.contains('Start from a template').click();
+    // Create an application from the Product Catalog CRUD template
+    cy.contains('[data-testid="template-card"]', 'Product Catalog CRUD').click()
+    cy.contains('Add selected page');
+    // Check if the application exists in the applications page
+    cy.visit('/applications');
+    cy.contains(`${app.appName}-${random}`);
+  });
 });
 
 it('allows to change workspace settings', () => {

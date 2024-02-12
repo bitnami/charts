@@ -202,24 +202,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                   | Value       |
-| ---------------------------------- | ----------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Cassandra service type                                                        | `ClusterIP` |
-| `service.ports.cql`                | Cassandra service CQL Port                                                    | `9042`      |
-| `service.ports.metrics`            | Cassandra service metrics port                                                | `8080`      |
-| `service.nodePorts.cql`            | Node port for CQL                                                             | `""`        |
-| `service.nodePorts.metrics`        | Node port for metrics                                                         | `""`        |
-| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `[]`        |
-| `service.loadBalancerIP`           | LoadBalancerIP if service type is `LoadBalancer`                              | `""`        |
-| `service.loadBalancerSourceRanges` | Service Load Balancer sources                                                 | `[]`        |
-| `service.clusterIP`                | Service Cluster IP                                                            | `""`        |
-| `service.externalTrafficPolicy`    | Service external traffic policy                                               | `Cluster`   |
-| `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`      |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`        |
-| `service.headless.annotations`     | Annotations for the headless service.                                         | `{}`        |
-| `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
-| `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
+| Name                                    | Description                                                                        | Value       |
+| --------------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
+| `service.type`                          | Cassandra service type                                                             | `ClusterIP` |
+| `service.ports.cql`                     | Cassandra service CQL Port                                                         | `9042`      |
+| `service.ports.metrics`                 | Cassandra service metrics port                                                     | `8080`      |
+| `service.nodePorts.cql`                 | Node port for CQL                                                                  | `""`        |
+| `service.nodePorts.metrics`             | Node port for metrics                                                              | `""`        |
+| `service.extraPorts`                    | Extra ports to expose in the service (normally used with the `sidecar` value)      | `[]`        |
+| `service.loadBalancerIP`                | LoadBalancerIP if service type is `LoadBalancer`                                   | `""`        |
+| `service.loadBalancerSourceRanges`      | Service Load Balancer sources                                                      | `[]`        |
+| `service.clusterIP`                     | Service Cluster IP                                                                 | `""`        |
+| `service.externalTrafficPolicy`         | Service external traffic policy                                                    | `Cluster`   |
+| `service.annotations`                   | Provide any additional annotations which may be required.                          | `{}`        |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                        | `{}`        |
+| `service.headless.annotations`          | Annotations for the headless service.                                              | `{}`        |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                | `true`      |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                         | `true`      |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                    | `true`      |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                       | `[]`        |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true) | `[]`        |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                             | `{}`        |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                         | `{}`        |
 
 ### Persistence parameters
 
