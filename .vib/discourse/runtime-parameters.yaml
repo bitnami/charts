@@ -5,7 +5,7 @@ auth:
 postgresql:
   auth:
     username: bn_discourse
-host: bitnami-discourse.my
+host: localhost
 service:
   type: LoadBalancer
   ports:
