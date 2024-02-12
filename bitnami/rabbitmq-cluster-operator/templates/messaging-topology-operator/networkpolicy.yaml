@@ -55,9 +55,12 @@ spec:
     {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   ingress:
-    {{- if .Values.msgTopologyOperator.metrics.enabled }}
     - ports:
+        {{/* Webhook port is hardcoded in the operator code */}}
+        - port: 9443
+        {{- if .Values.msgTopologyOperator.metrics.enabled }}
         - port: {{ .Values.msgTopologyOperator.metrics.containerPorts.metrics }}
+        {{- end }}
       {{- if not .Values.msgTopologyOperator.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -81,7 +84,6 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- end }}
     {{- if .Values.msgTopologyOperator.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

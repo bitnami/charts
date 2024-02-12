@@ -187,6 +187,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.externalTrafficPolicy`                     | server service external traffic policy                                                                              | `Cluster`                           |
 | `server.service.annotations`                               | Additional custom annotations for server service                                                                    | `{}`                                |
 | `server.service.extraPorts`                                | Extra port to expose on the server service                                                                          | `[]`                                |
+| `server.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                 | `true`                              |
+| `server.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                          | `true`                              |
+| `server.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                     | `true`                              |
+| `server.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                  | `[]`                                |
+| `server.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                        | `[]`                                |
+| `server.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                  | `[]`                                |
+| `server.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                              | `{}`                                |
+| `server.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                          | `{}`                                |
 
 ### Argo Workflows Controller configuration parameters
 
@@ -301,6 +309,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.externalTrafficPolicy`                     | controller service external traffic policy                                                                                    | `Cluster`                                  |
 | `controller.service.annotations`                               | Additional custom annotations for controller service                                                                          | `{}`                                       |
 | `controller.service.extraPorts`                                | Extra port to expose on the controller service                                                                                | `[]`                                       |
+| `controller.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                           | `true`                                     |
+| `controller.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                    | `true`                                     |
+| `controller.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                               | `true`                                     |
+| `controller.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                            | `[]`                                       |
+| `controller.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                  | `[]`                                       |
+| `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                            | `[]`                                       |
+| `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                        | `{}`                                       |
+| `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                    | `{}`                                       |
 
 ### Executor configuration section
 
