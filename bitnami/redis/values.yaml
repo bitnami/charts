@@ -1968,32 +1968,37 @@ volumePermissions:
 ## Kubectl InitContainer
 ## used by Sentinel to update the isMaster label on the Redis(TM) pods
 ##
-kubectlImage:
-  ## @param kubectlImage.command kubectl command to execute
+kubectl:
+  ## Bitnami Kubectl image version
+  ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
+  ## @param kubectl.image.registry [default: REGISTRY_NAME] Kubectl image registry
+  ## @param kubectl.image.repository [default: REPOSITORY_NAME/kubectl] Kubectl image repository
+  ## @skip kubectl.image.tag Kubectl image tag (immutable tags are recommended), by default, using the current version
+  ## @param kubectl.image.digest Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param kubectl.image.pullPolicy Kubectl image pull policy
+  ## @param kubectl.image.pullSecrets Kubectl pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/kubectl
+    tag: {{ .Capabilities.KubeVersion }}
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param kubectl.command kubectl command to execute
   ##
   command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
-  ## @param kubectlImage.registry [default: REGISTRY_NAME] kubectl image registry
-  ##
-  registry: docker.io
-  ## @param kubectlImage.repository [default: REPOSITORY_NAME/os-shell] kubectl image repository
-  ##
-  repository: bitnami/kubectl
-  ## @skip kubectlImage.tag kubectl image tag
-  ##
-  tag: "1.29"
-  ## @param kubectlImage.pullPolicy kubectl image pull policysysctl.enabled Enable init container to modify Kernel settings
-  ##
-  pullPolicy: Always
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## e.g:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  ## @param kubectlImage.pullSecrets kubectl image pull secrets
-  ##
-  pullSecrets: []
 
 ## init-sysctl container parameters
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)

@@ -588,8 +588,8 @@ spec:
         {{- if .Values.sentinel.service.createMaster }}
         - name: kubectl
           image: {{ template "redis.kubectl.image" . }}
-          imagePullPolicy: {{ .Values.kubectlImage.pullPolicy | quote }}
-          command: {{- toYaml .Values.kubectlImage.command | nindent 12 }}
+          imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
+          command: {{- toYaml .Values.kubectl.command | nindent 12 }}
           securityContext:
             runAsUser: 0
           volumeMounts:
