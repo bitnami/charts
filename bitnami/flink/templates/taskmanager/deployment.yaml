@@ -105,7 +105,9 @@ spec:
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
             - name: FLINK_CFG_TASKMANAGER_HOST
-              value: {{ include "flink.taskmanager.fullname" . | quote}}
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: FLINK_CFG_TASKMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: BITNAMI_DEBUG
