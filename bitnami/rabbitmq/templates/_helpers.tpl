@@ -139,38 +139,44 @@ Return the proper RabbitMQ plugin list
 
 {{/*
 Return the number of bytes given a value
-following a base 2 o base 10 number system.
+following a base 2 or base 10 number system.
+Input can be: b | B | k | K | m | M | g | G | Ki | Mi | Gi
+Or number without suffix
 Usage:
 {{ include "rabbitmq.toBytes" .Values.path.to.the.Value }}
 */}}
 {{- define "rabbitmq.toBytes" -}}
-{{- $value := int (regexReplaceAll "([0-9]+).*" . "${1}") }}
-{{- $unit := regexReplaceAll "[0-9]+(.*)" . "${1}" }}
-{{- if eq $unit "Ki" }}
-    {{- mul $value 1024 }}
-{{- else if eq $unit "Mi" }}
-    {{- mul $value 1024 1024 }}
-{{- else if eq $unit "Gi" }}
-    {{- mul $value 1024 1024 1024 }}
-{{- else if eq $unit "Ti" }}
-    {{- mul $value 1024 1024 1024 1024 }}
-{{- else if eq $unit "Pi" }}
-    {{- mul $value 1024 1024 1024 1024 1024 }}
-{{- else if eq $unit "Ei" }}
-    {{- mul $value 1024 1024 1024 1024 1024 1024 }}
-{{- else if eq $unit "K" }}
-    {{- mul $value 1000 }}
-{{- else if eq $unit "M" }}
-    {{- mul $value 1000 1000 }}
-{{- else if eq $unit "G" }}
-    {{- mul $value 1000 1000 1000 }}
-{{- else if eq $unit "T" }}
-    {{- mul $value 1000 1000 1000 1000 }}
-{{- else if eq $unit "P" }}
-    {{- mul $value 1000 1000 1000 1000 1000 }}
-{{- else if eq $unit "E" }}
-    {{- mul $value 1000 1000 1000 1000 1000 1000 }}
-{{- end }}
+    {{- $si := . -}}
+    {{- if not (typeIs "string" . ) -}}
+        {{- $si = int64 $si | toString -}}
+    {{- end -}}
+    {{- $bytes := 0 -}}
+    {{- if or (hasSuffix "B" $si) (hasSuffix "b" $si) -}}
+        {{- $bytes = $si | trimSuffix "B" | trimSuffix "b" | float64 | floor -}}
+    {{- else if or (hasSuffix "K" $si) (hasSuffix "k" $si) -}}
+        {{- $raw := $si | trimSuffix "K" | trimSuffix "k" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1000) | floor -}}
+    {{- else if or (hasSuffix "M" $si) (hasSuffix "m" $si) -}}
+        {{- $raw := $si | trimSuffix "M" | trimSuffix "m" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1000 1000) | floor -}}
+    {{- else if or (hasSuffix "G" $si) (hasSuffix "g" $si) -}}
+        {{- $raw := $si | trimSuffix "G" | trimSuffix "g" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1000 1000 1000) | floor -}}
+    {{- else if hasSuffix "Ki" $si -}}
+        {{- $raw := $si | trimSuffix "Ki" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1024) | floor -}}
+    {{- else if hasSuffix "Mi" $si -}}
+        {{- $raw := $si | trimSuffix "Mi" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1024 1024) | floor -}}
+    {{- else if hasSuffix "Gi" $si -}}
+        {{- $raw := $si | trimSuffix "Gi" | float64 -}}
+        {{- $bytes = mulf $raw (mul 1024 1024 1024) | floor -}}
+    {{- else if (mustRegexMatch "^[0-9]+$" $si) -}}
+        {{- $bytes = $si -}}
+    {{- else -}}
+        {{- printf "\n%s is invalid SI quantity\nSuffixes can be: b | B | k | K | m | M | g | G | Ki | Mi | Gi or without any Suffixes" $si | fail -}}
+    {{- end -}}
+    {{- $bytes | int64 -}}
 {{- end -}}
 
 {{/*
