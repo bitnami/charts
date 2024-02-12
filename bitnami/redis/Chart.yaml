@@ -5,6 +5,8 @@ annotations:
   category: Database
   licenses: Apache-2.0
   images: |
+    - name: kubectl
+      image: docker.io/bitnami/kubectl:1.29.1-debian-11-r8
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r96
     - name: redis-exporter
