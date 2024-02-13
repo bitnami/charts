@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: deepspeed
-      image: docker.io/bitnami/deepspeed:0.12.3-debian-11-r8
+      image: docker.io/bitnami/deepspeed:0.13.1-debian-11-r4
     - name: git
-      image: docker.io/bitnami/git:2.43.0-debian-11-r8
+      image: docker.io/bitnami/git:2.43.0-debian-11-r9
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r95
+      image: docker.io/bitnami/os-shell:11-debian-11-r96
 apiVersion: v2
-appVersion: 0.12.3
+appVersion: 0.13.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
