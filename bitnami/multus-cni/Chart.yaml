@@ -4,9 +4,7 @@
 annotations:
   category: Analytics
   licenses: Apache-2.0
-  images: |
-    - name: multus-cni
-      image: docker.io/bitnami/multus-cni:4.0.2-debian-11-r134
+  images: ''
 apiVersion: v2
 appVersion: 4.0.2
 dependencies:
@@ -29,4 +27,4 @@ maintainers:
 name: multus-cni
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
-version: 1.4.5
+version: 1.4.8
