@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:0.20.0-debian-11-r3
+      image: docker.io/bitnami/jmx-exporter:0.20.0-debian-11-r6
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r94
+      image: docker.io/bitnami/os-shell:11-debian-11-r96
     - name: sonarqube
-      image: docker.io/bitnami/sonarqube:10.3.0-debian-11-r5
+      image: docker.io/bitnami/sonarqube:10.4.0-debian-11-r0
 apiVersion: v2
-appVersion: 10.3.0
+appVersion: 10.4.0
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
@@ -37,4 +37,4 @@ maintainers:
 name: sonarqube
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
-version: 4.4.1
+version: 4.5.1
