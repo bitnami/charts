@@ -22,6 +22,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.defaultBackend.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -29,12 +33,13 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    {{- if .Values.networkPolicy.extraEgress }}
+    {{- if .Values.defaultBackend.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.containerPorts.http }}
+        - port: {{ .Values.defaultBackend.containerPort }}
       {{- if not .Values.defaultBackend.networkPolicy.allowExternal }}
       from:
         - podSelector:
