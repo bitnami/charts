@@ -255,6 +255,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.web.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 10 }}
         {{- end }}
 {{- end }}

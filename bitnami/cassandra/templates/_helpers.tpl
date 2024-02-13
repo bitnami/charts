@@ -50,7 +50,7 @@ Return the list of Cassandra seed nodes
 {{- define "cassandra.seeds" -}}
 {{- $seeds := list }}
 {{- $fullname := include "common.names.fullname" .  }}
-{{- $releaseNamespace := .Release.Namespace }}
+{{- $releaseNamespace := include "common.names.namespace" . }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $seedCount := .Values.cluster.seedCount | int }}
 {{- range $e, $i := until $seedCount }}
@@ -203,7 +203,7 @@ otherwise it generates a random value.
     {{- if .Values.dbUser.password }}
         {{- .Values.dbUser.password }}
     {{- else if (not .Values.dbUser.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "cassandra-password")  -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "cassandra-password")  -}}
     {{- else }}
         {{ required "A Cassandra Password is required!" .Values.dbUser.password }}
     {{- end }}
@@ -213,7 +213,7 @@ otherwise it generates a random value.
     {{- if .Values.tls.keystorePassword }}
         {{- .Values.tls.keystorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "keystore-password")  -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "keystore-password")  -}}
     {{- end }}
 {{- end -}}
 
@@ -221,7 +221,7 @@ otherwise it generates a random value.
     {{- if .Values.tls.truststorePassword }}
         {{- .Values.tls.truststorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "truststore-password")  -}}
+        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "truststore-password")  -}}
     {{- end }}
 {{- end -}}
 
