@@ -47,7 +47,7 @@ WARNING: Main deployment does not have the "resources" value set. Using "resourc
 {{- range $keys -}}
 {{- $section = index $section . -}}
 {{- end -}}
-{{- if not (index $section "resources") }}
+{{- if and (or (not (hasKey $section "enabled")) (index $section "enabled")) (not (index $section "resources")) }}
 
 WARNING: Section {{ . }} does not have the "resources" value set. Using "{{ . }}.resourcesPreset" is not recommended for production. For production workloads, please set the "{{ . }}.resources" value adapted to your workload needs. 
 +info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
