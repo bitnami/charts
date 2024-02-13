@@ -79,6 +79,8 @@ spec:
           securityContext:
             runAsUser: 0
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.backend.persistence.mountPath }}
@@ -175,6 +177,8 @@ spec:
             {{- end }}
           {{- if .Values.backend.resources }}
           resources: {{- toYaml .Values.backend.resources | nindent 12 }}
+          {{- else if ne .Values.backend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.backend.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
