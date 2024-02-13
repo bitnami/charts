@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/pytorch
-  tag: 2.1.2-debian-11-r1
+  tag: 2.2.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -534,7 +534,7 @@ networkPolicy:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.0-debian-11-r5
+  tag: 2.43.0-debian-11-r9
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -563,7 +563,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

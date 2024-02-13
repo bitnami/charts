@@ -104,7 +104,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 16.1.0-debian-11-r20
+    tag: 16.2.0-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1122,7 +1122,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.5.0-debian-11-r3
+    tag: 4.5.0-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1706,7 +1706,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-11-r7
+    tag: 0.15.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1960,7 +1960,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r95
+    tag: 11-debian-11-r96
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1976,6 +1976,7 @@ volumePermissions:
     pullSecrets: []
   ## K8s Security Context
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ## @param volumePermissions.podSecurityContext.enabled Whether to enable security context for the volume-permissions init container
   ## @param volumePermissions.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.podSecurityContext.runAsUser Init container volume-permissions User ID
   ## @param volumePermissions.podSecurityContext.runAsGroup Group ID for the init container volume-permissions container
@@ -1983,6 +1984,7 @@ volumePermissions:
   ## @param volumePermissions.podSecurityContext.seccompProfile.type Set Security Context seccompProfile for the init container volume-permissions container
   ##
   podSecurityContext:
+    enabled: true
     seLinuxOptions: null
     runAsUser: 0
     runAsGroup: 0
