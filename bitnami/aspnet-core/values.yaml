@@ -273,19 +273,28 @@ podSecurityContext:
   fsGroup: 0
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled ASP.NET Core containers' Security Context
+## @param containerSecurityContext.enabled Enable Container Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-## @param containerSecurityContext.runAsUser Set ASP.NET Core container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
-## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+## @param containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
+## @param containerSecurityContext.capabilities.add Set APISIX container's Security Context allowed kernel capabilities
+## @param containerSecurityContext.capabilities.drop Set APISIX container's Security Context dropped kernel capabilities
+## @param containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 0
   runAsNonRoot: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    add: ["NET_BIND_SERVICE"]
+    drop: ["ALL"]
   seccompProfile:
-    type: "RuntimeDefault"
+    type: RuntimeDefault
 ## Configure extra options for ASP.NET Core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
