@@ -8,7 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "argocd.application-controller" . }}
-  namespace: {{ default .Release.Namespace .Values.controller.metrics.serviceMonitor.namespace | quote }}
+  namespace: {{ default include "common.names.namespace" . .Values.controller.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.controller.metrics.serviceMonitor.selector }}
     {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
@@ -38,7 +38,7 @@ spec:
       {{- end }}
   namespaceSelector:
     matchNames:
-      - {{ .Release.Namespace }}
+      - {{ include "common.names.namespace" . }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics

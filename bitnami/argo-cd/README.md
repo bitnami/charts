@@ -149,6 +149,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`             |
 | `controller.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                 | `None`           |
 | `controller.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                          | `{}`             |
+| `controller.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                  | `true`           |
+| `controller.networkPolicy.allowExternal`                       | Don't require server label for connections                                                           | `true`           |
+| `controller.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                      | `true`           |
+| `controller.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)   | `[]`             |
+| `controller.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                         | `[]`             |
+| `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                   | `[]`             |
+| `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                               | `{}`             |
+| `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                           | `{}`             |
 | `controller.metrics.enabled`                                   | Enable Argo CD application controller metrics                                                        | `false`          |
 | `controller.metrics.service.type`                              | Argo CD application controller service type                                                          | `ClusterIP`      |
 | `controller.metrics.service.port`                              | Argo CD application controller metrics service port                                                  | `8082`           |
@@ -256,6 +264,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `applicationSet.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                  | `[]`             |
 | `applicationSet.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                            | `None`           |
 | `applicationSet.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                     | `{}`             |
+| `applicationSet.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                             | `true`           |
+| `applicationSet.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                      | `true`           |
+| `applicationSet.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                 | `true`           |
+| `applicationSet.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)              | `[]`             |
+| `applicationSet.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                    | `[]`             |
+| `applicationSet.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                              | `[]`             |
+| `applicationSet.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                          | `{}`             |
+| `applicationSet.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                      | `{}`             |
 | `applicationSet.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                            | `true`           |
 | `applicationSet.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                          | `""`             |
 | `applicationSet.serviceAccount.automountServiceAccountToken`       | Automount service account token for the applicationSet controller service account                               | `false`          |
@@ -361,6 +377,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.service.extraPorts`                                           | Extra ports to expose (normally used with the `sidecar` value)                                                     | `[]`             |
 | `notifications.service.sessionAffinity`                                      | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                               | `None`           |
 | `notifications.service.sessionAffinityConfig`                                | Additional settings for the sessionAffinity                                                                        | `{}`             |
+| `notifications.networkPolicy.enabled`                                        | Specifies whether a NetworkPolicy should be created                                                                | `true`           |
+| `notifications.networkPolicy.allowExternal`                                  | Don't require server label for connections                                                                         | `true`           |
+| `notifications.networkPolicy.allowExternalEgress`                            | Allow the pod to access any range of port and all destinations.                                                    | `true`           |
+| `notifications.networkPolicy.kubeAPIServerPorts`                             | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                 | `[]`             |
+| `notifications.networkPolicy.extraIngress`                                   | Add extra ingress rules to the NetworkPolice                                                                       | `[]`             |
+| `notifications.networkPolicy.extraEgress`                                    | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                 | `[]`             |
+| `notifications.networkPolicy.ingressNSMatchLabels`                           | Labels to match to allow traffic from other namespaces                                                             | `{}`             |
+| `notifications.networkPolicy.ingressNSPodMatchLabels`                        | Pod labels to match to allow traffic from other namespaces                                                         | `{}`             |
 | `notifications.serviceAccount.create`                                        | Specifies whether a ServiceAccount should be created                                                               | `true`           |
 | `notifications.serviceAccount.name`                                          | The name of the ServiceAccount to use.                                                                             | `""`             |
 | `notifications.serviceAccount.automountServiceAccountToken`                  | Automount service account token for the notifications controller service account                                   | `false`          |
@@ -444,6 +468,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notifications.bots.slack.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                     | `[]`             |
 | `notifications.bots.slack.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                               | `None`           |
 | `notifications.bots.slack.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                        | `{}`             |
+| `notifications.bots.slack.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                | `true`           |
+| `notifications.bots.slack.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                         | `true`           |
+| `notifications.bots.slack.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                    | `true`           |
+| `notifications.bots.slack.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                 | `[]`             |
+| `notifications.bots.slack.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                       | `[]`             |
+| `notifications.bots.slack.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                 | `[]`             |
+| `notifications.bots.slack.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                             | `{}`             |
+| `notifications.bots.slack.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                         | `{}`             |
 | `notifications.bots.slack.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                               | `true`           |
 | `notifications.bots.slack.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                             | `""`             |
 | `notifications.bots.slack.serviceAccount.automountServiceAccountToken`       | Automount service account token for the notifications controller service account                                   | `false`          |
@@ -620,6 +652,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                  | `[]`                     |
 | `server.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                            | `None`                   |
 | `server.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                     | `{}`                     |
+| `server.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                             | `true`                   |
+| `server.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                      | `true`                   |
+| `server.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                 | `true`                   |
+| `server.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                              | `[]`                     |
+| `server.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                    | `[]`                     |
+| `server.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                              | `[]`                     |
+| `server.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                          | `{}`                     |
+| `server.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                      | `{}`                     |
 | `server.command`                                           | Override default container command (useful when using custom images)                                                            | `[]`                     |
 | `server.args`                                              | Override default container args (useful when using custom images)                                                               | `[]`                     |
 | `server.extraArgs`                                         | concat to the default args                                                                                                      | `[]`                     |
@@ -707,6 +747,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `repoServer.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`             |
 | `repoServer.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                 | `None`           |
 | `repoServer.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                          | `{}`             |
+| `repoServer.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                  | `true`           |
+| `repoServer.networkPolicy.allowExternal`                       | Don't require server label for connections                                                           | `true`           |
+| `repoServer.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                      | `true`           |
+| `repoServer.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)   | `[]`             |
+| `repoServer.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                         | `[]`             |
+| `repoServer.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                   | `[]`             |
+| `repoServer.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                               | `{}`             |
+| `repoServer.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                           | `{}`             |
 | `repoServer.logFormat`                                         | Format for the Argo CD repo server logs. Options: [text, json]                                       | `text`           |
 | `repoServer.logLevel`                                          | Log level for the Argo CD repo server                                                                | `info`           |
 | `repoServer.containerPorts.repoServer`                         | Container port for Argo CD repo server                                                               | `8081`           |
@@ -832,6 +880,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                      | `[]`                  |
 | `dex.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                | `None`                |
 | `dex.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                         | `{}`                  |
+| `dex.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                 | `true`                |
+| `dex.networkPolicy.allowExternal`                       | Don't require server label for connections                                                          | `true`                |
+| `dex.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                     | `true`                |
+| `dex.networkPolicy.kubeAPIServerPorts`                  | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)  | `[]`                  |
+| `dex.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                        | `[]`                  |
+| `dex.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                  | `[]`                  |
+| `dex.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                              | `{}`                  |
+| `dex.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                          | `{}`                  |
 | `dex.containerPorts.http`                               | Dex container HTTP port                                                                             | `5556`                |
 | `dex.containerPorts.grpc`                               | Dex gRPC port                                                                                       | `5557`                |
 | `dex.containerPorts.metrics`                            | Dex metrics port                                                                                    | `5558`                |
