@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.msgTopologyOperator.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     - ports:
         # Allow dns resolution
@@ -54,6 +58,7 @@ spec:
     {{- if .Values.msgTopologyOperator.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         {{/* Webhook port is hardcoded in the operator code */}}
