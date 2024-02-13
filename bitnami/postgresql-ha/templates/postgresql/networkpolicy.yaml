@@ -23,6 +23,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.postgresql.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Allow dns resolution
     - ports:
@@ -41,6 +45,7 @@ spec:
     {{- if .Values.postgresql.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.postgresql.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.postgresql.containerPorts.postgresql }}

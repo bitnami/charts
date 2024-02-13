@@ -24,12 +24,19 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{/* As we cannot easily identify the ports of the metrics exporters (each exporter has its own port), we allow all egress traffic by default */}}
-  {{- if .Values.server.networkPolicy.extraEgress }}
-  egress: {{- include "common.tplvalues.render" ( dict "value" .Values.server.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
-  {{- else }}
+  {{- if .Values.server.networkPolicy.allowExternalEgress }}
   egress:
     - {}
+  {{- else }}
+  egress: 
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.server.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
   ingress:
     - ports:
