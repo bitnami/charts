@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "concourse.web.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
   {{- if .Values.commonAnnotations }}
@@ -212,8 +212,6 @@ spec:
             {{- end }}
             - name: CONCOURSE_EXTERNAL_URL
               value: {{ include "concourse.host" . | quote }}
-            - name: CONCOURSE_BIND_PORT
-              value: {{ .Values.web.containerPorts.http | quote }}
             {{- if .Values.web.peerAddress }}
             - name: CONCOURSE_PEER_ADDRESS
               value: {{ .Values.web.peerAddress | quote }}
@@ -350,9 +348,9 @@ spec:
             - name: https
               containerPort: {{ .Values.web.containerPorts.https }}
             {{- end }}
-            {{- if .Values.web.containerPorts.tsa }}
+            {{- if .Values.web.containerPorts.pprof }}
             - name: http-debug
-              containerPort: {{ .Values.web.containerPorts.tsa }}
+              containerPort: {{ .Values.web.containerPorts.pprof }}
             {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
