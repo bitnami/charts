@@ -79,7 +79,7 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.6.1-debian-11-r8
+  tag: 1.6.1-debian-11-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

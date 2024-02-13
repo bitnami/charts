@@ -22,7 +22,7 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.networkPolicy.allowExternalEgress }}
+  {{- if .Values.primary.networkPolicy.allowExternalEgress }}
   egress:
     - {}
   {{- else }}
@@ -35,7 +35,6 @@ spec:
           protocol: TCP
     # Allow outbound connections to read-replicas
     - ports:
-        - port: {{ include "postgresql.v1.readReplica.service.port" . }}
         - port: {{ .Values.containerPorts.postgresql }}
       to:
         - podSelector:

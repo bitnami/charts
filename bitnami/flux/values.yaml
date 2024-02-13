@@ -88,7 +88,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.2-debian-11-r0
+    tag: 1.2.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -598,7 +598,7 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.37.3-debian-11-r1
+    tag: 0.37.4-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1108,7 +1108,7 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.2.4-debian-11-r1
+    tag: 1.2.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1719,7 +1719,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.4-debian-11-r1
+    tag: 1.2.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2229,7 +2229,7 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.37.1-debian-11-r1
+    tag: 0.37.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2739,7 +2739,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.2-debian-11-r1
+    tag: 0.31.2-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

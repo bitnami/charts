@@ -281,6 +281,64 @@ controller:
     ##   clientIP:
     ##     timeoutSeconds: 300
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param controller.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param controller.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param controller.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param controller.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param controller.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param controller.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## Metrics configuration for Argo CD application controller
   ##
@@ -763,6 +821,64 @@ applicationSet:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param applicationSet.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param applicationSet.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param applicationSet.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param applicationSet.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param applicationSet.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param applicationSet.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param applicationSet.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## ServiceAccount configuration for the Argo CD applicationSet controller
   ##
   serviceAccount:
@@ -1167,6 +1283,64 @@ notifications:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param notifications.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param notifications.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param notifications.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param notifications.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param notifications.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param notifications.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param notifications.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## ServiceAccount configuration for the Argo CD notifications controller
   ##
   serviceAccount:
@@ -1481,6 +1655,65 @@ notifications:
         ##
         sessionAffinityConfig: {}
 
+      ## Network Policies
+      ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+      ##
+      networkPolicy:
+        ## @param notifications.bots.slack.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+        ##
+        enabled: true
+        ## @param notifications.bots.slack.networkPolicy.allowExternal Don't require server label for connections
+        ## The Policy model to apply. When set to false, only pods with the correct
+        ## server label will have network access to the ports server is listening
+        ## on. When true, server will accept connections from any source
+        ## (with the correct destination port).
+        ##
+        allowExternal: true
+        ## @param notifications.bots.slack.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+        ##
+        allowExternalEgress: true
+        ## @param notifications.bots.slack.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+        ##
+        kubeAPIServerPorts: [443, 6443, 8443]
+        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+        ## e.g:
+        ## extraIngress:
+        ##   - ports:
+        ##       - port: 1234
+        ##     from:
+        ##       - podSelector:
+        ##           - matchLabels:
+        ##               - role: frontend
+        ##       - podSelector:
+        ##           - matchExpressions:
+        ##               - key: role
+        ##                 operator: In
+        ##                 values:
+        ##                   - frontend
+        extraIngress: []
+        ## @param notifications.bots.slack.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+        ## e.g:
+        ## extraEgress:
+        ##   - ports:
+        ##       - port: 1234
+        ##     to:
+        ##       - podSelector:
+        ##           - matchLabels:
+        ##               - role: frontend
+        ##       - podSelector:
+        ##           - matchExpressions:
+        ##               - key: role
+        ##                 operator: In
+        ##                 values:
+        ##                   - frontend
+        ##
+        extraEgress: []
+        ## @param notifications.bots.slack.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+        ## @param notifications.bots.slack.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+        ##
+        ingressNSMatchLabels: {}
+        ingressNSPodMatchLabels: {}
+
       ## ServiceAccount configuration for the Argo CD Slack bot
       ##
       serviceAccount:
@@ -1672,7 +1905,6 @@ notifications:
       ## @param notifications.bots.slack.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD Slack bot nodes
       ##
       extraEnvVarsSecret: ""
-
 
 ## @section Argo CD server Parameters
 
@@ -2280,6 +2512,64 @@ server:
     ##   clientIP:
     ##     timeoutSeconds: 300
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param server.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param server.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param server.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param server.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param server.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -2595,6 +2885,64 @@ repoServer:
     ##   clientIP:
     ##     timeoutSeconds: 300
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param repoServer.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param repoServer.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param repoServer.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param repoServer.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param repoServer.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param repoServer.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param repoServer.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## Argo CD repo server log format: text|json
   ## @param repoServer.logFormat Format for the Argo CD repo server logs. Options: [text, json]
@@ -3080,6 +3428,64 @@ dex:
     ##   clientIP:
     ##     timeoutSeconds: 300
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dex.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param dex.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dex.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param dex.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param dex.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dex.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dex.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 
   ## Dex container ports
   ## @param dex.containerPorts.http Dex container HTTP port

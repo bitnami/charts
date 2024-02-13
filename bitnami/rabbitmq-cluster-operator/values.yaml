@@ -65,7 +65,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.12-debian-11-r7
+  tag: 3.12.12-debian-11-r10
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
