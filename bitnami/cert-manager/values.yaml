@@ -72,7 +72,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.13.3-debian-11-r5
+    tag: 1.14.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -103,7 +103,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.13.3-debian-11-r6
+      tag: 1.14.2-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -391,7 +391,7 @@ controller:
   networkPolicy:
     ## @param controller.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
     ##
-    enabled: false
+    enabled: true
     ## @param controller.networkPolicy.allowExternal Don't require client label for connections
     ## The Policy model to apply. When set to false, only pods with the correct
     ## client label will have network access to the ports Cert Manager Controller is listening
@@ -399,6 +399,12 @@ controller:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param controller.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
     ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -459,7 +465,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.13.3-debian-11-r6
+    tag: 1.14.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -733,7 +739,7 @@ webhook:
   networkPolicy:
     ## @param webhook.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
     ##
-    enabled: false
+    enabled: true
     ## @param webhook.networkPolicy.allowExternal Don't require client label for connections
     ## The Policy model to apply. When set to false, only pods with the correct
     ## client label will have network access to the ports Cert Manager Webhook is listening
@@ -741,6 +747,12 @@ webhook:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param webhook.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param webhook.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
     ## @param webhook.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -802,7 +814,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.13.3-debian-11-r6
+    tag: 1.14.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

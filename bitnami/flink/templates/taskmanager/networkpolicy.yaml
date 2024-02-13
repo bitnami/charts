@@ -1,0 +1,93 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.taskmanager.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "flink.taskmanager.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flink
+    app.kubernetes.io/component: taskmanager
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.taskmanager.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: flink
+      app.kubernetes.io/component: taskmanager
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.taskmanager.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other jobmanager pods
+    - ports:
+        - port: {{ .Values.jobmanager.containerPorts.blob }}
+        - port: {{ .Values.jobmanager.containerPorts.rpc }}
+        - port: {{ .Values.jobmanager.containerPorts.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: flink
+              app.kubernetes.io/component: jobmanager
+    # Allow outbound connections to other taskmanager pods
+    - ports:
+        - port: {{ .Values.taskmanager.containerPorts.data }}
+        - port: {{ .Values.taskmanager.containerPorts.rpc }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: flink
+              app.kubernetes.io/component: taskmanager
+    {{- if .Values.taskmanager.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.taskmanager.containerPorts.data }}
+        - port: {{ .Values.taskmanager.containerPorts.rpc }}
+      {{- if not .Values.taskmanager.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "flink.taskmanager.fullname" . }}-client: "true"
+        {{- if .Values.taskmanager.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.taskmanager.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.taskmanager.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.taskmanager.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
+              app.kubernetes.io/part-of: flink        
+      {{- end }}
+    {{- if .Values.taskmanager.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

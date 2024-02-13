@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "harbor.trivy" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.trivy.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -65,6 +65,9 @@ spec:
       {{- end }}
       {{- if .Values.trivy.schedulerName }}
       schedulerName: {{ .Values.trivy.schedulerName }}
+      {{- end }}
+      {{- if .Values.trivy.serviceAccountName }}
+      serviceAccountName: {{ .Values.trivy.serviceAccountName }}
       {{- end }}
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.trivy.podSecurityContext "enabled" | toYaml | nindent 8 }}
