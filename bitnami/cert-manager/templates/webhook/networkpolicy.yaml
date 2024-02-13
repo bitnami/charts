@@ -22,13 +22,21 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.webhook.networkPolicy.allowExternalEgress }}
   egress:
-    # Allow dns resolution
+    - {}
+  {{- else }}
+  egress:
     - ports:
+        # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.webhook.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.webhook.containerPort }}
@@ -39,6 +47,7 @@ spec:
     {{- if .Values.webhook.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.webhook.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.webhook.containerPort }}
