@@ -204,19 +204,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mastodon Web Traffic Exposure Parameters
 
-| Name                                   | Description                                                                             | Value       |
-| -------------------------------------- | --------------------------------------------------------------------------------------- | ----------- |
-| `web.service.type`                     | Mastodon web service type                                                               | `ClusterIP` |
-| `web.service.ports.http`               | Mastodon web service HTTP port                                                          | `80`        |
-| `web.service.nodePorts.http`           | Node port for HTTP                                                                      | `""`        |
-| `web.service.clusterIP`                | Mastodon web service Cluster IP                                                         | `""`        |
-| `web.service.loadBalancerIP`           | Mastodon web service Load Balancer IP                                                   | `""`        |
-| `web.service.loadBalancerSourceRanges` | Mastodon web service Load Balancer sources                                              | `[]`        |
-| `web.service.externalTrafficPolicy`    | Mastodon web service external traffic policy                                            | `Cluster`   |
-| `web.service.annotations`              | Additional custom annotations for Mastodon web service                                  | `{}`        |
-| `web.service.extraPorts`               | Extra ports to expose in Mastodon web service (normally used with the `sidecars` value) | `[]`        |
-| `web.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                           | `None`      |
-| `web.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
+| Name                                        | Description                                                                             | Value       |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- | ----------- |
+| `web.service.type`                          | Mastodon web service type                                                               | `ClusterIP` |
+| `web.service.ports.http`                    | Mastodon web service HTTP port                                                          | `80`        |
+| `web.service.nodePorts.http`                | Node port for HTTP                                                                      | `""`        |
+| `web.service.clusterIP`                     | Mastodon web service Cluster IP                                                         | `""`        |
+| `web.service.loadBalancerIP`                | Mastodon web service Load Balancer IP                                                   | `""`        |
+| `web.service.loadBalancerSourceRanges`      | Mastodon web service Load Balancer sources                                              | `[]`        |
+| `web.service.externalTrafficPolicy`         | Mastodon web service external traffic policy                                            | `Cluster`   |
+| `web.service.annotations`                   | Additional custom annotations for Mastodon web service                                  | `{}`        |
+| `web.service.extraPorts`                    | Extra ports to expose in Mastodon web service (normally used with the `sidecars` value) | `[]`        |
+| `web.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                           | `None`      |
+| `web.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                             | `{}`        |
+| `web.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                              | `true`      |
+| `web.networkPolicy.allowExternal`           | The Policy model to apply                                                               | `true`      |
+| `web.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                         | `true`      |
+| `web.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
+| `web.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
+| `web.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                  | `{}`        |
+| `web.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                              | `{}`        |
 
 ### Mastodon Sidekiq Parameters
 
@@ -287,6 +294,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)                           | `[]`             |
 | `sidekiq.sidecars`                                          | Add additional sidecar containers to the Mastodon sidekiq pod(s)                                                         | `[]`             |
 | `sidekiq.initContainers`                                    | Add additional init containers to the Mastodon sidekiq pod(s)                                                            | `[]`             |
+| `sidekiq.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                               | `true`           |
+| `sidekiq.networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                | `true`           |
+| `sidekiq.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                          | `true`           |
+| `sidekiq.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`             |
+| `sidekiq.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                             | `[]`             |
+| `sidekiq.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                   | `{}`             |
+| `sidekiq.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                               | `{}`             |
 
 ### Mastodon Streaming Parameters
 
@@ -361,40 +375,54 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mastodon Streaming Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                   | Value       |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
-| `streaming.service.type`                     | Mastodon streaming service type                                                               | `ClusterIP` |
-| `streaming.service.ports.http`               | Mastodon streaming service HTTP port                                                          | `80`        |
-| `streaming.service.nodePorts.http`           | Node port for HTTP                                                                            | `""`        |
-| `streaming.service.clusterIP`                | Mastodon streaming service Cluster IP                                                         | `""`        |
-| `streaming.service.loadBalancerIP`           | Mastodon streaming service Load Balancer IP                                                   | `""`        |
-| `streaming.service.loadBalancerSourceRanges` | Mastodon streaming service Load Balancer sources                                              | `[]`        |
-| `streaming.service.externalTrafficPolicy`    | Mastodon streaming service external traffic policy                                            | `Cluster`   |
-| `streaming.service.annotations`              | Additional custom annotations for Mastodon streaming service                                  | `{}`        |
-| `streaming.service.extraPorts`               | Extra ports to expose in Mastodon streaming service (normally used with the `sidecars` value) | `[]`        |
-| `streaming.service.sessionAffinity`          | Control where streaming requests go, to the same pod or round-robin                           | `None`      |
-| `streaming.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                   | `{}`        |
+| Name                                              | Description                                                                                   | Value       |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
+| `streaming.service.type`                          | Mastodon streaming service type                                                               | `ClusterIP` |
+| `streaming.service.ports.http`                    | Mastodon streaming service HTTP port                                                          | `80`        |
+| `streaming.service.nodePorts.http`                | Node port for HTTP                                                                            | `""`        |
+| `streaming.service.clusterIP`                     | Mastodon streaming service Cluster IP                                                         | `""`        |
+| `streaming.service.loadBalancerIP`                | Mastodon streaming service Load Balancer IP                                                   | `""`        |
+| `streaming.service.loadBalancerSourceRanges`      | Mastodon streaming service Load Balancer sources                                              | `[]`        |
+| `streaming.service.externalTrafficPolicy`         | Mastodon streaming service external traffic policy                                            | `Cluster`   |
+| `streaming.service.annotations`                   | Additional custom annotations for Mastodon streaming service                                  | `{}`        |
+| `streaming.service.extraPorts`                    | Extra ports to expose in Mastodon streaming service (normally used with the `sidecars` value) | `[]`        |
+| `streaming.service.sessionAffinity`               | Control where streaming requests go, to the same pod or round-robin                           | `None`      |
+| `streaming.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                   | `{}`        |
+| `streaming.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                    | `true`      |
+| `streaming.networkPolicy.allowExternal`           | The Policy model to apply                                                                     | `true`      |
+| `streaming.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                               | `true`      |
+| `streaming.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                  | `[]`        |
+| `streaming.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                  | `[]`        |
+| `streaming.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                        | `{}`        |
+| `streaming.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                    | `{}`        |
 
 ### Mastodon Media Management Cronjob Parameters
 
-| Name                                                | Description                                                                            | Value        |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------ |
-| `tootctlMediaManagement.enabled`                    | Enable Cronjob to manage all media caches                                              | `false`      |
-| `tootctlMediaManagement.removeAttachments`          | Enable removing attachements                                                           | `true`       |
-| `tootctlMediaManagement.removeAttachmentsDays`      | Number of days old media attachments must be for removal                               | `30`         |
-| `tootctlMediaManagement.removeCustomEmoji`          | Enable removal of cached remote emoji files                                            | `false`      |
-| `tootctlMediaManagement.removePreviewCards`         | Enable removal of cached preview cards                                                 | `false`      |
-| `tootctlMediaManagement.removePreviewCardsDays`     | Number of days old preview cards must be for removal                                   | `30`         |
-| `tootctlMediaManagement.removeAvatars`              | Enable removal of cached remote avatar images                                          | `false`      |
-| `tootctlMediaManagement.removeAvatarsDays`          | Number of days old avatar images must be for removal                                   | `30`         |
-| `tootctlMediaManagement.removeHeaders`              | Enable removal of cached profile header images                                         | `false`      |
-| `tootctlMediaManagement.removeHeadersDays`          | Number of days old header images must be for removal                                   | `30`         |
-| `tootctlMediaManagement.removeOrphans`              | Enable removal of cached orphan files                                                  | `false`      |
-| `tootctlMediaManagement.includeFollows`             | Enable removal of cached avatar and header when local users are following the accounts | `false`      |
-| `tootctlMediaManagement.cronSchedule`               | Cron job schedule to run tootctl media commands                                        | `14 3 * * *` |
-| `tootctlMediaManagement.failedJobsHistoryLimit`     | Number of failed jobs to keep                                                          | `3`          |
-| `tootctlMediaManagement.successfulJobsHistoryLimit` | Number of successful jobs to keep                                                      | `3`          |
-| `tootctlMediaManagement.concurrencyPolicy`          | Concurrency Policy.  Should be Allow, Forbid or Replace                                | `Allow`      |
+| Name                                                           | Description                                                                            | Value        |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------ |
+| `tootctlMediaManagement.enabled`                               | Enable Cronjob to manage all media caches                                              | `false`      |
+| `tootctlMediaManagement.removeAttachments`                     | Enable removing attachements                                                           | `true`       |
+| `tootctlMediaManagement.removeAttachmentsDays`                 | Number of days old media attachments must be for removal                               | `30`         |
+| `tootctlMediaManagement.removeCustomEmoji`                     | Enable removal of cached remote emoji files                                            | `false`      |
+| `tootctlMediaManagement.removePreviewCards`                    | Enable removal of cached preview cards                                                 | `false`      |
+| `tootctlMediaManagement.removePreviewCardsDays`                | Number of days old preview cards must be for removal                                   | `30`         |
+| `tootctlMediaManagement.removeAvatars`                         | Enable removal of cached remote avatar images                                          | `false`      |
+| `tootctlMediaManagement.removeAvatarsDays`                     | Number of days old avatar images must be for removal                                   | `30`         |
+| `tootctlMediaManagement.removeHeaders`                         | Enable removal of cached profile header images                                         | `false`      |
+| `tootctlMediaManagement.removeHeadersDays`                     | Number of days old header images must be for removal                                   | `30`         |
+| `tootctlMediaManagement.removeOrphans`                         | Enable removal of cached orphan files                                                  | `false`      |
+| `tootctlMediaManagement.includeFollows`                        | Enable removal of cached avatar and header when local users are following the accounts | `false`      |
+| `tootctlMediaManagement.cronSchedule`                          | Cron job schedule to run tootctl media commands                                        | `14 3 * * *` |
+| `tootctlMediaManagement.failedJobsHistoryLimit`                | Number of failed jobs to keep                                                          | `3`          |
+| `tootctlMediaManagement.successfulJobsHistoryLimit`            | Number of successful jobs to keep                                                      | `3`          |
+| `tootctlMediaManagement.concurrencyPolicy`                     | Concurrency Policy.  Should be Allow, Forbid or Replace                                | `Allow`      |
+| `tootctlMediaManagement.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                             | `true`       |
+| `tootctlMediaManagement.networkPolicy.allowExternal`           | The Policy model to apply                                                              | `true`       |
+| `tootctlMediaManagement.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                        | `true`       |
+| `tootctlMediaManagement.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                           | `[]`         |
+| `tootctlMediaManagement.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                           | `[]`         |
+| `tootctlMediaManagement.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                 | `{}`         |
+| `tootctlMediaManagement.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                             | `{}`         |
 
 ### Mastodon Migration job Parameters
 
@@ -431,6 +459,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.annotations`                                       | Add annotations to the job                                                                                                     | `{}`             |
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                          | `{}`             |
 | `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                     | `{}`             |
+| `initJob.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                     | `true`           |
+| `initJob.networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                      | `true`           |
+| `initJob.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                | `true`           |
+| `initJob.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                   | `[]`             |
+| `initJob.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                   | `[]`             |
+| `initJob.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                         | `{}`             |
+| `initJob.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                     | `{}`             |
 
 ### Persistence Parameters (only when S3 is disabled)
 

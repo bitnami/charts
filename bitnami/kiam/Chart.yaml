@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kiam
-      image: docker.io/bitnami/kiam:4.2.0-debian-11-r429
+      image: docker.io/bitnami/kiam:4.2.0-debian-11-r431
 apiVersion: v2
 appVersion: 4.2.0
 dependencies:
