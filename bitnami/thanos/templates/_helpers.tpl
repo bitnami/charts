@@ -39,7 +39,7 @@ Return the proper Thanos compactor fullname
 Return the proper Thanos query-frontend fullname
 */}}
 {{- define "thanos.query-frontend.fullname" -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) "queryfrontend" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
