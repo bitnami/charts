@@ -49,7 +49,7 @@ The list in the example assumes that the following values exist:
       {{- $section = index $section . -}}
     {{- end -}}
     {{- if not (index $section "resources") -}}
-      {{/* If the the section has enabled=false or replicaCount=0, do not include it */}}
+      {{/* If the section has enabled=false or replicaCount=0, do not include it */}}
       {{- if and (hasKey $section "enabled") -}}
         {{- if index $section "enabled" -}}
           {{/* enabled=true */}}
@@ -57,7 +57,7 @@ The list in the example assumes that the following values exist:
           {{- $printMessage = true -}}
         {{- end -}}
       {{- else if and (hasKey $section "replicaCount")  -}}
-        {{/* We need a cast to int because number 0 is not treated as an int by default */}}
+        {{/* We need a casting to int because number 0 is not treated as an int by default */}}
         {{- if (gt (index $section "replicaCount" | int) 0) -}}
           {{/* replicaCount > 0 */}}
           {{- $affectedSections = append $affectedSections (printf "%s.resources" .) -}}
