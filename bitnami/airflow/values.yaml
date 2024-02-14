@@ -469,6 +469,9 @@ web:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param web.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param web.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -783,6 +786,9 @@ scheduler:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param scheduler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param scheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1135,6 +1141,9 @@ worker:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param worker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1786,6 +1795,9 @@ metrics:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param metrics.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:

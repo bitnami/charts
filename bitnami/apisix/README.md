@@ -175,37 +175,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Data Plane Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                                                      | Value                     |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `dataPlane.service.type`                     | APISIX service type                                                                                                              | `LoadBalancer`            |
-| `dataPlane.service.ports.http`               | APISIX service HTTP port                                                                                                         | `80`                      |
-| `dataPlane.service.ports.https`              | APISIX service HTTPS port                                                                                                        | `443`                     |
-| `dataPlane.service.ports.metrics`            | APISIX service HTTPS port                                                                                                        | `8080`                    |
-| `dataPlane.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                      |
-| `dataPlane.service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                      |
-| `dataPlane.service.nodePorts.metrics`        | Node port for metrics                                                                                                            | `""`                      |
-| `dataPlane.service.clusterIP`                | APISIX service Cluster IP                                                                                                        | `""`                      |
-| `dataPlane.service.loadBalancerIP`           | APISIX service Load Balancer IP                                                                                                  | `""`                      |
-| `dataPlane.service.loadBalancerSourceRanges` | APISIX service Load Balancer sources                                                                                             | `[]`                      |
-| `dataPlane.service.externalTrafficPolicy`    | APISIX service external traffic policy                                                                                           | `Cluster`                 |
-| `dataPlane.service.annotations`              | Additional custom annotations for APISIX service                                                                                 | `{}`                      |
-| `dataPlane.service.extraPorts`               | Extra ports to expose in APISIX service (normally used with the `sidecars` value)                                                | `[]`                      |
-| `dataPlane.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                    |
-| `dataPlane.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                      |
-| `dataPlane.ingress.enabled`                  | Enable ingress record generation for Apisix                                                                                      | `false`                   |
-| `dataPlane.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific`  |
-| `dataPlane.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                      |
-| `dataPlane.ingress.hostname`                 | Default host for the ingress record                                                                                              | `apisix-data-plane.local` |
-| `dataPlane.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                      |
-| `dataPlane.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                       |
-| `dataPlane.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                      |
-| `dataPlane.ingress.tls`                      | Enable TLS configuration for the host defined at `dataPlane.ingress.hostname` parameter                                          | `false`                   |
-| `dataPlane.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                   |
-| `dataPlane.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                      |
-| `dataPlane.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                      |
-| `dataPlane.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                      |
-| `dataPlane.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                      |
-| `dataPlane.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                      |
+| Name                                              | Description                                                                                                                      | Value                     |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `dataPlane.service.type`                          | APISIX service type                                                                                                              | `LoadBalancer`            |
+| `dataPlane.service.ports.http`                    | APISIX service HTTP port                                                                                                         | `80`                      |
+| `dataPlane.service.ports.https`                   | APISIX service HTTPS port                                                                                                        | `443`                     |
+| `dataPlane.service.ports.metrics`                 | APISIX service HTTPS port                                                                                                        | `8080`                    |
+| `dataPlane.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                      |
+| `dataPlane.service.nodePorts.https`               | Node port for HTTPS                                                                                                              | `""`                      |
+| `dataPlane.service.nodePorts.metrics`             | Node port for metrics                                                                                                            | `""`                      |
+| `dataPlane.service.clusterIP`                     | APISIX service Cluster IP                                                                                                        | `""`                      |
+| `dataPlane.service.loadBalancerIP`                | APISIX service Load Balancer IP                                                                                                  | `""`                      |
+| `dataPlane.service.loadBalancerSourceRanges`      | APISIX service Load Balancer sources                                                                                             | `[]`                      |
+| `dataPlane.service.externalTrafficPolicy`         | APISIX service external traffic policy                                                                                           | `Cluster`                 |
+| `dataPlane.service.annotations`                   | Additional custom annotations for APISIX service                                                                                 | `{}`                      |
+| `dataPlane.service.extraPorts`                    | Extra ports to expose in APISIX service (normally used with the `sidecars` value)                                                | `[]`                      |
+| `dataPlane.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                                                    | `None`                    |
+| `dataPlane.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                      |
+| `dataPlane.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                    |
+| `dataPlane.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                    |
+| `dataPlane.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                    |
+| `dataPlane.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                      |
+| `dataPlane.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                      |
+| `dataPlane.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                      |
+| `dataPlane.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                      |
+| `dataPlane.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                      |
+| `dataPlane.ingress.enabled`                       | Enable ingress record generation for Apisix                                                                                      | `false`                   |
+| `dataPlane.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific`  |
+| `dataPlane.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                      |
+| `dataPlane.ingress.hostname`                      | Default host for the ingress record                                                                                              | `apisix-data-plane.local` |
+| `dataPlane.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                      |
+| `dataPlane.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                       |
+| `dataPlane.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                      |
+| `dataPlane.ingress.tls`                           | Enable TLS configuration for the host defined at `dataPlane.ingress.hostname` parameter                                          | `false`                   |
+| `dataPlane.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                   |
+| `dataPlane.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                      |
+| `dataPlane.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                      |
+| `dataPlane.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                      |
+| `dataPlane.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                      |
+| `dataPlane.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                      |
 
 ### APISIX Data Plane Autoscaling configuration
 
@@ -351,37 +359,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Control Plane Traffic Exposure Parameters
 
-| Name                                            | Description                                                                                                                      | Value                        |
-| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `controlPlane.service.type`                     | APISIX service type                                                                                                              | `ClusterIP`                  |
-| `controlPlane.service.ports.adminAPI`           | APISIX service Admin API port                                                                                                    | `9180`                       |
-| `controlPlane.service.ports.configServer`       | APISIX service Config Server port                                                                                                | `9280`                       |
-| `controlPlane.service.ports.metrics`            | APISIX service metrics port                                                                                                      | `8080`                       |
-| `controlPlane.service.nodePorts.adminAPI`       | Node port for Admin API                                                                                                          | `""`                         |
-| `controlPlane.service.nodePorts.configServer`   | Node port for Config Server                                                                                                      | `""`                         |
-| `controlPlane.service.nodePorts.metrics`        | Node port for Metrics                                                                                                            | `""`                         |
-| `controlPlane.service.clusterIP`                | APISIX service Cluster IP                                                                                                        | `""`                         |
-| `controlPlane.service.loadBalancerIP`           | APISIX service Load Balancer IP                                                                                                  | `""`                         |
-| `controlPlane.service.loadBalancerSourceRanges` | APISIX service Load Balancer sources                                                                                             | `[]`                         |
-| `controlPlane.service.externalTrafficPolicy`    | APISIX service external traffic policy                                                                                           | `Cluster`                    |
-| `controlPlane.service.annotations`              | Additional custom annotations for APISIX service                                                                                 | `{}`                         |
-| `controlPlane.service.extraPorts`               | Extra ports to expose in APISIX service (normally used with the `sidecars` value)                                                | `[]`                         |
-| `controlPlane.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                       |
-| `controlPlane.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                         |
-| `controlPlane.ingress.enabled`                  | Enable ingress record generation for Apisix                                                                                      | `false`                      |
-| `controlPlane.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific`     |
-| `controlPlane.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                         |
-| `controlPlane.ingress.hostname`                 | Default host for the ingress record                                                                                              | `apisix-control-plane.local` |
-| `controlPlane.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                         |
-| `controlPlane.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                          |
-| `controlPlane.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                         |
-| `controlPlane.ingress.tls`                      | Enable TLS configuration for the host defined at `controlPlane.ingress.hostname` parameter                                       | `false`                      |
-| `controlPlane.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                      |
-| `controlPlane.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                         |
-| `controlPlane.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                         |
-| `controlPlane.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                         |
-| `controlPlane.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                         |
-| `controlPlane.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
+| Name                                                 | Description                                                                                                                      | Value                        |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `controlPlane.service.type`                          | APISIX service type                                                                                                              | `ClusterIP`                  |
+| `controlPlane.service.ports.adminAPI`                | APISIX service Admin API port                                                                                                    | `9180`                       |
+| `controlPlane.service.ports.configServer`            | APISIX service Config Server port                                                                                                | `9280`                       |
+| `controlPlane.service.ports.metrics`                 | APISIX service metrics port                                                                                                      | `8080`                       |
+| `controlPlane.service.nodePorts.adminAPI`            | Node port for Admin API                                                                                                          | `""`                         |
+| `controlPlane.service.nodePorts.configServer`        | Node port for Config Server                                                                                                      | `""`                         |
+| `controlPlane.service.nodePorts.metrics`             | Node port for Metrics                                                                                                            | `""`                         |
+| `controlPlane.service.clusterIP`                     | APISIX service Cluster IP                                                                                                        | `""`                         |
+| `controlPlane.service.loadBalancerIP`                | APISIX service Load Balancer IP                                                                                                  | `""`                         |
+| `controlPlane.service.loadBalancerSourceRanges`      | APISIX service Load Balancer sources                                                                                             | `[]`                         |
+| `controlPlane.service.externalTrafficPolicy`         | APISIX service external traffic policy                                                                                           | `Cluster`                    |
+| `controlPlane.service.annotations`                   | Additional custom annotations for APISIX service                                                                                 | `{}`                         |
+| `controlPlane.service.extraPorts`                    | Extra ports to expose in APISIX service (normally used with the `sidecars` value)                                                | `[]`                         |
+| `controlPlane.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                                                    | `None`                       |
+| `controlPlane.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                         |
+| `controlPlane.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                       |
+| `controlPlane.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                       |
+| `controlPlane.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                       |
+| `controlPlane.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                         |
+| `controlPlane.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                         |
+| `controlPlane.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                         |
+| `controlPlane.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                         |
+| `controlPlane.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                         |
+| `controlPlane.ingress.enabled`                       | Enable ingress record generation for Apisix                                                                                      | `false`                      |
+| `controlPlane.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific`     |
+| `controlPlane.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                         |
+| `controlPlane.ingress.hostname`                      | Default host for the ingress record                                                                                              | `apisix-control-plane.local` |
+| `controlPlane.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                         |
+| `controlPlane.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                          |
+| `controlPlane.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                         |
+| `controlPlane.ingress.tls`                           | Enable TLS configuration for the host defined at `controlPlane.ingress.hostname` parameter                                       | `false`                      |
+| `controlPlane.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                      |
+| `controlPlane.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                         |
+| `controlPlane.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                         |
+| `controlPlane.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                         |
+| `controlPlane.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                         |
+| `controlPlane.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
 ### APISIX Control Plane Autoscaling configuration
 
@@ -529,35 +545,42 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Dashboard Traffic Exposure Parameters
 
-| Name                                         | Description                                                                                                                      | Value                    |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `dashboard.service.type`                     | APISIX Dashboard service type                                                                                                    | `LoadBalancer`           |
-| `dashboard.service.ports.http`               | APISIX Dashboard service HTTP                                                                                                    | `80`                     |
-| `dashboard.service.ports.https`              | APISIX Dashboard service HTTPS                                                                                                   | `443`                    |
-| `dashboard.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `dashboard.service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
-| `dashboard.service.clusterIP`                | APISIX Dashboard service Cluster IP                                                                                              | `""`                     |
-| `dashboard.service.loadBalancerIP`           | APISIX Dashboard service Load Balancer IP                                                                                        | `""`                     |
-| `dashboard.service.loadBalancerSourceRanges` | APISIX Dashboard service Load Balancer sources                                                                                   | `[]`                     |
-| `dashboard.service.externalTrafficPolicy`    | APISIX Dashboard service external traffic policy                                                                                 | `Cluster`                |
-| `dashboard.service.annotations`              | Additional custom annotations for APISIX Dashboard service                                                                       | `{}`                     |
-| `dashboard.service.extraPorts`               | Extra ports to expose in APISIX Dashboard service (normally used with the `sidecars` value)                                      | `[]`                     |
-| `dashboard.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
-| `dashboard.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `dashboard.ingress.enabled`                  | Enable ingress record generation for Apisix                                                                                      | `false`                  |
-| `dashboard.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `dashboard.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `dashboard.ingress.hostname`                 | Default host for the ingress record                                                                                              | `apisix-dashboard.local` |
-| `dashboard.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `dashboard.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `dashboard.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `dashboard.ingress.tls`                      | Enable TLS configuration for the host defined at `dashboard.ingress.hostname` parameter                                          | `false`                  |
-| `dashboard.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `dashboard.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `dashboard.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `dashboard.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `dashboard.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `dashboard.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                              | Description                                                                                                                      | Value                    |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `dashboard.service.type`                          | APISIX Dashboard service type                                                                                                    | `LoadBalancer`           |
+| `dashboard.service.ports.http`                    | APISIX Dashboard service HTTP                                                                                                    | `80`                     |
+| `dashboard.service.ports.https`                   | APISIX Dashboard service HTTPS                                                                                                   | `443`                    |
+| `dashboard.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `dashboard.service.nodePorts.https`               | Node port for HTTPS                                                                                                              | `""`                     |
+| `dashboard.service.clusterIP`                     | APISIX Dashboard service Cluster IP                                                                                              | `""`                     |
+| `dashboard.service.loadBalancerIP`                | APISIX Dashboard service Load Balancer IP                                                                                        | `""`                     |
+| `dashboard.service.loadBalancerSourceRanges`      | APISIX Dashboard service Load Balancer sources                                                                                   | `[]`                     |
+| `dashboard.service.externalTrafficPolicy`         | APISIX Dashboard service external traffic policy                                                                                 | `Cluster`                |
+| `dashboard.service.annotations`                   | Additional custom annotations for APISIX Dashboard service                                                                       | `{}`                     |
+| `dashboard.service.extraPorts`                    | Extra ports to expose in APISIX Dashboard service (normally used with the `sidecars` value)                                      | `[]`                     |
+| `dashboard.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
+| `dashboard.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `dashboard.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `dashboard.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `dashboard.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `dashboard.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `dashboard.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                     |
+| `dashboard.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `dashboard.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `dashboard.ingress.enabled`                       | Enable ingress record generation for Apisix                                                                                      | `false`                  |
+| `dashboard.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `dashboard.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `dashboard.ingress.hostname`                      | Default host for the ingress record                                                                                              | `apisix-dashboard.local` |
+| `dashboard.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `dashboard.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `dashboard.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `dashboard.ingress.tls`                           | Enable TLS configuration for the host defined at `dashboard.ingress.hostname` parameter                                          | `false`                  |
+| `dashboard.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `dashboard.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `dashboard.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `dashboard.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `dashboard.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `dashboard.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### APISIX Dashboard Autoscaling configuration
 
@@ -681,35 +704,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Ingress Controller Traffic Exposure Parameters
 
-| Name                                                 | Description                                                                                                                      | Value                             |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `ingressController.service.type`                     | APISIX Ingress Controller service type                                                                                           | `ClusterIP`                       |
-| `ingressController.service.ports.http`               | APISIX Ingress Controller service HTTP port                                                                                      | `80`                              |
-| `ingressController.service.ports.https`              | APISIX Ingress Controller service HTTPS port                                                                                     | `443`                             |
-| `ingressController.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                              |
-| `ingressController.service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                              |
-| `ingressController.service.clusterIP`                | APISIX Ingress Controller service Cluster IP                                                                                     | `""`                              |
-| `ingressController.service.loadBalancerIP`           | APISIX Ingress Controller service Load Balancer IP                                                                               | `""`                              |
-| `ingressController.service.loadBalancerSourceRanges` | APISIX Ingress Controller service Load Balancer sources                                                                          | `[]`                              |
-| `ingressController.service.externalTrafficPolicy`    | APISIX Ingress Controller service external traffic policy                                                                        | `Cluster`                         |
-| `ingressController.service.annotations`              | Additional custom annotations for APISIX Ingress Controller service                                                              | `{}`                              |
-| `ingressController.service.extraPorts`               | Extra ports to expose in APISIX Ingress Controller service (normally used with the `sidecars` value)                             | `[]`                              |
-| `ingressController.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                            |
-| `ingressController.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                              |
-| `ingressController.ingress.enabled`                  | Enable ingress record generation for Apisix                                                                                      | `false`                           |
-| `ingressController.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific`          |
-| `ingressController.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                              |
-| `ingressController.ingress.hostname`                 | Default host for the ingress record                                                                                              | `apisix-ingress-controller.local` |
-| `ingressController.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                              |
-| `ingressController.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                               |
-| `ingressController.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                              |
-| `ingressController.ingress.tls`                      | Enable TLS configuration for the host defined at `ingressController.ingress.hostname` parameter                                  | `false`                           |
-| `ingressController.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                           |
-| `ingressController.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                              |
-| `ingressController.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                              |
-| `ingressController.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                              |
-| `ingressController.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                              |
-| `ingressController.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                              |
+| Name                                                      | Description                                                                                                                      | Value                             |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `ingressController.service.type`                          | APISIX Ingress Controller service type                                                                                           | `ClusterIP`                       |
+| `ingressController.service.ports.http`                    | APISIX Ingress Controller service HTTP port                                                                                      | `80`                              |
+| `ingressController.service.ports.https`                   | APISIX Ingress Controller service HTTPS port                                                                                     | `443`                             |
+| `ingressController.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                              |
+| `ingressController.service.nodePorts.https`               | Node port for HTTPS                                                                                                              | `""`                              |
+| `ingressController.service.clusterIP`                     | APISIX Ingress Controller service Cluster IP                                                                                     | `""`                              |
+| `ingressController.service.loadBalancerIP`                | APISIX Ingress Controller service Load Balancer IP                                                                               | `""`                              |
+| `ingressController.service.loadBalancerSourceRanges`      | APISIX Ingress Controller service Load Balancer sources                                                                          | `[]`                              |
+| `ingressController.service.externalTrafficPolicy`         | APISIX Ingress Controller service external traffic policy                                                                        | `Cluster`                         |
+| `ingressController.service.annotations`                   | Additional custom annotations for APISIX Ingress Controller service                                                              | `{}`                              |
+| `ingressController.service.extraPorts`                    | Extra ports to expose in APISIX Ingress Controller service (normally used with the `sidecars` value)                             | `[]`                              |
+| `ingressController.service.sessionAffinity`               | Control where web requests go, to the same pod or round-robin                                                                    | `None`                            |
+| `ingressController.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                              |
+| `ingressController.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                            |
+| `ingressController.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                            |
+| `ingressController.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                            |
+| `ingressController.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                              |
+| `ingressController.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                              |
+| `ingressController.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                              |
+| `ingressController.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                              |
+| `ingressController.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                              |
+| `ingressController.ingress.enabled`                       | Enable ingress record generation for Apisix                                                                                      | `false`                           |
+| `ingressController.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific`          |
+| `ingressController.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                              |
+| `ingressController.ingress.hostname`                      | Default host for the ingress record                                                                                              | `apisix-ingress-controller.local` |
+| `ingressController.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                              |
+| `ingressController.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                               |
+| `ingressController.ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                              |
+| `ingressController.ingress.tls`                           | Enable TLS configuration for the host defined at `ingressController.ingress.hostname` parameter                                  | `false`                           |
+| `ingressController.ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                           |
+| `ingressController.ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                              |
+| `ingressController.ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                              |
+| `ingressController.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                              |
+| `ingressController.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                              |
+| `ingressController.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                              |
 
 ### APISIX Ingress Controller Autoscaling configuration
 

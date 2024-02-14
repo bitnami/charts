@@ -388,6 +388,9 @@ clusterOperator:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param clusterOperator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param clusterOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -988,6 +991,9 @@ msgTopologyOperator:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param msgTopologyOperator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param msgTopologyOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:

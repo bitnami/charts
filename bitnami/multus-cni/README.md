@@ -108,6 +108,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                               | Add additional init containers to the pod (evaluated as a template)                                                   | `[]`                         |
 | `sidecars`                                     | Attach additional containers to the pod (evaluated as a template)                                                     | `[]`                         |
 | `tolerations`                                  | Tolerations for pod assignment                                                                                        | `[]`                         |
+| `networkPolicy.enabled`                        | Specifies whether a NetworkPolicy should be created                                                                   | `true`                       |
+| `networkPolicy.kubeAPIServerPorts`             | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                    | `[]`                         |
+| `networkPolicy.allowExternal`                  | Don't require server label for connections                                                                            | `true`                       |
+| `networkPolicy.allowExternalEgress`            | Allow the pod to access any range of port and all destinations.                                                       | `true`                       |
+| `networkPolicy.extraIngress`                   | Add extra ingress rules to the NetworkPolice                                                                          | `[]`                         |
+| `networkPolicy.extraEgress`                    | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`                         |
+| `networkPolicy.ingressNSMatchLabels`           | Labels to match to allow traffic from other namespaces                                                                | `{}`                         |
+| `networkPolicy.ingressNSPodMatchLabels`        | Pod labels to match to allow traffic from other namespaces                                                            | `{}`                         |
 | `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`                         |
 | `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                       |
 | `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                         |

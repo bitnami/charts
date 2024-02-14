@@ -64,7 +64,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 8.0.1-debian-11-r3
+  tag: 8.0.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -273,10 +273,14 @@ podSecurityContext:
   fsGroup: 0
 ## Configure Container Security Context (only main container)
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled ASP.NET Core containers' Security Context
+## @param containerSecurityContext.enabled Enable Container Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-## @param containerSecurityContext.runAsUser Set ASP.NET Core container's Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+## @param containerSecurityContext.capabilities.add Set container's Security Context allowed kernel capabilities
+## @param containerSecurityContext.capabilities.drop Set container's Security Context dropped kernel capabilities
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
@@ -284,8 +288,13 @@ containerSecurityContext:
   seLinuxOptions: null
   runAsUser: 0
   runAsNonRoot: false
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    add: ["NET_BIND_SERVICE"]
+    drop: ["ALL"]
   seccompProfile:
-    type: "RuntimeDefault"
+    type: RuntimeDefault
 ## Configure extra options for ASP.NET Core containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -388,7 +397,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/git
-      tag: 2.43.0-debian-11-r9
+      tag: 2.43.1-debian-11-r9
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -430,7 +439,7 @@ appFromExternalRepo:
     image:
       registry: docker.io
       repository: bitnami/dotnet-sdk
-      tag: 8.0.101-debian-11-r3
+      tag: 8.0.200-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
