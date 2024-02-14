@@ -275,13 +275,13 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Container Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-## @param containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
-## @param containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context readOnlyRootFilesystem
-## @param containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
-## @param containerSecurityContext.capabilities.add Set APISIX container's Security Context allowed kernel capabilities
-## @param containerSecurityContext.capabilities.drop Set APISIX container's Security Context dropped kernel capabilities
-## @param containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
+## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
+## @param containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+## @param containerSecurityContext.capabilities.add Set container's Security Context allowed kernel capabilities
+## @param containerSecurityContext.capabilities.drop Set container's Security Context dropped kernel capabilities
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
