@@ -118,6 +118,8 @@ spec:
                 {{- end }}
               {{- if .Values.disasterRecovery.cronjob.resources }}
               resources: {{- toYaml .Values.disasterRecovery.cronjob.resources | nindent 16 }}
+              {{- else if ne .Values.disasterRecovery.cronjob.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.disasterRecovery.cronjob.resourcesPreset) | nindent 16 }}
               {{- end }}
               volumeMounts:
                 - name: snapshot-volume
