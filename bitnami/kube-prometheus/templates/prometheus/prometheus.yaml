@@ -103,6 +103,8 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
+  {{- else if ne .Values.prometheus.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.prometheus.resourcesPreset) | nindent 4 }}
   {{- end }}
   retention: {{ .Values.prometheus.retention }}
   {{- if .Values.prometheus.retentionSize }}
@@ -280,6 +282,8 @@ spec:
       {{- end }}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
+      {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}
+      resources: {{- include "common.resources.preset" (dict "type" .Values.prometheus.thanos.resourcesPreset) | nindent 8 }}
       {{- end }}
       ports:
         - name: grpc
