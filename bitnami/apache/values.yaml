@@ -153,8 +153,6 @@ extraPodSpec: {}
 ## @param cloneHtdocsFromGit.interval Interval for sidecar container pull from the repository
 ## @param cloneHtdocsFromGit.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cloneHtdocsFromGit.resources is set (cloneHtdocsFromGit.resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-##
-resourcesPreset: "none"
 ## @param cloneHtdocsFromGit.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -172,6 +170,7 @@ cloneHtdocsFromGit:
   branch: ""
   enableAutoRefresh: true
   interval: 60
+  resourcesPreset: "none"
   resources: {}
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:
