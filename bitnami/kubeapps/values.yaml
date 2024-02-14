@@ -253,17 +253,18 @@ frontend:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param frontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
+  ## @param frontend.resources.limits.memory The memory limits for the NGINX container
+  ## @param frontend.resources.requests.cpu The requested CPU for the NGINX container
+  ## @param frontend.resources.requests.memory The requested memory for the NGINX container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   ## @param frontend.extraEnvVars Array with extra environment variables to add to the NGINX container
   ## e.g:
   ## extraEnvVars:
@@ -646,17 +647,18 @@ dashboard:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param dashboard.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
+  ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
+  ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
+  ## @param dashboard.resources.requests.memory The requested memory for the Dashboard container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
@@ -1018,17 +1020,18 @@ apprepository:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param apprepository.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
+  ## @param apprepository.resources.limits.memory The memory limits for the AppRepository Controller container
+  ## @param apprepository.resources.requests.cpu The requested CPU for the AppRepository Controller container
+  ## @param apprepository.resources.requests.memory The requested memory for the AppRepository Controller container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apprepository.podSecurityContext.enabled Enabled AppRepository Controller pods' Security Context
@@ -1337,17 +1340,18 @@ authProxy:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param authProxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
+  ## @param authProxy.resources.limits.memory The memory limits for the OAuth2 Proxy container
+  ## @param authProxy.resources.requests.cpu The requested CPU for the OAuth2 Proxy container
+  ## @param authProxy.resources.requests.memory The requested memory for the OAuth2 Proxy container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
 ## @section Pinniped Proxy parameters
 
 ## Pinniped Proxy configuration for converting user OIDC tokens to k8s client authorization certs
@@ -1465,17 +1469,20 @@ pinnipedProxy:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param pinnipedProxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## Pinniped Proxy containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
+  ## @param pinnipedProxy.resources.limits.memory The memory limits for the Pinniped Proxy container
+  ## @param pinnipedProxy.resources.requests.cpu The requested CPU for the Pinniped Proxy container
+  ## @param pinnipedProxy.resources.requests.memory The requested memory for the Pinniped Proxy container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 128Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   ## Pinniped Proxy service parameters
   ##
   service:
@@ -1587,17 +1594,15 @@ postgresql:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param postgresql.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
+  ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
+  ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
   ##
-  resources: {}
+  resources:
+    limits: {}
+    requests:
+      memory: 256Mi
+      cpu: 250m
 ## @section kubeappsapis parameters
 kubeappsapis:
   ## @param kubeappsapis.enabledPlugins Manually override which plugins are enabled for the Kubeapps-APIs service
@@ -1745,17 +1750,18 @@ kubeappsapis:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param kubeappsapis.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
+  ## @param kubeappsapis.resources.limits.memory The memory limits for the KubeappsAPIs container
+  ## @param kubeappsapis.resources.requests.cpu The requested CPU for the KubeappsAPIs container
+  ## @param kubeappsapis.resources.requests.memory The requested memory for the KubeappsAPIs container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kubeappsapis.podSecurityContext.enabled Enabled KubeappsAPIs pods' Security Context
@@ -2034,17 +2040,18 @@ ociCatalog:
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
-  ## @param ociCatalog.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## resources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
+  ## @param ociCatalog.resources.limits.cpu The CPU limits for the OCI Catalog container
+  ## @param ociCatalog.resources.limits.memory The memory limits for the OCI Catalog container
+  ## @param ociCatalog.resources.requests.cpu The requested CPU for the OCI Catalog container
+  ## @param ociCatalog.resources.requests.memory The requested memory for the OCI Catalog container
   ##
-  resources: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ociCatalog.containerSecurityContext.enabled Enabled containers' Security Context
