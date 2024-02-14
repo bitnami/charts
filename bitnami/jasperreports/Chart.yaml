@@ -34,4 +34,4 @@ maintainers: []
 name: jasperreports
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jasperreports
-version: 18.2.5
+version: 18.3.0
