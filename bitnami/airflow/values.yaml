@@ -236,7 +236,7 @@ web:
     http: 8080
   ## @param web.replicaCount Number of Airflow web replicas
   ##
-  replicaCount: 1
+  replicaCount: 0
   ## Configure extra options for Airflow web containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param web.livenessProbe.enabled Enable livenessProbe on Airflow web containers
@@ -295,9 +295,7 @@ web:
   ## @param web.resources.limits The resources limits for the Airflow web containers
   ## @param web.resources.requests The requested resources for the Airflow web containers
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resources: {}
   ## Configure Airflow web pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.podSecurityContext.enabled Enabled Airflow web pods' Security Context
@@ -603,9 +601,7 @@ scheduler:
   ## @param scheduler.resources.limits The resources limits for the Airflow scheduler containers
   ## @param scheduler.resources.requests The requested resources for the Airflow scheduler containers
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resources: {}
   ## Configure Airflow scheduler pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param scheduler.podSecurityContext.enabled Enabled Airflow scheduler pods' Security Context
@@ -929,9 +925,7 @@ worker:
   ## @param worker.resources.limits The resources limits for the Airflow worker containers
   ## @param worker.resources.requests The requested resources for the Airflow worker containers
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resources: {}
   ## Configure Airflow worker pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled Airflow worker pods' Security Context
@@ -1567,9 +1561,7 @@ metrics:
   ## @param metrics.resources.limits The resources limits for the container
   ## @param metrics.resources.requests The requested resources for the container
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resources: {}
   ## Airflow exporter pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.podSecurityContext.enabled Enable security context for the pods
