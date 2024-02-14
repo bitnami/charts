@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name).
@@ -42,7 +41,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Dataflow Server parameters
 
 ## Spring Cloud Dataflow Server parameters.
@@ -292,20 +290,21 @@ server:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param server.resources.limits The resources limits for the Dataflow server container
-  ## @param server.resources.requests The requested resources for the Dataflow server container
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Dataflow Server pods' startup probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param server.startupProbe.enabled Enable startupProbe
@@ -653,7 +652,6 @@ server:
   ## @param server.applicationProperties Specify common application properties added by SCDF server to streams and/or tasks
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#spring-cloud-dataflow-global-properties
   applicationProperties: {}
-
 ## @section Dataflow Skipper parameters
 
 ## Spring Cloud Skipper parameters.
@@ -861,20 +859,21 @@ skipper:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param skipper.resources.limits The resources limits for the Skipper server container
-  ## @param skipper.resources.requests The requested resources for the Skipper server container
+  ## @param skipper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if skipper.resources is set (skipper.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param skipper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param skipper.startupProbe.enabled Enable startupProbe
@@ -1120,7 +1119,6 @@ externalSkipper:
   ## @param externalSkipper.port External Skipper Server port number
   ##
   port: 7577
-
 ## @section Deployer parameters
 
 ## Spring Cloud Deployer for Kubernetes parameters.
@@ -1128,18 +1126,21 @@ externalSkipper:
 deployer:
   ## Streaming applications resource requests and limits.
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param deployer.resources.limits [object] Streaming applications resource limits
-  ## @param deployer.resources.requests Streaming applications resource requests
+  ## @param deployer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if deployer.resources is set (deployer.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits:
-      cpu: 500m
-      memory: 1024Mi
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param deployer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param deployer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -1193,7 +1194,6 @@ deployer:
   ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
   imagePullPolicy: IfNotPresent
-
 ## @section RBAC parameters
 
 ## K8s Service Account.
@@ -1217,7 +1217,6 @@ rbac:
   ## that allows pods querying the K8s API
   ##
   create: true
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -1258,20 +1257,21 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for the Prometheus Rsocket Proxy container
-  ## @param metrics.resources.requests The requested resources for the Prometheus Rsocket Proxy container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.replicaCount Number of Prometheus Rsocket Proxy replicas to deploy
   ##
   replicaCount: 1
@@ -1683,7 +1683,6 @@ metrics:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
-
 ## @section Init Container parameters
 
 ## Init containers parameters:
@@ -1747,21 +1746,21 @@ waitForBackends:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param waitForBackends.resources.limits Init container wait-for-backend resource limits
-  ## @param waitForBackends.resources.requests Init container wait-for-backend resource requests
+  ## @param waitForBackends.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForBackends.resources is set (waitForBackends.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param waitForBackends.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Database parameters
 
 ## MariaDB chart configuration
@@ -1889,7 +1888,6 @@ externalDatabase:
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
   hibernateDialect: ""
-
 ## @section RabbitMQ chart parameters
 
 ## RabbitMQ chart configuration
@@ -1930,7 +1928,6 @@ externalRabbitmq:
   ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
   ##
   existingPasswordSecret: ""
-
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
@@ -1948,7 +1945,6 @@ kafka:
   ##
   extraConfig: |-
     offsets.topic.replication.factor=1
-
 ## External Kafka Configuration
 ## All of these values are ignored when kafka.enabled is set to true
 ##
