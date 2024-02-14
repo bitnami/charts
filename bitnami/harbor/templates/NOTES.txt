@@ -48,3 +48,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "core" "exporter" "jobservice" "nginx" "portal" "registry.controller" "registry.server" "trivy" "volumePermissions") "context" $) }}
