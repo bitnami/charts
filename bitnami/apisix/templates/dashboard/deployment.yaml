@@ -164,8 +164,10 @@ spec:
               mountPath: /bitnami/apisix/conf
             - name: log-dir
               mountPath: /opt/bitnami/apisix-dashboard/logs
+            {{- if .Values.dashboard.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
+            {{- end }}
          {{- if .Values.dashboard.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
