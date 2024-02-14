@@ -78,4 +78,3 @@ To access your Appsmith site from outside the cluster follow the steps below:
 {{- include "appsmith.validateValues" . }}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "common.warnings.resources" (dict "sections" (list "backend" "client" "rts" "volumePermissions") "context" $) }}
