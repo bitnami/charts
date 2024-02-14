@@ -78,10 +78,12 @@ spec:
             - name: provisioning
               mountPath: {{ .Values.provisioningFolder }}/extensions/plugins/
               subPath: extensions/plugins
+          {{- if .Values.plugins.resources }}
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
           {{- else if ne .Values.plugins.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.plugins.resourcesPreset) | nindent 12 }}
           securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.caCerts.enabled }}
         - name:  {{ printf "%s-ca-certs-initcontainer" (include "common.names.fullname" .) }}
