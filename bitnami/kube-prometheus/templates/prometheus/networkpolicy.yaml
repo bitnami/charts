@@ -30,13 +30,14 @@ spec:
     {{- end }}
   {{- end }}
   ingress:
-    {{/* TODO: Allow configuring prometheus container ports */}}
     - ports:
+        {{/* The deployed Prometheus objects have the ports hardcoded
+            https://github.com/prometheus-operator/prometheus-operator/blob/bdfc5ec0055471b2f626e63682ee7decd0c41db9/pkg/prometheus/statefulset.go#L243 */}}
         - port: 9090
         - port: 8080
         {{- if .Values.prometheus.thanos.create }}
-        - port: 10901
-        - port: 10902
+        - port: {{ .Values.prometheus.thanos.containerPorts.grpc }}
+        - port: {{ .Values.prometheus.thanos.containerPorts.http }}
         {{- end }}
       {{- if not .Values.prometheus.networkPolicy.allowExternal }}
       from:

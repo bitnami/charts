@@ -1385,6 +1385,12 @@ prometheus:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
+    ## @param prometheus.thanos.containerPorts.grpc Thanos grpc port
+    ## @param prometheus.thanos.containerPorts.http Thanos http port
+    ##
+    containerPorts:
+      grpc: 10901 
+      http: 10902
     ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""

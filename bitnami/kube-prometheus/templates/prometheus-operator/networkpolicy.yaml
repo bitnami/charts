@@ -30,7 +30,8 @@ spec:
     {{- end }}
   {{- end }}
   ingress:
-    {{/* TODO: Allow configuring prometheus-operator container ports */}}
+    {{/* Prometheus Operator hardcodes the 8080 port
+      https://github.com/prometheus-operator/prometheus-operator/blob/main/cmd/operator/main.go#L106 */}}
     - ports:
         - port: 8080
       {{- if not .Values.operator.networkPolicy.allowExternal }}

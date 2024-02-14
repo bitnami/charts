@@ -30,7 +30,8 @@ spec:
     {{- end }}
   {{- end }}
   ingress:
-    {{/* TODO: Allow configuring alertmanager container ports */}}
+    {{/* The deployed AlertManager objects have the ports hardcoded
+       https://github.com/prometheus-operator/prometheus-operator/blob/bdfc5ec0055471b2f626e63682ee7decd0c41db9/pkg/alertmanager/statefulset.go#L252 */}}
     - ports:
         - port: 8080
         - port: 9093
