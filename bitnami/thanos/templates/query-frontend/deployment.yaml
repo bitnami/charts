@@ -3,13 +3,12 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if .Values.queryFrontend.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-frontend
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query-frontend.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
   {{- if .Values.commonAnnotations }}
@@ -42,7 +41,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "query-frontend" "context" $) }}
+      serviceAccountName: {{ include "thanos.query-frontend.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.queryFrontend.automountServiceAccountToken }}
       {{- if .Values.queryFrontend.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.hostAliases "context" $) | nindent 8 }}
@@ -102,8 +101,8 @@ spec:
             - query-frontend
             - --log.level={{ .Values.queryFrontend.logLevel }}
             - --log.format={{ .Values.queryFrontend.logFormat }}
-            - --http-address=0.0.0.0:10902
-            - --query-frontend.downstream-url=http://{{ include "common.names.fullname" . }}-query:{{ if $query.service.http }}{{ coalesce $query.service.ports.http $query.service.http.port }}{{ else }}{{ $query.service.ports.http }}{{ end }}
+            - --http-address=0.0.0.0:{{ .Values.queryFrontend.containerPorts.http }}
+            - --query-frontend.downstream-url=http://{{ include "thanos.query.fullname" . }}:{{ .Values.query.service.ports.http }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
@@ -130,7 +129,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 10902
+              containerPort: {{ .Values.queryFrontend.containerPorts.http }}
               protocol: TCP
           {{- if .Values.queryFrontend.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}

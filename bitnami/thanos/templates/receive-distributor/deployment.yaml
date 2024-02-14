@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive-distributor
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.receive-distributor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive-distributor
   {{- if .Values.commonAnnotations }}
@@ -40,7 +40,7 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "receive" "context" $) }}
+      serviceAccountName: {{ include "thanos.receive-distributor.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.receiveDistributor.automountServiceAccountToken }}
       {{- if .Values.receiveDistributor.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.hostAliases "context" $) | nindent 8 }}
@@ -100,9 +100,9 @@ spec:
             - receive
             - --log.level={{ .Values.receiveDistributor.logLevel }}
             - --log.format={{ .Values.receiveDistributor.logFormat }}
-            - --grpc-address=0.0.0.0:{{ if .Values.receive.service.grpc }}{{ coalesce .Values.receive.service.ports.grpc .Values.receive.service.grpc.port }}{{ else }}{{ .Values.receive.service.ports.grpc }}{{ end }}
-            - --http-address=0.0.0.0:{{ if .Values.receive.service.http }}{{ coalesce .Values.receive.service.ports.http .Values.receive.service.http.port }}{{ else }}{{ .Values.receive.service.ports.http }}{{ end }}
-            - --remote-write.address=0.0.0.0:{{ if .Values.receive.service.remoteWrite }}{{ coalesce .Values.receive.service.ports.remote .Values.receive.service.remoteWrite.port }}{{ else }}{{ .Values.receive.service.ports.remote }}{{ end }}
+            - --grpc-address=0.0.0.0:{{ .Values.receive.containerPorts.grpc }}
+            - --http-address=0.0.0.0:{{ .Values.receive.containerPorts.http }}
+            - --remote-write.address=0.0.0.0:{{ .Values.receive.containerPorts.remote }}
             - --label={{ .Values.receiveDistributor.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --receive.hashrings-file=/var/lib/thanos-receive/hashrings.json
@@ -143,13 +143,13 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ if .Values.receive.service.grpc }}{{ coalesce .Values.receive.service.ports.grpc .Values.receive.service.grpc.port }}{{ else }}{{ .Values.receive.service.ports.grpc }}{{ end }}
+            - containerPort: {{ .Values.receive.service.ports.grpc }}
               name: grpc
               protocol: TCP
-            - containerPort: {{ if .Values.receive.service.http }}{{ coalesce .Values.receive.service.ports.http .Values.receive.service.http.port }}{{ else }}{{ .Values.receive.service.ports.http }}{{ end }}
+            - containerPort: {{ .Values.receive.service.ports.http }}
               name: http
               protocol: TCP
-            - containerPort: {{ if .Values.receive.service.remoteWrite }}{{ coalesce .Values.receive.service.ports.remote .Values.receive.service.remoteWrite.port }}{{ else }}{{ .Values.receive.service.ports.remote }}{{ end }}
+            - containerPort: {{ .Values.receive.service.ports.remote }}
               name: remote-write
               protocol: TCP
           {{- if .Values.receiveDistributor.customLivenessProbe }}

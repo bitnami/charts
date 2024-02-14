@@ -261,8 +261,8 @@ spec:
       args:
         - sidecar
         - --prometheus.url={{ default "http://localhost:9090" .Values.prometheus.thanos.prometheusUrl }}
-        - --grpc-address=0.0.0.0:10901
-        - --http-address=0.0.0.0:10902
+        - --grpc-address=0.0.0.0:{{ .Values.prometheus.thanos.containerPorts.grpc }}
+        - --http-address=0.0.0.0:{{ .Values.prometheus.thanos.containerPorts.http }}
         - --tsdb.path=/prometheus/
         {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - --objstore.config=$(OBJSTORE_CONFIG)
@@ -283,10 +283,10 @@ spec:
       {{- end }}
       ports:
         - name: grpc
-          containerPort: 10901
+          containerPort: {{ .Values.prometheus.thanos.containerPorts.grpc }}
           protocol: TCP
         - name: http
-          containerPort: 10902
+          containerPort: {{ .Values.prometheus.thanos.containerPorts.http }}
           protocol: TCP
       volumeMounts:
         - mountPath: /prometheus

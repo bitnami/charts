@@ -28,4 +28,4 @@ maintainers:
 name: kiam
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kiam
-version: 1.7.5
+version: 1.8.0

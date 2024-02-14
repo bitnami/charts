@@ -19,7 +19,8 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: JasperReports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
+deprecated: true  
+description: DEPRECATED JasperReports Server is a stand-alone and embeddable reporting server. It is a central information hub, with reporting and analytics that can be embedded into web and mobile applications.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/jasperserver/img/jasperserver-stack-220x234.png
 keywords:
@@ -29,10 +30,8 @@ keywords:
 - reporting
 - analytic
 - visualization
-maintainers:
-- name: VMware, Inc.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: jasperreports
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jasperreports
-version: 18.2.4
+version: 18.2.5

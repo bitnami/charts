@@ -24,6 +24,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.clusterOperator.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     - ports:
         # Allow dns resolution
@@ -35,9 +39,26 @@ spec:
         {{- range $port := .Values.clusterOperator.networkPolicy.kubeAPIServerPorts }}
         - port: {{ $port }}
         {{- end }}
+    # RabbitMQCluster instances have the label app.kubernetes.io/component: rabbitmq
+    - to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/component: rabbitmq
+        {{- if not .Values.clusterOperator.watchAllNamespaces }}
+        {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.clusterOperator.watchNamespaces }}
+          namespaceSelector:
+            matchExpressions:
+              - key: namespace
+                operator: In
+                values: 
+                {{- range $namespace := $watchNamespaces }}
+                  - {{ $namespace }}
+                {{- end }}
+        {{- end }}
     {{- if .Values.clusterOperator.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     {{- if .Values.clusterOperator.metrics.enabled }}
     - ports:

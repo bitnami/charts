@@ -25,7 +25,9 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: Osclass allows you to easily create a classifieds site without any technical knowledge. It provides support for presenting general ads or specialized ads, is customizable, extensible and multilingual.
+# The Osclass chart is deprecated and no longer maintained.
+deprecated: true
+description: DEPRECATED Osclass allows you to easily create a classifieds site without any technical knowledge. It provides support for presenting general ads or specialized ads, is customizable, extensible and multilingual.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/osclass/img/osclass-stack-220x234.png
 keywords:
@@ -34,10 +36,8 @@ keywords:
 - http
 - web
 - php
-maintainers:
-- name: VMware, Inc.
-  url: https://github.com/bitnami/charts
+maintainers: []
 name: osclass
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/osclass
-version: 18.2.3
+version: 18.2.4
