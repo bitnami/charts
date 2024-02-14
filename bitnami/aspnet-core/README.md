@@ -127,13 +127,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.fsGroup`                        | Set Security Context fsGroup                                                              | `0`                    |
 | `containerSecurityContext.enabled`                  | Enable Container Security Context                                                         | `true`                 |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`                  |
-| `containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                         | `0`                    |
-| `containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                      | `false`                |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context readOnlyRootFilesystem                            | `false`                |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                               | `false`                |
-| `containerSecurityContext.capabilities.add`         | Set APISIX container's Security Context allowed kernel capabilities                       | `["NET_BIND_SERVICE"]` |
-| `containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context dropped kernel capabilities                       | `["ALL"]`              |
-| `containerSecurityContext.seccompProfile.type`      | Set APISIX container's Security Context seccomp profile                                   | `RuntimeDefault`       |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `0`                    |
+| `containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                             | `false`                |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context readOnlyRootFilesystem                                   | `false`                |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                      | `false`                |
+| `containerSecurityContext.capabilities.add`         | Set container's Security Context allowed kernel capabilities                              | `["NET_BIND_SERVICE"]` |
+| `containerSecurityContext.capabilities.drop`        | Set container's Security Context dropped kernel capabilities                              | `["ALL"]`              |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                          | `RuntimeDefault`       |
 | `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`                 |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `10`                   |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `20`                   |
