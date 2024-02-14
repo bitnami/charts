@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -56,7 +55,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Discourse Common parameters
 
 ## Bitnami Discourse image version
@@ -258,9 +256,7 @@ extraVolumeMounts: []
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Discourse pods
 ##
 extraVolumes: []
-
 ## @section Discourse container parameters
-
 discourse:
   ## @param discourse.skipInstall Do not run the Discourse installation wizard
   ## Use only in case you are importing an existing database.
@@ -351,12 +347,21 @@ discourse:
   customStartupProbe: {}
   ## Discourse resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param discourse.resources.limits The resources limits for the Discourse containers
-  ## @param discourse.resources.requests The requested resources for the Discourse containers
+  ## @param discourse.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if discourse.resources is set (discourse.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param discourse.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Discourse containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param discourse.containerSecurityContext.enabled Enabled Discourse containers' Security Context
@@ -378,7 +383,6 @@ discourse:
   ## @param discourse.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Discourse pods
   ##
   extraVolumeMounts: []
-
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
@@ -416,9 +420,7 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-
 ## @section Sidekiq container parameters
-
 sidekiq:
   ## @param sidekiq.command Custom command to override image cmd (evaluated as a template)
   ##
@@ -491,12 +493,21 @@ sidekiq:
   customStartupProbe: {}
   ## Sidekiq resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param sidekiq.resources.limits The resources limits for the Sidekiq containers
-  ## @param sidekiq.resources.requests The requested resources for the Sidekiq containers
+  ## @param sidekiq.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sidekiq.resources is set (sidekiq.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param sidekiq.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Sidekiq containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' Security Context
@@ -518,7 +529,6 @@ sidekiq:
   ## @param sidekiq.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Sidekiq pods
   ##
   extraVolumeMounts: []
-
 ## @section Traffic Exposure Parameters
 
 ## Discourse service parameters
@@ -574,7 +584,6 @@ service:
   ## @param service.extraPorts Extra port to expose on Discourse service
   ##
   extraPorts: []
-
 ## Discourse ingress parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -679,7 +688,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Volume Permissions parameters
 
 ## Init containers parameters:
@@ -712,12 +720,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -730,7 +747,6 @@ volumePermissions:
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"
-
 ## @section Other Parameters
 
 ## Service account for Discourse pods to use.
@@ -751,9 +767,7 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-
 ## @section NetworkPolicy parameters
-
 networkPolicy:
   ## @param networkPolicy.enabled Enable network policies
   ## If ingress.enabled is true, configure networkPolicy.ingress selectors to allow communication
@@ -826,7 +840,6 @@ networkPolicy:
     ##             label: example
     ##
     customRules: {}
-
 ## @section Discourse database parameters
 
 ## PostgreSQL chart configuration
@@ -876,7 +889,6 @@ externalDatabase:
   existingSecret: ""
   existingSecretPasswordKey: "password"
   existingSecretPostgresPasswordKey: "postgres-password"
-
 ## @section Redis&reg; parameters
 
 ## Redis&reg; chart configuration
@@ -898,7 +910,6 @@ redis:
     password: ""
     existingSecret: ""
   architecture: standalone
-
 ## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host
