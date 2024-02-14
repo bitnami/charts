@@ -924,17 +924,7 @@ metrics:
 ## @param tls.truststorePassword Password for the truststore, if needed.
 ## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-##
-resourcesPreset: "none"
 ## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-## Example:
-## resources:
-##   requests:
-##     cpu: 2
-##     memory: 512Mi
-##   limits:
-##     cpu: 3
-##     memory: 1024Mi
 ## @param tls.certificatesSecret Secret with the TLS certificates.
 ## @param tls.tlsEncryptionSecretName Secret with the encryption of the TLS certificates
 ##
@@ -948,9 +938,17 @@ tls:
   truststorePassword: ""
   certificatesSecret: ""
   tlsEncryptionSecretName: ""
+  resourcesPreset: "none"
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ##
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   resources: {}
