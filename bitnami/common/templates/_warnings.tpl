@@ -30,28 +30,53 @@ The list in the example assumes that the following values exist:
   - resources
 */}}
 {{- define "common.warnings.resources" -}}
-{{ $values := .context.Values -}}
+{{- $values := .context.Values -}}
+{{- $printMessage := false -}}
+{{ $affectedSections := list -}}
 {{- range .sections -}}
-{{- if eq . "" -}}
-{{/* Case where the resources section is at the root (one main deployment in the chart) */}}
-{{- if not (index $values "resources") }}
-
-WARNING: Main deployment does not have the "resources" value set. Using "resourcesPreset" is not recommended for production. For production workloads, please set the "resources" value adapted to your workload needs. 
-+info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+  {{- if eq . "" -}}
+    {{/* Case where the resources section is at the root (one main deployment in the chart) */}}
+    {{- if not (index $values "resources") -}}
+    {{- $affectedSections = append $affectedSections "resources" -}}
+    {{- $printMessage = true -}}
+    {{- end -}}
+  {{- else -}}
+    {{/* Case where the are multiple resources sections (more than one main deployment in the chart) */}}
+    {{- $keys := split "." . -}}
+    {{/* We iterate through the different levels until arriving to the resource section. Example: a.b.c.resources */}}
+    {{- $section := $values -}}
+    {{- range $keys -}}
+      {{- $section = index $section . -}}
+    {{- end -}}
+    {{- if not (index $section "resources") -}}
+      {{/* If the the section has enabled=false or replicaCount=0, do not include it */}}
+      {{- if and (hasKey $section "enabled") -}}
+        {{- if index $section "enabled" -}}
+          {{/* enabled=true */}}
+          {{- $affectedSections = append $affectedSections (printf "%s.resources" .) -}}
+          {{- $printMessage = true -}}
+        {{- end -}}
+      {{- else if and (hasKey $section "replicaCount")  -}}
+        {{/* We need a cast to int because number 0 is not treated as an int by default */}}
+        {{- if (gt (index $section "replicaCount" | int) 0) -}}
+          {{/* replicaCount > 0 */}}
+          {{- $affectedSections = append $affectedSections (printf "%s.resources" .) -}}
+          {{- $printMessage = true -}}
+        {{- end -}}
+      {{- else -}}
+        {{/* Default case, add it to the affected sections */}}
+        {{- $affectedSections = append $affectedSections (printf "%s.resources" .) -}}
+        {{- $printMessage = true -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
-{{- else -}}
-{{/* Case where the are multiple resources sections (more than one main deployment in the chart) */}}
-{{- $keys := split "." .}}
-{{/* We iterate through the different levels until arriving to the resource section. Example: a.b.c.resources */}}
-{{- $section := $values }}
-{{- range $keys -}}
-{{- $section = index $section . -}}
-{{- end -}}
-{{- if and (or (not (hasKey $section "enabled")) (index $section "enabled")) (not (index $section "resources")) }}
+{{- if $printMessage }}
 
-WARNING: Section {{ . }} does not have the "resources" value set. Using "{{ . }}.resourcesPreset" is not recommended for production. For production workloads, please set the "{{ . }}.resources" value adapted to your workload needs. 
-+info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+WARNING: There are "resources" sections in the chart not set. Using "resourcesPreset" is not recommended for production. For production installations, please set the following values according to your workload needs:
+{{- range $affectedSections }}
+  - {{ . }}
 {{- end }}
-{{- end -}}
++info https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 {{- end -}}
 {{- end -}}
