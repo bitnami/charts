@@ -278,6 +278,8 @@ spec:
               {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           resources: {{- toYaml .Values.configsvr.resources | nindent 12 }}
+          {{- else if ne .Values.configsvr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.configsvr.resourcesPreset) | nindent 12 }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" . }}

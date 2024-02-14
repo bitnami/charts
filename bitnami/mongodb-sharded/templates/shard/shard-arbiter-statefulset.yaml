@@ -251,6 +251,8 @@ spec:
               {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
           resources: {{- toYaml $.Values.shardsvr.arbiter.resources | nindent 12 }}
+          {{- else if ne $.Values.shardsvr.arbiter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.shardsvr.arbiter.resourcesPreset) | nindent 12 }}
         {{- if $.Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" $ }}
