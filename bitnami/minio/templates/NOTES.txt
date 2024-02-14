@@ -74,3 +74,4 @@ To access the MinIO&reg; web UI:
 {{- include "common.warnings.rollingTag" .Values.clientImage }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "minio.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "provisioning" "" "volumePermissions") "context" $) }}
