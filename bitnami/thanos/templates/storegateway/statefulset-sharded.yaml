@@ -252,9 +252,13 @@ spec:
           resources: {{- toYaml $partion.resources | nindent 12 }}
           {{- else }}
           resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
+          {{- else if ne $.Values.storegateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.storegateway.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- else }}
           resources: {{- toYaml $.Values.storegateway.resources | nindent 12 }}
+          {{- else if ne $.Values.storegateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.storegateway.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: objstore-config
