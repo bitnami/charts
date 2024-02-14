@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-bucketweb
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.bucketweb.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: bucketweb
   {{- if .Values.commonAnnotations }}
@@ -37,7 +37,7 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "bucketweb" "context" $) }}
+      serviceAccountName: {{ include "thanos.bucketweb.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.bucketweb.automountServiceAccountToken }}
       {{- if .Values.bucketweb.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.hostAliases "context" $) | nindent 8 }}
@@ -97,7 +97,7 @@ spec:
             - tools
             - bucket
             - web
-            - --http-address=0.0.0.0:8080
+            - --http-address=0.0.0.0:{{ .Values.bucketweb.containerPorts.http }}
             - --log.level={{ .Values.bucketweb.logLevel }}
             - --log.format={{ .Values.bucketweb.logFormat }}
             - --objstore.config-file=/conf/objstore.yml
@@ -130,7 +130,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.bucketweb.containerPorts.http }}
               protocol: TCP
           {{- if .Values.bucketweb.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.customLivenessProbe "context" $) | nindent 12 }}

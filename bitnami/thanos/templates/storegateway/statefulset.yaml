@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ include "common.names.fullname" . }}-storegateway
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.storegateway.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
   {{- if .Values.commonAnnotations }}
@@ -20,7 +20,7 @@ spec:
   {{- end }}
   revisionHistoryLimit: {{ .Values.storegateway.revisionHistoryLimit }}
   podManagementPolicy: {{ .Values.storegateway.podManagementPolicy }}
-  serviceName: {{ include "common.names.fullname" . }}-storegateway-headless
+  serviceName: {{ include "thanos.storegateway.fullname" . }}-headless
   {{- if .Values.storegateway.updateStrategy }}
   updateStrategy: {{- toYaml .Values.storegateway.updateStrategy | nindent 4 }}
   {{- end }}
@@ -42,7 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "storegateway" "context" $) }}
+      serviceAccountName: {{ include "thanos.storegateway.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.storegateway.automountServiceAccountToken }}
       {{- if .Values.storegateway.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.hostAliases "context" $) | nindent 8 }}
@@ -121,8 +121,8 @@ spec:
             - store
             - --log.level={{ .Values.storegateway.logLevel }}
             - --log.format={{ .Values.storegateway.logFormat }}
-            - --grpc-address=0.0.0.0:10901
-            - --http-address=0.0.0.0:10902
+            - --grpc-address=0.0.0.0:{{ .Values.storegateway.containerPorts.grpc }}
+            - --http-address=0.0.0.0:{{ .Values.storegateway.containerPorts.http }}
             - --data-dir=/data
             - --objstore.config-file=/conf/objstore.yml
             {{- if (include "thanos.httpConfigEnabled" .) }}
@@ -162,10 +162,10 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: 10902
+              containerPort: {{ .Values.storegateway.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: 10901
+              containerPort: {{ .Values.storegateway.containerPorts.grpc }}
               protocol: TCP
           {{- if .Values.storegateway.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.customLivenessProbe "context" $) | nindent 12 }}
