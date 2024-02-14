@@ -79,6 +79,8 @@ spec:
               mountPath: {{ .Values.provisioningFolder }}/extensions/plugins/
               subPath: extensions/plugins
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
+          {{- else if ne .Values.plugins.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.plugins.resourcesPreset) | nindent 12 }}
           securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
         {{- if .Values.caCerts.enabled }}
@@ -94,6 +96,8 @@ spec:
             - mountPath: /tmp/secrets/ca-certs
               name: ca-certs
           resources: {{- toYaml .Values.caCerts.resources | nindent 12 }}
+          {{- else if ne .Values.caCerts.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.caCerts.resourcesPreset) | nindent 12 }}
           securityContext: {{- .Values.caCerts.containerSecurityContext | toYaml | nindent 12 }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
@@ -112,6 +116,8 @@ spec:
             runAsUser: 0
           {{- if .Values.sysctl.resources }}
           resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
+          {{- else if ne .Values.sysctl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctl.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -129,6 +135,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: sonarqube
@@ -314,6 +322,8 @@ spec:
             {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -383,6 +393,8 @@ spec:
               containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
           {{- if .Values.metrics.jmx.resources }}
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jmx-config
