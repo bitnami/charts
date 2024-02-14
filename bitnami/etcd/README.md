@@ -254,14 +254,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Network Policy parameters
 
-| Name                                    | Description                                                | Value   |
-| --------------------------------------- | ---------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                 | `false` |
-| `networkPolicy.allowExternal`           | Don't require client label for connections                 | `true`  |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy               | `[]`    |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy               | `[]`    |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces     | `{}`    |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                      | `true` |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 ### Metrics parameters
 

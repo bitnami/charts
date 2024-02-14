@@ -435,25 +435,6 @@ kubectl delete pvc -l release=my-release
 | `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                | `""`                                                                                                                                                                                 |
 | `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                                                                                                                                                                                 |
 
-### NetworkPolicy parameters
-
-| Name                                                                      | Description                                                                                                                                        | Value   |
-| ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                                   | Enable network policies                                                                                                                            | `false` |
-| `networkPolicy.metrics.enabled`                                           | Enable network policies for metrics (prometheus)                                                                                                   | `false` |
-| `networkPolicy.metrics.namespaceSelector`                                 | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                                             | `{}`    |
-| `networkPolicy.metrics.podSelector`                                       | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                                         | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled`                | Enable ingress rule that makes PostgreSQL primary node only accessible from a particular origin.                                                   | `false` |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector`      | Namespace selector label that is allowed to access the PostgreSQL primary node. This label will be used to identified the allowed namespace(s).    | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector`            | Pods selector label that is allowed to access the PostgreSQL primary node. This label will be used to identified the allowed pod(s).               | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules`            | Custom network policy for the PostgreSQL primary node.                                                                                             | `[]`    |
-| `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled`           | Enable ingress rule that makes PostgreSQL read-only nodes only accessible from a particular origin.                                                | `false` |
-| `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access the PostgreSQL read-only nodes. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector`       | Pods selector label that is allowed to access the PostgreSQL read-only nodes. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules`       | Custom network policy for the PostgreSQL read-only nodes.                                                                                          | `[]`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`                     | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                                     | `false` |
-| `networkPolicy.egressRules.customRules`                                   | Custom network policy rule                                                                                                                         | `[]`    |
-
 ### Volume Permissions parameters
 
 | Name                                                             | Description                                                                                                                       | Value                      |
