@@ -99,6 +99,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -149,6 +151,8 @@ spec:
               name: grpc
           {{- if .Values.ruler.resources }}
           resources: {{- toYaml .Values.ruler.resources | nindent 12 }}
+          {{- else if ne .Values.ruler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ruler.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ruler.customLivenessProbe }}
