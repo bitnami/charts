@@ -314,6 +314,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.allocateLoadBalancerNodePorts` | Whether to allocate node ports when service type is LoadBalancer                                                                 | `true`                   |
 | `service.externalIPs`                   | Set the ExternalIPs                                                                                                              | `[]`                     |
 | `service.externalTrafficPolicy`         | Enable client source IP preservation                                                                                             | `Cluster`                |
+| `service.loadBalancerClass`             | Set the LoadBalancerClass                                                                                                        | `""`                     |
 | `service.loadBalancerIP`                | Set the LoadBalancerIP                                                                                                           | `""`                     |
 | `service.clusterIP`                     | Kubernetes service Cluster IP                                                                                                    | `""`                     |
 | `service.labels`                        | Service labels. Evaluated as a template                                                                                          | `{}`                     |
