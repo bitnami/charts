@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Fetch alerting and aggregation rules from provided urls into this chart."""
+"""Fetch alerting from provided urls into this chart."""
 import json
 import os
 import re
 import shutil
 import subprocess
 import textwrap
+from pathlib import Path
 
 import _jsonnet
 import yaml
-from pathlib import Path
 from yaml.representer import SafeRepresenter
 
 ROOT = Path(__file__).parent.parent
@@ -133,16 +133,6 @@ def yaml_str_repr(struct, indent=4):
     return text
 
 
-def get_rule_group_condition(group_name, value_key):
-    if group_name == '':
-        return ''
-
-    if group_name.count(".Values") > 1:
-        group_name = group_name.split(' ')[-1]
-
-    return group_name.replace('Values.defaultRules.rules', f"Values.defaultRules.{value_key}").strip()
-
-
 def add_rules_conditions(rules, rules_map, indent=4):
     """Add if wrapper for rules, listed in rules_map"""
     rule_condition = '{{- if %s }}\n'
@@ -194,7 +184,7 @@ def add_rules_per_rule_conditions(rules, group, indent=4):
     return rules
 
 
-def add_custom_labels(rules_str, group, indent=4, label_indent=2):
+def add_custom_labels(rules_str, indent=4, label_indent=2):
     """Add if wrapper for additional rules labels"""
     additional_rule_labels_indented = textwrap.indent(additional_rule_labels, " " * (indent + label_indent * 2))
 
@@ -202,7 +192,7 @@ def add_custom_labels(rules_str, group, indent=4, label_indent=2):
     # should only be added if there are .Values defaultRules.additionalRuleLabels defined
     rule_seperator = "\n" + " " * indent + "-.*"
     label_seperator = "\n" + " " * indent + "  labels:"
-    section_seperator = "\n" + " " * indent + "  \S"
+    section_seperator = "\n" + " " * indent + r"  \S"
     section_seperator_len = len(section_seperator) - 1
     rules_positions = re.finditer(rule_seperator,rules_str)
 
@@ -246,7 +236,7 @@ def add_custom_labels(rules_str, group, indent=4, label_indent=2):
     return head + "".join(rules) + "\n"
 
 
-def add_custom_annotations(rules, group, indent=4, annotation_indent=2):
+def add_custom_annotations(rules, indent=4, annotation_indent=2):
     """Add if wrapper for additional rules annotations"""
     additional_annotation_indented = textwrap.indent(additional_annotation, " " * (indent + annotation_indent * 2))
     annotations = "      annotations:\n"
@@ -274,15 +264,15 @@ def write_group_to_file(group, url, destination):
     rules = yaml_str_repr(group)
     # add replacements of custom variables and include their initialisation in case it's needed
     init_line = ''
-    for line in replacement_map:
-        if group_name in replacement_map[line].get('limitGroup', [group_name]) and line in rules:
-            rules = rules.replace(line, replacement_map[line]['replacement'])
-            if replacement_map[line]['init']:
-                init_line += '\n' + replacement_map[line]['init']
+    for match_str, replacement in replacement_map.items():
+        if group_name in replacement.get('limitGroup', [group_name]) and match_str in rules:
+            rules = rules.replace(match_str, replacement['replacement'])
+            if replacement['init']:
+                init_line += '\n' + replacement['init']
 
     # append per-alert rules
-    rules = add_custom_labels(rules, group)
-    rules = add_custom_annotations(rules, group)
+    rules = add_custom_labels(rules)
+    rules = add_custom_annotations(rules)
     rules = add_rules_per_rule_conditions(rules, group)
 
     # initialize header
@@ -321,7 +311,10 @@ def main():
     checkout_dir = Path(os.path.basename(url))
     shutil.rmtree(checkout_dir, ignore_errors=True)
 
-    subprocess.run(["git", "clone", url, "--branch", chart['branch'], "--single-branch", "--depth", "1", checkout_dir])
+    subprocess.run(
+        ["git", "clone", url, "--branch", chart['branch'], "--single-branch", "--depth", "1", checkout_dir],
+        check=True
+    )
 
     cwd = Path.cwd()
     source_cwd = chart['cwd']
@@ -329,17 +322,16 @@ def main():
     mixin_dir = cwd.joinpath(checkout_dir, source_cwd)
     if os.path.exists(mixin_dir.joinpath("jsonnetfile.json")):
         print("Running jsonnet-bundler, because jsonnetfile.json exists")
-        subprocess.run(["jb", "install"], cwd=mixin_dir)
+        subprocess.run(["jb", "install"], cwd=mixin_dir, check=True)
 
     if 'content' in chart:
-        f = open(mixin_dir.joinpath(mixin_file), "w")
-        f.write(chart['content'])
-        f.close()
+        with open(mixin_dir.joinpath(mixin_file), "w") as f:
+            f.write(chart['content'])
 
     mixin_vars = json.dumps(chart['mixin_vars'])
 
-    print("Generating rules from %s" % mixin_file)
-    print("Change cwd to %s" % checkout_dir.joinpath(source_cwd))
+    print(f"Generating rules from {mixin_file}")
+    print(f"Change cwd to {checkout_dir.joinpath(source_cwd)}")
     os.chdir(mixin_dir)
 
     mixin = """
