@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section RabbitMQ Image parameters
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
@@ -53,7 +52,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## @section Common parameters
 ##
 
@@ -75,7 +73,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
@@ -85,19 +82,16 @@ servicenameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-
 ## @param serviceBindings.enabled Create secret for service binding (Experimental)
 ## Ref: https://servicebinding.io/service-provider/
 ##
 serviceBindings:
   enabled: false
-
 ## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
 ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: true
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -112,7 +106,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -175,7 +168,6 @@ auth:
   ## NOTE: ignored unless `auth.existingErlangSecret` parameter is set
   ##
   existingSecretErlangKey: ""
-
   ## Enable encryption to rabbitmq
   ## ref: https://www.rabbitmq.com/ssl.html
   ## @param auth.tls.enabled Enable TLS support on RabbitMQ
@@ -209,7 +201,6 @@ auth:
     existingSecret: ""
     existingSecretFullChain: false
     overrideCaCertificate: ""
-
 ## @param logs Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
 ##
@@ -227,7 +218,6 @@ ulimitNofiles: "65536"
 ##
 maxAvailableSchedulers: ""
 onlineSchedulers: ""
-
 ## The memory threshold under which RabbitMQ will stop reading from client network sockets, in order to avoid being killed by the OS
 ## ref: https://www.rabbitmq.com/alarms.html
 ## ref: https://www.rabbitmq.com/memory.html#threshold
@@ -246,7 +236,6 @@ memoryHighWatermark:
   ## You can also use an absolute value, e.g.: 256MB
   ##
   value: 0.4
-
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
 ##
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
@@ -258,7 +247,6 @@ communityPlugins: ""
 ## Use this instead of `plugins` to add new plugins
 ##
 extraPlugins: "rabbitmq_auth_backend_ldap"
-
 ## Clustering settings
 ##
 clustering:
@@ -285,7 +273,6 @@ clustering:
   ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
   ##
   partitionHandling: autoheal
-
 ## Loading a RabbitMQ definitions file to configure RabbitMQ
 ##
 loadDefinition:
@@ -300,7 +287,6 @@ loadDefinition:
   ## existingSecret: "{{ .Release.Name }}-load-definition"
   ##
   existingSecret: ""
-
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -327,7 +313,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra environment variables (in case of sensitive data)
 ##
 extraEnvVarsSecret: ""
-
 ## Container Ports
 ## @param containerPorts.amqp
 ## @param containerPorts.amqpTls
@@ -343,7 +328,6 @@ containerPorts:
   manager: 15672
   epmd: 4369
   metrics: 9419
-
 ## @param initScripts Dictionary of init scripts. Evaluated as a template.
 ## Specify dictionary of scripts to be run at first boot
 ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
@@ -395,7 +379,6 @@ tcpListenOptions:
   ## @param tcpListenOptions.keepalive When set to true, enables TCP keepalives
   ##
   keepalive: false
-
 configuration: |-
   ## Username and password
   default_user = {{ .Values.auth.username }}
@@ -512,14 +495,12 @@ configuration: |-
   tcp_listen_options.linger.timeout = {{ .Values.tcpListenOptions.linger.timeout }}
   tcp_listen_options.keepalive = {{ .Values.tcpListenOptions.keepalive }}
   {{- end }}
-
 ## @param configurationExistingSecret Existing secret with the configuration to use as rabbitmq.conf.
 ## Must contain the key "rabbitmq.conf"
 ## Takes precedence over `configuration`, so do not use both simultaneously
 ## With providing an existingSecret, extraConfiguration and extraConfigurationExistingSecret do not take any effect
 ##
 configurationExistingSecret: ""
-
 ## @param extraConfiguration [string] Configuration file content: extra configuration to be appended to RabbitMQ configuration
 ## Use this instead of `configuration` to add more configuration
 ## Do not use simultaneously with `extraConfigurationExistingSecret`
@@ -527,13 +508,11 @@ configurationExistingSecret: ""
 extraConfiguration: |-
   #default_vhost = {{ .Release.Namespace }}-vhost
   #disk_free_limit.absolute = 50MB
-
 ## @param extraConfigurationExistingSecret Existing secret with the extra configuration to append to `configuration`.
 ## Must contain the key "extraConfiguration"
 ## Takes precedence over `extraConfiguration`, so do not use both simultaneously
 ##
 extraConfigurationExistingSecret: ""
-
 ## @param advancedConfiguration Configuration file content: advanced configuration
 ## Use this as additional configuration in classic config format (Erlang term configuration format)
 ##
@@ -547,21 +526,18 @@ extraConfigurationExistingSecret: ""
 ## If both, advancedConfiguration and advancedConfigurationExistingSecret are set, then advancedConfiguration
 ## will be used instead of the secret.
 #
-advancedConfiguration: |-
-
+advancedConfiguration: ""
 ## @param advancedConfigurationExistingSecret Existing secret with the advanced configuration file (must contain a key `advanced.config`).
 ## Use this as additional configuration in classic config format (Erlang term configuration format) as in advancedConfiguration
 ## Do not use in combination with advancedConfiguration, will be ignored
 ##
 advancedConfigurationExistingSecret: ""
-
 ## This subsystem was introduced in RabbitMQ 3.8.0 to allow rolling upgrades of cluster members without shutting down the entire cluster.
 ## Feature flags are a mechanism that controls what features are considered to be enabled or available on all cluster nodes. If a feature flag is enabled, so is its associated feature (or behavior). If not then all nodes in the cluster will disable the feature (behavior).
 ## e.g, drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata
 ## @param featureFlags that controls what features are considered to be enabled or available on all cluster nodes.
 ##
 featureFlags: ""
-
 ## LDAP configuration
 ##
 ldap:
@@ -577,7 +553,6 @@ ldap:
   ## @param ldap.port LDAP servers port. This is valid only if ldap.uri is not set
   ##
   port: ""
-
   ## DEPRECATED ldap.user_dn_pattern it will removed in a future, please use userDnPattern instead
   ## Pattern used to translate the provided username into a value to be used for the LDAP bind
   ## @param ldap.userDnPattern Pattern used to translate the provided username into a value to be used for the LDAP bind.
@@ -623,7 +598,6 @@ ldap:
     CAFilename: ""
     certFilename: ""
     certKeyFilename: ""
-
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts
 ## Examples:
 ## extraVolumeMounts:
@@ -653,7 +627,6 @@ extraSecrets: {}
 ## @param extraSecretsPrependReleaseName Set this flag to true if extraSecrets should be created with <release-name> prepended.
 ##
 extraSecretsPrependReleaseName: false
-
 ## @section Statefulset parameters
 ##
 
@@ -712,7 +685,6 @@ podAffinityPreset: ""
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
 podAntiAffinityPreset: soft
-
 ## Node affinity preset
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -732,7 +704,6 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-
 ## @param affinity Affinity for pod assignment. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
@@ -750,7 +721,6 @@ tolerations: []
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
 topologySpreadConstraints: []
-
 ## RabbitMQ pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable RabbitMQ pods' Security Context
@@ -765,7 +735,6 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
-
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
@@ -790,30 +759,27 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-
 ## RabbitMQ containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for RabbitMQ containers
-## @param resources.requests The requested resources for RabbitMQ containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 1000m
-  ##    memory: 2Gi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 1000m
-  ##    memory: 2Gi
-  ##
-  requests: {}
-
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure RabbitMQ containers' extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -846,7 +812,6 @@ readinessProbe:
   periodSeconds: 30
   failureThreshold: 3
   successThreshold: 1
-
 ## Configure RabbitMQ containers' extra options for startup probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param startupProbe.enabled Enable startupProbe
@@ -863,7 +828,6 @@ startupProbe:
   periodSeconds: 30
   failureThreshold: 3
   successThreshold: 1
-
 ## @param customLivenessProbe Override default liveness probe
 ##
 customLivenessProbe: {}
@@ -896,7 +860,6 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
@@ -910,7 +873,6 @@ pdb:
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   maxUnavailable: ""
-
 ## @section RBAC parameters
 ##
 
@@ -931,7 +893,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   annotations: {}
-
 ## Role Based Access
 ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -941,10 +902,8 @@ rbac:
   ## that allows RabbitMQ pods querying the K8s API
   ##
   create: true
-
 ## @section Persistence parameters
 ##
-
 persistence:
   ## @param persistence.enabled Enable RabbitMQ data persistence using PVC
   ##
@@ -995,7 +954,6 @@ persistence:
   ## labels:
   ##   app: my-app
   labels: {}
-
 ## Persistent Volume Claim Retention Policy
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
 ##
@@ -1009,7 +967,6 @@ persistentVolumeClaimRetentionPolicy:
   ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
   ##
   whenDeleted: Retain
-
 ## @section Exposure parameters
 ##
 
@@ -1019,7 +976,6 @@ service:
   ## @param service.type Kubernetes Service type
   ##
   type: ClusterIP
-
   ## @param service.portEnabled Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.
   ##
   portEnabled: true
@@ -1063,7 +1019,6 @@ service:
     manager: "http-stats"
     metrics: "metrics"
     epmd: "epmd"
-
   ## Node ports to expose
   ## @param service.nodePorts.amqp Node port for Ampq
   ## @param service.nodePorts.amqpTls Node port for Ampq TLS
@@ -1097,7 +1052,7 @@ service:
   ## @param service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
   ##
-  allocateLoadBalancerNodePorts: true 
+  allocateLoadBalancerNodePorts: true
   ## @param service.externalIPs Set the ExternalIPs
   ##
   externalIPs: []
@@ -1146,7 +1101,6 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
 ## Configure the ingress resource that allows you to access the
 ## RabbitMQ installation. Set up the URL
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -1155,11 +1109,9 @@ ingress:
   ## @param ingress.enabled Enable ingress resource for Management console
   ##
   enabled: false
-
   ## @param ingress.path Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
-
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
@@ -1248,7 +1200,6 @@ ingress:
   ## @param ingress.existingSecret It is you own the certificate as secret.
   ##
   existingSecret: ""
-
 ## Network Policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -1307,7 +1258,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## @section Metrics Parameters
 ##
 
@@ -1387,7 +1337,6 @@ metrics:
     ## @param metrics.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-
   ## Custom PrometheusRule to be defined
   ## The value is evaluated as a template, so, for example, the value can depend on .Release or .Chart
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
@@ -1461,7 +1410,6 @@ metrics:
     ##           VALUE = {{ "{{ $value }}" }}\n  LABELS: {{ "{{ $labels }}" }}
     ##
     rules: []
-
 ## @section Init Container Parameters
 ##
 
@@ -1503,22 +1451,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
