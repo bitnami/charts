@@ -89,6 +89,8 @@ spec:
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
                 subPath: {{ .Values.backup.cronjob.storage.subPath }}
+              - name: tmp
+                mountPath: /tmp
             {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
             securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 14 }}
             {{- end }}
@@ -111,4 +113,6 @@ spec:
               persistentVolumeClaim:
                 claimName: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
             {{- end }}
+            - name: tmp
+              emptyDir: {}
 {{- end }}

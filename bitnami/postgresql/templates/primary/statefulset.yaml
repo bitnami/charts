@@ -106,6 +106,8 @@ spec:
               cp /tmp/certs/* /opt/bitnami/postgresql/certs/
               chmod 600 {{ include "postgresql.v1.tlsCertKey" . }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
             - name: raw-certificates
               mountPath: /tmp/certs
             - name: postgresql-certificates
@@ -156,13 +158,13 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{- if .Values.primary.persistence.enabled }}
+            - name: tmp
+              mountPath: /tmp
             - name: data
               mountPath: {{ .Values.primary.persistence.mountPath }}
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if .Values.shmVolume.enabled }}
             - name: dshm
               mountPath: /dev/shm
@@ -453,6 +455,14 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.primary.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: postgres-conf-dir
+              mountPath: /opt/bitnami/postgresql/conf
+            - name: postgres-tmp-dir
+              mountPath: /opt/bitnami/postgresql/tmp
+            - name: postgres-logs-dir
+              mountPath: /opt/bitnami/postgresql/logs
             {{- if or .Values.primary.initdb.scriptsConfigMap .Values.primary.initdb.scripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
@@ -561,6 +571,8 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
@@ -580,6 +592,14 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: postgres-conf-dir
+          emptyDir: {}
+        - name: postgres-tmp-dir
+          emptyDir: {}
+        - name: postgres-logs-dir
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
         {{- if or .Values.primary.configuration .Values.primary.pgHbaConfiguration .Values.primary.existingConfigmap }}
         - name: postgresql-config
           configMap:
