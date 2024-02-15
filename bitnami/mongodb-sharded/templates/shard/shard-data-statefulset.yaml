@@ -91,7 +91,11 @@ spec:
               find {{ $.Values.shardsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
+          {{- if $.Values.volumePermissions.resources }}
           resources: {{ toYaml $.Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne $.Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
@@ -362,7 +366,6 @@ spec:
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
           {{- else if ne $.Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" $.Values.metrics.resourcesPreset) | nindent 12 }}
-          {{- end }}
           {{- end }}
         {{- end }}
         {{- with $.Values.shardsvr.dataNode.sidecars }}
