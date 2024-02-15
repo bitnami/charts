@@ -138,6 +138,8 @@ spec:
                   key: ssl-truststore-password
           {{- if .Values.security.ssl.resources }}
           resources: {{- toYaml .Values.security.ssl.resources | nindent 12 }}
+          {{- else if ne .Values.security.ssl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.security.ssl.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
           - name: certs
@@ -333,6 +335,8 @@ spec:
           {{- end }}
           {{- if .Values.worker.resources }}
           resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- else if ne .Values.worker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.worker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}

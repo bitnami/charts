@@ -2485,6 +2485,8 @@ provisioning:
   ## @param provisioning.waitForKafka If true use an init container to wait until kafka is ready before starting provisioning
   ##
   waitForKafka: true
+  ## @param provisioning.useHelmHooks Flag to indicate usage of helm hooks
+  useHelmHooks: true
 
 ## @section KRaft chart parameters
 

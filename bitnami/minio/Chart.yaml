@@ -5,14 +5,14 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
   images: |
-    - name: minio-client
-      image: docker.io/bitnami/minio-client:2024.2.9-debian-11-r7
     - name: minio
-      image: docker.io/bitnami/minio:2024.2.13-debian-11-r0
+      image: docker.io/bitnami/minio:2024.2.14-debian-11-r1
+    - name: minio-client
+      image: docker.io/bitnami/minio-client:2024.2.14-debian-11-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r104
+      image: docker.io/bitnami/os-shell:11-debian-11-r109
 apiVersion: v2
-appVersion: 2024.2.13
+appVersion: 2024.2.14
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -34,4 +34,4 @@ maintainers:
 name: minio
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/minio
-version: 13.4.6
+version: 13.4.7

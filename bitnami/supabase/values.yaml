@@ -34,7 +34,6 @@ global:
     ## @param global.jwt.existingSecretServiceKey The key in the existing secret containing the JWT service key
     ##
     existingSecretServiceKey: "service-key"
-
 ## @section Common parameters
 ##
 
@@ -62,7 +61,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -77,10 +75,8 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Supabase Common parameters
 ##
-
 jwt:
   ## @param jwt.secret The secret string used to sign JWT tokens
   ##
@@ -170,7 +166,6 @@ jwt:
       ## @param jwt.autoGenerate.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
       ##
       automountServiceAccountToken: false
-
     ## Configure Container Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -226,12 +221,21 @@ jwt:
     extraVolumeMounts: []
     ## Container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param jwt.autoGenerate.resources.limits The resources limits for the container
-    ## @param jwt.autoGenerate.resources.requests The requested resources for the container
+    ## @param jwt.autoGenerate.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jwt.autoGenerate.resources is set (jwt.autoGenerate.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      limits: {}
-      requests: {}
+    resourcesPreset: "none"
+    ## @param jwt.autoGenerate.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## @param jwt.autoGenerate.automountServiceAccountToken Mount Service Account token in pod
     ##
     automountServiceAccountToken: true
@@ -246,7 +250,6 @@ jwt:
       helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
       # This should be executed after the minio provisioning job
       helm.sh/hook-weight: "10"
-
     ## @param jwt.autoGenerate.podLabels Additional pod labels
     ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
@@ -255,7 +258,6 @@ jwt:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
     podAnnotations: {}
-
 ## @param publicURL Supabase API public URL
 ##
 publicURL: ""
@@ -263,7 +265,6 @@ publicURL: ""
 ## https://www.postgresql.org/docs/current/libpq-ssl.html
 ##
 dbSSL: "disable"
-
 ## @section Supabase Auth Parameters
 ##
 ##
@@ -274,7 +275,6 @@ auth:
   ## @param auth.replicaCount Number of Supabase auth replicas to deploy
   ##
   replicaCount: 1
-
   ## @param auth.defaultConfig [string] Supabase auth default configuration
   ##
   defaultConfig: |
@@ -300,18 +300,15 @@ auth:
     GOTRUE_MAILER_URLPATHS_CONFIRMATION: "{{ include "supabase.studio.publicURL" . }}/auth/v1/verify"
     GOTRUE_MAILER_URLPATHS_RECOVERY: "{{ include "supabase.studio.publicURL" . }}/auth/v1/verify"
     GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE: "{{ include "supabase.studio.publicURL" . }}/auth/v1/verify"
-
   ## @param auth.extraConfig Supabase auth extra configuration
   ##
   extraConfig: {}
-
   ## @param auth.existingConfigmap The name of an existing ConfigMap with the default configuration
   ##
   existingConfigmap: ""
   ## @param auth.extraConfigExistingConfigmap The name of an existing ConfigMap with extra configuration
   ##
   extraConfigExistingConfigmap: ""
-
   ## Bitnami Gotrue image
   ## ref: https://hub.docker.com/r/bitnami/gotrue/tags/
   ## @param auth.image.registry [default: REGISTRY_NAME] Gotrue image registry
@@ -339,7 +336,6 @@ auth:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param auth.containerPorts.http Supabase auth HTTP container port
   ##
   containerPorts:
@@ -399,12 +395,21 @@ auth:
   customStartupProbe: {}
   ## Supabase auth resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param auth.resources.limits The resources limits for the Supabase auth containers
-  ## @param auth.resources.requests The requested resources for the Supabase auth containers
+  ## @param auth.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if auth.resources is set (auth.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param auth.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param auth.podSecurityContext.enabled Enabled Supabase auth pods' Security Context
@@ -443,7 +448,6 @@ auth:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param auth.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -511,7 +515,6 @@ auth:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param auth.priorityClassName Supabase auth pods' priorityClassName
   ##
   priorityClassName: ""
@@ -570,7 +573,6 @@ auth:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supabase Auth Traffic Exposure Parameters
   ##
   service:
@@ -679,18 +681,16 @@ auth:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Supabase Meta Parameters
 ##
 ##
-meta:  
+meta:
   ## @param meta.enabled Enable Supabase Postgres Meta
   ##
   enabled: true
   ## @param meta.replicaCount Number of Supabase Postgres Meta replicas to deploy
   ##
   replicaCount: 1
-
   ## @param meta.defaultConfig [string] Default Supabase Postgres Meta configuration
   ##
   defaultConfig: |
@@ -700,18 +700,15 @@ meta:
     PG_META_DB_NAME: {{ include "supabase.database.name" . | quote }}
     PG_META_DB_SSL_MODE: {{ .Values.dbSSL | quote }}
     PG_META_PORT: {{ .Values.meta.containerPorts.http | quote }}
-
   ## @param meta.extraConfig Extra Supabase Postgres Meta configuration
   ##
   extraConfig: {}
-
   ## @param meta.existingConfigmap The name of an existing ConfigMap with the default configuration
   ##
   existingConfigmap: ""
   ## @param meta.extraConfigExistingConfigmap The name of an existing ConfigMap with extra configuration
   ##
   extraConfigExistingConfigmap: ""
-
   ## Bitnami Supabase Postgres Meta image
   ## ref: https://hub.docker.com/r/bitnami/supabase-postgres-meta/tags/
   ## @param meta.image.registry [default: REGISTRY_NAME] Supabase Postgres Meta image registry
@@ -739,7 +736,6 @@ meta:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param meta.containerPorts.http Supabase Postgres Meta HTTP container port
   ##
   containerPorts:
@@ -799,12 +795,21 @@ meta:
   customStartupProbe: {}
   ## Supabase Postgres Meta resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param meta.resources.limits The resources limits for the Supabase Postgres Meta containers
-  ## @param meta.resources.requests The requested resources for the Supabase Postgres Meta containers
+  ## @param meta.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if meta.resources is set (meta.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param meta.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param meta.podSecurityContext.enabled Enabled Supabase Postgres Meta pods' Security Context
@@ -843,7 +848,6 @@ meta:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param meta.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -911,7 +915,6 @@ meta:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param meta.priorityClassName Supabase Postgres Meta pods' priorityClassName
   ##
   priorityClassName: ""
@@ -970,7 +973,6 @@ meta:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supabase Meta Traffic Exposure Parameters
   ##
   service:
@@ -1079,7 +1081,6 @@ meta:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Supabase Realtime Parameters
 ##
 ##
@@ -1090,19 +1091,15 @@ realtime:
   ## @param realtime.replicaCount Number of Supabase realtime replicas to deploy
   ##
   replicaCount: 1
-
   ## @param realtime.keyBase key base for Supabase realtime
   ##
   keyBase: ""
-
   ## @param realtime.existingSecret Name of an existing secret containing the key base for Supabase realtime
   ##
   existingSecret: ""
-
   ## @param realtime.existingSecretKey Key in the existing secret containing the key base for Supabase realtime
   ##
   existingSecretKey: "key-base"
-
   ## @param realtime.defaultConfig [string] Default configuration for Supabase realtime
   ##
   defaultConfig: |
@@ -1119,18 +1116,15 @@ realtime:
     SECURE_CHANNELS: "true"
     SLOT_NAME: "supabase_realtime_rls"
     TEMPORARY_SLOT: "true"
-
   ## @param realtime.extraConfig Extra configuration for Supabase realtime
   ##
   extraConfig: {}
-
   ## @param realtime.existingConfigmap The name of an existing ConfigMap with the default configuration
   ##
   existingConfigmap: ""
   ## @param realtime.extraConfigExistingConfigmap The name of an existing ConfigMap with extra configuration
   ##
   extraConfigExistingConfigmap: ""
-
   ## Bitnami Realtime image
   ## ref: https://hub.docker.com/r/bitnami/supabase-realtime/tags/
   ## @param realtime.image.registry [default: REGISTRY_NAME] Realtime image registry
@@ -1158,7 +1152,6 @@ realtime:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param realtime.containerPorts.http Supabase realtime HTTP container port
   ##
   containerPorts:
@@ -1218,12 +1211,21 @@ realtime:
   customStartupProbe: {}
   ## Supabase realtime resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param realtime.resources.limits The resources limits for the Supabase realtime containers
-  ## @param realtime.resources.requests The requested resources for the Supabase realtime containers
+  ## @param realtime.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if realtime.resources is set (realtime.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param realtime.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param realtime.podSecurityContext.enabled Enabled Supabase realtime pods' Security Context
@@ -1262,7 +1264,6 @@ realtime:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param realtime.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1330,7 +1331,6 @@ realtime:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param realtime.priorityClassName Supabase realtime pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1389,7 +1389,6 @@ realtime:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supabase Realtime Traffic Exposure Parameters
   ##
   service:
@@ -1498,7 +1497,6 @@ realtime:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Supabase Rest Parameters
 ##
 ##
@@ -1509,7 +1507,6 @@ rest:
   ## @param rest.replicaCount Number of Supabase rest replicas to deploy
   ##
   replicaCount: 1
-
   ## @param rest.defaultConfig [string] Default configuration for the Supabase rest service
   ##
   defaultConfig: |
@@ -1517,18 +1514,15 @@ rest:
     PGRST_DB_ANON_ROLE: "anon"
     PGRST_DB_USE_LEGACY_GUCS: "false"
     PGRST_SERVER_PORT: {{ .Values.rest.containerPorts.http | quote }}
-
   ## @param rest.extraConfig Extra configuration for the Supabase rest service
   ##
   extraConfig: {}
-
   ## @param rest.existingConfigmap The name of an existing ConfigMap with the default configuration
   ##
   existingConfigmap: ""
   ## @param rest.extraConfigExistingConfigmap The name of an existing ConfigMap with extra configuration
   ##
   extraConfigExistingConfigmap: ""
-
   ## Bitnami PostgREST image
   ## ref: https://hub.docker.com/r/bitnami/postgrest/tags/
   ## @param rest.image.registry [default: REGISTRY_NAME] PostgREST image registry
@@ -1556,7 +1550,6 @@ rest:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param rest.containerPorts.http Supabase rest HTTP container port
   ##
   containerPorts:
@@ -1616,12 +1609,21 @@ rest:
   customStartupProbe: {}
   ## Supabase rest resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param rest.resources.limits The resources limits for the Supabase rest containers
-  ## @param rest.resources.requests The requested resources for the Supabase rest containers
+  ## @param rest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rest.resources is set (rest.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param rest.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rest.podSecurityContext.enabled Enabled Supabase rest pods' Security Context
@@ -1660,7 +1662,6 @@ rest:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param rest.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1728,7 +1729,6 @@ rest:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param rest.priorityClassName Supabase rest pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1787,7 +1787,6 @@ rest:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supabase Rest Traffic Exposure Parameters
   ##
   service:
@@ -1896,7 +1895,6 @@ rest:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Supabase Storage Parameters
 ##
 ##
@@ -1907,7 +1905,6 @@ storage:
   ## @param storage.replicaCount Number of Supabase storage replicas to deploy
   ##
   replicaCount: 1
-
   ## @param storage.defaultConfig [string] Default configuration for Supabase storage
   ##
   defaultConfig: |
@@ -1921,18 +1918,15 @@ storage:
     GLOBAL_S3_BUCKET: "stub"
     DB_INSTALL_ROLES: "false"
     PORT: {{ .Values.storage.containerPorts.http | quote }}
-
   ## @param storage.extraConfig Extra configuration for Supabase storage
   ##
   extraConfig: {}
-
   ## @param storage.existingConfigmap The name of an existing ConfigMap with the default configuration
   ##
   existingConfigmap: ""
   ## @param storage.extraConfigExistingConfigmap The name of an existing ConfigMap with extra configuration
   ##
   extraConfigExistingConfigmap: ""
-
   ## Bitnami Storage image
   ## ref: https://hub.docker.com/r/bitnami/supabase-storage/tags/
   ## @param storage.image.registry [default: REGISTRY_NAME] Storage image registry
@@ -1960,11 +1954,10 @@ storage:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param storage.containerPorts.http Supabase storage HTTP container port
   ##
   containerPorts:
-      http: 5000
+    http: 5000
   ## Configure extra options for Supabase storage containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param storage.livenessProbe.enabled Enable livenessProbe on Supabase storage containers
@@ -2020,12 +2013,21 @@ storage:
   customStartupProbe: {}
   ## Supabase storage resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storage.resources.limits The resources limits for the Supabase storage containers
-  ## @param storage.resources.requests The requested resources for the Supabase storage containers
+  ## @param storage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storage.resources is set (storage.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param storage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param storage.podSecurityContext.enabled Enabled Supabase storage pods' Security Context
@@ -2064,7 +2066,6 @@ storage:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param storage.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -2132,7 +2133,6 @@ storage:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param storage.priorityClassName Supabase storage pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2191,7 +2191,6 @@ storage:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supabase Storage Traffic Exposure Parameters
   ##
   service:
@@ -2300,7 +2299,6 @@ storage:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
   ## @section Storage Persistence Parameters
   ##
 
@@ -2349,7 +2347,6 @@ storage:
     ## @param storage.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
-
 ## @section Supabase Studio Parameters
 ##
 ##
@@ -2363,7 +2360,6 @@ studio:
   ## @param studio.replicaCount Number of Supabase studio replicas to deploy
   ##
   replicaCount: 1
-
   ## @param studio.defaultConfig [string] Supabase studio default configuration
   ##
   defaultConfig: |
@@ -2371,18 +2367,15 @@ studio:
     STUDIO_PG_META_URL: "http://{{ include "supabase.kong.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.kong.service.ports.proxyHttp }}/pg"
     SUPABASE_PUBLIC_URL: {{ include "supabase.api.publicURL" . | quote }}
     PORT: {{ .Values.studio.containerPorts.http | quote }}
-
   ## @param studio.extraConfig Supabase studio extra configuration
   ##
   extraConfig: {}
-
   ## @param studio.existingConfigmap The name of an existing ConfigMap with the default configuration
   ##
   existingConfigmap: ""
   ## @param studio.extraConfigExistingConfigmap The name of an existing ConfigMap with extra configuration
   ##
   extraConfigExistingConfigmap: ""
-
   ## Bitnami Studio image
   ## ref: https://hub.docker.com/r/bitnami/supabase-studio/tags/
   ## @param studio.image.registry [default: REGISTRY_NAME] Studio image registry
@@ -2410,7 +2403,6 @@ studio:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param studio.containerPorts.http Supabase studio HTTP container port
   ##
   containerPorts:
@@ -2470,12 +2462,21 @@ studio:
   customStartupProbe: {}
   ## Supabase studio resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param studio.resources.limits The resources limits for the Supabase studio containers
-  ## @param studio.resources.requests The requested resources for the Supabase studio containers
+  ## @param studio.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if studio.resources is set (studio.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param studio.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param studio.podSecurityContext.enabled Enabled Supabase studio pods' Security Context
@@ -2514,7 +2515,6 @@ studio:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param studio.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -2582,7 +2582,6 @@ studio:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param studio.priorityClassName Supabase studio pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2641,7 +2640,6 @@ studio:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supabase Studio Traffic Exposure Parameters
   ##
   service:
@@ -2750,7 +2748,6 @@ studio:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
@@ -2851,7 +2848,6 @@ studio:
     ##             name: http
     ##
     extraRules: []
-
 ## @section Init Container Parameters
 ##
 
@@ -2886,12 +2882,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -2903,7 +2908,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
 ## @param psqlImage.registry [default: REGISTRY_NAME] PostgreSQL client image registry
@@ -2935,7 +2939,6 @@ psqlImage:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## @section Other Parameters
 ##
 
@@ -2943,7 +2946,6 @@ psqlImage:
 ##
 rbac:
   create: true
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -2960,10 +2962,8 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
   automountServiceAccountToken: false
-
 ## @section Kong sub-chart parameters
 ##
-
 kong:
   ## @param kong.enabled Enable Kong
   ##
@@ -3007,7 +3007,6 @@ kong:
             secretKeyRef:
               name: '{{ include "supabase.jwt.secretName" . }}'
               key: '{{ include "supabase.jwt.serviceSecretKey" . }}'
-
   ## @param kong.ingressController.enabled Enable Kong Ingress Controller
   ##
   ingressController:
@@ -3026,7 +3025,6 @@ kong:
         value: LAST,A,CNAME
       - name: KONG_PLUGINS
         value: request-transformer,cors,key-auth,acl
-
   ## @param kong.extraVolumes [array] Additional volumes to the Kong pods
   ##
   extraVolumes:
@@ -3043,7 +3041,6 @@ kong:
     enabled: false
     hostname: "supabase.local"
     tls: false
-
   ## @param kong.service.loadBalancerIP Kubernetes service LoadBalancer IP
   ## @param kong.service.type Kubernetes service type
   ## @param kong.service.ports.proxyHttp Kong service port
@@ -3053,12 +3050,10 @@ kong:
     type: LoadBalancer
     ports:
       proxyHttp: 80
-
   ## @param kong.postgresql.enabled Switch to enable or disable the PostgreSQL helm chart inside the Kong subchart
   ##
   postgresql:
     enabled: false
-
 ## @section PostgreSQL sub-chart parameters
 ##
 
@@ -3121,7 +3116,6 @@ postgresql:
   service:
     ports:
       postgresql: 5432
-
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
