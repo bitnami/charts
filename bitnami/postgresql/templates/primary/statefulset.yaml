@@ -106,7 +106,7 @@ spec:
               cp /tmp/certs/* /opt/bitnami/postgresql/certs/
               chmod 600 {{ include "postgresql.v1.tlsCertKey" . }}
           volumeMounts:
-            - name: tmp
+            - name: tmp-dir
               mountPath: /tmp
             - name: raw-certificates
               mountPath: /tmp/certs
@@ -158,7 +158,7 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: tmp-dir
               mountPath: /tmp
             - name: data
               mountPath: {{ .Values.primary.persistence.mountPath }}
@@ -455,13 +455,13 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.primary.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: tmp-dir
               mountPath: /tmp
-            - name: postgres-conf-dir
+            - name: app-conf-dir
               mountPath: /opt/bitnami/postgresql/conf
-            - name: postgres-tmp-dir
+            - name: app-tmp-dir
               mountPath: /opt/bitnami/postgresql/tmp
-            - name: postgres-logs-dir
+            - name: app-logs-dir
               mountPath: /opt/bitnami/postgresql/logs
             {{- if or .Values.primary.initdb.scriptsConfigMap .Values.primary.initdb.scripts }}
             - name: custom-init-scripts
@@ -571,7 +571,7 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: tmp-dir
               mountPath: /tmp
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
@@ -592,13 +592,13 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: postgres-conf-dir
+        - name: app-conf-dir
           emptyDir: {}
-        - name: postgres-tmp-dir
+        - name: app-tmp-dir
           emptyDir: {}
-        - name: postgres-logs-dir
+        - name: app-logs-dir
           emptyDir: {}
-        - name: tmp
+        - name: tmp-dir
           emptyDir: {}
         {{- if or .Values.primary.configuration .Values.primary.pgHbaConfiguration .Values.primary.existingConfigmap }}
         - name: postgresql-config

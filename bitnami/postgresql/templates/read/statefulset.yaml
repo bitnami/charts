@@ -154,7 +154,7 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: tmp-dir
               mountPath: /tmp
             {{ if .Values.readReplicas.persistence.enabled }}
             - name: data
@@ -382,13 +382,13 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: tmp-dir
               mountPath: /tmp
-            - name: postgres-conf-dir
+            - name: app-conf-dir
               mountPath: /opt/bitnami/postgresql/conf
-            - name: postgres-tmp-dir
+            - name: app-tmp-dir
               mountPath: /opt/bitnami/postgresql/tmp
-            - name: postgres-logs-dir
+            - name: app-logs-dir
               mountPath: /opt/bitnami/postgresql/logs
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
@@ -527,13 +527,13 @@ spec:
             sizeLimit: {{ .Values.shmVolume.sizeLimit }}
             {{- end }}
         {{- end }}
-        - name: postgres-conf-dir
+        - name: app-conf-dir
           emptyDir: {}
-        - name: postgres-tmp-dir
+        - name: app-tmp-dir
           emptyDir: {}
-        - name: postgres-logs-dir
+        - name: app-logs-dir
           emptyDir: {}
-        - name: tmp
+        - name: tmp-dir
           emptyDir: {}
         {{- if .Values.readReplicas.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
