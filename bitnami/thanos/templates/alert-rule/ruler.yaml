@@ -8,7 +8,7 @@ Generated from 'thanos-rule' group from https://github.com/thanos-io/thanos.git
 Do not change in-place! In order to change this file run the script in
 https://github.com/bitnami/charts/tree/main/bitnami/thanos/hack
 */ -}}
-{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default. ) }}
+{{- if and .Values.metrics.enabled (or .Values.metrics.prometheusRule.default.create .Values.metrics.prometheusRule.default.ruler ) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:

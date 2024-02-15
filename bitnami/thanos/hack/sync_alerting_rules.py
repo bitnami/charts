@@ -48,7 +48,7 @@ rule_name_map = {
     'thanos-compact': 'compaction',
     'thanos-query': 'query',
     'thanos-receive': 'receive',
-    'thanos-ruler': 'ruler',
+    'thanos-rule': 'ruler',
     'thanos-sidecar': 'sidecar',
     'thanos-store': 'store_gateway'
 }
