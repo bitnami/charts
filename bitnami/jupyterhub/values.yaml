@@ -228,17 +228,11 @@ hub:
         tag: {{ .Values.singleuser.image.tag }}
         digest: {{ .Values.singleuser.image.digest }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
-        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
+        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 4 }}
       startTimeout: 300
-      {{- /* We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M) */}}
-      cpu:
-        limit: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.limits.cpu)  "${1}" }}
-        guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.requests.cpu) "${1}" }}
-      memory:
-        limit: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.limits.memory) "${1}" }}
-        guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.requests.memory) "${1}" }}
+      {{- include "jupyterhub.singleuser.resources" . | nindent 2 }}
       {{- if .Values.singleuser.command }}
-      cmd: {{- include "common.tplvalues.render" (dict "value" .Values.singleuser.command "context" $) | nindent 12 }}
+      cmd: {{- include "common.tplvalues.render" (dict "value" .Values.singleuser.command "context" $) | nindent 4 }}
       {{- else }}
       cmd: jupyterhub-singleuser
       {{- end }}
