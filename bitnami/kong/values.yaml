@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -58,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Kong common parameters
 ##
 
@@ -96,7 +94,6 @@ image:
 ## @param database Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'
 ##
 database: postgresql
-
 ## @section Kong deployment / daemonset parameters
 ##
 
@@ -278,10 +275,8 @@ pdb:
   create: false
   minAvailable: ""
   maxUnavailable: "50%"
-
 ## @section Kong Container Parameters
 ##
-
 kong:
   ## @param kong.command Override default container command (useful when using custom images)
   ##
@@ -297,17 +292,14 @@ kong:
   ## Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.
   ##
   initScriptsSecret: ""
-
   ## @param kong.declarativeConfig Declarative configuration to be loaded by Kong (evaluated as a template)
   ## https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/
   ##
   declarativeConfig: ""
-
   ## @param kong.declarativeConfigCM Configmap with declarative configuration to be loaded by Kong (evaluated as a template)
   ## https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/
   ##
   declarativeConfigCM: ""
-
   ## @param kong.extraEnvVars Array containing extra env vars to configure Kong
   ## For example:
   ## extraEnvVars:
@@ -336,12 +328,21 @@ kong:
     adminHttps: 8444
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param kong.resources.limits The resources limits for the Kong container
-  ## @param kong.resources.requests The requested resources for the Kong container
+  ## @param kong.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if kong.resources is set (kong.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param kong.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Kong containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param kong.livenessProbe.enabled Enable livenessProbe on Kong containers
@@ -399,7 +400,6 @@ kong:
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   lifecycleHooks: {}
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -535,7 +535,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## Configure the ingress resource that allows you to access the
 ## Kong installation. Set up the URL
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -637,10 +636,8 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Kong Ingress Controller Container Parameters
 ##
-
 ingressController:
   ## @param ingressController.enabled Enable/disable the Kong Ingress Controller
   ##
@@ -704,12 +701,21 @@ ingressController:
     health: 10254
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ingressController.resources.limits The resources limits for the Kong Ingress Controller container
-  ## @param ingressController.resources.requests The requested resources for the Kong Ingress Controller container
+  ## @param ingressController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingressController.resources is set (ingressController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param ingressController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Kong Ingress Controller containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param ingressController.livenessProbe.enabled Enable livenessProbe on Kong Ingress Controller containers
@@ -793,10 +799,8 @@ ingressController:
     ##       - list
     ##
     rules: []
-
 ## @section Kong Migration job Parameters
 ##
-
 migration:
   ## In case you want to use a custom image for Kong migration, set this value
   ## image:
@@ -829,12 +833,21 @@ migration:
   extraVolumeMounts: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param migration.resources.limits The resources limits for the container
-  ## @param migration.resources.requests The requested resources for the container
+  ## @param migration.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param migration.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param migration.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
@@ -855,7 +868,6 @@ migration:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
-
 ## @section PostgreSQL Parameters
 ##
 
@@ -910,7 +922,6 @@ postgresql:
     database: kong
     existingSecret: ""
     existingSecretPasswordKey: ""
-
 ## @section Cassandra Parameters
 ##
 
@@ -947,7 +958,6 @@ cassandra:
     password: ""
     existingSecret: ""
     existingSecretPasswordKey: ""
-
 ## @section Metrics Parameters
 ##
 

@@ -152,3 +152,4 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}

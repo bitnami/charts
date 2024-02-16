@@ -42,7 +42,6 @@ global:
     service:
       ports:
         postgresql: ""
-
 ## @section Common parameters
 ##
 
@@ -81,7 +80,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section PostgreSQL common parameters
 ##
 
@@ -286,7 +284,6 @@ tls:
   ## @param tls.crlFilename File containing a Certificate Revocation List
   ##
   crlFilename: ""
-
 ## @section PostgreSQL Primary parameters
 ##
 primary:
@@ -439,15 +436,21 @@ primary:
   lifecycleHooks: {}
   ## PostgreSQL Primary resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param primary.resources.limits The resources limits for the PostgreSQL Primary containers
-  ## @param primary.resources.requests.memory The requested memory for the PostgreSQL Primary containers
-  ## @param primary.resources.requests.cpu The requested cpu for the PostgreSQL Primary containers
+  ## @param primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      memory: 256Mi
-      cpu: 250m
+  resourcesPreset: "none"
+  ## @param primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param primary.podSecurityContext.enabled Enable security context
@@ -778,7 +781,6 @@ primary:
     ## @param primary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
     ##
     whenDeleted: Retain
-
 ## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
 readReplicas:
@@ -869,15 +871,21 @@ readReplicas:
   lifecycleHooks: {}
   ## PostgreSQL read only resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param readReplicas.resources.limits The resources limits for the PostgreSQL read only containers
-  ## @param readReplicas.resources.requests.memory The requested memory for the PostgreSQL read only containers
-  ## @param readReplicas.resources.requests.cpu The requested cpu for the PostgreSQL read only containers
+  ## @param readReplicas.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if readReplicas.resources is set (readReplicas.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests:
-      memory: 256Mi
-      cpu: 250m
+  resourcesPreset: "none"
+  ## @param readReplicas.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Pod Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param readReplicas.podSecurityContext.enabled Enable security context
@@ -1208,8 +1216,6 @@ readReplicas:
     ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
     ##
     whenDeleted: Retain
-
-
 ## @section Backup parameters
 ## This section implements a trivial logical dump cronjob of the database.
 ## This only comes with the consistency guarantees of the dump program.
@@ -1274,7 +1280,6 @@ backup:
       - /bin/sh
       - -c
       - "pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
-
     ## @param backup.cronjob.labels Set the cronjob labels
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
@@ -1301,7 +1306,7 @@ backup:
       ## @param backup.cronjob.storage.accessModes PV Access Mode
       ##
       accessModes:
-       - ReadWriteOnce
+        - ReadWriteOnce
       ## @param backup.cronjob.storage.size PVC Storage Request for the backup data volume
       ##
       size: 8Gi
@@ -1323,7 +1328,6 @@ backup:
         ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
         ##
         selector: {}
-
 ## @section Volume Permissions parameters
 ##
 
@@ -1357,12 +1361,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -1387,7 +1400,6 @@ volumePermissions:
 ##
 serviceBindings:
   enabled: false
-
 ## Service account for PostgreSQL to use.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -1429,10 +1441,8 @@ rbac:
 ##
 psp:
   create: false
-
 ## @section Metrics Parameters
 ##
-
 metrics:
   ## @param metrics.enabled Start a prometheus exporter
   ##
@@ -1569,12 +1579,21 @@ metrics:
     metrics: 9187
   ## PostgreSQL Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resources.limits The resources limits for the PostgreSQL Prometheus exporter container
-  ## @param metrics.resources.requests The requested resources for the PostgreSQL Prometheus exporter container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Service configuration
   ##
   service:

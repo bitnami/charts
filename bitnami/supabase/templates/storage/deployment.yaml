@@ -89,6 +89,8 @@ spec:
               find {{ .Values.storage.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.storage.containerSecurityContext.runAsUser }}:{{ .Values.storage.podSecurityContext.fsGroup }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.storage.persistence.mountPath }}
@@ -178,6 +180,8 @@ spec:
             {{- end }}
           {{- if .Values.storage.resources }}
           resources: {{- toYaml .Values.storage.resources | nindent 12 }}
+          {{- else if ne .Values.storage.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.storage.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
