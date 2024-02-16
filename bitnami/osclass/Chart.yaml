@@ -26,7 +26,7 @@ dependencies:
   - bitnami-common
   version: 2.x.x
 deprecated: true
-description: Osclass allows you to easily create a classifieds site without any technical knowledge. It provides support for presenting general ads or specialized ads, is customizable, extensible and multilingual.
+description: DEPRECATED Osclass allows you to easily create a classifieds site without any technical knowledge. It provides support for presenting general ads or specialized ads, is customizable, extensible and multilingual.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/osclass/img/osclass-stack-220x234.png
 keywords:
@@ -39,4 +39,4 @@ maintainers: []
 name: osclass
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/osclass
-version: 18.2.5
+version: 18.2.6
