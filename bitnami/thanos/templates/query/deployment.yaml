@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-query
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if .Values.commonAnnotations }}
@@ -41,7 +41,7 @@ spec:
       {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "query" "context" $) }}
+      serviceAccountName: {{ include "thanos.query.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.query.automountServiceAccountToken }}
       {{- if .Values.query.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.query.hostAliases "context" $) | nindent 8 }}
@@ -131,13 +131,13 @@ spec:
             {{- end }}
             {{- end }}
             {{- if and .Values.storegateway.enabled .Values.query.dnsDiscovery.enabled (not .Values.storegateway.sharded.enabled ) }}
-            - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-storegateway{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.ruler.enabled .Values.query.dnsDiscovery.enabled }}
-            - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-ruler{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.ruler.fullname" . }}{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- if and .Values.receive.enabled .Values.query.dnsDiscovery.enabled }}
-            - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" . }}-receive{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.receive.fullname" . }}{{ if .Values.receive.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
             {{- range .Values.query.stores }}
             - --endpoint={{ . }}

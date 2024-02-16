@@ -96,6 +96,7 @@ spec:
             {{- if .Values.security.tls.restEncryption }}
             - --es.ssl-skip-verify
             {{- end }}
+            - --web.listen-address=:{{ .Values.metrics.containerPorts.http }}
             {{- if .Values.metrics.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -124,7 +125,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 9114
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}

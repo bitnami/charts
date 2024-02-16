@@ -148,6 +148,10 @@ spec:
             - name: MINIO_CERTS_DIR
               value: {{ .Values.tls.mountPath | quote }}
             {{- end }}
+            {{- if .Values.persistence.mountPath }}
+            - name: MINIO_DATA_DIR
+              value: {{ .Values.persistence.mountPath | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -86,6 +86,8 @@ spec:
             runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: static-files
@@ -163,6 +165,8 @@ spec:
             {{- end }}
           {{- if .Values.dex.resources }}
           resources: {{- toYaml .Values.dex.resources | nindent 12 }}
+          {{- else if ne .Values.dex.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dex.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dex.customStartupProbe "context" $) | nindent 12 }}

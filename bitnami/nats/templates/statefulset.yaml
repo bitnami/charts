@@ -171,7 +171,7 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
+              containerPort: {{ coalesce .Values.metrics.containerPorts.http .Values.metrics.containerPort }}
           livenessProbe:
             httpGet:
               path: /metrics

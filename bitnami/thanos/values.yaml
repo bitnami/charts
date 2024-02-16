@@ -136,23 +136,6 @@ auth:
   ## Note: Passwords will be later encrypted using bcrypt
   basicAuthUsers: {}
 
-## Common Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-## @param serviceAccount.create Specifies whether a ServiceAccount should be created
-## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
-## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
-##
-serviceAccount:
-  create: true
-  name: ""
-  automountServiceAccountToken: false
-  annotations: {}
-
-## DEPRECATED - existingServiceAccount. This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
-##
-## existingServiceAccount: ""
-
 ## @section Thanos Query parameters
 
 query:
@@ -220,6 +203,12 @@ query:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param query.containerPorts.http HTTP container port
+  ## @param query.containerPorts.grpc HTTP container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
   ## K8s Pod Security Context for Thanos Query pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param query.podSecurityContext.enabled Enable security context for the Thanos Query pods
@@ -490,6 +479,61 @@ query:
         key: ""
         ca: ""
         existingSecret: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param query.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param query.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param query.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param query.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param query.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param query.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -615,14 +659,12 @@ query:
   ## @param query.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param query.serviceAccount.annotations Annotations for Thanos Query Service Account
   ## @param query.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED query.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## RBAC configuration
   ##
   rbac:
@@ -917,6 +959,10 @@ queryFrontend:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param queryFrontend.containerPorts.http HTTP container port
+  ##
+  containerPorts:
+    http: 9090
   ## K8s Pod Security Context for Thanos Query Frontend pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param queryFrontend.podSecurityContext.enabled Enable security context for the Thanos Query Frontend pods
@@ -1126,6 +1172,61 @@ queryFrontend:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param queryFrontend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param queryFrontend.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param queryFrontend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -1182,14 +1283,12 @@ queryFrontend:
   ## @param queryFrontend.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param queryFrontend.serviceAccount.annotations Annotations for Thanos Query Frontend Service Account
   ## @param queryFrontend.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED queryFrontend.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## RBAC configuration
   ##
   rbac:
@@ -1383,6 +1482,10 @@ bucketweb:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param bucketweb.containerPorts.http HTTP container port
+  ##
+  containerPorts:
+    http: 8080
   ## K8s Pod Security Context for Thanos Bucket Web pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param bucketweb.podSecurityContext.enabled Enable security context for the Thanos Bucket Web pods
@@ -1592,6 +1695,61 @@ bucketweb:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param bucketweb.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param bucketweb.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param bucketweb.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param bucketweb.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param bucketweb.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param bucketweb.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param bucketweb.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -1646,14 +1804,12 @@ bucketweb:
   ## @param bucketweb.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param bucketweb.serviceAccount.annotations Annotations for Thanos Bucket Web Service Account
   ## @param bucketweb.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED bucketweb.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Bucket Web Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param bucketweb.autoscaling.enabled Enable autoscaling for Thanos Bucket Web
@@ -1851,6 +2007,10 @@ compactor:
   ##
   updateStrategy:
     type: Recreate
+  ## @param compactor.containerPorts.http HTTP container port
+  ##
+  containerPorts:
+    http: 10902
   ## K8s Pod Security Context for Thanos Compactor pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param compactor.podSecurityContext.enabled Enable security context for the Thanos Compactor pods
@@ -2060,6 +2220,61 @@ compactor:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param compactor.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param compactor.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param compactor.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -2116,14 +2331,12 @@ compactor:
   ## @param compactor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param compactor.serviceAccount.annotations Annotations for Thanos Compactor Service Account
   ## @param compactor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED compactor.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -2338,6 +2551,12 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param storegateway.containerPorts.http HTTP container port
+  ## @param storegateway.containerPorts.grpc GRPC container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
   ## K8s Pod Security Context for Thanos Store Gateway pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param storegateway.podSecurityContext.enabled Enable security context for the Thanos Store Gateway pods
@@ -2547,6 +2766,61 @@ storegateway:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param storegateway.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param storegateway.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param storegateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param storegateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param storegateway.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param storegateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param storegateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -2646,14 +2920,12 @@ storegateway:
   ## @param storegateway.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param storegateway.serviceAccount.annotations Annotations for Thanos Store Gateway Service Account
   ## @param storegateway.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED storegateway.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Store Gateway Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param storegateway.autoscaling.enabled Enable autoscaling for Thanos Store Gateway
@@ -3000,6 +3272,12 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param ruler.containerPorts.http HTTP container port
+  ## @param ruler.containerPorts.grpc GRPC container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
   ## K8s Pod Security Context for Thanos Ruler pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ruler.podSecurityContext.enabled Enable security context for the Thanos Ruler pods
@@ -3209,6 +3487,61 @@ ruler:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param ruler.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param ruler.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param ruler.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param ruler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param ruler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -3305,14 +3638,12 @@ ruler:
   ## @param ruler.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param ruler.serviceAccount.annotations Annotations for Thanos Ruler Service Account
   ## @param ruler.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED ruler.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Ruler Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param ruler.autoscaling.enabled Enable autoscaling for Thanos Ruler
@@ -3526,6 +3857,14 @@ receive:
   ## @param receive.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds: 0
+  ## @param receive.containerPorts.http HTTP container port
+  ## @param receive.containerPorts.grpc GRPC container port
+  ## @param receive.containerPorts.remote remote-write container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
+    remote: 19291
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
@@ -3740,6 +4079,61 @@ receive:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param receive.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param receive.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param receive.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param receive.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param receive.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param receive.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param receive.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -3812,14 +4206,12 @@ receive:
   ## @param receive.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param receive.serviceAccount.annotations Annotations for Thanos Receive Service Account
   ## @param receive.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED receive.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Receive Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receive.autoscaling.enabled Enable autoscaling for Thanos Receive
@@ -4233,14 +4625,12 @@ receiveDistributor:
   ## @param receiveDistributor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param receiveDistributor.serviceAccount.annotations Annotations for Thanos Receive Distributor Service Account
   ## @param receiveDistributor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED receive.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Receive Distributor Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receiveDistributor.autoscaling.enabled Enable autoscaling for Thanos Receive Distributor
@@ -4467,31 +4857,3 @@ minio:
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: "thanos"
-
-## @section NetWorkPolicy parameters
-
-networkPolicy:
-  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
-  ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to http and grpc thanos port.
-  ## When true, thanos will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  allowExternal: true
-  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
-  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
-  ## and that match other criteria, the ones that have the good label, can reach thanos.
-  ## But sometimes, we want thanos to be accessible to clients from other namespaces, in this case, we can use this
-  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
-  ##
-  ## Example:
-  ## explicitNamespacesSelector:
-  ##   matchLabels:
-  ##     role: frontend
-  ##   matchExpressions:
-  ##    - {key: role, operator: In, values: [frontend]}
-  ##
-  explicitNamespacesSelector: {}

@@ -82,6 +82,8 @@ spec:
             runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: tmp-dir
@@ -196,6 +198,8 @@ spec:
             {{- end }}
           {{- if .Values.repoServer.resources }}
           resources: {{- toYaml .Values.repoServer.resources | nindent 12 }}
+          {{- else if ne .Values.repoServer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.repoServer.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.repoServer.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customStartupProbe "context" $) | nindent 12 }}

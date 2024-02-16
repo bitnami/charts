@@ -7,8 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}-receive
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.receive.fullname" . }}
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
   {{- if .Values.commonAnnotations }}
