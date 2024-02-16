@@ -157,6 +157,8 @@ spec:
           {{- end }}
           {{- if .Values.speaker.resources }}
           resources: {{- toYaml .Values.speaker.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: memberlist-secret

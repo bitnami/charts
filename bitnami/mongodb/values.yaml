@@ -21,7 +21,6 @@ global:
   imagePullSecrets: []
   storageClass: ""
   namespaceOverride: ""
-
 ## @section Common parameters
 ##
 
@@ -77,24 +76,20 @@ commonLabels: {}
 ## @param commonAnnotations Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonAnnotations: {}
-
 ## @param topologyKey Override common lib default topology key. If empty - "kubernetes.io/hostname" is used
 ## i.e. topologyKey: topology.kubernetes.io/zone
 ##
 topologyKey: ""
-
 ## @param serviceBindings.enabled Create secret for service binding (Experimental)
 ## Ref: https://servicebinding.io/service-provider/
 ##
 serviceBindings:
   enabled: false
-
 ## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
 ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: true
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -109,7 +104,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section MongoDB(&reg;) parameters
 ##
 
@@ -143,7 +137,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## @param schedulerName Name of the scheduler (other than default) to dispatch pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
@@ -264,7 +257,6 @@ tls:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## e.g:
   ## extraDnsNames
   ##   "DNS.6": "$my_host"
@@ -280,33 +272,31 @@ tls:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param tls.resources.limits Init container generate-tls-certs resource limits
-  ## @param tls.resources.requests Init container generate-tls-certs resource requests
+  ## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##   cpu: 100m
-    ##   memory: 128Mi
-    ##
-    requests: {}
-    ##
+  resourcesPreset: "none"
+  ## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init Container securityContext 
   ## ref: https://kubernetes.io/docs/concepts/security/pod-security-policy/
   ## @param tls.securityContext Init container generate-tls-cert Security context
   ##
   securityContext: {}
-    ## Example:
-    ## allowPrivilegeEscalation: false
-    ## capabilities:
-    ##   drop: ["ALL"]
-    ##
+  ## Example:
+  ## allowPrivilegeEscalation: false
+  ## capabilities:
+  ##   drop: ["ALL"]
+  ##
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
@@ -449,7 +439,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars (in case of sensitive data)
 ##
 extraEnvVarsSecret: ""
-
 ## @section MongoDB(&reg;) statefulset parameters
 ##
 
@@ -596,22 +585,21 @@ containerSecurityContext:
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for MongoDB(&reg;) containers
-## @param resources.requests The requested resources for MongoDB(&reg;) containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  ##
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## @param containerPorts.mongodb MongoDB(&reg;) container port
 ##
 containerPorts:
@@ -742,7 +730,6 @@ pdb:
   ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction
   ##
   maxUnavailable: ""
-
 ## @section Traffic exposure parameters
 ##
 
@@ -864,22 +851,21 @@ externalAccess:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param externalAccess.autoDiscovery.resources.limits Init container auto-discovery resource limits
-    ## @param externalAccess.autoDiscovery.resources.requests Init container auto-discovery resource requests
+    ## @param externalAccess.autoDiscovery.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      requests: {}
+    resourcesPreset: "none"
+    ## @param externalAccess.autoDiscovery.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## Parameters to configure a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes.
   ## @param externalAccess.externalMaster.enabled Use external master for bootstrapping
   ## @param externalAccess.externalMaster.host External master host to bootstrap from
@@ -1033,7 +1019,6 @@ externalAccess:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
-
 ## @section Network policy parameters
 ##
 
@@ -1153,7 +1138,6 @@ persistence:
     ## @param persistence.volumeClaimTemplates.dataSource Add dataSource to the VolumeClaimTemplate
     ##
     dataSource: {}
-
 ## Persistent Volume Claim Retention Policy
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
 ##
@@ -1167,8 +1151,6 @@ persistentVolumeClaimRetentionPolicy:
   ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
   ##
   whenDeleted: Retain
-    
-
 ## @section Backup parameters
 ## This section implements a trivial logical dump cronjob of the database.
 ## This only comes with the consistency guarantees of the dump program.
@@ -1256,7 +1238,7 @@ backup:
       ## @param backup.cronjob.storage.accessModes PV Access Mode
       ##
       accessModes:
-       - ReadWriteOnce
+        - ReadWriteOnce
       ## @param backup.cronjob.storage.size PVC Storage Request for the backup data volume
       ##
       size: 8Gi
@@ -1278,7 +1260,6 @@ backup:
         ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
         ##
         selector: {}
-
 ## @section RBAC parameters
 ##
 
@@ -1376,7 +1357,6 @@ podSecurityPolicy:
   ##      - 'emptyDir'
   ##      - 'persistentVolumeClaim'
   ##
-
 ## @section Volume Permissions parameters
 ##
 ## Init Container parameters
@@ -1417,22 +1397,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
@@ -1447,10 +1426,8 @@ volumePermissions:
   securityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Arbiter parameters
 ##
-
 arbiter:
   ## @param arbiter.enabled Enable deploying the arbiter
   ##   https://docs.mongodb.com/manual/tutorial/add-replica-set-arbiter/
@@ -1636,22 +1613,21 @@ arbiter:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param arbiter.resources.limits The resources limits for Arbiter containers
-  ## @param arbiter.resources.requests The requested resources for Arbiter containers
+  ## @param arbiter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if arbiter.resources is set (arbiter.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param arbiter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param arbiter.containerPorts.mongodb MongoDB(&reg;) arbiter container port
   ##
   containerPorts:
@@ -1787,10 +1763,8 @@ arbiter:
       ## @param arbiter.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
 ## @section Hidden Node parameters
 ##
-
 hidden:
   ## @param hidden.enabled Enable deploying the hidden nodes
   ##   https://docs.mongodb.com/manual/tutorial/configure-a-hidden-replica-set-member/
@@ -1980,22 +1954,21 @@ hidden:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param hidden.resources.limits The resources limits for hidden node containers
-  ## @param hidden.resources.requests The requested resources for hidden node containers
+  ## @param hidden.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if hidden.resources is set (hidden.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param hidden.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param hidden.containerPorts.mongodb MongoDB(&reg;) hidden container port
   ##
   containerPorts:
@@ -2180,10 +2153,8 @@ hidden:
       ## @param hidden.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
 ## @section Metrics parameters
 ##
-
 metrics:
   ## @param metrics.enabled Enable using a sidecar Prometheus exporter
   ##
@@ -2211,7 +2182,6 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param metrics.username String with username for the metrics exporter
   ## If undefined the root user will be used for the metrics exporter
   ##
@@ -2222,7 +2192,6 @@ metrics:
   password: ""
   ## @param metrics.compatibleMode Enables old style mongodb-exporter metrics
   compatibleMode: true
-
   collector:
     ## @param metrics.collector.all Enable all collectors. Same as enabling all individual metrics
     ## Enabling all metrics will cause significant CPU load on mongod
@@ -2245,7 +2214,6 @@ metrics:
     indexstatsColls: []
     ## @param metrics.collector.collstatsLimit Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit
     collstatsLimit: 0
-
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
   ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
@@ -2262,22 +2230,21 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for Prometheus exporter containers
-  ## @param metrics.resources.requests The requested resources for Prometheus exporter containers
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.containerPort Port of the Prometheus metrics container
   ##
   containerPort: 9216

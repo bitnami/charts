@@ -53,3 +53,4 @@ Option B:
 {{- include "metrics-server.validateValues" . }}
 {{- include "metrics-server.checkRollingTags" . }}
 
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
