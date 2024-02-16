@@ -84,6 +84,8 @@ spec:
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -153,6 +155,8 @@ spec:
             {{- end }}
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- else if ne .Values.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -220,6 +224,8 @@ spec:
           {{- end }}
           {{- if .Values.server.thanos.resources }}
           resources: {{- toYaml .Values.server.thanos.resources | nindent 12 }}
+          {{- else if ne .Values.server.thanos.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.thanos.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: grpc

@@ -171,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.streaming.resources }}
           resources: {{- toYaml .Values.streaming.resources | nindent 12 }}
+          {{- else if ne .Values.streaming.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.streaming.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

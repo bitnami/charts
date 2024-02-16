@@ -152,6 +152,8 @@ spec:
           {{- end }}
           {{- if .Values.jobmanager.resources }}
           resources: {{- toYaml .Values.jobmanager.resources | nindent 12 }}
+          {{- else if ne .Values.jobmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jobmanager.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.jobmanager.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.extraVolumeMounts "context" $) | nindent 12 }}
