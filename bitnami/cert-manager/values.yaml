@@ -13,7 +13,6 @@ global:
   imageRegistry: ""
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -50,7 +49,6 @@ installCRDs: false
 ## @param replicaCount Number of cert-manager replicas
 ##
 replicaCount: 1
-
 ## @section Controller deployment parameters
 
 ## Controller deployment parameters
@@ -123,12 +121,21 @@ controller:
       debug: false
   ## Controller containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param controller.resources.limits The resources limits for the Controller container
-  ## @param controller.resources.requests The requested resources for the Controller container
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## controller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Controller pods' Security Context
@@ -384,7 +391,6 @@ controller:
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## Controller Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -443,7 +449,6 @@ controller:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Webhook deployment parameters
 
 ## Webhook deployment parameters
@@ -485,14 +490,21 @@ webhook:
     debug: false
   ## Webhook containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param webhook.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## @param webhook.resources.limits The resources limits for the Webhook container
-    ##
-    limits: {}
-    ## @param webhook.resources.requests The requested resources for the Webhook container
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param webhook.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## webhook pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param webhook.podSecurityContext.enabled Enabled Webhook pods' Security Context
@@ -732,7 +744,6 @@ webhook:
   ##  @param webhook.hostNetwork Specifies hostNetwork value
   ##
   hostNetwork: false
-
   ## Webhook Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -791,7 +802,6 @@ webhook:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section CAInjector deployment parameters
 
 ## CAInjector deployment parameters
@@ -800,7 +810,6 @@ cainjector:
   ## @param cainjector.replicaCount Number of CAInjector replicas
   ##
   replicaCount: 1
-
   ## Bitnami CAInjector image
   ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
   ## @param cainjector.image.registry [default: REGISTRY_NAME] CAInjector image registry
@@ -835,13 +844,21 @@ cainjector:
   ## CAInjector containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
-  resources:
-    ## @param cainjector.resources.limits The resources limits for the CAInjector container
-    ##
-    limits: {}
-    ## @param cainjector.resources.requests The requested resources for the CAInjector container
-    ##
-    requests: {}
+  ## @param cainjector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cloneHtdocsFromGit.resources is set (cloneHtdocsFromGit.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param cainjector.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## cainjector pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cainjector.podSecurityContext.enabled Enabled CAInjector pods' Security Context
@@ -1079,9 +1096,7 @@ cainjector:
     ## @param cainjector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
 ## @section Metrics Parameters
-
 metrics:
   ## @param metrics.enabled Start metrics
   ##
@@ -1097,7 +1112,6 @@ metrics:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: "{{ .Values.controller.containerPort }}"
-
   ## Prometheus Operator ServiceMonitor resource
   ##
   serviceMonitor:
@@ -1150,7 +1164,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-
 ## @section Other Parameters
 
 ## RBAC configuration
