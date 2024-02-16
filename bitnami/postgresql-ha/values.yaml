@@ -45,7 +45,6 @@ global:
     adminUsername: ""
     adminPassword: ""
     existingSecret: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -86,7 +85,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section PostgreSQL with Repmgr parameters
 
 ## PostgreSQL parameters
@@ -304,22 +302,21 @@ postgresql:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param postgresql.resources.limits The resources limits for the container
-  ## @param postgresql.resources.requests The requested resources for the container
+  ## @param postgresql.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.resources is set (postgresql.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param postgresql.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## The pod management policy of the statefulset. 
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ## @param postgresql.podManagementPolicy sets the pod management policy
@@ -684,7 +681,6 @@ postgresql:
   ## after start/restart of container. It gives pgpool time switch node back from DOWN to UP state during rolling
   ## upgrade.
   headlessWithNotReadyAddresses: false
-
 witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
   ## @param witness.create Create PostgreSQL witness nodes
@@ -870,22 +866,21 @@ witness:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param witness.resources.limits The resources limits for the container
-  ## @param witness.resources.requests The requested resources for the container
+  ## @param witness.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if witness.resources is set (witness.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param witness.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## PostgreSQL container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param witness.livenessProbe.enabled Enable livenessProbe
@@ -952,7 +947,6 @@ witness:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @param witness.upgradeRepmgrExtension Upgrade repmgr extension in the database
   ##
   upgradeRepmgrExtension: false
@@ -969,7 +963,6 @@ witness:
   repmgrConnectTimeout: 5
   repmgrReconnectAttempts: 2
   repmgrReconnectInterval: 3
-
   ## Audit settings
   ## https://github.com/bitnami/containers/tree/main/bitnami/postgresql#auditing
   ##
@@ -1333,22 +1326,21 @@ pgpool:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param pgpool.resources.limits The resources limits for the container
-  ## @param pgpool.resources.requests The requested resources for the container
+  ## @param pgpool.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if pgpool.resources is set (pgpool.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param pgpool.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Pgpool container's liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param pgpool.livenessProbe.enabled Enable livenessProbe
@@ -1518,7 +1510,6 @@ pgpool:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
   reservedConnections: 1
-
   ## @param pgpool.maxPool The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/pgpool#configuration
   ##
@@ -1609,7 +1600,6 @@ pgpool:
     ## ref: https://www.pgpool.net/docs/latest/en/html/runtime-ssl.html
     ##
     certCAFilename: ""
-
 ## @section LDAP parameters
 
 ## LDAP parameters
@@ -1636,7 +1626,6 @@ ldap:
   scope: ""
   tlsReqcert: ""
   nssInitgroupsIgnoreusers: root,nslcd
-
 ## @section Other Parameters
 
 ## RBAC configuration
@@ -1658,7 +1647,6 @@ rbac:
   ##       - list
   ##
   rules: []
-
 ## ServiceAccount configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -1677,14 +1665,12 @@ serviceAccount:
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
   automountServiceAccountToken: false
-
 ## Pod Security Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
 ##
 psp:
   create: false
-
 ## @section Metrics parameters
 
 ## PostgreSQL Prometheus exporter parameters
@@ -1746,22 +1732,21 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for the container
-  ## @param metrics.resources.requests The requested resources for the container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.containerPorts.http Prometheus metrics exporter port
   ##
   containerPorts:
@@ -1823,7 +1808,6 @@ metrics:
   ## @param metrics.customStartupProbe Override default startup probe
   ##
   customStartupProbe: {}
-
   ## Metrics service parameters
   ##
   service:
@@ -1940,7 +1924,6 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
-
 ## @section Volume permissions parameters
 
 ## Init Container parameters
@@ -1997,23 +1980,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -2058,7 +2039,6 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
-
 ## Persistent Volume Claim Retention Policy
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
 ##
@@ -2072,7 +2052,6 @@ persistentVolumeClaimRetentionPolicy:
   ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
   ##
   whenDeleted: Retain
-
 ## @section Traffic Exposure parameters
 
 ## PostgreSQL service parameters
@@ -2142,7 +2121,6 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-
 ## @section Backup parameters
 ## This section implements a trivial logical dump cronjob of the database.
 ## This only comes with the consistency guarantees of the dump program.
@@ -2208,7 +2186,6 @@ backup:
       - /bin/sh
       - -c
       - "pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
-
     ## @param backup.cronjob.labels Set the cronjob labels
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
@@ -2235,7 +2212,7 @@ backup:
       ## @param backup.cronjob.storage.accessModes PV Access Mode
       ##
       accessModes:
-       - ReadWriteOnce
+        - ReadWriteOnce
       ## @param backup.cronjob.storage.size PVC Storage Request for the backup data volume
       ##
       size: 8Gi
