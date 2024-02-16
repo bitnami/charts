@@ -212,6 +212,8 @@ spec:
           {{- end }}
           {{- if .Values.ingest.resources }}
           resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
+          {{- else if ne .Values.ingest.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingest.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
