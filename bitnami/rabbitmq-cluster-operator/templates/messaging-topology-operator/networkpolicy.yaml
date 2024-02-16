@@ -35,6 +35,9 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Allow rabbitmq api
+        - port: 15672
+          protocol: TCP
         # Allow access to kube-apiserver
         {{- range $port := .Values.msgTopologyOperator.networkPolicy.kubeAPIServerPorts }}
         - port: {{ $port }}

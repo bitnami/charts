@@ -140,6 +140,8 @@ spec:
           {{- end }}
           {{- if .Values.applicationSet.resources }}
           resources: {{- toYaml .Values.applicationSet.resources | nindent 12 }}
+          {{- else if ne .Values.applicationSet.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.applicationSet.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.applicationSet.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.applicationSet.containerSecurityContext "enabled" | toYaml | nindent 12 }}
