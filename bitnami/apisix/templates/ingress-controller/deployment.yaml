@@ -125,6 +125,8 @@ spec:
             {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}
+          {{- else if ne .Values.ingressController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingressController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

@@ -8,6 +8,10 @@ Osclass allows you to easily create a classifieds site without any technical kno
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+## This Helm chart is deprecated
+
+The Osclass chart will no longer be released in our catalog.
+
 ## TL;DR
 
 ```console

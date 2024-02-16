@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -44,13 +43,11 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @param enableServiceLinks Whether information about services should be injected into all pods' environment variable
 ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: false
-
 ## Enable diagnostic mode in the deployments/statefulsets
 ##
 diagnosticMode:
@@ -65,7 +62,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Common Milvus Parameters
 ##
 milvus:
@@ -241,15 +237,12 @@ milvus:
   ## @param milvus.extraConfig Extra configuration parameters
   ##
   extraConfig: {}
-
   ## @param milvus.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
-
   ## @param milvus.extraConfigExistingConfigMap name of a ConfigMap with existing configuration for the Dashboard
   ##
   extraConfigExistingConfigMap: ""
-
 initJob:
   ## @param initJob.forceRun Force the run of the credential job
   ##
@@ -312,7 +305,6 @@ initJob:
   ## @param initJob.extraVolumes Optionally specify extra list of additional volumes for the credential init job
   ##
   extraVolumes: []
-
   ## @param initJob.extraCommands Extra commands to pass to the generation job
   ##
   extraCommands: ""
@@ -372,12 +364,21 @@ initJob:
   extraVolumeMounts: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param initJob.resources.limits The resources limits for the container
-  ## @param initJob.resources.requests The requested resources for the container
+  ## @param initJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param initJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -392,7 +393,6 @@ initJob:
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
     # This should be executed after the minio provisioning job
     helm.sh/hook-weight: "10"
-
   ## @param initJob.podLabels Additional pod labels
   ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -450,7 +450,6 @@ initJob:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Data Coordinator Deployment Parameters
 ##
 dataCoord:
@@ -477,7 +476,6 @@ dataCoord:
     dataCoord:
       port: {{ .Values.dataCoord.containerPorts.grpc }}
       enableActiveStandby: true
-
   ## @param dataCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -556,12 +554,21 @@ dataCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dataCoord.resources.limits The resources limits for the data coordinator containers
-  ## @param dataCoord.resources.requests The requested resources for the data coordinator containers
+  ## @param dataCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dataCoord.resources is set (dataCoord.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param dataCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataCoord.podSecurityContext.enabled Enabled Data Coordinator pods' Security Context
@@ -726,7 +733,6 @@ dataCoord:
     ## @param dataCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dataCoord.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -737,7 +743,6 @@ dataCoord:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Data Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -784,7 +789,6 @@ dataCoord:
       ## @param dataCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Data Coordinator Traffic Exposure Parameters
   ##
 
@@ -845,7 +849,6 @@ dataCoord:
     ## @param dataCoord.service.extraPorts Extra ports to expose in the Data Coordinator service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -900,8 +903,6 @@ dataCoord:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Data Coordinator Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -952,7 +953,6 @@ dataCoord:
       ## @param dataCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Root Coordinator Deployment Parameters
 ##
 rootCoord:
@@ -979,7 +979,6 @@ rootCoord:
     rootCoord:
       port: {{ .Values.rootCoord.containerPorts.grpc }}
       enableActiveStandby: true
-
   ## @param rootCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -1001,7 +1000,7 @@ rootCoord:
   ## @param rootCoord.containerPorts.grpc GRPC port for Root Coordinator
   ## @param rootCoord.containerPorts.metrics Metrics port for Root Coordinator
   containerPorts:
-    grpc: 19530 
+    grpc: 19530
     metrics: 9091
   ## Configure extra options for Root Coordinator containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -1058,12 +1057,21 @@ rootCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param rootCoord.resources.limits The resources limits for the data coordinator containers
-  ## @param rootCoord.resources.requests The requested resources for the data coordinator containers
+  ## @param rootCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rootCoord.resources is set (rootCoord.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param rootCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param rootCoord.podSecurityContext.enabled Enabled Root Coordinator pods' Security Context
@@ -1228,7 +1236,6 @@ rootCoord:
     ## @param rootCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param rootCoord.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1239,7 +1246,6 @@ rootCoord:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Root Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -1286,7 +1292,6 @@ rootCoord:
       ## @param rootCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Root Coordinator Traffic Exposure Parameters
   ##
 
@@ -1347,7 +1352,6 @@ rootCoord:
     ## @param rootCoord.service.extraPorts Extra ports to expose in the Root Coordinator service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1402,7 +1406,6 @@ rootCoord:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
   ## @section Root Coordinator Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -1453,7 +1456,6 @@ rootCoord:
       ## @param rootCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Query Coordinator Deployment Parameters
 ##
 queryCoord:
@@ -1480,7 +1482,6 @@ queryCoord:
     queryCoord:
       port: {{ .Values.queryCoord.containerPorts.grpc }}
       enableActiveStandby: true
-
   ## @param queryCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -1559,12 +1560,21 @@ queryCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryCoord.resources.limits The resources limits for the data coordinator containers
-  ## @param queryCoord.resources.requests The requested resources for the data coordinator containers
+  ## @param queryCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryCoord.resources is set (queryCoord.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param queryCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryCoord.podSecurityContext.enabled Enabled Query Coordinator pods' Security Context
@@ -1729,7 +1739,6 @@ queryCoord:
     ## @param queryCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryCoord.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1740,7 +1749,6 @@ queryCoord:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Query Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -1787,7 +1795,6 @@ queryCoord:
       ## @param queryCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Query Coordinator Traffic Exposure Parameters
   ##
 
@@ -1848,7 +1855,6 @@ queryCoord:
     ## @param queryCoord.service.extraPorts Extra ports to expose in the Query Coordinator service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1903,8 +1909,6 @@ queryCoord:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Query Coordinator Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -1955,7 +1959,6 @@ queryCoord:
       ## @param queryCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Index Coordinator Deployment Parameters
 ##
 indexCoord:
@@ -1982,7 +1985,6 @@ indexCoord:
     indexCoord:
       port: {{ .Values.indexCoord.containerPorts.grpc }}
       enableActiveStandby: true
-
   ## @param indexCoord.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -2061,12 +2063,21 @@ indexCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexCoord.resources.limits The resources limits for the data coordinator containers
-  ## @param indexCoord.resources.requests The requested resources for the data coordinator containers
+  ## @param indexCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexCoord.resources is set (indexCoord.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param indexCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexCoord.podSecurityContext.enabled Enabled Index Coordinator pods' Security Context
@@ -2231,7 +2242,6 @@ indexCoord:
     ## @param indexCoord.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param indexCoord.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2242,7 +2252,6 @@ indexCoord:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Index Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -2289,7 +2298,6 @@ indexCoord:
       ## @param indexCoord.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Index Coordinator Traffic Exposure Parameters
   ##
 
@@ -2350,7 +2358,6 @@ indexCoord:
     ## @param indexCoord.service.extraPorts Extra ports to expose in the Index Coordinator service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -2405,8 +2412,6 @@ indexCoord:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Index Coordinator Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -2457,7 +2462,6 @@ indexCoord:
       ## @param indexCoord.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Data Node Deployment Parameters
 ##
 dataNode:
@@ -2484,7 +2488,6 @@ dataNode:
     dataNode:
       port: {{ .Values.dataNode.containerPorts.grpc }}
       enableDisk: true
-
   ## @param dataNode.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -2563,12 +2566,21 @@ dataNode:
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dataNode.resources.limits The resources limits for the data node containers
-  ## @param dataNode.resources.requests The requested resources for the data node containers
+  ## @param dataNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dataNode.resources is set (dataNode.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param dataNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dataNode.podSecurityContext.enabled Enabled Data Node pods' Security Context
@@ -2733,7 +2745,6 @@ dataNode:
     ## @param dataNode.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dataNode.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2744,7 +2755,6 @@ dataNode:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Data Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -2791,7 +2801,6 @@ dataNode:
       ## @param dataNode.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Data Node Traffic Exposure Parameters
   ##
 
@@ -2852,7 +2861,6 @@ dataNode:
     ## @param dataNode.service.extraPorts Extra ports to expose in the Data Node service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -2907,8 +2915,6 @@ dataNode:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Data Node Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -2959,7 +2965,6 @@ dataNode:
       ## @param dataNode.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Query Node Deployment Parameters
 ##
 queryNode:
@@ -2986,7 +2991,6 @@ queryNode:
     queryNode:
       port: {{ .Values.queryNode.containerPorts.grpc }}
       enableDisk: true
-
   ## @param queryNode.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -3065,12 +3069,21 @@ queryNode:
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryNode.resources.limits The resources limits for the data node containers
-  ## @param queryNode.resources.requests The requested resources for the data node containers
+  ## @param queryNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryNode.resources is set (queryNode.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param queryNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryNode.podSecurityContext.enabled Enabled Query Node pods' Security Context
@@ -3235,7 +3248,6 @@ queryNode:
     ## @param queryNode.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryNode.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3246,7 +3258,6 @@ queryNode:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Query Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -3293,7 +3304,6 @@ queryNode:
       ## @param queryNode.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Query Node Traffic Exposure Parameters
   ##
 
@@ -3354,7 +3364,6 @@ queryNode:
     ## @param queryNode.service.extraPorts Extra ports to expose in the Query Node service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -3409,8 +3418,6 @@ queryNode:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Query Node Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -3461,7 +3468,6 @@ queryNode:
       ## @param queryNode.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Index Node Deployment Parameters
 ##
 indexNode:
@@ -3488,7 +3494,6 @@ indexNode:
     indexNode:
       port: {{ .Values.indexNode.containerPorts.grpc }}
       enableDisk: true
-
   ## @param indexNode.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -3567,12 +3572,21 @@ indexNode:
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexNode.resources.limits The resources limits for the data node containers
-  ## @param indexNode.resources.requests The requested resources for the data node containers
+  ## @param indexNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexNode.resources is set (indexNode.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param indexNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param indexNode.podSecurityContext.enabled Enabled Index Node pods' Security Context
@@ -3737,7 +3751,6 @@ indexNode:
     ## @param indexNode.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param indexNode.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3748,7 +3761,6 @@ indexNode:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Index Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -3795,7 +3807,6 @@ indexNode:
       ## @param indexNode.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Index Node Traffic Exposure Parameters
   ##
 
@@ -3856,7 +3867,6 @@ indexNode:
     ## @param indexNode.service.extraPorts Extra ports to expose in the Index Node service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -3911,8 +3921,6 @@ indexNode:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Index Node Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -3963,7 +3971,6 @@ indexNode:
       ## @param indexNode.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Proxy Deployment Parameters
 ##
 proxy:
@@ -3996,7 +4003,6 @@ proxy:
     ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
     ##
     keyPassword: ""
-
   ## @param proxy.extraEnvVars Array with extra environment variables to add to proxy nodes
   ## e.g:
   ## extraEnvVars:
@@ -4017,7 +4023,6 @@ proxy:
     proxy:
       port: {{ .Values.proxy.containerPorts.grpc }}
       internalPort: {{ .Values.proxy.containerPorts.grpcInternal }}
-
   ## @param proxy.existingConfigMap name of a ConfigMap with existing configuration for the default configuration
   ##
   existingConfigMap: ""
@@ -4098,12 +4103,21 @@ proxy:
   customStartupProbe: {}
   ## proxy resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param proxy.resources.limits The resources limits for the proxy containers
-  ## @param proxy.resources.requests The requested resources for the proxy containers
+  ## @param proxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param proxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param proxy.podSecurityContext.enabled Enabled Proxy pods' Security Context
@@ -4268,7 +4282,6 @@ proxy:
     ## @param proxy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param proxy.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -4279,7 +4292,6 @@ proxy:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Proxy Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -4326,7 +4338,6 @@ proxy:
       ## @param proxy.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Proxy Traffic Exposure Parameters
   ##
 
@@ -4387,7 +4398,6 @@ proxy:
     ## @param proxy.service.extraPorts Extra ports to expose in the Proxy service
     ##
     extraPorts: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -4442,8 +4452,6 @@ proxy:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
-
   ## @section Proxy Metrics Parameters
   ## Prometheus Exporter / Metrics
   ##
@@ -4494,7 +4502,6 @@ proxy:
       ## @param proxy.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Attu Deployment Parameters
 ##
 attu:
@@ -4612,12 +4619,21 @@ attu:
   customStartupProbe: {}
   ## attu resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param attu.resources.limits The resources limits for the attu containers
-  ## @param attu.resources.requests The requested resources for the attu containers
+  ## @param attu.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if attu.resources is set (attu.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param attu.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param attu.podSecurityContext.enabled Enabled Attu pods' Security Context
@@ -4782,7 +4798,6 @@ attu:
     ## @param attu.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param attu.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -4793,7 +4808,6 @@ attu:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
   ## @section Attu Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -4840,7 +4854,6 @@ attu:
       ## @param attu.autoscaling.hpa.targetMemory Target Memory utilization percentage
       ##
       targetMemory: ""
-
   ## @section Attu Traffic Exposure Parameters
   ##
 
@@ -4897,7 +4910,6 @@ attu:
     ## @param attu.service.extraPorts Extra ports to expose in the Attu service
     ##
     extraPorts: []
-
   ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
@@ -5001,7 +5013,6 @@ attu:
     ##             name: http
     ##
     extraRules: []
-
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -5056,10 +5067,8 @@ attu:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Init Container Parameters
 ##
-
 waitContainer:
   ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
   ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
@@ -5083,7 +5092,6 @@ waitContainer:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
@@ -5108,7 +5116,6 @@ waitContainer:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
 ## @section External etcd settings
 ##
 externalEtcd:
@@ -5153,7 +5160,6 @@ externalEtcd:
     ## Milvus cannot decrypt key file with password, so now the key must not be encrypted, value here must be empty
     ##
     keyPassword: ""
-
 ## @section External S3 parameters
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalS3.host External S3 host
@@ -5182,7 +5188,6 @@ externalS3:
   rootPath: "file"
   iamEndpoint: ""
   cloudProvider: ""
-
 ## @section External Kafka parameters
 ## All of these values are ignored when kafka.enabled is set to true
 ##
@@ -5212,7 +5217,6 @@ externalKafka:
     existingSecret: ""
     existingSecretPasswordKey: "kafka-root-password"
     enabledMechanisms: "PLAIN"
-
 ## @section etcd sub-chart parameters
 ##
 etcd:
@@ -5236,7 +5240,6 @@ etcd:
       create: false
     client:
       secureTransport: false
-
 ## @section MinIO&reg; chart parameters
 ## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 ##
@@ -5260,7 +5263,6 @@ minio:
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: "milvus"
-
   ## @param minio.provisioning.enabled Enable/disable MinIO&reg; provisioning job
   ## @param minio.provisioning.extraCommands Extra commands to run on MinIO&reg; provisioning job
   ##
@@ -5268,7 +5270,6 @@ minio:
     enabled: true
     # We need to allow downloads in order for the UI to work
     extraCommands: ["mc anonymous set download provisioning/milvus"]
-
   ## @param minio.tls.enabled Enable/disable MinIO&reg; TLS support
   ##
   tls:
@@ -5282,7 +5283,6 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
-
 ## @section kafka sub-chart paramaters
 ## https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml
 ##

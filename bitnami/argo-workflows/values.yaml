@@ -17,7 +17,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -49,7 +48,6 @@ rbac:
 ## @param createAggregateRoles Create Aggregated cluster roles
 ##
 createAggregateRoles: true
-
 ## @section Argo Workflows Server configuration parameters
 ##
 
@@ -83,7 +81,6 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param server.enabled Enable server deployment
   ##
   enabled: true
@@ -147,12 +144,21 @@ server:
   customStartupProbe: {}
   ## server resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param server.resources.limits The resources limits for the server containers
-  ## @param server.resources.requests The requested resources for the server containers
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param server.podSecurityContext.enabled Enabled server pods' Security Context
@@ -191,7 +197,6 @@ server:
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-
   ## Create RBAC resources for the Argo workflows server
   ## @param server.rbac.create Create RBAC resources for the Argo workflows server
   ##
@@ -259,7 +264,6 @@ server:
       ## decisions.
       ##
       scopes: []
-
   ## @param server.clusterWorkflowTemplates.enabled Create ClusterRole and CRB for the controoler to access ClusterWorkflowTemplates
   ## @param server.clusterWorkflowTemplates.enableEditing Give the server permissions to edit ClusterWorkflowTemplates
   ##
@@ -277,25 +281,21 @@ server:
     enabled: false
     minAvailable: 1
     maxUnavailable: 1
-
   ## Run the argo server in "secure" mode.
   ## Ref: https://argoproj.github.io/argo-workflows/tls/
   ## @param server.secure Run Argo server in secure mode
   ##
   secure: false
-
   ## Base URL for client resources
   ## Ref: https://github.com/argoproj/argo-workflows/issues/716#issuecomment-433213190
   ## @param server.baseHref Base href of the Argo Workflows deployment
   ##
   baseHref: /
-
   ## Server container port
   ## @param server.containerPorts.web argo Server container port
   ##
   containerPorts:
     web: 2746
-
   ## Server Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -308,7 +308,6 @@ server:
     name: ""
     automountServiceAccountToken: false
     annotations: {}
-
   ## @param server.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -435,7 +434,6 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Server service parameters
   ##
   service:
@@ -446,7 +444,6 @@ server:
     ##
     ports:
       http: 80
-
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
     ## NOTE: choose port between <30000-32767>
@@ -537,7 +534,6 @@ server:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Argo Workflows Controller configuration parameters
 ##
 
@@ -571,7 +567,6 @@ controller:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param controller.replicaCount Number of controller replicas to deploy
   ##
   replicaCount: 1
@@ -632,12 +627,21 @@ controller:
   customStartupProbe: {}
   ## controller resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param controller.resources.limits The resources limits for the controller containers
-  ## @param controller.resources.requests The requested resources for the controller containers
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled controller pods' Security Context
@@ -676,7 +680,6 @@ controller:
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-
   ## Server container port
   ## @param controller.containerPorts.metrics Port to expose controller metrics
   ## @param controller.containerPorts.telemetry Port to expose controller telemetry
@@ -684,28 +687,23 @@ controller:
   containerPorts:
     metrics: 9090
     telemetry: 8081
-
   ## Create RBAC resources for the Argo workflows controller
   ## @param controller.rbac.create Create RBAC resources for the Argo workflows controller
   ##
   rbac:
     create: true
-
   ## Use an existing configmap instead of creating a configmap with the specified parameters
   ## @param controller.existingConfigMap
   ##
   existingConfigMap: ""
-
   ## @param controller.extraArgs Extra arguments for the controller command line
   ##
   extraArgs: ""
-
   ##
   ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
   persistence:
     archive:
       enabled: false
-
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
   ## @param controller.config [object] Controller configmap configuration content
   ##
@@ -727,6 +725,8 @@ controller:
     executor:
       {{- if .Values.executor.resources }}
       resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 4 }}
+      {{- else if ne .Values.executor.resourcesPreset "none" }}
+      resources: {{- include "common.resources.preset" (dict "type" .Values.executor.resourcesPreset) | nindent 4 }}
       {{- end }}
       {{- if .Values.executor.extraEnvVars }}
       env: {{- include "common.tplvalues.render" (dict "value" .Values.executor.extraEnvVars "context" $) | nindent 4 }}
@@ -784,7 +784,6 @@ controller:
     ## Ref: https://argoproj.github.io/argo-workflows/links/
     ## links: {}
     ##
-
   ## Configure the controller to accept only submissions with a matching instanceID attribute
   ## @param controller.instanceID.enabled Enable submission filtering based on instanceID attribute. Requires to set instanceID.useReleaseName or instanceID.explicitID
   ## @param controller.instanceID.useReleaseName Use the release name to filter submissions
@@ -796,12 +795,10 @@ controller:
     ##
     useReleaseName: false
     explicitID: ""
-
-   ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
+    ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
   ##
   clusterWorkflowTemplates:
     enabled: true
-
   ## Metrics configuration for the controller
   ## @param controller.metrics.enabled Enable controller metrics exporter
   ## @param controller.metrics.path Path to expose controller metrics
@@ -819,12 +816,10 @@ controller:
   telemetry:
     enabled: false
     path: /telemetry
-
   ## Number of workflow workers to deploy
   ## @param controller.workflowWorkers Number of workflow workers to deploy
   ##
   workflowWorkers: 32
-
   ## Namespaces allowed to run workflows
   ## @param controller.workflowNamespaces Namespaces allowed to run workflows
   ##
@@ -864,7 +859,6 @@ controller:
     name: ""
     automountServiceAccountToken: false
     annotations: {}
-
   ## @param controller.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -991,14 +985,12 @@ controller:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Controller service parameters
   ##
   service:
     ## @param controller.service.type controller service type
     ##
     type: ClusterIP
-
     ## @param controller.service.ports.metrics Metrics port for the controller
     ## @param controller.service.ports.telemetry Telemetry port for the controller
     ##
@@ -1097,10 +1089,8 @@ controller:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Executor configuration section
 ##
-
 executor:
   ## Bitnami Argo Workflow Executor image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-exec/tags/
@@ -1131,12 +1121,21 @@ executor:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param executor.resources.limits The resources limits for the init container
-  ## @param executor.resources.requests The requested resources for the init container
+  ## @param executor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if executor.resources is set (executor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param executor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param executor.extraEnvVars Array with extra environment variables to add to server nodes
   ## e.g:
   ## extraEnvVars:
@@ -1168,7 +1167,6 @@ executor:
     seccompProfile:
       type: "RuntimeDefault"
     readOnlyRootFilesystem: true
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -1283,10 +1281,8 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Workflows configuration
 ##
-
 workflows:
   ## Service account configuration for workflows
   ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
@@ -1305,7 +1301,6 @@ workflows:
   ##
   rbac:
     create: true
-
 ## @section PostgreSQL subchart
 ##
 
@@ -1325,7 +1320,6 @@ postgresql:
     username: postgres
     database: bn_argo_workflows
     password: ""
-
 ## @section MySQL subchart
 ##
 
@@ -1345,7 +1339,6 @@ mysql:
     username: mysql
     database: bn_argo_workflows
     password: ""
-
 ## @section External Database configuration
 ##
 
