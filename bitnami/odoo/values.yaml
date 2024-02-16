@@ -357,7 +357,6 @@ schedulerName: ""
 ##
 terminationGracePeriodSeconds: ""
 ## @param updateStrategy.type Odoo deployment strategy type
-## @param updateStrategy.rollingUpdate Odoo deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
 ## e.g:
@@ -369,7 +368,6 @@ terminationGracePeriodSeconds: ""
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param extraVolumes Optionally specify extra list of additional volumes for Odoo pods
 ##
 extraVolumes: []
