@@ -579,12 +579,6 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if .Values.replica.sidecars }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
-        {{- end }}
-      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.replica.persistence.enabled .Values.replica.podSecurityContext.enabled .Values.replica.containerSecurityContext.enabled }}
-      {{- if or .Values.replica.initContainers $needsVolumePermissions .Values.sysctl.enabled .Values.sentinel.service.createMaster }}
-      initContainers:
         {{- if .Values.sentinel.service.createMaster }}
         - name: kubectl
           image: {{ template "redis.kubectl.image" . }}
@@ -596,6 +590,12 @@ spec:
             - name: kubectl
               mountPath: /kubectl
         {{- end }}
+        {{- if .Values.replica.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.replica.persistence.enabled .Values.replica.podSecurityContext.enabled .Values.replica.containerSecurityContext.enabled }}
+      {{- if or .Values.replica.initContainers $needsVolumePermissions .Values.sysctl.enabled }}
+      initContainers:
         {{- if .Values.replica.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.replica.initContainers "context" $) | nindent 8 }}
         {{- end }}
