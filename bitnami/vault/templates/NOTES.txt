@@ -49,3 +49,4 @@ Read the upstream vault documentation for unsealing and initializing the instanc
 {{- include "common.warnings.rollingTag" .Values.injector.image }}
 {{- include "common.warnings.rollingTag" .Values.csiProvider.image }}
 {{- include "vault.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "csiProvider.agent" "csiProvider.provider" "injector" "server" "volumePermissions") "context" $) }}

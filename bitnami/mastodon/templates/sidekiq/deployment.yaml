@@ -171,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.sidekiq.resources }}
           resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
+          {{- else if ne .Values.sidekiq.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sidekiq.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.sidekiq.customLivenessProbe }}

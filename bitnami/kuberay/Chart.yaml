@@ -32,4 +32,4 @@ maintainers:
 name: kuberay
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kuberay
-version: 0.4.2
+version: 0.5.0
