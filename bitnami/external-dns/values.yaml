@@ -768,6 +768,21 @@ txtOwnerId: ""
 ## value passed as txtOwnerId when forceTxtOwnerId=true
 ##
 forceTxtOwnerId: false
+## TXT registry record encryption
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#encryption
+##
+txtEncrypt:
+  ## @param txtEncrypt.enabled Enable TXT record encrypencryption
+  ##
+  enabled: true
+  ## @param txtEncrypt.aesKey 32-byte AES-256-GCM encryption key. The key must be specified in URL-safe base64 form.
+  ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#generating-the-txt-encryption-key
+  ##
+  aesKey: ""
+  ## @param txtEncrypt.secretName Use an existing secret with key "txt_aes_encryption_key" defined.
+  ## This ignores txtEncrypt.secretName
+  ##
+  secretName: ""
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
