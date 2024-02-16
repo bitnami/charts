@@ -199,6 +199,8 @@ spec:
           {{- end }}
           {{- if .Values.receiveDistributor.resources }}
           resources: {{- toYaml .Values.receiveDistributor.resources | nindent 12 }}
+          {{- else if ne .Values.receiveDistributor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.receiveDistributor.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if (include "thanos.httpConfigEnabled" .) }}
