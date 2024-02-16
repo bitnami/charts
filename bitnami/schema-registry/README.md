@@ -88,6 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                                   | Enable image debug mode                                                                                         | `false`                           |
 | `command`                                       | Override default container command (useful when using custom images)                                            | `[]`                              |
 | `args`                                          | Override default container args (useful when using custom images)                                               | `[]`                              |
+| `automountServiceAccountToken`                  | Mount Service Account token in pod                                                                              | `false`                           |
 | `hostAliases`                                   | Schema Registry pods host aliases                                                                               | `[]`                              |
 | `podLabels`                                     | Extra labels for Schema Registry pods                                                                           | `{}`                              |
 | `configuration`                                 | Specify content for schema-registry.properties. Auto-generated based on other parameters when not specified     | `{}`                              |
@@ -112,112 +113,119 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Schema Registry statefulset parameters
 
-| Name                                                | Description                                                                                                              | Value            |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| `replicaCount`                                      | Number of Schema Registry replicas to deploy.                                                                            | `1`              |
-| `updateStrategy.type`                               | Schema Registry statefulset strategy type                                                                                | `RollingUpdate`  |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                    | `""`             |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`             |
-| `affinity`                                          | Affinity for pod assignment                                                                                              | `{}`             |
-| `nodeSelector`                                      | Node labels for pod assignment                                                                                           | `{}`             |
-| `tolerations`                                       | Tolerations for pod assignment                                                                                           | `[]`             |
-| `podManagementPolicy`                               | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                       | `OrderedReady`   |
-| `podAnnotations`                                    | Annotations for Schema Registry pods                                                                                     | `{}`             |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
-| `priorityClassName`                                 | Schema Registry pod priority class name                                                                                  | `""`             |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`             |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default) for Schema Registry pods                                                  | `""`             |
-| `terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`             |
-| `lifecycleHooks`                                    | for the Schema Registry container(s) to automate configuration before or after startup                                   | `{}`             |
-| `podSecurityContext.enabled`                        | Enabled Controller pods' Security Context                                                                                | `true`           |
-| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
-| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
-| `podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                                            | `1001`           |
-| `podSecurityContext.sysctls`                        | sysctl settings of the Schema Registry pods                                                                              | `[]`             |
-| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
-| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
-| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
-| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
-| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
-| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
-| `resources.limits`                                  | The resources limits for the container                                                                                   | `{}`             |
-| `resources.requests`                                | The requested resources for the container                                                                                | `{}`             |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                     | `true`           |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `10`             |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `20`             |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `1`              |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`              |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                    | `true`           |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `10`             |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `20`             |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `1`              |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`              |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                                                      | `false`          |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `10`             |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `5`              |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`              |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `20`             |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
-| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
-| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
-| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for schema-registry pods                                             | `[]`             |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                | `[]`             |
-| `initContainers`                                    | Add additional init containers to the Schema Registry pods.                                                              | `[]`             |
-| `sidecars`                                          | Add additional sidecar containers to the Schema Registry pods.                                                           | `[]`             |
-| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                          | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that must still be available after the eviction                                        | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable after the eviction                                        | `""`             |
-| `autoscaling.enabled`                               | Enable autoscaling for replicas                                                                                          | `false`          |
-| `autoscaling.minReplicas`                           | Minimum number of replicas                                                                                               | `1`              |
-| `autoscaling.maxReplicas`                           | Maximum number of replicas                                                                                               | `11`             |
-| `autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                        | `""`             |
-| `autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                     | `""`             |
-| `autoscaling.customPodMetrics`                      | allows you to set a list of custom metrics to trigger the scaling.                                                       | `[]`             |
+| Name                                                | Description                                                                                                                                                                                                | Value            |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of Schema Registry replicas to deploy.                                                                                                                                                              | `1`              |
+| `updateStrategy.type`                               | Schema Registry statefulset strategy type                                                                                                                                                                  | `RollingUpdate`  |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                                                                                                      | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                                                                                                   | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                             | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                             | `[]`             |
+| `podManagementPolicy`                               | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                                                                                                         | `OrderedReady`   |
+| `podAnnotations`                                    | Annotations for Schema Registry pods                                                                                                                                                                       | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                   | `soft`           |
+| `priorityClassName`                                 | Schema Registry pod priority class name                                                                                                                                                                    | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                   | `{}`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default) for Schema Registry pods                                                                                                                                    | `""`             |
+| `terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                                                                                                          | `""`             |
+| `lifecycleHooks`                                    | for the Schema Registry container(s) to automate configuration before or after startup                                                                                                                     | `{}`             |
+| `podSecurityContext.enabled`                        | Enabled Controller pods' Security Context                                                                                                                                                                  | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`         |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                | `[]`             |
+| `podSecurityContext.fsGroup`                        | Set Controller pod's Security Context fsGroup                                                                                                                                                              | `1001`           |
+| `podSecurityContext.sysctls`                        | sysctl settings of the Schema Registry pods                                                                                                                                                                | `[]`             |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                       | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`            |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                              | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                  | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault` |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`           |
+| `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                       | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                    | `10`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                           | `20`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                          | `1`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                        | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                        | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                                                                                      | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                   | `10`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                          | `20`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                         | `1`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                       | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                       | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                                                                                                                        | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                     | `10`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                            | `5`              |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                           | `1`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                         | `20`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                         | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                        | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                       | `{}`             |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                         | `{}`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for schema-registry pods                                                                                                                               | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                                                                                                  | `[]`             |
+| `initContainers`                                    | Add additional init containers to the Schema Registry pods.                                                                                                                                                | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the Schema Registry pods.                                                                                                                                             | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                            | `false`          |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that must still be available after the eviction                                                                                                                          | `1`              |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable after the eviction                                                                                                                          | `""`             |
+| `autoscaling.enabled`                               | Enable autoscaling for replicas                                                                                                                                                                            | `false`          |
+| `autoscaling.minReplicas`                           | Minimum number of replicas                                                                                                                                                                                 | `1`              |
+| `autoscaling.maxReplicas`                           | Maximum number of replicas                                                                                                                                                                                 | `11`             |
+| `autoscaling.targetCPU`                             | Target CPU utilization percentage                                                                                                                                                                          | `""`             |
+| `autoscaling.targetMemory`                          | Target Memory utilization percentage                                                                                                                                                                       | `""`             |
+| `autoscaling.customPodMetrics`                      | allows you to set a list of custom metrics to trigger the scaling.                                                                                                                                         | `[]`             |
 
 ### Exposure Parameters
 
-| Name                               | Description                                                                                           | Value                    |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes service type                                                                               | `ClusterIP`              |
-| `service.ports.http`               | Service HTTP port                                                                                     | `8081`                   |
-| `service.nodePorts.http`           | Service HTTP node port                                                                                | `""`                     |
-| `service.clusterIP`                | Schema Registry service clusterIP IP                                                                  | `""`                     |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                  | `Cluster`                |
-| `service.loadBalancerIP`           | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
-| `service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
-| `service.annotations`              | Annotations for Schema Registry service                                                               | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                           | `{}`                     |
-| `service.headless.annotations`     | Annotations for the headless service.                                                                 | `{}`                     |
-| `ingress.enabled`                  | Enable ingress controller resource                                                                    | `false`                  |
-| `ingress.hostname`                 | Default host for the ingress resource                                                                 | `schema-registry.local`  |
-| `ingress.annotations`              | Ingress annotations                                                                                   | `{}`                     |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Schema Registry                                                  | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                     | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                   | `schema-registry.local`  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                         | `""`                     |
-| `ingress.path`                     | Default path for the ingress record                                                                   | `/`                      |
-| `ingress.annotations`              | Additional custom annotations for the ingress record                                                  | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                    | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                               | `[]`                     |
+| Name                                    | Description                                                                                           | Value                    |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Kubernetes service type                                                                               | `ClusterIP`              |
+| `service.ports.http`                    | Service HTTP port                                                                                     | `8081`                   |
+| `service.nodePorts.http`                | Service HTTP node port                                                                                | `""`                     |
+| `service.clusterIP`                     | Schema Registry service clusterIP IP                                                                  | `""`                     |
+| `service.externalTrafficPolicy`         | Enable client source IP preservation                                                                  | `Cluster`                |
+| `service.loadBalancerIP`                | loadBalancerIP if service type is LoadBalancer                                                        | `""`                     |
+| `service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                                 | `[]`                     |
+| `service.annotations`                   | Annotations for Schema Registry service                                                               | `{}`                     |
+| `service.extraPorts`                    | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                     |
+| `service.headless.annotations`          | Annotations for the headless service.                                                                 | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                   | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require client label for connections                                                            | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                       | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                          | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                          | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                            | `{}`                     |
+| `ingress.enabled`                       | Enable ingress controller resource                                                                    | `false`                  |
+| `ingress.hostname`                      | Default host for the ingress resource                                                                 | `schema-registry.local`  |
+| `ingress.annotations`                   | Ingress annotations                                                                                   | `{}`                     |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `ingress.enabled`                       | Enable ingress record generation for Schema Registry                                                  | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                     | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                   | `schema-registry.local`  |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                         | `""`                     |
+| `ingress.path`                          | Default path for the ingress record                                                                   | `/`                      |
+| `ingress.annotations`                   | Additional custom annotations for the ingress record                                                  | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                         | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm          | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                    | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                               | `[]`                     |
 
 ### RBAC parameters
 
@@ -268,6 +276,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/schem
 
 ## Configuration and installation details
 
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -286,7 +300,7 @@ You can configure different authentication protocols for each listener you confi
 | sasl      | Yes (via SASL)               | No                 |
 | sasl_tls  | Yes (via SASL)               | Yes                |
 
-Learn more about how to configure Kafka to use the different authentication protocols in the [chart documentation](https://docs.bitnami.com/kubernetes/infrastructure/kafka/administration/enable-security/).
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
 
 If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
 

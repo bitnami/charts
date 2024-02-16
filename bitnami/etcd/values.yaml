@@ -1,4 +1,4 @@
-﻿# Copyright VMware, Inc.
+# Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -44,7 +43,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section etcd parameters
 ##
 
@@ -73,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.11-debian-11-r3
+  tag: 3.5.12-debian-11-r3
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -258,10 +255,8 @@ command: []
 ## @param args [array] Default container args (useful when using custom images)
 ##
 args: []
-
 ## @section etcd statefulset parameters
 ##
-
 
 ## @param replicaCount Number of etcd replicas to deploy
 ##
@@ -276,6 +271,9 @@ updateStrategy:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
 ##
 podManagementPolicy: Parallel
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases [array] etcd pod host aliases
 ## ref: https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -309,7 +307,7 @@ podSecurityContext:
 ## etcd containers' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled etcd containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set etcd containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -319,7 +317,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -334,17 +332,21 @@ containerSecurityContext:
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits [object] The resources limits for the etcd container
-## @param resources.requests [object] The requested resources for the etcd container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 500m
-  ##    memory: 1Gi
-  ##
-  limits: {}
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -602,7 +604,6 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-
 ## @section Persistence parameters
 ##
 
@@ -639,7 +640,6 @@ persistence:
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/#selector
   ##
   selector: {}
-
 ## @section Volume Permissions parameters
 ##
 
@@ -658,7 +658,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r93
+    tag: 11-debian-11-r96
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -678,31 +678,37 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits [object] Init container volume-permissions resource  limits
-  ## @param volumePermissions.resources.requests [object] Init container volume-permissions resource  requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    ##
-    limits: {}
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Network Policy parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
   ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
+  enabled: true
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## When set to false, only pods with the correct client label will have network access to the ports
   ## etcd is listening on. When true, etcd will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -742,10 +748,8 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## @section Metrics parameters
 ##
-
 metrics:
   ## @param metrics.enabled Expose etcd metrics
   ##
@@ -793,7 +797,6 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
-
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -807,19 +810,17 @@ metrics:
     ##
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
-      # - alert: ETCD has no leader
-      #   annotations:
-      #     summary: "ETCD has no leader"
-      #     description: "pod {{`{{`}} $labels.pod {{`}}`}} state error, can't connect leader"
-      #   for: 1m
-      #   expr: etcd_server_has_leader == 0
-      #   labels:
-      #     severity: critical
-      #     group: PaaS
+    # - alert: ETCD has no leader
+    #   annotations:
+    #     summary: "ETCD has no leader"
+    #     description: "pod {{`{{`}} $labels.pod {{`}}`}} state error, can't connect leader"
+    #   for: 1m
+    #   expr: etcd_server_has_leader == 0
+    #   labels:
+    #     severity: critical
+    #     group: PaaS
     ##
     rules: []
-
-
 ## @section Snapshotting parameters
 ##
 
@@ -869,18 +870,21 @@ disasterRecovery:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param disasterRecovery.cronjob.resources.limits [object] Cronjob container resource limits
-    ## @param disasterRecovery.cronjob.resources.requests [object] Cronjob container resource requests
+    ## @param disasterRecovery.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if disasterRecovery.cronjob.resources is set (disasterRecovery.cronjob.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 500m
-      ##    memory: 1Gi
-      ##
-      limits: {}
-      requests: {}
-
+    resourcesPreset: "none"
+    ## @param disasterRecovery.cronjob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## @param disasterRecovery.cronjob.nodeSelector Node labels for cronjob pods assignment
     ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
@@ -895,7 +899,6 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.serviceAccountName Specifies the service account to use for disaster recovery cronjob
     ##
     serviceAccountName: ""
-
   pvc:
     ## @param disasterRecovery.pvc.existingClaim A manually managed Persistent Volume and Claim
     ## If defined, PVC must be created manually before volume will be bound
@@ -912,10 +915,8 @@ disasterRecovery:
     ## Useful if snapshots should only be stored in a subdirectory of the volume
     ##
     subPath: ""
-
 ## @section Service account parameters
 ##
-
 serviceAccount:
   ## @param serviceAccount.create Enable/disable service account creation
   ##
@@ -933,7 +934,6 @@ serviceAccount:
   ## @param serviceAccount.labels [object] Additional labels to be included on the service account
   ##
   labels: {}
-
 ## @section Other parameters
 ##
 

@@ -40,6 +40,7 @@ spec:
     spec:
       serviceAccountName: {{ template "vault.injector.serviceAccountName" . }}
       {{- include "vault.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.injector.automountServiceAccountToken }}
       {{- if .Values.injector.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.injector.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -133,6 +134,8 @@ spec:
             {{- end }}
           {{- if .Values.injector.resources }}
           resources: {{- toYaml .Values.injector.resources | nindent 12 }}
+          {{- else if ne .Values.injector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.injector.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: https

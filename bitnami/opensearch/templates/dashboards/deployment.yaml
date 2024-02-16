@@ -35,6 +35,7 @@ spec:
     spec:
       serviceAccountName: {{ template "opensearch.dashboards.serviceAccountName" . }}
       {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboards.automountServiceAccountToken }}
       {{- if .Values.dashboards.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.hostAliases "context" $) | nindent 8 }}
       {{- end }}

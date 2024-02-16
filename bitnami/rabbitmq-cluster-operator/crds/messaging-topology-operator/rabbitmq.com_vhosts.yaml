@@ -1,0 +1,140 @@
+# Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_vhosts.yaml
+# Version: 1.13.0
+# VersionOf: rmq-messaging-topology-operator
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: vhosts.rabbitmq.com
+spec:
+  group: rabbitmq.com
+  names:
+    categories:
+    - all
+    - rabbitmq
+    kind: Vhost
+    listKind: VhostList
+    plural: vhosts
+    singular: vhost
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: Vhost is the Schema for the vhosts API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: VhostSpec defines the desired state of Vhost
+            properties:
+              defaultQueueType:
+                description: |-
+                  Default queue type for this vhost; can be set to quorum, classic or stream.
+                  Supported in RabbitMQ 3.11.12 or above.
+                enum:
+                - quorum
+                - classic
+                - stream
+                type: string
+              name:
+                description: Name of the vhost; see https://www.rabbitmq.com/vhosts.html.
+                type: string
+              rabbitmqClusterReference:
+                description: |-
+                  Reference to the RabbitmqCluster that the vhost will be created in.
+                  Required property.
+                properties:
+                  connectionSecret:
+                    description: |-
+                      Secret contains the http management uri for the RabbitMQ cluster.
+                      The Secret must contain the key `uri`, `username` and `password` or operator will error.
+                      Have to set either name or connectionSecret, but not both.
+                    properties:
+                      name:
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  name:
+                    description: |-
+                      The name of the RabbitMQ cluster to reference.
+                      Have to set either name or connectionSecret, but not both.
+                    type: string
+                  namespace:
+                    description: |-
+                      The namespace of the RabbitMQ cluster to reference.
+                      Defaults to the namespace of the requested resource if omitted.
+                    type: string
+                type: object
+              tags:
+                items:
+                  type: string
+                type: array
+              tracing:
+                type: boolean
+            required:
+            - name
+            - rabbitmqClusterReference
+            type: object
+          status:
+            description: VhostStatus defines the observed state of Vhost
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: The last time this Condition status changed.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Full text reason for current status of the condition.
+                      type: string
+                    reason:
+                      description: One word, camel-case reason for current status
+                        of the condition.
+                      type: string
+                    status:
+                      description: True, False, or Unknown
+                      type: string
+                    type:
+                      description: Type indicates the scope of the custom resource
+                        status addressed by the condition.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                description: |-
+                  observedGeneration is the most recent successful generation observed for this Vhost. It corresponds to the
+                  Vhost's generation, which is updated on mutation by the API Server.
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

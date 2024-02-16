@@ -1,0 +1,223 @@
+# Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_shovels.yaml
+# Version: 1.13.0
+# VersionOf: rmq-messaging-topology-operator
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: shovels.rabbitmq.com
+spec:
+  group: rabbitmq.com
+  names:
+    categories:
+    - all
+    - rabbitmq
+    kind: Shovel
+    listKind: ShovelList
+    plural: shovels
+    singular: shovel
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: Shovel is the Schema for the shovels API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              ShovelSpec defines the desired state of Shovel
+              For how to configure Shovel, see: https://www.rabbitmq.com/shovel.html.
+            properties:
+              ackMode:
+                enum:
+                - on-confirm
+                - on-publish
+                - no-ack
+                type: string
+              addForwardHeaders:
+                type: boolean
+              deleteAfter:
+                type: string
+              destAddForwardHeaders:
+                type: boolean
+              destAddTimestampHeader:
+                type: boolean
+              destAddress:
+                description: amqp10 configuration; required if destProtocol is amqp10
+                type: string
+              destApplicationProperties:
+                description: amqp10 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              destExchange:
+                description: amqp091 configuration
+                type: string
+              destExchangeKey:
+                description: amqp091 configuration
+                type: string
+              destMessageAnnotations:
+                description: amqp10 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              destProperties:
+                description: amqp10 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              destProtocol:
+                enum:
+                - amqp091
+                - amqp10
+                type: string
+              destPublishProperties:
+                description: amqp091 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              destQueue:
+                description: amqp091 configuration
+                type: string
+              name:
+                description: Required property; cannot be updated
+                type: string
+              prefetchCount:
+                type: integer
+              rabbitmqClusterReference:
+                description: |-
+                  Reference to the RabbitmqCluster that this Shovel will be created in.
+                  Required property.
+                properties:
+                  connectionSecret:
+                    description: |-
+                      Secret contains the http management uri for the RabbitMQ cluster.
+                      The Secret must contain the key `uri`, `username` and `password` or operator will error.
+                      Have to set either name or connectionSecret, but not both.
+                    properties:
+                      name:
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  name:
+                    description: |-
+                      The name of the RabbitMQ cluster to reference.
+                      Have to set either name or connectionSecret, but not both.
+                    type: string
+                  namespace:
+                    description: |-
+                      The namespace of the RabbitMQ cluster to reference.
+                      Defaults to the namespace of the requested resource if omitted.
+                    type: string
+                type: object
+              reconnectDelay:
+                type: integer
+              srcAddress:
+                description: amqp10 configuration; required if srcProtocol is amqp10
+                type: string
+              srcConsumerArgs:
+                description: amqp091 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              srcDeleteAfter:
+                type: string
+              srcExchange:
+                description: amqp091 configuration
+                type: string
+              srcExchangeKey:
+                description: amqp091 configuration
+                type: string
+              srcPrefetchCount:
+                type: integer
+              srcProtocol:
+                enum:
+                - amqp091
+                - amqp10
+                type: string
+              srcQueue:
+                description: amqp091 configuration
+                type: string
+              uriSecret:
+                description: |-
+                  Secret contains the AMQP URI(s) to configure Shovel destination and source.
+                  The Secret must contain the key `destUri` and `srcUri` or operator will error.
+                  Both fields should be one or multiple uris separated by ','.
+                  Required property.
+                properties:
+                  name:
+                    description: |-
+                      Name of the referent.
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+              vhost:
+                default: /
+                description: Default to vhost '/'; cannot be updated
+                type: string
+            required:
+            - name
+            - rabbitmqClusterReference
+            - uriSecret
+            type: object
+          status:
+            description: ShovelStatus defines the observed state of Shovel
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: The last time this Condition status changed.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Full text reason for current status of the condition.
+                      type: string
+                    reason:
+                      description: One word, camel-case reason for current status
+                        of the condition.
+                      type: string
+                    status:
+                      description: True, False, or Unknown
+                      type: string
+                    type:
+                      description: Type indicates the scope of the custom resource
+                        status addressed by the condition.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                description: |-
+                  observedGeneration is the most recent successful generation observed for this Shovel. It corresponds to the
+                  Shovel's generation, which is updated on mutation by the API Server.
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

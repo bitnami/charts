@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
@@ -45,7 +44,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section MinIO&reg; parameters
 
 ## Bitnami MinIO&reg; image version
@@ -61,7 +59,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2024.1.16-debian-11-r0
+  tag: 2024.2.14-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -89,7 +87,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.1.16-debian-11-r0
+  tag: 2024.2.14-debian-11-r1
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -159,7 +157,6 @@ command: []
 ## @param args Default container args (useful when using custom images). Use array form
 ##
 args: []
-
 ## @section MinIO&reg; deployment/statefulset parameters
 
 ## @param schedulerName Specifies the schedulerName, if it's nil uses kube-scheduler
@@ -213,7 +210,6 @@ statefulset:
   ## @param statefulset.drivesPerNode Number of drives attached to every node (only for MinIO&reg; distributed mode)
   ##
   drivesPerNode: 1
-
 ## MinIO&reg; provisioning
 ##
 provisioning:
@@ -254,20 +250,21 @@ provisioning:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param provisioning.resources.limits The resources limits for the container
-  ## @param provisioning.resources.requests The requested resources for the container
+  ## @param provisioning.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if provisioning.resources is set (provisioning.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 64Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 200m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param provisioning.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param provisioning.policies MinIO&reg; policies provisioning
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#policy
   ## e.g.
@@ -411,7 +408,7 @@ provisioning:
   ## MinIO&reg; container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param provisioning.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param provisioning.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param provisioning.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param provisioning.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param provisioning.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param provisioning.containerSecurityContext.privileged Set container's Security Context privileged
@@ -422,7 +419,7 @@ provisioning:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -432,7 +429,6 @@ provisioning:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## Automatic Cleanup for Finished Jobs
   ## @param provisioning.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs
   ## @param provisioning.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished
@@ -441,6 +437,9 @@ provisioning:
   cleanupAfterFinished:
     enabled: false
     seconds: 600
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -471,7 +470,7 @@ podSecurityContext:
 ## MinIO&reg; container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
@@ -482,7 +481,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsNonRoot: true
   privileged: false
@@ -547,26 +546,31 @@ topologySpreadConstraints: []
 ## @param priorityClassName MinIO&reg; pods' priorityClassName
 ##
 priorityClassName: ""
+## @param runtimeClassName Name of the runtime class to be used by MinIO&reg; pods'
+## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+##
+runtimeClassName: ""
 ## MinIO&reg; containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the MinIO&reg; container
-## @param resources.requests The requested resources for the MinIO&reg; container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -655,7 +659,6 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
 ## @section Traffic exposure parameters
 
 ## MinIO&reg; Service properties
@@ -819,7 +822,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## Configure the ingress resource that allows you to access the
 ## MinIO&reg; API. Set up the URL
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -928,25 +930,60 @@ apiIngress:
   ##             name: http
   ##
   extraRules: []
-## NetworkPolicy parameters
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable the default NetworkPolicy policy
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port MinIO&reg; is
-  ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
+  enabled: true
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+  ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
-  extraFromClauses: []
-  ## Example
-  ## extraFromClauses:
-  ## - podSelector:
-  ##     matchLabels:
-  ##       a: b
-
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -980,7 +1017,6 @@ persistence:
   ## @param persistence.existingClaim Name of an existing PVC to use (only in `standalone` mode)
   ##
   existingClaim: ""
-
 ## @section Volume Permissions parameters
 
 ## Init containers parameters:
@@ -1000,7 +1036,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r109
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1017,26 +1053,30 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
-  ## @param volumePermissions.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
-
 ## @section RBAC parameters
 
 ## Specifies whether a ServiceAccount should be created
@@ -1055,7 +1095,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Custom annotations for MinIO&reg; ServiceAccount
   ##
   annotations: {}
-
 ## @section Other parameters
 
 ## MinIO&reg; Pod Disruption Budget configuration in distributed mode.
@@ -1071,9 +1110,7 @@ pdb:
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction
   ##
   maxUnavailable: ""
-
 ## @section Metrics parameters
-
 metrics:
   ## @param metrics.prometheusAuthType Authentication mode for Prometheus (`jwt` or `public`)
   ## To allow public access without authentication for prometheus metrics set environment as follows.
@@ -1127,7 +1164,6 @@ metrics:
     ## @param metrics.serviceMonitor.tlsConfig Additional TLS configuration for metrics endpoint with "https" scheme
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.TLSConfig
     tlsConfig: {}
-
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
@@ -1141,14 +1177,14 @@ metrics:
     ##
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
-      # - alert: minio cluster nodes offline
-      #   annotations:
-      #     summary: "minio cluster nodes offline"
-      #     description: "minio cluster nodes offline, pod {{`{{`}} $labels.pod {{`}}`}} service {{`{{`}} $labels.job {{`}}`}} offline"
-      #   for: 10m
-      #   expr: minio_cluster_nodes_offline_total > 0
-      #   labels:
-      #     severity: critical
-      #     group: PaaS
+    # - alert: minio cluster nodes offline
+    #   annotations:
+    #     summary: "minio cluster nodes offline"
+    #     description: "minio cluster nodes offline, pod {{`{{`}} $labels.pod {{`}}`}} service {{`{{`}} $labels.job {{`}}`}} offline"
+    #   for: 10m
+    #   expr: minio_cluster_nodes_offline_total > 0
+    #   labels:
+    #     severity: critical
+    #     group: PaaS
     ##
     rules: []

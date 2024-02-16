@@ -24,8 +24,6 @@ This chart bootstraps a [Grafana Tempo](https://github.com/grafana/tempo) Deploy
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/get-started/).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -150,7 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                         | `[]`             |
 | `compactor.podSecurityContext.fsGroup`                        | Set Compactor pod's Security Context fsGroup                                                        | `1001`           |
 | `compactor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                | `true`           |
-| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `{}`             |
+| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                    | `nil`            |
 | `compactor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                          | `1001`           |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                       | `true`           |
 | `compactor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                         | `false`          |
@@ -159,6 +157,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                  | `["ALL"]`        |
 | `compactor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                    | `RuntimeDefault` |
 | `compactor.lifecycleHooks`                                    | for the compactor container(s) to automate configuration before or after startup                    | `{}`             |
+| `compactor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                  | `false`          |
 | `compactor.hostAliases`                                       | compactor pods host aliases                                                                         | `[]`             |
 | `compactor.podLabels`                                         | Extra labels for compactor pods                                                                     | `{}`             |
 | `compactor.podAnnotations`                                    | Annotations for compactor pods                                                                      | `{}`             |
@@ -182,19 +181,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Compactor Traffic Exposure Parameters
 
-| Name                                         | Description                                                      | Value       |
-| -------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `compactor.service.type`                     | Compactor service type                                           | `ClusterIP` |
-| `compactor.service.ports.http`               | Compactor HTTP service port                                      | `3200`      |
-| `compactor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `compactor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `compactor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `compactor.service.clusterIP`                | Compactor service Cluster IP                                     | `""`        |
-| `compactor.service.loadBalancerIP`           | Compactor service Load Balancer IP                               | `""`        |
-| `compactor.service.loadBalancerSourceRanges` | Compactor service Load Balancer sources                          | `[]`        |
-| `compactor.service.externalTrafficPolicy`    | Compactor service external traffic policy                        | `Cluster`   |
-| `compactor.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
-| `compactor.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
+| Name                                              | Description                                                      | Value       |
+| ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `compactor.service.type`                          | Compactor service type                                           | `ClusterIP` |
+| `compactor.service.ports.http`                    | Compactor HTTP service port                                      | `3200`      |
+| `compactor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
+| `compactor.service.clusterIP`                     | Compactor service Cluster IP                                     | `""`        |
+| `compactor.service.loadBalancerIP`                | Compactor service Load Balancer IP                               | `""`        |
+| `compactor.service.loadBalancerSourceRanges`      | Compactor service Load Balancer sources                          | `[]`        |
+| `compactor.service.externalTrafficPolicy`         | Compactor service external traffic policy                        | `Cluster`   |
+| `compactor.service.annotations`                   | Additional custom annotations for Compactor service              | `{}`        |
+| `compactor.service.extraPorts`                    | Extra ports to expose in the Compactor service                   | `[]`        |
+| `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Distributor Deployment Parameters
 
@@ -235,7 +241,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                           | `[]`             |
 | `distributor.podSecurityContext.fsGroup`                        | Set Distributor pod's Security Context fsGroup                                                        | `1001`           |
 | `distributor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                  | `true`           |
-| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `{}`             |
+| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                      | `nil`            |
 | `distributor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                            | `1001`           |
 | `distributor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                         | `true`           |
 | `distributor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                           | `false`          |
@@ -244,6 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                    | `["ALL"]`        |
 | `distributor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                      | `RuntimeDefault` |
 | `distributor.lifecycleHooks`                                    | for the distributor container(s) to automate configuration before or after startup                    | `{}`             |
+| `distributor.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                    | `false`          |
 | `distributor.hostAliases`                                       | distributor pods host aliases                                                                         | `[]`             |
 | `distributor.podLabels`                                         | Extra labels for distributor pods                                                                     | `{}`             |
 | `distributor.podAnnotations`                                    | Annotations for distributor pods                                                                      | `{}`             |
@@ -267,21 +274,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Distributor Traffic Exposure Parameters
 
-| Name                                           | Description                                                      | Value       |
-| ---------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `distributor.service.type`                     | Distributor service type                                         | `ClusterIP` |
-| `distributor.service.ports.http`               | Distributor HTTP service port                                    | `3200`      |
-| `distributor.service.ports.grpc`               | Distributor GRPC service port                                    | `9095`      |
-| `distributor.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `distributor.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `distributor.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `distributor.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `distributor.service.clusterIP`                | Distributor service Cluster IP                                   | `""`        |
-| `distributor.service.loadBalancerIP`           | Distributor service Load Balancer IP                             | `""`        |
-| `distributor.service.loadBalancerSourceRanges` | Distributor service Load Balancer sources                        | `[]`        |
-| `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
-| `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
-| `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+| Name                                                | Description                                                      | Value       |
+| --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `distributor.service.type`                          | Distributor service type                                         | `ClusterIP` |
+| `distributor.service.ports.http`                    | Distributor HTTP service port                                    | `3200`      |
+| `distributor.service.ports.grpc`                    | Distributor GRPC service port                                    | `9095`      |
+| `distributor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `distributor.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
+| `distributor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `distributor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
+| `distributor.service.clusterIP`                     | Distributor service Cluster IP                                   | `""`        |
+| `distributor.service.loadBalancerIP`                | Distributor service Load Balancer IP                             | `""`        |
+| `distributor.service.loadBalancerSourceRanges`      | Distributor service Load Balancer sources                        | `[]`        |
+| `distributor.service.externalTrafficPolicy`         | Distributor service external traffic policy                      | `Cluster`   |
+| `distributor.service.annotations`                   | Additional custom annotations for Distributor service            | `{}`        |
+| `distributor.service.extraPorts`                    | Extra ports to expose in the Distributor service                 | `[]`        |
+| `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Metrics Generator Deployment Parameters
 
@@ -323,7 +337,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metricsGenerator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                | `[]`             |
 | `metricsGenerator.podSecurityContext.fsGroup`                        | Set metricsGenerator pod's Security Context fsGroup                                                        | `1001`           |
 | `metricsGenerator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                       | `true`           |
-| `metricsGenerator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `{}`             |
+| `metricsGenerator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                           | `nil`            |
 | `metricsGenerator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                 | `1001`           |
 | `metricsGenerator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                              | `true`           |
 | `metricsGenerator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                | `false`          |
@@ -332,6 +346,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metricsGenerator.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                         | `["ALL"]`        |
 | `metricsGenerator.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                           | `RuntimeDefault` |
 | `metricsGenerator.lifecycleHooks`                                    | for the metricsGenerator container(s) to automate configuration before or after startup                    | `{}`             |
+| `metricsGenerator.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                         | `false`          |
 | `metricsGenerator.hostAliases`                                       | metricsGenerator pods host aliases                                                                         | `[]`             |
 | `metricsGenerator.podLabels`                                         | Extra labels for metricsGenerator pods                                                                     | `{}`             |
 | `metricsGenerator.podAnnotations`                                    | Annotations for metricsGenerator pods                                                                      | `{}`             |
@@ -355,20 +370,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Generator Traffic Exposure Parameters
 
-| Name                                                | Description                                                      | Value       |
-| --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `metricsGenerator.service.type`                     | metricsGenerator service type                                    | `ClusterIP` |
-| `metricsGenerator.service.ports.http`               | metricsGenerator HTTP service port                               | `3200`      |
-| `metricsGenerator.service.ports.grpc`               | metricsGenerator GRPC service port                               | `9095`      |
-| `metricsGenerator.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `metricsGenerator.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `metricsGenerator.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `metricsGenerator.service.clusterIP`                | metricsGenerator service Cluster IP                              | `""`        |
-| `metricsGenerator.service.loadBalancerIP`           | metricsGenerator service Load Balancer IP                        | `""`        |
-| `metricsGenerator.service.loadBalancerSourceRanges` | metricsGenerator service Load Balancer sources                   | `[]`        |
-| `metricsGenerator.service.externalTrafficPolicy`    | metricsGenerator service external traffic policy                 | `Cluster`   |
-| `metricsGenerator.service.annotations`              | Additional custom annotations for metricsGenerator service       | `{}`        |
-| `metricsGenerator.service.extraPorts`               | Extra ports to expose in the metricsGenerator service            | `[]`        |
+| Name                                                     | Description                                                      | Value       |
+| -------------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `metricsGenerator.service.type`                          | metricsGenerator service type                                    | `ClusterIP` |
+| `metricsGenerator.service.ports.http`                    | metricsGenerator HTTP service port                               | `3200`      |
+| `metricsGenerator.service.ports.grpc`                    | metricsGenerator GRPC service port                               | `9095`      |
+| `metricsGenerator.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `metricsGenerator.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
+| `metricsGenerator.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `metricsGenerator.service.clusterIP`                     | metricsGenerator service Cluster IP                              | `""`        |
+| `metricsGenerator.service.loadBalancerIP`                | metricsGenerator service Load Balancer IP                        | `""`        |
+| `metricsGenerator.service.loadBalancerSourceRanges`      | metricsGenerator service Load Balancer sources                   | `[]`        |
+| `metricsGenerator.service.externalTrafficPolicy`         | metricsGenerator service external traffic policy                 | `Cluster`   |
+| `metricsGenerator.service.annotations`                   | Additional custom annotations for metricsGenerator service       | `{}`        |
+| `metricsGenerator.service.extraPorts`                    | Extra ports to expose in the metricsGenerator service            | `[]`        |
+| `metricsGenerator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `metricsGenerator.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `metricsGenerator.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `metricsGenerator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `metricsGenerator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `metricsGenerator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `metricsGenerator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Ingester Deployment Parameters
 
@@ -410,7 +432,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                        | `[]`             |
 | `ingester.podSecurityContext.fsGroup`                        | Set Ingester pod's Security Context fsGroup                                                        | `1001`           |
 | `ingester.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                               | `true`           |
-| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `{}`             |
+| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                   | `nil`            |
 | `ingester.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                         | `1001`           |
 | `ingester.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                      | `true`           |
 | `ingester.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                        | `false`          |
@@ -418,6 +440,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                          | `false`          |
 | `ingester.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                 | `["ALL"]`        |
 | `ingester.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                   | `RuntimeDefault` |
+| `ingester.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                 | `false`          |
 | `ingester.hostAliases`                                       | ingester pods host aliases                                                                         | `[]`             |
 | `ingester.podLabels`                                         | Extra labels for ingester pods                                                                     | `{}`             |
 | `ingester.podAnnotations`                                    | Annotations for ingester pods                                                                      | `{}`             |
@@ -454,21 +477,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ingester Traffic Exposure Parameters
 
-| Name                                        | Description                                                      | Value       |
-| ------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `ingester.service.type`                     | Ingester service type                                            | `ClusterIP` |
-| `ingester.service.ports.http`               | Ingester HTTP service port                                       | `3200`      |
-| `ingester.service.ports.grpc`               | Ingester GRPC service port                                       | `9095`      |
-| `ingester.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `ingester.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `ingester.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `ingester.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `ingester.service.clusterIP`                | Ingester service Cluster IP                                      | `""`        |
-| `ingester.service.loadBalancerIP`           | Ingester service Load Balancer IP                                | `""`        |
-| `ingester.service.loadBalancerSourceRanges` | Ingester service Load Balancer sources                           | `[]`        |
-| `ingester.service.externalTrafficPolicy`    | Ingester service external traffic policy                         | `Cluster`   |
-| `ingester.service.annotations`              | Additional custom annotations for Ingester service               | `{}`        |
-| `ingester.service.extraPorts`               | Extra ports to expose in the Ingester service                    | `[]`        |
+| Name                                             | Description                                                      | Value       |
+| ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
+| `ingester.service.type`                          | Ingester service type                                            | `ClusterIP` |
+| `ingester.service.ports.http`                    | Ingester HTTP service port                                       | `3200`      |
+| `ingester.service.ports.grpc`                    | Ingester GRPC service port                                       | `9095`      |
+| `ingester.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `ingester.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
+| `ingester.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `ingester.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
+| `ingester.service.clusterIP`                     | Ingester service Cluster IP                                      | `""`        |
+| `ingester.service.loadBalancerIP`                | Ingester service Load Balancer IP                                | `""`        |
+| `ingester.service.loadBalancerSourceRanges`      | Ingester service Load Balancer sources                           | `[]`        |
+| `ingester.service.externalTrafficPolicy`         | Ingester service external traffic policy                         | `Cluster`   |
+| `ingester.service.annotations`                   | Additional custom annotations for Ingester service               | `{}`        |
+| `ingester.service.extraPorts`                    | Extra ports to expose in the Ingester service                    | `[]`        |
+| `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Querier Deployment Parameters
 
@@ -509,7 +539,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                       | `[]`             |
 | `querier.podSecurityContext.fsGroup`                        | Set Querier pod's Security Context fsGroup                                                        | `1001`           |
 | `querier.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                              | `true`           |
-| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `{}`             |
+| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                  | `nil`            |
 | `querier.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                        | `1001`           |
 | `querier.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                     | `true`           |
 | `querier.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                       | `false`          |
@@ -518,6 +548,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                | `["ALL"]`        |
 | `querier.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                  | `RuntimeDefault` |
 | `querier.lifecycleHooks`                                    | for the Querier container(s) to automate configuration before or after startup                    | `{}`             |
+| `querier.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                | `false`          |
 | `querier.hostAliases`                                       | querier pods host aliases                                                                         | `[]`             |
 | `querier.podLabels`                                         | Extra labels for querier pods                                                                     | `{}`             |
 | `querier.podAnnotations`                                    | Annotations for querier pods                                                                      | `{}`             |
@@ -541,21 +572,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Querier Traffic Exposure Parameters
 
-| Name                                       | Description                                                      | Value       |
-| ------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `querier.service.type`                     | Querier service type                                             | `ClusterIP` |
-| `querier.service.ports.http`               | Querier HTTP service port                                        | `3200`      |
-| `querier.service.ports.grpc`               | Querier GRPC service port                                        | `9095`      |
-| `querier.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `querier.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `querier.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `querier.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `querier.service.clusterIP`                | Querier service Cluster IP                                       | `""`        |
-| `querier.service.loadBalancerIP`           | Querier service Load Balancer IP                                 | `""`        |
-| `querier.service.loadBalancerSourceRanges` | Querier service Load Balancer sources                            | `[]`        |
-| `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
-| `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
-| `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
+| Name                                            | Description                                                      | Value       |
+| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `querier.service.type`                          | Querier service type                                             | `ClusterIP` |
+| `querier.service.ports.http`                    | Querier HTTP service port                                        | `3200`      |
+| `querier.service.ports.grpc`                    | Querier GRPC service port                                        | `9095`      |
+| `querier.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `querier.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
+| `querier.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `querier.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
+| `querier.service.clusterIP`                     | Querier service Cluster IP                                       | `""`        |
+| `querier.service.loadBalancerIP`                | Querier service Load Balancer IP                                 | `""`        |
+| `querier.service.loadBalancerSourceRanges`      | Querier service Load Balancer sources                            | `[]`        |
+| `querier.service.externalTrafficPolicy`         | Querier service external traffic policy                          | `Cluster`   |
+| `querier.service.annotations`                   | Additional custom annotations for Querier service                | `{}`        |
+| `querier.service.extraPorts`                    | Extra ports to expose in the Querier service                     | `[]`        |
+| `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `querier.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Query Frontend Deployment Parameters
 
@@ -596,7 +634,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.podSecurityContext.supplementalGroups`                   | Set filesystem extra groups                                                                                         | `[]`                                  |
 | `queryFrontend.podSecurityContext.fsGroup`                              | Set queryFrontend pod's Security Context fsGroup                                                                    | `1001`                                |
 | `queryFrontend.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                                                                | `true`                                |
-| `queryFrontend.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                                                                    | `{}`                                  |
+| `queryFrontend.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                                                                    | `nil`                                 |
 | `queryFrontend.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                                                                          | `1001`                                |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                                                                       | `true`                                |
 | `queryFrontend.containerSecurityContext.privileged`                     | Set container's Security Context privileged                                                                         | `false`                               |
@@ -605,6 +643,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                                                                  | `["ALL"]`                             |
 | `queryFrontend.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                    | `RuntimeDefault`                      |
 | `queryFrontend.lifecycleHooks`                                          | for the queryFrontend container(s) to automate configuration before or after startup                                | `{}`                                  |
+| `queryFrontend.automountServiceAccountToken`                            | Mount Service Account token in pod                                                                                  | `false`                               |
 | `queryFrontend.hostAliases`                                             | queryFrontend pods host aliases                                                                                     | `[]`                                  |
 | `queryFrontend.podLabels`                                               | Extra labels for queryFrontend pods                                                                                 | `{}`                                  |
 | `queryFrontend.podAnnotations`                                          | Annotations for queryFrontend pods                                                                                  | `{}`                                  |
@@ -662,7 +701,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.query.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                  | `{}`                                  |
 | `queryFrontend.query.lifecycleHooks`                                    | for the query sidecar container(s) to automate configuration before or after startup                                | `{}`                                  |
 | `queryFrontend.query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                | `true`                                |
-| `queryFrontend.query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `{}`                                  |
+| `queryFrontend.query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                    | `nil`                                 |
 | `queryFrontend.query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                          | `1001`                                |
 | `queryFrontend.query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                       | `true`                                |
 | `queryFrontend.query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                         | `false`                               |
@@ -676,22 +715,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Query Frontend Traffic Exposure Parameters
 
-| Name                                             | Description                                                      | Value       |
-| ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `queryFrontend.service.type`                     | queryFrontend service type                                       | `ClusterIP` |
-| `queryFrontend.service.ports.http`               | queryFrontend HTTP service port                                  | `3200`      |
-| `queryFrontend.service.ports.grpc`               | queryFrontend GRPC service port                                  | `9095`      |
-| `queryFrontend.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `queryFrontend.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
-| `queryFrontend.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `queryFrontend.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `queryFrontend.service.clusterIP`                | queryFrontend service Cluster IP                                 | `""`        |
-| `queryFrontend.service.loadBalancerIP`           | queryFrontend service Load Balancer IP                           | `""`        |
-| `queryFrontend.service.loadBalancerSourceRanges` | queryFrontend service Load Balancer sources                      | `[]`        |
-| `queryFrontend.service.externalTrafficPolicy`    | queryFrontend service external traffic policy                    | `Cluster`   |
-| `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
-| `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
-| `queryFrontend.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
+| Name                                                  | Description                                                      | Value       |
+| ----------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `queryFrontend.service.type`                          | queryFrontend service type                                       | `ClusterIP` |
+| `queryFrontend.service.ports.http`                    | queryFrontend HTTP service port                                  | `3200`      |
+| `queryFrontend.service.ports.grpc`                    | queryFrontend GRPC service port                                  | `9095`      |
+| `queryFrontend.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `queryFrontend.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
+| `queryFrontend.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `queryFrontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
+| `queryFrontend.service.clusterIP`                     | queryFrontend service Cluster IP                                 | `""`        |
+| `queryFrontend.service.loadBalancerIP`                | queryFrontend service Load Balancer IP                           | `""`        |
+| `queryFrontend.service.loadBalancerSourceRanges`      | queryFrontend service Load Balancer sources                      | `[]`        |
+| `queryFrontend.service.externalTrafficPolicy`         | queryFrontend service external traffic policy                    | `Cluster`   |
+| `queryFrontend.service.annotations`                   | Additional custom annotations for queryFrontend service          | `{}`        |
+| `queryFrontend.service.extraPorts`                    | Extra ports to expose in the queryFrontend service               | `[]`        |
+| `queryFrontend.service.headless.annotations`          | Annotations for the headless service.                            | `{}`        |
+| `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Vulture Deployment Parameters
 
@@ -738,7 +784,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                     | `[]`                                    |
 | `vulture.podSecurityContext.fsGroup`                        | Set Vulture pod's Security Context fsGroup                                                                      | `1001`                                  |
 | `vulture.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`                                  |
-| `vulture.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                                    |
+| `vulture.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `nil`                                   |
 | `vulture.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`                                  |
 | `vulture.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                                  |
 | `vulture.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`                                 |
@@ -747,6 +793,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                              | `["ALL"]`                               |
 | `vulture.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                        |
 | `vulture.lifecycleHooks`                                    | for the vulture container(s) to automate configuration before or after startup                                  | `{}`                                    |
+| `vulture.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                              | `false`                                 |
 | `vulture.hostAliases`                                       | vulture pods host aliases                                                                                       | `[]`                                    |
 | `vulture.podLabels`                                         | Extra labels for vulture pods                                                                                   | `{}`                                    |
 | `vulture.podAnnotations`                                    | Annotations for vulture pods                                                                                    | `{}`                                    |
@@ -771,19 +818,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vulture Traffic Exposure Parameters
 
-| Name                                       | Description                                                      | Value       |
-| ------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `vulture.service.type`                     | Vulture service type                                             | `ClusterIP` |
-| `vulture.service.ports.http`               | Vulture HTTP service port                                        | `3200`      |
-| `vulture.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
-| `vulture.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
-| `vulture.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
-| `vulture.service.clusterIP`                | Vulture service Cluster IP                                       | `""`        |
-| `vulture.service.loadBalancerIP`           | Vulture service Load Balancer IP                                 | `""`        |
-| `vulture.service.loadBalancerSourceRanges` | Vulture service Load Balancer sources                            | `[]`        |
-| `vulture.service.externalTrafficPolicy`    | Vulture service external traffic policy                          | `Cluster`   |
-| `vulture.service.annotations`              | Additional custom annotations for Vulture service                | `{}`        |
-| `vulture.service.extraPorts`               | Extra ports to expose in the Vulture service                     | `[]`        |
+| Name                                            | Description                                                      | Value       |
+| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `vulture.service.type`                          | Vulture service type                                             | `ClusterIP` |
+| `vulture.service.ports.http`                    | Vulture HTTP service port                                        | `3200`      |
+| `vulture.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
+| `vulture.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
+| `vulture.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
+| `vulture.service.clusterIP`                     | Vulture service Cluster IP                                       | `""`        |
+| `vulture.service.loadBalancerIP`                | Vulture service Load Balancer IP                                 | `""`        |
+| `vulture.service.loadBalancerSourceRanges`      | Vulture service Load Balancer sources                            | `[]`        |
+| `vulture.service.externalTrafficPolicy`         | Vulture service external traffic policy                          | `Cluster`   |
+| `vulture.service.annotations`                   | Additional custom annotations for Vulture service                | `{}`        |
+| `vulture.service.extraPorts`                    | Extra ports to expose in the Vulture service                     | `[]`        |
+| `vulture.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
+| `vulture.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
+| `vulture.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
+| `vulture.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `vulture.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
+| `vulture.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
+| `vulture.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
 
 ### Init Container Parameters
 
@@ -797,7 +851,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
 | `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
 | `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `nil`                      |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Other Parameters
@@ -919,7 +973,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/grafana-tempo/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as grafana-tempo (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture` .
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 

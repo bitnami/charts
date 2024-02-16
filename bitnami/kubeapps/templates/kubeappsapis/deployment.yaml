@@ -34,6 +34,7 @@ spec:
     spec:
       {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ template "kubeapps.kubeappsapis.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.kubeappsapis.automountServiceAccountToken }}
       {{- if .Values.kubeappsapis.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -208,6 +209,8 @@ spec:
           {{- end }}
           {{- if .Values.kubeappsapis.resources }}
           resources: {{- toYaml .Values.kubeappsapis.resources | nindent 12 }}
+          {{- else if ne .Values.kubeappsapis.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.kubeappsapis.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Values.clusters }}
@@ -303,6 +306,8 @@ spec:
           {{- end }}
           {{- if .Values.ociCatalog.resources }}
           resources: {{- toYaml .Values.ociCatalog.resources | nindent 12 }}
+          {{- else if ne .Values.ociCatalog.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ociCatalog.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
           {{- if .Values.ociCatalog.extraVolumeMounts }}

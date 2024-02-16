@@ -17,6 +17,20 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.msgTopologyOperator.rbac.clusterRole.customRules }}
+  {{- range .Values.msgTopologyOperator.rbac.clusterRole.customRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- else }}
+  {{- if .Values.msgTopologyOperator.rbac.clusterRole.extraRules }}
+  {{- range .Values.msgTopologyOperator.rbac.clusterRole.extraRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- end }}
   - apiGroups:
       - ""
     resources:
@@ -298,4 +312,23 @@ rules:
       - get
       - patch
       - update
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies
+    verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+  - apiGroups:
+    - rabbitmq.com
+    resources:
+    - operatorpolicies/status
+    verbs:
+    - get
+  {{- end }}
 {{- end }}

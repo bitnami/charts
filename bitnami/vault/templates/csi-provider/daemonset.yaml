@@ -37,6 +37,7 @@ spec:
     spec:
       serviceAccountName: {{ template "vault.csi-provider.serviceAccountName" . }}
       {{- include "vault.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.csiProvider.automountServiceAccountToken }}
       {{- if .Values.csiProvider.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -112,6 +113,8 @@ spec:
             {{- end }}
           {{- if .Values.csiProvider.provider.resources }}
           resources: {{- toYaml .Values.csiProvider.provider.resources | nindent 12 }}
+          {{- else if ne .Values.csiProvider.provider.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.csiProvider.provider.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-health
@@ -191,6 +194,8 @@ spec:
             {{- end }}
           {{- if .Values.csiProvider.agent.resources }}
           resources: {{- toYaml .Values.csiProvider.agent.resources | nindent 12 }}
+          {{- else if ne .Values.csiProvider.agent.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.csiProvider.agent.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: tcp

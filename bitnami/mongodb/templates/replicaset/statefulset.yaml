@@ -49,6 +49,7 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       serviceAccountName: {{ template "mongodb.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -106,6 +107,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: datadir
@@ -154,6 +157,8 @@ spec:
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          {{- else if ne .Values.tls.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
@@ -173,6 +178,8 @@ spec:
               value: "/shared/info.txt"
           {{- if .Values.externalAccess.autoDiscovery.resources }}
           resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+          {{- else if ne .Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: shared
@@ -352,6 +359,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: datadir
@@ -470,6 +479,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}

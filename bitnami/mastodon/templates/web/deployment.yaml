@@ -34,6 +34,7 @@ spec:
     spec:
       serviceAccountName: {{ template "mastodon.serviceAccountName" . }}
       {{- include "mastodon.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.web.automountServiceAccountToken }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -81,6 +82,8 @@ spec:
           securityContext:
             runAsUser: 0
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -199,6 +202,8 @@ spec:
             {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- else if ne .Values.web.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -254,6 +259,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.web.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.web.extraVolumes "context" $) | nindent 10 }}
         {{- end }}
 {{- end }}

@@ -54,13 +54,13 @@ spec:
         {{- end }}
     spec:
       {{- include "redis.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.replica.automountServiceAccountToken }}
       {{- if .Values.replica.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.replica.hostAliases "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.replica.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.replica.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       serviceAccountName: {{ template "redis.serviceAccountName" . }}
       {{- if .Values.replica.priorityClassName }}
       priorityClassName: {{ .Values.replica.priorityClassName | quote }}
@@ -270,6 +270,8 @@ spec:
           {{- end }}
           {{- if .Values.replica.resources }}
           resources: {{- toYaml .Values.replica.resources | nindent 12 }}
+          {{- else if ne .Values.replica.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.replica.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: start-scripts
@@ -449,6 +451,8 @@ spec:
           {{- end }}
           {{- if .Values.sentinel.resources }}
           resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
+          {{- else if ne .Values.sentinel.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sentinel.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: start-scripts
@@ -503,6 +507,8 @@ spec:
           env:
             - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.auth.enabled }}
             - name: REDIS_USER
               value: default
@@ -531,7 +537,7 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 9121
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
@@ -558,6 +564,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.auth.usePasswordFiles }}
@@ -602,6 +610,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: redis-data
@@ -624,6 +634,8 @@ spec:
           {{- end }}
           {{- if .Values.sysctl.resources }}
           resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
+          {{- else if ne .Values.sysctl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctl.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.sysctl.mountHostSys }}
           volumeMounts:

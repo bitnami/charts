@@ -139,71 +139,71 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress deployment parameters
 
-| Name                                                | Description                                                                                                              | Value            |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
-| `replicaCount`                                      | Number of WordPress replicas to deploy                                                                                   | `1`              |
-| `updateStrategy.type`                               | WordPress deployment strategy type                                                                                       | `RollingUpdate`  |
-| `schedulerName`                                     | Alternate scheduler                                                                                                      | `""`             |
-| `terminationGracePeriodSeconds`                     | In seconds, time given to the WordPress pod to terminate gracefully                                                      | `""`             |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
-| `priorityClassName`                                 | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand          | `""`             |
-| `hostAliases`                                       | WordPress pod host aliases                                                                                               | `[]`             |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for WordPress pods                                                   | `[]`             |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for WordPress container(s)                                      | `[]`             |
-| `sidecars`                                          | Add additional sidecar containers to the WordPress pod                                                                   | `[]`             |
-| `initContainers`                                    | Add additional init containers to the WordPress pods                                                                     | `[]`             |
-| `podLabels`                                         | Extra labels for WordPress pods                                                                                          | `{}`             |
-| `podAnnotations`                                    | Annotations for WordPress pods                                                                                           | `{}`             |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`             |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`           |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`             |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                    | `""`             |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`             |
-| `affinity`                                          | Affinity for pod assignment                                                                                              | `{}`             |
-| `nodeSelector`                                      | Node labels for pod assignment                                                                                           | `{}`             |
-| `tolerations`                                       | Tolerations for pod assignment                                                                                           | `[]`             |
-| `resources.limits`                                  | The resources limits for the WordPress containers                                                                        | `{}`             |
-| `resources.requests.memory`                         | The requested memory for the WordPress containers                                                                        | `512Mi`          |
-| `resources.requests.cpu`                            | The requested cpu for the WordPress containers                                                                           | `300m`           |
-| `containerPorts.http`                               | WordPress HTTP container port                                                                                            | `8080`           |
-| `containerPorts.https`                              | WordPress HTTPS container port                                                                                           | `8443`           |
-| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                             | `[]`             |
-| `podSecurityContext.enabled`                        | Enabled WordPress pods' Security Context                                                                                 | `true`           |
-| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                       | `Always`         |
-| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                           | `[]`             |
-| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                              | `[]`             |
-| `podSecurityContext.fsGroup`                        | Set WordPress pod's Security Context fsGroup                                                                             | `1001`           |
-| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                         | `{}`             |
-| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
-| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
-| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
-| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
-| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
-| `livenessProbe.enabled`                             | Enable livenessProbe on WordPress containers                                                                             | `true`           |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `120`            |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`             |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`              |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`              |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`              |
-| `readinessProbe.enabled`                            | Enable readinessProbe on WordPress containers                                                                            | `true`           |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `30`             |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`             |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`              |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`              |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`              |
-| `startupProbe.enabled`                              | Enable startupProbe on WordPress containers                                                                              | `false`          |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`             |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`             |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `5`              |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `6`              |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`              |
-| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`             |
-| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`             |
-| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`             |
-| `lifecycleHooks`                                    | for the WordPress container(s) to automate configuration before or after startup                                         | `{}`             |
+| Name                                                | Description                                                                                                                                                                                                | Value            |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of WordPress replicas to deploy                                                                                                                                                                     | `1`              |
+| `updateStrategy.type`                               | WordPress deployment strategy type                                                                                                                                                                         | `RollingUpdate`  |
+| `schedulerName`                                     | Alternate scheduler                                                                                                                                                                                        | `""`             |
+| `terminationGracePeriodSeconds`                     | In seconds, time given to the WordPress pod to terminate gracefully                                                                                                                                        | `""`             |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                   | `[]`             |
+| `priorityClassName`                                 | Name of the existing priority class to be used by WordPress pods, priority class needs to be created beforehand                                                                                            | `""`             |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                         | `false`          |
+| `hostAliases`                                       | WordPress pod host aliases                                                                                                                                                                                 | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for WordPress pods                                                                                                                                     | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for WordPress container(s)                                                                                                                        | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the WordPress pod                                                                                                                                                     | `[]`             |
+| `initContainers`                                    | Add additional init containers to the WordPress pods                                                                                                                                                       | `[]`             |
+| `podLabels`                                         | Extra labels for WordPress pods                                                                                                                                                                            | `{}`             |
+| `podAnnotations`                                    | Annotations for WordPress pods                                                                                                                                                                             | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                   | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                                                                                                      | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                                                                                                   | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                             | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                             | `[]`             |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`           |
+| `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`             |
+| `containerPorts.http`                               | WordPress HTTP container port                                                                                                                                                                              | `8080`           |
+| `containerPorts.https`                              | WordPress HTTPS container port                                                                                                                                                                             | `8443`           |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                                                                                                               | `[]`             |
+| `podSecurityContext.enabled`                        | Enabled WordPress pods' Security Context                                                                                                                                                                   | `true`           |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`         |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                             | `[]`             |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                | `[]`             |
+| `podSecurityContext.fsGroup`                        | Set WordPress pod's Security Context fsGroup                                                                                                                                                               | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                       | `true`           |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`            |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                              | `true`           |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                  | `false`          |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault` |
+| `livenessProbe.enabled`                             | Enable livenessProbe on WordPress containers                                                                                                                                                               | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                    | `120`            |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                           | `10`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                          | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                        | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                        | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe on WordPress containers                                                                                                                                                              | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                   | `30`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                          | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                         | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                       | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                       | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe on WordPress containers                                                                                                                                                                | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                     | `30`             |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                            | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                           | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                         | `6`              |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                         | `1`              |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                        | `{}`             |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                       | `{}`             |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                         | `{}`             |
+| `lifecycleHooks`                                    | for the WordPress container(s) to automate configuration before or after startup                                                                                                                           | `{}`             |
 
 ### Traffic Exposure Parameters
 
@@ -241,27 +241,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                        | Description                                                                                                        | Value                      |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
-| `persistence.storageClass`                                  | Persistent Volume storage class                                                                                    | `""`                       |
-| `persistence.accessModes`                                   | Persistent Volume access modes                                                                                     | `[]`                       |
-| `persistence.accessMode`                                    | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`            |
-| `persistence.size`                                          | Persistent Volume size                                                                                             | `10Gi`                     |
-| `persistence.dataSource`                                    | Custom PVC data source                                                                                             | `{}`                       |
-| `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                 | `""`                       |
-| `persistence.selector`                                      | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                       |
-| `persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                | `{}`                       |
-| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
-| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
-| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
-| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
-| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
-| `volumePermissions.resources.limits`                        | The resources limits for the init container                                                                        | `{}`                       |
-| `volumePermissions.resources.requests`                      | The requested resources for the init container                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                   | `{}`                       |
-| `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                     | `0`                        |
+| Name                                                        | Description                                                                                                                                                                                                                                    | Value                      |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                                                                                                                                                                              | `true`                     |
+| `persistence.storageClass`                                  | Persistent Volume storage class                                                                                                                                                                                                                | `""`                       |
+| `persistence.accessModes`                                   | Persistent Volume access modes                                                                                                                                                                                                                 | `[]`                       |
+| `persistence.accessMode`                                    | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                                                                                                                              | `ReadWriteOnce`            |
+| `persistence.size`                                          | Persistent Volume size                                                                                                                                                                                                                         | `10Gi`                     |
+| `persistence.dataSource`                                    | Custom PVC data source                                                                                                                                                                                                                         | `{}`                       |
+| `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                                                                                                                                             | `""`                       |
+| `persistence.selector`                                      | Selector to match an existing Persistent Volume for WordPress data PVC                                                                                                                                                                         | `{}`                       |
+| `persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                                                                                                                                            | `{}`                       |
+| `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                                                                                                                                | `false`                    |
+| `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                                                                                                                                              | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                                                                                                                                            | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                             | `""`                       |
+| `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                                                                                                                                                           | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                                                                                                                                                          | `[]`                       |
+| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `nil`                      |
+| `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                                                                                                                                 | `0`                        |
 
 ### Other Parameters
 
@@ -282,59 +282,59 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics Parameters
 
-| Name                                                        | Description                                                                                                     | Value                             |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
-| `metrics.image.registry`                                    | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
-| `metrics.image.repository`                                  | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.digest`                                      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
-| `metrics.image.pullPolicy`                                  | Apache exporter image pull policy                                                                               | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                                 | Apache exporter image pull secrets                                                                              | `[]`                              |
-| `metrics.containerPorts.metrics`                            | Prometheus exporter container port                                                                              | `9117`                            |
-| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Prometheus exporter containers                                                          | `true`                            |
-| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                         | `15`                              |
-| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                | `10`                              |
-| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                               | `5`                               |
-| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                             | `3`                               |
-| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                             | `1`                               |
-| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Prometheus exporter containers                                                         | `true`                            |
-| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                        | `5`                               |
-| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                               | `10`                              |
-| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                              | `3`                               |
-| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                            | `3`                               |
-| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                            | `1`                               |
-| `metrics.startupProbe.enabled`                              | Enable startupProbe on Prometheus exporter containers                                                           | `false`                           |
-| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                          | `10`                              |
-| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                 | `10`                              |
-| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                | `1`                               |
-| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                              | `15`                              |
-| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                              | `1`                               |
-| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                             | `{}`                              |
-| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                            | `{}`                              |
-| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                              | `{}`                              |
-| `metrics.resources.limits`                                  | The resources limits for the Prometheus exporter container                                                      | `{}`                              |
-| `metrics.resources.requests`                                | The requested resources for the Prometheus exporter container                                                   | `{}`                              |
-| `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                            | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                | `{}`                              |
-| `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                      | `1001`                            |
-| `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                   | `true`                            |
-| `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                     | `false`                           |
-| `metrics.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                         | `false`                           |
-| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                       | `false`                           |
-| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                              | `["ALL"]`                         |
-| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                | `RuntimeDefault`                  |
-| `metrics.service.ports.metrics`                             | Prometheus metrics service port                                                                                 | `9150`                            |
-| `metrics.service.annotations`                               | Additional custom annotations for Metrics service                                                               | `{}`                              |
-| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                   | `false`                           |
-| `metrics.serviceMonitor.namespace`                          | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                   | `""`                              |
-| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped.                                                                    | `""`                              |
-| `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                         | `""`                              |
-| `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                           | `{}`                              |
-| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                             | `{}`                              |
-| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                              | `[]`                              |
-| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                       | `[]`                              |
-| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                        | `false`                           |
-| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                               | `""`                              |
+| Name                                                        | Description                                                                                                                                                                                                                | Value                             |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose metrics                                                                                                                                                                      | `false`                           |
+| `metrics.image.registry`                                    | Apache exporter image registry                                                                                                                                                                                             | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                                  | Apache exporter image repository                                                                                                                                                                                           | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.digest`                                      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                            | `""`                              |
+| `metrics.image.pullPolicy`                                  | Apache exporter image pull policy                                                                                                                                                                                          | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                                 | Apache exporter image pull secrets                                                                                                                                                                                         | `[]`                              |
+| `metrics.containerPorts.metrics`                            | Prometheus exporter container port                                                                                                                                                                                         | `9117`                            |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on Prometheus exporter containers                                                                                                                                                                     | `true`                            |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                    | `15`                              |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                           | `10`                              |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                          | `5`                               |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                                        | `3`                               |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                                        | `1`                               |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on Prometheus exporter containers                                                                                                                                                                    | `true`                            |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                   | `5`                               |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                          | `10`                              |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                         | `3`                               |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                       | `3`                               |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                       | `1`                               |
+| `metrics.startupProbe.enabled`                              | Enable startupProbe on Prometheus exporter containers                                                                                                                                                                      | `false`                           |
+| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                     | `10`                              |
+| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                            | `10`                              |
+| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                           | `1`                               |
+| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                         | `15`                              |
+| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                         | `1`                               |
+| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                        | `{}`                              |
+| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                       | `{}`                              |
+| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                         | `{}`                              |
+| `metrics.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `none`                            |
+| `metrics.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                              |
+| `metrics.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                       | `true`                            |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`                             |
+| `metrics.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `true`                            |
+| `metrics.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                | `false`                           |
+| `metrics.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `false`                           |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                  | `false`                           |
+| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                         | `["ALL"]`                         |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                           | `RuntimeDefault`                  |
+| `metrics.service.ports.metrics`                             | Prometheus metrics service port                                                                                                                                                                                            | `9150`                            |
+| `metrics.service.annotations`                               | Additional custom annotations for Metrics service                                                                                                                                                                          | `{}`                              |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                                                                                                              | `false`                           |
+| `metrics.serviceMonitor.namespace`                          | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                                                                                                              | `""`                              |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped.                                                                                                                                                                               | `""`                              |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                                                                                                                                    | `""`                              |
+| `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                                                                                                      | `{}`                              |
+| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                                                                                                                                        | `{}`                              |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                                                                                                                         | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                                                                                                                  | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                                                                                                                                   | `false`                           |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                          | `""`                              |
 
 ### NetworkPolicy parameters
 
@@ -412,6 +412,12 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/wordp
 
 ## Configuration and installation details
 
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
@@ -443,7 +449,9 @@ externalDatabase.database=mydatabase
 externalDatabase.port=3306
 ```
 
-Refer to the [documentation on using an external database with WordPress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/use-external-database/) and the [tutorial on integrating WordPress with a managed cloud database](https://docs.bitnami.com/tutorials/secure-wordpress-kubernetes-managed-database-ssl-upgrades/) for more information.
+If the database already contains data from a previous WordPress installation, set the `wordpressSkipInstall` parameter to `true`. This parameter forces the container to skip the WordPress installation wizard. Otherwise, the container will assume it is a fresh installation and execute the installation wizard, potentially modifying or resetting the data in the existing database.
+
+[Refer to the container documentation for more information](https://github.com/bitnami/containers/tree/main/bitnami/wordpress#connect-wordpress-container-to-an-existing-database).
 
 ### Memcached
 
@@ -462,13 +470,55 @@ externalCache.port=11211
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-ingress/).
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/enable-tls-ingress/).
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
 
 ### `.htaccess` files
 
@@ -476,7 +526,19 @@ For performance and security reasons, it is a good practice to configure Apache 
 
 By default, the container image includes all the default `.htaccess` files in WordPress (together with the default plugins). To enable this feature, install the chart with the value `allowOverrideNone=yes`.
 
-[Learn more about working with `.htaccess` files](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/understand-htaccess/).
+However, some plugins may include `.htaccess` directives that will not be loaded when `AllowOverride` is set to `None`. To make them work, create a custom `wordpress-htaccess.conf` file with all the required directives. After creating it, create a Kubernetes ConfigMap with it (for example, named `custom-htaccess`) and install the chart with the correct parameters as shown below:
+
+```text
+    allowOverrideNone=true
+    customHTAccessCM=custom-htaccess
+```
+
+Some plugins permit editing the `.htaccess` file and it may be necessary to persist it in order to keep those edits. To make these plugins work, set the `htaccessPersistenceEnabled` parameter as shown below:
+
+```text
+    allowOverrideNone=false
+    htaccessPersistenceEnabled=true
+```
 
 ## Persistence
 
@@ -499,7 +561,43 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as WordPress (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/wordpress/configuration/configure-sidecar-init-containers/).
+If additional containers are needed in the same pod as WordPress (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
 ### Pod affinity
 
@@ -576,8 +674,6 @@ Compatibility is not guaranteed due to the amount of involved changes, however n
 ### To 10.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
-
-[Learn more about this change and related upgrade considerations](https://docs.bitnami.com/kubernetes/apps/wordpress/administration/upgrade-helm3/).
 
 #### Additional upgrade notes
 

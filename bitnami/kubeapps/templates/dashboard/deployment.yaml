@@ -36,6 +36,7 @@ spec:
         app.kubernetes.io/component: dashboard
     spec:
       {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      automountServiceAccountToken: {{ .Values.dashboard.automountServiceAccountToken }}
       {{- if .Values.dashboard.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -133,6 +134,8 @@ spec:
           {{- end }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: vhost

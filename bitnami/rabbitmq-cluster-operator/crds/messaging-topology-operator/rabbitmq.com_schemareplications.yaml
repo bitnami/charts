@@ -1,0 +1,156 @@
+# Source: https://raw.githubusercontent.com/rabbitmq/messaging-topology-operator/v{version}/config/crd/bases/rabbitmq.com_schemareplications.yaml
+# Version: 1.13.0
+# VersionOf: rmq-messaging-topology-operator
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: schemareplications.rabbitmq.com
+spec:
+  group: rabbitmq.com
+  names:
+    kind: SchemaReplication
+    listKind: SchemaReplicationList
+    plural: schemareplications
+    singular: schemareplication
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: |-
+          SchemaReplication is the Schema for the schemareplications API
+          This feature requires Tanzu RabbitMQ with schema replication plugin.
+          For more information, see: https://tanzu.vmware.com/rabbitmq and https://www.rabbitmq.com/definitions-standby.html.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: SchemaReplicationSpec defines the desired state of SchemaReplication
+            properties:
+              endpoints:
+                description: |-
+                  endpoints should be one or multiple endpoints separated by ','.
+                  Must provide either spec.endpoints or endpoints in spec.upstreamSecret.
+                  When endpoints are provided in both spec.endpoints and spec.upstreamSecret, spec.endpoints takes
+                  precedence.
+                type: string
+              rabbitmqClusterReference:
+                description: Reference to the RabbitmqCluster that schema replication
+                  would be set for. Must be an existing cluster.
+                properties:
+                  connectionSecret:
+                    description: |-
+                      Secret contains the http management uri for the RabbitMQ cluster.
+                      The Secret must contain the key `uri`, `username` and `password` or operator will error.
+                      Have to set either name or connectionSecret, but not both.
+                    properties:
+                      name:
+                        description: |-
+                          Name of the referent.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  name:
+                    description: |-
+                      The name of the RabbitMQ cluster to reference.
+                      Have to set either name or connectionSecret, but not both.
+                    type: string
+                  namespace:
+                    description: |-
+                      The namespace of the RabbitMQ cluster to reference.
+                      Defaults to the namespace of the requested resource if omitted.
+                    type: string
+                type: object
+              secretBackend:
+                description: Set to fetch user credentials from K8s external secret
+                  stores to be used for schema replication.
+                properties:
+                  vault:
+                    properties:
+                      secretPath:
+                        description: |-
+                          Path in Vault to access a KV (Key-Value) secret with the fields username and password to be used for replication.
+                          For example "secret/data/rabbitmq/config".
+                          Optional; if not provided, username and password will come from upstreamSecret instead.
+                          Have to set either secretBackend.vault.secretPath or upstreamSecret, but not both.
+                        type: string
+                    type: object
+                type: object
+              upstreamSecret:
+                description: |-
+                  Defines a Secret which contains credentials to be used for schema replication.
+                  The Secret must contain the keys `username` and `password` in its Data field, or operator will error.
+                  Have to set either secretBackend.vault.secretPath or spec.upstreamSecret, but not both.
+                properties:
+                  name:
+                    description: |-
+                      Name of the referent.
+                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?
+                    type: string
+                type: object
+                x-kubernetes-map-type: atomic
+            required:
+            - rabbitmqClusterReference
+            type: object
+          status:
+            description: SchemaReplicationStatus defines the observed state of SchemaReplication
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: The last time this Condition status changed.
+                      format: date-time
+                      type: string
+                    message:
+                      description: Full text reason for current status of the condition.
+                      type: string
+                    reason:
+                      description: One word, camel-case reason for current status
+                        of the condition.
+                      type: string
+                    status:
+                      description: True, False, or Unknown
+                      type: string
+                    type:
+                      description: Type indicates the scope of the custom resource
+                        status addressed by the condition.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGeneration:
+                description: |-
+                  observedGeneration is the most recent successful generation observed for this Queue. It corresponds to the
+                  Queue's generation, which is updated on mutation by the API Server.
+                format: int64
+                type: integer
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

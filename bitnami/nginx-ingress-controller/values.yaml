@@ -16,7 +16,6 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -43,7 +42,6 @@ extraDeploy: []
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-
 ## @section Nginx Ingress Controller parameters
 
 ## Bitnami NGINX Ingress controller image version
@@ -58,7 +56,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.9.5-debian-11-r3
+  tag: 1.9.6-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -79,6 +77,9 @@ containerPorts:
   http: 8080
   https: 8443
   metrics: 10254
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: true
 ## @param hostAliases Deployment pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
@@ -208,7 +209,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of a existing Secret containing extra environment variables
 ##
 extraEnvVarsSecret: ""
-
 ## @section Nginx Ingress deployment / daemonset parameters
 
 ## @param kind Install as Deployment or DaemonSet
@@ -253,7 +253,7 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable Controller containers' Security Context
 ## @param containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the Controller container
-## @param containerSecurityContext.seLinuxOptions Set SELinux options in container
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser User ID for the Controller container
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added
@@ -263,7 +263,7 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: false
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   capabilities:
     drop: ["ALL"]
@@ -280,20 +280,21 @@ minReadySeconds: 0
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the Controller container
-## @param resources.requests The requested resources for the Controller container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Controller containers' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -478,7 +479,6 @@ topologySpreadConstraints: []
 ##
 podSecurityPolicy:
   enabled: false
-
 ## @section Default backend parameters
 
 ## Default 404 backend
@@ -487,6 +487,9 @@ defaultBackend:
   ## @param defaultBackend.enabled Enable a default backend based on NGINX
   ##
   enabled: true
+  ## @param defaultBackend.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## @param defaultBackend.hostAliases Add deployment host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -503,7 +506,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r4
+    tag: 1.25.3-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -557,7 +560,7 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.enabled Enable Default backend containers' Security Context
   ## @param defaultBackend.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
   ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the container
-  ## @param defaultBackend.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
@@ -565,7 +568,7 @@ defaultBackend:
   containerSecurityContext:
     enabled: true
     allowPrivilegeEscalation: false
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     capabilities:
       drop: ["ALL"]
@@ -578,20 +581,21 @@ defaultBackend:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param defaultBackend.resources.limits The resources limits for the Default backend container
-  ## @param defaultBackend.resources.requests The requested resources for the Default backend container
+  ## @param defaultBackend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultBackend.resources is set (defaultBackend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param defaultBackend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.livenessProbe.enabled Enable livenessProbe
@@ -776,6 +780,61 @@ defaultBackend:
     ## @param defaultBackend.service.annotations Annotations for the default backend service
     ##
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param defaultBackend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param defaultBackend.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param defaultBackend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param defaultBackend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param defaultBackend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param defaultBackend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Default backend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -789,7 +848,6 @@ defaultBackend:
     ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that may be made unavailable
     ##
     maxUnavailable: ""
-
 ## @section Traffic exposure parameters
 
 ## Service parameters
@@ -871,7 +929,64 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443]
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section RBAC parameters
 
 ## Pods Service Account
@@ -890,7 +1005,7 @@ serviceAccount:
   annotations: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
-  automountServiceAccountToken: true
+  automountServiceAccountToken: false
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ##
@@ -938,7 +1053,6 @@ autoscaling:
   maxReplicas: 11
   targetCPU: ""
   targetMemory: ""
-
 ## @section Metrics parameters
 
 ## Prometheus exporter parameters
@@ -1011,7 +1125,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-
   ## @param metrics.prometheusRule.enabled Create PrometheusRules resource for scraping metrics using PrometheusOperator
   ## @param metrics.prometheusRule.additionalLabels Used to pass Labels that are required by the Installed Prometheus Operator
   ## @param metrics.prometheusRule.namespace Namespace which Prometheus is running in

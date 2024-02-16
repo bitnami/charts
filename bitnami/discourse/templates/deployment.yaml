@@ -34,6 +34,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
       {{- include "discourse.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -83,6 +84,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: discourse-data
@@ -225,6 +228,8 @@ spec:
           {{- end }}
           {{- if .Values.discourse.resources }}
           resources: {{- toYaml .Values.discourse.resources | nindent 12 }}
+          {{- else if ne .Values.discourse.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.discourse.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: discourse-data
@@ -325,6 +330,8 @@ spec:
           {{- end }}
           {{- if .Values.sidekiq.resources }}
           resources: {{- toYaml .Values.sidekiq.resources | nindent 12 }}
+          {{- else if ne .Values.sidekiq.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sidekiq.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.sidekiq.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.lifecycleHooks "context" $) | nindent 12 }}

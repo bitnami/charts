@@ -8,6 +8,7 @@ Pod Spec
 */}}
 {{- define "tomcat.pod" -}}
 {{- include "tomcat.imagePullSecrets" . }}
+automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
 {{- if .Values.hostAliases }}
 hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 2 }}
 {{- end }}
@@ -20,6 +21,7 @@ affinity:
   podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 4 }}
   nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 4 }}
 {{- end }}
+serviceAccountName: {{ include "tomcat.serviceAccountName" . }}
 {{- if .Values.schedulerName }}
 schedulerName: {{ .Values.schedulerName | quote }}
 {{- end }}
@@ -49,6 +51,8 @@ initContainers:
       runAsUser: 0
     {{- if .Values.volumePermissions.resources }}
     resources: {{- toYaml .Values.volumePermissions.resources | nindent 6 }}
+    {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -82,6 +86,8 @@ containers:
             key: tomcat-password
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+      - name: TOMCAT_HTTP_PORT_NUMBER
+        value: {{ .Values.containerPorts.http | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
         value: {{ include "tomcat.catalinaOpts" . | quote }}
@@ -138,6 +144,8 @@ containers:
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}
+    {{- else if ne .Values.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -168,6 +176,8 @@ containers:
     {{- end }}
     {{- if .Values.metrics.jmx.resources }}
     resources: {{- toYaml .Values.metrics.jmx.resources | nindent 6 }}
+    {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: jmx-config

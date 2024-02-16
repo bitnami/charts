@@ -2,7 +2,7 @@ source:
   type: "git"
   git:
     repository: https://github.com/microsoft/DeepSpeedExamples
-    revision: add-benchmarks
+    revision: master
 client:
   podSecurityContext:
     enabled: true
@@ -13,7 +13,7 @@ client:
     runAsGroup: 1002
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
   persistence:
     enabled: true
     mountPath: /bitnami/deepspeed/vib-test

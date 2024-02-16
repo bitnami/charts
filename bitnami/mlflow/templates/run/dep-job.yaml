@@ -46,6 +46,7 @@ spec:
     spec:
       {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ template "mlflow.v0.run.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.run.automountServiceAccountToken }}
       {{- if .Values.run.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.run.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -170,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.run.resources }}
           resources: {{- toYaml .Values.run.resources | nindent 12 }}
+          {{- else if ne .Values.run.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.run.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.run.customLivenessProbe }}

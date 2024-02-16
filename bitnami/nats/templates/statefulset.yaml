@@ -34,6 +34,8 @@ spec:
         {{- end }}
     spec:
       {{- include "nats.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ include "nats.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -169,7 +171,7 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
+              containerPort: {{ coalesce .Values.metrics.containerPorts.http .Values.metrics.containerPort }}
           livenessProbe:
             httpGet:
               path: /metrics

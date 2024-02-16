@@ -175,6 +175,17 @@ Return the proper Docker Image Registry Secret Names list
 {{/*
 Create the name of the service account to use
 */}}
+{{- define "jupyterhub.imagePullerServiceAccountName" -}}
+{{- if .Values.hub.serviceAccount.create -}}
+    {{ default (printf "%s-image-puller" (include "common.names.fullname" .)) .Values.imagePuller.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.imagePuller.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
 {{- define "jupyterhub.hubServiceAccountName" -}}
 {{- if .Values.hub.serviceAccount.create -}}
     {{ default (printf "%s-hub" (include "common.names.fullname" .)) .Values.hub.serviceAccount.name }}
@@ -299,6 +310,24 @@ Get the Postgresql credentials secret.
 {{- else }}
     {{- printf "%s-hub" (include "common.names.fullname" . ) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+ We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M)
+*/}}
+{{- define "jupyterhub.singleuser.resources" -}}
+{{ $resources := (dict "limits" (dict) "requests" (dict)) }}
+{{- if .Values.singleuser.resources -}}
+    {{ $resources = .Values.singleuser.resources -}}
+{{- else if ne .Values.singleuser.resourcesPreset "none" -}}
+    {{ $resources = include "common.resources.preset" (dict "type" .Values.singleuser.resourcesPreset) -}}
+{{- end -}}
+cpu:
+  limit: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.limits.cpu)  "${1}" }}
+  guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.requests.cpu) "${1}" }}
+memory:
+  limit: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.limits.memory) "${1}" }}
+  guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.requests.memory) "${1}" }}
 {{- end -}}
 
 {{/* Validate values of JupyterHub - Database */}}

@@ -8,7 +8,44 @@ Watch the RabbitMQ Cluster Operator and RabbitMQ Messaging Topology Operator Dep
 
     kubectl get deploy -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
 
+{{- if .Values.clusterOperator.rbac.create }}
+{{- if .Values.clusterOperator.watchAllNamespaces }}
+WARNING: RabbitMQ Cluster Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting clusterOperator.watchAllNamespaces = false and configuring clusterOperator.watchNamespaces
+{{- else }}
+
+RabbitMQ Cluster Operator can ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.clusterOperator.watchAllNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+RabbitMQ Cluster Operator won't be able to access resources in other namespaces. You can configure this behavior by setting clusterOperator.watchNamespaces
+
+{{- end }}
+{{- end }}
+
+{{- if .Values.msgTopologyOperator.rbac.create }}
+{{- if .Values.msgTopologyOperator.watchAllNamespaces }}
+WARNING: RabbitMQ Messaging Topology Operator can access all secrets in the cluster. This could pose a security risk if the application gets compromised.
+
+You can limit allowed namespaces by setting msgTopologyOperator.watchAllNamespaces = false and configuring msgTopologyOperator.watchNamespaces
+{{- else }}
+
+RabbitMQ Messaging Topology Operator can ONLY access resources in the following namespaces:
+{{ $namespaces := .Values.msgTopologyOperator.watchAllNamespaces | default (list (include "common.names.namespace" .)) }}
+{{- range $namespace := $namespaces }}
+  - {{ $namespace }}
+{{- end }}
+
+RabbitMQ Messaging Topology Operator won't be able to access resources in other namespaces. You can configure this behavior by setting msgTopologyOperator.watchNamespaces
+
+{{- end }}
+{{- end }}
+
 {{ include "common.warnings.rollingTag" .Values.clusterOperator.image }}
 {{ include "common.warnings.rollingTag" .Values.msgTopologyOperator.image }}
 {{ include "common.warnings.rollingTag" .Values.credentialUpdaterImage }}
 {{ include "common.warnings.rollingTag" .Values.rabbitmqImage }}
+{{- include "common.warnings.resources" (dict "sections" (list "clusterOperator" "msgTopologyOperator") "context" $) }}

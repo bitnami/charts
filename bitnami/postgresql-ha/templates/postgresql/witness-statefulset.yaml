@@ -42,6 +42,7 @@ spec:
       {{- end }}
     spec:
       {{- include "postgresql-ha.image.pullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.witness.automountServiceAccountToken }}
       {{- if .Values.witness.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.witness.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -122,6 +123,8 @@ spec:
           securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -387,6 +390,8 @@ spec:
           {{- end }}
           {{- if .Values.witness.resources }}
           resources: {{- toYaml .Values.witness.resources | nindent 12 }}
+          {{- else if ne .Values.witness.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.witness.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.witness.repmgrConfiguration .Values.witness.configuration .Values.witness.pgHbaConfiguration .Values.witness.configurationCM }}
@@ -489,6 +494,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.postgresql.usePasswordFile }}
@@ -568,7 +575,9 @@ spec:
           emptyDir: {}
   {{- else if and .Values.persistence.enabled (not .Values.persistence.existingClaim) }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}

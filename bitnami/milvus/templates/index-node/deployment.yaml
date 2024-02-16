@@ -45,6 +45,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "milvus.index-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.indexNode.automountServiceAccountToken }}
       {{- if .Values.indexNode.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.indexNode.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -130,6 +131,8 @@ spec:
               name: http-metrics
           {{- if .Values.indexNode.resources }}
           resources: {{- toYaml .Values.indexNode.resources | nindent 12 }}
+          {{- else if ne .Values.indexNode.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.indexNode.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.indexNode.customLivenessProbe }}

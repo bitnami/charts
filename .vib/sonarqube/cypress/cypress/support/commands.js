@@ -21,8 +21,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('user'), password = Cypress.env('password')) => {
     cy.visit('/sessions/new');
-    cy.get('#login').type(username);
-    cy.get('#password').type(password);
+    cy.get('#login-input').type(username);
+    cy.get('#password-input').type(password);
     cy.contains('button', 'Log in').click();
   }
 );

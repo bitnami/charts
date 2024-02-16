@@ -44,6 +44,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "argo-workflows.server.serviceAccountName" . }}
       {{- include "argo-workflows.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.server.automountServiceAccountToken }}
       {{- if .Values.server.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.server.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -131,6 +132,8 @@ spec:
             {{- end }}
           {{- if .Values.server.resources }}
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          {{- else if ne .Values.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}

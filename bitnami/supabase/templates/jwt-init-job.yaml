@@ -32,6 +32,7 @@ spec:
       {{- if .Values.jwt.autoGenerate.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.jwt.autoGenerate.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.jwt.autoGenerate.automountServiceAccountToken }}
       {{- if .Values.jwt.autoGenerate.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -99,6 +100,8 @@ spec:
           {{- end }}
           {{- if .Values.jwt.autoGenerate.resources }}
           resources: {{- toYaml .Values.jwt.autoGenerate.resources | nindent 12 }}
+          {{- else if ne .Values.jwt.autoGenerate.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jwt.autoGenerate.resourcesPreset) | nindent 12 }}
           {{- end }}
       containers:
         - name: create-update-secret
@@ -137,6 +140,8 @@ spec:
           {{- end }}
           {{- if .Values.jwt.autoGenerate.resources }}
           resources: {{- toYaml .Values.jwt.autoGenerate.resources | nindent 12 }}
+          {{- else if ne .Values.jwt.autoGenerate.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jwt.autoGenerate.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
         - name: secret-files

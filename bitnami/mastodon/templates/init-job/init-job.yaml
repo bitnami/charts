@@ -31,6 +31,7 @@ spec:
       {{- if .Values.initJob.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.initJob.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.initJob.automountServiceAccountToken }}
       {{- if .Values.initJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -107,6 +108,8 @@ spec:
           {{- end }}
           {{- if .Values.initJob.resources }}
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.initJob.precompileAssets }}
@@ -178,6 +181,8 @@ spec:
           {{- end }}
           {{- if .Values.initJob.resources }}
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- end }}
       volumes:

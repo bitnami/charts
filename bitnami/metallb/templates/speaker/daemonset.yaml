@@ -33,6 +33,7 @@ spec:
       {{- end }}
     spec:
       {{- include "common.images.renderPullSecrets" (dict "images" (list .Values.speaker.image .Values.controller.image) "context" $) | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.speaker.automountServiceAccountToken }}
       {{- if .Values.speaker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -156,6 +157,8 @@ spec:
           {{- end }}
           {{- if .Values.speaker.resources }}
           resources: {{- toYaml .Values.speaker.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: memberlist-secret

@@ -1,11 +1,12 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.68.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
+# Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
+# Version: 0.71.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.13.0
+    operator.prometheus.io/version: 0.71.2
   name: prometheusagents.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -995,8 +996,8 @@ spec:
                       `bearerTokenFile`."
                     properties:
                       password:
-                        description: The secret in the service monitor namespace that
-                          contains the password for authentication.
+                        description: '`password` specifies a key of a Secret containing
+                          the password for authentication.'
                         properties:
                           key:
                             description: The key of the secret to select from.  Must
@@ -1015,8 +1016,8 @@ spec:
                         type: object
                         x-kubernetes-map-type: atomic
                       username:
-                        description: The secret in the service monitor namespace that
-                          contains the username for authentication.
+                        description: '`username` specifies a key of a Secret containing
+                          the username for authentication.'
                         properties:
                           key:
                             description: The key of the secret to select from.  Must
@@ -1038,13 +1039,13 @@ spec:
                   bearerToken:
                     description: "*Warning: this field shouldn't be used because the
                       token value appears in clear-text. Prefer using `authorization`.*
-                      \n *Deprecated: this will be removed in a future release.*"
+                      \n Deprecated: this will be removed in a future release."
                     type: string
                   bearerTokenFile:
                     description: "File to read bearer token for accessing apiserver.
                       \n Cannot be set at the same time as `basicAuth`, `authorization`,
-                      or `bearerToken`. \n *Deprecated: this will be removed in a
-                      future release. Prefer using `authorization`.*"
+                      or `bearerToken`. \n Deprecated: this will be removed in a future
+                      release. Prefer using `authorization`."
                     type: string
                   host:
                     description: Kubernetes API address consisting of a hostname or
@@ -2682,7 +2683,7 @@ spec:
                 description: When true, `spec.namespaceSelector` from all PodMonitor,
                   ServiceMonitor and Probe objects will be ignored. They will only
                   discover targets within the namespace of the PodMonitor, ServiceMonitor
-                  and Probe objec.
+                  and Probe object.
                 type: boolean
               image:
                 description: "Container image name for Prometheus. If specified, it
@@ -4056,6 +4057,15 @@ spec:
                 - warn
                 - error
                 type: string
+              maximumStartupDurationSeconds:
+                description: Defines the maximum time that the `prometheus` container's
+                  startup probe will wait before being considered failed. The startup
+                  probe will return success after the WAL replay is complete. If set,
+                  the value should be greater than 60 (seconds). Otherwise it will
+                  be equal to 600 seconds (15 minutes).
+                format: int32
+                minimum: 60
+                type: integer
               minReadySeconds:
                 description: "Minimum number of seconds for which a newly created
                   Pod should be ready without any of its container crashing for it
@@ -4085,9 +4095,40 @@ spec:
                 description: When a Prometheus deployment is paused, no actions except
                   for deletion will be performed on the underlying objects.
                 type: boolean
+              persistentVolumeClaimRetentionPolicy:
+                description: The field controls if and how PVCs are deleted during
+                  the lifecycle of a StatefulSet. The default behavior is all PVCs
+                  are retained. This is an alpha field from kubernetes 1.23 until
+                  1.26 and a beta field from 1.26. It requires enabling the StatefulSetAutoDeletePVC
+                  feature gate.
+                properties:
+                  whenDeleted:
+                    description: WhenDeleted specifies what happens to PVCs created
+                      from StatefulSet VolumeClaimTemplates when the StatefulSet is
+                      deleted. The default policy of `Retain` causes PVCs to not be
+                      affected by StatefulSet deletion. The `Delete` policy causes
+                      those PVCs to be deleted.
+                    type: string
+                  whenScaled:
+                    description: WhenScaled specifies what happens to PVCs created
+                      from StatefulSet VolumeClaimTemplates when the StatefulSet is
+                      scaled down. The default policy of `Retain` causes PVCs to not
+                      be affected by a scaledown. The `Delete` policy causes the associated
+                      PVCs for any excess pods above the replica count to be deleted.
+                    type: string
+                type: object
               podMetadata:
-                description: PodMetadata configures labels and annotations which are
-                  propagated to the Prometheus pods.
+                description: "PodMetadata configures labels and annotations which
+                  are propagated to the Prometheus pods. \n The following items are
+                  reserved and cannot be overridden: * \"prometheus\" label, set to
+                  the name of the Prometheus object. * \"app.kubernetes.io/instance\"
+                  label, set to the name of the Prometheus object. * \"app.kubernetes.io/managed-by\"
+                  label, set to \"prometheus-operator\". * \"app.kubernetes.io/name\"
+                  label, set to \"prometheus\". * \"app.kubernetes.io/version\" label,
+                  set to the Prometheus version. * \"operator.prometheus.io/name\"
+                  label, set to the name of the Prometheus object. * \"operator.prometheus.io/shard\"
+                  label, set to the shard number of the Prometheus object. * \"kubectl.kubernetes.io/default-container\"
+                  annotation, set to \"prometheus\"."
                 properties:
                   annotations:
                     additionalProperties:
@@ -4337,6 +4378,14 @@ spec:
                   when the field is set to the empty string (`\"\"`). \n Default:
                   \"prometheus\""
                 type: string
+              reloadStrategy:
+                description: Defines the strategy used to reload the Prometheus configuration.
+                  If not specified, the configuration is reloaded using the /-/reload
+                  HTTP endpoint.
+                enum:
+                - HTTP
+                - ProcessSignal
+                type: string
               remoteWrite:
                 description: Defines the list of remote write configurations.
                 items:
@@ -4346,7 +4395,7 @@ spec:
                     authorization:
                       description: "Authorization section for the URL. \n It requires
                         Prometheus >= v2.26.0. \n Cannot be set at the same time as
-                        `sigv4`, `basicAuth`, or `oauth2`."
+                        `sigv4`, `basicAuth`, `oauth2`, or `azureAd`."
                       properties:
                         credentials:
                           description: Selects a key of a Secret in the namespace
@@ -4378,13 +4427,83 @@ spec:
                             \n Default: \"Bearer\""
                           type: string
                       type: object
+                    azureAd:
+                      description: "AzureAD for the URL. \n It requires Prometheus
+                        >= v2.45.0. \n Cannot be set at the same time as `authorization`,
+                        `basicAuth`, `oauth2`, or `sigv4`."
+                      properties:
+                        cloud:
+                          description: The Azure Cloud. Options are 'AzurePublic',
+                            'AzureChina', or 'AzureGovernment'.
+                          enum:
+                          - AzureChina
+                          - AzureGovernment
+                          - AzurePublic
+                          type: string
+                        managedIdentity:
+                          description: ManagedIdentity defines the Azure User-assigned
+                            Managed identity. Cannot be set at the same time as `oauth`.
+                          properties:
+                            clientId:
+                              description: The client id
+                              type: string
+                          required:
+                          - clientId
+                          type: object
+                        oauth:
+                          description: "OAuth defines the oauth config that is being
+                            used to authenticate. Cannot be set at the same time as
+                            `managedIdentity`. \n It requires Prometheus >= v2.48.0."
+                          properties:
+                            clientId:
+                              description: '`clientID` is the clientId of the Azure
+                                Active Directory application that is being used to
+                                authenticate.'
+                              minLength: 1
+                              type: string
+                            clientSecret:
+                              description: '`clientSecret` specifies a key of a Secret
+                                containing the client secret of the Azure Active Directory
+                                application that is being used to authenticate.'
+                              properties:
+                                key:
+                                  description: The key of the secret to select from.  Must
+                                    be a valid secret key.
+                                  type: string
+                                name:
+                                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    TODO: Add other useful fields. apiVersion, kind,
+                                    uid?'
+                                  type: string
+                                optional:
+                                  description: Specify whether the Secret or its key
+                                    must be defined
+                                  type: boolean
+                              required:
+                              - key
+                              type: object
+                              x-kubernetes-map-type: atomic
+                            tenantId:
+                              description: '`tenantID` is the tenant ID of the Azure
+                                Active Directory application that is being used to
+                                authenticate.'
+                              minLength: 1
+                              pattern: ^[0-9a-zA-Z-.]+$
+                              type: string
+                          required:
+                          - clientId
+                          - clientSecret
+                          - tenantId
+                          type: object
+                      type: object
                     basicAuth:
                       description: "BasicAuth configuration for the URL. \n Cannot
-                        be set at the same time as `sigv4`, `authorization`, or `oauth2`."
+                        be set at the same time as `sigv4`, `authorization`, `oauth2`,
+                        or `azureAd`."
                       properties:
                         password:
-                          description: The secret in the service monitor namespace
-                            that contains the password for authentication.
+                          description: '`password` specifies a key of a Secret containing
+                            the password for authentication.'
                           properties:
                             key:
                               description: The key of the secret to select from.  Must
@@ -4403,8 +4522,8 @@ spec:
                           type: object
                           x-kubernetes-map-type: atomic
                         username:
-                          description: The secret in the service monitor namespace
-                            that contains the username for authentication.
+                          description: '`username` specifies a key of a Secret containing
+                            the username for authentication.'
                           properties:
                             key:
                               description: The key of the secret to select from.  Must
@@ -4426,13 +4545,16 @@ spec:
                     bearerToken:
                       description: "*Warning: this field shouldn't be used because
                         the token value appears in clear-text. Prefer using `authorization`.*
-                        \n *Deprecated: this will be removed in a future release.*"
+                        \n Deprecated: this will be removed in a future release."
                       type: string
                     bearerTokenFile:
                       description: "File from which to read bearer token for the URL.
-                        \n *Deprecated: this will be removed in a future release.
-                        Prefer using `authorization`.*"
+                        \n Deprecated: this will be removed in a future release. Prefer
+                        using `authorization`."
                       type: string
+                    enableHTTP2:
+                      description: Whether to enable HTTP2.
+                      type: boolean
                     headers:
                       additionalProperties:
                         type: string
@@ -4464,11 +4586,11 @@ spec:
                     oauth2:
                       description: "OAuth2 configuration for the URL. \n It requires
                         Prometheus >= v2.27.0. \n Cannot be set at the same time as
-                        `sigv4`, `authorization`, or `basicAuth`."
+                        `sigv4`, `authorization`, `basicAuth`, or `azureAd`."
                       properties:
                         clientId:
-                          description: The secret or configmap containing the OAuth2
-                            client id
+                          description: '`clientId` specifies a key of a Secret or
+                            ConfigMap containing the OAuth2 client''s ID.'
                           properties:
                             configMap:
                               description: ConfigMap containing data to use for the
@@ -4512,7 +4634,8 @@ spec:
                               x-kubernetes-map-type: atomic
                           type: object
                         clientSecret:
-                          description: The secret containing the OAuth2 client secret
+                          description: '`clientSecret` specifies a key of a Secret
+                            containing the OAuth2 client''s secret.'
                           properties:
                             key:
                               description: The key of the secret to select from.  Must
@@ -4533,15 +4656,18 @@ spec:
                         endpointParams:
                           additionalProperties:
                             type: string
-                          description: Parameters to append to the token URL
+                          description: '`endpointParams` configures the HTTP parameters
+                            to append to the token URL.'
                           type: object
                         scopes:
-                          description: OAuth2 scopes used for the token request
+                          description: '`scopes` defines the OAuth2 scopes used for
+                            the token request.'
                           items:
                             type: string
                           type: array
                         tokenUrl:
-                          description: The URL to fetch the token from
+                          description: '`tokenURL` configures the URL to fetch the
+                            token from.'
                           minLength: 1
                           type: string
                       required:
@@ -4611,8 +4737,8 @@ spec:
                     sigv4:
                       description: "Sigv4 allows to configures AWS's Signature Verification
                         4 for the URL. \n It requires Prometheus >= v2.26.0. \n Cannot
-                        be set at the same time as `authorization`, `basicAuth`, or
-                        `oauth2`."
+                        be set at the same time as `authorization`, `basicAuth`, `oauth2`,
+                        or `azureAd`."
                       properties:
                         accessKey:
                           description: AccessKey is the AWS API key. If not specified,
@@ -5363,8 +5489,8 @@ spec:
                 description: Storage defines the storage used by Prometheus.
                 properties:
                   disableMountSubPath:
-                    description: '*Deprecated: subPath usage will be removed in a
-                      future release.*'
+                    description: 'Deprecated: subPath usage will be removed in a future
+                      release.'
                     type: boolean
                   emptyDir:
                     description: 'EmptyDirVolumeSource to be used by the StatefulSet.
@@ -5916,7 +6042,7 @@ spec:
                             type: string
                         type: object
                       status:
-                        description: '*Deprecated: this field is never set.*'
+                        description: 'Deprecated: this field is never set.'
                         properties:
                           accessModes:
                             description: 'accessModes contains the actual access modes
@@ -6107,9 +6233,14 @@ spec:
               topologySpreadConstraints:
                 description: Defines the pod's topology spread constraints if specified.
                 items:
-                  description: TopologySpreadConstraint specifies how to spread matching
-                    pods among the given topology.
                   properties:
+                    additionalLabelSelectors:
+                      description: Defines what Prometheus Operator managed labels
+                        should be added to labelSelector on the topologySpreadConstraint.
+                      enum:
+                      - OnResource
+                      - OnShard
+                      type: string
                     labelSelector:
                       description: LabelSelector is used to find matching pods. Pods
                         that match this label selector are counted to determine the
@@ -8341,6 +8472,10 @@ spec:
                   Prometheus deployment (their labels match the selector).
                 format: int32
                 type: integer
+              selector:
+                description: The selector used to match the pods targeted by this
+                  Prometheus resource.
+                type: string
               shardStatuses:
                 description: The list has one entry per shard. Each entry provides
                   a summary of the shard status.
@@ -8379,6 +8514,10 @@ spec:
                 x-kubernetes-list-map-keys:
                 - shardID
                 x-kubernetes-list-type: map
+              shards:
+                description: Shards is the most recently observed number of shards.
+                format: int32
+                type: integer
               unavailableReplicas:
                 description: Total number of unavailable pods targeted by this Prometheus
                   deployment.
@@ -8402,4 +8541,8 @@ spec:
     served: true
     storage: true
     subresources:
+      scale:
+        labelSelectorPath: .status.selector
+        specReplicasPath: .spec.shards
+        statusReplicasPath: .status.shards
       status: {}

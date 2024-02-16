@@ -35,6 +35,7 @@ spec:
         {{- end }}
     spec:
       {{- include "airflow.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.web.automountServiceAccountToken }}
       {{- if .Values.web.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.web.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -232,6 +233,8 @@ spec:
           {{- end }}
           {{- if .Values.web.resources }}
           resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- else if ne .Values.web.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Files.Glob "files/dags/*.py" }}

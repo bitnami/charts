@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.53.0-debian-11-r2
+  tag: 1.54.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -98,6 +98,13 @@ query:
   ## @param query.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param query.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param query.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param query.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -154,7 +161,7 @@ query:
   ## @param query.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -276,6 +283,61 @@ query:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.query.service.ports.admin }}"
         prometheus.io/path: "/metrics"
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param query.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param query.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param query.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param query.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param query.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param query.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Jaeger Query serviceAccount parameters
   ##
   serviceAccount:
@@ -308,7 +370,7 @@ query:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param query.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
@@ -319,7 +381,7 @@ query:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -415,6 +477,13 @@ collector:
   ## @param collector.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param collector.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param collector.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param collector.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -471,7 +540,7 @@ collector:
   ## @param collector.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -638,6 +707,61 @@ collector:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.collector.service.ports.admin }}"
         prometheus.io/path: "/metrics"
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param collector.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param collector.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param collector.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param collector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param collector.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param collector.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param collector.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Jaeger collector serviceAccount parameters
   ##
   serviceAccount:
@@ -670,7 +794,7 @@ collector:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param collector.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param collector.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param collector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param collector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param collector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param collector.containerSecurityContext.privileged Set container's Security Context privileged
@@ -681,7 +805,7 @@ collector:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -777,6 +901,13 @@ agent:
   ## @param agent.args Args for running the container (set to default if not set). Use array form
   ##
   args: []
+  ## @param agent.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param agent.hostAliases Set pod host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
   ## @param agent.lifecycleHooks [object] Override default etcd container hooks
   ##
   lifecycleHooks: {}
@@ -833,7 +964,7 @@ agent:
   ## @param agent.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     initialDelaySeconds: 10
     periodSeconds: 10
     timeoutSeconds: 1
@@ -982,6 +1113,61 @@ agent:
         prometheus.io/scrape: "true"
         prometheus.io/port: "{{ .Values.agent.service.ports.admin }}"
         prometheus.io/path: "/metrics"
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param agent.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param agent.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param agent.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param agent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param agent.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param agent.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param agent.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Jaeger agent serviceAccount parameters
   ##
   serviceAccount:
@@ -1014,7 +1200,7 @@ agent:
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param agent.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1025,7 +1211,7 @@ agent:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1142,7 +1328,7 @@ migration:
     fsGroup: 1001
 
   ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
-  ## @param migration.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param migration.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
@@ -1152,7 +1338,7 @@ migration:
   ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     privileged: false
@@ -1203,6 +1389,61 @@ migration:
     ##    memory: 4Gi
     ##
     requests: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param migration.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param migration.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param migration.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param migration.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param migration.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param migration.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param migration.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param migration.extraVolumes Optionally specify extra list of additional volumes for jaeger container
   ##
   extraVolumes: []
@@ -1219,7 +1460,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.11-debian-11-r87
+  tag: 4.0.12-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

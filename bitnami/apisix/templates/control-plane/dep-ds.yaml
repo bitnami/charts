@@ -48,6 +48,7 @@ spec:
       hostNetwork: {{ .Values.controlPlane.hostNetwork }}
       {{- end }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.controlPlane.automountServiceAccountToken }}
       {{- if .Values.controlPlane.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -127,6 +128,8 @@ spec:
             {{- end }}
           {{- if .Values.controlPlane.resources }}
           resources: {{- toYaml .Values.controlPlane.resources | nindent 12 }}
+          {{- else if ne .Values.controlPlane.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controlPlane.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}-admin-api
