@@ -12,8 +12,8 @@ it('allows to create a new app from template', () => {
   cy.login();
   cy.fixture('app').then((app) => {
     // Create new app
-    cy.contains('Create New').click();
-    cy.contains('New app').click();
+    cy.contains('Create new').click();
+    cy.get('div[data-testid*="create-app"]').click();
     // Rename application
     cy.get('.t--application-name').click();
     cy.contains('Rename').click();

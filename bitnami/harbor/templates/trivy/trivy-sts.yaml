@@ -89,6 +89,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -168,6 +170,8 @@ spec:
           {{- end }}
           {{- if .Values.trivy.resources }}
           resources: {{- toYaml .Values.trivy.resources | nindent 12 }}
+          {{- else if ne .Values.trivy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.trivy.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
