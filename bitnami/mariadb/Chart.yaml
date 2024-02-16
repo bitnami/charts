@@ -12,7 +12,7 @@ annotations:
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r96
 apiVersion: v2
-appVersion: 11.2.3
+appVersion: 11.2.4
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
