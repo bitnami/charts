@@ -246,6 +246,8 @@ spec:
           {{- end }}
           {{- if .Values.primary.resources }}
           resources: {{ toYaml .Values.primary.resources | nindent 12 }}
+          {{- else if ne .Values.primary.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.primary.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
