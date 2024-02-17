@@ -111,6 +111,13 @@ spec:
                   exit 1
               fi
               {{- end }}
+              if [[ -f "/certs/ssl.keystore.jks" ]]; then
+                  mkdir -p /opt/bitnami/schema-registry/certs
+                  cp "/certs/ssl.keystore.jks" "/opt/bitnami/schema-registry/certs/ssl.keystore.jks"
+              fi
+              if [[ -f "/certs/ssl.truststore.jks" ]]; then
+                  cp "/certs/ssl.truststore.jks" "/opt/bitnami/schema-registry/certs/ssl.truststore.jks"
+              fi
               exec /opt/bitnami/scripts/schema-registry/entrypoint.sh /opt/bitnami/scripts/schema-registry/run.sh
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
