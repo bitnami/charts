@@ -179,6 +179,8 @@ spec:
           {{- end }}
           {{- if .Values.bucketweb.resources }}
           resources: {{- toYaml .Values.bucketweb.resources | nindent 12 }}
+          {{- else if ne .Values.bucketweb.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.bucketweb.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: objstore-config

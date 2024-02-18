@@ -112,6 +112,8 @@ spec:
               name: grpc
           {{- if .Values.metricsGenerator.resources }}
           resources: {{- toYaml .Values.metricsGenerator.resources | nindent 12 }}
+          {{- else if ne .Values.metricsGenerator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metricsGenerator.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metricsGenerator.customLivenessProbe }}
