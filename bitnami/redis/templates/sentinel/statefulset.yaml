@@ -457,7 +457,7 @@ spec:
               mountPath: /health
             {{- if .Values.sentinel.service.createMaster}}
             - name: kubectl
-              mountPath: /opt/bitnami/common/bin/kubectl
+              mountPath: /kubectl
             {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/redis-sentinel/etc
@@ -589,6 +589,11 @@ spec:
           volumeMounts:
             - name: kubectl
               mountPath: /kubectl
+            - name: kubectl-scripts
+              mountPath: /opt/bitnami/scripts/kubectl-scripts
+          {{- if .Values.kubectl.resources }}
+          resources: {{- toYaml .Values.kubectl.resources | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.replica.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
@@ -661,6 +666,10 @@ spec:
         {{- if .Values.sentinel.service.createMaster}}
         - name: kubectl
           emptyDir: {}
+        - name: kubectl-scripts
+          configMap:
+            name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
+            defaultMode: 0755
         {{- end }}
         {{- if .Values.auth.usePasswordFiles }}
         - name: redis-password

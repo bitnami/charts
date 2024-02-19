@@ -1998,7 +1998,15 @@ kubectl:
     pullSecrets: []
   ## @param kubectl.command kubectl command to execute
   ##
-  command: ["cp", "/opt/bitnami/kubectl/bin/kubectl", "/kubectl"]
+  command: ["/opt/bitnami/scripts/kubectl-scripts/update-master-label.sh"]
+  ## Bitnami Kubectl resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param kubectl.resources.limits The resources limits for the kubectl containers
+  ## @param kubectl.resources.requests The requested resources for the kubectl containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
 
 ## init-sysctl container parameters
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)

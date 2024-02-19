@@ -369,7 +369,7 @@ data:
     {{- if .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
      # Add isMaster label to master node for master service.
-     /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector status.podIP=${REDIS_MASTER_HOST} isMaster="true" --overwrite
+     echo "kubectl label pod --field-selector metadata.name=${REDIS_MASTER_HOST/.*} isMaster=\"true\" --overwrite" > /kubectl/update-annotations.sh
     fi
     {{- end }}
 
@@ -604,17 +604,14 @@ data:
     fi
 
   {{- if .Values.sentinel.service.createMaster}}
-  update-master-label.sh: |
+  push-master-label.sh: |
     #!/bin/bash
-    # The following arguments are passed to the script:
-    #
-    # <master-name> <role> <state> <from-ip> <from-port> <to-ip> <to-port>
-    # $1            $2     $3      $4        $5          $6      $7
+    # https://download.redis.io/redis-stable/sentinel.conf
 
     PREVIOUS="${4}"
     CURRENT="${6}"
-    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector metadata.name=${CURRENT/.*} isMaster="true" --overwrite
-    /opt/bitnami/common/bin/kubectl/kubectl label pod --field-selector metadata.name=${PREVIOUS/.*} isMaster="false" --overwrite
+    echo "kubectl label pod --field-selector metadata.name=${CURRENT/.*} isMaster=\"true\" --overwrite
+    kubectl label pod --field-selector metadata.name=${PREVIOUS/.*} isMaster=\"false\" --overwrite" > /kubectl/update-annotations.sh
   {{- end }}
 {{- else }}
   start-master.sh: |
@@ -774,4 +771,33 @@ data:
     exec redis-server "${ARGS[@]}"
     {{- end }}
   {{- end }}
+{{- end }}
+---
+{{- if .Values.sentinel.service.createMaster}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  update-master-label.sh: |
+    #!/bin/bash
+    oldtimestamp=0
+    echo "Init $(basename $0)"
+    while true; do
+      while [ ! -f /kubectl/update-annotations.sh ]; do
+        sleep 1
+      done
+      refreshedtimestamp=$(date -r /kubectl/update-annotations.sh "+%s")
+      while test $refreshedtimestamp -gt $oldtimestamp;  do 
+      echo "$(date "+[%Y-%m-%d %H:%M]") update-annotations.sh updated, running it..."
+       oldtimestamp=${refreshedtimestamp}
+       sh /kubectl/update-annotations.sh
+      done;
+      sleep 1
+    done
 {{- end }}

@@ -53,7 +53,7 @@ data:
     sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
     sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
     {{- if .Values.sentinel.service.createMaster}}
-      sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/update-master-label.sh
+      sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
     {{- end }}
     # User-supplied sentinel configuration:
     {{- if .Values.sentinel.configuration }}
