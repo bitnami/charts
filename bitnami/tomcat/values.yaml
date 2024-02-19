@@ -92,7 +92,7 @@ tomcatUsername: user
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/tomcat#creating-a-custom-user
 ##
 tomcatPassword: ""
-## @param existingSecret Use existing secret for password details (`tomcatPassword` will be ignored and picked up from this secret). The secret has to contain the keys `tomcat-password`
+## @param existingSecret Use existing secret for password details (`tomcatPassword` will be ignored and picked up from this secret). The secret has to contain the key `tomcat-password`
 ##
 existingSecret: ""
 ## @param tomcatAllowRemoteManagement Enable remote access to management interface
