@@ -103,6 +103,8 @@ spec:
               {{- if .Values.secondary.persistence.subPath }}
               subPath: {{ .Values.secondary.persistence.subPath }}
               {{- end }}
+            - name: tmp-dir
+              mountPath: /tmp
         {{- end }}
         {{- if .Values.secondary.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.initContainers "context" $) | nindent 8 }}
@@ -256,6 +258,14 @@ spec:
             - name: mysql-credentials
               mountPath: /opt/bitnami/mysql/secrets/
             {{- end }}
+            - name: tmp-dir
+              mountPath: /tmp
+            - name: app-conf-dir
+              mountPath: /opt/bitnami/mysql/conf
+            - name: app-tmp-dir
+              mountPath: /opt/bitnami/mysql/tmp
+            - name: app-logs-dir
+              mountPath: /opt/bitnami/mysql/logs
             {{- if .Values.secondary.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -313,11 +323,13 @@ spec:
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
           volumeMounts:
+          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mysql-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
+            - name: tmp-dir
+              mountPath: /tmp
         {{- end }}
         {{- if .Values.secondary.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.sidecars "context" $) | nindent 8 }}
@@ -348,6 +360,14 @@ spec:
               - key: mysql-replication-password
                 path: mysql-replication-password
         {{- end }}
+        - name: app-conf-dir
+          emptyDir: {}
+        - name: app-tmp-dir
+          emptyDir: {}
+        - name: app-logs-dir
+          emptyDir: {}
+        - name: tmp-dir
+          emptyDir: {}
         {{- if .Values.secondary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
