@@ -575,7 +575,21 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the admin area of Keycloak, for example the `master` realm.  
 
-For this scenario, set the environment variable `KC_HOSTNAME_ADMIN` to the appropriate value (e.g. `keycloak-admin.example.com`) and the `frontendUrl` property of the realm accordingly (e.g. `https://keycloak-admin.example.com`).
+For this scenario, you can use the Keycloak Config CLI integration with the following values, where `keycloak-admin.example.com` is to be replaced by the actual hostname:
+
+```
+adminIngress:
+  enabled: true
+  hostname: keycloak-admin.example.com
+keycloakConfigCli:
+  configuration: |
+    {
+      "realm" : "master",
+      "attributes": {
+        "frontendUrl": "https://keycloak-admin.example.com"
+      }
+    }
+```
 
 ### Configure TLS Secrets for use with Ingress
 
