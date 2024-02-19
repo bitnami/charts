@@ -128,6 +128,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            - name: tmp-dir
+              mountPath: /tmp
             {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
@@ -198,10 +200,12 @@ spec:
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: certs-shared
-            mountPath: /opt/bitnami/cassandra/certs
+            - name: certs
+              mountPath: /certs
+            - name: certs-shared
+              mountPath: /opt/bitnami/cassandra/certs
+            - name: tmp-dir
+              mountPath: /tmp
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -460,6 +464,14 @@ spec:
             - name: configurations
               mountPath: {{ .Values.persistence.mountPath }}/conf
             {{- end }}
+            - name: tmp-dir
+              mountPath: /tmp
+            - name: app-conf-dir
+              mountPath: /opt/bitnami/cassandra/conf
+            - name: app-tmp-dir
+              mountPath: /opt/bitnami/cassandra/tmp
+            - name: app-logs-dir
+              mountPath: /opt/bitnami/cassandra/logs
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -508,6 +520,8 @@ spec:
             - name: metrics-conf
               mountPath: /opt/bitnami/cassandra-exporter/config.yml
               subPath: config.yml
+            - name: tmp-dir
+              mountPath: /tmp
           {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -533,6 +547,14 @@ spec:
           configMap:
             name: {{ tpl .Values.existingConfiguration $ }}
         {{- end }}
+        - name: app-conf-dir
+          emptyDir: {}
+        - name: app-tmp-dir
+          emptyDir: {}
+        - name: app-logs-dir
+          emptyDir: {}
+        - name: tmp-dir
+          emptyDir: {}
         {{- if .Values.initDBConfigMap }}
         - name: init-db-cm
           configMap:
