@@ -96,7 +96,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.27.0-debian-11-r6
+    tag: 1.27.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -371,6 +371,64 @@ contour:
     ## @param contour.certgen.automountServiceAccountToken Mount Service Account token in pod
     ##
     automountServiceAccountToken: true
+    ## Network Policies
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+    ##
+    networkPolicy:
+      ## @param contour.certgen.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+      ##
+      enabled: true
+      ## @param contour.certgen.networkPolicy.allowExternal Don't require server label for connections
+      ## The Policy model to apply. When set to false, only pods with the correct
+      ## server label will have network access to the ports server is listening
+      ## on. When true, server will accept connections from any source
+      ## (with the correct destination port).
+      ##
+      allowExternal: true
+      ## @param contour.certgen.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+      ##
+      allowExternalEgress: true
+      ## @param contour.certgen.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+      ##
+      kubeAPIServerPorts: [443, 6443, 8443]
+      ## @param contour.certgen.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+      ## e.g:
+      ## extraIngress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     from:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      extraIngress: []
+      ## @param contour.certgen.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+      ## e.g:
+      ## extraEgress:
+      ##   - ports:
+      ##       - port: 1234
+      ##     to:
+      ##       - podSelector:
+      ##           - matchLabels:
+      ##               - role: frontend
+      ##       - podSelector:
+      ##           - matchExpressions:
+      ##               - key: role
+      ##                 operator: In
+      ##                 values:
+      ##                   - frontend
+      ##
+      extraEgress: []
+      ## @param contour.certgen.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+      ## @param contour.certgen.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+      ##
+      ingressNSMatchLabels: {}
+      ingressNSPodMatchLabels: {}
   ## @param contour.tlsExistingSecret Name of the existingSecret to be use in Contour deployment. If it is not nil `contour.certgen` will be disabled.
   ## It will override `tlsExistingSecret`
   ##
@@ -435,6 +493,64 @@ contour:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param contour.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param contour.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param contour.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param contour.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param contour.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param contour.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param contour.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param contour.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param contour.initContainers [array] Attach additional init containers to Contour pods
   ## For example:
   ## initContainers:
@@ -534,7 +650,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.27.2-debian-11-r6
+    tag: 1.27.2-debian-11-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -987,6 +1103,61 @@ envoy:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param envoy.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param envoy.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param envoy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param envoy.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param envoy.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param envoy.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param envoy.useHostPort.http Enable/disable `hostPort` for TCP/80
   ## @param envoy.useHostPort.https Enable/disable `hostPort` TCP/443
   ## @param envoy.useHostPort.metrics Enable/disable `hostPort` for TCP/8002
@@ -1083,7 +1254,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r5
+    tag: 1.25.3-debian-11-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1353,6 +1524,61 @@ defaultBackend:
     ports:
       http: 80
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param defaultBackend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param defaultBackend.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param defaultBackend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param defaultBackend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param defaultBackend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param defaultBackend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## PodDisruptionBudget for default backend
   ## Default backend Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/

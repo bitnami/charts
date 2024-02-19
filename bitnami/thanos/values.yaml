@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -42,7 +41,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Thanos common parameters
 
 ## Bitnami Thanos image
@@ -57,7 +55,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.34.0-debian-11-r0
+  tag: 0.34.0-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -96,7 +94,6 @@ httpConfig: ""
 ## @param existingHttpConfigSecret Secret containing the HTTPS and Basic auth configuration
 ##
 existingHttpConfigSecret: ""
-
 ## HTTPS configuration (Experimental)
 ## Ref: https://thanos.io/tip/operating/https.md/
 ##
@@ -135,26 +132,7 @@ auth:
   ## @param auth.basicAuthUsers Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication
   ## Note: Passwords will be later encrypted using bcrypt
   basicAuthUsers: {}
-
-## Common Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-## @param serviceAccount.create Specifies whether a ServiceAccount should be created
-## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
-## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
-##
-serviceAccount:
-  create: true
-  name: ""
-  automountServiceAccountToken: false
-  annotations: {}
-
-## DEPRECATED - existingServiceAccount. This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
-##
-## existingServiceAccount: ""
-
 ## @section Thanos Query parameters
-
 query:
   ## @param query.enabled Set to true to enable Thanos Query component
   ##
@@ -220,6 +198,12 @@ query:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param query.containerPorts.http HTTP container port
+  ## @param query.containerPorts.grpc HTTP container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
   ## K8s Pod Security Context for Thanos Query pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param query.podSecurityContext.enabled Enable security context for the Thanos Query pods
@@ -260,12 +244,21 @@ query:
       type: "RuntimeDefault"
   ## Thanos Query containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param query.resources.limits The resources limits for the Thanos Query container
-  ## @param query.resources.requests The requested resources for the Thanos Query container
+  ## @param query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if query.resources is set (query.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param query.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Query containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param query.livenessProbe.enabled Enable livenessProbe on Thanos Query containers
@@ -490,6 +483,61 @@ query:
         key: ""
         ca: ""
         existingSecret: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param query.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param query.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param query.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param query.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param query.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param query.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -547,7 +595,6 @@ query:
       ## @param query.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
   ## Service GRPC parameters
   ##
   serviceGrpc:
@@ -605,7 +652,6 @@ query:
       ## @param query.serviceGrpc.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
   ## Autoscaling parameters
   ## @param query.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
@@ -615,14 +661,12 @@ query:
   ## @param query.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param query.serviceAccount.annotations Annotations for Thanos Query Service Account
   ## @param query.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED query.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## RBAC configuration
   ##
   rbac:
@@ -681,7 +725,7 @@ query:
     hostname: thanos.local
     ## @param query.ingress.secretName Custom secretName for the ingress resource
     ## If query.ingress.secretName is not set, the secret will be named as follows: query.ingress.hostname-tls
-    secretName: ""   
+    secretName: ""
     ## @param query.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -783,7 +827,7 @@ query:
       hostname: thanos-grpc.local
       ## @param query.ingress.grpc.secretName Custom secretName for the ingress resource (GRPC)
       ## If query.ingress.grpc.secretName is not set, the secret will be named as follows: query.ingress.grpc.hostname-tls
-      secretName: ""         
+      secretName: ""
       ## @param query.ingress.grpc.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
       ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
       ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -864,9 +908,7 @@ query:
       ## @param query.ingress.grpc.pathType Ingress Path type
       ##
       pathType: ImplementationSpecific
-
 ## @section Thanos Query Frontend parameters
-
 queryFrontend:
   ## @param queryFrontend.enabled Enable/disable Thanos Query Frontend component
   ##
@@ -917,6 +959,10 @@ queryFrontend:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param queryFrontend.containerPorts.http HTTP container port
+  ##
+  containerPorts:
+    http: 9090
   ## K8s Pod Security Context for Thanos Query Frontend pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param queryFrontend.podSecurityContext.enabled Enable security context for the Thanos Query Frontend pods
@@ -957,12 +1003,21 @@ queryFrontend:
       type: "RuntimeDefault"
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
-  ## @param queryFrontend.resources.requests The requested resources for the Thanos Query Frontend container
+  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param queryFrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Query Frontend containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param queryFrontend.livenessProbe.enabled Enable livenessProbe on Thanos Query Frontend containers
@@ -1126,6 +1181,61 @@ queryFrontend:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param queryFrontend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param queryFrontend.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param queryFrontend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -1182,14 +1292,12 @@ queryFrontend:
   ## @param queryFrontend.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param queryFrontend.serviceAccount.annotations Annotations for Thanos Query Frontend Service Account
   ## @param queryFrontend.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED queryFrontend.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## RBAC configuration
   ##
   rbac:
@@ -1332,9 +1440,7 @@ queryFrontend:
     ## @param queryFrontend.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Bucket Web parameters
-
 bucketweb:
   ## @param bucketweb.enabled Enable/disable Thanos Bucket Web component
   ##
@@ -1383,6 +1489,10 @@ bucketweb:
   ##
   updateStrategy:
     type: RollingUpdate
+  ## @param bucketweb.containerPorts.http HTTP container port
+  ##
+  containerPorts:
+    http: 8080
   ## K8s Pod Security Context for Thanos Bucket Web pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param bucketweb.podSecurityContext.enabled Enable security context for the Thanos Bucket Web pods
@@ -1423,12 +1533,21 @@ bucketweb:
       type: "RuntimeDefault"
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
-  ## @param bucketweb.resources.requests The requested resources for the Thanos Bucket Web container
+  ## @param bucketweb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if bucketweb.resources is set (bucketweb.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param bucketweb.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Bucket Web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param bucketweb.livenessProbe.enabled Enable livenessProbe on Thanos Bucket Web containers
@@ -1592,6 +1711,61 @@ bucketweb:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param bucketweb.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param bucketweb.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param bucketweb.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param bucketweb.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param bucketweb.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param bucketweb.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param bucketweb.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -1646,14 +1820,12 @@ bucketweb:
   ## @param bucketweb.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param bucketweb.serviceAccount.annotations Annotations for Thanos Bucket Web Service Account
   ## @param bucketweb.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED bucketweb.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Bucket Web Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param bucketweb.autoscaling.enabled Enable autoscaling for Thanos Bucket Web
@@ -1770,9 +1942,7 @@ bucketweb:
     ## @param bucketweb.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Compactor parameters
-
 compactor:
   ## @param compactor.enabled Enable/disable Thanos Compactor component
   ##
@@ -1851,6 +2021,10 @@ compactor:
   ##
   updateStrategy:
     type: Recreate
+  ## @param compactor.containerPorts.http HTTP container port
+  ##
+  containerPorts:
+    http: 10902
   ## K8s Pod Security Context for Thanos Compactor pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param compactor.podSecurityContext.enabled Enable security context for the Thanos Compactor pods
@@ -1891,12 +2065,21 @@ compactor:
       type: "RuntimeDefault"
   ## Thanos Compactor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
-  ## @param compactor.resources.requests The requested resources for the Thanos Compactor container
+  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param compactor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Compactor containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param compactor.livenessProbe.enabled Enable livenessProbe on Thanos Compactor containers
@@ -2060,6 +2243,61 @@ compactor:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param compactor.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param compactor.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param compactor.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -2116,14 +2354,12 @@ compactor:
   ## @param compactor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param compactor.serviceAccount.annotations Annotations for Thanos Compactor Service Account
   ## @param compactor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED compactor.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -2252,9 +2488,7 @@ compactor:
     ## If defined, PVC must be created manually before volume will be bound
     ##
     existingClaim: ""
-
 ## @section Thanos Store Gateway parameters
-
 storegateway:
   ## @param storegateway.enabled Enable/disable Thanos Store Gateway component
   ##
@@ -2338,6 +2572,12 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param storegateway.containerPorts.http HTTP container port
+  ## @param storegateway.containerPorts.grpc GRPC container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
   ## K8s Pod Security Context for Thanos Store Gateway pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param storegateway.podSecurityContext.enabled Enable security context for the Thanos Store Gateway pods
@@ -2378,12 +2618,21 @@ storegateway:
       type: "RuntimeDefault"
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
-  ## @param storegateway.resources.requests The requested resources for the Thanos Store Gateway container
+  ## @param storegateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storegateway.resources is set (storegateway.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param storegateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Store Gateway containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param storegateway.livenessProbe.enabled Enable livenessProbe on Thanos Store Gateway containers
@@ -2547,6 +2796,61 @@ storegateway:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param storegateway.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param storegateway.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param storegateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param storegateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param storegateway.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param storegateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param storegateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -2646,14 +2950,12 @@ storegateway:
   ## @param storegateway.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param storegateway.serviceAccount.annotations Annotations for Thanos Store Gateway Service Account
   ## @param storegateway.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED storegateway.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Store Gateway Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param storegateway.autoscaling.enabled Enable autoscaling for Thanos Store Gateway
@@ -2906,9 +3208,7 @@ storegateway:
         nodePorts: []
       grpc:
         nodePorts: []
-
 ## @section Thanos Ruler parameters
-
 ruler:
   ## @param ruler.enabled Enable/disable Thanos Ruler component
   ##
@@ -3000,6 +3300,12 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
   podManagementPolicy: OrderedReady
+  ## @param ruler.containerPorts.http HTTP container port
+  ## @param ruler.containerPorts.grpc GRPC container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
   ## K8s Pod Security Context for Thanos Ruler pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param ruler.podSecurityContext.enabled Enable security context for the Thanos Ruler pods
@@ -3040,12 +3346,21 @@ ruler:
       type: "RuntimeDefault"
   ## Thanos Ruler containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
-  ## @param ruler.resources.requests The requested resources for the Thanos Ruler container
+  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param ruler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Ruler containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param ruler.livenessProbe.enabled Enable livenessProbe on Thanos Ruler containers
@@ -3209,6 +3524,61 @@ ruler:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param ruler.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param ruler.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param ruler.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param ruler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param ruler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -3305,14 +3675,12 @@ ruler:
   ## @param ruler.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param ruler.serviceAccount.annotations Annotations for Thanos Ruler Service Account
   ## @param ruler.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED ruler.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Ruler Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param ruler.autoscaling.enabled Enable autoscaling for Thanos Ruler
@@ -3418,9 +3786,7 @@ ruler:
     ## @param ruler.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Receive parameters
-
 receive:
   ## @param receive.enabled Enable/disable Thanos Receive component
   ##
@@ -3526,6 +3892,14 @@ receive:
   ## @param receive.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
   ##
   minReadySeconds: 0
+  ## @param receive.containerPorts.http HTTP container port
+  ## @param receive.containerPorts.grpc GRPC container port
+  ## @param receive.containerPorts.remote remote-write container port
+  ##
+  containerPorts:
+    http: 10902
+    grpc: 10901
+    remote: 19291
   ## K8s Pod Security Context for Thanos Receive pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param receive.podSecurityContext.enabled Enable security context for the Thanos Receive pods
@@ -3566,12 +3940,21 @@ receive:
       type: "RuntimeDefault"
   ## Thanos Receive containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param receive.resources.limits The resources limits for the Thanos Receive container
-  ## @param receive.resources.requests The requested resources for the Thanos Receive container
+  ## @param receive.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if receive.resources is set (receive.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param receive.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Receive containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param receive.livenessProbe.enabled Enable livenessProbe on Thanos Receive containers
@@ -3740,6 +4123,61 @@ receive:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param receive.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param receive.networkPolicy.allowExternal Don't require client label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## client label will have network access to the ports the application is listening
+    ## on. When true, the app will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param receive.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param receive.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param receive.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param receive.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param receive.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Service parameters
   ##
   service:
@@ -3812,14 +4250,12 @@ receive:
   ## @param receive.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param receive.serviceAccount.annotations Annotations for Thanos Receive Service Account
   ## @param receive.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED receive.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Receive Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receive.autoscaling.enabled Enable autoscaling for Thanos Receive
@@ -3964,9 +4400,7 @@ receive:
     ## @param receive.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Receive Distributor parameters
-
 receiveDistributor:
   ## @param receiveDistributor.enabled Enable/disable Thanos Receive Distributor component
   ##
@@ -4055,12 +4489,21 @@ receiveDistributor:
       type: "RuntimeDefault"
   ## Thanos Receive Distributor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
-  ## @param receiveDistributor.resources.requests The requested resources for the Thanos Receive container
+  ## @param receiveDistributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if receiveDistributor.resources is set (receiveDistributor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param receiveDistributor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Receive Distributor containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param receiveDistributor.livenessProbe.enabled Enable livenessProbe on Thanos Receive Distributor containers
@@ -4233,14 +4676,12 @@ receiveDistributor:
   ## @param receiveDistributor.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
   ## @param receiveDistributor.serviceAccount.annotations Annotations for Thanos Receive Distributor Service Account
   ## @param receiveDistributor.serviceAccount.automountServiceAccountToken Enable/disable auto mounting of the service account token
-  ## DEPRECATED receive.serviceAccount.existingServiceAccount - This value has been deprecated and will be removed in a future release, please use `serviceAccount.name` in combination with `serviceAccount.create=false` instead
   ##
   serviceAccount:
     create: true
     name: ""
     annotations: {}
     automountServiceAccountToken: false
-    ## existingServiceAccount: ""
   ## Thanos Receive Distributor Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ## @param receiveDistributor.autoscaling.enabled Enable autoscaling for Thanos Receive Distributor
@@ -4265,7 +4706,6 @@ receiveDistributor:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -4315,7 +4755,6 @@ metrics:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
     ##
     extraParameters: {}
-
   ## PrometheusRule CRD configuration
   ##
   prometheusRule:
@@ -4411,7 +4850,6 @@ metrics:
     ##           labels:
     ##             severity: warning
     groups: []
-
 ## @section Volume Permissions parameters
 
 ## 'volumePermissions' init container parameters
@@ -4432,7 +4870,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r95
+    tag: 11-debian-11-r96
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4446,10 +4884,8 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
 ## @section MinIO&reg; chart parameters
 ## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Thanos
@@ -4467,31 +4903,3 @@ minio:
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: "thanos"
-
-## @section NetWorkPolicy parameters
-
-networkPolicy:
-  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources. Only Ingress traffic is filtered for now.
-  ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to http and grpc thanos port.
-  ## When true, thanos will accept connections from any source
-  ## (with the correct destination port).
-  ##
-  allowExternal: true
-  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
-  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
-  ## and that match other criteria, the ones that have the good label, can reach thanos.
-  ## But sometimes, we want thanos to be accessible to clients from other namespaces, in this case, we can use this
-  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
-  ##
-  ## Example:
-  ## explicitNamespacesSelector:
-  ##   matchLabels:
-  ##     role: frontend
-  ##   matchExpressions:
-  ##    - {key: role, operator: In, values: [frontend]}
-  ##
-  explicitNamespacesSelector: {}

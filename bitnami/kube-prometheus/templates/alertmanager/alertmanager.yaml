@@ -38,7 +38,11 @@ spec:
   {{- if .Values.alertmanager.configMaps }}
   configMaps: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configMaps "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.alertmanager.resources }}
   resources: {{- toYaml .Values.alertmanager.resources | nindent 4 }}
+  {{- else if ne .Values.alertmanager.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.alertmanager.resourcesPreset) | nindent 4 }}
+  {{- end }}
   routePrefix: "{{ .Values.alertmanager.routePrefix }}"
   {{- if .Values.alertmanager.podSecurityContext.enabled }}
   securityContext: {{- omit .Values.alertmanager.podSecurityContext "enabled" | toYaml | nindent 4 }}

@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if or .Values.skipper.enabled .Values.skipper.networkPolicy.enabled }}
+{{- if and .Values.skipper.enabled .Values.skipper.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:

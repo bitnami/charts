@@ -7,7 +7,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.jobservice" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.jobservice.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -69,6 +69,9 @@ spec:
       {{- if .Values.jobservice.schedulerName }}
       schedulerName: {{ .Values.jobservice.schedulerName }}
       {{- end }}
+      {{- if .Values.jobservice.serviceAccountName }}
+      serviceAccountName: {{ .Values.jobservice.serviceAccountName }}
+      {{- end }}
       {{- if .Values.jobservice.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.jobservice.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -90,6 +93,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: job-logs
@@ -206,6 +211,8 @@ spec:
           {{- end }}
           {{- if .Values.jobservice.resources }}
           resources: {{- toYaml .Values.jobservice.resources | nindent 12 }}
+          {{- else if ne .Values.jobservice.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jobservice.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jobservice-config

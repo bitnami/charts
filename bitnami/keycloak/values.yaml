@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -78,7 +77,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Keycloak parameters
 
 ## Bitnami Keycloak image version
@@ -94,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 23.0.5-debian-11-r0
+  tag: 23.0.6-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -131,7 +129,6 @@ auth:
   ## @param auth.annotations Additional custom annotations for Keycloak auth secret object
   ##
   annotations: {}
-
 ## HTTPS settings
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption
 ##
@@ -171,7 +168,6 @@ tls:
   ## @param tls.passwordsSecret Secret containing the Keystore and Truststore passwords.
   ##
   passwordsSecret: ""
-
 ## SPI TLS settings
 ## ref: https://www.keycloak.org/server/keycloak-truststore
 ##
@@ -195,7 +191,6 @@ spi:
   ## @param spi.hostnameVerificationPolicy Verify the hostname of the server’s certificate. Allowed values: "ANY", "WILDCARD", "STRICT".
   ##
   hostnameVerificationPolicy: ""
-
 ## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.
 ##
 production: false
@@ -260,7 +255,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @section Keycloak statefulset parameters
 
 ## @param replicaCount Number of Keycloak replicas to deploy
@@ -280,7 +274,6 @@ containerPorts:
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
-
 ## Keycloak pods' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context
@@ -321,12 +314,21 @@ containerSecurityContext:
     type: "RuntimeDefault"
 ## Keycloak resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the Keycloak containers
-## @param resources.requests The requested resources for the Keycloak containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for Keycloak containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on Keycloak containers
@@ -492,7 +494,6 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
 ## @section Exposure parameters
 ##
 
@@ -675,35 +676,64 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
-## Network Policy configuration
-## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable the default NetworkPolicy policy
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.allowExternal Don't require client label for connections
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the ports Keycloak is listening
-  ## on. When true, Keycloak will accept connections from any source
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.additionalRules Additional NetworkPolicy rules
-  ## Note that all rules are OR-ed.
-  ## Example:
-  ## additionalRules:
-  ##   - matchLabels:
-  ##       - role: frontend
-  ##   - matchExpressions:
-  ##       - key: role
-  ##         operator: In
-  ##         values:
-  ##           - frontend
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  additionalRules: {}
-
+  allowExternalEgress: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443]
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section RBAC parameter
 ## Specifies whether a ServiceAccount should be created
 ##
@@ -742,7 +772,6 @@ rbac:
   ##       - list
   ##
   rules: []
-
 ## @section Other parameters
 ##
 
@@ -772,7 +801,6 @@ autoscaling:
   maxReplicas: 11
   targetCPU: ""
   targetMemory: ""
-
 ## @section Metrics parameters
 ##
 
@@ -871,7 +899,6 @@ metrics:
     ##           labels:
     ##             severity: critical
     groups: []
-
 ## @section keycloak-config-cli parameters
 
 ## Configuration for keycloak-config-cli
@@ -893,7 +920,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.10.0-debian-11-r2
+    tag: 5.10.0-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -930,12 +957,21 @@ keycloakConfigCli:
   hostAliases: []
   ## Keycloak config CLI resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param keycloakConfigCli.resources.limits The resources limits for the keycloak-config-cli container
-  ## @param keycloakConfigCli.resources.requests The requested resources for the keycloak-config-cli container
+  ## @param keycloakConfigCli.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if keycloakConfigCli.resources is set (keycloakConfigCli.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param keycloakConfigCli.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## keycloak-config-cli containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param keycloakConfigCli.containerSecurityContext.enabled Enabled keycloak-config-cli Security Context
@@ -1062,7 +1098,6 @@ keycloakConfigCli:
   cleanupAfterFinished:
     enabled: false
     seconds: 600
-
 ## @section Database parameters
 
 ## PostgreSQL chart configuration
@@ -1112,7 +1147,6 @@ externalDatabase:
   existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
   annotations: {}
-
 ## @section Keycloak Cache parameters
 
 ## Keycloak cache configuration
@@ -1126,7 +1160,6 @@ cache:
   enabled: true
   stackName: kubernetes
   stackFile: ""
-
 ## @section Keycloak Logging parameters
 
 ## Keycloak logging configuration

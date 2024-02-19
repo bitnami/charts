@@ -8,7 +8,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "harbor.trivy" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.trivy.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -66,6 +66,9 @@ spec:
       {{- if .Values.trivy.schedulerName }}
       schedulerName: {{ .Values.trivy.schedulerName }}
       {{- end }}
+      {{- if .Values.trivy.serviceAccountName }}
+      serviceAccountName: {{ .Values.trivy.serviceAccountName }}
+      {{- end }}
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.trivy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -86,6 +89,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -165,6 +170,8 @@ spec:
           {{- end }}
           {{- if .Values.trivy.resources }}
           resources: {{- toYaml .Values.trivy.resources | nindent 12 }}
+          {{- else if ne .Values.trivy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.trivy.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
