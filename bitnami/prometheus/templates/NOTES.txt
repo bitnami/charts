@@ -121,3 +121,4 @@ To access Alertmanager from outside the cluster execute the following commands:
 {{- include "common.warnings.rollingTag" .Values.server.thanos.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "prometheus.server.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "alertmanager" "server" "server.thanos" "volumePermissions") "context" $) }}

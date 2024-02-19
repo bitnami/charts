@@ -3,13 +3,12 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if (include "thanos.query.createSDConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "common.names.fullname" . }}-query-sd-configmap
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ include "thanos.query.fullname" . }}-sd
+  namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if .Values.commonAnnotations }}
@@ -17,5 +16,5 @@ metadata:
   {{- end }}
 data:
   servicediscovery.yml: |-
-    {{- include "common.tplvalues.render" (dict "value" $query.sdConfig "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.query.sdConfig "context" $) | nindent 4 }}
 {{ end }}

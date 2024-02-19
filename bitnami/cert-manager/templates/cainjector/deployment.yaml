@@ -160,6 +160,8 @@ spec:
           {{- end }}
           {{- if .Values.cainjector.resources }}
           resources: {{- toYaml .Values.cainjector.resources | nindent 12 }}
+          {{- else if ne .Values.cainjector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cainjector.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.cainjector.extraVolumeMounts }}
