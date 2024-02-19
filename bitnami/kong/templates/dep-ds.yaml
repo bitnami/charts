@@ -232,6 +232,8 @@ spec:
           {{- end }}
           {{- if .Values.kong.resources }}
           resources: {{- toYaml .Values.kong.resources | nindent 12 }}
+          {{- else if ne .Values.kong.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.kong.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: health
@@ -346,6 +348,8 @@ spec:
           {{- end }}
           {{- if .Values.ingressController.resources }}
           resources: {{- toYaml .Values.ingressController.resources | nindent 12 }}
+          {{- else if ne .Values.ingressController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingressController.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: health

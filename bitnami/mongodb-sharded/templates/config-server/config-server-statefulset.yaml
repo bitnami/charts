@@ -88,7 +88,11 @@ spec:
               find {{ .Values.configsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.configsvr.containerSecurityContext.runAsUser }}:{{ .Values.configsvr.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
-          resources: {{ toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: datadir
               mountPath: {{ .Values.configsvr.persistence.mountPath }}
@@ -277,7 +281,11 @@ spec:
             {{- if .Values.configsvr.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if .Values.configsvr.resources }}
           resources: {{- toYaml .Values.configsvr.resources | nindent 12 }}
+          {{- else if ne .Values.configsvr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.configsvr.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" . }}
@@ -347,7 +355,11 @@ spec:
               port: metrics
           {{- end }}
           {{- end }}
-          resources: {{ toYaml .Values.metrics.resources | nindent 12 }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- with .Values.configsvr.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}

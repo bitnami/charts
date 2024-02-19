@@ -211,6 +211,8 @@ spec:
           {{- end }}
           {{- if .Values.coordinating.resources }}
           resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
+          {{- else if ne .Values.coordinating.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.coordinating.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
