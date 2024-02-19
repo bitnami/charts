@@ -121,3 +121,4 @@ service:
 
 {{ include "parse.validateValues" . }}
 {{ include "parse.checkRollingTags" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "dashboard" "server" "volumePermissions") "context" $) }}

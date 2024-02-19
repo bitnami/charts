@@ -685,6 +685,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.sidecars`                                          | Add additional sidecar containers to the Kafka provisioning pod(s)                                                            | `[]`                  |
 | `provisioning.initContainers`                                    | Add additional Add init containers to the Kafka provisioning pod(s)                                                           | `[]`                  |
 | `provisioning.waitForKafka`                                      | If true use an init container to wait until kafka is ready before starting provisioning                                       | `true`                |
+| `provisioning.useHelmHooks`                                      | Flag to indicate usage of helm hooks                                                                                          | `true`                |
 
 ### KRaft chart parameters
 

@@ -112,6 +112,8 @@ spec:
             {{- end }}
           {{- if .Values.apiserver.resources }}
           resources: {{- toYaml .Values.apiserver.resources | nindent 12 }}
+          {{- else if ne .Values.apiserver.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.apiserver.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
