@@ -577,7 +577,7 @@ In addition to the Ingress resource described above, this chart also provides th
 
 For this scenario, you can use the Keycloak Config CLI integration with the following values, where `keycloak-admin.example.com` is to be replaced by the actual hostname:
 
-```
+```yaml
 adminIngress:
   enabled: true
   hostname: keycloak-admin.example.com
