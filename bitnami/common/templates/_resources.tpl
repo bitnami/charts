@@ -15,23 +15,23 @@ These presets are for basic testing and not meant to be used in production
 {{- $presets := dict 
   "nano" (dict 
       "requests" (dict "cpu" "100m" "memory" "128Mi" "ephemeral-storage" "50Mi")
-      "limits" (dict "cpu" "150m" "memory" "192Mi" "ephemeral-storage" "256Mi")
+      "limits" (dict "cpu" "150m" "memory" "192Mi" "ephemeral-storage" "1024Mi")
    )
   "micro" (dict 
       "requests" (dict "cpu" "250m" "memory" "256Mi" "ephemeral-storage" "50Mi")
-      "limits" (dict "cpu" "375m" "memory" "384Mi" "ephemeral-storage" "256Mi")
+      "limits" (dict "cpu" "375m" "memory" "384Mi" "ephemeral-storage" "1024Mi")
    )
   "small" (dict 
       "requests" (dict "cpu" "500m" "memory" "512Mi" "ephemeral-storage" "50Mi")
-      "limits" (dict "cpu" "750m" "memory" "768Mi" "ephemeral-storage" "512Mi")
+      "limits" (dict "cpu" "750m" "memory" "768Mi" "ephemeral-storage" "1024Mi")
    )
   "medium" (dict 
       "requests" (dict "cpu" "500m" "memory" "1024Mi" "ephemeral-storage" "50Mi")
-      "limits" (dict "cpu" "750m" "memory" "1536Mi" "ephemeral-storage" "512Mi")
+      "limits" (dict "cpu" "750m" "memory" "1536Mi" "ephemeral-storage" "1024Mi")
    )
   "large" (dict 
       "requests" (dict "cpu" "1.0" "memory" "2048Mi" "ephemeral-storage" "50Mi")
-      "limits" (dict "cpu" "1.5" "memory" "3072Mi" "ephemeral-storage" "512Mi")
+      "limits" (dict "cpu" "1.5" "memory" "3072Mi" "ephemeral-storage" "1024Mi")
    )
   "xlarge" (dict 
       "requests" (dict "cpu" "2.0" "memory" "4096Mi" "ephemeral-storage" "50Mi")
