@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.adminIngress.enabled }}
-apiVersion: {{ include "common.capabilities.adminIngress.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-admin
@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.adminIngress.ingressClassName (eq "true" (include "common.adminIngress.supportsIngressClassname" .)) }}
+  {{- if and .Values.adminIngress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
   ingressClassName: {{ .Values.adminIngress.ingressClassName | quote }}
   {{- end }}
   rules:
@@ -29,27 +29,27 @@ spec:
           {{- toYaml .Values.adminIngress.extraPaths | nindent 10 }}
           {{- end }}
           - path: {{ include "common.tplvalues.render" ( dict "value" .Values.adminIngress.path "context" $) }}
-            {{- if eq "true" (include "common.adminIngress.supportsPathType" .) }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.adminIngress.pathType }}
             {{- end }}
-            backend: {{- include "common.adminIngress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" .Values.adminIngress.servicePort "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" .Values.adminIngress.servicePort "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.adminIngress.extraHosts }}
     - host: {{ (tpl .name $) }}
       http:
         paths:
           - path: {{ default "/" .path }}
-            {{- if eq "true" (include "common.adminIngress.supportsPathType" $) }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.adminIngress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" $.Values.adminIngress.servicePort "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" $.Values.adminIngress.servicePort "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.adminIngress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.adminIngress.extraRules "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or (and .Values.adminIngress.tls (or (include "common.adminIngress.certManagerRequest" ( dict "annotations" .Values.adminIngress.annotations )) .Values.adminIngress.selfSigned .Values.adminIngress.secrets )) .Values.adminIngress.extraTls }}
+  {{- if or (and .Values.adminIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.adminIngress.annotations )) .Values.adminIngress.selfSigned .Values.adminIngress.secrets )) .Values.adminIngress.extraTls }}
   tls:
-  {{- if and .Values.adminIngress.tls (or (include "common.adminIngress.certManagerRequest" ( dict "annotations" .Values.adminIngress.annotations )) .Values.adminIngress.secrets .Values.adminIngress.selfSigned) }}
+  {{- if and .Values.adminIngress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.adminIngress.annotations )) .Values.adminIngress.secrets .Values.adminIngress.selfSigned) }}
     - hosts:
         - {{ (tpl .Values.adminIngress.hostname .) | quote }}
       secretName: {{ printf "%s-tls" (tpl .Values.adminIngress.hostname .) }}
