@@ -141,7 +141,7 @@ loki:
         index:
           prefix: index_
           period: 24h
-      - from: "2024-01-20"
+      - from: 2024-03-12
         index:
           period: 24h
           prefix: index_
