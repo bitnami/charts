@@ -156,13 +156,11 @@ spec:
           volumeMounts:
             - name: tmp-dir
               mountPath: /tmp
-            {{ if .Values.readReplicas.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.readReplicas.persistence.mountPath }}
               {{- if .Values.readReplicas.persistence.subPath }}
               subPath: {{ .Values.readReplicas.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if .Values.shmVolume.enabled }}
             - name: dshm
               mountPath: /dev/shm
