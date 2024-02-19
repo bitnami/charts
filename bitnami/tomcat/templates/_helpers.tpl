@@ -48,6 +48,13 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
+Return the Tomcat credential secret name
+*/}}
+{{- define "tomcat.secretName" -}}
+{{- coalesce .Values.existingSecret (include "common.names.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Check if there are rolling tags in the images
 */}}
 {{- define "tomcat.checkRollingTags" -}}
