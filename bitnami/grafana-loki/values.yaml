@@ -126,6 +126,7 @@ loki:
         dir: {{ .Values.loki.dataDir }}/wal
 
     limits_config:
+      retention_period: 336h
       enforce_metric_name: false
       reject_old_samples: true
       reject_old_samples_max_age: 168h
@@ -241,7 +242,12 @@ loki:
       tail_proxy_url: http://{{ include "grafana-loki.querier.fullname" . }}:{{ .Values.querier.service.ports.http }}
 
     compactor:
+      working_directory: {{ .Values.loki.dataDir }}/loki/retention
       shared_store: filesystem
+      compaction_interval: 10m
+      retention_enabled: true
+      retention_delete_delay: 2h
+      retention_delete_worker_count: 150
 
     ruler:
       storage:
