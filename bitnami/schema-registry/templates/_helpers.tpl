@@ -113,7 +113,7 @@ Return kafka port
 {{- if .Values.kafka.enabled -}}
     {{- int .Values.kafka.service.ports.client -}}
 {{- else -}}
-    {{- regexFind ":[0-9]+" .Values.externalKafka.brokers | trimPrefix ":" | default "9092" | int -}}
+    {{- regexFind ":[0-9]+" (join "," .Values.externalKafka.brokers) | trimPrefix ":" | default "9092" | int -}}
 {{- end -}}
 {{- end -}}
 

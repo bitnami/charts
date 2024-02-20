@@ -90,6 +90,8 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.resources }}
           resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- else if ne .Values.readReplicas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.readReplicas.resourcesPreset) | nindent 12 }}
           {{- end }}
           # We don't require a privileged container in this case
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
@@ -112,6 +114,8 @@ spec:
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.resources }}
           resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- else if ne .Values.readReplicas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.readReplicas.resourcesPreset) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -369,6 +373,8 @@ spec:
           {{- end }}
           {{- if .Values.readReplicas.resources }}
           resources: {{- toYaml .Values.readReplicas.resources | nindent 12 }}
+          {{- else if ne .Values.readReplicas.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.readReplicas.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.readReplicas.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.lifecycleHooks "context" $) | nindent 12 }}
@@ -473,6 +479,8 @@ spec:
             {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.readReplicas.sidecars }}

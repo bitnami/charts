@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -47,7 +46,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,7 +60,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section MongoDB(&reg;) Sharded parameters
 ##
 
@@ -97,7 +94,6 @@ image:
   ## Set to true if you would like to see extra information on logs
   ##
   debug: false
-
 ## MongoDB(&reg;) Authentication parameters
 ##
 auth:
@@ -122,7 +118,6 @@ auth:
   ## @param auth.usePasswordFile Mount credentials as files instead of using environment variables
   ##
   usePasswordFile: false
-
 ## @param shards Number of shards to be created
 ## ref: https://docs.mongodb.com/manual/core/sharded-cluster-shards/
 ##
@@ -232,7 +227,6 @@ common:
     ## @param common.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
 ##
@@ -261,7 +255,19 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param volumePermissions.resources Init container resource requests/limit
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
   resources: {}
 ## Kubernetes service type
@@ -329,7 +335,6 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-
 ## Network Policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -385,7 +390,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## @section Config Server parameters
 ##
 
@@ -396,7 +400,19 @@ configsvr:
   ## @param configsvr.replicaCount Number of nodes in the replica set (the first node will be primary)
   ##
   replicaCount: 1
-  ## @param configsvr.resources Configure pod resources
+  ## @param configsvr.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if configsvr.resources is set (configsvr.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param configsvr.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -693,7 +709,6 @@ configsvr:
     timeoutSeconds: 20
     failureThreshold: 6
     successThreshold: 1
-
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param configsvr.startupProbe.enabled Enable startupProbe
@@ -710,7 +725,6 @@ configsvr:
     timeoutSeconds: 5
     failureThreshold: 30
     successThreshold: 1
-
   ## @param configsvr.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -720,7 +734,6 @@ configsvr:
   ## @param configsvr.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
-
 ## @section Mongos parameters
 ##
 
@@ -731,7 +744,19 @@ mongos:
   ## @param mongos.replicaCount Number of replicas
   ##
   replicaCount: 1
-  ## @param mongos.resources Configure pod resources
+  ## @param mongos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if mongos.resources is set (mongos.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param mongos.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -1036,7 +1061,6 @@ mongos:
     timeoutSeconds: 20
     failureThreshold: 6
     successThreshold: 1
-
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param mongos.startupProbe.enabled Enable startupProbe
@@ -1053,7 +1077,6 @@ mongos:
     timeoutSeconds: 5
     failureThreshold: 30
     successThreshold: 1
-
   ## @param mongos.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -1076,7 +1099,19 @@ shardsvr:
     ## @param shardsvr.dataNode.replicaCount Number of nodes in each shard replica set (the first node will be primary)
     ##
     replicaCount: 1
-    ## @param shardsvr.dataNode.resources Configure pod resources
+    ## @param shardsvr.dataNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if shardsvr.dataNode.resources is set (shardsvr.dataNode.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param shardsvr.dataNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
@@ -1335,7 +1370,6 @@ shardsvr:
       timeoutSeconds: 20
       failureThreshold: 6
       successThreshold: 1
-
     ## Configure extra options for startup probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
     ## @param shardsvr.dataNode.startupProbe.enabled Enable startupProbe
@@ -1352,7 +1386,6 @@ shardsvr:
       timeoutSeconds: 5
       failureThreshold: 30
       successThreshold: 1
-
     ## @param shardsvr.dataNode.customLivenessProbe Custom livenessProbe that overrides the default one
     ##
     customLivenessProbe: {}
@@ -1362,7 +1395,6 @@ shardsvr:
     ## @param shardsvr.dataNode.customStartupProbe Custom startupProbe that overrides the default one
     ##
     customStartupProbe: {}
-
   ## @section Shard configuration: Persistence parameters
   ##
 
@@ -1401,7 +1433,6 @@ shardsvr:
     annotations: {}
     ## @param shardsvr.persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
     resourcePolicy: ""
-
   ## @section Shard configuration: Arbiter parameters
   ##
 
@@ -1419,7 +1450,19 @@ shardsvr:
     ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
     ##
     hostAliases: []
-    ## @param shardsvr.arbiter.resources Configure pod resources
+    ## @param shardsvr.arbiter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if shardsvr.arbiter.resources is set (shardsvr.arbiter.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param shardsvr.arbiter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
@@ -1649,7 +1692,6 @@ shardsvr:
       timeoutSeconds: 20
       failureThreshold: 6
       successThreshold: 1
-
     ## Configure extra options for startup probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
     ## @param shardsvr.arbiter.startupProbe.enabled Enable startupProbe
@@ -1666,7 +1708,6 @@ shardsvr:
       timeoutSeconds: 5
       failureThreshold: 30
       successThreshold: 1
-
     ## @param shardsvr.arbiter.customLivenessProbe Custom livenessProbe that overrides the default one
     ##
     customLivenessProbe: {}
@@ -1711,7 +1752,19 @@ metrics:
   ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
   extraArgs: ""
-  ## @param metrics.resources Metrics exporter resource requests and limits
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -1787,7 +1840,6 @@ metrics:
     timeoutSeconds: 2
     failureThreshold: 15
     successThreshold: 1
-
   ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
