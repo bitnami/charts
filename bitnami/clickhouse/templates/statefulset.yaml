@@ -102,6 +102,8 @@ spec:
               mountPath: /tmp/certs
             - name: clickhouse-certificates
               mountPath: /opt/bitnami/clickhouse/certs
+            - name: tmp-dir
+              mountPath: /tmp
         {{- else if and $.Values.volumePermissions.enabled $.Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "clickhouse.volumePermissions.image" $ }}
@@ -137,6 +139,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/clickhouse
+            - name: tmp-dir
+              mountPath: /tmp
             {{- if $.Values.tls.enabled }}
             - name: raw-certificates
               mountPath: /tmp/certs
@@ -309,6 +313,14 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: app-conf-dir
+              mountPath: /opt/bitnami/clickhouse/etc
+            - name: app-logs-dir
+              mountPath: /opt/bitnami/clickhouse/logs
+            - name: app-tmp-dir
+              mountPath: /opt/bitnami/clickhouse/tmp
+            - name: tmp-dir
+              mountPath: /tmp
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
@@ -355,6 +367,14 @@ spec:
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" $) }}
             defaultMode: 0755
+        - name: app-conf-dir
+          emptyDir: {}
+        - name: app-tmp-dir
+          emptyDir: {}
+        - name: app-logs-dir
+          emptyDir: {}
+        - name: tmp-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ template "clickhouse.configmapName" $ }}
