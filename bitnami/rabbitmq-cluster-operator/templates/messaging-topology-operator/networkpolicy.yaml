@@ -24,12 +24,19 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.msgTopologyOperator.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     - ports:
         # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
+          protocol: TCP
+        # Allow rabbitmq api
+        - port: 15672
           protocol: TCP
         # Allow access to kube-apiserver
         {{- range $port := .Values.msgTopologyOperator.networkPolicy.kubeAPIServerPorts }}
@@ -54,6 +61,7 @@ spec:
     {{- if .Values.msgTopologyOperator.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.msgTopologyOperator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         {{/* Webhook port is hardcoded in the operator code */}}
