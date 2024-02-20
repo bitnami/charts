@@ -35,6 +35,8 @@ spec:
           {{- end }}
           restartPolicy: OnFailure
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             - name: backup-scripts
               configMap:
                 name: {{ include "common.names.fullname" . }}-backup
@@ -86,6 +88,9 @@ spec:
               command:
                 - "/tmp/backup.sh"
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
@@ -118,6 +123,9 @@ spec:
                 - "/tmp/upload-google.sh"
               {{- end }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
@@ -150,6 +158,9 @@ spec:
                       {{- end }}
                       key: {{ .Values.backup.uploadProviders.azure.secretKey }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
@@ -207,6 +218,9 @@ spec:
                       {{- end }}
                       key: endpoint
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
