@@ -103,6 +103,8 @@ spec:
               name: http
           {{- if .Values.blackboxExporter.resources }}
           resources: {{- toYaml .Values.blackboxExporter.resources | nindent 12 }}
+          {{- else if ne .Values.blackboxExporter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.blackboxExporter.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.customLivenessProbe "context" $) | nindent 12 }}

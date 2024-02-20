@@ -131,6 +131,8 @@ spec:
               name: http-metrics
           {{- if .Values.rootCoord.resources }}
           resources: {{- toYaml .Values.rootCoord.resources | nindent 12 }}
+          {{- else if ne .Values.rootCoord.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.rootCoord.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.rootCoord.customLivenessProbe }}

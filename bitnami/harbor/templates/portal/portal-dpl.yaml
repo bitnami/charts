@@ -140,6 +140,8 @@ spec:
           {{- end }}
           {{- if .Values.portal.resources }}
           resources: {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- else if ne .Values.portal.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.portal.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: portal-config
