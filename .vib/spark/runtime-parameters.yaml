@@ -6,4 +6,4 @@ master:
   containerPorts:
     cluster: 7077
 worker:
-  replicaCount: 2
+  replicaCount: 3
