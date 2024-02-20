@@ -179,6 +179,8 @@ spec:
           {{- end }}
           {{- if .Values.scheduler.resources }}
           resources: {{- toYaml .Values.scheduler.resources | nindent 12 }}
+          {{- else if ne .Values.scheduler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.scheduler.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Files.Glob "files/dags/*.py" }}

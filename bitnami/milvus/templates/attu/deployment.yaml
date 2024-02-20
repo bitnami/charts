@@ -120,6 +120,8 @@ spec:
               name: http
           {{- if .Values.attu.resources }}
           resources: {{- toYaml .Values.attu.resources | nindent 12 }}
+          {{- else if ne .Values.attu.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.attu.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.attu.customLivenessProbe }}

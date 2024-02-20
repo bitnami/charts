@@ -84,6 +84,8 @@ Usage:
 {{- end }}
 {{- if .context.Values.git.clone.resources }}
   resources: {{- toYaml .context.Values.git.clone.resources | nindent 4 }}
+  {{- else if ne .context.Values.git.clone.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.git.clone.resourcesPreset) | nindent 4 }}
 {{- end }}
 {{- if .context.Values.git.clone.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.command "context" .context) | nindent 4 }}
@@ -147,6 +149,8 @@ Usage:
 {{- end }}
 {{- if .context.Values.git.sync.resources }}
   resources: {{- toYaml .context.Values.git.sync.resources | nindent 4 }}
+  {{- else if ne .context.Values.git.sync.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.git.sync.resourcesPreset) | nindent 4 }}
 {{- end }}
 {{- if .context.Values.git.sync.command }}
   command: {{- include "common.tplvalues.render" (dict "value" .context.Values.git.sync.command "context" .context) | nindent 4 }}
