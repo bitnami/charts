@@ -171,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.streaming.resources }}
           resources: {{- toYaml .Values.streaming.resources | nindent 12 }}
+          {{- else if ne .Values.streaming.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.streaming.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -226,6 +228,6 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.streaming.extraVolumes }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.extraVolumes "context" $) | nindent 10 }}
         {{- end }}
 {{- end }}

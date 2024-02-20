@@ -16,7 +16,6 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -37,7 +36,6 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:
@@ -69,25 +67,69 @@ psp:
   ## @param psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
   create: false
-## Prometheus Operator alertmanager alerts
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable NetworkPolicy
-  ## Prometheus scraping of the controller and webhook traffic
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
   ##
-  enabled: false
-  ## @param networkPolicy.ingressNSMatchLabels Allow connections from other namespaces
-  ## Set label for namespace and pods (optional).
+  enabled: true
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+  ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+  ##
+  kubeAPIServerPorts: [443, 6443, 8443]
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
   ##
   ingressNSMatchLabels: {}
-  ## @param networkPolicy.ingressNSPodMatchLabels For other namespaces match by pod labels and namespace labels
-  ##
   ingressNSPodMatchLabels: {}
+## Prometheus Operator alertmanager alerts
+##
 ## @param prometheusRule.enabled Prometheus Operator alertmanager alerts are created
 ##
 prometheusRule:
   enabled: false
-
 ## @section Controller parameters
 
 ## MetalLB Controller deployment.
@@ -104,7 +146,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.12-debian-11-r4
+    tag: 0.14.3-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -179,20 +221,21 @@ controller:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param controller.resources.limits The resources limits for the container
-  ## @param controller.resources.requests The requested resources for the container
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 100Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 25m
-    ##    memory: 25Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param controller.nodeSelector Node labels for controller pod assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
@@ -258,7 +301,7 @@ controller:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled MetalLB Controller containers' Security Context
-  ## @param controller.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set MetalLB Controller containers' Security Context runAsUser
   ## @param controller.containerSecurityContext.runAsNonRoot Set MetalLB Controller container's Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
@@ -268,7 +311,7 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
@@ -404,7 +447,6 @@ controller:
   ## @param controller.customReadinessProbe Custom readiness probe for the Web component
   ##
   customReadinessProbe: {}
-
   ## @param controller.logLevel Sets the controller log level. Does not work if the args are overridden
   ##
   logLevel: info
@@ -423,7 +465,6 @@ controller:
   ## @param controller.extraArgs Add extra arguments to the default arguments for the controller
   ##
   extraArgs: []
-
   ## @section MetalLB controller Prometheus metrics export
   ##
   metrics:
@@ -441,7 +482,7 @@ controller:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "7472"
-        prometheus.io/path: "/metrics"    ## Prometheus Operator service monitors
+        prometheus.io/path: "/metrics" ## Prometheus Operator service monitors
     ##
     serviceMonitor:
       ## @param controller.metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator
@@ -481,7 +522,6 @@ controller:
       ## @param controller.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
       ##
       honorLabels: false
-
 ## @section Speaker parameters
 
 ## MetalLB Speaker daemonset.
@@ -503,7 +543,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.12-debian-11-r4
+    tag: 0.14.3-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -537,6 +577,63 @@ speaker:
   ## @param speaker.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param speaker.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: true
+    ## @param speaker.networkPolicy.allowExternal The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param speaker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param speaker.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param speaker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: []
+    ## @param speaker.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param speaker.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param speaker.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## @param speaker.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -566,20 +663,21 @@ speaker:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param speaker.resources.limits The resources limits for the container
-  ## @param speaker.resources.requests The requested resources for the container
+  ## @param speaker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 100Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 25m
-    ##    memory: 25Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param speaker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param speaker.nodeSelector Node labels for speaker pod assignment
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
@@ -642,7 +740,7 @@ speaker:
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param speaker.containerSecurityContext.enabled Enabled Speaker containers' Security Context
-  ## @param speaker.containerSecurityContext.seLinuxOptions Set SELinux options in container
+  ## @param speaker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param speaker.containerSecurityContext.runAsUser Set Speaker containers' Security Context runAsUser
   ## @param speaker.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
@@ -652,7 +750,7 @@ speaker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true

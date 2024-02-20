@@ -184,7 +184,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.sidecars`                                          | Add additional sidecar containers to the Client pod(s)                                           | `[]`             |
 | `client.enableDefaultInitContainers`                       | Deploy default init containers                                                                   | `true`           |
 | `client.initContainers`                                    | Add additional init containers to the Client pod(s)                                              | `[]`             |
-| `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                       | `false`          |
+| `client.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                       | `true`           |
+| `client.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                  | `true`           |
 | `client.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
 | `client.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                     | `[]`             |
 | `client.serviceAccount.create`                             | Enable creation of ServiceAccount for Client pods                                                | `true`           |
@@ -311,8 +312,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`        |
 | `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`     |
 | `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`        |
-| `worker.networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources                                                                                                | `false`     |
+| `worker.networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources                                                                                                | `true`      |
 | `worker.networkPolicy.allowExternal`                     | The Policy model to apply                                                                                                                 | `true`      |
+| `worker.networkPolicy.allowExternalEgress`               | Allow the pod to access any range of port and all destinations.                                                                           | `true`      |
 | `worker.networkPolicy.extraIngress`                      | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`        |
 | `worker.networkPolicy.extraEgress`                       | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`        |
 | `worker.networkPolicy.ingressNSMatchLabels`              | Labels to match to allow traffic from other namespaces                                                                                    | `{}`        |

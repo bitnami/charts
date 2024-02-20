@@ -103,6 +103,8 @@ spec:
   {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
+  {{- else if ne .Values.prometheus.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.prometheus.resourcesPreset) | nindent 4 }}
   {{- end }}
   retention: {{ .Values.prometheus.retention }}
   {{- if .Values.prometheus.retentionSize }}
@@ -167,6 +169,7 @@ spec:
   {{- else if .Values.prometheus.persistence.enabled }}
   storage:
     volumeClaimTemplate:
+      {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations .Values.commonLabels }}
       metadata:
         {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
@@ -175,6 +178,7 @@ spec:
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
+      {{- end }}
       spec:
         accessModes:
           {{- range .Values.prometheus.persistence.accessModes }}
@@ -259,8 +263,8 @@ spec:
       args:
         - sidecar
         - --prometheus.url={{ default "http://localhost:9090" .Values.prometheus.thanos.prometheusUrl }}
-        - --grpc-address=0.0.0.0:10901
-        - --http-address=0.0.0.0:10902
+        - --grpc-address=0.0.0.0:{{ .Values.prometheus.thanos.containerPorts.grpc }}
+        - --http-address=0.0.0.0:{{ .Values.prometheus.thanos.containerPorts.http }}
         - --tsdb.path=/prometheus/
         {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - --objstore.config=$(OBJSTORE_CONFIG)
@@ -278,13 +282,15 @@ spec:
       {{- end }}
       {{- if .Values.prometheus.thanos.resources }}
       resources: {{- toYaml .Values.prometheus.thanos.resources | nindent 8 }}
+      {{- else if ne .Values.prometheus.thanos.resourcesPreset "none" }}
+      resources: {{- include "common.resources.preset" (dict "type" .Values.prometheus.thanos.resourcesPreset) | nindent 8 }}
       {{- end }}
       ports:
         - name: grpc
-          containerPort: 10901
+          containerPort: {{ .Values.prometheus.thanos.containerPorts.grpc }}
           protocol: TCP
         - name: http
-          containerPort: 10902
+          containerPort: {{ .Values.prometheus.thanos.containerPorts.http }}
           protocol: TCP
       volumeMounts:
         - mountPath: /prometheus

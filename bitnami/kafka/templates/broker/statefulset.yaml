@@ -113,6 +113,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -293,6 +295,8 @@ spec:
           {{- end }}
           {{- if .Values.broker.resources }}
           resources: {{- toYaml .Values.broker.resources | nindent 12 }}
+          {{- else if ne .Values.broker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.broker.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -346,6 +350,8 @@ spec:
               containerPort: {{ .Values.metrics.jmx.containerPorts.metrics }}
           {{- if .Values.metrics.jmx.resources }}
           resources: {{- toYaml .Values.metrics.jmx.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jmx-config
@@ -437,7 +443,9 @@ spec:
   {{- if or (and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim)) (and .Values.broker.logPersistence.enabled (not .Values.broker.logPersistence.existingClaim)) }}
   volumeClaimTemplates:
     {{- if and .Values.broker.persistence.enabled (not .Values.broker.persistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.broker.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.broker.persistence.annotations "context" $) | nindent 10 }}
@@ -459,7 +467,9 @@ spec:
         {{- end -}}
     {{- end }}
     {{- if and .Values.broker.logPersistence.enabled (not .Values.broker.logPersistence.existingClaim) }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: logs
         {{- if .Values.broker.logPersistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.broker.logPersistence.annotations "context" $) | nindent 10 }}

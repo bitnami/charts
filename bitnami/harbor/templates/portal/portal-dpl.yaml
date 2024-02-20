@@ -7,7 +7,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.portal" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.portal.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -63,6 +63,9 @@ spec:
       {{- end }}
       {{- if .Values.portal.schedulerName }}
       schedulerName: {{ .Values.portal.schedulerName }}
+      {{- end }}
+      {{- if .Values.portal.serviceAccountName }}
+      serviceAccountName: {{ .Values.portal.serviceAccountName }}
       {{- end }}
       {{- if .Values.portal.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -137,6 +140,8 @@ spec:
           {{- end }}
           {{- if .Values.portal.resources }}
           resources: {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- else if ne .Values.portal.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.portal.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: portal-config

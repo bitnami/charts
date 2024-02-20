@@ -18,7 +18,7 @@ metadata:
   {{- end }}
 spec:
   podMetricsEndpoints:
-    - port: http-metrics
+    - port: {{ .Values.metrics.podMonitor.port }}
       {{- if .Values.metrics.podMonitor.interval }}
       interval: {{ .Values.metrics.podMonitor.interval }}
       {{- end }}
@@ -34,6 +34,36 @@ spec:
       {{- if .Values.metrics.podMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.podMonitor.metricRelabelings | nindent 6 }}
       {{- end }}
+    {{- range .Values.metrics.podMonitor.additionalEndpoints }}
+    - port: {{ .port }}
+      {{- if .interval }}
+      interval: {{ .interval }}
+      {{- end }}
+      {{- if .path }}
+      path: {{ .path }}
+      {{- end }}
+      {{- if .honorLabels }}
+      honorLabels: {{ .honorLabels }}
+      {{- end }}
+      {{- if .relabellings }}
+      relabelings: {{- toYaml .relabellings | nindent 6 }}
+      {{- end }}
+      {{- if .metricRelabelings }}
+      metricRelabelings: {{- toYaml .metricRelabelings | nindent 6 }}
+      {{- end }}
+      {{- if .scrapeTimeout }}
+      scrapeTimeout: {{ .scrapeTimeout }}
+      {{- end }}
+      {{- if .params }}
+      params:
+        {{- range $key, $value := .params }}
+        {{ $key }}:
+          {{- range $value }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
   {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4 }}
   {{- end }}
@@ -48,5 +78,4 @@ spec:
       - {{ include "common.names.namespace" . | quote }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: metrics
 {{- end }}

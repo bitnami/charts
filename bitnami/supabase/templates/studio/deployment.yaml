@@ -133,6 +133,8 @@ spec:
             {{- end }}
           {{- if .Values.studio.resources }}
           resources: {{- toYaml .Values.studio.resources | nindent 12 }}
+          {{- else if ne .Values.studio.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.studio.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-studio

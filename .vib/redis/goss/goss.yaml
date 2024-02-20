@@ -1,7 +1,7 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-{{- $auth := printf "REDISCLI_AUTH=%s" .Vars.auth.password }}
+{{- $auth := printf "REDISCLI_AUTH='%s'" .Vars.auth.password }}
 {{- $master_endpoint := printf "-h redis-master -p %d" .Vars.master.service.ports.redis }}
 {{- $replicas_endpoint := printf "-h redis-replicas -p %d" .Vars.replica.service.ports.redis }}
 {{- $replicas := .Vars.replica.replicaCount }}

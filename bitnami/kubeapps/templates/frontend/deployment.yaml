@@ -133,6 +133,8 @@ spec:
           {{- end }}
           {{- if .Values.frontend.resources }}
           resources: {{- toYaml .Values.frontend.resources | nindent 12 }}
+          {{- else if ne .Values.frontend.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.frontend.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: vhost
@@ -220,6 +222,8 @@ spec:
               containerPort: {{ .Values.authProxy.containerPorts.proxy }}
           {{- if .Values.authProxy.resources }}
           resources: {{- toYaml .Values.authProxy.resources | nindent 12 }}
+          {{- else if ne .Values.authProxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.authProxy.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.authProxy.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.authProxy.extraVolumeMounts "context" $) | nindent 12 }}
@@ -284,6 +288,8 @@ spec:
               containerPort: {{ .Values.pinnipedProxy.containerPorts.pinnipedProxy }}
           {{- if .Values.pinnipedProxy.resources }}
           resources: {{- toYaml .Values.pinnipedProxy.resources | nindent 12 }}
+          {{- else if ne .Values.pinnipedProxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.pinnipedProxy.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.pinnipedProxy.tls.existingSecret }}
