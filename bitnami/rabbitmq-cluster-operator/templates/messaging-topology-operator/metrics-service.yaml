@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
     type: metrics
-  name: {{ printf "%s-metrics" (include "rmqco.msgTopologyOperator.fullname" .) }}
+  name: {{ printf "%s-metrics" (include "rmqco.msgTopologyOperator.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.commonAnnotations .Values.msgTopologyOperator.metrics.service.annotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}

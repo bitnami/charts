@@ -10,7 +10,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: rabbitmq-operator
     app.kubernetes.io/part-of: rabbitmq
-  name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) }}
+  name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.commonAnnotations .Values.clusterOperator.metrics.service.annotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
