@@ -103,8 +103,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/etcd
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       {{- end }}
       containers:
@@ -334,10 +335,17 @@ spec:
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: app-conf-dir
+            {{- if or .Values.configuration .Values.existingConfigmap }}
+            - name: configuration
               mountPath: /opt/bitnami/etcd/conf/
-            - name: tmp-dir
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/etcd/conf/
+              subPath: app-conf-dir
+            {{- end }}
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/etcd
             {{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") }}
@@ -373,15 +381,13 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-dir
+        - name: empty-dir
           emptyDir: {}
-        - name: app-conf-dir
-          {{- if or .Values.configuration .Values.existingConfigmap }}
+        {{- if or .Values.configuration .Values.existingConfigmap }}
+        - name: configuration
           configMap:
             name: {{ include "etcd.configmapName" . }}
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
+        {{- end }}
         {{- if and (eq .Values.auth.token.enabled true) (eq .Values.auth.token.type "jwt") }}
         - name: etcd-jwt-token
           secret:
