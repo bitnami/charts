@@ -147,7 +147,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.containerSecurityContext.enabled`             | Enabled kiam server containers' Security Context                                                                                            | `true`           |
 | `server.containerSecurityContext.runAsUser`           | Set kiam server container's Security Context runAsUser                                                                                      | `1001`           |
 | `server.containerSecurityContext.runAsNonRoot`        | Set kiam server container's Security Context runAsNonRoot                                                                                   | `true`           |
-| `server.containerSecurityContext.seLinuxOptions`      | Set kiam server container's Security Context SE Linux options                                                                               | `{}`             |
+| `server.containerSecurityContext.seLinuxOptions`      | Set kiam server container's Security Context SE Linux options                                                                               | `nil`            |
 | `server.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault` |
 | `server.podSecurityContext.enabled`                   | Enabled kiam server pods' Security Context                                                                                                  | `true`           |
 | `server.podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                                          | `Always`         |
@@ -176,19 +176,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam server exposure parameters
 
-| Name                                      | Description                                                                  | Value       |
-| ----------------------------------------- | ---------------------------------------------------------------------------- | ----------- |
-| `server.service.type`                     | Kubernetes service type                                                      | `ClusterIP` |
-| `server.service.port`                     | Service grpc-lb port                                                         | `8443`      |
-| `server.service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types. | `{}`        |
-| `server.service.clusterIP`                | kiam service clusterIP IP                                                    | `None`      |
-| `server.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `""`        |
-| `server.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                        | `[]`        |
-| `server.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)               | `[]`        |
-| `server.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
-| `server.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
-| `server.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
-| `server.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
+| Name                                           | Description                                                                                        | Value       |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| `server.service.type`                          | Kubernetes service type                                                                            | `ClusterIP` |
+| `server.service.port`                          | Service grpc-lb port                                                                               | `8443`      |
+| `server.service.nodePorts`                     | Specify the nodePort values for the LoadBalancer and NodePort service types.                       | `{}`        |
+| `server.service.clusterIP`                     | kiam service clusterIP IP                                                                          | `None`      |
+| `server.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                                                   | `""`        |
+| `server.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                                              | `[]`        |
+| `server.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                     | `[]`        |
+| `server.service.externalTrafficPolicy`         | Enable client source IP preservation                                                               | `Cluster`   |
+| `server.service.annotations`                   | Annotations for kiam service                                                                       | `{}`        |
+| `server.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                               | `None`      |
+| `server.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                        | `{}`        |
+| `server.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                | `true`      |
+| `server.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
+| `server.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                    | `true`      |
+| `server.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
+| `server.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
+| `server.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
+| `server.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
+| `server.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
 
 ### kiam server Service Account parameters
 
@@ -277,7 +285,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.containerSecurityContext.enabled`             | Enabled agent containers' Security Context                                                                                                  | `true`                    |
 | `agent.containerSecurityContext.runAsUser`           | Set agent container's Security Context runAsUser                                                                                            | `0`                       |
 | `agent.containerSecurityContext.runAsNonRoot`        | Set agent container's Security Context runAsNonRoot                                                                                         | `false`                   |
-| `agent.containerSecurityContext.seLinuxOptions`      | Set agent container's Security Context SE Linux options                                                                                     | `{}`                      |
+| `agent.containerSecurityContext.seLinuxOptions`      | [object] Set agent container's Security Context SE Linux options                                                                            | `nil`                     |
 | `agent.containerSecurityContext.capabilities.add`    | Add capabilities for the securityContext                                                                                                    | `["NET_ADMIN"]`           |
 | `agent.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                            | `RuntimeDefault`          |
 | `agent.podSecurityContext.enabled`                   | Enabled agent pods' Security Context                                                                                                        | `true`                    |
@@ -307,18 +315,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kiam agent exposure parameters
 
-| Name                                     | Description                                                                  | Value       |
-| ---------------------------------------- | ---------------------------------------------------------------------------- | ----------- |
-| `agent.service.type`                     | Kubernetes service type                                                      | `ClusterIP` |
-| `agent.service.nodePorts`                | Specify the nodePort values for the LoadBalancer and NodePort service types. | `{}`        |
-| `agent.service.clusterIP`                | kiam service clusterIP IP                                                    | `""`        |
-| `agent.service.loadBalancerIP`           | loadBalancerIP if service type is `LoadBalancer`                             | `""`        |
-| `agent.service.loadBalancerSourceRanges` | Address that are allowed when service is LoadBalancer                        | `[]`        |
-| `agent.service.externalTrafficPolicy`    | Enable client source IP preservation                                         | `Cluster`   |
-| `agent.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)               | `[]`        |
-| `agent.service.annotations`              | Annotations for kiam service                                                 | `{}`        |
-| `agent.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
-| `agent.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                  | `{}`        |
+| Name                                          | Description                                                                  | Value       |
+| --------------------------------------------- | ---------------------------------------------------------------------------- | ----------- |
+| `agent.service.type`                          | Kubernetes service type                                                      | `ClusterIP` |
+| `agent.service.nodePorts`                     | Specify the nodePort values for the LoadBalancer and NodePort service types. | `{}`        |
+| `agent.service.clusterIP`                     | kiam service clusterIP IP                                                    | `""`        |
+| `agent.service.loadBalancerIP`                | loadBalancerIP if service type is `LoadBalancer`                             | `""`        |
+| `agent.service.loadBalancerSourceRanges`      | Address that are allowed when service is LoadBalancer                        | `[]`        |
+| `agent.service.externalTrafficPolicy`         | Enable client source IP preservation                                         | `Cluster`   |
+| `agent.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)               | `[]`        |
+| `agent.service.annotations`                   | Annotations for kiam service                                                 | `{}`        |
+| `agent.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"         | `None`      |
+| `agent.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                  | `{}`        |
+| `agent.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                          | `true`      |
+| `agent.networkPolicy.allowExternal`           | Don't require server label for connections                                   | `true`      |
+| `agent.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.              | `true`      |
+| `agent.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                 | `[]`        |
+| `agent.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                 | `[]`        |
+| `agent.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                       | `{}`        |
+| `agent.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                   | `{}`        |
 
 ### kiam agent Service Account parameters
 

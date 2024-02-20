@@ -324,6 +324,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: previous-boot
@@ -387,14 +389,14 @@ spec:
               if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
-              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=${MARIADB_ROOT_USER} $MARIADB_METRICS_EXTRA_FLAGS
+              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=${MARIADB_ROOT_USER} --web.listen-address=:{{ .Values.metrics.containerPorts.http }} $MARIADB_METRICS_EXTRA_FLAGS
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: metrics
-              containerPort: 9104
+              containerPort: {{ .Values.metrics.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
           livenessProbe:
             httpGet:
@@ -411,6 +413,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
           volumeMounts:

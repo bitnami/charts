@@ -7,7 +7,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.registry" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.registry.server.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -68,6 +68,9 @@ spec:
       {{- if .Values.registry.schedulerName }}
       schedulerName: {{ .Values.registry.schedulerName }}
       {{- end }}
+      {{- if .Values.registry.serviceAccountName }}
+      serviceAccountName: {{ .Values.registry.serviceAccountName }}
+      {{- end }}
       {{- if .Values.registry.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.registry.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -88,6 +91,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: registry-data
@@ -186,6 +191,8 @@ spec:
           {{- end }}
           {{- if .Values.registry.server.resources }}
           resources: {{- toYaml .Values.registry.server.resources | nindent 12 }}
+          {{- else if ne .Values.registry.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.registry.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: registry-data
@@ -337,6 +344,8 @@ spec:
           {{- end }}
           {{- if .Values.registry.controller.resources }}
           resources: {{- toYaml .Values.registry.controller.resources | nindent 12 }}
+          {{- else if ne .Values.registry.controller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.registry.controller.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: registry-data

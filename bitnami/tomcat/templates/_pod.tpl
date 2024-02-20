@@ -51,6 +51,8 @@ initContainers:
       runAsUser: 0
     {{- if .Values.volumePermissions.resources }}
     resources: {{- toYaml .Values.volumePermissions.resources | nindent 6 }}
+    {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -80,10 +82,12 @@ containers:
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: {{ template "common.names.fullname" . }}
+            name: {{ include "tomcat.secretName" . }}
             key: tomcat-password
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
+      - name: TOMCAT_HTTP_PORT_NUMBER
+        value: {{ .Values.containerPorts.http | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
         value: {{ include "tomcat.catalinaOpts" . | quote }}
@@ -140,6 +144,8 @@ containers:
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}
+    {{- else if ne .Values.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -170,6 +176,8 @@ containers:
     {{- end }}
     {{- if .Values.metrics.jmx.resources }}
     resources: {{- toYaml .Values.metrics.jmx.resources | nindent 6 }}
+    {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: jmx-config

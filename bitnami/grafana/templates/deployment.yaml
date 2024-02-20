@@ -92,6 +92,8 @@ spec:
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -182,11 +184,11 @@ spec:
             {{- range .Values.dashboardsConfigMaps }}
             - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
             {{- if .folderName }}
-              mountPath: /opt/bitnami/grafana/dashboards/{{ .folderName }}/{{ .fileName }}
+              mountPath: /opt/bitnami/grafana/dashboards/{{ include "common.tplvalues.render" ( dict "value" .folderName "context" $ ) }}/{{ include "common.tplvalues.render" ( dict "value" .fileName "context" $ ) }}
             {{- else }}
-              mountPath: /opt/bitnami/grafana/dashboards/{{ .fileName }}
+              mountPath: /opt/bitnami/grafana/dashboards/{{ include "common.tplvalues.render" ( dict "value" .fileName "context" $ ) }}
             {{- end }}
-              subPath: {{ .fileName }}
+              subPath: {{ include "common.tplvalues.render" ( dict "value" .fileName "context" $ ) }}
             {{- end }}
             {{- if or (.Values.datasources.secretName) (.Values.datasources.secretDefinition) }}
             - name: datasources
@@ -207,13 +209,13 @@ spec:
             {{- end }}
             {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
             - name: ldap-tls
-              mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
+              mountPath: {{ include "common.tplvalues.render" (dict "value" .Values.ldap.tls.certificatesMountPath "context" $) }}
             {{- end }}
             {{- range .Values.grafana.extraConfigmaps }}
-            - name: {{ .name }}
-              mountPath: {{ .mountPath }}
-              subPath: {{ .subPath | default "" }}
-              readOnly: {{ .readOnly }}
+            - name: {{ include "common.tplvalues.render" (dict "value" .name "context" $) }}
+              mountPath: {{ include "common.tplvalues.render" (dict "value" .mountPath "context" $) }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" .subPath "context" $) | default "" }}
+              readOnly: {{ include "common.tplvalues.render" (dict "value" .readOnly "context" $) }}
             {{- end }}
             {{- if .Values.grafana.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 12 }}
@@ -272,6 +274,8 @@ spec:
           {{- end }}
           {{- if .Values.grafana.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.grafana.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.grafana.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.grafana.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.sidecars "context" $) | nindent 8 }}
@@ -280,7 +284,7 @@ spec:
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "common.names.fullname" .) }}
+            claimName: {{ include "common.tplvalues.render" ( dict "value" .Values.persistence.existingClaim "context" $) | default (include "common.names.fullname" .) }}
         {{- else }}
           emptyDir: {}
         {{- end }}
@@ -288,10 +292,10 @@ spec:
         - name: ldap
           {{- if not (empty .Values.ldap.configMapName) }}
           configMap:
-            name: {{ .Values.ldap.configMapName }}
+            name: {{ include "common.tplvalues.render" ( dict "value" .Values.ldap.configMapName "context" $) }}
           {{- else if not (empty .Values.ldap.secretName) }}
           secret:
-            secretName: {{ .Values.ldap.secretName }}
+            secretName: {{ include "common.tplvalues.render" ( dict "value" .Values.ldap.secretName "context" $) }}
           {{- else }}
           secret:
             secretName: {{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}
@@ -323,32 +327,32 @@ spec:
         {{- if .Values.notifiers.configMapName }}
         - name: notifiers
           configMap:
-            name: {{ .Values.notifiers.configMapName }}
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.notifiers.configMapName "context" $) }}
         {{- end }}
         {{- if .Values.alerting.configMapName }}
         - name: alerting
           configMap:
-            name: {{ .Values.alerting.configMapName }}
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.alerting.configMapName "context" $) }}
         {{- end }}
         {{- if .Values.config.useGrafanaIniFile }}
         - name: grafana-ini
           {{- if .Values.config.grafanaIniConfigMap }}
           configMap:
-            name: {{ .Values.config.grafanaIniConfigMap }}
+            name: {{ include "common.tplvalues.render" (dict "value" .Values.config.grafanaIniConfigMap "context" $) }}
           {{- else if .Values.config.grafanaIniSecret }}
           secret:
-            secretName: {{ .Values.config.grafanaIniSecret }}
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.config.grafanaIniSecret "context" $) }}
           {{- end }}
         {{- end }}
         {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
         - name: ldap-tls
           secret:
-            secretName: {{ .Values.ldap.tls.certificatesSecret }}
+            secretName: {{ include "common.tplvalues.render" (dict "value" .Values.ldap.tls.certificatesSecret "context" $) }}
         {{- end }}
         {{- range .Values.grafana.extraConfigmaps }}
-        - name: {{ .name }}
+        - name: {{ include "common.tplvalues.render" (dict "value" .name "context" $) }}
           configMap:
-            name: {{ .name }}
+            name: {{ include "common.tplvalues.render" (dict "value" .name "context" $) }}
         {{- end }}
         {{- if .Values.grafana.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes  "context" $) | nindent 8 }}

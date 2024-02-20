@@ -165,6 +165,8 @@ spec:
           {{- end }}
           {{- if .Values.operator.resources }}
           resources: {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- else if ne .Values.operator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.operator.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.operator.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}

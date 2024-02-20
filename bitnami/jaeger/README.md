@@ -140,6 +140,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`           |
 | `query.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                               | `{}`             |
 | `query.service.metrics.annotations`                       | Annotations for Prometheus metrics                                                        | `{}`             |
+| `query.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                       | `true`           |
+| `query.networkPolicy.allowExternal`                       | Don't require server label for connections                                                | `true`           |
+| `query.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                           | `true`           |
+| `query.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                              | `[]`             |
+| `query.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                              | `[]`             |
+| `query.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                    | `{}`             |
+| `query.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                | `{}`             |
 | `query.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
 | `query.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
 | `query.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
@@ -150,7 +157,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `query.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                               | `[]`             |
 | `query.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                 | `1001`           |
 | `query.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                      | `true`           |
-| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `{}`             |
+| `query.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                          | `nil`            |
 | `query.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                | `1001`           |
 | `query.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                             | `true`           |
 | `query.containerSecurityContext.privileged`               | Set container's Security Context privileged                                               | `false`          |
@@ -242,6 +249,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                       | `None`           |
 | `collector.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                | `{}`             |
 | `collector.service.metrics.annotations`                       | Annotations for Prometheus metrics                                                         | `{}`             |
+| `collector.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                        | `true`           |
+| `collector.networkPolicy.allowExternal`                       | Don't require server label for connections                                                 | `true`           |
+| `collector.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                            | `true`           |
+| `collector.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                               | `[]`             |
+| `collector.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                               | `[]`             |
+| `collector.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                     | `{}`             |
+| `collector.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                 | `{}`             |
 | `collector.serviceAccount.create`                             | Enables ServiceAccount                                                                     | `true`           |
 | `collector.serviceAccount.name`                               | ServiceAccount name                                                                        | `""`             |
 | `collector.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                 | `{}`             |
@@ -252,7 +266,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                | `[]`             |
 | `collector.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                  | `1001`           |
 | `collector.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                       | `true`           |
-| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `{}`             |
+| `collector.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                           | `nil`            |
 | `collector.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                 | `1001`           |
 | `collector.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                              | `true`           |
 | `collector.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                | `false`          |
@@ -341,6 +355,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.service.sessionAffinity`                               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                           | `None`           |
 | `agent.service.sessionAffinityConfig`                         | Additional settings for the sessionAffinity                                                                    | `{}`             |
 | `agent.service.metrics.annotations`                           | Annotations for Prometheus metrics                                                                             | `{}`             |
+| `agent.networkPolicy.enabled`                                 | Specifies whether a NetworkPolicy should be created                                                            | `true`           |
+| `agent.networkPolicy.allowExternal`                           | Don't require server label for connections                                                                     | `true`           |
+| `agent.networkPolicy.allowExternalEgress`                     | Allow the pod to access any range of port and all destinations.                                                | `true`           |
+| `agent.networkPolicy.extraIngress`                            | Add extra ingress rules to the NetworkPolice                                                                   | `[]`             |
+| `agent.networkPolicy.extraEgress`                             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`             |
+| `agent.networkPolicy.ingressNSMatchLabels`                    | Labels to match to allow traffic from other namespaces                                                         | `{}`             |
+| `agent.networkPolicy.ingressNSPodMatchLabels`                 | Pod labels to match to allow traffic from other namespaces                                                     | `{}`             |
 | `agent.serviceAccount.create`                                 | Enables ServiceAccount                                                                                         | `true`           |
 | `agent.serviceAccount.name`                                   | ServiceAccount name                                                                                            | `""`             |
 | `agent.serviceAccount.annotations`                            | Annotations to add to all deployed objects                                                                     | `{}`             |
@@ -351,7 +372,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.podSecurityContext.supplementalGroups`                 | Set filesystem extra groups                                                                                    | `[]`             |
 | `agent.podSecurityContext.fsGroup`                            | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `agent.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                           | `true`           |
-| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `{}`             |
+| `agent.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                               | `nil`            |
 | `agent.containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `agent.containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `agent.containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                    | `false`          |
@@ -386,7 +407,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `migration.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                    | `[]`             |
 | `migration.podSecurityContext.fsGroup`                        | Set Jaeger pod's Security Context fsGroup                                                                      | `1001`           |
 | `migration.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                           | `true`           |
-| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `{}`             |
+| `migration.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                               | `nil`            |
 | `migration.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                     | `1001`           |
 | `migration.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                  | `true`           |
 | `migration.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                    | `false`          |
@@ -400,6 +421,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `migration.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for jaeger container                                  | `[]`             |
 | `migration.resources.limits`                                  | The resources limits for Jaeger containers                                                                     | `{}`             |
 | `migration.resources.requests`                                | The requested resources for Jaeger containers                                                                  | `{}`             |
+| `migration.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                            | `true`           |
+| `migration.networkPolicy.allowExternal`                       | Don't require server label for connections                                                                     | `true`           |
+| `migration.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                | `true`           |
+| `migration.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                   | `[]`             |
+| `migration.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`             |
+| `migration.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                         | `{}`             |
+| `migration.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                     | `{}`             |
 | `migration.extraVolumes`                                      | Optionally specify extra list of additional volumes for jaeger container                                       | `[]`             |
 
 ### Set the image to use for the migration job
