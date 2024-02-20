@@ -147,6 +147,8 @@ spec:
           {{- end }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
+          {{- else if ne .Values.apprepository.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.apprepository.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.apprepository.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.sidecars "context" $) | trim | nindent 8 }}
