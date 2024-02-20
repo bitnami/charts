@@ -237,12 +237,15 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: app-conf-dir
+              subPath: tmp
+            - name: empty-dir
               mountPath: /opt/bitnami/schema-registry/etc
-            - name: app-logs-dir
+              subPath: etc
+            - name: empty-dir
               mountPath: /opt/bitnami/schema-registry/logs
+              subPath: logs
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: configuration
               mountPath: /bitnami/schema-registry/etc/schema-registry/schema-registry.properties
@@ -265,11 +268,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: app-conf-dir
-          emptyDir: {}
-        - name: app-logs-dir
-          emptyDir: {}
-        - name: tmp-dir
+        - name: empty-dir
           emptyDir: {}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: configuration
