@@ -151,15 +151,19 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.taskmanager.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: app-conf-dir
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/flink/conf
-            - name: app-logs-dir
+              subPath: app-conf-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/flink/log
+              subPath: app-logs-dir
             # HACK: Workaround to bypass the libflink.sh persist_app logic
-            - name: app-conf-dir
+            - name: empty-dir
               mountPath: /bitnami/flink/conf
+              subPath: app-conf-dir
             {{- if .Values.taskmanager.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -167,11 +171,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: app-conf-dir
-          emptyDir: {}
-        - name: app-logs-dir
-          emptyDir: {}
-        - name: tmp-dir
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.taskmanager.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumes "context" $) | nindent 8 }}
