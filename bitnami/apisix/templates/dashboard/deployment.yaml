@@ -124,6 +124,8 @@ spec:
             {{- end }}
           {{- if .Values.dashboard.resources }}
           resources: {{- toYaml .Values.dashboard.resources | nindent 12 }}
+          {{- else if ne .Values.dashboard.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboard.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -164,8 +166,10 @@ spec:
               mountPath: /bitnami/apisix/conf
             - name: log-dir
               mountPath: /opt/bitnami/apisix-dashboard/logs
+            {{- if .Values.dashboard.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
+            {{- end }}
          {{- if .Values.dashboard.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

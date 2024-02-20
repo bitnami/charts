@@ -73,3 +73,4 @@ To upgrade this helm chart:
   {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $passwordValidationErrors) "context" $) -}}
 {{- end }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "primary" "secondary" "volumePermissions") "context" $) }}
