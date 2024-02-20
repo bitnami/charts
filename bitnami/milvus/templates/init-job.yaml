@@ -142,6 +142,8 @@ spec:
           {{- end }}
           {{- if .Values.initJob.resources }}
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
         - name: tmp

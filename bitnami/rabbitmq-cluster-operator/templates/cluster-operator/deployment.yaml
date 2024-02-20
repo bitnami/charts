@@ -122,6 +122,8 @@ spec:
             {{- end }}
           {{- if .Values.clusterOperator.resources }}
           resources: {{- toYaml .Values.clusterOperator.resources | nindent 12 }}
+          {{- else if ne .Values.clusterOperator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.clusterOperator.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.clusterOperator.customLivenessProbe }}

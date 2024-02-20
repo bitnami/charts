@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -48,7 +47,6 @@ commonAnnotations: {}
 ## Useful when including ZooKeeper as a chart dependency, so it can be released into a different namespace than the parent
 ##
 namespaceOverride: ""
-
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -63,7 +61,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section ZooKeeper chart parameters
 
 ## Bitnami ZooKeeper image version
@@ -235,7 +232,6 @@ command:
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-
 ## @section Statefulset parameters
 
 ## @param replicaCount Number of ZooKeeper nodes
@@ -313,15 +309,21 @@ customStartupProbe: {}
 lifecycleHooks: {}
 ## ZooKeeper resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the ZooKeeper containers
-## @param resources.requests.memory The requested memory for the ZooKeeper containers
-## @param resources.requests.cpu The requested cpu for the ZooKeeper containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests:
-    memory: 256Mi
-    cpu: 250m
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled ZooKeeper pods' Security Context
@@ -523,9 +525,7 @@ dnsPolicy: ""
 ##       value: "2"
 ##     - name: edns0
 dnsConfig: {}
-
 ## @section Traffic Exposure parameters
-
 service:
   ## @param service.type Kubernetes Service type
   ##
@@ -649,7 +649,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## @section Other Parameters
 
 ## Service account for ZooKeeper to use.
@@ -670,7 +669,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -731,7 +729,6 @@ persistence:
     ##     app: my-app
     ##
     selector: {}
-
 ## @section Volume Permissions parameters
 ##
 
@@ -765,12 +762,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -782,7 +788,6 @@ volumePermissions:
     enabled: true
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Metrics parameters
 ##
 
@@ -875,7 +880,6 @@ metrics:
     ##      severity: critical
     ##
     rules: []
-
 ## @section TLS/SSL parameters
 ##
 
@@ -965,9 +969,18 @@ tls:
     truststorePassword: ""
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param tls.resources.limits The resources limits for the TLS init container
-  ## @param tls.resources.requests The requested resources for the TLS init container
+  ## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

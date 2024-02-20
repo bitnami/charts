@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -47,7 +46,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,7 +60,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Kustomize Controller Parameters
 ##
 kustomizeController:
@@ -88,7 +85,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.2-debian-11-r0
+    tag: 1.2.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -228,12 +225,21 @@ kustomizeController:
   customStartupProbe: {}
   ## Kustomize Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param kustomizeController.resources.limits The resources limits for the Kustomize Controller containers
-  ## @param kustomizeController.resources.requests The requested resources for the Kustomize Controller containers
+  ## @param kustomizeController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if kustomizeController.resources is set (kustomizeController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param kustomizeController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kustomizeController.podSecurityContext.enabled Enabled Kustomize Controller pods' Security Context
@@ -272,7 +278,6 @@ kustomizeController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param kustomizeController.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -364,7 +369,6 @@ kustomizeController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param kustomizeController.priorityClassName Kustomize Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -423,7 +427,6 @@ kustomizeController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Kustomize Controller RBAC Parameters
   ##
 
@@ -445,7 +448,6 @@ kustomizeController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -462,7 +464,6 @@ kustomizeController:
     ## @param kustomizeController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## @section Kustomize Controller Metrics Parameters
   ##
 
@@ -572,7 +573,6 @@ kustomizeController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Helm Controller Parameters
 ##
 helmController:
@@ -598,7 +598,7 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.37.3-debian-11-r1
+    tag: 0.37.4-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -738,12 +738,21 @@ helmController:
   customStartupProbe: {}
   ## Helm Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param helmController.resources.limits The resources limits for the Helm Controller containers
-  ## @param helmController.resources.requests The requested resources for the Helm Controller containers
+  ## @param helmController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if helmController.resources is set (helmController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param helmController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param helmController.podSecurityContext.enabled Enabled Helm Controller pods' Security Context
@@ -782,7 +791,6 @@ helmController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param helmController.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -874,7 +882,6 @@ helmController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param helmController.priorityClassName Helm Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -933,7 +940,6 @@ helmController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Helm Controller RBAC Parameters
   ##
 
@@ -955,7 +961,6 @@ helmController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -972,7 +977,6 @@ helmController:
     ## @param helmController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## @section Helm Controller Metrics Parameters
   ##
 
@@ -1082,7 +1086,6 @@ helmController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Source Controller Parameters
 ##
 sourceController:
@@ -1108,7 +1111,7 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.2.4-debian-11-r1
+    tag: 1.2.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1250,12 +1253,21 @@ sourceController:
   customStartupProbe: {}
   ## Source Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param sourceController.resources.limits The resources limits for the Source Controller containers
-  ## @param sourceController.resources.requests The requested resources for the Source Controller containers
+  ## @param sourceController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sourceController.resources is set (sourceController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param sourceController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sourceController.podSecurityContext.enabled Enabled Source Controller pods' Security Context
@@ -1294,7 +1306,6 @@ sourceController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param sourceController.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1386,7 +1397,6 @@ sourceController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param sourceController.priorityClassName Source Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -1445,7 +1455,6 @@ sourceController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Source Controller service parameters
   ##
   service:
@@ -1501,7 +1510,6 @@ sourceController:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
   ## @section Source Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1544,7 +1552,6 @@ sourceController:
     ## @param sourceController.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-
   ## @section Source Controller RBAC Parameters
   ##
 
@@ -1566,7 +1573,6 @@ sourceController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1583,7 +1589,6 @@ sourceController:
     ## @param sourceController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## @section Source Controller Metrics Parameters
   ##
 
@@ -1693,7 +1698,6 @@ sourceController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Notification Controller Parameters
 ##
 notificationController:
@@ -1719,7 +1723,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.4-debian-11-r1
+    tag: 1.2.4-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1859,12 +1863,21 @@ notificationController:
   customStartupProbe: {}
   ## Notification Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param notificationController.resources.limits The resources limits for the Notification Controller containers
-  ## @param notificationController.resources.requests The requested resources for the Notification Controller containers
+  ## @param notificationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if notificationController.resources is set (notificationController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param notificationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param notificationController.podSecurityContext.enabled Enabled Notification Controller pods' Security Context
@@ -1903,7 +1916,6 @@ notificationController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param notificationController.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -1995,7 +2007,6 @@ notificationController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param notificationController.priorityClassName Notification Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2054,7 +2065,6 @@ notificationController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Notification Controller RBAC Parameters
   ##
 
@@ -2076,7 +2086,6 @@ notificationController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -2093,7 +2102,6 @@ notificationController:
     ## @param notificationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## @section Notification Controller Metrics Parameters
   ##
 
@@ -2203,7 +2211,6 @@ notificationController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Image Automation Controller Parameters
 ##
 imageAutomationController:
@@ -2229,7 +2236,7 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.37.1-debian-11-r1
+    tag: 0.37.1-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2369,12 +2376,21 @@ imageAutomationController:
   customStartupProbe: {}
   ## Image Automation Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param imageAutomationController.resources.limits The resources limits for the Image Automation Controller containers
-  ## @param imageAutomationController.resources.requests The requested resources for the Image Automation Controller containers
+  ## @param imageAutomationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if imageAutomationController.resources is set (imageAutomationController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param imageAutomationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageAutomationController.podSecurityContext.enabled Enabled Image Automation Controller pods' Security Context
@@ -2413,7 +2429,6 @@ imageAutomationController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param imageAutomationController.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -2505,7 +2520,6 @@ imageAutomationController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param imageAutomationController.priorityClassName Image Automation Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -2564,7 +2578,6 @@ imageAutomationController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Image Automation Controller RBAC Parameters
   ##
 
@@ -2586,7 +2599,6 @@ imageAutomationController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -2603,7 +2615,6 @@ imageAutomationController:
     ## @param imageAutomationController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## @section Image Automation Controller Metrics Parameters
   ##
 
@@ -2713,7 +2724,6 @@ imageAutomationController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## @section Image Reflector Controller Parameters
 ##
 imageReflectorController:
@@ -2739,7 +2749,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.2-debian-11-r1
+    tag: 0.31.2-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2879,12 +2889,21 @@ imageReflectorController:
   customStartupProbe: {}
   ## Image Reflector Controller resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param imageReflectorController.resources.limits The resources limits for the Image Reflector Controller containers
-  ## @param imageReflectorController.resources.requests The requested resources for the Image Reflector Controller containers
+  ## @param imageReflectorController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if imageReflectorController.resources is set (imageReflectorController.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param imageReflectorController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param imageReflectorController.podSecurityContext.enabled Enabled Image Reflector Controller pods' Security Context
@@ -2923,7 +2942,6 @@ imageReflectorController:
       drop: ["ALL"]
     seccompProfile:
       type: RuntimeDefault
-
   ## @param imageReflectorController.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -3015,7 +3033,6 @@ imageReflectorController:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param imageReflectorController.priorityClassName Image Reflector Controller pods' priorityClassName
   ##
   priorityClassName: ""
@@ -3074,7 +3091,6 @@ imageReflectorController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Image Reflector Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -3117,7 +3133,6 @@ imageReflectorController:
     ## @param imageReflectorController.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-
   ## @section Image Reflector Controller RBAC Parameters
   ##
 
@@ -3139,7 +3154,6 @@ imageReflectorController:
     ##       - list
     ##
     rules: []
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -3156,7 +3170,6 @@ imageReflectorController:
     ## @param imageReflectorController.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## @section Image Reflector Controller Metrics Parameters
   ##
 
@@ -3266,7 +3279,6 @@ imageReflectorController:
       ##   prometheus: my-prometheus
       ##
       selector: {}
-
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -3287,7 +3299,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag:  11-debian-11-r96
+    tag: 11-debian-11-r96
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3300,12 +3312,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.enabled Enable init container's Security Context

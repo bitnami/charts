@@ -117,6 +117,8 @@ spec:
             {{- end }}
           {{- if .Values.dashboards.resources }}
           resources: {{- toYaml .Values.dashboards.resources | nindent 12 }}
+          {{- else if ne .Values.dashboards.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.dashboards.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

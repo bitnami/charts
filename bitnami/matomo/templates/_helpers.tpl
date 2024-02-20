@@ -161,6 +161,8 @@ Return the matomo pods needed initContainers
     runAsUser: 0
   {{- if .Values.volumePermissions.resources }}
   resources: {{- toYaml .Values.volumePermissions.resources | nindent 4 }}
+  {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: matomo-data
