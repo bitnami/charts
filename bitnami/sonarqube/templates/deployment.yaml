@@ -82,7 +82,9 @@ spec:
           resources: {{- toYaml .Values.plugins.resources | nindent 12 }}
           {{- else if ne .Values.plugins.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.plugins.resourcesPreset) | nindent 12 }}
-          securityContext: {{- .Values.plugins.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.plugins.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.plugins.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.caCerts.enabled }}
@@ -97,10 +99,14 @@ spec:
               subPath: certs
             - mountPath: /tmp/secrets/ca-certs
               name: ca-certs
+          {{- if .Values.caCerts.resources }}
           resources: {{- toYaml .Values.caCerts.resources | nindent 12 }}
           {{- else if ne .Values.caCerts.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.caCerts.resourcesPreset) | nindent 12 }}
-          securityContext: {{- .Values.caCerts.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.caCerts.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.caCerts.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -113,9 +119,9 @@ spec:
             - |
               {{- include "sonarqube.sysctl.ifLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
               {{- include "sonarqube.sysctl.ifLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
-          securityContext:
-            privileged: true
-            runAsUser: 0
+          {{- if .Values.sysctl.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.sysctl.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.sysctl.resources }}
           resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
           {{- else if ne .Values.sysctl.resourcesPreset "none" }}

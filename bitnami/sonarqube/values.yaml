@@ -727,6 +727,7 @@ caCerts:
   resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param caCerts.containerSecurityContext.enabled Enable container security context
   ## @param caCerts.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param caCerts.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
@@ -734,6 +735,7 @@ caCerts:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
+    enabled: true
     seLinuxOptions: null
     runAsUser: 0
 ## @section SonarQube plugin provisioning parameters
@@ -944,6 +946,19 @@ sysctl:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## @param sysctl.containerSecurityContext.enabled Enable container security context
+  ## @param sysctl.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param sysctl.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## @param sysctl.containerSecurityContext.privileged Set init container's Security Context privileged
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    enabled: true
+    privileged: true
+    runAsUser: 0
+    seLinuxOptions: null
 ## @section Other Parameters
 ##
 
