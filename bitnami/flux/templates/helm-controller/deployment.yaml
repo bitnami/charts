@@ -123,6 +123,8 @@ spec:
             {{- end }}
           {{- if .Values.helmController.resources }}
           resources: {{- toYaml .Values.helmController.resources | nindent 12 }}
+          {{- else if ne .Values.helmController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.helmController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-metrics
