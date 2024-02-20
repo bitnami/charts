@@ -84,6 +84,8 @@ spec:
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
+          {{- else if ne $.Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if $.Values.containerSecurityContext.enabled }}
           # We don't require a privileged container in this case
@@ -129,6 +131,8 @@ spec:
           securityContext: {{- include "common.tplvalues.render" (dict "value" $.Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if $.Values.volumePermissions.resources }}
           resources: {{- toYaml $.Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne $.Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -241,6 +245,8 @@ spec:
             {{- end }}
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
+          {{- else if ne $.Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

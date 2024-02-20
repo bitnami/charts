@@ -102,6 +102,8 @@ spec:
                 {{- end }}
               {{- if .Values.tls.resources }}
               resources: {{- toYaml .Values.tls.resources | nindent 16 }}
+              {{- else if ne .Values.tls.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 16 }}
               {{- end }}
           {{- end }}
           containers:
