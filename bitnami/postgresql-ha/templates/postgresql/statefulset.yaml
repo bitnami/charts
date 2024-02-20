@@ -103,6 +103,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: raw-certificates
@@ -128,6 +130,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -424,6 +428,8 @@ spec:
           {{- end }}
           {{- if .Values.postgresql.resources }}
           resources: {{- toYaml .Values.postgresql.resources | nindent 12 }}
+          {{- else if ne .Values.postgresql.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.postgresql.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration .Values.postgresql.configurationCM }}
@@ -529,6 +535,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if or .Values.postgresql.usePasswordFile .Values.metrics.customMetrics }}
           volumeMounts:

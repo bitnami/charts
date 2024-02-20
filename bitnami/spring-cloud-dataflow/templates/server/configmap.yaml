@@ -45,11 +45,15 @@ data:
                     {{- if $environmentVariables }}
                     environmentVariables: {{- $environmentVariables | trim | nindent 22 }}
                     {{- end }}
+                    {{- if .Values.deployer.resources }}
                     {{- if .Values.deployer.resources.limits }}
                     limits: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.resources.limits "context" $) | trim | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.resources.requests }}
                     requests: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.resources.requests "context" $) | trim | nindent 22 }}
+                    {{- end }}
+                    {{- else if ne .Values.deployer.resourcesPreset "none" }}
+                    {{- include "common.resources.preset" (dict "type" .Values.deployer.resourcesPreset) | nindent 20 }}
                     {{- end }}
                     {{- if .Values.deployer.readinessProbe.initialDelaySeconds }}
                     readinessProbeDelay: {{ .Values.deployer.readinessProbe.initialDelaySeconds }}

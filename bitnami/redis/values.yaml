@@ -22,7 +22,6 @@ global:
   storageClass: ""
   redis:
     password: ""
-
 ## @section Common parameters
 ##
 
@@ -62,7 +61,6 @@ nameResolutionThreshold: 5
 ## @param nameResolutionTimeout Timeout seconds between probes for internal hostnames resolution
 ##
 nameResolutionTimeout: 5
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -77,7 +75,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Redis&reg; Image parameters
 ##
 
@@ -112,7 +109,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## @section Redis&reg; common configuration parameters
 ## https://github.com/bitnami/containers/tree/main/bitnami/redis#configuration
 ##
@@ -145,7 +141,6 @@ auth:
   ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
   ##
   usePasswordFiles: false
-
 ## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
 ## ref: https://redis.io/topics/config
 ##
@@ -157,10 +152,8 @@ commonConfiguration: |-
 ## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes
 ##
 existingConfigmap: ""
-
 ## @section Redis&reg; master configuration parameters
 ##
-
 master:
   ## @param master.count Number of Redis&reg; master instances to deploy (experimental, requires additional configuration)
   ##
@@ -267,12 +260,21 @@ master:
   customReadinessProbe: {}
   ## Redis&reg; master resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param master.resources.limits The resources limits for the Redis&reg; master containers
-  ## @param master.resources.requests The requested resources for the Redis&reg; master containers
+  ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled Redis&reg; master pods' Security Context
@@ -599,10 +601,8 @@ master:
     ## @param master.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
 ## @section Redis&reg; replicas configuration parameters
 ##
-
 replica:
   ## @param replica.kind Use either DaemonSet or StatefulSet (default)
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
@@ -721,20 +721,21 @@ replica:
   customReadinessProbe: {}
   ## Redis&reg; replicas resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param replica.resources.limits The resources limits for the Redis&reg; replicas containers
-  ## @param replica.resources.requests The requested resources for the Redis&reg; replicas containers
+  ## @param replica.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if replica.resources is set (replica.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #   cpu: 250m
-    #   memory: 256Mi
-    requests: {}
-    #   cpu: 250m
-    #   memory: 256Mi
+  resourcesPreset: "none"
+  ## @param replica.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.podSecurityContext.enabled Enabled Redis&reg; replicas pods' Security Context
@@ -1288,12 +1289,21 @@ sentinel:
     whenDeleted: Retain
   ## Redis&reg; Sentinel resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param sentinel.resources.limits The resources limits for the Redis&reg; Sentinel containers
-  ## @param sentinel.resources.requests The requested resources for the Redis&reg; Sentinel containers
+  ## @param sentinel.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sentinel.resources is set (sentinel.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param sentinel.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&reg; Sentinel containers' Security Context
@@ -1396,7 +1406,6 @@ sentinel:
   ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
   ##
   terminationGracePeriodSeconds: 30
-
 ## @section Other Parameters
 ##
 
@@ -1405,7 +1414,6 @@ sentinel:
 ##
 serviceBindings:
   enabled: false
-
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -1461,7 +1469,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
   metrics:
     ## @param networkPolicy.metrics.allowExternal Don't require client label for connections for metrics endpoint
     ## When set to false, only pods with the correct client label will have network access to the metrics port
@@ -1472,7 +1479,6 @@ networkPolicy:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
@@ -1561,10 +1567,8 @@ tls:
   ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
   ##
   dhParamsFilename: ""
-
 ## @section Metrics Parameters
 ##
-
 metrics:
   ## @param metrics.enabled Start a sidecar prometheus exporter to expose Redis&reg; metrics
   ##
@@ -1592,7 +1596,6 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param metrics.containerPorts.http Metrics HTTP container port
   ##
   containerPorts:
@@ -1701,12 +1704,21 @@ metrics:
   extraVolumeMounts: []
   ## Redis&reg; exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resources.limits The resources limits for the Redis&reg; exporter container
-  ## @param metrics.resources.requests The requested resources for the Redis&reg; exporter container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.podLabels Extra labels for Redis&reg; exporter pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
@@ -1802,16 +1814,16 @@ metrics:
     ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
     ##
     additionalEndpoints: []
-      # uncomment in order to scrape sentinel metrics, also to in order distinguish between Sentinel and Redis container metrics
-      # add metricRelabelings with label like app=redis to main redis pod-monitor port
-      # - interval: "30s"
-      #   path: "/scrape"
-      #   port: "metrics"
-      #   params:
-      #     target: ["localhost:26379"]
-      #   metricRelabelings:
-      #     - targetLabel: "app"
-      #       replacement: "sentinel"
+    # uncomment in order to scrape sentinel metrics, also to in order distinguish between Sentinel and Redis container metrics
+    # add metricRelabelings with label like app=redis to main redis pod-monitor port
+    # - interval: "30s"
+    #   path: "/scrape"
+    #   port: "metrics"
+    #   params:
+    #     target: ["localhost:26379"]
+    #   metricRelabelings:
+    #     - targetLabel: "app"
+    #       replacement: "sentinel"
   ## Prometheus Pod Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
@@ -1838,8 +1850,8 @@ metrics:
     ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
     ##
     metricRelabelings: []
-      # - targetLabel: "app"
-      #   replacement: "redis"
+    # - targetLabel: "app"
+    #   replacement: "redis"
     ## @param metrics.podMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
@@ -1858,15 +1870,14 @@ metrics:
     ## @param metrics.podMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
     ##
     additionalEndpoints: []
-      # - interval: "30s"
-      #   path: "/scrape"
-      #   port: "metrics"
-      #   params:
-      #     target: ["localhost:26379"]
-      #   metricRelabelings:
-      #     - targetLabel: "app"
-      #       replacement: "sentinel"
-
+    # - interval: "30s"
+    #   path: "/scrape"
+    #   port: "metrics"
+    #   params:
+    #     target: ["localhost:26379"]
+    #   metricRelabelings:
+    #     - targetLabel: "app"
+    #       replacement: "sentinel"
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   ##
@@ -1916,7 +1927,6 @@ metrics:
     ##          Redis&reg; instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
     ##
     rules: []
-
 ## @section Init Container Parameters
 ##
 
@@ -1953,12 +1963,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -1970,7 +1989,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## init-sysctl container parameters
 ## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
 ##
@@ -2009,13 +2027,21 @@ sysctl:
   mountHostSys: false
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param sysctl.resources.limits The resources limits for the init container
-  ## @param sysctl.resources.requests The requested resources for the init container
+  ## @param sysctl.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sysctl.resources is set (sysctl.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param sysctl.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section useExternalDNS Parameters
 ##
 ## @param useExternalDNS.enabled Enable various syntax that would enable external-dns to work.  Note this requires a working installation of `external-dns` to be usable.
