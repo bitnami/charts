@@ -92,6 +92,8 @@ spec:
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -272,6 +274,8 @@ spec:
           {{- end }}
           {{- if .Values.grafana.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.grafana.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.grafana.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.grafana.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.sidecars "context" $) | nindent 8 }}

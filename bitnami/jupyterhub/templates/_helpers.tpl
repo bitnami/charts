@@ -312,6 +312,24 @@ Get the Postgresql credentials secret.
 {{- end -}}
 {{- end -}}
 
+{{/*
+ We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M)
+*/}}
+{{- define "jupyterhub.singleuser.resources" -}}
+{{ $resources := (dict "limits" (dict) "requests" (dict)) }}
+{{- if .Values.singleuser.resources -}}
+    {{ $resources = .Values.singleuser.resources -}}
+{{- else if ne .Values.singleuser.resourcesPreset "none" -}}
+    {{ $resources = include "common.resources.preset" (dict "type" .Values.singleuser.resourcesPreset) -}}
+{{- end -}}
+cpu:
+  limit: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.limits.cpu)  "${1}" }}
+  guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.requests.cpu) "${1}" }}
+memory:
+  limit: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.limits.memory) "${1}" }}
+  guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.requests.memory) "${1}" }}
+{{- end -}}
+
 {{/* Validate values of JupyterHub - Database */}}
 {{- define "jupyterhub.validateValues.database" -}}
 {{- if and .Values.postgresql.enabled .Values.externalDatabase.host -}}

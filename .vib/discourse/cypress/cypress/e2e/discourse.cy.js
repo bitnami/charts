@@ -29,7 +29,7 @@ it('allows to create a topic', () => {
     cy.get('textarea').type(`${topic.newTopic.content} ${random}`);
     cy.contains('button', 'Create Topic').click();
     cy.contains('Saving').should('not.exist');
-    cy.visit('/latest')
+    cy.visit('/latest');
     cy.get('.topic-list').within(() => {
       cy.contains('td', `${topic.newTopic.title}-${random}`);
     });

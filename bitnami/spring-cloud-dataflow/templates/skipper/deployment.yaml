@@ -84,6 +84,8 @@ spec:
           {{- end }}
           {{- if .Values.waitForBackends.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.waitForBackends.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.waitForBackends.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -198,6 +200,8 @@ spec:
           {{- end }}
           {{- if .Values.skipper.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.skipper.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.skipper.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: database

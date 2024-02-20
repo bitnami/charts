@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -44,7 +43,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section WordPress Image parameters
 ##
 
@@ -94,7 +91,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## @section WordPress Configuration parameters
 ## WordPress settings based on environment variables
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#environment-variables
@@ -240,7 +236,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @section WordPress Multisite Configuration parameters
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/wordpress#multisite-configuration
 ##
@@ -255,7 +250,6 @@ multisite:
   host: ""
   networkType: subdomain
   enableNipIoRedirect: false
-
 ## @section WordPress deployment parameters
 ##
 
@@ -378,15 +372,21 @@ nodeSelector: {}
 tolerations: []
 ## WordPress containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the WordPress containers
-## @param resources.requests.memory The requested memory for the WordPress containers
-## @param resources.requests.cpu The requested cpu for the WordPress containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests:
-    memory: 512Mi
-    cpu: 300m
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Container ports
 ## @param containerPorts.http WordPress HTTP container port
 ## @param containerPorts.https WordPress HTTPS container port
@@ -540,7 +540,6 @@ customStartupProbe: {}
 ## @param lifecycleHooks for the WordPress container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -715,7 +714,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Persistence Parameters
 ##
 
@@ -759,7 +757,6 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume(s) mountpoint(s) to 'runAsUser:fsGroup' on each node
 ##
@@ -792,12 +789,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -807,7 +813,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Other Parameters
 ##
 
@@ -853,7 +858,6 @@ autoscaling:
   maxReplicas: 11
   targetCPU: 50
   targetMemory: 50
-
 ## @section Metrics Parameters
 ##
 
@@ -945,12 +949,21 @@ metrics:
   customStartupProbe: {}
   ## Prometheus exporter container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resources.limits The resources limits for the Prometheus exporter container
-  ## @param metrics.resources.requests The requested resources for the Prometheus exporter container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1023,7 +1036,6 @@ metrics:
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
-
 ## @section NetworkPolicy parameters
 ##
 
@@ -1124,7 +1136,6 @@ networkPolicy:
     ##             label: example
     ##
     customRules: {}
-
 ## @section Database Parameters
 ##
 
