@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/flink
-  tag: 1.18.1-debian-11-r4
+  tag: 1.18.1-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -374,8 +374,10 @@ jobmanager:
   ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param jobmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param jobmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
+  ## @param jobmanager.containerSecurityContext.runAsGroup Set Apache Flink container's Security Context runAsGroup
   ## @param jobmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param jobmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param jobmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param jobmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param jobmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param jobmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
@@ -384,8 +386,10 @@ jobmanager:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     privileged: false
     capabilities:
       drop: ["ALL"]
@@ -742,9 +746,11 @@ taskmanager:
   ## @param taskmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param taskmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param taskmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
+  ## @param taskmanager.containerSecurityContext.runAsGroup Set Apache Flink container's Security Context runAsGroup
   ## @param taskmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param taskmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param taskmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param taskmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param taskmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param taskmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
@@ -752,9 +758,11 @@ taskmanager:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
