@@ -89,6 +89,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -151,6 +153,8 @@ spec:
             {{- end }}
           {{- if .Values.sourceController.resources }}
           resources: {{- toYaml .Values.sourceController.resources | nindent 12 }}
+          {{- else if ne .Values.sourceController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sourceController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

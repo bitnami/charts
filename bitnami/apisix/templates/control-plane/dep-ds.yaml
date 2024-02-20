@@ -128,6 +128,8 @@ spec:
             {{- end }}
           {{- if .Values.controlPlane.resources }}
           resources: {{- toYaml .Values.controlPlane.resources | nindent 12 }}
+          {{- else if ne .Values.controlPlane.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.controlPlane.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}-admin-api

@@ -72,6 +72,8 @@ spec:
           imagePullPolicy: {{ .pullPolicy }}
           {{- if $.Values.imagePuller.resources }}
           resources: {{- toYaml $.Values.imagePuller.resources | nindent 12 }}
+          {{- else if ne $.Values.imagePuller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.imagePuller.resourcesPreset) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -123,6 +125,8 @@ spec:
             {{- end }}
           {{- if .Values.imagePuller.resources }}
           resources: {{- toYaml .Values.imagePuller.resources | nindent 12 }}
+          {{- else if ne .Values.imagePuller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.imagePuller.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.imagePuller.customStartupProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customStartupProbe "context" $) | nindent 12 }}

@@ -171,6 +171,8 @@ spec:
             {{- end }}
           {{- if .Values.run.resources }}
           resources: {{- toYaml .Values.run.resources | nindent 12 }}
+          {{- else if ne .Values.run.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.run.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.run.customLivenessProbe }}

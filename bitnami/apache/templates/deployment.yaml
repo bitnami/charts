@@ -82,6 +82,8 @@ spec:
               git clone {{ .Values.cloneHtdocsFromGit.repository }} --branch {{ .Values.cloneHtdocsFromGit.branch }} /tmp/repo
               [[ "$?" -eq 0 ]] && rm -rf /app/* && mv /tmp/repo/* /app/
           resources: {{- toYaml .Values.cloneHtdocsFromGit.resources | nindent 12 }}
+          {{- else if ne .Values.cloneHtdocsFromGit.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cloneHtdocsFromGit.resourcesPreset) | nindent 12 }}
           volumeMounts:
             - name: htdocs
               mountPath: /app
@@ -108,6 +110,8 @@ spec:
                   sleep {{ .Values.cloneHtdocsFromGit.interval }}
               done
           resources: {{- toYaml .Values.cloneHtdocsFromGit.resources | nindent 12 }}
+          {{- else if ne .Values.cloneHtdocsFromGit.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.cloneHtdocsFromGit.resourcesPreset) | nindent 12 }}
           volumeMounts:
             - name: htdocs
               mountPath: /app
@@ -195,6 +199,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if (include "apache.useHtdocs" .) }}
@@ -238,6 +244,8 @@ spec:
             timeoutSeconds: 1
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.sidecars }}

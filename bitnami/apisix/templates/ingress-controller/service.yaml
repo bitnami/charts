@@ -54,6 +54,7 @@ spec:
       nodePort: null
       {{- end }}
       targetPort: http
+    {{- if .Values.ingressController.tls.enabled }}
     - name: https
       port: {{ .Values.ingressController.service.ports.https }}
       protocol: TCP
@@ -63,6 +64,7 @@ spec:
       nodePort: null
       {{- end }}
       targetPort: https
+    {{- end }}
     {{- if .Values.ingressController.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
