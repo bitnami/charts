@@ -119,6 +119,8 @@ spec:
               name: http
           {{- if .Values.promtail.resources }}
           resources: {{- toYaml .Values.promtail.resources | nindent 12 }}
+          {{- else if ne .Values.promtail.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.promtail.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.promtail.customLivenessProbe }}
