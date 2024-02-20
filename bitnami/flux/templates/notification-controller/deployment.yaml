@@ -123,6 +123,8 @@ spec:
             {{- end }}
           {{- if .Values.notificationController.resources }}
           resources: {{- toYaml .Values.notificationController.resources | nindent 12 }}
+          {{- else if ne .Values.notificationController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.notificationController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-metrics

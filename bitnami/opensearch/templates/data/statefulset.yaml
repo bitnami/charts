@@ -103,6 +103,8 @@ spec:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -236,6 +238,8 @@ spec:
           {{- end }}
           {{- if .Values.data.resources }}
           resources: {{- toYaml .Values.data.resources | nindent 12 }}
+          {{- else if ne .Values.data.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.data.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data

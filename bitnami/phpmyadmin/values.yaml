@@ -16,7 +16,6 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -40,7 +39,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section phpMyAdmin parameters
 
 ## Bitnami WordPress image version
@@ -94,7 +92,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of a existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @section phpMyAdmin deployment parameters
 
 ## @param automountServiceAccountToken Mount Service Account token in pod
@@ -170,20 +167,21 @@ replicas: 1
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for the PhpMyAdmin container
-## @param resources.requests The requested resources for the PhpMyAdmin container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 100m
-  ##    memory: 128Mi
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## phpMyAdmin containers' startup probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param startupProbe.enabled Enable startupProbe
@@ -344,7 +342,6 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
 ## @section Traffic Exposure parameters
 
 ## Service configuration
@@ -404,7 +401,6 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
 ## Ingress configuration
 ##
 ingress:
@@ -516,7 +512,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Database parameters
 
 ## Database configuration
@@ -551,13 +546,13 @@ db:
   ssl:
     ## @param db.ssl.clientKey Client key file when using SSL
     ##
-    clientKey: |-
+    clientKey: ""
     ## @param db.ssl.clientCertificate Client certificate file when using SSL
     ##
-    clientCertificate: |-
+    clientCertificate: ""
     ## @param db.ssl.caCertificate CA file when using SSL
     ##
-    caCertificate: |-
+    caCertificate: ""
     ## @param db.ssl.ciphers List of allowable ciphers for connections when using SSL
     ##
     ciphers: []
@@ -568,7 +563,6 @@ db:
 ## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb: {}
-
 ## @section Other Parameters
 
 ## Service account for PhpMyAdmin to use.
@@ -589,7 +583,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-
 ## @section Metrics parameters
 
 ## Prometheus Exporter / Metrics
@@ -619,7 +612,19 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.resources Metrics exporter resource requests and limits
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -668,7 +673,6 @@ metrics:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
@@ -712,7 +716,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-
 ## @section NetworkPolicy parameters
 
 ## Add networkpolicies
