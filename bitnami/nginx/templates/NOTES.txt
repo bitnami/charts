@@ -70,3 +70,4 @@ To access NGINX from outside the cluster, follow the steps below:
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "nginx.validateValues" . }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "cloneStaticSiteFromGit.gitSync" "metrics" "") "context" $) }}

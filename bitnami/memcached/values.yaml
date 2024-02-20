@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -42,7 +41,6 @@ commonLabels: {}
 ## @param commonAnnotations Add annotations to all the deployed resources
 ##
 commonAnnotations: {}
-
 ## Enable diagnostic mode in the deployment/statefulset
 ##
 diagnosticMode:
@@ -57,7 +55,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Memcached parameters
 
 ## Bitnami Memcached image version
@@ -73,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.23-debian-11-r3
+  tag: 1.6.23-debian-11-r17
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -135,7 +132,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Memcached nodes
 ##
 extraEnvVarsSecret: ""
-
 ## @section Deployment/Statefulset parameters
 
 ## @param replicaCount Number of Memcached nodes
@@ -203,15 +199,21 @@ customStartupProbe: {}
 lifecycleHooks: {}
 ## Memcached resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the Memcached containers
-## @param resources.requests.memory The requested memory for the Memcached containers
-## @param resources.requests.cpu The requested cpu for the Memcached containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests:
-    memory: 256Mi
-    cpu: 250m
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Memcached pods' Security Context
@@ -403,9 +405,7 @@ pdb:
   create: false
   minAvailable: ""
   maxUnavailable: 1
-
 ## @section Traffic Exposure parameters
-
 service:
   ## @param service.type Kubernetes Service type
   ##
@@ -457,7 +457,6 @@ service:
   ## @param service.extraPorts Extra ports to expose in the Memcached service (normally used with the `sidecar` value)
   ##
   extraPorts: []
-
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -512,7 +511,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## @section Other Parameters
 
 ## Service account for Memcached to use.
@@ -533,7 +531,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -572,7 +569,6 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
-
 ## @section Volume Permissions parameters
 ##
 
@@ -593,7 +589,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 11-debian-11-r109
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -606,12 +602,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -621,7 +626,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -640,7 +644,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.14.2-debian-11-r5
+    tag: 0.14.2-debian-11-r19
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -657,12 +661,21 @@ metrics:
     metrics: 9150
   ## Memcached Prometheus exporter container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resources.limits Init container volume-permissions resource limits
-  ## @param metrics.resources.requests Init container volume-permissions resource requests
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Metrics Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context

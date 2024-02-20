@@ -48,3 +48,4 @@ APP VERSION: {{ .Chart.AppVersion }}
   echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.tomcat-password}" | base64 -d)
 
 {{- include "tomcat.checkRollingTags" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics.jmx" "" "volumePermissions") "context" $) }}

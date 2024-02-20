@@ -104,6 +104,8 @@ spec:
               {{- end }}
             {{- if .Values.cluster.head.resources }}
             resources: {{- toYaml .Values.cluster.head.resources | nindent 14 }}
+            {{- else if ne .Values.cluster.head.resourcesPreset "none" }}
+            resources: {{- include "common.resources.preset" (dict "type" .Values.cluster.head.resourcesPreset) | nindent 14 }}
             {{- end }}
             {{- if .Values.cluster.head.lifecycleHooks }}
             lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.cluster.head.lifecycleHooks "context" $) | nindent 14 }}

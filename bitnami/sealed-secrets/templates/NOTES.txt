@@ -47,3 +47,4 @@ Both the SealedSecret and generated Secret must have the same name and namespace
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
