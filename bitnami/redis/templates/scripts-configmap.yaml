@@ -787,11 +787,11 @@ data:
   update-master-label.sh: |
     #!/bin/bash
     oldtimestamp=0
-    echo "date "+[%Y-%m-%d %H:%M]") Init $(basename $0)"
+    echo "$(date "+[%Y-%m-%d %H:%M]") Init $(basename $0)"
     while [ ! -f /kubectl/update-annotations.sh ]; do
       sleep 1
     done
-    echo "date "+[%Y-%m-%d %H:%M]") update-annotations.sh exist"
+    echo "$(date "+[%Y-%m-%d %H:%M]") update-annotations.sh exist"
     while true; do
       refreshedtimestamp=$(date -r /kubectl/update-annotations.sh "+%s")
       while test $refreshedtimestamp -gt $oldtimestamp;  do 
