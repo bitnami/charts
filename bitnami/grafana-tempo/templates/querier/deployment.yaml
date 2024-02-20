@@ -112,6 +112,8 @@ spec:
               name: grpc
           {{- if .Values.querier.resources }}
           resources: {{- toYaml .Values.querier.resources | nindent 12 }}
+          {{- else if ne .Values.querier.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.querier.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.querier.customLivenessProbe }}

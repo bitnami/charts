@@ -113,6 +113,8 @@ spec:
           {{- end }}
           {{- if .Values.keycloakConfigCli.resources }}
           resources: {{- toYaml .Values.keycloakConfigCli.resources | nindent 12 }}
+          {{- else if ne .Values.keycloakConfigCli.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.keycloakConfigCli.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- if .Values.keycloakConfigCli.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.keycloakConfigCli.sidecars "context" $) | nindent 8 }}
