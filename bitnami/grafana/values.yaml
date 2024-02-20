@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -42,7 +41,6 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## @section Grafana parameters
 
 ## Bitnami Grafana image version
@@ -216,7 +214,6 @@ imageRenderer:
   ## @param imageRenderer.callbackURL URL of the callback service
   ##
   callbackURL: ""
-
 ## Parameters to override the default grafana.ini file.
 ## It is needed to create a configmap or a secret containing the grafana.ini file.
 ## @param config.useGrafanaIniFile Allows to load a `grafana.ini` file
@@ -270,22 +267,18 @@ datasources:
   ##     isDefault: true
   ##
   secretDefinition: {}
-
 ## Create notifiers from a configMap
 ## The notifiersName must contain the files
 ## @param notifiers.configMapName Name of a ConfigMap containing Grafana notifiers configuration
 ##
 notifiers:
   configMapName: ""
-
 ## Create alerting rules, contact points, notification policies, templates, and mute timings from a configMap
 ## @param alerting.configMapName Name of a ConfigMap containing Grafana alerting configuration
 ##
 alerting:
   configMapName: ""
-
 ## @section Grafana Deployment parameters
-
 grafana:
   ## @param grafana.replicaCount Number of Grafana nodes
   ##
@@ -426,20 +419,21 @@ grafana:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param grafana.resources.limits The resources limits for Grafana containers
-  ## @param grafana.resources.requests The requested resources for Grafana containers
+  ## @param grafana.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if grafana.resources is set (grafana.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 250m
-    ##    memory: 256Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param grafana.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Grafana containers' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
@@ -573,7 +567,6 @@ grafana:
   ## @param grafana.args Override default container args (useful when using custom images)
   ##
   args: []
-
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -600,7 +593,6 @@ persistence:
   accessMode: ReadWriteOnce
   accessModes: []
   size: 10Gi
-
 ## @section RBAC parameters
 
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -612,7 +604,6 @@ serviceAccount:
   name: ""
   annotations: {}
   automountServiceAccountToken: false
-
 ## @section Traffic exposure parameters
 
 ## Service parameters
@@ -773,7 +764,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -859,7 +849,6 @@ metrics:
     ##    for: 5m
     ##
     rules: []
-
 ## @section Volume permissions init Container Parameters
 
 ## 'volumePermissions' init container parameters
@@ -896,12 +885,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -913,7 +911,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Diagnostic Mode Parameters
 
 ## Enable diagnostic mode in the deployment

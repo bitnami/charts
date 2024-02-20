@@ -324,6 +324,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: previous-boot
@@ -411,6 +413,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
           volumeMounts:

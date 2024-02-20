@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -56,7 +55,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section WildFly Image parameters
 
 ## Bitnami WildFly image
@@ -90,7 +88,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## @section WildFly Configuration parameters
 ## WildFly settings based on environment variables
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/wildfly#configuration
@@ -127,7 +124,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @section WildFly deployment parameters
 
 ## @param replicaCount Number of Wildfly replicas to deploy
@@ -243,14 +239,21 @@ schedulerName: ""
 topologySpreadConstraints: []
 ## WildFly containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits [object] The resources limits for the WildFly container
-## @param resources.requests [object] The requested resources for the WildFly container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests:
-    memory: 512Mi
-    cpu: 300m
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Container ports
 ## @param containerPorts.http WildFly HTTP container port
 ## @param containerPorts.mgmt WildFly HTTPS container port
@@ -258,7 +261,6 @@ resources:
 containerPorts:
   http: 8080
   mgmt: 9990
-
 ## @param extraContainerPorts [array] Array with extra container ports to add to the WildFly container
 ## e.g:
 ## extraContainerPorts:
@@ -266,7 +268,6 @@ containerPorts:
 ##     value: 8888
 ##
 extraContainerPorts: []
-
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled WildFly pods' Security Context
@@ -369,7 +370,6 @@ customLivenessProbe: {}
 ## @param customReadinessProbe [object] Custom readinessProbe that overrides the default one
 ##
 customReadinessProbe: {}
-
 ## @section Traffic Exposure Parameters
 
 ## WildFly service parameters
@@ -430,7 +430,6 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
 ## Network Policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -486,7 +485,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
 ## Configure the ingress resource that allows you to access the WildFly installation
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
@@ -595,7 +593,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## Management Console Ingress parameters
 ##
 mgmtIngress:
@@ -677,8 +674,6 @@ mgmtIngress:
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
   ##
   ingressClassName: ""
-
-
 ## @section Persistence Parameters
 
 ## Persistence Parameters
@@ -740,12 +735,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits [object] The resources limits for the init container
-  ## @param volumePermissions.resources.requests [object] The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container

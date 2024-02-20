@@ -114,6 +114,8 @@ spec:
             {{- end }}
           {{- if .Values.concierge.resources }}
           resources: {{- toYaml .Values.concierge.resources | nindent 12 }}
+          {{- else if ne .Values.concierge.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.concierge.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: https-proxy
