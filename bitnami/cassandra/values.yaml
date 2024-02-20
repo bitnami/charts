@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -44,7 +43,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Cassandra parameters
 ##
 
@@ -94,7 +91,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## Secret with keystore, keystore password, truststore, truststore password
 ## DEPRECATED. Use tls.existingSecret instead
 # tlsEncryptionSecretName:
@@ -123,7 +119,6 @@ dbUser:
   ##     cassandra-password: myCassandraPasswordKey
   ##
   existingSecret: ""
-
 ## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
 ##
 initDBConfigMap: ""
@@ -163,7 +158,6 @@ cluster:
   ##
   extraSeeds: []
   enableUDF: false
-
 ## JVM Settings
 ## @param jvm.extraOpts Set the value for Java Virtual Machine extra options
 ## @param jvm.maxHeapSize Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`
@@ -202,7 +196,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-
 ## @section Statefulset parameters
 ##
 
@@ -327,22 +320,21 @@ containerSecurityContext:
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for Cassandra containers
-## @param resources.requests The requested resources for Cassandra containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 2
-  ##    memory: 4Gi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 2
-  ##    memory: 4Gi
-  ##
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for Cassandra containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -450,7 +442,6 @@ containerPorts:
   tls: 7001
   jmx: 7199
   cql: 9042
-
 ## Cassandra ports to be exposed as hostPort
 ## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
 ## @param hostPorts.intra Intra Port on the Host
@@ -463,7 +454,6 @@ hostPorts:
   tls: ""
   jmx: ""
   cql: ""
-
 ## @section RBAC parameters
 ##
 
@@ -484,7 +474,6 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
   ##
   automountServiceAccountToken: false
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -553,7 +542,6 @@ service:
     ## @param service.headless.annotations Annotations for the headless service.
     ##
     annotations: {}
-
 ## Network Policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -609,8 +597,6 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-
-
 ## @section Persistence parameters
 ##
 
@@ -661,7 +647,6 @@ persistence:
   ##
   # commitLogMountPath: /bitnami/cassandra/commitlog
   commitLogMountPath: ""
-
 ## @section Volume Permissions parameters
 ##
 
@@ -699,22 +684,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Security Context
   ## Note: the chown of the data folder is done to securityContext.runAsUser
   ## and not the below volumePermissions.securityContext.runAsUser
@@ -730,7 +714,6 @@ volumePermissions:
   securityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Metrics parameters
 ##
 
@@ -769,22 +752,21 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for the container
-  ## @param metrics.resources.requests The requested resources for the container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
   ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
   ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -853,7 +835,6 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
-
   ## Metrics container ports to open
   ## If hostNetwork true: the hostPort is set identical to the containerPort
   ## @param metrics.containerPorts.http HTTP Port on the Host and Container
@@ -862,7 +843,6 @@ metrics:
   containerPorts:
     http: 8080
     jmx: 5555
-
   ## Metrics ports to be exposed as hostPort
   ## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
   ## @param metrics.hostPorts.http HTTP Port on the Host
@@ -871,7 +851,6 @@ metrics:
   hostPorts:
     http: ""
     jmx: ""
-
   ## @param metrics.configuration [string] Configure Cassandra-exporter with a custom config.yml file
   ## ref: https://github.com/criteo/cassandra_exporter/blob/master/config.yml
   ##
@@ -932,7 +911,6 @@ metrics:
         - .*:snapshotssize:.*
         - .*:estimated.*
         - .*:totaldiskspaceused:.*
-
 ## @section TLS/SSL parameters
 ##
 
@@ -944,8 +922,9 @@ metrics:
 ## @param tls.passwordsSecret Secret containing the Keystore and Truststore passwords if needed
 ## @param tls.keystorePassword Password for the keystore, if needed.
 ## @param tls.truststorePassword Password for the truststore, if needed.
-## @param tls.resources.limits The resources limits for the TLS init container
-## @param tls.resources.requests The requested resources for the TLS init container
+## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## @param tls.certificatesSecret Secret with the TLS certificates.
 ## @param tls.tlsEncryptionSecretName Secret with the encryption of the TLS certificates
 ##
@@ -959,21 +938,17 @@ tls:
   truststorePassword: ""
   certificatesSecret: ""
   tlsEncryptionSecretName: ""
+  resourcesPreset: "none"
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  resources: {}
