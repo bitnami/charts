@@ -82,7 +82,7 @@ containers:
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: {{ template "common.names.fullname" . }}
+            name: {{ include "tomcat.secretName" . }}
             key: tomcat-password
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
