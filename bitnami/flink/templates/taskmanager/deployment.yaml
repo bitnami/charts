@@ -147,6 +147,8 @@ spec:
           {{- end }}
           {{- if .Values.taskmanager.resources }}
           resources: {{- toYaml .Values.taskmanager.resources | nindent 12 }}
+          {{- else if ne .Values.taskmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.taskmanager.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.taskmanager.extraVolumeMounts }}
           volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
