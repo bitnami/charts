@@ -752,12 +752,9 @@ In case the current master crashes, the Sentinel containers will elect a new mas
 
 `master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
-##### Enabling master service
-
 To be able to redirect requests only to the master pod via the service, it need to enable these dependencies:
-
 - sentinel.service.createMaster
-- replica.automountServiceAccountToken.
+- replica.automountServiceAccountToken
 - rbac.create
 
 ### Multiple masters (experimental)
