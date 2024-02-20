@@ -134,6 +134,8 @@ spec:
           {{- end }}
           {{- if .Values.notifications.resources }}
           resources: {{- toYaml .Values.notifications.resources | nindent 12 }}
+          {{- else if ne .Values.notifications.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.notifications.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.notifications.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.notifications.containerSecurityContext "enabled" | toYaml | nindent 12 }}

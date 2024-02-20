@@ -104,6 +104,8 @@ spec:
           {{- end }}
           name: shutdown-manager
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.shutdownManager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.shutdownManager.resourcesPreset) | nindent 12 }}
           volumeMounts:
             - name: envoy-admin
               mountPath: /admin

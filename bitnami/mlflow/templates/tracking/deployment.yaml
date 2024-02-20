@@ -202,6 +202,8 @@ spec:
             {{- end }}
           {{- if .Values.tracking.resources }}
           resources: {{- toYaml .Values.tracking.resources | nindent 12 }}
+          {{- else if ne .Values.tracking.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tracking.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: {{ include "mlflow.v0.tracking.portName" . }}

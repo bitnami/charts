@@ -123,6 +123,8 @@ spec:
             {{- end }}
           {{- if .Values.imageAutomationController.resources }}
           resources: {{- toYaml .Values.imageAutomationController.resources | nindent 12 }}
+          {{- else if ne .Values.imageAutomationController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.imageAutomationController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-metrics

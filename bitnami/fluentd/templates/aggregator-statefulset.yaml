@@ -153,6 +153,8 @@ spec:
             {{- end }}
           {{- if .Values.aggregator.resources }}
           resources: {{- toYaml .Values.aggregator.resources | nindent 12 }}
+          {{- else if ne .Values.aggregator.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             {{- if .Values.aggregator.port }}

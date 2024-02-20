@@ -99,6 +99,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/wordpress
@@ -265,6 +267,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /bitnami/wordpress
@@ -336,6 +340,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}

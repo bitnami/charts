@@ -93,6 +93,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: job-logs
@@ -209,6 +211,8 @@ spec:
           {{- end }}
           {{- if .Values.jobservice.resources }}
           resources: {{- toYaml .Values.jobservice.resources | nindent 12 }}
+          {{- else if ne .Values.jobservice.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jobservice.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: jobservice-config
