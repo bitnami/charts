@@ -148,6 +148,8 @@ spec:
             {{- end }}
           {{- if .Values.client.resources }}
           resources: {{- toYaml .Values.client.resources | nindent 12 }}
+          {{- else if ne .Values.client.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.client.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.client.customLivenessProbe }}

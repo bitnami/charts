@@ -969,6 +969,8 @@ Init container definition for waiting for Kubernetes autodiscovery
   {{- end }}
   {{- if .context.Values.externalAccess.autoDiscovery.resources }}
   resources: {{- toYaml .context.Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  {{- else if ne .context.Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: scripts
