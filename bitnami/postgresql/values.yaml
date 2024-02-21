@@ -96,7 +96,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.2.0-debian-11-r17
+  tag: 16.2.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -470,6 +470,7 @@ primary:
   ## @param primary.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param primary.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param primary.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param primary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -481,6 +482,7 @@ primary:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -905,6 +907,7 @@ readReplicas:
   ## @param readReplicas.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param readReplicas.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param readReplicas.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param readReplicas.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param readReplicas.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param readReplicas.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param readReplicas.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -916,6 +919,7 @@ readReplicas:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1257,6 +1261,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param backup.cronjob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param backup.cronjob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param backup.cronjob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param backup.cronjob.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1267,6 +1272,7 @@ backup:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -1348,7 +1354,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r112
+    tag: 12-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1457,7 +1463,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-11-r26
+    tag: 0.15.0-debian-12-r12
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1501,6 +1507,7 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1512,6 +1519,7 @@ metrics:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
