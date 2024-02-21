@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -52,7 +51,6 @@ runtimeClassName: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -67,13 +65,11 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @param serviceBindings.enabled Create secret for service binding (Experimental)
 ## Ref: https://servicebinding.io/service-provider/
 ##
 serviceBindings:
   enabled: false
-
 ## @section MariaDB common parameters
 ##
 
@@ -90,7 +86,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 11.2.3-debian-11-r1
+  tag: 11.2.3-debian-11-r15
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -166,7 +162,6 @@ initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsConfigMap: ""
-
 ## @section MariaDB Primary parameters
 ##
 
@@ -336,9 +331,11 @@ primary:
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
   ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MariaDB primary container
+  ## @param primary.containerSecurityContext.runAsGroup Group ID for the MariaDB primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+  ## @param primary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param primary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param primary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -346,9 +343,11 @@ primary:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -359,22 +358,21 @@ primary:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param primary.resources.limits The resources limits for MariaDB primary containers
-  ## @param primary.resources.requests The requested resources for MariaDB primary containers
+  ## @param primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for MariaDB primary containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param primary.startupProbe.enabled Enable startupProbe
@@ -582,7 +580,6 @@ primary:
   ## @param primary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
   ##
   revisionHistoryLimit: 10
-
 ## @section MariaDB Secondary parameters
 ##
 
@@ -753,9 +750,11 @@ secondary:
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
   ## @param secondary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MariaDB secondary container
+  ## @param secondary.containerSecurityContext.runAsGroup Group ID for the MariaDB secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
+  ## @param secondary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param secondary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param secondary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -763,9 +762,11 @@ secondary:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -776,22 +777,21 @@ secondary:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param secondary.resources.limits The resources limits for MariaDB secondary containers
-  ## @param secondary.resources.requests The requested resources for MariaDB secondary containers
+  ## @param secondary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if secondary.resources is set (secondary.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param secondary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for MariaDB Secondary containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
   ## @param secondary.startupProbe.enabled Enable startupProbe
@@ -997,7 +997,6 @@ secondary:
   ## @param secondary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
   ##
   revisionHistoryLimit: 10
-
 ## @section RBAC parameters
 ##
 
@@ -1025,7 +1024,6 @@ rbac:
   ## @param rbac.create Whether to create and use RBAC resources or not
   ##
   create: false
-
 ## @section Volume Permissions parameters
 ##
 
@@ -1056,13 +1054,21 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Metrics parameters
 ##
 
@@ -1152,9 +1158,11 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MariaDB metrics container
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the MariaDB metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set metrics container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## Example:
@@ -1170,6 +1178,8 @@ metrics:
     runAsNonRoot: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1181,22 +1191,21 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for MariaDB prometheus exporter containers
-  ## @param metrics.resources.requests The requested resources for MariaDB prometheus exporter containers
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe
@@ -1295,7 +1304,6 @@ metrics:
     ##      summary: MariaDB instance is down
     ##
     rules: []
-
 ## @section NetworkPolicy parameters
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -1350,4 +1358,3 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
-

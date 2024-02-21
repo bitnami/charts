@@ -125,6 +125,8 @@ spec:
             {{- end }}
           {{- if .Values.meta.resources }}
           resources: {{- toYaml .Values.meta.resources | nindent 12 }}
+          {{- else if ne .Values.meta.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.meta.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

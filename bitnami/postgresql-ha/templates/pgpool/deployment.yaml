@@ -99,6 +99,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: raw-certificates
@@ -338,6 +340,8 @@ spec:
           {{- end }}
           {{- if .Values.pgpool.resources }}
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
+          {{- else if ne .Values.pgpool.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.pgpool.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
           volumeMounts:

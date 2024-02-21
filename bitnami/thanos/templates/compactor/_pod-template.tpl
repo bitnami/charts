@@ -186,6 +186,8 @@ spec:
       {{- end }}
       {{- if .Values.compactor.resources }}
       resources: {{- toYaml .Values.compactor.resources | nindent 8 }}
+      {{- else if ne .Values.compactor.resourcesPreset "none" }}
+      resources: {{- include "common.resources.preset" (dict "type" .Values.compactor.resourcesPreset) | nindent 8 }}
       {{- end }}
       volumeMounts:
         - name: objstore-config

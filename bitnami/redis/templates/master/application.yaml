@@ -226,6 +226,8 @@ spec:
           {{- end }}
           {{- if .Values.master.resources }}
           resources: {{- toYaml .Values.master.resources | nindent 12 }}
+          {{- else if ne .Values.master.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.master.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: start-scripts
@@ -341,6 +343,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.auth.usePasswordFiles }}
@@ -385,6 +389,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: redis-data
@@ -407,6 +413,8 @@ spec:
           {{- end }}
           {{- if .Values.sysctl.resources }}
           resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
+          {{- else if ne .Values.sysctl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctl.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.sysctl.mountHostSys }}
           volumeMounts:
