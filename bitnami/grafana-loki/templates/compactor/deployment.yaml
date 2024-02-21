@@ -119,6 +119,8 @@ spec:
               name: http-memberlist
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
+          {{- else if ne .Values.compactor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.compactor.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.compactor.customLivenessProbe }}

@@ -122,6 +122,8 @@ spec:
               name: grpc
           {{- if .Values.indexGateway.resources }}
           resources: {{- toYaml .Values.indexGateway.resources | nindent 12 }}
+          {{- else if ne .Values.indexGateway.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.indexGateway.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.indexGateway.customLivenessProbe }}

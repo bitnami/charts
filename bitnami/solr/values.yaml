@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -58,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Solr parameters
 ##
 
@@ -158,7 +156,6 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Secret with extra environment variables
 ##
 extraEnvVarsSecret: ""
-
 ## @section Solr statefulset parameters
 ##
 
@@ -227,12 +224,21 @@ customStartupProbe: {}
 lifecycleHooks: {}
 ## Solr resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits The resources limits for the container
-## @param resources.requests The requested resources for the container
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Solr pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Solr pods' Security Context
@@ -355,7 +361,6 @@ updateStrategy:
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
 ##
 enableServiceLinks: true
-
 ## Solr Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param pdb.create Enable a Pod Disruption Budget creation
@@ -366,7 +371,6 @@ pdb:
   create: false
   minAvailable: 1
   maxUnavailable: ""
-
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Solr pod(s)
 ##
 extraVolumes: []
@@ -395,10 +399,8 @@ initContainers: []
 ##         containerPort: 1234
 ##
 sidecars: []
-
 ## @section Traffic Exposure parameters
 ##
-
 service:
   ## @param service.type Kubernetes Service type
   ##
@@ -608,7 +610,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Persistence parameters
 ##
 
@@ -696,12 +697,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -711,7 +721,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Other Parameters
 ##
 
@@ -733,7 +742,6 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-
 ## @section Solr TLS parameters
 ##
 
@@ -767,23 +775,21 @@ tls:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param tls.resources.limits The resources limits for the TLS init container
-  ## @param tls.resources.requests The requested resources for the TLS init container
+  ## @param tls.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tls.resources is set (tls.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param tls.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Metrics parameters
 ##
 
@@ -877,12 +883,21 @@ metrics:
   customStartupProbe: {}
   ## Solr Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resources.limits The resources limits for the container
-  ## @param metrics.resources.requests The requested resources for the container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Solr Prometheus exporter containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
@@ -1110,7 +1125,6 @@ metrics:
     ##       description: Solr instance {{ "{{ $labels.instance }}" }} is down
     ##
     rules: []
-
 ## @section ZooKeeper parameters
 ##
 

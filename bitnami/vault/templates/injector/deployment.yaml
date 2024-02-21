@@ -134,6 +134,8 @@ spec:
             {{- end }}
           {{- if .Values.injector.resources }}
           resources: {{- toYaml .Values.injector.resources | nindent 12 }}
+          {{- else if ne .Values.injector.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.injector.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: https

@@ -113,3 +113,4 @@ WARNING: The configured password will be ignored on new installation in case whe
 {{- include "postgresql.v1.validateValues" . -}}
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "primary" "readReplicas" "volumePermissions") "context" $) }}

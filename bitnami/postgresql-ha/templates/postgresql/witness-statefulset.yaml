@@ -123,6 +123,8 @@ spec:
           securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -388,6 +390,8 @@ spec:
           {{- end }}
           {{- if .Values.witness.resources }}
           resources: {{- toYaml .Values.witness.resources | nindent 12 }}
+          {{- else if ne .Values.witness.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.witness.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.witness.repmgrConfiguration .Values.witness.configuration .Values.witness.pgHbaConfiguration .Values.witness.configurationCM }}
@@ -490,6 +494,8 @@ spec:
           {{- end }}
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.postgresql.usePasswordFile }}

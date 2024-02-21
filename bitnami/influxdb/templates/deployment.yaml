@@ -291,6 +291,8 @@ spec:
           {{- end }}
           {{- if .Values.influxdb.resources }}
           resources: {{- toYaml .Values.influxdb.resources | nindent 12 }}
+          {{- else if ne .Values.influxdb.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.influxdb.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}

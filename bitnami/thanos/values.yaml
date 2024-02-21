@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -42,7 +41,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Thanos common parameters
 
 ## Bitnami Thanos image
@@ -96,7 +94,6 @@ httpConfig: ""
 ## @param existingHttpConfigSecret Secret containing the HTTPS and Basic auth configuration
 ##
 existingHttpConfigSecret: ""
-
 ## HTTPS configuration (Experimental)
 ## Ref: https://thanos.io/tip/operating/https.md/
 ##
@@ -135,9 +132,7 @@ auth:
   ## @param auth.basicAuthUsers Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication
   ## Note: Passwords will be later encrypted using bcrypt
   basicAuthUsers: {}
-
 ## @section Thanos Query parameters
-
 query:
   ## @param query.enabled Set to true to enable Thanos Query component
   ##
@@ -249,12 +244,21 @@ query:
       type: "RuntimeDefault"
   ## Thanos Query containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param query.resources.limits The resources limits for the Thanos Query container
-  ## @param query.resources.requests The requested resources for the Thanos Query container
+  ## @param query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if query.resources is set (query.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param query.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Query containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param query.livenessProbe.enabled Enable livenessProbe on Thanos Query containers
@@ -591,7 +595,6 @@ query:
       ## @param query.service.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
   ## Service GRPC parameters
   ##
   serviceGrpc:
@@ -649,7 +652,6 @@ query:
       ## @param query.serviceGrpc.headless.annotations Annotations for the headless service.
       ##
       annotations: {}
-
   ## Autoscaling parameters
   ## @param query.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the deployment
   ##
@@ -723,7 +725,7 @@ query:
     hostname: thanos.local
     ## @param query.ingress.secretName Custom secretName for the ingress resource
     ## If query.ingress.secretName is not set, the secret will be named as follows: query.ingress.hostname-tls
-    secretName: ""   
+    secretName: ""
     ## @param query.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -825,7 +827,7 @@ query:
       hostname: thanos-grpc.local
       ## @param query.ingress.grpc.secretName Custom secretName for the ingress resource (GRPC)
       ## If query.ingress.grpc.secretName is not set, the secret will be named as follows: query.ingress.grpc.hostname-tls
-      secretName: ""         
+      secretName: ""
       ## @param query.ingress.grpc.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
       ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
       ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -906,9 +908,7 @@ query:
       ## @param query.ingress.grpc.pathType Ingress Path type
       ##
       pathType: ImplementationSpecific
-
 ## @section Thanos Query Frontend parameters
-
 queryFrontend:
   ## @param queryFrontend.enabled Enable/disable Thanos Query Frontend component
   ##
@@ -1003,12 +1003,21 @@ queryFrontend:
       type: "RuntimeDefault"
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
-  ## @param queryFrontend.resources.requests The requested resources for the Thanos Query Frontend container
+  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param queryFrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Query Frontend containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param queryFrontend.livenessProbe.enabled Enable livenessProbe on Thanos Query Frontend containers
@@ -1431,9 +1440,7 @@ queryFrontend:
     ## @param queryFrontend.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Bucket Web parameters
-
 bucketweb:
   ## @param bucketweb.enabled Enable/disable Thanos Bucket Web component
   ##
@@ -1526,12 +1533,21 @@ bucketweb:
       type: "RuntimeDefault"
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
-  ## @param bucketweb.resources.requests The requested resources for the Thanos Bucket Web container
+  ## @param bucketweb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if bucketweb.resources is set (bucketweb.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param bucketweb.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Bucket Web containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param bucketweb.livenessProbe.enabled Enable livenessProbe on Thanos Bucket Web containers
@@ -1926,9 +1942,7 @@ bucketweb:
     ## @param bucketweb.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Compactor parameters
-
 compactor:
   ## @param compactor.enabled Enable/disable Thanos Compactor component
   ##
@@ -2051,12 +2065,21 @@ compactor:
       type: "RuntimeDefault"
   ## Thanos Compactor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
-  ## @param compactor.resources.requests The requested resources for the Thanos Compactor container
+  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param compactor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Compactor containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param compactor.livenessProbe.enabled Enable livenessProbe on Thanos Compactor containers
@@ -2465,9 +2488,7 @@ compactor:
     ## If defined, PVC must be created manually before volume will be bound
     ##
     existingClaim: ""
-
 ## @section Thanos Store Gateway parameters
-
 storegateway:
   ## @param storegateway.enabled Enable/disable Thanos Store Gateway component
   ##
@@ -2597,12 +2618,21 @@ storegateway:
       type: "RuntimeDefault"
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
-  ## @param storegateway.resources.requests The requested resources for the Thanos Store Gateway container
+  ## @param storegateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storegateway.resources is set (storegateway.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param storegateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Store Gateway containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param storegateway.livenessProbe.enabled Enable livenessProbe on Thanos Store Gateway containers
@@ -3178,9 +3208,7 @@ storegateway:
         nodePorts: []
       grpc:
         nodePorts: []
-
 ## @section Thanos Ruler parameters
-
 ruler:
   ## @param ruler.enabled Enable/disable Thanos Ruler component
   ##
@@ -3318,12 +3346,21 @@ ruler:
       type: "RuntimeDefault"
   ## Thanos Ruler containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
-  ## @param ruler.resources.requests The requested resources for the Thanos Ruler container
+  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param ruler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Ruler containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param ruler.livenessProbe.enabled Enable livenessProbe on Thanos Ruler containers
@@ -3749,9 +3786,7 @@ ruler:
     ## @param ruler.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Receive parameters
-
 receive:
   ## @param receive.enabled Enable/disable Thanos Receive component
   ##
@@ -3905,12 +3940,21 @@ receive:
       type: "RuntimeDefault"
   ## Thanos Receive containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param receive.resources.limits The resources limits for the Thanos Receive container
-  ## @param receive.resources.requests The requested resources for the Thanos Receive container
+  ## @param receive.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if receive.resources is set (receive.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param receive.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Receive containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param receive.livenessProbe.enabled Enable livenessProbe on Thanos Receive containers
@@ -4356,9 +4400,7 @@ receive:
     ## @param receive.ingress.pathType Ingress Path type
     ##
     pathType: ImplementationSpecific
-
 ## @section Thanos Receive Distributor parameters
-
 receiveDistributor:
   ## @param receiveDistributor.enabled Enable/disable Thanos Receive Distributor component
   ##
@@ -4447,12 +4489,21 @@ receiveDistributor:
       type: "RuntimeDefault"
   ## Thanos Receive Distributor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
-  ## @param receiveDistributor.resources.requests The requested resources for the Thanos Receive container
+  ## @param receiveDistributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if receiveDistributor.resources is set (receiveDistributor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param receiveDistributor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for Thanos Receive Distributor containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param receiveDistributor.livenessProbe.enabled Enable livenessProbe on Thanos Receive Distributor containers
@@ -4655,7 +4706,6 @@ receiveDistributor:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -4705,7 +4755,6 @@ metrics:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
     ##
     extraParameters: {}
-
   ## PrometheusRule CRD configuration
   ##
   prometheusRule:
@@ -4801,7 +4850,6 @@ metrics:
     ##           labels:
     ##             severity: warning
     groups: []
-
 ## @section Volume Permissions parameters
 
 ## 'volumePermissions' init container parameters
@@ -4836,10 +4884,8 @@ volumePermissions:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
 ## @section MinIO&reg; chart parameters
 ## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
-
 minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Thanos

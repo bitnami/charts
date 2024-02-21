@@ -33,3 +33,4 @@ To configure additional endpoints, redeploy the chart overwritting the field 'co
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}

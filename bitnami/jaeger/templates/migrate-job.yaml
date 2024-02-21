@@ -113,6 +113,8 @@ spec:
           {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
+          {{- else if ne .Values.migration.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.migration.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
         - name: cassandra-schema
