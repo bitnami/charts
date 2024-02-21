@@ -221,8 +221,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`                  | Enabled RabbitMQ containers' Security Context                                                                                                                                                              | `true`           |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set RabbitMQ containers' Security Context runAsUser                                                                                                                                                        | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set RabbitMQ containers' Security Context runAsGroup                                                                                                                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set RabbitMQ container's Security Context runAsNonRoot                                                                                                                                                     | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                                                       | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `true`           |
 | `containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                                                                              | `["ALL"]`        |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault` |
 | `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`           |
@@ -266,21 +268,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence parameters
 
-| Name                                               | Description                                                                    | Value                      |
-| -------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------- |
-| `persistence.enabled`                              | Enable RabbitMQ data persistence using PVC                                     | `true`                     |
-| `persistence.storageClass`                         | PVC Storage Class for RabbitMQ data volume                                     | `""`                       |
-| `persistence.selector`                             | Selector to match an existing Persistent Volume                                | `{}`                       |
-| `persistence.accessModes`                          | PVC Access Modes for RabbitMQ data volume                                      | `["ReadWriteOnce"]`        |
-| `persistence.existingClaim`                        | Provide an existing PersistentVolumeClaims                                     | `""`                       |
-| `persistence.mountPath`                            | The path the volume will be mounted at                                         | `/bitnami/rabbitmq/mnesia` |
-| `persistence.subPath`                              | The subdirectory of the volume to mount to                                     | `""`                       |
-| `persistence.size`                                 | PVC Storage Request for RabbitMQ data volume                                   | `8Gi`                      |
-| `persistence.annotations`                          | Persistence annotations. Evaluated as a template                               | `{}`                       |
-| `persistence.labels`                               | Persistence labels. Evaluated as a template                                    | `{}`                       |
-| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for rabbitmq Statefulset             | `false`                    |
-| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`                   |
-| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`                   |
+| Name                                               | Description                                                                    | Value                                    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------- |
+| `persistence.enabled`                              | Enable RabbitMQ data persistence using PVC                                     | `true`                                   |
+| `persistence.storageClass`                         | PVC Storage Class for RabbitMQ data volume                                     | `""`                                     |
+| `persistence.selector`                             | Selector to match an existing Persistent Volume                                | `{}`                                     |
+| `persistence.accessModes`                          | PVC Access Modes for RabbitMQ data volume                                      | `["ReadWriteOnce"]`                      |
+| `persistence.existingClaim`                        | Provide an existing PersistentVolumeClaims                                     | `""`                                     |
+| `persistence.mountPath`                            | The path the volume will be mounted at                                         | `/opt/bitnami/rabbitmq/.rabbitmq/mnesia` |
+| `persistence.subPath`                              | The subdirectory of the volume to mount to                                     | `""`                                     |
+| `persistence.size`                                 | PVC Storage Request for RabbitMQ data volume                                   | `8Gi`                                    |
+| `persistence.annotations`                          | Persistence annotations. Evaluated as a template                               | `{}`                                     |
+| `persistence.labels`                               | Persistence labels. Evaluated as a template                                    | `{}`                                     |
+| `persistentVolumeClaimRetentionPolicy.enabled`     | Enable Persistent volume retention policy for rabbitmq Statefulset             | `false`                                  |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`  | Volume retention behavior when the replica count of the StatefulSet is reduced | `Retain`                                 |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted` | Volume retention behavior that applies when the StatefulSet is deleted         | `Retain`                                 |
 
 ### Exposure parameters
 
