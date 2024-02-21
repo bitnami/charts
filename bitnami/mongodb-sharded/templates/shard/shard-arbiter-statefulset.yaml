@@ -250,7 +250,11 @@ spec:
             {{- if $.Values.shardsvr.arbiter.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.arbiter.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if $.Values.shardsvr.arbiter.resources }}
           resources: {{- toYaml $.Values.shardsvr.arbiter.resources | nindent 12 }}
+          {{- else if ne $.Values.shardsvr.arbiter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.shardsvr.arbiter.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- if $.Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" $ }}
@@ -320,7 +324,11 @@ spec:
               port: metrics
           {{- end }}
           {{- end }}
+          {{- if $.Values.metrics.resources }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
+          {{- else if ne $.Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- with $.Values.shardsvr.arbiter.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}

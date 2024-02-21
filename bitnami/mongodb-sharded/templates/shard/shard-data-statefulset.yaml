@@ -91,7 +91,11 @@ spec:
               find {{ $.Values.shardsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
+          {{- if $.Values.volumePermissions.resources }}
           resources: {{ toYaml $.Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne $.Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
@@ -284,7 +288,11 @@ spec:
             {{- if $.Values.shardsvr.dataNode.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
+          {{- if $.Values.shardsvr.dataNode.resources }}
           resources: {{- toYaml $.Values.shardsvr.dataNode.resources | nindent 12 }}
+          {{- else if ne $.Values.shardsvr.dataNode.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.shardsvr.dataNode.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- if $.Values.metrics.enabled }}
         - name: metrics
           image: {{ include "mongodb-sharded.metrics.image" $ }}
@@ -354,7 +362,11 @@ spec:
               port: metrics
           {{- end }}
           {{- end }}
+          {{- if $.Values.metrics.resources }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
+          {{- else if ne $.Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- with $.Values.shardsvr.dataNode.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}

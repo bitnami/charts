@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common Parameters
 ##
 
@@ -58,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Harbor common parameters
 ##
 
@@ -120,7 +118,6 @@ ipFamily:
   ##
   ipv4:
     enabled: true
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -129,7 +126,6 @@ ipFamily:
 ## Use "ingress" to use an Ingress Controller as proxy
 ##
 exposureType: proxy
-
 ## Service parameters
 ##
 service:
@@ -187,7 +183,6 @@ service:
   ## @param service.extraPorts Extra port to expose on NGINX proxy service
   ##
   extraPorts: []
-
 ingress:
   ## Configure the ingress resource that allows you to access Harbor Core
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -296,8 +291,7 @@ ingress:
     ##             name: http
     ##
     extraRules: []
-  ##
-
+    ##
 ## @section Persistence Parameters
 ##
 
@@ -516,7 +510,6 @@ persistence:
       chunksize: ""
       rootdirectory: ""
       secretkey: ""
-
 ## @section Tracing parameters
 ##
 
@@ -539,7 +532,6 @@ tracing:
   ##   application: harbor
   ##
   attributes: {}
-
   ## @extra tracing.jaeger Configuration for exporting to jaeger. If using jaeger collector mode, use endpoint, username and password. If using jaeger agent mode, use agentHostname and agentPort.
   ## e.g:
   ## jaeger:
@@ -576,7 +568,6 @@ tracing:
     compression: false
     timeout: 10s
     insecure: true
-
 ## @section Volume Permissions parameters
 ##
 
@@ -610,12 +601,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
@@ -627,10 +627,8 @@ volumePermissions:
     enabled: true
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section NGINX Parameters
 ##
-
 nginx:
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
@@ -764,12 +762,21 @@ nginx:
   customStartupProbe: {}
   ## NGINX resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param nginx.resources.limits The resources limits for the NGINX containers
-  ## @param nginx.resources.requests The requested resources for the NGINX containers
+  ## @param nginx.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if nginx.resources is set (nginx.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param nginx.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure NGINX pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param nginx.podSecurityContext.enabled Enabled NGINX pods' Security Context
@@ -971,10 +978,8 @@ nginx:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Harbor Portal Parameters
 ##
-
 portal:
   ## Bitnami Harbor Portal image
   ## ref: https://hub.docker.com/r/bitnami/harbor-portal/tags/
@@ -1094,12 +1099,21 @@ portal:
   customStartupProbe: {}
   ## Harbor Portal resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param portal.resources.limits The resources limits for the Harbor Portal containers
-  ## @param portal.resources.requests The requested resources for the Harbor Portal containers
+  ## @param portal.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if portal.resources is set (portal.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param portal.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Harbor Portal pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param portal.podSecurityContext.enabled Enabled Harbor Portal pods' Security Context
@@ -1309,10 +1323,8 @@ portal:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Harbor Core Parameters
 ##
-
 core:
   ## Bitnami Harbor Core image
   ## ref: https://hub.docker.com/r/bitnami/harbor-core/tags/
@@ -1345,7 +1357,6 @@ core:
     ## Enable debug mode
     ##
     debug: false
-
   ## @param core.sessionLifetime Explicitly set a session timeout (in seconds) overriding the backend default.
   ##
   sessionLifetime: ""
@@ -1491,12 +1502,21 @@ core:
   customStartupProbe: {}
   ## Harbor Core resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param core.resources.limits The resources limits for the Harbor Core containers
-  ## @param core.resources.requests The requested resources for the Harbor Core containers
+  ## @param core.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if core.resources is set (core.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param core.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Harbor Core pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param core.podSecurityContext.enabled Enabled Harbor Core pods' Security Context
@@ -1708,10 +1728,8 @@ core:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Harbor Jobservice Parameters
 ##
-
 jobservice:
   ## Bitnami Harbor Jobservice image
   ## ref: https://hub.docker.com/r/bitnami/harbor-jobservice/tags/
@@ -1852,12 +1870,21 @@ jobservice:
   customStartupProbe: {}
   ## Harbor Jobservice resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param jobservice.resources.limits The resources limits for the Harbor Jobservice containers
-  ## @param jobservice.resources.requests The requested resources for the Harbor Jobservice containers
+  ## @param jobservice.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jobservice.resources is set (jobservice.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param jobservice.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Harbor Jobservice pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param jobservice.podSecurityContext.enabled Enabled Harbor Jobservice pods' Security Context
@@ -2069,7 +2096,6 @@ jobservice:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Harbor Registry Parameters
 ##
 
@@ -2421,12 +2447,21 @@ registry:
     customStartupProbe: {}
     ## Harbor Registry main resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param registry.server.resources.limits The resources limits for the Harbor Registry main containers
-    ## @param registry.server.resources.requests The requested resources for the Harbor Registry main containers
+    ## @param registry.server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if registry.server.resources is set (registry.server.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      limits: {}
-      requests: {}
+    resourcesPreset: "none"
+    ## @param registry.server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## Configure Harbor Registry main containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param registry.server.containerSecurityContext.enabled Enabled containers' Security Context
@@ -2578,12 +2613,21 @@ registry:
     customStartupProbe: {}
     ## Harbor Registryctl resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param registry.controller.resources.limits The resources limits for the Harbor Registryctl containers
-    ## @param registry.controller.resources.requests The requested resources for the Harbor Registryctl containers
+    ## @param registry.controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if registry.controller.resources is set (registry.controller.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      limits: {}
-      requests: {}
+    resourcesPreset: "none"
+    ## @param registry.controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## Configure Harbor Registryctl containers (only main one) Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param registry.controller.containerSecurityContext.enabled Enabled containers' Security Context
@@ -2623,10 +2667,8 @@ registry:
       ports:
         http: 8080
         https: 8443
-
 ## @section Harbor Adapter Trivy Parameters
 ##
-
 trivy:
   ## Bitnami Harbor Adapter Trivy image
   ## ref: https://hub.docker.com/r/bitnami/harbor-adapter-trivy/tags/
@@ -2790,16 +2832,21 @@ trivy:
   customStartupProbe: {}
   ## Trivy resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param trivy.resources.limits [object] The resources limits for the Trivy containers
-  ## @param trivy.resources.requests [object] The requested resources for the Trivy containers
+  ## @param trivy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if trivy.resources is set (trivy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
-    limits:
-      cpu: 1
-      memory: 1Gi
+  resourcesPreset: "none"
+  ## @param trivy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Trivy pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param trivy.podSecurityContext.enabled Enabled Trivy pods' Security Context
@@ -3009,10 +3056,8 @@ trivy:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Harbor Exporter Parameters
 ##
-
 exporter:
   ## Bitnami Harbor Exporter image
   ## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
@@ -3127,12 +3172,21 @@ exporter:
   customStartupProbe: {}
   ## Harbor Exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param exporter.resources.limits The resources limits for the Harbor Exporter containers
-  ## @param exporter.resources.requests The requested resources for the Harbor Exporter containers
+  ## @param exporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if exporter.resources is set (exporter.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param exporter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Exporter pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param exporter.podSecurityContext.enabled Enabled Exporter pods' Security Context
@@ -3325,7 +3379,6 @@ exporter:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section PostgreSQL Parameters
 ##
 
@@ -3383,7 +3436,6 @@ externalDatabase:
   password: ""
   sslmode: disable
   coreDatabase: ""
-
 ## @section Redis&reg; parameters
 ##
 
@@ -3416,7 +3468,6 @@ redis:
     service:
       ports:
         sentinel: 26379
-
 ## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host
@@ -3444,7 +3495,6 @@ externalRedis:
     enabled: false
     masterSet: "mymaster"
     hosts: ""
-
 ## @section Harbor metrics parameters
 ##
 metrics:

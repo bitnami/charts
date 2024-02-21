@@ -231,6 +231,8 @@ spec:
           {{- end }}
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
+          {{- else if ne .Values.updateJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.updateJob.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
           volumeMounts:

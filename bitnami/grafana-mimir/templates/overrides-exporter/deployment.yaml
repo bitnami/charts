@@ -125,6 +125,8 @@ spec:
             {{- end }}
           {{- if .Values.overridesExporter.resources }}
           resources: {{- toYaml .Values.overridesExporter.resources | nindent 12 }}
+          {{- else if ne .Values.overridesExporter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.overridesExporter.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.mimir.containerPorts.http }}

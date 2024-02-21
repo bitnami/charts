@@ -148,6 +148,8 @@ spec:
           {{- end }}
           {{- if .Values.nginx.resources }}
           resources: {{- toYaml .Values.nginx.resources | nindent 12 }}
+          {{- else if ne .Values.nginx.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.nginx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: config
