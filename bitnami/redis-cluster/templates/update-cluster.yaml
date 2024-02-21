@@ -236,6 +236,9 @@ spec:
           {{- end }}
           {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -248,6 +251,8 @@ spec:
       restartPolicy: OnFailure
       {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:
