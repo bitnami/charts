@@ -198,6 +198,8 @@ spec:
           {{- end }}
           {{- if .Values.core.resources }}
           resources: {{- toYaml .Values.core.resources | nindent 12 }}
+          {{- else if ne .Values.core.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.core.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: config

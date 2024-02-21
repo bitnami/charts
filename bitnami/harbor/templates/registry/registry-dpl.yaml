@@ -91,6 +91,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: registry-data
@@ -189,6 +191,8 @@ spec:
           {{- end }}
           {{- if .Values.registry.server.resources }}
           resources: {{- toYaml .Values.registry.server.resources | nindent 12 }}
+          {{- else if ne .Values.registry.server.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.registry.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: registry-data
@@ -340,6 +344,8 @@ spec:
           {{- end }}
           {{- if .Values.registry.controller.resources }}
           resources: {{- toYaml .Values.registry.controller.resources | nindent 12 }}
+          {{- else if ne .Values.registry.controller.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.registry.controller.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: registry-data

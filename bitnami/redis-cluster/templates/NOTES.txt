@@ -115,3 +115,4 @@ will be able to connect to redis.
   {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredPasswordError) "context" $) -}}
 {{- end -}}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "redis" "sysctlImage" "updateJob" "volumePermissions") "context" $) }}

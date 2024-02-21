@@ -45,6 +45,8 @@ Return the proper sysctl image name
     runAsUser: 0
   {{- if .Values.sysctlImage.resources }}
   resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+  {{- else if ne .Values.sysctlImage.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
   {{- end }}
 {{- end -}}
 

@@ -49,3 +49,4 @@ If it is missing create it with:
     kubectl create secret {{ include "metallb.speaker.secretName" . }} --from-file={{ include "metallb.speaker.secretKey" . }}
 {{- end }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "controller" "speaker") "context" $) }}
