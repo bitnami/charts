@@ -359,6 +359,35 @@ If you want to manage TLS secrets outside of Helm, please know that you can crea
 
 To make use of cert-manager, you need to add the the `cert-manager.io/cluster-issuer:` annotation to the ingress object via `ingress.annotations`.
 
+Some ingress controllers (such as [ingress-nginx-controller](https://kubernetes.github.io/ingress-nginx/)) have the ability to provide a default TLS certificate for all Ingresses that do not have a TLS secret defined. This way, you can conveniently share one default TLS certificate with several Ingresses across multiple namespaces. If that is your case, you might expect this chart to render an Ingress without any reference to a TLS Secret, for example:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myrelease-phpmyadmin
+spec:
+  tls:
+    - hosts:
+        - my.domain.com
+      
+      ## Sometimes, you don't need this to be rendered.
+      ##secretName: phpmyadmin.local-tls
+```
+
+To achieve that, you can disable the chart's default behavior and define your own TLS section with `extraTls`:
+
+```yaml
+ingress:
+  ## Disable chart's default TLS behavior.
+  tls: false
+  
+  ## Define my own TLS list without any Secret reference.
+  extraTls:
+  - hosts:
+    - my.domain.com
+```
+
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
