@@ -320,12 +320,11 @@ tracking:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param tracking.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param tracking.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-
   ## @param tracking.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
     create: false
-    minAvailable: 1
+    minAvailable: "1"
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
