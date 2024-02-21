@@ -476,10 +476,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/cassandra/conf
               subPath: app-conf-dir
-            - name: app-tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/cassandra/tmp
               subPath: app-tmp-dir
-            - name: app-logs-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/cassandra/logs
               subPath: app-logs-dir
             {{- if .Values.extraVolumeMounts }}
