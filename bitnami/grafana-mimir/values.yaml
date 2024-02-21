@@ -75,7 +75,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.11.0-debian-11-r9
+    tag: 2.11.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1556,7 +1556,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r7
+    tag: 1.25.4-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4816,7 +4816,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r15
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -5014,7 +5014,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -5053,7 +5053,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -5092,7 +5092,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -5131,7 +5131,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##
