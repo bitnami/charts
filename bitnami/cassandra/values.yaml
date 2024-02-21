@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.1.4-debian-11-r0
+  tag: 4.1.4-debian-11-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -291,6 +291,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled Cassandra containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Cassandra containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Cassandra containers' Security Context runAsGroup
 ## @param containerSecurityContext.allowPrivilegeEscalation Set Cassandra containers' Security Context allowPrivilegeEscalation
 ## @param containerSecurityContext.capabilities.drop Set Cassandra containers' Security Context capabilities to be dropped
 ## @param containerSecurityContext.readOnlyRootFilesystem Set Cassandra containers' Security Context readOnlyRootFilesystem
@@ -302,6 +303,7 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
