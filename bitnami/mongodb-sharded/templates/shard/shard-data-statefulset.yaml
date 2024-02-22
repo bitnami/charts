@@ -428,7 +428,9 @@ spec:
         {{- end }}
   {{- if and $.Values.shardsvr.persistence.enabled }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: datadir
         {{- if or $.Values.shardsvr.persistence.annotations $.Values.commonAnnotations $.Values.shardsvr.persistence.resourcePolicy }}
         {{- if or $.Values.commonAnnotations $.Values.shardsvr.persistence.annotations $.Values.shardsvr.persistence.resourcePolicy }}
