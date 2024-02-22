@@ -401,7 +401,9 @@ spec:
         {{- end }}
   {{- if and .Values.configsvr.persistence.enabled }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: datadir
         {{- if or .Values.configsvr.persistence.annotations .Values.commonAnnotations .Values.configsvr.persistence.resourcePolicy }}
         {{- if or .Values.commonAnnotations .Values.configsvr.persistence.annotations .Values.configsvr.persistence.resourcePolicy }}
