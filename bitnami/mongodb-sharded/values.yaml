@@ -1793,10 +1793,10 @@ metrics:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
