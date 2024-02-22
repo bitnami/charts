@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -41,11 +40,9 @@ commonAnnotations: {}
 ## @param commonLabels Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template
 ##
 commonLabels: {}
-
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template).
 ##
 extraDeploy: []
-
 ## @section Matomo parameters
 ##
 
@@ -62,7 +59,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.0.2-debian-11-r0
+  tag: 5.0.2-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -216,7 +213,7 @@ smtpUser: ""
 smtpPassword: ""
 smtpProtocol: ""
 noreplyName: ""
-noreplyAddress: "" 
+noreplyAddress: ""
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
@@ -276,7 +273,6 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
-
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -318,20 +314,21 @@ nodeSelector: {}
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for Matomo containers
-## @param resources.requests The requested resources for Matomo containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 500m
-  ##    memory: 1Gi
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 250m
-  ##    memory: 256Mi
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable Matomo pods' Security Context
@@ -456,7 +453,6 @@ podAnnotations: {}
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -524,7 +520,6 @@ ingress:
   ## @param ingress.enabled Enable ingress controller resource
   ##
   enabled: false
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -616,7 +611,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Database parameters
 ##
 
@@ -688,7 +682,6 @@ externalDatabase:
   password: ""
   database: bitnami_matomo
   existingSecret: ""
-
 ## @section Volume Permissions parameters
 ##
 
@@ -709,7 +702,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -726,23 +719,21 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resources.limits The resources limits for the container
-  ## @param volumePermissions.resources.requests The requested resources for the container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    ##
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Metrics parameters
 ##
 
@@ -762,7 +753,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.6-debian-11-r1
+    tag: 1.0.6-debian-12-r7
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -773,7 +764,19 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param metrics.resources Metrics exporter resource requests and limits
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -783,7 +786,6 @@ metrics:
   podAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
-
 ## @section Certificate injection parameters
 ##
 
@@ -833,7 +835,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -845,7 +847,6 @@ certificates:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
 ## @section NetworkPolicy parameters
 ##
 
@@ -938,10 +939,8 @@ networkPolicy:
     ##             label: example
     ##
     customRules: {}
-
 ## @section CronJob parameters
 ##
-
 cronjobs:
   ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
   ##
@@ -1043,8 +1042,8 @@ cronjobs:
     ## @param cronjobs.archive.podAnnotations Additional pod annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
-    podAnnotations: { }
+    podAnnotations: {}
     ## @param cronjobs.archive.podLabels Additional pod labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
-    podLabels: { }
+    podLabels: {}

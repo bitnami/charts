@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.6-debian-11-r1
+      image: docker.io/bitnami/apache-exporter:1.0.6-debian-12-r7
     - name: joomla
-      image: docker.io/bitnami/joomla:5.0.2-debian-11-r3
+      image: docker.io/bitnami/joomla:5.0.3-debian-12-r1
 apiVersion: v2
-appVersion: 5.0.2
+appVersion: 5.0.3
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
@@ -36,4 +36,4 @@ maintainers:
 name: joomla
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/joomla
-version: 18.3.0
+version: 18.4.2

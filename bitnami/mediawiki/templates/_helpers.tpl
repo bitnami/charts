@@ -23,7 +23,7 @@ If not using ClusterIP, or if a host or LoadBalancerIP is not defined, the value
 When using Ingress, it will be set to the Ingress hostname.
 */}}
 {{- define "mediawiki.host" -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- $host := .Values.mediawikiHost | default "" -}}
 {{- if .Values.ingress.enabled }}
 {{- $host := .Values.ingress.hostname | default "" -}}
 {{- end -}}
