@@ -309,42 +309,44 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### CronJob parameters
 
-| Name                                                                       | Description                                                          | Value            |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------- |
-| `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
-| `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
-| `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
-| `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                  | `{}`             |
-| `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
-| `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)    | `[]`             |
-| `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                 | `true`           |
-| `cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                     | `nil`            |
-| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                           | `1001`           |
-| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                        | `true`           |
-| `cronjobs.taskScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                          | `false`          |
-| `cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem              | `false`          |
-| `cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation            | `false`          |
-| `cronjobs.taskScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                   | `["ALL"]`        |
-| `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
-| `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                           | `{}`             |
-| `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                | `{}`             |
-| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
-| `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
-| `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
-| `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                  | `{}`             |
-| `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
-| `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)    | `[]`             |
-| `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                 | `true`           |
-| `cronjobs.archive.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                     | `nil`            |
-| `cronjobs.archive.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                           | `1001`           |
-| `cronjobs.archive.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                        | `true`           |
-| `cronjobs.archive.containerSecurityContext.privileged`                     | Set container's Security Context privileged                          | `false`          |
-| `cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem`         | Set container's Security Context readOnlyRootFilesystem              | `false`          |
-| `cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation`       | Set container's Security Context allowPrivilegeEscalation            | `false`          |
-| `cronjobs.archive.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                   | `["ALL"]`        |
-| `cronjobs.archive.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
-| `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                           | `{}`             |
-| `cronjobs.archive.podLabels`                                               | Additional pod labels                                                | `{}`             |
+| Name                                                                       | Description                                                                                                       | Value            |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
+| `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                                                               | `false`          |
+| `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images)                                              | `[]`             |
+| `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)                                                 | `[]`             |
+| `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                              | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                  | `nil`            |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                        | `1001`           |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                     | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                       | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                           | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                         | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                | `["ALL"]`        |
+| `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
+| `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                                                                        | `{}`             |
+| `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                                                             | `{}`             |
+| `cronjobs.taskScheduler.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
+| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
+| `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
+| `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images)                                              | `[]`             |
+| `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)                                                 | `[]`             |
+| `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                                                              | `true`           |
+| `cronjobs.archive.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                                                                  | `nil`            |
+| `cronjobs.archive.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                                                                        | `1001`           |
+| `cronjobs.archive.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                                                                     | `true`           |
+| `cronjobs.archive.containerSecurityContext.privileged`                     | Set container's Security Context privileged                                                                       | `false`          |
+| `cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem`         | Set container's Security Context readOnlyRootFilesystem                                                           | `false`          |
+| `cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation`       | Set container's Security Context allowPrivilegeEscalation                                                         | `false`          |
+| `cronjobs.archive.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                                                                | `["ALL"]`        |
+| `cronjobs.archive.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
+| `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                                                                        | `{}`             |
+| `cronjobs.archive.podLabels`                                               | Additional pod labels                                                                                             | `{}`             |
+| `cronjobs.archive.resources`                                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
