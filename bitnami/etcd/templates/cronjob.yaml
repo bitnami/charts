@@ -60,6 +60,8 @@ spec:
               volumeMounts:
                 - name: snapshot-volume
                   mountPath: /snapshots
+                - name: tmp-dir
+                  mountPath: /tmp
           {{- end }}
           containers:
             - name: etcd-snapshotter
@@ -122,6 +124,9 @@ spec:
               resources: {{- include "common.resources.preset" (dict "type" .Values.disasterRecovery.cronjob.resourcesPreset) | nindent 16 }}
               {{- end }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: snapshot-volume
                   mountPath: /snapshots
                   {{- if .Values.disasterRecovery.pvc.subPath }}
@@ -133,6 +138,8 @@ spec:
                   readOnly: true
                 {{- end }}
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             {{- if .Values.auth.client.secureTransport }}
             - name: certs
               secret:

@@ -373,6 +373,8 @@ Return the volume-permissions init container
     runAsUser: 0
   {{- if .context.Values.volumePermissions.resources }}
   resources: {{- toYaml .context.Values.volumePermissions.resources | nindent 12 }}
+  {{- else if ne .context.Values.volumePermissions.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.volumePermissions.resourcesPreset) | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: data
