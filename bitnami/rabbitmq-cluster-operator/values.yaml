@@ -232,6 +232,7 @@ clusterOperator:
   ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param clusterOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param clusterOperator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -243,6 +244,7 @@ clusterOperator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -772,6 +774,7 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param msgTopologyOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param msgTopologyOperator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -783,6 +786,7 @@ msgTopologyOperator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
