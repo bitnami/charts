@@ -27,14 +27,13 @@ spec:
           annotations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
-          {{- if .Values.backup.cronjob.securityContext.enabled }}
-          # Deprecated, use backup.cronjob.podSecurityContext
-          securityContext: {{- omit .Values.backup.cronjob.securityContext "enabled" | toYaml | nindent 12 }}
-          {{- else if .Values.backup.cronjob.podSecurityContext.enabled }}
+          {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.backup.cronjob.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             - name: backup-scripts
               configMap:
                 name: {{ include "common.names.fullname" . }}-backup
@@ -86,6 +85,9 @@ spec:
               command:
                 - "/tmp/backup.sh"
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
@@ -118,6 +120,9 @@ spec:
                 - "/tmp/upload-google.sh"
               {{- end }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
@@ -150,6 +155,9 @@ spec:
                       {{- end }}
                       key: {{ .Values.backup.uploadProviders.azure.secretKey }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
@@ -207,6 +215,9 @@ spec:
                       {{- end }}
                       key: endpoint
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts

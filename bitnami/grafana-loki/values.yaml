@@ -72,7 +72,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.9.4-debian-11-r6
+    tag: 2.9.4-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -122,6 +122,7 @@ loki:
         dir: {{ .Values.loki.dataDir }}/wal
 
     limits_config:
+      retention_period: 336h
       enforce_metric_name: false
       reject_old_samples: true
       reject_old_samples_max_age: 168h
@@ -137,6 +138,13 @@ loki:
         index:
           prefix: index_
           period: 24h
+      - from: 2024-03-12
+        index:
+          period: 24h
+          prefix: index_
+        object_store: filesystem
+        schema: v12
+        store: tsdb
 
     storage_config:
       boltdb_shipper:
@@ -160,6 +168,20 @@ loki:
           addresses: dns+{{ include "grafana-loki.memcached-index-queries.host" . }}
           service: http
         {{- end }}
+      tsdb_shipper:
+        active_index_directory: {{ .Values.loki.dataDir }}/loki/tsdb-index
+        cache_location: {{ .Values.loki.dataDir }}/loki/tsdb-cache
+        {{- if .Values.indexGateway.enabled }}
+        index_gateway_client:
+          server_address: {{ (printf "dns:///%s:9095" (include "grafana-loki.index-gateway.fullname" .)) }}
+        {{- end }}
+        shared_store: filesystem
+
+    query_scheduler:
+      max_outstanding_requests_per_tenant: 32768
+
+    querier:
+      max_concurrent: 16
 
     chunk_store_config:
       max_look_back_period: 0s
@@ -216,7 +238,12 @@ loki:
       tail_proxy_url: http://{{ include "grafana-loki.querier.fullname" . }}:{{ .Values.querier.service.ports.http }}
 
     compactor:
+      working_directory: {{ .Values.loki.dataDir }}/loki/retention
       shared_store: filesystem
+      compaction_interval: 10m
+      retention_enabled: true
+      retention_delete_delay: 2h
+      retention_delete_worker_count: 150
 
     ruler:
       storage:
@@ -671,7 +698,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r7
+    tag: 1.25.4-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4127,7 +4154,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.9.4-debian-11-r3
+    tag: 2.9.4-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4627,7 +4654,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4759,7 +4786,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4798,7 +4825,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4837,7 +4864,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -4876,7 +4903,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

@@ -59,7 +59,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.1.18-debian-11-r4
+  tag: 10.1.19-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -627,7 +627,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -685,7 +685,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-11-r6
+      tag: 0.20.0-debian-12-r11
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
