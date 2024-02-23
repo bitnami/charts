@@ -1345,6 +1345,7 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.enabled Enabled defaultBackend containers' Security Context
   ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser Set defaultBackend containers' Security Context runAsUser
+  ## @param defaultBackend.containerSecurityContext.runAsGroup Set defaultBackend containers' Security Context runAsGroup
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set defaultBackend containers' Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param defaultBackend.containerSecurityContext.privileged Set defaultBackend container's Security Context privileged
