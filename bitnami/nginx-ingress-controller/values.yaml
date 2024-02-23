@@ -566,7 +566,7 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the container
   ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
-  ## @param defaultBackend.containerSecurityContext.runAsUser Group ID for the Default backend container
+  ## @param defaultBackend.containerSecurityContext.runAsGroup Group ID for the Default backend container
   ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
