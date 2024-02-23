@@ -149,9 +149,6 @@ spec:
             - name: etcmachineid
               mountPath: /etc/machine-id
               readOnly: true
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -159,8 +156,6 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: empty-dir
-          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "fluent-bit.configuration.configMap" . }}
