@@ -11,7 +11,7 @@ file:
     filetype: directory
     exists: true
   /opt/bitnami/mariadb/conf/my.cnf:
-    mode: "0664"
+    mode: "0644"
     filetype: file
     exists: true
     contents:

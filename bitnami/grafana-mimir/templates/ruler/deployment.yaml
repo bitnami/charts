@@ -113,6 +113,8 @@ spec:
             {{- end }}
           {{- if .Values.ruler.resources }}
           resources: {{- toYaml .Values.ruler.resources | nindent 12 }}
+          {{- else if ne .Values.ruler.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ruler.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.mimir.containerPorts.http }}

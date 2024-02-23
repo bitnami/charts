@@ -63,9 +63,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.podSecurityContext.fsGroup }}
-        runAsUser: {{ .Values.podSecurityContext.runAsUser }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -353,6 +351,18 @@ spec:
             - name: mariadb-galera-credentials
               mountPath: /opt/bitnami/mariadb/secrets/
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mariadb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mariadb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mariadb/logs
+              subPath: app-logs-dir
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -416,11 +426,14 @@ spec:
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
           volumeMounts:
+          {{- if and .Values.usePasswordFiles (not .Values.customPasswordFiles) }}
             - name: mariadb-galera-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: app-tmp-dir
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
@@ -456,6 +469,8 @@ spec:
           configMap:
             name: {{ template "mariadb-galera.initdbScriptsCM" . }}
         {{- end }}
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}

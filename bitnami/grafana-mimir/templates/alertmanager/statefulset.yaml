@@ -96,6 +96,8 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -153,6 +155,8 @@ spec:
             {{- end }}
           {{- if .Values.alertmanager.resources }}
           resources: {{- toYaml .Values.alertmanager.resources | nindent 12 }}
+          {{- else if ne .Values.alertmanager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.alertmanager.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.mimir.containerPorts.http }}
