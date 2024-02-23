@@ -608,10 +608,8 @@ data:
     #!/bin/bash
     # https://download.redis.io/redis-stable/sentinel.conf
 
-    PREVIOUS="${4}"
-    CURRENT="${6}"
-    echo "kubectl label pod --field-selector metadata.name=${CURRENT/.*} isMaster=\"true\" --overwrite
-    kubectl label pod --field-selector metadata.name=${PREVIOUS/.*} isMaster=\"false\" --overwrite" > /kubectl/update-annotations.sh
+    echo "${4/.*}" > /kubectl/previous
+    echo "${6/.*}" > /kubectl/current
   {{- end }}
 {{- else }}
   start-master.sh: |
