@@ -1369,7 +1369,7 @@ sentinel:
     ##
     clusterIP: ""
 
-    ## @param sentinel.service.createMaster Enable master service pointing to the current master.
+    ## @param sentinel.service.createMaster Enable master service pointing to the current master (experimental)
     ## NOTE: rbac.create need to be set to true
     ##
     createMaster: false
