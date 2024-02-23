@@ -170,10 +170,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: apisix-dir
+            - name: empty-dir
               mountPath: /usr/local/apisix
-            - name: tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.controlPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
@@ -198,9 +200,7 @@ spec:
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}
         {{- end }}
-        - name: apisix-dir
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.controlPlane.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.extraVolumes "context" $) | nindent 8 }}
