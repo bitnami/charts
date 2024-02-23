@@ -95,6 +95,9 @@ spec:
           volumeMounts:
             - name: secret-files
               mountPath: /bitnami/supabase/secrets
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.jwt.autoGenerate.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -135,6 +138,9 @@ spec:
           volumeMounts:
             - name: secret-files
               mountPath: /bitnami/supabase/secrets
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.jwt.autoGenerate.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -144,6 +150,8 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.jwt.autoGenerate.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: secret-files
           emptyDir: {}
       {{- if .Values.extraVolumes }}
