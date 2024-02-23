@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -47,7 +46,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -62,10 +60,8 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Common Grafana Mimir Parameters
 ##
-
 mimir:
   ## Bitnami Grafana Mimir image
   ## ref: https://hub.docker.com/r/bitnami/grafana-mimir/tags/
@@ -79,7 +75,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.11.0-debian-11-r9
+    tag: 2.11.0-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -274,7 +270,6 @@ mimir:
         insecure: {{ not .Values.minio.tls.enabled }}
     {{- end }}
     {{- end }}
-
   ## @param mimir.overrideConfiguration [object] Mimir components configuration override. Values defined here takes precedence over mimir.configuration
   ## e.g:
   ## overrideConfiguration:
@@ -298,7 +293,6 @@ mimir:
     http: 8080
     grpc: 9095
     gossipRing: 7946
-
   ## Gossip Ring parameters
   ##
   gossipRing:
@@ -328,8 +322,6 @@ mimir:
   blockStorage:
     backend: s3
     config: {}
-
-
 ## @section Alertmanager Deployment Parameters
 ##
 alertmanager:
@@ -422,12 +414,21 @@ alertmanager:
   customStartupProbe: {}
   ## alertmanager resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param alertmanager.resources.limits The resources limits for the alertmanager containers
-  ## @param alertmanager.resources.requests The requested resources for the alertmanager containers
+  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param alertmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param alertmanager.podSecurityContext.enabled Enabled Alertmanager pods' Security Context
@@ -571,7 +572,6 @@ alertmanager:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -608,7 +608,6 @@ alertmanager:
     ## @param alertmanager.persistence.dataSource PVC data source
     ##
     dataSource: {}
-
   ## @section Alertmanager Traffic Exposure Parameters
   ##
 
@@ -624,7 +623,6 @@ alertmanager:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param alertmanager.service.nodePorts.http Node port for HTTP
@@ -757,7 +755,6 @@ alertmanager:
   blockStorage:
     backend: s3
     config: {}
-
 ## @section Compactor Deployment Parameters
 ##
 compactor:
@@ -847,12 +844,21 @@ compactor:
   customStartupProbe: {}
   ## compactor resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param compactor.resources.limits The resources limits for the compactor containers
-  ## @param compactor.resources.requests The requested resources for the compactor containers
+  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param compactor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param compactor.podSecurityContext.enabled Enabled Compactor pods' Security Context
@@ -996,7 +1002,6 @@ compactor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1033,7 +1038,6 @@ compactor:
     ## @param compactor.persistence.dataSource PVC data source
     ##
     dataSource: {}
-
   ## @section Compactor Traffic Exposure Parameters
   ##
 
@@ -1049,7 +1053,6 @@ compactor:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param compactor.service.nodePorts.http Node port for HTTP
@@ -1160,7 +1163,6 @@ compactor:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Distributor Deployment Parameters
 ##
 distributor:
@@ -1246,12 +1248,21 @@ distributor:
   customStartupProbe: {}
   ## Distributor resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param distributor.resources.limits The resources limits for the distributor containers
-  ## @param distributor.resources.requests The requested resources for the distributor containers
+  ## @param distributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param distributor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param distributor.podSecurityContext.enabled Enabled Distributor pods' Security Context
@@ -1395,7 +1406,6 @@ distributor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Distributor Traffic Exposure Parameters
   ##
 
@@ -1411,7 +1421,6 @@ distributor:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param distributor.service.nodePorts.http Node port for HTTP
@@ -1528,14 +1537,12 @@ distributor:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Gateway Deployment Parameters
 ##
 gateway:
   ## @param gateway.enabled Enable Gateway deployment
   ##
   enabled: true
-
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/grafana-nginx/tags/
   ## @param gateway.image.registry [default: REGISTRY_NAME] Nginx image registry
@@ -1549,7 +1556,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r7
+    tag: 1.25.4-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1565,7 +1572,6 @@ gateway:
     ##
     pullSecrets: []
     debug: false
-
   ## @param gateway.extraEnvVars Array with extra environment variables to add to gateway nodes
   ## e.g:
   ## extraEnvVars:
@@ -1660,12 +1666,21 @@ gateway:
     http: 8080
   ## gateway resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param gateway.resources.limits The resources limits for the gateway containers
-  ## @param gateway.resources.requests The requested resources for the gateway containers
+  ## @param gateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if gateway.resources is set (gateway.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param gateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param gateway.podSecurityContext.enabled Enabled Gateway pods' Security Context
@@ -1805,7 +1820,6 @@ gateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Gateway Traffic Exposure Parameters
   ##
 
@@ -1917,7 +1931,6 @@ gateway:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
   ## Configure the ingress resource that allows you to access the Mimir Gateway installation
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
@@ -2021,7 +2034,6 @@ gateway:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Ingester Deployment Parameters
 ##
 ingester:
@@ -2111,12 +2123,21 @@ ingester:
   customStartupProbe: {}
   ## ingester resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ingester.resources.limits The resources limits for the ingester containers
-  ## @param ingester.resources.requests The requested resources for the ingester containers
+  ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param ingester.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingester.podSecurityContext.enabled Enabled Ingester pods' Security Context
@@ -2260,7 +2281,6 @@ ingester:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -2297,7 +2317,6 @@ ingester:
     ## @param ingester.persistence.dataSource PVC data source
     ##
     dataSource: {}
-
   ## @section Ingester Traffic Exposure Parameters
   ##
 
@@ -2313,7 +2332,6 @@ ingester:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param ingester.service.nodePorts.http Node port for HTTP
@@ -2430,7 +2448,6 @@ ingester:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 # @section overrides-exporter Deployment Parameters
 ##
 overridesExporter:
@@ -2519,12 +2536,21 @@ overridesExporter:
   customStartupProbe: {}
   ## overrides-exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param overridesExporter.resources.limits The resources limits for the overrides-exporter containers
-  ## @param overridesExporter.resources.requests The requested resources for the overrides-exporter containers
+  ## @param overridesExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if overridesExporter.resources is set (overridesExporter.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param overridesExporter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param overridesExporter.podSecurityContext.enabled Enabled Overrides Exporter pods' Security Context
@@ -2668,7 +2694,6 @@ overridesExporter:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Overrides Exporter Traffic Exposure Parameters
   ##
 
@@ -2684,7 +2709,6 @@ overridesExporter:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param overridesExporter.service.nodePorts.http Node port for HTTP
@@ -2801,7 +2825,6 @@ overridesExporter:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Querier Deployment Parameters
 ##
 querier:
@@ -2887,12 +2910,21 @@ querier:
   customStartupProbe: {}
   ## querier resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param querier.resources.limits The resources limits for the querier containers
-  ## @param querier.resources.requests The requested resources for the querier containers
+  ## @param querier.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param querier.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param querier.podSecurityContext.enabled Enabled Querier pods' Security Context
@@ -3036,7 +3068,6 @@ querier:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Querier Traffic Exposure Parameters
   ##
 
@@ -3052,7 +3083,6 @@ querier:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param querier.service.nodePorts.http Node port for HTTP
@@ -3169,7 +3199,6 @@ querier:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Query Frontend Deployment Parameters
 ##
 queryFrontend:
@@ -3255,12 +3284,21 @@ queryFrontend:
   customStartupProbe: {}
   ## ingester resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryFrontend.resources.limits The resources limits for the ingester containers
-  ## @param queryFrontend.resources.requests The requested resources for the ingester containers
+  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param queryFrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryFrontend.podSecurityContext.enabled Enabled Query Frontend pods' Security Context
@@ -3404,7 +3442,6 @@ queryFrontend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Query Frontend Traffic Exposure Parameters
   ##
 
@@ -3420,7 +3457,6 @@ queryFrontend:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param queryFrontend.service.nodePorts.http Node port for HTTP
@@ -3537,7 +3573,6 @@ queryFrontend:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 # @section query-scheduler Deployment Parameters
 ##
 queryScheduler:
@@ -3626,12 +3661,21 @@ queryScheduler:
   customStartupProbe: {}
   ## query-scheduler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryScheduler.resources.limits The resources limits for the query-scheduler containers
-  ## @param queryScheduler.resources.requests The requested resources for the query-scheduler containers
+  ## @param queryScheduler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryScheduler.resources is set (queryScheduler.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param queryScheduler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param queryScheduler.podSecurityContext.enabled Enabled Query Scheduler pods' Security Context
@@ -3775,7 +3819,6 @@ queryScheduler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Query Scheduler Traffic Exposure Parameters
   ##
 
@@ -3791,7 +3834,6 @@ queryScheduler:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param queryScheduler.service.nodePorts.http Node port for HTTP
@@ -3908,7 +3950,6 @@ queryScheduler:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Store Gateway Deployment Parameters
 ##
 storeGateway:
@@ -3998,12 +4039,21 @@ storeGateway:
   customStartupProbe: {}
   ## ingester resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storeGateway.resources.limits The resources limits for the ingester containers
-  ## @param storeGateway.resources.requests The requested resources for the ingester containers
+  ## @param storeGateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storeGateway.resources is set (storeGateway.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param storeGateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param storeGateway.podSecurityContext.enabled Enabled Store Gateway pods' Security Context
@@ -4147,7 +4197,6 @@ storeGateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -4187,7 +4236,6 @@ storeGateway:
     ## @param storeGateway.persistence.dataSource PVC data source
     ##
     dataSource: {}
-
   ## @section Store Gateway Traffic Exposure Parameters
   ##
 
@@ -4203,7 +4251,6 @@ storeGateway:
     ports:
       http: 8080
       grpc: 9095
-
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param storeGateway.service.nodePorts.http Node port for HTTP
@@ -4320,7 +4367,6 @@ storeGateway:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## @section Ruler Deployment Parameters
 ##
 ruler:
@@ -4416,12 +4462,21 @@ ruler:
   lifecycleHooks: {}
   ## ruler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ruler.resources.limits The resources limits for the Ruler containers
-  ## @param ruler.resources.requests The requested resources for the Ruler containers
+  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param ruler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ruler.podSecurityContext.enabled Enabled Ruler pods' Security Context
@@ -4562,7 +4617,6 @@ ruler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Ruler Persistence Parameters
   ##
 
@@ -4599,7 +4653,6 @@ ruler:
     ##     app: my-app
     ##
     selector: {}
-
   ## @section Ruler Traffic Exposure Parameters
   ##
 
@@ -4741,8 +4794,6 @@ ruler:
   blockStorage:
     backend: s3
     config: {}
-
-
 ## @section Init Container Parameters
 ##
 
@@ -4765,7 +4816,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r15
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -4777,12 +4828,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits The resources limits for the init container
-  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -4794,7 +4854,6 @@ volumePermissions:
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
-
 ## @section Other Parameters
 ##
 
@@ -4816,7 +4875,6 @@ rbac:
   ##       - list
   ##
   rules: []
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -4833,7 +4891,6 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
   automountServiceAccountToken: false
-
 ## Prometheus metrics
 ##
 metrics:
@@ -4885,7 +4942,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-
 # @section MinIO&reg; chart parameters
 ## @extra minio For full list of MinIO&reg; values configurations please refere [here](https://github.com/bitnami/charts/tree/main/bitnami/minio)
 ##
@@ -4909,7 +4965,6 @@ minio:
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: "mimir, ruler, alertmanager"
-
   ## @param minio.provisioning.enabled Enable/disable MinIO&reg; provisioning job
   ## @param minio.provisioning.extraCommands Extra commands to run on MinIO&reg; provisioning job
   ##
@@ -4920,7 +4975,6 @@ minio:
       - "mc anonymous set download provisioning/mimir"
       - "mc anonymous set download provisioning/ruler"
       - "mc anonymous set download provisioning/alertmanager"
-
   ## @param minio.tls.enabled Enable/disable MinIO&reg; TLS support
   ##
   tls:
@@ -4934,7 +4988,6 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
-
 ## @section External Memcached (Chunks) Parameters
 ##
 externalMemcachedChunks:
@@ -4944,7 +4997,6 @@ externalMemcachedChunks:
   ## @param externalMemcachedChunks.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Chunks)
 ## Memcached sub-chart (Chunks)
 ##
@@ -4962,7 +5014,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4975,7 +5027,6 @@ memcachedchunks:
   service:
     ports:
       memcached: 11211
-
 ## @section External Memcached (Frontend) Parameters
 ##
 externalMemcachedFrontend:
@@ -4985,7 +5036,6 @@ externalMemcachedFrontend:
   ## @param externalMemcachedFrontend.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Frontend)
 ## Memcached sub-chart (Frontend)
 ##
@@ -5003,7 +5053,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -5016,7 +5066,6 @@ memcachedfrontend:
   service:
     ports:
       memcached: 11211
-
 ## @section External Memcached (Index) Parameters
 ##
 externalMemcachedIndex:
@@ -5026,7 +5075,6 @@ externalMemcachedIndex:
   ## @param externalMemcachedIndex.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Index)
 ## Memcached sub-chart (Index)
 ##
@@ -5034,7 +5082,6 @@ memcachedindex:
   ## @param memcachedindex.enabled Deploy memcached sub-chart
   ##
   enabled: true
-
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
   ## @param memcachedindex.image.registry [default: REGISTRY_NAME] Memcached image registry
@@ -5045,7 +5092,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -5058,7 +5105,6 @@ memcachedindex:
   service:
     ports:
       memcached: 11211
-
 ## @section External Memcached (Metadata) Parameters
 ##
 externalMemcachedMetadata:
@@ -5068,7 +5114,6 @@ externalMemcachedMetadata:
   ## @param externalMemcachedMetadata.port Port of a running external memcached instance
   ##
   port: 11211
-
 ## @section Memcached Sub-chart Parameters (Metadata)
 ## Memcached sub-chart (Metadata)
 ##
@@ -5086,7 +5131,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.23-debian-11-r3
+    tag: 1.6.23-debian-12-r6
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

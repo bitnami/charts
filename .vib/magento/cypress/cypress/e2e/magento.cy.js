@@ -28,7 +28,7 @@ it('allows admin to add a product to the store', () => {
   cy.get('#fileupload').selectFile('cypress/fixtures/images/image.png', {
     force: true,
   });
-  cy.get('.product-image');
+  cy.get('.product-image').should('be.visible');
   cy.get('#save-button').click();
   cy.get('#menu-magento-catalog-catalog').click();
   cy.contains('Products').click();

@@ -183,6 +183,10 @@ spec:
             - name: KEYCLOAK_EXTRA_ARGS
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
+            {{- if .Values.adminIngress.enabled }}
+            - name: KC_HOSTNAME_ADMIN
+              value: {{ .Values.adminIngress.hostname }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

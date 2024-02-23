@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -44,7 +43,6 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
-
 ## Diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,7 +57,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Contour parameters
 ##
 
@@ -80,7 +77,6 @@ configInline:
   tls:
     fallback-certificate: {}
   accesslog-format: envoy
-
 contour:
   ## @param contour.enabled Contour Deployment creation.
   ##
@@ -96,7 +92,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.27.0-debian-11-r9
+    tag: 1.27.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -166,22 +162,21 @@ contour:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param contour.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
-  ## @param contour.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ## @param contour.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if contour.resources is set (contour.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 400m
-    ##    memory: 258Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 25Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param contour.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param contour.manageCRDs Manage the creation, upgrade and deletion of Contour CRDs.
   ##
   manageCRDs: true
@@ -603,23 +598,18 @@ contour:
     name: ""
     create: true
     default: true
-
   ## @param contour.debug Enable Contour debug log level
   ##
   debug: false
-
   ## @param contour.logFormat Set contour log-format. Default text, either text or json.
   ##
   logFormat: text
-
   ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
   ##
   kubernetesDebug: 0
-
   ## @param contour.rootNamespaces Restrict Contour to searching these namespaces for root ingress routes.
   ##
   rootNamespaces: ""
-
   ## Exposes configuration of Envoy's Overload Manager through Contour's bootstrapping process
   ## When 95% of max heap size is reached for an Envoy, "shrink heap" operation is triggered.
   ## When 98% of max heap size is reached for an Envoy, it no longer accepts requests.
@@ -630,10 +620,8 @@ contour:
   overloadManager:
     enabled: false
     maxHeapBytes: "2147483648"
-
 ## @section Envoy parameters
 ##
-
 envoy:
   ## @param envoy.enabled Envoy Proxy creation
   ##
@@ -650,7 +638,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.27.2-debian-11-r8
+    tag: 1.27.3-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -695,22 +683,21 @@ envoy:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param envoy.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
-  ## @param envoy.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ## @param envoy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.resources is set (envoy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 400m
-    ##   memory: 250Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ## cpu: 100m
-    ## memory: 25Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param envoy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param envoy.command Override default command
   ##
   command: []
@@ -720,26 +707,24 @@ envoy:
   ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
   ## @param envoy.shutdownManager.extraArgs [array] Extra arguments passed to shutdown container
   ## @param envoy.shutdownManager.port Specify Port for shutdown container
-  ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
-  ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ## @param envoy.shutdownManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.shutdownManager.resources is set (envoy.shutdownManager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ## @param envoy.shutdownManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ##
   shutdownManager:
     extraArgs: []
     port: "8090"
     enabled: true
-    resources:
-      ## Example:
-      ## limits:
-      ##   cpu: 50m
-      ##   memory: 32Mi
-      ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ## cpu: 10m
-      ## memory: 16Mi
-      ##
-      requests: {}
+    resourcesPreset: "none"
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    resources: {}
     ## Shutdown Manager container security context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param envoy.shutdownManager.containerSecurityContext.enabled Enabled envoy shutdownManager containers' Security Context
@@ -764,7 +749,6 @@ envoy:
       seccompProfile:
         type: "RuntimeDefault"
       readOnlyRootFilesystem: true
-
   ## Envoy Initconfig initcontainer security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
@@ -1232,7 +1216,6 @@ envoy:
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
-
 ## @section Default backend parameters
 ##
 
@@ -1254,7 +1237,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.3-debian-11-r7
+    tag: 1.25.4-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1378,22 +1361,21 @@ defaultBackend:
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube.
-  ## @param defaultBackend.resources.limits [object] The resources limits for the Default backend container
-  ## @param defaultBackend.resources.requests [object] The requested resources for the Default backend container
+  ## @param defaultBackend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultBackend.resources is set (defaultBackend.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##   cpu: 250m
-    ##   memory: 256Mi
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param defaultBackend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Default backend containers' liveness probe. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param defaultBackend.livenessProbe.enabled Enable livenessProbe
@@ -1590,7 +1572,6 @@ defaultBackend:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-
 ## Ingress parameters
 ##
 ingress:
@@ -1690,10 +1671,8 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Metrics parameters
 ##
-
 metrics:
   ## Prometheus Operator service monitors
   ##
@@ -1728,7 +1707,6 @@ metrics:
     ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
-
   ## Prometheus Operator prometheusRules
   ##
   prometheusRule:
@@ -1744,7 +1722,6 @@ metrics:
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
     ##
     rules: []
-
 ## @section Other parameters
 ##
 
