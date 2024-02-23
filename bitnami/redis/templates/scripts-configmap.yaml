@@ -368,8 +368,8 @@ data:
 
     {{- if .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
-     # Add isMaster label to master node for master service.
-     echo "kubectl label pod --field-selector metadata.name=${REDIS_MASTER_HOST/.*} isMaster=\"true\" --overwrite" > /kubectl/update-annotations.sh
+        # Add isMaster label to master node for master service
+        echo "kubectl label pod --field-selector metadata.name=${REDIS_MASTER_HOST/.*} isMaster=\"true\" --overwrite" > /kubectl/update-annotations.sh
     fi
     {{- end }}
 
