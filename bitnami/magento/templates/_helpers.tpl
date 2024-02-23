@@ -17,7 +17,7 @@ We append a random number to the string to avoid password validation errors
 Get the user defined password or use a random string
 */}}
 {{- define "magento.password" -}}
-{{- $password := index .Values (printf "%sPassword" .Chart.Name) -}}
+{{- $password := .Values.magentoPassword -}}
 {{- default (include "magento.randomPassword" .) $password -}}
 {{- end -}}
 
@@ -62,7 +62,7 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- $host := .Values.magentoHost | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
 {{- else -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- $host := .Values.magentoHost | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
 {{- end -}}
 {{- end -}}
