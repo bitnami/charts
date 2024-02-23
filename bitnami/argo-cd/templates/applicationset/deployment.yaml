@@ -161,10 +161,12 @@ spec:
             - mountPath: /app/config/rbac
               name: rbac
             {{- end }}
-            - mountPath: /app/config/gpg/keys
-              name: gpg-keyring
-            - mountPath: /tmp
-              name: tmp
+            - name: empty-dir
+              mountPath: /app/config/gpg/keys
+              subPath: app-keys-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.applicationSet.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -187,9 +189,7 @@ spec:
           configMap:
             name: argocd-rbac-cm
         {{- end }}
-        - name: gpg-keyring
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.applicationSet.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.extraVolumes "context" $) | nindent 8 }}
