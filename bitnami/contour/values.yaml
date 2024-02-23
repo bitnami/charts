@@ -744,7 +744,7 @@ envoy:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
-      runAsGroup: 0
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       allowPrivilegeEscalation: false
@@ -752,7 +752,7 @@ envoy:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
   ## Envoy Initconfig initcontainer security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
