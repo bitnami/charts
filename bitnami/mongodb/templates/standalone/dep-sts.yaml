@@ -323,7 +323,9 @@ spec:
               subPath: app-logs-dir
             - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
+              {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
+              {{- end }}
             - name: common-scripts
               mountPath: /bitnami/scripts
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
