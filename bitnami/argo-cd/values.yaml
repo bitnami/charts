@@ -56,7 +56,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.10.0-debian-11-r2
+  tag: 2.10.0-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -171,6 +171,7 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled Argo CD containers' Security Context
   ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set Argo CD containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set Argo CD containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Set Argo CD containers' Security Context allowPrivilegeEscalation
   ## @param controller.containerSecurityContext.capabilities.drop Set Argo CD containers' Security Context capabilities to be dropped
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' Security Context readOnlyRootFilesystem
@@ -182,6 +183,7 @@ controller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
@@ -926,6 +928,7 @@ applicationSet:
   ## @param applicationSet.containerSecurityContext.enabled Enabled Argo CD applicationSet controller containers' Security Context
   ## @param applicationSet.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param applicationSet.containerSecurityContext.runAsUser Set Argo CD applicationSet controller containers' Security Context runAsUser
+  ## @param applicationSet.containerSecurityContext.runAsGroup Set Argo CD applicationSet controller containers' Security Context runAsGroup
   ## @param applicationSet.containerSecurityContext.allowPrivilegeEscalation Set Argo CD applicationSet controller containers' Security Context allowPrivilegeEscalation
   ## @param applicationSet.containerSecurityContext.capabilities.drop Set Argo CD applicationSet controller containers' Security Context capabilities to be dropped
   ## @param applicationSet.containerSecurityContext.readOnlyRootFilesystem Set Argo CD applicationSet controller containers' Security Context readOnlyRootFilesystem
@@ -937,6 +940,7 @@ applicationSet:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
@@ -1395,6 +1399,7 @@ notifications:
   ## @param notifications.containerSecurityContext.enabled Enabled Argo CD notifications controller containers' Security Context
   ## @param notifications.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param notifications.containerSecurityContext.runAsUser Set Argo CD notifications controller containers' Security Context runAsUser
+  ## @param notifications.containerSecurityContext.runAsGroup Set Argo CD notifications controller containers' Security Context runAsGroup
   ## @param notifications.containerSecurityContext.allowPrivilegeEscalation Set Argo CD notifications controller containers' Security Context allowPrivilegeEscalation
   ## @param notifications.containerSecurityContext.capabilities.drop Set Argo CD notifications controller containers' Security Context capabilities to be dropped
   ## @param notifications.containerSecurityContext.readOnlyRootFilesystem Set Argo CD notifications controller containers' Security Context readOnlyRootFilesystem
@@ -1406,6 +1411,7 @@ notifications:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
@@ -1827,6 +1833,7 @@ notifications:
       ## @param notifications.bots.slack.containerSecurityContext.enabled Enabled Argo CD Slack bot containers' Security Context
       ## @param notifications.bots.slack.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
       ## @param notifications.bots.slack.containerSecurityContext.runAsUser Set Argo CD Slack bot containers' Security Context runAsUser
+      ## @param notifications.bots.slack.containerSecurityContext.runAsGroup Set Argo CD Slack bot containers' Security Context runAsGroup
       ## @param notifications.bots.slack.containerSecurityContext.allowPrivilegeEscalation Set Argo CD Slack bot containers' Security Context allowPrivilegeEscalation
       ## @param notifications.bots.slack.containerSecurityContext.capabilities.drop Set Argo CD Slack bot containers' Security Context capabilities to be dropped
       ## @param notifications.bots.slack.containerSecurityContext.readOnlyRootFilesystem Set Argo CD Slack bot containers' Security Context readOnlyRootFilesystem
@@ -1838,6 +1845,7 @@ notifications:
         enabled: true
         seLinuxOptions: null
         runAsUser: 1001
+        runAsGroup: 0
         runAsNonRoot: true
         readOnlyRootFilesystem: false
         allowPrivilegeEscalation: false
@@ -2004,6 +2012,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled Argo CD server containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set Argo CD server containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set Argo CD server containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.allowPrivilegeEscalation Set Argo CD server containers' Security Context allowPrivilegeEscalation
   ## @param server.containerSecurityContext.capabilities.drop Set Argo CD containers' server Security Context capabilities to be dropped
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' server Security Context readOnlyRootFilesystem
@@ -2015,6 +2024,7 @@ server:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
@@ -2798,6 +2808,7 @@ repoServer:
   ## @param repoServer.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
   ## @param repoServer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param repoServer.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
+  ## @param repoServer.containerSecurityContext.runAsGroup Set Argo CD repo server containers' Security Context runAsGroup
   ## @param repoServer.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param repoServer.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
   ## @param repoServer.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
@@ -2809,6 +2820,7 @@ repoServer:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
@@ -3216,7 +3228,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.38.0-debian-11-r2
+    tag: 2.38.0-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3330,6 +3342,7 @@ dex:
   ## @param dex.containerSecurityContext.enabled Enabled Dex containers' Security Context
   ## @param dex.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dex.containerSecurityContext.runAsUser Set Dex containers' Security Context runAsUser
+  ## @param dex.containerSecurityContext.runAsGroup Set Dex containers' Security Context runAsGroup
   ## @param dex.containerSecurityContext.allowPrivilegeEscalation Set Dex containers' Security Context allowPrivilegeEscalation
   ## @param dex.containerSecurityContext.readOnlyRootFilesystem Set Dex containers' server Security Context readOnlyRootFilesystem
   ## @param dex.containerSecurityContext.runAsNonRoot Set Dex containers' Security Context runAsNonRoot
@@ -3341,6 +3354,7 @@ dex:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
@@ -3900,7 +3914,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3962,7 +3976,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.4-debian-11-r5
+    tag: 7.2.4-debian-12-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4043,6 +4057,7 @@ redisWait:
   ## @param redisWait.containerSecurityContext.enabled Enabled Argo CD repo server containers' Security Context
   ## @param redisWait.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param redisWait.containerSecurityContext.runAsUser Set Argo CD repo server containers' Security Context runAsUser
+  ## @param redisWait.containerSecurityContext.runAsGroup Set Argo CD repo server containers' Security Context runAsGroup
   ## @param redisWait.containerSecurityContext.allowPrivilegeEscalation Set Argo CD repo server containers' Security Context allowPrivilegeEscalation
   ## @param redisWait.containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
   ## @param redisWait.containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
@@ -4054,6 +4069,7 @@ redisWait:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false

@@ -84,6 +84,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/influxdb
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.influxdb.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.initContainers "context" $) | trim | nindent 8 }}
@@ -295,6 +298,12 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.influxdb.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/influxdb/etc
+              mountPath: app-conf-dir
             {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
             - name: influxdb-config
               mountPath: /opt/bitnami/influxdb/etc
@@ -322,6 +331,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration }}
         - name: influxdb-config
           configMap:
