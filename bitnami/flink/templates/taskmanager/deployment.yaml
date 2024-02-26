@@ -107,7 +107,7 @@ spec:
             - name: FLINK_CFG_TASKMANAGER_HOST
               valueFrom:
                 fieldRef:
-                  fieldPath: metadata.name
+                  fieldPath: status.podIP
             - name: FLINK_CFG_TASKMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: BITNAMI_DEBUG
