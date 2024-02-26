@@ -105,6 +105,8 @@ spec:
           nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
           {{- end }}
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             - name: grafana-data
               {{- if .Values.grafana.persistence.enabled }}
               persistentVolumeClaim:
@@ -161,10 +163,13 @@ spec:
                   port: 3000
                   scheme: HTTP
               {{- end }}
-              {{- if .Values.grafana.extraVolumeMounts }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
+                {{- if .Values.grafana.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 16 }}
-              {{- end }}
+                {{- end }}
             {{- if .Values.grafana.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
             {{- end }}

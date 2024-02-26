@@ -232,6 +232,7 @@ operator:
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -243,9 +244,10 @@ operator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -547,6 +549,7 @@ grafana:
   ## @param grafana.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param grafana.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
   ## @param grafana.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param grafana.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param grafana.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param grafana.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param grafana.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -558,10 +561,10 @@ grafana:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
