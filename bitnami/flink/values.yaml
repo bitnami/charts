@@ -824,7 +824,7 @@ taskmanager:
   ## @param taskmanager.podManagementPolicy Pod management policy for the Apache Flink taskmanager statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
-  podManagementPolicy: OrderedReady
+  podManagementPolicy: Parallel
   ## @param taskmanager.updateStrategy.type Apache Flink taskmanager statefulset strategy type
   ## @param taskmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink taskmanager statefulset rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
