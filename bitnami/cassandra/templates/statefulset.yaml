@@ -130,6 +130,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.persistence.commitLogMountPath }}
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
@@ -202,10 +205,13 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: certs-shared
-            mountPath: /opt/bitnami/cassandra/certs
+            - name: certs
+              mountPath: /certs
+            - name: certs-shared
+              mountPath: /opt/bitnami/cassandra/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -464,6 +470,18 @@ spec:
             - name: configurations
               mountPath: {{ .Values.persistence.mountPath }}/conf
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cassandra/logs
+              subPath: app-logs-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -514,6 +532,9 @@ spec:
             - name: metrics-conf
               mountPath: /opt/bitnami/cassandra-exporter/config.yml
               subPath: config.yml
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -539,6 +560,8 @@ spec:
           configMap:
             name: {{ tpl .Values.existingConfiguration $ }}
         {{- end }}
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.initDBConfigMap }}
         - name: init-db-cm
           configMap:
