@@ -33,7 +33,7 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- $host := .Values.ingress.hostname | default "" -}}
 {{- default (include "prestashop.serviceIP" .) $host -}}
 {{- else -}}
-{{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
+{{- $host := .Values.prestashopHost | default "" -}}
 {{- default (include "prestashop.serviceIP" .) $host -}}
 {{- end -}}
 {{- end -}}
