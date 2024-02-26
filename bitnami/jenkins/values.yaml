@@ -308,6 +308,7 @@ configAsCode:
     ## @param configAsCode.autoReload.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param configAsCode.autoReload.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param configAsCode.autoReload.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param configAsCode.autoReload.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param configAsCode.autoReload.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param configAsCode.autoReload.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -319,6 +320,7 @@ configAsCode:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -583,6 +585,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -594,6 +597,7 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
