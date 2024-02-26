@@ -28,4 +28,4 @@ maintainers:
 name: haproxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/haproxy
-version: 0.16.2
+version: 0.17.0
