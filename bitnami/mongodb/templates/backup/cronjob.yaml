@@ -79,6 +79,9 @@ spec:
                     fieldRef:
                       fieldPath: status.hostIP
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
                 {{- if (include "mongodb.autoGenerateCerts" .) }}
                 - name: certs-volume
                   mountPath: /certs/CAs
@@ -139,6 +142,9 @@ spec:
               - "mongodump {{- if .Values.auth.enabled }} --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} --authenticationDatabase=admin {{- end }} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} {{- if (eq $.Values.architecture "replicaset") }}--oplog{{- end }} --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz"
             {{- end }}
             volumeMounts:
+              - name: empty-dir
+                mountPath: /tmp
+                subPath: tmp-dir
               {{- if .Values.tls.enabled }}
               - name: certs
                 mountPath: /certs
@@ -159,6 +165,8 @@ spec:
             {{- end }}
           restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             - name: common-scripts
               configMap:
                 name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}

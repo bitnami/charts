@@ -234,6 +234,9 @@ spec:
             # Ref: https://argoproj.github.io/argo-cd/operator-manual/tls/#inbound-tls-certificates-used-by-argocd-repo-sever
             - mountPath: /app/config/server/tls
               name: argocd-repo-server-tls
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.controller.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -241,6 +244,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.controller.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: argocd-repo-server-tls
           secret:
             items:
