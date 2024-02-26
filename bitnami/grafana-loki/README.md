@@ -1333,7 +1333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                            | Description                                                                                               | Value                       |
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `false`                     |
 | `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
 | `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
 | `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |

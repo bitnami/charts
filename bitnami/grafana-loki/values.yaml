@@ -4853,7 +4853,7 @@ externalMemcachedIndexQueries:
 memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
-  enabled: true
+  enabled: false
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
   ## @param memcachedindexqueries.image.registry [default: REGISTRY_NAME] Memcached image registry
