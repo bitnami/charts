@@ -463,7 +463,7 @@ alertmanager:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -895,7 +895,7 @@ compactor:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1301,7 +1301,7 @@ distributor:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1721,7 +1721,7 @@ gateway:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2180,7 +2180,7 @@ ingester:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2595,7 +2595,7 @@ overridesExporter:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2971,7 +2971,7 @@ querier:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -3347,7 +3347,7 @@ queryFrontend:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -3726,7 +3726,7 @@ queryScheduler:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -4106,7 +4106,7 @@ storeGateway:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -4531,7 +4531,7 @@ ruler:
     runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
