@@ -178,6 +178,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.rest.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.rest.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.rest.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -185,6 +188,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.rest.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.rest.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.rest.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

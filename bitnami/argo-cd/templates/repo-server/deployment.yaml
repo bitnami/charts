@@ -86,8 +86,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.redisWait.enabled }}
         - name: wait-for-redis
@@ -253,10 +254,12 @@ spec:
             # Ref: https://argoproj.github.io/argo-cd/operator-manual/tls/#inbound-tls-certificates-used-by-argocd-repo-sever
             - mountPath: /app/config/server/tls
               name: argocd-repo-server-tls
-            - mountPath: /app/config/gpg/keys
-              name: gpg-keyring
-            - mountPath: /tmp
-              name: tmp-dir
+            - name: empty-dir
+              mountPath: /app/config/gpg/keys
+              subPath: app-keys-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.repoServer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -283,10 +286,8 @@ spec:
                 path: ca.crt
             optional: true
             secretName: argocd-repo-server-tls
-        - emptyDir: {}
-          name: tmp-dir
-        - emptyDir: {}
-          name: gpg-keyring
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.repoServer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

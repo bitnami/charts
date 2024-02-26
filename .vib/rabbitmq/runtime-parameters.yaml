@@ -25,7 +25,7 @@ rbac:
   create: true
 persistence:
   enabled: true
-  mountPath: /bitnami/rabbitmq/mnesia
+  mountPath: /opt/bitnami/rabbitmq/.rabbitmq/mnesia
 service:
   ports:
     amqp: 5673

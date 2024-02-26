@@ -147,10 +147,15 @@ spec:
             {{- end }}
             - mountPath: /app/config/server/tls
               name: argocd-repo-server-tls
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.notifications.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.config.tlsCerts }}
         - name: tls-certs
           configMap:
