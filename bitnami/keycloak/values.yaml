@@ -92,7 +92,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 23.0.7-debian-12-r0
+  tag: 23.0.7-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -293,6 +293,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -304,6 +305,7 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
@@ -1086,6 +1088,7 @@ keycloakConfigCli:
   ## @param keycloakConfigCli.containerSecurityContext.enabled Enabled keycloak-config-cli Security Context
   ## @param keycloakConfigCli.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param keycloakConfigCli.containerSecurityContext.runAsUser Set keycloak-config-cli Security Context runAsUser
+  ## @param keycloakConfigCli.containerSecurityContext.runAsGroup Set keycloak-config-cli Security Context runAsGroup
   ## @param keycloakConfigCli.containerSecurityContext.runAsNonRoot Set keycloak-config-cli Security Context runAsNonRoot
   ## @param keycloakConfigCli.containerSecurityContext.privileged Set keycloak-config-cli Security Context privileged
   ## @param keycloakConfigCli.containerSecurityContext.readOnlyRootFilesystem Set keycloak-config-cli Security Context readOnlyRootFilesystem
@@ -1097,6 +1100,7 @@ keycloakConfigCli:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
