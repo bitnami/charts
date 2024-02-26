@@ -151,3 +151,4 @@ From inside the cluster:
 
 {{- include "grafana-mimir.checkRollingTags" . }}
 {{- include "grafana-mimir.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "alertmanager" "compactor" "distributor" "gateway" "ingester" "overridesExporter" "querier" "queryFrontend" "queryScheduler" "ruler" "storeGateway" "volumePermissions") "context" $) }}

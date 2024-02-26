@@ -12,9 +12,15 @@ import { random } from '../support/utils';
 
 it('allows a user to place an order and an admin to list it', () => {
   cy.visit('/');
+  cy.contains('new products').click();
   cy.get('div.product').first().click();
+  cy.fixture('customers').then((customers) => {
+    cy.get('textarea[class=product-message]').type(customers.shopper.firstName);
+  });
+  cy.contains('Save Customization').click();
   cy.contains('Add to cart').click();
-  cy.visit('/order');
+  cy.contains('Proceed').click();
+  cy.contains('checkout').click();
   cy.fixture('customers').then((customers) => {
     cy.get('form#customer-form').within(() => {
       cy.get('#field-id_gender-1').check();
@@ -25,7 +31,7 @@ it('allows a user to place an order and an admin to list it', () => {
       cy.get('[name="psgdpr"]').check();
       cy.contains('button', 'Continue').click();
     });
-    cy.get('div.js-address-form').within(() => {
+    cy.get('div[id=delivery-address]').within(() => {
       cy.get('#field-address1').type(customers.shopper.address.street);
       cy.get('#field-city').type(customers.shopper.address.city);
       cy.get('#field-id_state').select(customers.shopper.address.state);

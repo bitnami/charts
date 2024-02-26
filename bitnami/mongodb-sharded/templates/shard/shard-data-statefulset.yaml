@@ -97,6 +97,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" $.Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
               {{- if $.Values.shardsvr.persistence.subPath }}
@@ -259,6 +262,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/logs
+              subPath: app-logs-dir
             - name: replicaset-entrypoint-configmap
               mountPath: /entrypoint
             - name: datadir
@@ -329,11 +344,14 @@ spec:
               {{- end }}
               /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ $.Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ $.Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ $.Values.metrics.extraArgs }}
           {{- end }}
-          {{- if $.Values.auth.usePasswordFile }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if $.Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
-          {{- end }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: {{ $.Values.metrics.containerPorts.metrics }}
@@ -375,6 +393,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: replicaset-entrypoint-configmap
           configMap:
             name: {{ printf "%s-replicaset-entrypoint" (include "common.names.fullname" $) }}
@@ -408,7 +428,9 @@ spec:
         {{- end }}
   {{- if and $.Values.shardsvr.persistence.enabled }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: datadir
         {{- if or $.Values.shardsvr.persistence.annotations $.Values.commonAnnotations $.Values.shardsvr.persistence.resourcePolicy }}
         {{- if or $.Values.commonAnnotations $.Values.shardsvr.persistence.annotations $.Values.shardsvr.persistence.resourcePolicy }}

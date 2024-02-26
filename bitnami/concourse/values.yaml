@@ -17,7 +17,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -41,7 +40,6 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment(s)/statefulset(s)
 ##
 diagnosticMode:
@@ -56,7 +54,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Common Concourse Parameters
 
 ## Bitnami Concourse image
@@ -71,7 +68,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.2-debian-11-r0
+  tag: 7.11.2-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -86,7 +83,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## For managing secrets using Helm
 ##
 secrets:
@@ -233,9 +229,7 @@ secrets:
   ## @param secrets.workerAdditionalCerts Additional certificates to add to the worker nodes
   ##
   workerAdditionalCerts: ""
-
 ## @section Concourse Web parameters
-
 web:
   ## @param web.enabled Enable Concourse web component
   ##
@@ -497,12 +491,21 @@ web:
   customStartupProbe: {}
   ## Concourse web resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param web.resources.limits The resources limits for the Concourse web containers
-  ## @param web.resources.requests The requested resources for the Concourse web containers
+  ## @param web.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param web.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param web.podSecurityContext.enabled Enabled web pods' Security Context
@@ -673,7 +676,6 @@ web:
     ## @param web.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
 ## @section Concourse Worker parameters
 ##
 worker:
@@ -854,12 +856,21 @@ worker:
   customStartupProbe: {}
   ## Concourse worker resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param worker.resources.limits The resources limits for the Concourse worker containers
-  ## @param worker.resources.requests The requested resources for the Concourse worker containers
+  ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.podSecurityContext.enabled Enabled worker pods' Security Context
@@ -1117,10 +1128,7 @@ worker:
     ## @param worker.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
-
 ## @section Traffic exposure parameters
-
 service:
   ## Concourse web service parameters
   ##
@@ -1336,7 +1344,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Init Container Parameters
 
 ## Init containers parameters:
@@ -1356,7 +1363,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1369,12 +1376,21 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
-  ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Init container' Security Context
   ## @param volumePermissions.containerSecurityContext.enabled Enabled init container Security Context
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -1387,7 +1403,6 @@ volumePermissions:
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"
-
 ## @section Concourse database parameters
 
 ## PostgreSQL chart configuration
@@ -1409,7 +1424,6 @@ postgresql:
     database: bitnami_concourse
     existingSecret: ""
   architecture: standalone
-
 ## @section External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host

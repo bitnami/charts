@@ -19,7 +19,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -52,7 +51,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Fluent Bit parameters
 ##
 
@@ -69,7 +67,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 2.2.2-debian-11-r4
+  tag: 2.2.2-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -87,7 +85,6 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
 ## @section Fluent Bit daemonset configuration
 ## Running as daemonset eases kubernetes pod monitoring and ensures its integrity
 ## If daemonset is enabled, Fluent Bit deployment will be disabled
@@ -227,22 +224,21 @@ customReadinessProbe: {}
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resources.limits The resources limits for Fluent Bit containers
-## @param resources.requests The requested resources for Fluent Bit containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  ## Example:
-  ## limits:
-  ##    cpu: 2
-  ##    memory: 4Gi
-  ##
-  limits: {}
-  ## Examples:
-  ## requests:
-  ##    cpu: 2
-  ##    memory: 4Gi
-  ##
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for fluent-bit container
 ##
 extraVolumeMounts: []
@@ -495,7 +491,6 @@ initContainers: []
 ## @param sidecars Add additional sidecar containers to the fluent-bit pods
 ##
 sidecars: []
-
 ## @section Fluent Bit configuration
 ##
 config:
@@ -522,7 +517,6 @@ config:
   inputs: |
     [INPUT]
         Name cpu
-
   ## @param config.filters [string] Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
   ## https://docs.fluentbit.io/manual/pipeline/filters
   ## Example:
@@ -582,7 +576,6 @@ rbac:
   ##       - list
   ##
   rules: []
-
 ## @section Autoscaling
 ##
 autoscaling:
@@ -636,7 +629,6 @@ autoscaling:
     ## @param autoscaling.hpa.behavior HPA Behavior
     ##
     behavior: {}
-
 ## Configure the ingress resource that allows you to access the
 ## fluent-bit Console. Set up the URL
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -741,7 +733,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## Fluent Bit Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ## @param pdb.create Deploy a PodDisruptionBudget object for Fluent Bit deployment
@@ -752,7 +743,6 @@ pdb:
   create: false
   minAvailable: ""
   maxUnavailable: "50%"
-
 ## Prometheus metrics
 ##
 metrics:
@@ -807,7 +797,6 @@ metrics:
     ##   prometheus: my-prometheus
     ##
     selector: {}
-
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
