@@ -21,3 +21,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}

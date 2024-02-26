@@ -113,6 +113,9 @@ spec:
           volumeMounts:
             - name: datadir
               mountPath: {{ .Values.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: generate-tls-certs
@@ -145,6 +148,9 @@ spec:
               mountPath: /certs
             - name: common-scripts
               mountPath: /bitnami/scripts
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           command:
             - /bitnami/scripts/generate-certs.sh
           args:
@@ -187,6 +193,9 @@ spec:
             - name: scripts
               mountPath: /scripts/auto-discovery.sh
               subPath: auto-discovery.sh
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       {{- end }}
       containers:
@@ -363,6 +372,18 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/logs
+              subPath: app-logs-dir
             - name: datadir
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
@@ -442,6 +463,9 @@ spec:
             {{- end }}
             {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /certs
@@ -487,6 +511,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
