@@ -68,6 +68,9 @@ var _ = Describe("NATS", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
+			// Give the application some time to sync the data
+			time.Sleep(5*time.Second)
+
 			By("scaling down to 0 replicas")
 			ss, err = utils.StsScale(ctx, c, ss, 0)
 			Expect(err).NotTo(HaveOccurred())
