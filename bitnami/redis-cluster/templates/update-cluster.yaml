@@ -231,9 +231,14 @@ spec:
           {{- end }}
           {{- if .Values.updateJob.resources }}
           resources: {{- toYaml .Values.updateJob.resources | nindent 12 }}
+          {{- else if ne .Values.updateJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.updateJob.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if or .Values.tls.enabled .Values.updateJob.extraVolumeMounts }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -246,6 +251,8 @@ spec:
       restartPolicy: OnFailure
       {{- if or .Values.tls.enabled .Values.updateJob.extraVolumes }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.tls.enabled }}
         - name: redis-certificates
           secret:

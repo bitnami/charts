@@ -18,7 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -42,7 +41,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -57,7 +55,6 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Fluentd parameters
 
 ## Bitnami Fluentd image version
@@ -72,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.3-debian-11-r6
+  tag: 1.16.3-debian-12-r12
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -437,7 +434,6 @@ forwarder:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param forwarder.startupProbe.enabled Enable startupProbe
@@ -510,7 +506,6 @@ forwarder:
   ## @param forwarder.customReadinessProbe Custom rediness probe for the Fluend Forwarder
   ##
   customReadinessProbe: {}
-
   ## @param forwarder.updateStrategy.type Set up update strategy.
   ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/#daemonset-update-strategy
   ## Example:
@@ -528,20 +523,21 @@ forwarder:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param forwarder.resources.limits The resources limits for the container
-  ## @param forwarder.resources.requests The requested resources for the container
+  ## @param forwarder.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if forwarder.resources is set (forwarder.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 300m
-    ##    memory: 512Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param forwarder.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param forwarder.priorityClassName Set Priority Class Name to allow priority control over other pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
   ##
@@ -618,7 +614,6 @@ forwarder:
     ## @param forwarder.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## Role Based Access
   ## ref: https://kubernetes.io/docs/admin/authorization/rbac/
   ## @param forwarder.rbac.create Specify whether RBAC resources should be created and used, allowing the get, watch and list of pods/namespaces
@@ -858,7 +853,6 @@ aggregator:
           host ${hostname}
         </labels>
       </source>
-
   ## @param aggregator.port Port the Aggregator container will listen for logs. Leave it blank to ignore.
   ## You can specify other ports in the aggregator.containerPorts parameter
   ##
@@ -1103,7 +1097,6 @@ aggregator:
     ##             name: http
     ##
     extraRules: []
-
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param aggregator.startupProbe.enabled Enable startupProbe
@@ -1176,7 +1169,6 @@ aggregator:
   ## @param aggregator.customReadinessProbe Custom rediness probe for the Fluentd Aggregator
   ##
   customReadinessProbe: {}
-
   ## @param aggregator.updateStrategy.type Set up update strategy.
   ## ref: https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#updating-statefulsets
   ## Example:
@@ -1194,20 +1186,21 @@ aggregator:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param aggregator.resources.limits The resources limits for the container
-  ## @param aggregator.resources.requests The requested resources for the container
+  ## @param aggregator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 500m
-    ##    memory: 1Gi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 300m
-    ##    memory: 512Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param aggregator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param aggregator.priorityClassName Fluentd Aggregator pods' priorityClassName
   ##
   priorityClassName: ""

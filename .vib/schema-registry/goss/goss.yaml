@@ -3,7 +3,7 @@
 
 file:
   /opt/bitnami/schema-registry/etc/schema-registry/schema-registry.properties:
-    mode: "0664"
+    mode: "0644"
     filetype: file
     exists: true
     contents:

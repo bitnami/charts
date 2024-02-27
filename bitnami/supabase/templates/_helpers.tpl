@@ -534,6 +534,10 @@ Return the PostgreSQL User
       value: {{ include "supabase.database.user" . | quote }}
     - name: DATABASE_NAME
       value: {{ include "supabase.database.name" . | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*

@@ -95,6 +95,9 @@ spec:
             - name: data
               mountPath: {{ .Values.storage.persistence.mountPath }}
               subPath: {{ .Values.storage.persistence.subPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- include "supabase.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
@@ -216,6 +219,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.storage.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.pm2
+              subPath: app-pm2-dir
             - name: data
               mountPath: {{ .Values.storage.persistence.mountPath }}
               {{- if .Values.storage.persistence.subPath }}
@@ -228,6 +237,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.storage.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
         {{- if .Values.storage.persistence.enabled }}
           persistentVolumeClaim:

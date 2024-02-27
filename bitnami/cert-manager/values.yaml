@@ -70,7 +70,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.14.2-debian-11-r0
+    tag: 1.14.2-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -101,7 +101,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.14.2-debian-11-r0
+      tag: 1.14.2-debian-12-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -155,6 +155,7 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set controller containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
@@ -166,6 +167,7 @@ controller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -470,7 +472,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.14.2-debian-11-r0
+    tag: 1.14.2-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -524,6 +526,7 @@ webhook:
   ## @param webhook.containerSecurityContext.enabled Enabled webhook containers' Security Context
   ## @param webhook.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param webhook.containerSecurityContext.runAsUser Set webhook containers' Security Context runAsUser
+  ## @param webhook.containerSecurityContext.runAsGroup Set webhook containers' Security Context runAsGroup
   ## @param webhook.containerSecurityContext.runAsNonRoot Set webhook containers' Security Context runAsNonRoot
   ## @param webhook.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param webhook.containerSecurityContext.privileged Set webhook container's Security Context privileged
@@ -535,6 +538,7 @@ webhook:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -823,7 +827,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.14.2-debian-11-r0
+    tag: 1.14.2-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -878,6 +882,7 @@ cainjector:
   ## @param cainjector.containerSecurityContext.enabled Enabled cainjector containers' Security Context
   ## @param cainjector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param cainjector.containerSecurityContext.runAsUser Set cainjector containers' Security Context runAsUser
+  ## @param cainjector.containerSecurityContext.runAsGroup Set cainjector containers' Security Context runAsGroup
   ## @param cainjector.containerSecurityContext.runAsNonRoot Set cainjector containers' Security Context runAsNonRoot
   ## @param cainjector.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param cainjector.containerSecurityContext.privileged Set cainjector container's Security Context privileged
@@ -889,6 +894,7 @@ cainjector:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false

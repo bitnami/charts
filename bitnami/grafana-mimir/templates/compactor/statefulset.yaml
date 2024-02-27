@@ -95,8 +95,13 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.mimir.dataDir }}
         {{- end }}
@@ -152,6 +157,8 @@ spec:
             {{- end }}
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
+          {{- else if ne .Values.compactor.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.compactor.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -189,6 +196,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: mimir-config
               mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
@@ -200,6 +210,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: mimir-config
           configMap:
             name: {{ template "grafana-mimir.mimir.configmapName" . }}
