@@ -152,6 +152,15 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.nginx.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: app-tmp-dir
             - name: config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
@@ -166,6 +175,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.nginx.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "harbor.nginx" . }}

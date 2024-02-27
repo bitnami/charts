@@ -111,6 +111,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: datadir
               mountPath: {{ .Values.hidden.persistence.mountPath }}
         {{- end }}
@@ -145,6 +148,9 @@ spec:
               mountPath: /certs
             - name: common-scripts
               mountPath: /bitnami/scripts
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           command:
             - /bitnami/scripts/generate-certs.sh
           args:
@@ -187,6 +193,9 @@ spec:
             - name: scripts
               mountPath: /scripts/auto-discovery.sh
               subPath: auto-discovery.sh
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       {{- end }}
       containers:
@@ -392,6 +401,18 @@ spec:
             - name: certs
               mountPath: /certs
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mongodb/logs
+              subPath: app-logs-dir
             {{- if .Values.hidden.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.hidden.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -441,10 +462,16 @@ spec:
             {{- end }}
             {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /certs
             {{- end }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis-cluster/tmp
+              subPath: app-tmp-dir
             {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -486,6 +513,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.hidden.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
