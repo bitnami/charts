@@ -56,7 +56,7 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.pgpool.containerPorts.pgpool }}
+        - port: {{ .Values.pgpool.containerPorts.postgresql }}
         {{- if .Values.metrics.enabled }}
         - port: {{ .Values.metrics.containerPorts.http }}
         {{- end }}
