@@ -170,6 +170,7 @@ jwt:
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param jwt.autoGenerate.containerSecurityContext.runAsUser Set jwt init job containers' Security Context runAsUser
+    ## @param jwt.autoGenerate.containerSecurityContext.runAsGroup Set jwt init job containers' Security Context runAsUser
     ## @param jwt.autoGenerate.containerSecurityContext.runAsNonRoot Set jwt init job container's Security Context runAsNonRoot
     ## @param jwt.autoGenerate.containerSecurityContext.privileged Set jwt init job container's Security Context privileged
     ## @param jwt.autoGenerate.containerSecurityContext.readOnlyRootFilesystem Set jwt init job container's Security Context readOnlyRootFilesystem
@@ -181,6 +182,7 @@ jwt:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -429,6 +431,7 @@ auth:
   ## @param auth.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param auth.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param auth.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param auth.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param auth.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param auth.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param auth.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -440,6 +443,7 @@ auth:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -829,6 +833,7 @@ meta:
   ## @param meta.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param meta.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param meta.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param meta.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param meta.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param meta.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param meta.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -840,6 +845,7 @@ meta:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1137,7 +1143,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.25.65-debian-12-r0
+    tag: 2.25.66-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1245,6 +1251,7 @@ realtime:
   ## @param realtime.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param realtime.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param realtime.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param realtime.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param realtime.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param realtime.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param realtime.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1256,6 +1263,7 @@ realtime:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1643,6 +1651,7 @@ rest:
   ## @param rest.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param rest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param rest.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param rest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rest.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param rest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1654,6 +1663,7 @@ rest:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2047,6 +2057,7 @@ storage:
   ## @param storage.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param storage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param storage.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param storage.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param storage.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param storage.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param storage.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2058,6 +2069,7 @@ storage:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2496,6 +2508,7 @@ studio:
   ## @param studio.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param studio.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param studio.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param studio.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param studio.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param studio.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param studio.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2507,6 +2520,7 @@ studio:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false

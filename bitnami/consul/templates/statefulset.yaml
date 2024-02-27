@@ -95,6 +95,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/consul
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -252,6 +255,18 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/consul/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/consul/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/consul/logs
+              subPath: app-logs-dir
             {{- if .Values.tlsEncryptionSecretName }}
             - name: consul-tls-certs
               mountPath: "/opt/bitnami/consul/certificates/"
@@ -314,6 +329,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: consul-config
           configMap:
