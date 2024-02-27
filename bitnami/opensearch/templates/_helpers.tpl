@@ -51,6 +51,82 @@ Return the proper sysctl image name
 {{- end -}}
 
 {{/*
+Return the copy plugins init container definition
+*/}}
+{{- define "opensearch.copy-default-plugins.initContainer" -}}
+{{- $block := index .context.Values .component }}
+- name: copy-default-plugins
+  image: {{ include "opensearch.image" .context }}
+  imagePullPolicy: {{ .context.Values.image.pullPolicy | quote }}
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+  {{- end }}
+  {{- if $block.resources }}
+  resources: {{- toYaml $block.resources | nindent 12 }}
+  {{- else if ne $block.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $block.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+        #!/bin/bash
+
+        . /opt/bitnami/scripts/libfs.sh
+        . /opt/bitnami/scripts/opensearch-env.sh
+
+        if ! is_dir_empty "$DB_DEFAULT_PLUGINS_DIR"; then
+            cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /plugins
+        fi
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /plugins
+      subPath: app-plugins-dir
+{{- end -}}
+
+{{/*
+Return the copy plugins init container definition
+*/}}
+{{- define "opensearch.dashboards.copy-default-plugins.initContainer" -}}
+- name: copy-default-plugins
+  image: {{ include "opensearch.dashboards.image" . }}
+  imagePullPolicy: {{ .Values.dashboards.image.pullPolicy | quote }}
+  {{- if .Values.dashboards.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.dashboards.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+  {{- end }}
+  {{- if .Values.dashboards.resources }}
+  resources: {{- toYaml .Values.dashboards.resources | nindent 12 }}
+  {{- else if ne .Values.dashboards.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.dashboards.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+        #!/bin/bash
+
+        . /opt/bitnami/scripts/libfs.sh
+        . /opt/bitnami/scripts/opensearch-dashboards-env.sh
+
+        if ! is_dir_empty "$SERVER_DEFAULT_PLUGINS_DIR"; then
+            cp -nr "$SERVER_DEFAULT_PLUGINS_DIR"/* /plugins
+        fi
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /plugins
+      subPath: app-plugins-dir
+{{- end -}}
+
+{{/*
+Set Elasticsearch PVC.
+*/}}
+{{- define "opensearh.dashboards.pvc" -}}
+{{- .Values.dashboards.persistence.existingClaim | default (include "opensearch.dashboards.fullname" .) -}}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "opensearch.volumePermissions.image" -}}
