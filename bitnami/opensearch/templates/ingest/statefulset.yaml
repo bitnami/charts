@@ -88,6 +88,7 @@ spec:
         {{- if .Values.sysctlImage.enabled }}
           {{- include "opensearch.sysctl.initContainer" .  | nindent 8}}
         {{- end }}
+        {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "ingest" "context" $) | nindent 8 }} 
         {{- if .Values.ingest.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.ingest.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -216,6 +217,21 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.ingest.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/plugins
+              subPath: app-plugins-dir
             - name: data
               mountPath: /bitnami/opensearch/data
             {{- if .Values.config }}
@@ -258,6 +274,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: "data"
           emptyDir: {}
         {{- if or .Values.config .Values.extraConfig }}

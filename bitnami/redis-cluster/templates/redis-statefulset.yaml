@@ -285,8 +285,18 @@ spec:
             - name: default-config
               mountPath: /opt/bitnami/redis/etc/redis-default.conf
               subPath: redis-default.conf
-            - name: redis-tmp-conf
+            - name: empty-dir
               mountPath: /opt/bitnami/redis/etc/
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -348,6 +358,9 @@ spec:
             {{- end }}
           {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -380,6 +393,9 @@ spec:
           resources:
           {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: redis-data
               mountPath: {{ .Values.persistence.path }}
               subPath: {{ .Values.persistence.subPath }}
@@ -392,6 +408,9 @@ spec:
           {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- if .Values.sysctlImage.mountHostSys }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: host-sys
               mountPath: /host-sys
           {{- end }}
@@ -426,7 +445,7 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
-        - name: redis-tmp-conf
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.redis.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraVolumes "context" $ ) | nindent 8 }}
