@@ -369,7 +369,7 @@ data:
     {{- if .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
-        echo "${REDIS_MASTER_HOST/.*};" > /kubectl/pods
+        echo "${REDIS_MASTER_HOST/.*};" > /etc/shared/pods
     fi
     {{- end }}
 
@@ -608,7 +608,7 @@ data:
     #!/bin/bash
     # https://download.redis.io/redis-stable/sentinel.conf
 
-    echo "${6/.*};${4/.*}" > /kubectl/pods
+    echo "${6/.*};${4/.*}" > /etc/shared/pods
   {{- end }}
 {{- else }}
   start-master.sh: |
@@ -784,13 +784,13 @@ data:
   update-master-label.sh: |
     #!/bin/bash
     while true; do
-        while [ ! -f /kubectl/pods ]; do
+        while [ ! -f /etc/shared/pods ]; do
             sleep 1
         done
-        pods=$(< "/kubectl/pods")
+        pods=$(< "/etc/shared/pods")
         echo "new master elected, updating label(s)..."
         kubectl label pod --field-selector metadata.name="${pods//;*}" isMaster="true" --overwrite
         test ! -z ${pods##*;} && kubectl label pod --field-selector metadata.name="${pods##*;}" isMaster="false" --overwrite
-        rm "/kubectl/pods"
+        rm "/etc/shared/pods"
     done
 {{- end }}

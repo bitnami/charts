@@ -465,8 +465,8 @@ spec:
             - name: health
               mountPath: /health
             {{- if .Values.sentinel.service.createMaster}}
-            - name: kubectl
-              mountPath: /kubectl
+            - name: kubectl-shared
+              mountPath: /etc/shared
             {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/redis-sentinel/etc
@@ -594,15 +594,15 @@ spec:
             {{- end }}
         {{- end }}
         {{- if .Values.sentinel.service.createMaster }}
-        - name: kubectl
+        - name: kubectl-shared
           image: {{ template "redis.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
           command: {{- toYaml .Values.kubectl.command | nindent 12 }}
           securityContext:
             runAsUser: 0
           volumeMounts:
-            - name: kubectl
-              mountPath: /kubectl
+            - name: kubectl-shared
+              mountPath: /etc/shared
             - name: kubectl-scripts
               mountPath: /opt/bitnami/scripts/kubectl-scripts
           {{- if .Values.kubectl.resources }}
@@ -688,7 +688,7 @@ spec:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
         {{- if .Values.sentinel.service.createMaster}}
-        - name: kubectl
+        - name: kubectl-shared
           emptyDir: {}
         - name: kubectl-scripts
           configMap:
