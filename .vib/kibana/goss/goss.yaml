@@ -16,7 +16,6 @@ file:
     mode: "0664"
     filetype: file
     exists: true
-    group: root
     contents:
     - "{{ toJson .Vars.extraConfiguration }}"
 command:
