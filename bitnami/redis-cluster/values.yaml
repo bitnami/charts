@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  tag: 7.2.4-debian-11-r5
+  tag: 7.2.4-debian-12-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -206,6 +206,7 @@ maxUnavailable: ""
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -217,6 +218,7 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
@@ -406,7 +408,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -895,7 +897,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.57.0-debian-11-r2
+    tag: 1.58.0-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -947,12 +949,30 @@ metrics:
   ##
   podLabels: {}
   ## Containers' Security Context - All fields other than `enabled` get added to the metrics container's security context
-  ## @param metrics.containerSecurityContext.enabled Enable Metrics Containers' Security Context
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation for metrics container
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Enable this if you're using https://github.com/coreos/prometheus-operator
   ##
   serviceMonitor:
@@ -1083,7 +1103,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r96
+  tag: 12-debian-12-r16
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

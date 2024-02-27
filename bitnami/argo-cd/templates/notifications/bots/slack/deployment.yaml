@@ -138,10 +138,16 @@ spec:
           {{- if .Values.notifications.bots.slack.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.notifications.bots.slack.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.notifications.bots.slack.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.notifications.bots.slack.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

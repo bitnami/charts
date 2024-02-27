@@ -33,7 +33,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.12-debian-11-r7
+  tag: 3.12.13-debian-12-r2
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -738,8 +738,10 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set RabbitMQ containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -753,8 +755,10 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
   capabilities:
     drop: ["ALL"]
   seccompProfile:
@@ -934,7 +938,7 @@ persistence:
   ## @param persistence.mountPath The path the volume will be mounted at
   ## Note: useful when using custom RabbitMQ images
   ##
-  mountPath: /bitnami/rabbitmq/mnesia
+  mountPath: /opt/bitnami/rabbitmq/.rabbitmq/mnesia
   ## @param persistence.subPath The subdirectory of the volume to mount to
   ## Useful in dev environments and one PV for multiple services
   ##
@@ -1434,7 +1438,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
