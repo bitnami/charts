@@ -652,6 +652,15 @@ server:
   ## @param server.applicationProperties Specify common application properties added by SCDF server to streams and/or tasks
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#spring-cloud-dataflow-global-properties
   applicationProperties: {}
+  security:
+    ## @param server.security.authorization Authorization customization
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-customizing-authorization
+    authorization: {}
+    oauth2:
+      ## @param server.security.oauth2.client OAuth 2.0 client authentication configuration
+      ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
+      client: {}
+
 ## @section Dataflow Skipper parameters
 
 ## Spring Cloud Skipper parameters.

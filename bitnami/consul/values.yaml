@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.17.3-debian-12-r2
+  tag: 1.17.3-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -289,9 +289,10 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled Consul containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup
 ## @param containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
-## @param containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
-## @param containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
@@ -300,6 +301,7 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
@@ -769,16 +771,30 @@ metrics:
     pullSecrets: []
   ## Container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled HashiCorp Consul Prometheus Exporter securityContext
+  ## @param metrics.containerSecurityContext.enabled Enabled Consul containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser User ID for the HashiCorp Consul Prometheus Exporter
-  ## @param metrics.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param metrics.containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## Consul Prometheus exporter service type
   ##
   service:

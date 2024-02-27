@@ -233,6 +233,9 @@ spec:
             failureThreshold: {{ .Values.server.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             # Mounting into a path that will be read by Argo CD
             # Ref: https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#ssh-known-host-public-keys
             - name: ssh-known-hosts
@@ -260,6 +263,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: ssh-known-hosts
           configMap:
             name: argocd-ssh-known-hosts-cm

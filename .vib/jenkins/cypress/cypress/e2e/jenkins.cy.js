@@ -14,7 +14,7 @@ it('should be possible to create a new Jenkins pipeline', () => {
     cy.get('#name').type(`${item.freestyleProject.name}-${random}`);
     cy.contains(item.freestyleProject.type).click();
     cy.contains('button', 'OK').should('be.enabled').click();
-    cy.contains('Error').should('not.be.visible');
+    cy.contains('Error').should('not.exist');
 
     cy.contains('button', 'Save').click();
     cy.contains('h1', item.freestyleProject.name);
