@@ -97,6 +97,10 @@ data:
           metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
+          {{- if .Values.server.security.authorization }}
+          security:
+            authorization: {{- include "common.tplvalues.render" (dict "value" .Values.server.security.authorization) | nindent 14 }}
+          {{- end }}
         task:
           closecontextEnabled: true
       {{- if .Values.externalDatabase.hibernateDialect }}
@@ -118,4 +122,9 @@ data:
         validationQuery: "SELECT 1"
       flyway:
         enabled: {{ .Values.flyway.enabled }}
+      {{- if .Values.server.security.oauth2.client }}
+      security:
+        oauth2:
+          client: {{- include "common.tplvalues.render" (dict "value" .Values.server.security.oauth2.client) | nindent 12 }}
+      {{- end }}
 {{ end }}
