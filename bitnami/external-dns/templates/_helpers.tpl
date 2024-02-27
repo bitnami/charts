@@ -132,7 +132,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "pihole") .Values.pihole.secretName (not .Values.pihole.secretName) -}}
     {{- true -}}
-{{- else if and .Values.txtEncrypt.enabled .Values.txtEncrypt.aesKey (not .Values.txtEncrypt.secretName) -}}
+{{- else if and .Values.txtEncrypt.enabled (not .Values.txtEncrypt.secretName) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -903,7 +903,7 @@ Returns the name of the default secret if the AES key is set via `.Values.txtEnc
 {{- define "external-dns.txtEncryptKeySecretName" -}}
 {{- if and .Values.txtEncrypt.enabled .Values.txtEncrypt.secretName }}
     {{- printf "%s" .Values.txtEncrypt.secretName -}}
-{{- else if and .Values.txtEncrypt.enabled .Values.txtEncrypt.aesKey (not .Values.txtEncrypt.secretName) -}}
+{{- else if and .Values.txtEncrypt.enabled (not .Values.txtEncrypt.secretName) -}}
     {{ template "external-dns.secretName" . }}
 {{- end -}}
 {{- end -}}

@@ -774,8 +774,9 @@ forceTxtOwnerId: false
 txtEncrypt:
   ## @param txtEncrypt.enabled Enable TXT record encrypencryption
   ##
-  enabled: false
+  enabled: true
   ## @param txtEncrypt.aesKey 32-byte AES-256-GCM encryption key.
+  ## If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set a default key will be generated.
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#generating-the-txt-encryption-key
   ##
   aesKey: ""

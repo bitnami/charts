@@ -318,7 +318,7 @@ spec:
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
             {{- end }}
-            {{- if and .Values.txtEncrypt.enabled (or .Values.txtEncrypt.aesKey .Values.txtEncrypt.secretName) }}
+            {{- if .Values.txtEncrypt.enabled }}
             # TXT registry encryption
             - --txt-encrypt-enabled
             - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
@@ -669,7 +669,7 @@ spec:
                   key: ns1-api-key
             {{- end }}
             {{- end }}
-            {{- if and .Values.txtEncrypt.enabled (or .Values.txtEncrypt.aesKey .Values.txtEncrypt.secretName) }}
+            {{- if and .Values.txtEncrypt.enabled }}
             - name: TXT_AES_ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
