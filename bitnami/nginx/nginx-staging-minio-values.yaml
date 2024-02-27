@@ -511,7 +511,7 @@ serverBlock: |-
        proxy_set_header Upgrade $http_upgrade;
        proxy_set_header Connection "upgrade";
        chunked_transfer_encoding off;
-       proxy_pass https://172.27.15.144:33373;
+       proxy_pass https://172.27.15.144:9000;
      }
    }
 
