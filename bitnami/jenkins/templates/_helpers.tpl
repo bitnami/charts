@@ -113,7 +113,7 @@ resourceLimitMemory: {{ $resources.limits.memory }}
 {{- if $resources.requests }}
 {{- if $resources.requests.cpu }}
 resourceRequestCpu: {{ $resources.requests.cpu }}
-{{- end}}
+{{- end }}
 {{- if $resources.requests.memory }}
 resourceRequestMemory: {{ $resources.requests.memory }}
 {{- end }}
