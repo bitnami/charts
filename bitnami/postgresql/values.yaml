@@ -1296,6 +1296,7 @@ backup:
     nodeSelector: {}
     ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory
     ## Example:
+    resources: {}
     ## resources:
     ##   requests:
     ##     cpu: 1
