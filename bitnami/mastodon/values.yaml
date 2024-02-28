@@ -318,6 +318,7 @@ web:
   ## @param web.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param web.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param web.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -329,6 +330,7 @@ web:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -665,6 +667,7 @@ sidekiq:
   ## @param sidekiq.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param sidekiq.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param sidekiq.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sidekiq.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param sidekiq.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param sidekiq.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param sidekiq.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -676,6 +679,7 @@ sidekiq:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -963,6 +967,7 @@ streaming:
   ## @param streaming.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param streaming.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param streaming.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param streaming.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param streaming.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param streaming.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param streaming.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -974,6 +979,7 @@ streaming:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1330,6 +1336,7 @@ initJob:
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param initJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1341,6 +1348,7 @@ initJob:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
