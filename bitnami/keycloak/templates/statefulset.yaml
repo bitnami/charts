@@ -185,7 +185,7 @@ spec:
             {{- end }}
             {{- if .Values.adminIngress.enabled }}
             - name: KC_HOSTNAME_ADMIN
-              value: {{ .Values.adminIngress.hostname }}
+              value: {{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
