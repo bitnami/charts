@@ -164,6 +164,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: mimir-config
               mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
@@ -175,6 +178,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.distributor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: mimir-config
