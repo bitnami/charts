@@ -94,6 +94,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.alertmanager.persistence.mountPath }}
               {{- if .Values.alertmanager.persistence.subPath }}
@@ -197,6 +200,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: config
               mountPath: /opt/bitnami/alertmanager/conf
               readOnly: true
@@ -209,6 +215,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "prometheus.alertmanager.configmapName" . }}
