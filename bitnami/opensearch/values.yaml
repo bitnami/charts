@@ -175,7 +175,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.12.0-debian-12-r0
+  tag: 2.12.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -579,6 +579,7 @@ master:
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -590,6 +591,7 @@ master:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -995,6 +997,7 @@ data:
   ## @param data.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param data.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param data.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param data.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param data.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param data.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param data.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1006,6 +1009,7 @@ data:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1412,6 +1416,7 @@ coordinating:
   ## @param coordinating.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param coordinating.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param coordinating.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param coordinating.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param coordinating.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param coordinating.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param coordinating.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1423,6 +1428,7 @@ coordinating:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1792,6 +1798,7 @@ ingest:
   ## @param ingest.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param ingest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingest.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param ingest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ingest.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param ingest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1803,6 +1810,7 @@ ingest:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2377,7 +2385,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.11.1-debian-12-r6
+    tag: 2.12.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2629,6 +2637,7 @@ dashboards:
   ## @param dashboards.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param dashboards.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboards.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboards.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dashboards.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboards.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dashboards.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2640,6 +2649,7 @@ dashboards:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2938,3 +2948,48 @@ dashboards:
     ## Otherwise, the new node certs won't match the existing certs.
     ##
     autoGenerated: true
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param dashboards.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param dashboards.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/opensearch-dashboards
+    ## @param dashboards.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param dashboards.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param dashboards.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param dashboards.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param dashboards.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param dashboards.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param dashboards.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param dashboards.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
