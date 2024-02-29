@@ -136,6 +136,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: proc
               mountPath: /host/proc
               readOnly: true
@@ -151,6 +154,8 @@ spec:
       hostNetwork: {{ .Values.hostNetwork }}
       hostPID: {{ .Values.hostPID }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: proc
           hostPath:
             path: /proc
