@@ -725,7 +725,7 @@ controller:
     ## Maximun number of workflows running in a namespace
     ##
     namespaceParallelism:
-    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.podSecurityContext }}
+    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.containerSecurityContext }}
     executor:
       {{- if .Values.executor.resources }}
       resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 4 }}
