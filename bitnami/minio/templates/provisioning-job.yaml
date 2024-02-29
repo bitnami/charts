@@ -273,6 +273,12 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /.mc
+              subPath: app-mc-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.provisioning.enabled }}
             - name: minio-provisioning
               mountPath: /etc/ilm
@@ -301,6 +307,8 @@ spec:
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.provisioning.enabled }}
         - name: minio-provisioning
           configMap:
