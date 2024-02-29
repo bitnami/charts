@@ -200,6 +200,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -211,6 +212,7 @@ server:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1070,6 +1072,7 @@ csiProvider:
     ## @param csiProvider.provider.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param csiProvider.provider.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param csiProvider.provider.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.provider.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.provider.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1081,6 +1084,7 @@ csiProvider:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1177,6 +1181,7 @@ csiProvider:
     ## @param csiProvider.agent.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param csiProvider.agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param csiProvider.agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.agent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.agent.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1188,6 +1193,7 @@ csiProvider:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1408,6 +1414,7 @@ injector:
   ## @param injector.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param injector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param injector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param injector.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param injector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param injector.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1419,6 +1426,7 @@ injector:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
