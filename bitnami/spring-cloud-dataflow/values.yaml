@@ -265,6 +265,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -276,6 +277,7 @@ server:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -843,6 +845,7 @@ skipper:
   ## @param skipper.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param skipper.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param skipper.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param skipper.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param skipper.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param skipper.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param skipper.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -854,6 +857,7 @@ skipper:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1358,6 +1362,7 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1369,6 +1374,7 @@ metrics:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1730,6 +1736,7 @@ waitForBackends:
   ## @param waitForBackends.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param waitForBackends.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitForBackends.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitForBackends.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param waitForBackends.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitForBackends.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param waitForBackends.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1741,6 +1748,7 @@ waitForBackends:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
