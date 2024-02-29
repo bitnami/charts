@@ -277,6 +277,9 @@ spec:
               mountPath: /.mc
               subPath: app-mc-dir
             - name: empty-dir
+              mountPath: /opt/bitnami/minio/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
             {{- if .Values.provisioning.enabled }}
