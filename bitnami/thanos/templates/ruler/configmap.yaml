@@ -15,6 +15,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  ruler.yml: |-
-    {{- include "common.tplvalues.render" (dict "value" .Values.ruler.config "context" $) | nindent 4 }}
+  {{- include "thanos.rulerConfigMap" . | nindent 2 }}
 {{ end }}
