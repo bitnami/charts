@@ -656,10 +656,9 @@ server:
     ## @param server.security.authorization Authorization customization
     ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-customizing-authorization
     authorization: {}
-    oauth2:
-      ## @param server.security.oauth2.client OAuth 2.0 client authentication configuration
-      ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
-      client: {}
+    ## @param server.security.oauth2 OAuth 2.0 authentication configuration
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
+    oauth2: {}
 
 ## @section Dataflow Skipper parameters
 

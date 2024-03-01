@@ -122,9 +122,8 @@ data:
         validationQuery: "SELECT 1"
       flyway:
         enabled: {{ .Values.flyway.enabled }}
-      {{- if .Values.server.security.oauth2.client }}
+      {{- if .Values.server.security.oauth2 }}
       security:
-        oauth2:
-          client: {{- include "common.tplvalues.render" (dict "value" .Values.server.security.oauth2.client) | nindent 12 }}
+        oauth2: {{- include "common.tplvalues.render" (dict "value" .Values.server.security.oauth2) | nindent 10 }}
       {{- end }}
 {{ end }}
