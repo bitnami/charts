@@ -441,8 +441,8 @@ spec:
             - key: conjur_authn_token_file
               path: conjur_authn_token_file
             {{- if .Values.secrets.conjurCACert }}
-              - key: conjur_ca_cert
-                path: ca.cert
+            - key: conjur_ca_cert
+              path: ca.cert
             {{- end }}
         {{- end }}
 {{- end }}
