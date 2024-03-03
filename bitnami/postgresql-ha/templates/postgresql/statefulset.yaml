@@ -476,7 +476,7 @@ spec:
           {{- end }}
           env:
             - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
-              value: :{{ .Values.metrics.containerPorts.http }}
+              value: ":{{ .Values.metrics.containerPorts.http }}"
             - name: DATA_SOURCE_URI
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}

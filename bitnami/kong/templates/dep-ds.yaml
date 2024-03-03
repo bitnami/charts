@@ -283,7 +283,7 @@ spec:
           {{- end }}
           env:
             - name: CONTROLLER_KONG_ADMIN_URL
-              value: http://127.0.0.1:{{ .Values.kong.containerPorts.adminHttp }}
+              value: "http://127.0.0.1:{{ .Values.kong.containerPorts.adminHttp }}"
             - name: CONTROLLER_PUBLISH_SERVICE
               value: {{ printf "%s/%s" .Release.Namespace (include "common.names.fullname" .) | quote }}
             - name: CONTROLLER_INGRESS_CLASS

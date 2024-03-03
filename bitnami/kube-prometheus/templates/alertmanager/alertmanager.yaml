@@ -25,7 +25,7 @@ spec:
   {{- else if and .Values.alertmanager.ingress.enabled }}
   externalUrl: {{ printf "%s://%s%s" (ternary "https" "http" .Values.alertmanager.ingress.tls) .Values.alertmanager.ingress.hostname .Values.alertmanager.routePrefix }}
   {{- else }}
-  externalUrl: http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ include "common.names.namespace" . }}:{{ .Values.alertmanager.service.ports.http }}{{ .Values.alertmanager.routePrefix }}
+  externalUrl: "http://{{ template "kube-prometheus.alertmanager.fullname" . }}.{{ include "common.names.namespace" . }}:{{ .Values.alertmanager.service.ports.http }}{{ .Values.alertmanager.routePrefix }}"
   {{- end }}
   portName: "{{ .Values.alertmanager.portName }}"
   paused: {{ .Values.alertmanager.paused }}

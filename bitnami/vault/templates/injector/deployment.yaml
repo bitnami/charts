@@ -103,9 +103,9 @@ spec:
           {{- end }}
           env:
             - name: AGENT_INJECT_LISTEN
-              value: :{{ .Values.injector.containerPorts.https }}
+              value: ":{{ .Values.injector.containerPorts.https }}"
             - name: AGENT_INJECT_VAULT_ADDR
-              value: http://{{ include "vault.server.fullname" . }}:{{ .Values.server.service.general.ports.http }}
+              value: "http://{{ include "vault.server.fullname" . }}:{{ .Values.server.service.general.ports.http }}"
             - name: AGENT_INJECT_VAULT_AUTH_PATH
               value: auth/kubernetes
             - name: AGENT_INJECT_VAULT_IMAGE
