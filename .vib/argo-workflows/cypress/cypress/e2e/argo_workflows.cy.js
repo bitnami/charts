@@ -7,6 +7,7 @@
 import { random } from '../support/utils';
 
 it('allows submitting a workflow using a template created from a file', () => {
+  cy.wait(15000);
   cy.visit('/workflow-templates');
   // Closes walkthrough pop-ups
   cy.get('[class="modal-close"]').click();
