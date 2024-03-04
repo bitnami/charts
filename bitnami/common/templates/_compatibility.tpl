@@ -21,11 +21,9 @@ Render a compatible securityContext depending on the platform. By default it is 
 {{- $adaptedContext := .secContext -}}
 {{- if .context.Values.global.compatibility -}}
   {{- if .context.Values.global.compatibility.openshift -}}
-    {{- if ne .context.Values.global.compatibility.openshift.adaptSecurityContext "no" -}}
-      {{- if or (eq .context.Values.global.compatibility.openshift.adaptSecurityContext "force") (and (eq .context.Values.global.compatibility.openshift.adaptSecurityContext "auto") (include "common.compatibility.isOpenshift" .context)) -}}
-        {{/* Remove incompatible user/group values that do not work in Openshift out of the box */}}
-        {{- $adaptedContext = omit $adaptedContext "fsGroup" "runAsUser" "runAsGroup" -}}
-      {{- end -}}
+    {{- if or (eq .context.Values.global.compatibility.openshift.adaptSecurityContext "force") (and (eq .context.Values.global.compatibility.openshift.adaptSecurityContext "auto") (include "common.compatibility.isOpenshift" .context)) -}}
+      {{/* Remove incompatible user/group values that do not work in Openshift out of the box */}}
+      {{- $adaptedContext = omit $adaptedContext "fsGroup" "runAsUser" "runAsGroup" -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
