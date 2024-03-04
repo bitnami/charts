@@ -210,6 +210,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /bitnami/kiam/tls
               name: tls
             {{- if .Values.server.sslCertHostPath }}
@@ -226,6 +229,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tls
           secret:
             {{- if .Values.agent.tlsSecret }}
