@@ -302,7 +302,8 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.containerSecurityContext.enabled Enabled MetalLB Controller containers' Security Context
   ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param controller.containerSecurityContext.runAsUser Set MetalLB Controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set MetalLB Controller container's Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
@@ -313,6 +314,7 @@ controller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -741,7 +743,8 @@ speaker:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param speaker.containerSecurityContext.enabled Enabled Speaker containers' Security Context
   ## @param speaker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param speaker.containerSecurityContext.runAsUser Set Speaker containers' Security Context runAsUser
+  ## @param speaker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param speaker.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param speaker.containerSecurityContext.allowPrivilegeEscalation Enables privilege Escalation context for the pod.
   ## @param speaker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly
   ## @param speaker.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
@@ -752,6 +755,7 @@ speaker:
     enabled: true
     seLinuxOptions: null
     runAsUser: 0
+    runAsGroup: 0
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     capabilities:

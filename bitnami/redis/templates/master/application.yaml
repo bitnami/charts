@@ -445,11 +445,15 @@ spec:
             defaultMode: 0755
         {{- if .Values.auth.usePasswordFiles }}
         - name: redis-password
+          {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:
             secretName: {{ template "redis.secretName" . }}
             items:
             - key: {{ template "redis.secretPasswordKey" . }}
               path: redis-password
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
         {{- end }}
         - name: config
           configMap:

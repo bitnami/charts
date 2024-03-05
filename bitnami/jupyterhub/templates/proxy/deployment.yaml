@@ -171,12 +171,18 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.proxy.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.proxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.proxy.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.proxy.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.proxy.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.proxy.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.proxy.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
