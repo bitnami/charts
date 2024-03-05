@@ -65,17 +65,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value          |
-| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`           |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`           |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
-| `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                   | `{}`           |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
+| Name                     | Description                                                                             | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                   | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
 ### Apache Flink parameters
 
@@ -181,7 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                                   | `[]`             |
 | `jobmanager.schedulerName`                                     | Alternative scheduler                                                                                                                                                                                                            | `""`             |
 | `jobmanager.updateStrategy.type`                               | Apache Flink jobmanager deployment strategy type                                                                                                                                                                                 | `RollingUpdate`  |
-| `jobmanager.updateStrategy.rollingUpdate`                      | Apache Flink jobmanager deployment rolling update configuration parameters                                                                                                                                                       | `{}`             |
+| `jobmanager.updateStrategy.rollingUpdate`                      | Apache Flink jobmanager deployment rolling update configuration parameters                                                                                                                                                       | `nil`            |
 | `jobmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                          | `[]`             |
 | `jobmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                 | `[]`             |
 | `jobmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                              | `[]`             |
@@ -275,8 +276,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                                     | `[]`             |
 | `taskmanager.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                                     | `[]`             |
 | `taskmanager.schedulerName`                                     | Alternative scheduler                                                                                                                                                                                                              | `""`             |
-| `taskmanager.updateStrategy.type`                               | Apache Flink taskmanager deployment strategy type                                                                                                                                                                                  | `RollingUpdate`  |
-| `taskmanager.updateStrategy.rollingUpdate`                      | Apache Flink taskmanager deployment rolling update configuration parameters                                                                                                                                                        | `{}`             |
+| `taskmanager.podManagementPolicy`                               | Pod management policy for the Apache Flink taskmanager statefulset                                                                                                                                                                 | `Parallel`       |
+| `taskmanager.updateStrategy.type`                               | Apache Flink taskmanager statefulset strategy type                                                                                                                                                                                 | `RollingUpdate`  |
+| `taskmanager.updateStrategy.rollingUpdate`                      | Apache Flink taskmanager statefulset rolling update configuration parameters                                                                                                                                                       | `nil`            |
 | `taskmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                            | `[]`             |
 | `taskmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                   | `[]`             |
 | `taskmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                                | `[]`             |

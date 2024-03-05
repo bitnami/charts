@@ -658,10 +658,9 @@ server:
     ## @param server.security.authorization Authorization customization
     ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-customizing-authorization
     authorization: {}
-    oauth2:
-      ## @param server.security.oauth2.client OAuth 2.0 client authentication configuration
-      ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
-      client: {}
+    ## @param server.security.oauth2 OAuth 2.0 authentication configuration
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
+    oauth2: {}
 
 ## @section Dataflow Skipper parameters
 
@@ -1250,7 +1249,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-12-r9
+    tag: 1.5.3-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
