@@ -220,12 +220,19 @@ spec:
   {{- if .Values.prometheus.topologySpreadConstraints }}
   topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.topologySpreadConstraints "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.volumes }}
-  volumes: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.prometheus.volumeMounts }}
-  volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
-  {{- end }}
+  volumes:
+    - name: empty-dir
+      emptyDir: {}
+    {{- if .Values.prometheus.volumes }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
+    {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    {{- if .Values.prometheus.volumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.prometheus.additionalScrapeConfigs.enabled .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
   additionalScrapeConfigs:
     {{- if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "external") }}
