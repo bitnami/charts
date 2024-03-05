@@ -126,6 +126,16 @@ tempo:
   ##
   configuration: |
     multitenancy_enabled: false
+    cache:
+      caches:
+        - memcached:
+            host: {{ include "grafana-tempo.memcached.url" . }}
+            service: memcache
+            timeout: 500ms
+            consistent_hash: true
+          roles:
+            - bloom
+            - trace-id-index
     compactor:
       compaction:
         block_retention: 48h
@@ -210,12 +220,6 @@ tempo:
           path: {{ .Values.tempo.dataDir }}/traces
         wal:
           path: {{ .Values.tempo.dataDir }}/wal
-        cache: memcached
-        memcached:
-          consistent_hash: true
-          host: {{ include "grafana-tempo.memcached.url" . }}
-          service: memcache
-          timeout: 500ms
   ## @param tempo.existingConfigmap Name of a ConfigMap with the Tempo configuration
   ##
   existingConfigmap: ""
