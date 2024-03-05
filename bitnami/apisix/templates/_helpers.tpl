@@ -385,12 +385,14 @@ Init container definition for waiting for the database to be ready
         name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
     {{- end }}
   volumeMounts:
-    - name: apisix-dir
+    - name: empty-dir
       mountPath: /usr/local/apisix
+      subPath: app-tmp-dir
     - name: config
       mountPath: /bitnami/apisix/conf/00_default
-    - name: tmp
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
     {{- if or $block.extraConfig $block.extraConfigExistingConfigMap }}
     - name: extra-config
       mountPath: /bitnami/apisix/conf/01_extra
@@ -599,8 +601,9 @@ Render configuration for the dashboard and ingress-controller components
         name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
     {{- end }}
   volumeMounts:
-    - name: rendered-config
+    - name: empty-dir
       mountPath: /bitnami/apisix/rendered-conf
+      subPath: app-conf-dir
     - name: config
       mountPath: /bitnami/apisix/conf/00_default
     {{- if or $block.extraConfig $block.extraConfigExistingConfigMap }}

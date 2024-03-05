@@ -1,0 +1,34 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.dashboards.persistence.enabled (not .Values.dashboards.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "opensearch.dashboards.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels .Values.dashboards.persistence.labels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: dashboards
+  {{- if or .Values.dashboards.persistence.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboards.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.dashboards.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.dashboards.persistence.size | quote }}
+  {{- if .Values.dashboards.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.dashboards.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.dashboards.persistence "global" .Values.global) | nindent 2 }}
+{{- end -}}

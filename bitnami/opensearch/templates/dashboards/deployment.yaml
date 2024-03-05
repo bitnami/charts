@@ -68,6 +68,11 @@ spec:
       {{- if .Values.dashboards.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dashboards.terminationGracePeriodSeconds }}
       {{- end }}
+      initContainers:
+        {{- include "opensearch.dashboards.copy-default-plugins.initContainer" . | nindent 8 }} 
+        {{- if .Values.dashboards.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: {{ include "opensearch.dashboards.fullname" . }}
           image: {{ template "opensearch.dashboards.image" . }}
@@ -153,6 +158,23 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch-dashboards/plugins
+              subPath: app-plugins-dir
+            - name: dashboards-data
+              mountPath: /bitnami/opensearch-dashboards
             {{- if .Values.security.enabled }}
             - name: opensearch-certificates
               mountPath: /opt/bitnami/opensearch-dashboards/config/certs/opensearch
@@ -170,6 +192,15 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: dashboards-data
+        {{- if .Values.dashboards.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "opensearch.dashboards.pvc" . }}
+        {{- else }}
+          emptyDir: {}
+        {{ end }}
         {{- if .Values.security.enabled }}
         - name: opensearch-certificates
           secret:
