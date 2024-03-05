@@ -100,13 +100,37 @@ spec:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
-            - name: extensions
+            - name: empty-dir
               mountPath: /extensions
-            - name: gems
+              subPath: app-extensions-dir
+            - name: empty-dir
               mountPath: /gems
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /specifications
+              subPath: app-specifications-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
+        # Source: https://github.com/fluent/fluentd-kubernetes-daemonset/issues/1393
+        - name: tmp-dir-permissions
+          image: {{ include "fluentd.aggregator.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              #!/bin/sh
+              chmod o-rwx /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- if .Values.aggregator.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -222,12 +246,15 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.aggregator.extraGems }}
-            - name: extensions
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/extensions/
-            - name: gems
+              subPath: app-extensions-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/gems/
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/specifications/
+              subPath: app-specifications-dir
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: fluentd-aggregator-certificates
@@ -246,6 +273,9 @@ spec:
             - name: custom-init-scripts-secret
               mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -253,6 +283,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.tls.enabled }}
         - name: fluentd-aggregator-certificates
           secret:
@@ -264,14 +296,6 @@ spec:
             name: {{ template "fluentd.aggregator.configMap" . }}
         {{- if not .Values.aggregator.persistence.enabled }}
         - name: buffer
-          emptyDir: {}
-        {{- end }}
-        {{- if .Values.aggregator.extraGems }}
-        - name: extensions
-          emptyDir: {}
-        - name: gems
-          emptyDir: {}
-        - name: specifications
           emptyDir: {}
         {{- end }}
         {{- if .Values.aggregator.initScripts }}

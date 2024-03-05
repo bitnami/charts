@@ -73,7 +73,7 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.9.2-debian-12-r3
+  tag: 2.9.2-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -110,7 +110,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.0.0-debian-12-r13
+    tag: 1.0.0-debian-12-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -235,6 +235,7 @@ operator:
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -246,6 +247,7 @@ operator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -760,7 +762,7 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.0.0-debian-12-r10
+    tag: 1.0.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -882,6 +884,7 @@ apiserver:
   ## @param apiserver.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param apiserver.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param apiserver.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param apiserver.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param apiserver.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param apiserver.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param apiserver.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -893,6 +896,7 @@ apiserver:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1443,6 +1447,7 @@ cluster:
     ## @param cluster.head.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param cluster.head.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cluster.head.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cluster.head.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param cluster.head.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cluster.head.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param cluster.head.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1454,6 +1459,7 @@ cluster:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1643,6 +1649,7 @@ cluster:
       ## @param cluster.worker.common.containerSecurityContext.enabled Enabled containers' Security Context
       ## @param cluster.worker.common.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
       ## @param cluster.worker.common.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+      ## @param cluster.worker.common.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
       ## @param cluster.worker.common.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
       ## @param cluster.worker.common.containerSecurityContext.privileged Set container's Security Context privileged
       ## @param cluster.worker.common.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1654,6 +1661,7 @@ cluster:
         enabled: true
         seLinuxOptions: null
         runAsUser: 1001
+        runAsGroup: 1001
         runAsNonRoot: true
         privileged: false
         readOnlyRootFilesystem: true

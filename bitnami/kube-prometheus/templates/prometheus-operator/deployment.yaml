@@ -168,13 +168,20 @@ spec:
           {{- else if ne .Values.operator.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.operator.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.operator.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.operator.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.operator.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.operator.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.operator.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.operator.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

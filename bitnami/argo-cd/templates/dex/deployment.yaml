@@ -90,10 +90,12 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: static-files
+            - name: empty-dir
               mountPath: /shared
-            - name: tmp-dir
+              subPath: app-static-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         - name: copyutil
           image: {{ include "argocd.image" . }}
@@ -110,8 +112,12 @@ spec:
             - /opt/bitnami/argo-cd/bin/argocd
             - /shared/argocd-dex
           volumeMounts:
-            - mountPath: /shared
-              name: static-files
+            - name: empty-dir
+              mountPath: /shared
+              subPath: app-static-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- if .Values.dex.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dex.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -208,10 +214,12 @@ spec:
             failureThreshold: {{ .Values.dex.readinessProbe.failureThreshold }}
           {{- end }}
           volumeMounts:
-            - name: static-files
+            - name: empty-dir
               mountPath: /shared
-            - name: tmp-dir
+              subPath: app-static-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.dex.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -219,9 +227,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.dex.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-dir
-          emptyDir: {}
-        - name: static-files
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.dex.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraVolumes "context" $) | nindent 8 }}
