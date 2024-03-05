@@ -1412,12 +1412,14 @@ volumePermissions:
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.runAsGroup Group ID for the init container
   ## @param volumePermissions.containerSecurityContext.runAsNonRoot runAsNonRoot for the init container
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type seccompProfile.type for the init container
   ##
   containerSecurityContext:
     seLinuxOptions: null
     runAsUser: 0
+    runAsGroup: 0
     runAsNonRoot: false
     seccompProfile:
       type: RuntimeDefault
