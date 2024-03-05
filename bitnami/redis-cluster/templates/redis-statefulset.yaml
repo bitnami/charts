@@ -48,7 +48,7 @@ spec:
       {{- end }}
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.redis.automountServiceAccountToken }}
@@ -86,7 +86,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -310,7 +310,7 @@ spec:
           image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -417,7 +417,7 @@ spec:
           command:
           {{- toYaml .Values.sysctlImage.command | nindent 12 }}
           {{- if .Values.sysctlImage.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.sysctlImage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sysctlImage.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.redis.initContainers }}
