@@ -3,8 +3,8 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
-kind: Deployment
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
 metadata:
   name:  {{ include "flink.taskmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -15,15 +15,15 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  replicas: {{ .Values.taskmanager.replicaCount }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.taskmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: flink
       app.kubernetes.io/component: taskmanager
-  replicas: {{ .Values.taskmanager.replicaCount }}
-  {{- if .Values.taskmanager.updateStrategy }}
-  strategy: {{- toYaml .Values.taskmanager.updateStrategy | nindent 4 }}
-  {{- end }}
+  podManagementPolicy: {{ .Values.taskmanager.podManagementPolicy }}
+  serviceName: {{ printf "%s-headless" (include "flink.taskmanager.fullname" .) | trunc 63 | trimSuffix "-" }}
+  updateStrategy: {{- toYaml .Values.taskmanager.updateStrategy | nindent 4 }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
@@ -93,6 +93,10 @@ spec:
             - name: tcp-rpc
               containerPort: {{ .Values.taskmanager.containerPorts.rpc }}
           env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: FLINK_MODE
               value: taskmanager
             # Hosts and addresses are determined by the service full name, which maps to flink.*§.fullname
@@ -104,8 +108,11 @@ spec:
               value: 0.0.0.0
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
+            {{- $releaseNamespace := include "common.names.namespace" . }}
+            {{- $headlessServiceName := printf "%s-headless" (include "flink.taskmanager.fullname" .) | trunc 63 | trimSuffix "-" }}
+            {{- $clusterDomain := .Values.clusterDomain }}
             - name: FLINK_CFG_TASKMANAGER_HOST
-              value: {{ include "flink.taskmanager.fullname" . | quote}}
+              value: "$(MY_POD_NAME).{{ $headlessServiceName }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}"
             - name: FLINK_CFG_TASKMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: BITNAMI_DEBUG

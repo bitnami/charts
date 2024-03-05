@@ -128,7 +128,7 @@ spec:
             - name: OPENSEARCH_IS_DEDICATED_NODE
               value: "yes"
             - name: OPENSEARCH_NODE_ROLES
-              value: {{ ternary "" (join "," .Values.coordinating.extraRoles) (empty .Values.coordinating.extraRoles) | quote }}
+              value: {{ .Values.coordinating.extraRoles | join "," | quote }}
             - name: OPENSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: OPENSEARCH_HTTP_PORT_NUMBER
