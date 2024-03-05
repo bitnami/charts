@@ -113,9 +113,11 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           name: shutdown-manager
+          {{- if .Values.envoy.shutdownManager.resources }}
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
           {{- else if ne .Values.envoy.shutdownManager.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.shutdownManager.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: envoy-admin
               mountPath: /admin
@@ -241,9 +243,11 @@ spec:
             successThreshold: {{ .Values.envoy.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.startupProbe.failureThreshold }}
           {{- end }}
+          {{- if .Values.envoy.resources }}
           resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
           {{- else if ne .Values.envoy.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: envoy-config
               mountPath: /config
