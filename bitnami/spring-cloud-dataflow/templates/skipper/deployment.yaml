@@ -69,7 +69,7 @@ spec:
       priorityClassName: {{ .Values.skipper.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.skipper.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.skipper.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.skipper.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.skipper.initContainers .Values.waitForBackends.enabled }}
       initContainers:
@@ -80,7 +80,7 @@ spec:
           command:
             - /scripts/wait-for-backends.sh
           {{- if .Values.waitForBackends.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.waitForBackends.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitForBackends.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.waitForBackends.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
@@ -101,7 +101,7 @@ spec:
           image: {{ include "scdf.skipper.image" . }}
           imagePullPolicy: {{ .Values.skipper.image.pullPolicy | quote }}
           {{- if .Values.skipper.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.skipper.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.skipper.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.skipper.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.command "context" $) | nindent 12 }}

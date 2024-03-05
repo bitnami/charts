@@ -71,7 +71,7 @@ spec:
       priorityClassName: {{ .Values.server.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.server.initContainers .Values.waitForBackends.enabled }}
       initContainers:
@@ -82,7 +82,7 @@ spec:
           command:
             - /scripts/wait-for-backends.sh
           {{- if .Values.waitForBackends.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.waitForBackends.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitForBackends.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.waitForBackends.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
@@ -103,7 +103,7 @@ spec:
           image: {{ include "scdf.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy | quote }}
           {{- if .Values.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.server.command "context" $) | nindent 12 }}
