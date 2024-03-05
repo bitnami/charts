@@ -63,7 +63,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboards.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dashboards.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboards.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dashboards.terminationGracePeriodSeconds }}
@@ -78,7 +78,7 @@ spec:
           image: {{ template "opensearch.dashboards.image" . }}
           imagePullPolicy: {{ .Values.dashboards.image.pullPolicy }}
           {{- if .Values.dashboards.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dashboards.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboards.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
