@@ -970,9 +970,7 @@ aggregator:
     ##                 operator: In
     ##                 values:
     ##                   - frontend
-    extraIngress:
-       - ports:
-           - port: 24224
+    extraIngress: []
     ## @param aggregator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraEgress:
