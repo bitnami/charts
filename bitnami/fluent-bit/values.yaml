@@ -513,6 +513,8 @@ config:
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
         HTTP_Port    {{ .Values.containerPorts.http }}
+        Parsers_File /opt/bitnami/fluent-bit/conf/parsers.conf
+        Parsers_File /opt/bitnami/fluent-bit/conf/custom_parsers.conf
   ## @param config.inputs [string] Defines the source from where Fluent Bit can collect data
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   ##

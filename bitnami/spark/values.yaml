@@ -174,9 +174,6 @@ master:
   ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param master.podSecurityContext.fsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.runAsUser Set master pod's Security Context User ID
-  ## @param master.podSecurityContext.runAsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.seLinuxOptions [object,nullable] Set master pod's Security Context SELinux options
   ##
   podSecurityContext:
     enabled: true
@@ -184,14 +181,12 @@ master:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-    runAsUser: 1001
-    runAsGroup: 0
-    seLinuxOptions: null
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -203,6 +198,7 @@ master:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -542,6 +538,7 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -553,6 +550,7 @@ worker:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
