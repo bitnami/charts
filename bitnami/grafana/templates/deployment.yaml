@@ -72,7 +72,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.grafana.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.grafana.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.grafana.terminationGracePeriodSeconds }}
@@ -110,7 +110,7 @@ spec:
           image: {{ include "grafana.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.grafana.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
