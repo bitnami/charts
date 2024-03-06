@@ -80,6 +80,7 @@ data:
                     runAsUser: {{ .Values.agent.containerSecurityContext.runAsUser }}
                     runAsGroup: {{ .Values.agent.containerSecurityContext.runAsGroup }}
                     {{- end }}
+                    {{- end }}
                   {{- if .Values.agent.sidecars }}
                   {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 18 }}
                   {{- end }}
