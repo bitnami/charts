@@ -685,7 +685,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.waitContainer.image" .context }}
   imagePullPolicy: {{ .context.Values.waitContainer.image.pullPolicy }}
   {{- if .context.Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.waitContainer.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash
