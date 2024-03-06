@@ -68,6 +68,19 @@ var _ = Describe("NATS", Ordered, func() {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
+			By("puting a value into a key")
+			putJobName := fmt.Sprintf("%s-putbc-%s",
+				stsName, jobSuffix)
+			err = createJob(ctx, c, putJobName, port, "put", bucketName, "testKey", "testValue")
+			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(func() (*batchv1.Job, error) {
+				return c.BatchV1().Jobs(namespace).Get(ctx, putJobName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+
+			// Give the application some time to sync the data
+			time.Sleep(10*time.Second)
+
 			By("scaling down to 0 replicas")
 			ss, err = utils.StsScale(ctx, c, ss, 0)
 			Expect(err).NotTo(HaveOccurred())
@@ -83,6 +96,16 @@ var _ = Describe("NATS", Ordered, func() {
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+
+			By("getting a value for a key")
+			getJobName := fmt.Sprintf("%s-getbc-%s",
+				stsName, jobSuffix)
+			err = createJob(ctx, c, getJobName, port, "get", bucketName, "testKey")
+			Expect(err).NotTo(HaveOccurred())
+
+			Eventually(func() (*batchv1.Job, error) {
+				return c.BatchV1().Jobs(namespace).Get(ctx, getJobName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("creating a job to get the test bucket")
 			deleteDBJobName := fmt.Sprintf("%s-delbc-%s",

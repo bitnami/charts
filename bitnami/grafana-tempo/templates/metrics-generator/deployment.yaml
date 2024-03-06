@@ -63,7 +63,7 @@ spec:
       schedulerName: {{ .Values.metricsGenerator.schedulerName }}
       {{- end }}
       {{- if .Values.metricsGenerator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metricsGenerator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.metricsGenerator.initContainers }}
@@ -74,7 +74,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.metricsGenerator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metricsGenerator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -144,6 +144,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -159,6 +162,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: tempo-config

@@ -70,7 +70,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.meta.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.meta.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.meta.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.meta.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.meta.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.meta.terminationGracePeriodSeconds }}
@@ -87,7 +87,7 @@ spec:
           image: {{ template "supabase.meta.image" . }}
           imagePullPolicy: {{ .Values.meta.image.pullPolicy }}
           {{- if .Values.meta.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.meta.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.meta.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -161,6 +161,15 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.meta.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.npm/_logs
+              subPath: npm-logs-dir
+            - name: empty-dir
+              mountPath: /.npm/_cacache
+              subPath: npm-cache-dir
           {{- if .Values.meta.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.meta.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -168,6 +177,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.meta.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.meta.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.meta.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

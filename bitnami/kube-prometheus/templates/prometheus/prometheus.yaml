@@ -152,7 +152,7 @@ spec:
   remoteWrite: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.remoteWrite "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.prometheus.podSecurityContext.enabled }}
-  securityContext: {{- omit .Values.prometheus.podSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.prometheus.podSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.prometheus.ruleNamespaceSelector }}
   ruleNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.ruleNamespaceSelector "context" $) | nindent 4 }}
@@ -220,12 +220,19 @@ spec:
   {{- if .Values.prometheus.topologySpreadConstraints }}
   topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.topologySpreadConstraints "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.prometheus.volumes }}
-  volumes: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.prometheus.volumeMounts }}
-  volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
-  {{- end }}
+  volumes:
+    - name: empty-dir
+      emptyDir: {}
+    {{- if .Values.prometheus.volumes }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
+    {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    {{- if .Values.prometheus.volumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumeMounts "context" $) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.prometheus.additionalScrapeConfigs.enabled .Values.prometheus.additionalScrapeConfigsExternal.enabled }}
   additionalScrapeConfigs:
     {{- if and .Values.prometheus.additionalScrapeConfigs.enabled (eq .Values.prometheus.additionalScrapeConfigs.type "external") }}
@@ -303,7 +310,7 @@ spec:
         {{- end }}
       {{- if .Values.prometheus.thanos.containerSecurityContext.enabled }}
       # yamllint disable rule:indentation
-      securityContext: {{- omit .Values.prometheus.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.prometheus.thanos.containerSecurityContext "context" $) | nindent 8 }}
       # yamllint enable rule:indentation
       {{- end }}
       {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
@@ -339,7 +346,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: prometheus
       {{- if .Values.prometheus.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.prometheus.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.prometheus.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.prometheus.livenessProbe.enabled }}
       livenessProbe:
@@ -386,7 +393,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
       {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.prometheusConfigReloader.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
       livenessProbe:

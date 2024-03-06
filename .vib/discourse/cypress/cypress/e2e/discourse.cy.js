@@ -22,7 +22,6 @@ it('allows to sign up', () => {
 
 it('allows to create a topic', () => {
   cy.login();
-  cy.contains('Got it').click();
   cy.contains('button', 'New Topic').click();
   cy.fixture('topics').then((topic) => {
     cy.get('#reply-title').type(`${topic.newTopic.title}-${random}`);

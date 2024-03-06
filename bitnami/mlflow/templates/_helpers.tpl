@@ -121,7 +121,7 @@ Init container definition for copying the certificates
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -147,7 +147,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -164,7 +164,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.waitContainer.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -234,7 +234,7 @@ Init container definition for upgrading the database
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - mlflow
@@ -261,7 +261,7 @@ Init container definition for upgrading the database
   image: {{ include "mlflow.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.tracking.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - python
@@ -519,7 +519,7 @@ Return the volume-permissions init container
       chown {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
       find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
   {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.volumePermissions.resources }}
   resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -662,7 +662,7 @@ Return the definition of the git clone init container
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
       git clone {{ .Values.run.source.git.repository }} {{ if .Values.run.source.git.revision }}--branch {{ .Values.run.source.git.revision }}{{ end }} /app
   {{- if .Values.run.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.run.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.run.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: source
@@ -685,7 +685,7 @@ Init container definition for waiting for the database to be ready
   image: {{ include "mlflow.v0.waitContainer.image" .context }}
   imagePullPolicy: {{ .context.Values.waitContainer.image.pullPolicy }}
   {{- if .context.Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .context.Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.waitContainer.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash

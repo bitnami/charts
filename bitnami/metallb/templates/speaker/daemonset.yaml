@@ -62,7 +62,7 @@ spec:
       priorityClassName: {{ .Values.speaker.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.speaker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.speaker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.speaker.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.speaker.terminationGracePeriodSeconds }}
@@ -75,7 +75,7 @@ spec:
           image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.speaker.image.pullPolicy }}
           {{- if .Values.speaker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.speaker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

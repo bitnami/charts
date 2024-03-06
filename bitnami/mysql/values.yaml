@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -81,7 +90,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.36-debian-12-r7
+  tag: 8.0.36-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -327,21 +336,25 @@ primary:
   ## @param primary.containerSecurityContext.enabled MySQL primary container securityContext
   ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MySQL primary container
+  ## @param primary.containerSecurityContext.runAsGroup Group ID for the MySQL primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set MySQL primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
+  ## @param primary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## MySQL primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -740,21 +753,25 @@ secondary:
   ## @param secondary.containerSecurityContext.enabled MySQL secondary container securityContext
   ## @param secondary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MySQL secondary container
+  ## @param secondary.containerSecurityContext.runAsGroup Group ID for the MySQL secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set MySQL secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param secondary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param secondary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## MySQL secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1112,7 +1129,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1157,7 +1174,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-12-r7
+    tag: 0.15.1-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1173,13 +1190,25 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the MySQL metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param metrics.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## @param metrics.containerPorts.http Container port for http
   ##
   containerPorts:
