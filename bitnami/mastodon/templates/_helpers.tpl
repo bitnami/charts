@@ -567,7 +567,7 @@ Init container definition for waiting for the database to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -619,7 +619,7 @@ Init container definition for waiting for Redis(TM) to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -666,7 +666,7 @@ Init container definition for waiting for Elasticsearch to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -713,7 +713,7 @@ Init container definition for waiting for S3 to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -753,7 +753,7 @@ Init container definition for waiting for Mastodon Web to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash

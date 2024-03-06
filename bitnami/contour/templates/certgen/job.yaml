@@ -37,7 +37,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.contour.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.contour.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: contour
@@ -73,7 +73,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.contour.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.contour.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
       restartPolicy: Never
