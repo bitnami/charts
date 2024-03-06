@@ -123,7 +123,7 @@ spec:
               chown {{ .Values.witness.containerSecurityContext.runAsUser }}:{{ .Values.witness.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
                 xargs -r chown -R {{ .Values.witness.containerSecurityContext.runAsUser }}:{{ .Values.witness.podSecurityContext.fsGroup }}
-          securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
+          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}

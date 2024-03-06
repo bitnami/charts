@@ -228,6 +228,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /etc/jupyterhub/jupyterhub_config.py
               subPath: jupyterhub_config.py
               name: config
@@ -236,13 +239,15 @@ spec:
               name: config
             - mountPath: /usr/local/etc/jupyterhub/secret/
               name: secret
-          {{- if .Values.hub.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- if .Values.hub.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.hub.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.hub.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "jupyterhub.hubConfigmapName" . }}

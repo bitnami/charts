@@ -90,6 +90,9 @@ spec:
             - name: cni-bin-dir
               mountPath: {{ .Values.CNIMountPath }}/opt/cni/bin
               mountPropagation: Bidirectional
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
       containers:
         - name: multus-cni
           image: {{ template "multus-cni.image" . }}
@@ -189,6 +192,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: cni-net-dir
               mountPath: {{ .Values.CNIMountPath }}/etc/cni/net.d
             - name: cni-bin-dir
@@ -200,6 +206,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: cni-bin-dir
           hostPath:
             path: {{ .Values.hostCNIBinDir }}

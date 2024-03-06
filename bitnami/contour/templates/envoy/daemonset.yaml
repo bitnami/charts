@@ -103,12 +103,15 @@ spec:
                   - shutdown
           {{- end }}
           name: shutdown-manager
+          {{- if .Values.envoy.shutdownManager.resources }}
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
           {{- else if ne .Values.envoy.shutdownManager.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.shutdownManager.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
-            - name: envoy-admin
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
           {{- if .Values.envoy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
@@ -216,14 +219,21 @@ spec:
             successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
           {{- end }}
-          resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
+          {{- if .Values.envoy.resources }}
+          resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
-            - name: envoy-config
+            - name: empty-dir
               mountPath: /config
+              subPath: app-conf-dir
             - name: envoycert
               mountPath: /certs
-            - name: envoy-admin
+              readOnly: true
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -264,13 +274,15 @@ spec:
           name: envoy-initconfig
           resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
           volumeMounts:
-            - name: envoy-config
+            - name: empty-dir
               mountPath: /config
+              subPath: app-conf-dir
             - name: envoycert
               mountPath: /certs
               readOnly: true
-            - name: envoy-admin
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -301,9 +313,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
-        - name: envoy-admin
-          emptyDir: {}
-        - name: envoy-config
+        - name: empty-dir
           emptyDir: {}
         - name: envoycert
           secret:
