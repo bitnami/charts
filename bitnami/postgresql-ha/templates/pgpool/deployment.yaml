@@ -67,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.pgpool.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.pgpool.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.pgpool.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.pgpool.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.pgpool.terminationGracePeriodSeconds }}
@@ -125,7 +125,7 @@ spec:
           image: {{ include "postgresql-ha.pgpool.image" . }}
           imagePullPolicy: {{ .Values.pgpool.image.pullPolicy | quote }}
           {{- if .Values.pgpool.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.pgpool.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.pgpool.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

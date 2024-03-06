@@ -73,7 +73,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.witness.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.witness.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.witness.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.witness.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
@@ -123,7 +123,7 @@ spec:
               chown {{ .Values.witness.containerSecurityContext.runAsUser }}:{{ .Values.witness.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
                 xargs -r chown -R {{ .Values.witness.containerSecurityContext.runAsUser }}:{{ .Values.witness.podSecurityContext.fsGroup }}
-          securityContext: {{- omit .Values.volumePermissions.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.podSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
@@ -144,7 +144,7 @@ spec:
           image: {{ include "postgresql-ha.postgresql.image" . }}
           imagePullPolicy: {{ .Values.postgresql.image.pullPolicy | quote }}
           {{- if .Values.witness.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.witness.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.witness.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.witness.lifecycleHooks }}
@@ -458,7 +458,7 @@ spec:
           image: {{ include "postgresql-ha.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: PG_EXPORTER_WEB_LISTEN_ADDRESS
