@@ -108,13 +108,13 @@ spec:
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.coordinating.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.coordinating.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- if .Values.ingest.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          {{- if .Values.coordinating.resources }}
-          resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}
-          {{- else if ne .Values.coordinating.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.coordinating.resourcesPreset) | nindent 12 }}
+          {{- if .Values.ingest.resources }}
+          resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
+          {{- else if ne .Values.ingest.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingest.resourcesPreset) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
