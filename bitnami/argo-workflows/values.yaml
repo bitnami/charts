@@ -17,6 +17,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -66,7 +75,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.5.4-debian-12-r7
+    tag: 3.5.5-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -178,6 +187,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled server containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set server containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set server containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set server containers' Security Context runAsNonRoot
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param server.containerSecurityContext.privileged Set server container's Security Context privileged
@@ -189,6 +199,7 @@ server:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -552,7 +563,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.5.4-debian-12-r7
+    tag: 3.5.5-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -661,6 +672,7 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set controller containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
@@ -672,6 +684,7 @@ controller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -721,7 +734,7 @@ controller:
     ## Maximun number of workflows running in a namespace
     ##
     namespaceParallelism:
-    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.podSecurityContext }}
+    {{- if or .Values.executor.resources .Values.executor.extraEnvVars .Values.executor.containerSecurityContext }}
     executor:
       {{- if .Values.executor.resources }}
       resources: {{- include "common.tplvalues.render" (dict "value" .Values.executor.resources "context" $) | nindent 4 }}
@@ -1104,7 +1117,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.5.4-debian-12-r10
+    tag: 3.5.5-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1148,6 +1161,7 @@ executor:
   ## @param executor.containerSecurityContext.enabled Enabled executor containers' Security Context
   ## @param executor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param executor.containerSecurityContext.runAsUser Set executor containers' Security Context runAsUser
+  ## @param executor.containerSecurityContext.runAsGroup Set executor containers' Security Context runAsGroup
   ## @param executor.containerSecurityContext.runAsNonRoot Set executor containers' Security Context runAsNonRoot
   ## @param executor.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param executor.containerSecurityContext.privileged Set executor container's Security Context privileged
@@ -1159,6 +1173,7 @@ executor:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false

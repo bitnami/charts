@@ -70,7 +70,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.storage.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.storage.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.storage.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storage.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.storage.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.storage.terminationGracePeriodSeconds }}
@@ -109,7 +109,7 @@ spec:
           image: {{ template "supabase.storage.image" . }}
           imagePullPolicy: {{ .Values.storage.image.pullPolicy }}
           {{- if .Values.storage.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.storage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.storage.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
