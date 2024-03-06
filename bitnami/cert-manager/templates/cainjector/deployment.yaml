@@ -34,7 +34,7 @@ spec:
     spec:
       {{- include "certmanager.cainjector.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.cainjector.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.cainjector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cainjector.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.cainjector.schedulerName }}
       schedulerName: {{ .Values.cainjector.schedulerName }}
@@ -89,7 +89,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.cainjector.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.cainjector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cainjector.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

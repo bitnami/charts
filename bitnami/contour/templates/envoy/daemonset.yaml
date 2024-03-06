@@ -59,7 +59,7 @@ spec:
       hostNetwork: {{ .Values.envoy.hostNetwork }}
       dnsPolicy: {{ .Values.envoy.dnsPolicy }}
       {{- if .Values.envoy.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.envoy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.envoy.shutdownManager.enabled }}
@@ -89,7 +89,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.shutdownManager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.shutdownManager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.envoy.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.lifecycleHooks "context" $) | nindent 12 }}
@@ -109,8 +109,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.shutdownManager.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: envoy-admin
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
           {{- if .Values.envoy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
           {{- end }}
@@ -138,7 +139,7 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           {{- if .Values.envoy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: CONTOUR_NAMESPACE
@@ -224,12 +225,15 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: envoy-config
+            - name: empty-dir
               mountPath: /config
+              subPath: app-conf-dir
             - name: envoycert
               mountPath: /certs
-            - name: envoy-admin
+              readOnly: true
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -270,13 +274,15 @@ spec:
           name: envoy-initconfig
           resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
           volumeMounts:
-            - name: envoy-config
+            - name: empty-dir
               mountPath: /config
+              subPath: app-conf-dir
             - name: envoycert
               mountPath: /certs
               readOnly: true
-            - name: envoy-admin
+            - name: empty-dir
               mountPath: /admin
+              subPath: app-admin-dir
             {{- if .Values.envoy.extraVolumeMounts }}
               {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -300,16 +306,14 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.envoy.initConfig.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.initConfig.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.initConfig.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
       volumes:
-        - name: envoy-admin
-          emptyDir: {}
-        - name: envoy-config
+        - name: empty-dir
           emptyDir: {}
         - name: envoycert
           secret:
