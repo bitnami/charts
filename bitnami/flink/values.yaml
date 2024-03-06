@@ -37,6 +37,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -451,12 +454,12 @@ jobmanager:
   ##
   schedulerName: ""
   ## @param jobmanager.updateStrategy.type Apache Flink jobmanager deployment strategy type
-  ## @param jobmanager.updateStrategy.rollingUpdate Apache Flink jobmanager deployment rolling update configuration parameters
+  ## @param jobmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink jobmanager deployment rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param jobmanager.extraVolumes Optionally specify extra list of additional volumes for flink container
   ##
   extraVolumes: []
@@ -818,13 +821,17 @@ taskmanager:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param taskmanager.updateStrategy.type Apache Flink taskmanager deployment strategy type
-  ## @param taskmanager.updateStrategy.rollingUpdate Apache Flink taskmanager deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## @param taskmanager.podManagementPolicy Pod management policy for the Apache Flink taskmanager statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param taskmanager.updateStrategy.type Apache Flink taskmanager statefulset strategy type
+  ## @param taskmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink taskmanager statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param taskmanager.extraVolumes Optionally specify extra list of additional volumes for flink container
   ##
   extraVolumes: []

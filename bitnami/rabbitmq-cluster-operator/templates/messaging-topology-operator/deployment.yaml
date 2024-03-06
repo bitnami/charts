@@ -65,7 +65,7 @@ spec:
       priorityClassName: {{ .Values.msgTopologyOperator.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.msgTopologyOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.msgTopologyOperator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.msgTopologyOperator.terminationGracePeriodSeconds }}
@@ -85,7 +85,7 @@ spec:
           image: {{ template "rmqco.msgTopologyOperator.image" . }}
           imagePullPolicy: {{ .Values.msgTopologyOperator.image.pullPolicy }}
           {{- if .Values.msgTopologyOperator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.msgTopologyOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.msgTopologyOperator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.msgTopologyOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.command "context" $) | nindent 12 }}

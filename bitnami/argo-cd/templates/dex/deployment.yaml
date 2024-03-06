@@ -69,7 +69,7 @@ spec:
       runtimeClassName: {{ .Values.dex.runtimeClassName }}
       {{- end }}
       {{- if .Values.dex.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dex.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dex.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
@@ -104,7 +104,7 @@ spec:
           resources:  {{- toYaml .Values.dex.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.containerSecurityContext }}
-          securityContext: {{- omit .Values.dex.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dex.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - cp
@@ -129,7 +129,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dex.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dex.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dex.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.dex.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.dex.command "context" $) | nindent 12 }}

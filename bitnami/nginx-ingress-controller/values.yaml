@@ -255,6 +255,8 @@ podSecurityContext:
 ## @param containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the Controller container
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser User ID for the Controller container
+## @param containerSecurityContext.runAsGroup Group ID for the Controller container
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities that should be dropped
 ## @param containerSecurityContext.capabilities.add [array] Linux Kernel capabilities that should be added
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
@@ -265,6 +267,8 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
+  readOnlyRootFilesystem: false
   capabilities:
     drop: ["ALL"]
     add: ["NET_BIND_SERVICE"]
@@ -562,6 +566,8 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.allowPrivilegeEscalation Switch to allow priviledge escalation on the container
   ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser User ID for the Default backend container
+  ## @param defaultBackend.containerSecurityContext.runAsGroup Group ID for the Default backend container
+  ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -570,6 +576,8 @@ defaultBackend:
     allowPrivilegeEscalation: false
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     runAsNonRoot: true
