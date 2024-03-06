@@ -45,6 +45,15 @@ global:
     adminUsername: ""
     adminPassword: ""
     existingSecret: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -102,7 +111,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 16.2.0-debian-12-r3
+    tag: 16.2.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -238,6 +247,7 @@ postgresql:
   ## @param postgresql.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param postgresql.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param postgresql.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param postgresql.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param postgresql.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param postgresql.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param postgresql.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -255,6 +265,7 @@ postgresql:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -802,6 +813,7 @@ witness:
   ## @param witness.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param witness.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param witness.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param witness.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param witness.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param witness.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param witness.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -813,12 +825,13 @@ witness:
   ##     enabled: true
   ##     capabilities:
   ##       drop: ["NET_RAW"]
-  ##     readOnlyRootFilesystem: true
+  ##     readOnlyRootFilesystem: false
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1115,7 +1128,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.5.0-debian-12-r8
+    tag: 4.5.0-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1295,6 +1308,7 @@ pgpool:
   ## @param pgpool.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param pgpool.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param pgpool.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param pgpool.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param pgpool.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param pgpool.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param pgpool.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1306,12 +1320,13 @@ pgpool:
   ##     enabled: true
   ##     capabilities:
   ##       drop: ["NET_RAW"]
-  ##     readOnlyRootFilesystem: true
+  ##     readOnlyRootFilesystem: false
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1692,7 +1707,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r12
+    tag: 0.15.0-debian-12-r13
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1943,7 +1958,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -2175,7 +2190,7 @@ backup:
       runAsGroup: 0
       runAsNonRoot: true
       allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       seccompProfile:
         type: RuntimeDefault
       capabilities:

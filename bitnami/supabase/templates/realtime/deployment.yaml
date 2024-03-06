@@ -71,7 +71,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.realtime.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.realtime.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.realtime.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.realtime.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.realtime.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.realtime.terminationGracePeriodSeconds }}
@@ -80,6 +80,30 @@ spec:
         {{- if not .Values.diagnosticMode.enabled }}
         {{- include "supabase.waitForDBInitContainer" . | nindent 8 }}
         {{- end }}
+        - name: create-tzdata-priv
+          image: {{ template "supabase.realtime.image" . }}
+          imagePullPolicy: {{ .Values.realtime.image.pullPolicy }}
+          {{- if .Values.realtime.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.realtime.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              cp -r /opt/bitnami/supabase-realtime/lib/tzdata-*/priv/* /priv
+          {{- if .Values.realtime.resources }}
+          resources: {{- toYaml .Values.realtime.resources | nindent 12 }}
+          {{- else if ne .Values.realtime.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.realtime.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /priv
+              subPath: app-tzdata-dir
         {{- if .Values.realtime.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.realtime.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -88,7 +112,7 @@ spec:
           image: {{ template "supabase.realtime.image" . }}
           imagePullPolicy: {{ .Values.realtime.image.pullPolicy }}
           {{- if .Values.realtime.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.realtime.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.realtime.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -180,6 +204,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.realtime.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.tzdata-priv
+              subPath: app-tzdata-dir
           {{- if .Values.realtime.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.realtime.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -187,6 +217,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.realtime.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.realtime.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.realtime.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
