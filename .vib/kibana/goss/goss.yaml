@@ -13,10 +13,9 @@ file:
     mode: "2777"
     owner: root
   /opt/bitnami/kibana/config/kibana.yml:
-    mode: "0664"
+    mode: "0644"
     filetype: file
     exists: true
-    group: root
     contents:
     - "{{ toJson .Vars.extraConfiguration }}"
 command:
