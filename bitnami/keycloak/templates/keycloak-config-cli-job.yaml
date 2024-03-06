@@ -37,7 +37,7 @@ spec:
       {{- include "keycloak.imagePullSecrets" . | nindent 6 }}
       restartPolicy: Never
       {{- if .Values.keycloakConfigCli.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.keycloakConfigCli.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakConfigCli.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: {{ .Values.keycloakConfigCli.automountServiceAccountToken }}
       {{- if .Values.keycloakConfigCli.hostAliases }}
@@ -69,7 +69,7 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.keycloakConfigCli.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.keycloakConfigCli.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakConfigCli.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: KEYCLOAK_URL
@@ -103,6 +103,9 @@ spec:
           {{- end }}
           {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: config-volume
               mountPath: /config
@@ -121,6 +124,8 @@ spec:
         {{- end }}
       {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumes }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
         - name: config-volume
           configMap:

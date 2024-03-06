@@ -194,7 +194,7 @@ Return the MongoDB Secret Name
   image: {{ template "appsmith.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.backend.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.backend.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -238,7 +238,7 @@ Return the MongoDB Secret Name
   image: {{ template "appsmith.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.backend.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.backend.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -280,7 +280,7 @@ Return the MongoDB Secret Name
   image: {{ template "appsmith.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.rts.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.rts.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rts.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
