@@ -82,6 +82,9 @@ spec:
               {{- end }}
             command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             volumeMounts:
+              - name: empty-dir
+                mountPath: /tmp
+                subPath: tmp-dir
               {{- if .Values.postgresql.tls.enabled }}
               - name: certs
                 mountPath: /certs
@@ -98,10 +101,8 @@ spec:
             fsGroup: {{ .Values.backup.cronjob.podSecurityContext.fsGroup }}
           {{- end }}
           volumes:
-            {{- if .Values.postgresql.tls.enabled }}
-            - name: raw-certificates
-              emptyDir: /tmp/certs
-            {{- end }}
+            - name: empty-dir
+              emptyDir: {}
             {{- if .Values.backup.cronjob.storage.existingClaim }}
             - name: datadir
               persistentVolumeClaim:
