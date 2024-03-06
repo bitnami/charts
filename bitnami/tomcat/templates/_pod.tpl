@@ -32,7 +32,7 @@ nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeS
 tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 2 }}
 {{- end }}
 {{- if .Values.podSecurityContext.enabled }}
-securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 2 }}
+securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 2 }}
 {{- end }}
 {{- if .Values.topologySpreadConstraints }}
 topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
@@ -66,7 +66,7 @@ containers:
     image: {{ template "tomcat.image" . }}
     imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
     {{- if .Values.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 6 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.command }}
     command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 6 }}
@@ -158,7 +158,7 @@ containers:
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
     {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
     {{- end }}
     command:
       - java

@@ -68,7 +68,7 @@ Usage:
   image: {{ include "git.image" .context | quote }}
   imagePullPolicy: {{ .context.Values.git.image.pullPolicy | quote }}
 {{- if .securityContext.enabled }}
-  securityContext: {{- omit .securityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .securityContext "context" $) | nindent 4 }}
 {{- end }}
 {{- if .context.Values.git.clone.resources }}
   resources: {{- toYaml .context.Values.git.clone.resources | nindent 4 }}
@@ -136,7 +136,7 @@ Usage:
   image: {{ include "git.image" .context | quote }}
   imagePullPolicy: {{ .context.Values.git.image.pullPolicy | quote }}
 {{- if .securityContext.enabled }}
-  securityContext: {{- omit .securityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .securityContext "context" $) | nindent 4 }}
 {{- end }}
 {{- if .context.Values.git.sync.resources }}
   resources: {{- toYaml .context.Values.git.sync.resources | nindent 4 }}

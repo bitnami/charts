@@ -85,7 +85,7 @@ Create a container for checking cassandra availability
     - name: CASSANDRA_KEYSPACE
       value: {{ .context.Values.cassandra.keyspace }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
 {{- end -}}
 

@@ -4,9 +4,9 @@ dependencies:
   version: 13.4.6
 - name: mysql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 9.22.0
+  version: 9.23.0
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.16.1
-digest: sha256:9a15ea22121e4b5336e1c27e996a8e25b752581aec365fba5d936c8c4ea6d94b
-generated: "2024-03-01T12:53:27.640365838Z"
+  version: 2.18.0
+digest: sha256:77d229377530fbf2269397dc8549df3157ffb709febea54dfe7b23e188beb0b4
+generated: "2024-03-06T13:15:04.753952324Z"
