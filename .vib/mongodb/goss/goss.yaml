@@ -10,7 +10,7 @@ file:
   /opt/bitnami/mongodb/conf/mongodb.conf:
     exists: true
     filetype: file
-    mode: "0660"
+    mode: "0644"
     contents:
       - /port:.*{{ .Vars.containerPorts.mongodb }}/
 command:

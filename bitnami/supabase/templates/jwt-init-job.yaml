@@ -30,7 +30,7 @@ spec:
       serviceAccountName: {{ template "supabase.jwt.serviceAccountName" . }}
       restartPolicy: OnFailure
       {{- if .Values.jwt.autoGenerate.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.jwt.autoGenerate.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jwt.autoGenerate.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: {{ .Values.jwt.autoGenerate.automountServiceAccountToken }}
       {{- if .Values.jwt.autoGenerate.hostAliases }}
@@ -79,7 +79,7 @@ spec:
                   key: secret
             {{- end }}
           {{- if .Values.jwt.autoGenerate.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.jwt.autoGenerate.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jwt.autoGenerate.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.jwt.autoGenerate.extraEnvVarsCM .Values.jwt.autoGenerate.extraEnvVarsSecret }}
           envFrom:
@@ -95,6 +95,9 @@ spec:
           volumeMounts:
             - name: secret-files
               mountPath: /bitnami/supabase/secrets
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.jwt.autoGenerate.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -119,7 +122,7 @@ spec:
               echo "Creating secret"
               kubectl create secret --namespace={{ include "common.names.namespace" . }} generic {{ include "supabase.jwt.secretName" . }} --from-file=/bitnami/supabase/secrets/secret --from-file=/bitnami/supabase/secrets/anon-key --from-file=/bitnami/supabase/secrets/service-key --dry-run -o yaml | kubectl apply -f -
           {{- if .Values.jwt.autoGenerate.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.jwt.autoGenerate.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jwt.autoGenerate.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if or .Values.jwt.autoGenerate.extraEnvVarsCM .Values.jwt.autoGenerate.extraEnvVarsSecret }}
           envFrom:
@@ -135,6 +138,9 @@ spec:
           volumeMounts:
             - name: secret-files
               mountPath: /bitnami/supabase/secrets
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.jwt.autoGenerate.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -144,6 +150,8 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.jwt.autoGenerate.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: secret-files
           emptyDir: {}
       {{- if .Values.extraVolumes }}

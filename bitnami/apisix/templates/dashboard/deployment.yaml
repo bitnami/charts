@@ -75,7 +75,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dashboard.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dashboard.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dashboard.terminationGracePeriodSeconds }}
@@ -91,7 +91,7 @@ spec:
           image: {{ template "apisix.dashboard.image" . }}
           imagePullPolicy: {{ .Values.dashboard.image.pullPolicy }}
           {{- if .Values.dashboard.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dashboard.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dashboard.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -162,10 +162,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: rendered-config
+            - name: empty-dir
               mountPath: /bitnami/apisix/conf
-            - name: log-dir
+              subPath: app-conf-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/apisix-dashboard/logs
+              subPath: app-logs-dir
             {{- if .Values.dashboard.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
@@ -190,9 +192,7 @@ spec:
           secret:
             secretName: {{ template "apisix.dashboard.tlsSecretName" . }}
         {{- end }}
-        - name: log-dir
-          emptyDir: {}
-        - name: rendered-config
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.dashboard.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraVolumes "context" $) | nindent 8 }}

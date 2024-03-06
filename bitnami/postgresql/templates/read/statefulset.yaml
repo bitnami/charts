@@ -78,7 +78,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.readReplicas.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.readReplicas.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.readReplicas.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.readReplicas.hostNetwork }}
       hostIPC: {{ .Values.readReplicas.hostIPC }}
@@ -95,7 +95,7 @@ spec:
           {{- end }}
           # We don't require a privileged container in this case
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -104,6 +104,9 @@ spec:
               cp /tmp/certs/* /opt/bitnami/postgresql/certs/
               chmod 600 {{ include "postgresql.v1.tlsCertKey" . }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: raw-certificates
               mountPath: /tmp/certs
             - name: postgresql-certificates
@@ -154,13 +157,14 @@ spec:
           securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
-            {{ if .Values.readReplicas.persistence.enabled }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.readReplicas.persistence.mountPath }}
               {{- if .Values.readReplicas.persistence.subPath }}
               subPath: {{ .Values.readReplicas.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if .Values.shmVolume.enabled }}
             - name: dshm
               mountPath: /dev/shm
@@ -181,7 +185,7 @@ spec:
           image: {{ include "postgresql.v1.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -380,6 +384,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/postgresql/logs
+              subPath: app-logs-dir
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
@@ -412,7 +428,7 @@ spec:
           image: {{ include "postgresql.v1.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -468,6 +484,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
@@ -517,6 +536,8 @@ spec:
             sizeLimit: {{ .Values.shmVolume.sizeLimit }}
             {{- end }}
         {{- end }}
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.readReplicas.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.extraVolumes "context" $ ) | nindent 8 }}
         {{- end }}
@@ -534,7 +555,9 @@ spec:
     whenScaled: {{ .Values.readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.readReplicas.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.annotations "context" $) | nindent 10 }}

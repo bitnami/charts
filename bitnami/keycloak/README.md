@@ -57,11 +57,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -143,6 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                       | `true`           |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                | `0`              |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                              | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                | `false`          |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`          |
@@ -233,6 +235,22 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
 | `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `adminIngress.enabled`                  | Enable admin ingress record generation for Keycloak                                                                              | `false`                  |
+| `adminIngress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `adminIngress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `adminIngress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `adminIngress.hostname`                 | Default host for the admin ingress record (evaluated as template)                                                                | `keycloak.local`         |
+| `adminIngress.path`                     | Default path for the admin ingress record (evaluated as template)                                                                | `""`                     |
+| `adminIngress.servicePort`              | Backend service port to use                                                                                                      | `http`                   |
+| `adminIngress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `adminIngress.labels`                   | Additional labels for the Ingress resource.                                                                                      | `{}`                     |
+| `adminIngress.tls`                      | Enable TLS configuration for the host defined at `adminIngress.hostname` parameter                                               | `false`                  |
+| `adminIngress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `adminIngress.extraHosts`               | An array with additional hostname(s) to be covered with the admin ingress record                                                 | `[]`                     |
+| `adminIngress.extraPaths`               | Any additional arbitrary paths that may need to be added to the admin ingress under the main host.                               | `[]`                     |
+| `adminIngress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `adminIngress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `adminIngress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
@@ -313,6 +331,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.containerSecurityContext.enabled`                  | Enabled keycloak-config-cli Security Context                                                                                                                                                                                                   | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                               | `nil`                                 |
 | `keycloakConfigCli.containerSecurityContext.runAsUser`                | Set keycloak-config-cli Security Context runAsUser                                                                                                                                                                                             | `1001`                                |
+| `keycloakConfigCli.containerSecurityContext.runAsGroup`               | Set keycloak-config-cli Security Context runAsGroup                                                                                                                                                                                            | `0`                                   |
 | `keycloakConfigCli.containerSecurityContext.runAsNonRoot`             | Set keycloak-config-cli Security Context runAsNonRoot                                                                                                                                                                                          | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.privileged`               | Set keycloak-config-cli Security Context privileged                                                                                                                                                                                            | `false`                               |
 | `keycloakConfigCli.containerSecurityContext.readOnlyRootFilesystem`   | Set keycloak-config-cli Security Context readOnlyRootFilesystem                                                                                                                                                                                | `false`                               |
@@ -571,6 +590,26 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
+### Configure admin Ingress
+
+In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the admin area of Keycloak, for example the `master` realm.  
+
+For this scenario, you can use the Keycloak Config CLI integration with the following values, where `keycloak-admin.example.com` is to be replaced by the actual hostname:
+
+```yaml
+adminIngress:
+  enabled: true
+  hostname: keycloak-admin.example.com
+keycloakConfigCli:
+  configuration: |
+    {
+      "realm" : "master",
+      "attributes": {
+        "frontendUrl": "https://keycloak-admin.example.com"
+      }
+    }
+```
+
 ### Configure TLS Secrets for use with Ingress
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
@@ -634,6 +673,10 @@ helm upgrade keycloak bitnami/keycloak \
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major release bumps the PostgreSQL chart version to [14.x.x](https://github.com/bitnami/charts/pull/22750); no major issues are expected during the upgrade.
 
 ### To 17.0.0
 

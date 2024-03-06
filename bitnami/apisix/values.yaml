@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -73,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.8.0-debian-11-r3
+  tag: 3.8.0-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -205,7 +214,9 @@ dataPlane:
   ## @param dataPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
   ## @param dataPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
+  ## @param dataPlane.containerSecurityContext.runAsGroup Set APISIX containers' Security Context runAsGroup
   ## @param dataPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
+  ## @param dataPlane.containerSecurityContext.privileged Set APISIX containers' Security Context privileged
   ## @param dataPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
   ## @param dataPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
   ## @param dataPlane.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
@@ -215,7 +226,9 @@ dataPlane:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
@@ -962,7 +975,9 @@ controlPlane:
   ## @param controlPlane.containerSecurityContext.enabled Enabled APISIX containers' Security Context
   ## @param controlPlane.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controlPlane.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
+  ## @param controlPlane.containerSecurityContext.runAsGroup Set APISIX containers' Security Context runAsGroup
   ## @param controlPlane.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
+  ## @param controlPlane.containerSecurityContext.privileged Set APISIX containers' Security Context privileged
   ## @param controlPlane.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
   ## @param controlPlane.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
   ## @param controlPlane.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
@@ -972,7 +987,9 @@ controlPlane:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
@@ -1648,7 +1665,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r146
+    tag: 3.0.1-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2043,6 +2060,7 @@ dashboard:
   ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard container' Security Context
   ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsGroup Set Dashboard container' Security Context runAsGroup
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set Dashboard container' Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set Dashboard container' Security Context privileged
   ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set Dashboard container' Security Context runAsNonRoot
@@ -2054,9 +2072,10 @@ dashboard:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: true
     privileged: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2383,7 +2402,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.0-debian-11-r6
+    tag: 1.8.0-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2499,6 +2518,7 @@ ingressController:
   ## @param ingressController.containerSecurityContext.enabled Enabled APISIX Ingress Controller containers' Security Context
   ## @param ingressController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingressController.containerSecurityContext.runAsUser Set APISIX Ingress Controller containers' Security Context runAsUser
+  ## @param ingressController.containerSecurityContext.runAsGroup Set APISIX Ingress Controller containers' Security Context runAsGroup
   ## @param ingressController.containerSecurityContext.runAsNonRoot Set APISIX Ingress Controller containers' Security Context runAsNonRoot
   ## @param ingressController.containerSecurityContext.privileged Set APISIX Ingress Controller containers' Security Context privileged
   ## @param ingressController.containerSecurityContext.readOnlyRootFilesystem Set APISIX Ingress Controller containers' Security Context runAsNonRoot
@@ -2510,6 +2530,7 @@ ingressController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -3085,7 +3106,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r15
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
@@ -3104,10 +3125,11 @@ waitContainer:
   ## @param waitContainer.containerSecurityContext.enabled Enabled APISIX containers' Security Context
   ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set APISIX containers' Security Context runAsUser
+  ## @param waitContainer.containerSecurityContext.runAsGroup Set APISIX containers' Security Context runAsGroup
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set APISIX containers' Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set APISIX containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set APISIX container's privilege escalation
-  ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param waitContainer.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.seccompProfile.type Set APISIX container's Security Context seccomp profile
   ##
@@ -3115,6 +3137,7 @@ waitContainer:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true

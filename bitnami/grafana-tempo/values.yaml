@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -72,7 +81,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.3.1-debian-11-r9
+    tag: 2.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -364,6 +373,7 @@ compactor:
   ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param compactor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param compactor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -375,6 +385,7 @@ compactor:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -708,6 +719,7 @@ distributor:
   ## @param distributor.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param distributor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param distributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param distributor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param distributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param distributor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param distributor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -719,6 +731,7 @@ distributor:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1058,6 +1071,7 @@ metricsGenerator:
   ## @param metricsGenerator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metricsGenerator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metricsGenerator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metricsGenerator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param metricsGenerator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metricsGenerator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param metricsGenerator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1069,6 +1083,7 @@ metricsGenerator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1403,6 +1418,7 @@ ingester:
   ## @param ingester.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param ingester.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingester.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingester.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param ingester.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ingester.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param ingester.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1414,6 +1430,7 @@ ingester:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1790,6 +1807,7 @@ querier:
   ## @param querier.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param querier.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param querier.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param querier.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param querier.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param querier.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param querier.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1801,6 +1819,7 @@ querier:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2138,6 +2157,7 @@ queryFrontend:
   ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param queryFrontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2149,6 +2169,7 @@ queryFrontend:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2273,7 +2294,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 2.3.1-debian-11-r9
+      tag: 2.4.0-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2381,6 +2402,8 @@ queryFrontend:
     ## @param queryFrontend.query.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param queryFrontend.query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param queryFrontend.query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+
+    ## @param queryFrontend.query.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param queryFrontend.query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param queryFrontend.query.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param queryFrontend.query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2392,6 +2415,7 @@ queryFrontend:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -2559,7 +2583,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 2.3.1-debian-11-r9
+    tag: 2.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2685,6 +2709,7 @@ vulture:
   ## @param vulture.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param vulture.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param vulture.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vulture.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param vulture.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param vulture.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param vulture.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2696,6 +2721,7 @@ vulture:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2942,7 +2968,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r96
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

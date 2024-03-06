@@ -68,7 +68,7 @@ spec:
       runtimeClassName: {{ .Values.client.runtimeClassName | quote }}
       {{- end }}
       {{- if .Values.client.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.client.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.client.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.client.tolerations "context" .) | nindent 8 }}
@@ -104,7 +104,7 @@ spec:
           image: {{ include "deepspeed.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.client.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
