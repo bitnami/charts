@@ -282,6 +282,9 @@ spec:
               mountPath: /opt/bitnami/nginx/conf
               subPath: app-conf-dir
             - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: app-logs-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/nginx/tmp
               subPath: app-tmp-dir
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
