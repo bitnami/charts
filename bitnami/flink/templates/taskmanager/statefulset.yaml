@@ -52,7 +52,7 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.taskmanager.nodeAffinityPreset.type "key" .Values.taskmanager.nodeAffinityPreset.key "values" .Values.taskmanager.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.taskmanager.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.taskmanager.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.taskmanager.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.taskmanager.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.nodeSelector "context" $) | nindent 8 }}
@@ -72,7 +72,7 @@ spec:
           image: {{ include "flink.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.taskmanager.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.taskmanager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.taskmanager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
