@@ -7,7 +7,6 @@
 import { random } from '../support/utils';
 
 it('allows submitting a workflow using a template created from a file', () => {
-  cy.wait(300000);
   cy.visit('/workflow-templates');
   // Closes walkthrough pop-ups
   cy.get('[class="modal-close"]').click();
@@ -37,4 +36,6 @@ it('allows submitting a workflow using a template created from a file', () => {
     cy.contains('button', 'Submit').click();
   });
   cy.get('[class*="node Succeeded"]').click();
+
+  cy.wait(3000000);
 });
