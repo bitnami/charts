@@ -144,7 +144,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
             - name: config-volume
               mountPath: /bitnami/pinniped/conf
@@ -159,10 +159,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.supervisor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
-          emptyDir:
-            medium: Memory
-            sizeLimit: 100Mi
+        - name: empty-dir
+          emptyDir: {}
         - name: config-volume
           configMap:
             name: {{ template "pinniped.supervisor.configmapName" . }}

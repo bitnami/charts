@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -678,7 +687,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## Keycloak admin ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -786,7 +794,6 @@ adminIngress:
   ##             name: http
   ##
   extraRules: []
-
 ## Network Policy configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##

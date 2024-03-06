@@ -36,4 +36,6 @@ it('allows submitting a workflow using a template created from a file', () => {
     cy.contains('button', 'Submit').click();
   });
   cy.get('[class*="node Succeeded"]').click();
+
+  cy.wait(3000000);
 });

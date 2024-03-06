@@ -72,7 +72,7 @@ spec:
       serviceAccountName: {{ .Values.registry.serviceAccountName }}
       {{- end }}
       {{- if .Values.registry.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.registry.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.registry.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
@@ -87,7 +87,7 @@ spec:
               mkdir -p {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
               find {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.registry.server.containerSecurityContext.runAsUser }}:{{ .Values.registry.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -95,6 +95,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: registry-data
               mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
               subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
@@ -107,7 +110,7 @@ spec:
           image: {{ include "harbor.registry.server.image" . }}
           imagePullPolicy: {{ .Values.registry.server.image.pullPolicy | quote }}
           {{- if .Values.registry.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.registry.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.registry.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -195,6 +198,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.registry.server.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: registry-data
               mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
               subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
@@ -240,7 +246,7 @@ spec:
           image: {{ include "harbor.registry.controller.image" . }}
           imagePullPolicy: {{ .Values.registry.controller.image.pullPolicy | quote }}
           {{- if .Values.registry.controller.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.registry.controller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.registry.controller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -348,6 +354,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.registry.controller.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: registry-data
               mountPath: {{ .Values.persistence.imageChartStorage.filesystem.rootdirectory }}
               subPath: {{ .Values.persistence.persistentVolumeClaim.registry.subPath }}
@@ -383,6 +392,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.registry.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: registry-htpasswd
           secret:
             {{- if .Values.registry.existingSecret }}
