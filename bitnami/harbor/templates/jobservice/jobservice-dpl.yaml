@@ -97,6 +97,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
@@ -215,6 +218,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.jobservice.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: jobservice-config
               mountPath: /etc/jobservice/config.yml
               subPath: config.yml
@@ -235,6 +241,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: jobservice-config
           secret:
             secretName: {{ include "harbor.jobservice" . }}-config

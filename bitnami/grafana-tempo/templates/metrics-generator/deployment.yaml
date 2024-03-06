@@ -144,6 +144,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -159,6 +162,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metricsGenerator.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: tempo-config

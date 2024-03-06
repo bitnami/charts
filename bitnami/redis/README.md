@@ -71,12 +71,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                            | Value |
-| ------------------------- | ------------------------------------------------------ | ----- |
-| `global.imageRegistry`    | Global Docker image registry                           | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array        | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)           | `""`  |
-| `global.redis.password`   | Global Redis&reg; password (overrides `auth.password`) | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.redis.password`                               | Global Redis&reg; password (overrides `auth.password`)                                                                                                                                                                                                                                                                                                              | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -120,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.existingSecret`            | The name of an existing secret with Redis&reg; credentials                            | `""`          |
 | `auth.existingSecretPasswordKey` | Password key to be retrieved from existing secret                                     | `""`          |
 | `auth.usePasswordFiles`          | Mount credentials as files instead of using an environment variable                   | `false`       |
+| `auth.usePasswordFileFromSecret` | Mount password file from secret                                                       | `true`        |
 | `commonConfiguration`            | Common configuration to be added into the ConfigMap                                   | `""`          |
 | `existingConfigmap`              | The name of an existing ConfigMap with your custom configuration for Redis&reg; nodes | `""`          |
 

@@ -9,7 +9,7 @@ kind: DaemonSet
 metadata:
   name: {{ template "grafana-loki.promtail.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.promtail.image "chart" .Chart ) ) }}  
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.promtail.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
@@ -36,7 +36,6 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: grafana-loki
         app.kubernetes.io/component: promtail
-        loki-gossip-member: "true"
     spec:
       serviceAccountName: {{ template "grafana-loki.promtail.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
@@ -152,6 +151,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: /bitnami/promtail/conf/promtail.yaml
               subPath: promtail.yaml
@@ -174,6 +176,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.promtail.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           secret:
             secretName: {{ template "grafana-loki.promtail.secretName" . }}

@@ -301,12 +301,13 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/influxdb/etc
-              mountPath: app-conf-dir
             {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
             - name: influxdb-config
               mountPath: /opt/bitnami/influxdb/etc
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/influxdb/etc
+              subPath: app-conf-dir
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts

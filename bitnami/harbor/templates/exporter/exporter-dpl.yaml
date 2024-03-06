@@ -168,6 +168,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.exporter.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/exporter
@@ -182,6 +185,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:

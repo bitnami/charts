@@ -142,9 +142,13 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          {{- if .Values.apprepository.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.apprepository.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.apprepository.resources }}
           resources: {{- toYaml .Values.apprepository.resources | nindent 12 }}
           {{- else if ne .Values.apprepository.resourcesPreset "none" }}
@@ -153,7 +157,10 @@ spec:
         {{- if .Values.apprepository.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
-      {{- if .Values.apprepository.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.apprepository.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}
