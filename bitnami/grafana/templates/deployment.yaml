@@ -191,7 +191,7 @@ spec:
               mountPath: /opt/bitnami/grafana/data
             {{- if .Values.dashboardsProvider.enabled }}
             - name: dashboards-provider
-              mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/dashboards
             {{- end }}
             {{- range .Values.dashboardsConfigMaps }}
             - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
@@ -204,19 +204,19 @@ spec:
             {{- end }}
             {{- if or (.Values.datasources.secretName) (.Values.datasources.secretDefinition) }}
             - name: datasources
-              mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/datasources
             {{- end }}
             {{- if .Values.notifiers.configMapName }}
             - name: notifiers
-              mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/notifiers
             {{- end }}
             {{- if .Values.alerting.configMapName }}
             - name: alerting
-              mountPath: /opt/bitnami/grafana/conf/provisioning/alerting
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/alerting
             {{- end }}
             {{- if .Values.ldap.enabled }}
             - name: ldap
-              mountPath: /opt/bitnami/grafana/conf/ldap.toml
+              mountPath: /opt/bitnami/grafana/conf.default/ldap.toml
               subPath: ldap.toml
             {{- end }}
             {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}

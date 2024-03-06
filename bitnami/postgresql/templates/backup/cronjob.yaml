@@ -93,7 +93,7 @@ spec:
                 mountPath: /tmp
                 subPath: tmp-dir
             {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-            securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
             {{- end }}
             {{- if .Values.backup.cronjob.resources }}
             resources: {{- toYaml .Values.backup.cronjob.resources | nindent 14 }}
