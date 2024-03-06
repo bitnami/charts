@@ -52,7 +52,7 @@ spec:
       priorityClassName: {{ .Values.applicationSet.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.applicationSet.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.applicationSet.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.applicationSet.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: applicationset-controller
@@ -144,7 +144,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.applicationSet.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.applicationSet.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.applicationSet.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.applicationSet.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - mountPath: /app/config/ssh

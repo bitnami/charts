@@ -97,6 +97,34 @@ spec:
             subPath: {{ .Values.persistence.subPath }}
             {{- end }}
         {{- end }}
+        - name: copy-default-plugins
+          image: {{ include "kibana.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+                #!/bin/bash
+
+                . /opt/bitnami/scripts/libfs.sh
+                . /opt/bitnami/scripts/kibana-env.sh
+
+                if ! is_dir_empty "$SERVER_DEFAULT_PLUGINS_DIR"; then
+                    cp -nr "$SERVER_DEFAULT_PLUGINS_DIR"/* /plugins
+                fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /plugins
+              subPath: app-plugins-dir
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -229,6 +257,21 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kibana/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kibana/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kibana/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kibana/plugins
+              subPath: app-plugins-dir
             - name: kibana-data
               mountPath: /bitnami/kibana
             - name: kibana-config
@@ -270,6 +313,8 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
       {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: kibana-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
