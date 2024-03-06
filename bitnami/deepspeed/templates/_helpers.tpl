@@ -337,7 +337,7 @@ Return the definition of the git clone init container
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
       git clone {{ .context.Values.source.git.repository }} {{ if .context.Values.source.git.revision }}--branch {{ .context.Values.source.git.revision }}{{ end }} /app
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" $) | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: source
