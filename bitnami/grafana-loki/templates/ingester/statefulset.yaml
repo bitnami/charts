@@ -70,7 +70,7 @@ spec:
       schedulerName: {{ .Values.ingester.schedulerName }}
       {{- end }}
       {{- if .Values.ingester.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ingester.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.ingester.initContainers }}
@@ -111,7 +111,7 @@ spec:
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.ingester.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ingester.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

@@ -50,7 +50,7 @@ spec:
       priorityClassName: {{ .Values.notifications.bots.slack.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.notifications.bots.slack.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.notifications.bots.slack.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.bots.slack.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: notifications-slack-bot
@@ -136,7 +136,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.notifications.bots.slack.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.notifications.bots.slack.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.notifications.bots.slack.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.bots.slack.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir

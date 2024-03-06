@@ -46,7 +46,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "fluentd.aggregator.serviceAccountName" . }}
       {{- if .Values.aggregator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.aggregator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.aggregator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.aggregator.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.affinity "context" $) | nindent 8 }}
@@ -140,7 +140,7 @@ spec:
           image: {{ include "fluentd.aggregator.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.aggregator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.aggregator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.aggregator.containerSecurityContext "context" $) | nindent 12 }}
           {{ end }}
           {{- if .Values.aggregator.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.lifecycleHooks "context" $ ) | nindent 12 }}

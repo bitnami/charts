@@ -88,7 +88,7 @@ spec:
       runtimeClassName: {{ .Values.controller.runtimeClassName }}
       {{- end }}
       {{- if .Values.broker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.broker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.broker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.broker.enableServiceLinks }}
@@ -137,7 +137,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.broker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.broker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.broker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -329,7 +329,7 @@ spec:
           image: {{ include "kafka.metrics.jmx.image" . }}
           imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
           {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
