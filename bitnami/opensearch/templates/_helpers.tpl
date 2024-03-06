@@ -59,7 +59,7 @@ Return the copy plugins init container definition
   image: {{ include "opensearch.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy | quote }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" $) | nindent 12 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 12 }}
   {{- end }}
   {{- if $block.resources }}
   resources: {{- toYaml $block.resources | nindent 12 }}
