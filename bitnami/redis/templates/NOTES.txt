@@ -53,6 +53,22 @@ For Redis Sentinel:
 {{- end }}
 {{- end }}
 
+{{- if and .Values.auth.usePasswordFiles (not .Values.auth.usePasswordFileFromSecret) (or (empty .Values.master.initContainers) (empty .Values.replica.initContainers)) }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying ".Values.auth.usePasswordFile=true" and ".Values.auth.usePasswordFileFromSecret=false"
+    Redis is expecting that the password is mounted as a file in each pod
+    (by default in /opt/bitnami/redis/secrets/redis-password)
+
+    Ensure that you specify the respective initContainers in
+    both .Values.master.initContainers and .Values.replica.initContainers
+    in order to populate the contents of this file.
+
+-------------------------------------------------------------------------------
+{{- end }}
+
 {{- if eq .Values.architecture "replication" }}
 {{- if .Values.sentinel.enabled }}
 
@@ -189,3 +205,4 @@ No need to upgrade, ports and nodeports have been set from values
 YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- end }}
+{{- include "common.warnings.resources" (dict "sections" (list "master" "metrics" "replica" "sentinel" "sysctl" "volumePermissions") "context" $) }}

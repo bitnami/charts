@@ -18,7 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param nameOverride String to partially override common.names.fullname template (will maintain the release name).
@@ -42,7 +50,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Dataflow Server parameters
 
 ## Spring Cloud Dataflow Server parameters.
@@ -61,7 +68,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.2-debian-11-r7
+    tag: 2.11.2-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -96,7 +103,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.2-debian-11-r5
+      tag: 2.11.2-debian-12-r9
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -267,6 +274,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -278,6 +286,7 @@ server:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -292,20 +301,21 @@ server:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param server.resources.limits The resources limits for the Dataflow server container
-  ## @param server.resources.requests The requested resources for the Dataflow server container
+  ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Dataflow Server pods' startup probes. Evaluated as a template.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param server.startupProbe.enabled Enable startupProbe
@@ -653,7 +663,13 @@ server:
   ## @param server.applicationProperties Specify common application properties added by SCDF server to streams and/or tasks
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#spring-cloud-dataflow-global-properties
   applicationProperties: {}
-
+  security:
+    ## @param server.security.authorization Authorization customization
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-customizing-authorization
+    authorization: {}
+    ## @param server.security.oauth2 OAuth 2.0 authentication configuration
+    ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#configuration-security-oauth2
+    oauth2: {}
 ## @section Dataflow Skipper parameters
 
 ## Spring Cloud Skipper parameters.
@@ -683,7 +699,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.11.2-debian-11-r5
+    tag: 2.11.2-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -836,6 +852,7 @@ skipper:
   ## @param skipper.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param skipper.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param skipper.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param skipper.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param skipper.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param skipper.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param skipper.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -847,6 +864,7 @@ skipper:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -861,20 +879,21 @@ skipper:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param skipper.resources.limits The resources limits for the Skipper server container
-  ## @param skipper.resources.requests The requested resources for the Skipper server container
+  ## @param skipper.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if skipper.resources is set (skipper.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param skipper.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for startup probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param skipper.startupProbe.enabled Enable startupProbe
@@ -1120,7 +1139,6 @@ externalSkipper:
   ## @param externalSkipper.port External Skipper Server port number
   ##
   port: 7577
-
 ## @section Deployer parameters
 
 ## Spring Cloud Deployer for Kubernetes parameters.
@@ -1128,18 +1146,21 @@ externalSkipper:
 deployer:
   ## Streaming applications resource requests and limits.
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param deployer.resources.limits [object] Streaming applications resource limits
-  ## @param deployer.resources.requests Streaming applications resource requests
+  ## @param deployer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if deployer.resources is set (deployer.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits:
-      cpu: 500m
-      memory: 1024Mi
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param deployer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure extra options for readiness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param deployer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
@@ -1193,7 +1214,6 @@ deployer:
   ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
   imagePullPolicy: IfNotPresent
-
 ## @section RBAC parameters
 
 ## K8s Service Account.
@@ -1217,7 +1237,6 @@ rbac:
   ## that allows pods querying the K8s API
   ##
   create: true
-
 ## @section Metrics parameters
 
 ## Prometheus metrics
@@ -1238,7 +1257,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-11-r5
+    tag: 1.5.3-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1258,20 +1277,21 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resources.limits The resources limits for the Prometheus Rsocket Proxy container
-  ## @param metrics.resources.requests The requested resources for the Prometheus Rsocket Proxy container
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
+  resourcesPreset: "none"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## @param metrics.replicaCount Number of Prometheus Rsocket Proxy replicas to deploy
   ##
   replicaCount: 1
@@ -1349,6 +1369,7 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1360,6 +1381,7 @@ metrics:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1683,7 +1705,6 @@ metrics:
     maxReplicas: ""
     targetCPU: ""
     targetMemory: ""
-
 ## @section Init Container parameters
 
 ## Init containers parameters:
@@ -1703,7 +1724,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.29.1-debian-11-r3
+    tag: 1.29.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1722,6 +1743,7 @@ waitForBackends:
   ## @param waitForBackends.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param waitForBackends.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitForBackends.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitForBackends.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param waitForBackends.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitForBackends.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param waitForBackends.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1733,6 +1755,7 @@ waitForBackends:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1747,21 +1770,21 @@ waitForBackends:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param waitForBackends.resources.limits Init container wait-for-backend resource limits
-  ## @param waitForBackends.resources.requests Init container wait-for-backend resource requests
+  ## @param waitForBackends.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if waitForBackends.resources is set (waitForBackends.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## Example:
-    ## limits:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    limits: {}
-    ## Examples:
-    ## requests:
-    ##    cpu: 100m
-    ##    memory: 128Mi
-    requests: {}
-
+  resourcesPreset: "none"
+  ## @param waitForBackends.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section Database parameters
 
 ## MariaDB chart configuration
@@ -1783,7 +1806,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.6-debian-11-r6
+    tag: 10.11.7-debian-12-r6
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
@@ -1889,7 +1912,6 @@ externalDatabase:
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
   hibernateDialect: ""
-
 ## @section RabbitMQ chart parameters
 
 ## RabbitMQ chart configuration
@@ -1930,7 +1952,6 @@ externalRabbitmq:
   ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
   ##
   existingPasswordSecret: ""
-
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
@@ -1948,7 +1969,6 @@ kafka:
   ##
   extraConfig: |-
     offsets.topic.replication.factor=1
-
 ## External Kafka Configuration
 ## All of these values are ignored when kafka.enabled is set to true
 ##

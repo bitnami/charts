@@ -72,7 +72,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds }}
@@ -84,10 +84,12 @@ spec:
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
+          {{- else if ne $.Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if $.Values.containerSecurityContext.enabled }}
           # We don't require a privileged container in this case
-          securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -100,6 +102,9 @@ spec:
               mountPath: /tmp/certs
             - name: clickhouse-certificates
               mountPath: /opt/bitnami/clickhouse/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- else if and $.Values.volumePermissions.enabled $.Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "clickhouse.volumePermissions.image" $ }}
@@ -129,10 +134,15 @@ spec:
           securityContext: {{- include "common.tplvalues.render" (dict "value" $.Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if $.Values.volumePermissions.resources }}
           resources: {{- toYaml $.Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne $.Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/clickhouse
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if $.Values.tls.enabled }}
             - name: raw-certificates
               mountPath: /tmp/certs
@@ -148,7 +158,7 @@ spec:
           image: {{ template "clickhouse.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           {{- if $.Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if $.Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" $.Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -241,6 +251,8 @@ spec:
             {{- end }}
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
+          {{- else if ne $.Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" $.Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http
@@ -303,6 +315,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" $.Values.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/clickhouse/etc
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/clickhouse/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/clickhouse/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: scripts
               mountPath: /scripts/setup.sh
               subPath: setup.sh
@@ -349,6 +373,8 @@ spec:
           configMap:
             name: {{ printf "%s-scripts" (include "common.names.fullname" $) }}
             defaultMode: 0755
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ template "clickhouse.configmapName" $ }}

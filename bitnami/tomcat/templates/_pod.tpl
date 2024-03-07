@@ -32,7 +32,7 @@ nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.nodeS
 tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 2 }}
 {{- end }}
 {{- if .Values.podSecurityContext.enabled }}
-securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 2 }}
+securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 2 }}
 {{- end }}
 {{- if .Values.topologySpreadConstraints }}
 topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 2 }}
@@ -51,6 +51,8 @@ initContainers:
       runAsUser: 0
     {{- if .Values.volumePermissions.resources }}
     resources: {{- toYaml .Values.volumePermissions.resources | nindent 6 }}
+    {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -64,7 +66,7 @@ containers:
     image: {{ template "tomcat.image" . }}
     imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
     {{- if .Values.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 6 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.command }}
     command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 6 }}
@@ -80,7 +82,7 @@ containers:
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: {{ template "common.names.fullname" . }}
+            name: {{ include "tomcat.secretName" . }}
             key: tomcat-password
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
@@ -142,6 +144,8 @@ containers:
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}
+    {{- else if ne .Values.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: data
@@ -154,7 +158,7 @@ containers:
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
     {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
-    securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.jmx.containerSecurityContext "context" $) | nindent 12 }}
     {{- end }}
     command:
       - java
@@ -172,6 +176,8 @@ containers:
     {{- end }}
     {{- if .Values.metrics.jmx.resources }}
     resources: {{- toYaml .Values.metrics.jmx.resources | nindent 6 }}
+    {{- else if ne .Values.metrics.jmx.resourcesPreset "none" }}
+    resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.jmx.resourcesPreset) | nindent 6 }}
     {{- end }}
     volumeMounts:
       - name: jmx-config

@@ -66,7 +66,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.helmController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.helmController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.helmController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.helmController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.helmController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.helmController.terminationGracePeriodSeconds }}
@@ -80,7 +80,7 @@ spec:
           image: {{ template "flux.helm-controller.image" . }}
           imagePullPolicy: {{ .Values.helmController.image.pullPolicy }}
           {{- if .Values.helmController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.helmController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.helmController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -123,6 +123,8 @@ spec:
             {{- end }}
           {{- if .Values.helmController.resources }}
           resources: {{- toYaml .Values.helmController.resources | nindent 12 }}
+          {{- else if ne .Values.helmController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.helmController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-metrics

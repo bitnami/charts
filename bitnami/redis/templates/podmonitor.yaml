@@ -18,7 +18,7 @@ metadata:
   {{- end }}
 spec:
   podMetricsEndpoints:
-    - port: metrics
+    - port: {{ .Values.metrics.podMonitor.port }}
       {{- if .Values.metrics.podMonitor.interval }}
       interval: {{ .Values.metrics.podMonitor.interval }}
       {{- end }}
@@ -41,6 +41,18 @@ spec:
       {{- end }}
       {{- if .path }}
       path: {{ .path }}
+      {{- end }}
+      {{- if .honorLabels }}
+      honorLabels: {{ .honorLabels }}
+      {{- end }}
+      {{- if .relabellings }}
+      relabelings: {{- toYaml .relabellings | nindent 6 }}
+      {{- end }}
+      {{- if .metricRelabelings }}
+      metricRelabelings: {{- toYaml .metricRelabelings | nindent 6 }}
+      {{- end }}
+      {{- if .scrapeTimeout }}
+      scrapeTimeout: {{ .scrapeTimeout }}
       {{- end }}
       {{- if .params }}
       params:

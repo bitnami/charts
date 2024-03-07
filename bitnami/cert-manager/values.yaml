@@ -13,7 +13,15 @@ global:
   imageRegistry: ""
   imagePullSecrets: []
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -50,7 +58,6 @@ installCRDs: false
 ## @param replicaCount Number of cert-manager replicas
 ##
 replicaCount: 1
-
 ## @section Controller deployment parameters
 
 ## Controller deployment parameters
@@ -72,7 +79,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.14.1-debian-11-r1
+    tag: 1.14.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -103,7 +110,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.14.1-debian-11-r1
+      tag: 1.14.3-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -123,12 +130,21 @@ controller:
       debug: false
   ## Controller containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param controller.resources.limits The resources limits for the Controller container
-  ## @param controller.resources.requests The requested resources for the Controller container
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## controller pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param controller.podSecurityContext.enabled Enabled Controller pods' Security Context
@@ -148,6 +164,7 @@ controller:
   ## @param controller.containerSecurityContext.enabled Enabled controller containers' Security Context
   ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param controller.containerSecurityContext.runAsUser Set controller containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set controller containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set controller containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param controller.containerSecurityContext.privileged Set controller container's Security Context privileged
@@ -159,6 +176,7 @@ controller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -384,14 +402,13 @@ controller:
     ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
   ## Controller Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
     ## @param controller.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
     ##
-    enabled: false
+    enabled: true
     ## @param controller.networkPolicy.allowExternal Don't require client label for connections
     ## The Policy model to apply. When set to false, only pods with the correct
     ## client label will have network access to the ports Cert Manager Controller is listening
@@ -399,6 +416,12 @@ controller:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param controller.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
     ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -437,7 +460,6 @@ controller:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Webhook deployment parameters
 
 ## Webhook deployment parameters
@@ -459,7 +481,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.14.1-debian-11-r1
+    tag: 1.14.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -479,14 +501,21 @@ webhook:
     debug: false
   ## Webhook containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param webhook.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    ## @param webhook.resources.limits The resources limits for the Webhook container
-    ##
-    limits: {}
-    ## @param webhook.resources.requests The requested resources for the Webhook container
-    ##
-    requests: {}
+  resourcesPreset: "none"
+  ## @param webhook.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## webhook pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param webhook.podSecurityContext.enabled Enabled Webhook pods' Security Context
@@ -506,6 +535,7 @@ webhook:
   ## @param webhook.containerSecurityContext.enabled Enabled webhook containers' Security Context
   ## @param webhook.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param webhook.containerSecurityContext.runAsUser Set webhook containers' Security Context runAsUser
+  ## @param webhook.containerSecurityContext.runAsGroup Set webhook containers' Security Context runAsGroup
   ## @param webhook.containerSecurityContext.runAsNonRoot Set webhook containers' Security Context runAsNonRoot
   ## @param webhook.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param webhook.containerSecurityContext.privileged Set webhook container's Security Context privileged
@@ -517,6 +547,7 @@ webhook:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -726,14 +757,13 @@ webhook:
   ##  @param webhook.hostNetwork Specifies hostNetwork value
   ##
   hostNetwork: false
-
   ## Webhook Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
   networkPolicy:
     ## @param webhook.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
     ##
-    enabled: false
+    enabled: true
     ## @param webhook.networkPolicy.allowExternal Don't require client label for connections
     ## The Policy model to apply. When set to false, only pods with the correct
     ## client label will have network access to the ports Cert Manager Webhook is listening
@@ -741,6 +771,12 @@ webhook:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param webhook.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param webhook.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
     ## @param webhook.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -779,7 +815,6 @@ webhook:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section CAInjector deployment parameters
 
 ## CAInjector deployment parameters
@@ -788,7 +823,6 @@ cainjector:
   ## @param cainjector.replicaCount Number of CAInjector replicas
   ##
   replicaCount: 1
-
   ## Bitnami CAInjector image
   ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
   ## @param cainjector.image.registry [default: REGISTRY_NAME] CAInjector image registry
@@ -802,7 +836,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.14.1-debian-11-r1
+    tag: 1.14.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -823,13 +857,21 @@ cainjector:
   ## CAInjector containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
-  resources:
-    ## @param cainjector.resources.limits The resources limits for the CAInjector container
-    ##
-    limits: {}
-    ## @param cainjector.resources.requests The requested resources for the CAInjector container
-    ##
-    requests: {}
+  ## @param cainjector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cloneHtdocsFromGit.resources is set (cloneHtdocsFromGit.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param cainjector.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## cainjector pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param cainjector.podSecurityContext.enabled Enabled CAInjector pods' Security Context
@@ -849,6 +891,7 @@ cainjector:
   ## @param cainjector.containerSecurityContext.enabled Enabled cainjector containers' Security Context
   ## @param cainjector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param cainjector.containerSecurityContext.runAsUser Set cainjector containers' Security Context runAsUser
+  ## @param cainjector.containerSecurityContext.runAsGroup Set cainjector containers' Security Context runAsGroup
   ## @param cainjector.containerSecurityContext.runAsNonRoot Set cainjector containers' Security Context runAsNonRoot
   ## @param cainjector.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param cainjector.containerSecurityContext.privileged Set cainjector container's Security Context privileged
@@ -860,6 +903,7 @@ cainjector:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -1067,9 +1111,7 @@ cainjector:
     ## @param cainjector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
-
 ## @section Metrics Parameters
-
 metrics:
   ## @param metrics.enabled Start metrics
   ##
@@ -1085,7 +1127,6 @@ metrics:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
     prometheus.io/port: "{{ .Values.controller.containerPort }}"
-
   ## Prometheus Operator ServiceMonitor resource
   ##
   serviceMonitor:
@@ -1138,7 +1179,6 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
-
 ## @section Other Parameters
 
 ## RBAC configuration

@@ -19,7 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -47,10 +55,8 @@ extraDeploy: []
 ## @param clusterDomain Kubernetes cluster domain name
 ##
 clusterDomain: cluster.local
-
 ## @section Prometheus Operator Parameters
 ##
-
 operator:
   ## @param operator.enabled Deploy Prometheus Operator to the cluster
   ##
@@ -67,7 +73,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.71.2-debian-11-r3
+    tag: 0.72.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -127,7 +133,6 @@ operator:
   ##         containerPort: 1234
   ##
   sidecars: []
-
   ## @param operator.initContainers Add additional init containers to the Prometheus Operator pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -194,6 +199,7 @@ operator:
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -205,6 +211,7 @@ operator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -280,6 +287,61 @@ operator:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param operator.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param operator.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param operator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param operator.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param operator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param operator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Create a servicemonitor for the operator
   ##
   serviceMonitor:
@@ -319,7 +381,19 @@ operator:
     ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
-  ## @param operator.resources Configure resource requests and limits
+  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param operator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -470,6 +544,7 @@ operator:
     ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -481,6 +556,7 @@ operator:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -526,7 +602,6 @@ operator:
   ## @param operator.namespaces Optional comma-separated list of namespaces to watch (default=all).
   ##
   namespaces: ""
-
 ## @section Prometheus Parameters
 ##
 
@@ -547,7 +622,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.49.1-debian-11-r5
+    tag: 2.50.1-debian-12-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -595,6 +670,7 @@ prometheus:
   ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param prometheus.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param prometheus.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -606,6 +682,7 @@ prometheus:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -624,6 +701,61 @@ prometheus:
     create: false
     minAvailable: 1
     maxUnavailable: ""
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param prometheus.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param prometheus.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param prometheus.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param prometheus.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param prometheus.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param prometheus.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param prometheus.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## Prometheus Service
   ##
   service:
@@ -710,7 +842,6 @@ prometheus:
     ## @param prometheus.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
-
   ## Configure the ingress resource that allows you to access the
   ## Prometheus installation. Set up the URL
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
@@ -817,7 +948,19 @@ prometheus:
   ## externalUrl: https://prometheus.example.com
   ##
   externalUrl: ""
-  ## @param prometheus.resources CPU/Memory resource requests/limits for node
+  ## @param prometheus.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.resources is set (prometheus.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param prometheus.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -1237,7 +1380,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.34.0-debian-11-r2
+      tag: 0.34.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1256,6 +1399,7 @@ prometheus:
     ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param prometheus.thanos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param prometheus.thanos.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1267,6 +1411,7 @@ prometheus:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -1275,6 +1420,12 @@ prometheus:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
+    ## @param prometheus.thanos.containerPorts.grpc Thanos grpc port
+    ## @param prometheus.thanos.containerPorts.http Thanos http port
+    ##
+    containerPorts:
+      grpc: 10901
+      http: 10902
     ## @param prometheus.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
     ##
     prometheusUrl: ""
@@ -1307,22 +1458,21 @@ prometheus:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param prometheus.thanos.resources.limits The resources limits for the Thanos sidecar container
-    ## @param prometheus.thanos.resources.requests The resources requests for the Thanos sidecar container
+    ## @param prometheus.thanos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resources:
-      ## Example:
-      ## limits:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      limits: {}
-      ## Examples:
-      ## requests:
-      ##    cpu: 100m
-      ##    memory: 128Mi
-      ##
-      requests: {}
+    resourcesPreset: "none"
+    ## @param prometheus.thanos.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
     ## Configure extra options for liveness probe
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
     ## @param prometheus.thanos.livenessProbe.enabled Turn on and off liveness probe
@@ -1622,7 +1772,6 @@ prometheus:
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
-
 ## @section Alertmanager Parameters
 ##
 
@@ -1644,7 +1793,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r54
+    tag: 0.27.0-debian-12-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1690,6 +1839,7 @@ alertmanager:
   ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param alertmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1701,6 +1851,7 @@ alertmanager:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1783,6 +1934,61 @@ alertmanager:
     ## @param alertmanager.service.annotations Additional annotations for Alertmanager service (this value is evaluated as a template)
     ##
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param alertmanager.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param alertmanager.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param alertmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param alertmanager.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param alertmanager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param alertmanager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## If true, create a serviceMonitor for alertmanager
   ##
   serviceMonitor:
@@ -1935,7 +2141,19 @@ alertmanager:
   ## externalUrl: https://alertmanager.example.com
   ##
   externalUrl: ""
-  ## @param alertmanager.resources CPU/Memory resource requests/limits for node
+  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "none"
+  ## @param alertmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
@@ -2242,7 +2460,6 @@ kubelet:
     ## @param kubelet.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
-
 ## @section Blackbox Exporter Deployment Parameters
 ##
 blackboxExporter:
@@ -2261,7 +2478,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r150
+    tag: 0.24.0-debian-12-r25
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2272,7 +2489,6 @@ blackboxExporter:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-
   ## @param blackboxExporter.extraEnvVars Array with extra environment variables to add to blackboxExporter nodes
   ## e.g:
   ## extraEnvVars:
@@ -2350,7 +2566,7 @@ blackboxExporter:
   customStartupProbe: {}
   ## @param blackboxExporter.configuration [object] Blackbox Exporter configuration
   ##
-  configuration:  |
+  configuration: |
     "modules":
       "http_2xx":
         "http":
@@ -2390,7 +2606,6 @@ blackboxExporter:
         "prober": "tcp"
         "tcp":
           "preferred_ip_protocol": "ip4"
-
   ## @param blackboxExporter.existingConfigMap ConfigMap pointing to the Blackbox Exporter configuration
   ##
   existingConfigMap: ""
@@ -2398,7 +2613,6 @@ blackboxExporter:
   ##
   containerPorts:
     http: 19115
-
   serviceAccount:
     ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for WordPress pod
     ##
@@ -2414,15 +2628,23 @@ blackboxExporter:
     ## @param blackboxExporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## Blackbox Exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param blackboxExporter.resources.limits The resources limits for the blackboxExporter containers
-  ## @param blackboxExporter.resources.requests The requested resources for the blackboxExporter containers
+  ## @param blackboxExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if blackboxExporter.resources is set (blackboxExporter.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param blackboxExporter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param blackboxExporter.podSecurityContext.enabled Enabled Blackbox Exporter pods' Security Context
@@ -2442,6 +2664,7 @@ blackboxExporter:
   ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param blackboxExporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param blackboxExporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2453,6 +2676,7 @@ blackboxExporter:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2564,7 +2788,6 @@ blackboxExporter:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Blackbox Exporter Traffic Exposure Parameters
   ##
 
@@ -2625,7 +2848,61 @@ blackboxExporter:
     ## @param blackboxExporter.service.extraPorts Extra ports to expose in the Blackbox Exporter service
     ##
     extraPorts: []
-
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param blackboxExporter.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param blackboxExporter.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param blackboxExporter.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param blackboxExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param blackboxExporter.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param blackboxExporter.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param blackboxExporter.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## Component scraping the kube-apiserver
 ##
 kubeApiServer:
@@ -2650,10 +2927,10 @@ kubeApiServer:
     relabelings: []
     ## @param kubeApiServer.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
-    labels: { }
+    labels: {}
     ## @param kubeApiServer.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
-    annotations: { }
+    annotations: {}
     ## @param kubeApiServer.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
@@ -2720,10 +2997,10 @@ kubeControllerManager:
     relabelings: []
     ## @param kubeControllerManager.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
-    labels: { }
+    labels: {}
     ## @param kubeControllerManager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
-    annotations: { }
+    annotations: {}
     ## @param kubeControllerManager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
@@ -2929,7 +3206,6 @@ kubeProxy:
     ## @param kubeProxy.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
-
 ## @section RBAC parameters
 ##
 

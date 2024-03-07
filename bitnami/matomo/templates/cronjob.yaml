@@ -45,7 +45,7 @@ spec:
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.archive.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cronjobs.archive.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.cronjobs.archive.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.command "context" $) | nindent 16 }}
@@ -86,6 +86,22 @@ spec:
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.certificates.customCertificate.certificateSecret }}
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
+                  subPath: tls.crt
+                  readOnly: true
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.keyLocation }}
+                  subPath: tls.key
+                  readOnly: true
+                {{- if .Values.certificates.customCertificate.chainSecret }}
+                - name: custom-certificate-chain
+                  mountPath: {{ .Values.certificates.customCertificate.chainLocation }}
+                  subPath: {{ .Values.certificates.customCertificate.chainSecret.key }}
+                  readOnly: true
+                {{- end }}
+                {{- end }}
                 {{- if .Values.customPostInitScripts }}
                 - mountPath: /docker-entrypoint-init.d
                   name: custom-postinit
@@ -182,7 +198,7 @@ spec:
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.taskScheduler.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.taskScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cronjobs.taskScheduler.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.cronjobs.taskScheduler.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.command "context" $) | nindent 16 }}
@@ -223,6 +239,26 @@ spec:
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
+                {{- if .Values.certificates.customCertificate.certificateSecret }}
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.certificateLocation }}
+                  subPath: tls.crt
+                  readOnly: true
+                - name: custom-certificate
+                  mountPath: {{ .Values.certificates.customCertificate.keyLocation }}
+                  subPath: tls.key
+                  readOnly: true
+                {{- if .Values.certificates.customCertificate.chainSecret }}
+                - name: custom-certificate-chain
+                  mountPath: {{ .Values.certificates.customCertificate.chainLocation }}
+                  subPath: {{ .Values.certificates.customCertificate.chainSecret.key }}
+                  readOnly: true
+                {{- end }}
+                {{- end }}
+                {{- if .Values.customPostInitScripts }}
+                - mountPath: /docker-entrypoint-init.d
+                  name: custom-postinit
+                {{- end }}
                 {{- if .Values.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}

@@ -46,8 +46,7 @@ file:
   /opt/bitnami/postgresql/conf/postgresql.conf:
     exists: true
     filetype: file
-    mode: "0664"
-    group: root
+    mode: "0644"
     contents:
       - /shared_preload_libraries.*{{ .Vars.postgresqlSharedPreloadLibraries }}/
       - /port.*{{ $port }}/

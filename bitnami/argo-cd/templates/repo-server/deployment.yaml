@@ -7,7 +7,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "argocd.repo-server" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: repo-server
   {{- if .Values.commonAnnotations }}
@@ -66,7 +66,7 @@ spec:
       runtimeClassName: {{ .Values.repoServer.runtimeClassName }}
       {{- end }}
       {{- if .Values.repoServer.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.repoServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.repoServer.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
@@ -82,10 +82,13 @@ spec:
             runAsUser: {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.redisWait.enabled }}
         - name: wait-for-redis
@@ -93,9 +96,9 @@ spec:
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
           {{- if .Values.redisWait.securityContext }}
           # Deprecated: use redisWait.containerSecurityContext
-          securityContext: {{- toYaml .Values.redisWait.securityContext | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.securityContext "context" $) | nindent 12 }}
           {{- else if .Values.redisWait.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.redisWait.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -145,7 +148,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.repoServer.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.repoServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.repoServer.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.repoServer.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.command "context" $) | nindent 12 }}
@@ -196,6 +199,8 @@ spec:
             {{- end }}
           {{- if .Values.repoServer.resources }}
           resources: {{- toYaml .Values.repoServer.resources | nindent 12 }}
+          {{- else if ne .Values.repoServer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.repoServer.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.repoServer.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.customStartupProbe "context" $) | nindent 12 }}
@@ -249,10 +254,12 @@ spec:
             # Ref: https://argoproj.github.io/argo-cd/operator-manual/tls/#inbound-tls-certificates-used-by-argocd-repo-sever
             - mountPath: /app/config/server/tls
               name: argocd-repo-server-tls
-            - mountPath: /app/config/gpg/keys
-              name: gpg-keyring
-            - mountPath: /tmp
-              name: tmp-dir
+            - name: empty-dir
+              mountPath: /app/config/gpg/keys
+              subPath: app-keys-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.repoServer.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -279,10 +286,8 @@ spec:
                 path: ca.crt
             optional: true
             secretName: argocd-repo-server-tls
-        - emptyDir: {}
-          name: tmp-dir
-        - emptyDir: {}
-          name: gpg-keyring
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.repoServer.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

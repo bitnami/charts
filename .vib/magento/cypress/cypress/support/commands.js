@@ -6,7 +6,7 @@
 const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://magento.my';
 
-for (const command of ['click', 'get']) {
+for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
     const origVal = originalFn(...args);
 
@@ -16,6 +16,16 @@ for (const command of ['click', 'get']) {
       }, COMMAND_DELAY);
     });
   });
+}
+
+for (const query of ['get']) {
+  Cypress.Commands.overwriteQuery(query, function (originalFn, ...args) {
+    const innerFn = originalFn.apply(this, args.concat({timeout: COMMAND_DELAY}))
+
+    return (subject) => {
+      return innerFn(subject)
+    }
+  })
 }
 
 // Due to a bug when using "hosts" in Cypress, we cannot set a "baseUrl" in the
@@ -34,7 +44,19 @@ Cypress.Commands.add(
     cy.get('#username').type(username);
     cy.get('#login').type(password);
     cy.contains('Sign in').click();
+
+    // It takes some time for the full page to render
+    cy.get('.spinner',  {timeout: 15000}).should('not.be.visible');
     cy.contains('.page-title', 'Dashboard');
+
+    // First time we log in, a pop-up to allow data collection is shown
+    cy.get('body').then(($body) => {
+      if ($body.text().includes('Allow Adobe')) {
+        cy.get('aside.modal-popup').within(() => {
+          cy.contains("Allow").click();
+        })
+      }
+    });
   }
 );
 
@@ -45,8 +67,9 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // we expect an application error with message 'rendering locks'
-  // and don't want to fail the test so we return false
-  if (err.message.includes('renderingLocks')) {
+  // or 'define is not defined; and don't want to fail the test,
+  // so we return false
+  if (err.message.includes('renderingLocks') || err.message.includes('define is not defined')) {
     return false;
   }
   // we still want to ensure there are no other unexpected

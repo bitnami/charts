@@ -3,12 +3,12 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.metrics.enabled}}
+{{- if .Values.metrics.enabled }}
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.exporter" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.exporter.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -71,7 +71,7 @@ spec:
       serviceAccountName: {{ .Values.exporter.serviceAccountName }}
       {{- end }}
       {{- if .Values.exporter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.exporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.exporter.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.initContainers "context" $) | nindent 8 }}
@@ -81,7 +81,7 @@ spec:
           image: {{ include "harbor.exporter.image" . }}
           imagePullPolicy: {{ .Values.exporter.image.pullPolicy | quote }}
           {{- if .Values.exporter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.exporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.exporter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -164,8 +164,13 @@ spec:
           {{- end }}
           {{- if .Values.exporter.resources }}
           resources: {{- toYaml .Values.exporter.resources | nindent 12 }}
+          {{- else if ne .Values.exporter.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.exporter.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/exporter
@@ -180,6 +185,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.exporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.internalTLS.enabled }}
         - name: internal-tls-certs
           secret:

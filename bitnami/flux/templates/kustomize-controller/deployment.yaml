@@ -66,7 +66,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.kustomizeController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.kustomizeController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kustomizeController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.kustomizeController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.kustomizeController.terminationGracePeriodSeconds }}
@@ -80,7 +80,7 @@ spec:
           image: {{ template "flux.kustomize-controller.image" . }}
           imagePullPolicy: {{ .Values.kustomizeController.image.pullPolicy }}
           {{- if .Values.kustomizeController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.kustomizeController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kustomizeController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -123,6 +123,8 @@ spec:
             {{- end }}
           {{- if .Values.kustomizeController.resources }}
           resources: {{- toYaml .Values.kustomizeController.resources | nindent 12 }}
+          {{- else if ne .Values.kustomizeController.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.kustomizeController.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
             - name: http-metrics

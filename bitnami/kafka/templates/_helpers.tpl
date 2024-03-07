@@ -739,7 +739,7 @@ Init container definition for Kafka initialization
   image: {{ include "kafka.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy }}
   {{- if $roleSettings.containerSecurityContext.enabled }}
-  securityContext: {{- omit $roleSettings.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $roleSettings.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   {{- if $roleSettings.initContainerResources }}
   resources: {{- toYaml $roleSettings.initContainerResources | nindent 4 }}  
@@ -965,10 +965,12 @@ Init container definition for waiting for Kubernetes autodiscovery
     - name: AUTODISCOVERY_SERVICE_TYPE
       value: {{ $externalAccessService.service.type | quote }}
   {{- if .context.Values.externalAccess.autoDiscovery.containerSecurityContext.enabled }}
-  securityContext: {{- omit .context.Values.externalAccess.autoDiscovery.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.externalAccess.autoDiscovery.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   {{- if .context.Values.externalAccess.autoDiscovery.resources }}
   resources: {{- toYaml .context.Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  {{- else if ne .context.Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: scripts

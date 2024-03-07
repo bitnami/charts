@@ -18,7 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -57,9 +65,7 @@ diagnosticMode:
   ##
   args:
     - infinity
-
 ## @section Hub deployment parameters
-
 hub:
   ## @param hub.image.registry [default: REGISTRY_NAME] Hub image registry
   ## @param hub.image.repository [default: REPOSITORY_NAME/jupyterhub] Hub image repository
@@ -71,7 +77,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r71
+    tag: 4.0.2-debian-12-r26
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -156,7 +162,7 @@ hub:
       {{- end }}
       networkTools:
         image:
-          name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
+          name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" .Values.global) }}
           tag: {{ .Values.auxiliaryImage.tag }}
           digest: {{ .Values.auxiliaryImage.digest }}
           pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
@@ -196,8 +202,12 @@ hub:
       {{- if .Values.singleuser.podSecurityContext.enabled }}
       fsGid: {{ .Values.singleuser.podSecurityContext.fsGroup }}
       {{- end }}
+      {{- if .Values.singleuser.containerSecurityContext.enabled }}
       containerSecurityContext: {{- omit .Values.singleuser.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+      {{- end }}
+      {{- if .Values.singleuser.podSecurityContext.enabled }}
       podSecurityContext: {{- omit .Values.singleuser.podSecurityContext "enabled" | toYaml | nindent 4 }}
+      {{- end }}
       serviceAccountName: {{ template "jupyterhub.singleuserServiceAccountName" . }}
       automountServiceAccountToken: {{ .Values.singleuser.automountServiceAccountToken }}
       storage:
@@ -209,12 +219,19 @@ hub:
         extraLabels:
           app.kubernetes.io/component: singleuser
           {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-        {{- if .Values.singleuser.extraVolumes }}
-        extraVolumes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
-        {{- end }}
-        {{- if .Values.singleuser.extraVolumeMounts }}
-        extraVolumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
-        {{- end }}
+        extraVolumes:
+          - name: empty-dir
+            emptyDir: {}
+          {{- if .Values.singleuser.extraVolumes }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
+          {{- end }}
+        extraVolumeMounts:
+          - name: empty-dir
+            mountPath: /tmp
+            subPath: tmp-dir
+          {{- if .Values.singleuser.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
+          {{- end }}
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
         dynamic:
@@ -223,21 +240,15 @@ hub:
           volumeNameTemplate: {{ include "common.names.fullname" . }}-volume-{username}{servername}
           storageAccessModes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.persistence.accessModes "context" $ ) | nindent 8 }}
       image:
-        name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
+        name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" .Values.global) }}
         tag: {{ .Values.singleuser.image.tag }}
         digest: {{ .Values.singleuser.image.digest }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
-        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 8 }}
+        pullSecrets: {{- include "jupyterhub.imagePullSecrets.list" . | nindent 4 }}
       startTimeout: 300
-      {{- /* We need to replace the Kubernetes memory/cpu terminology (e.g. 10Gi, 10Mi) with one compatible with Python (10G, 10M) */}}
-      cpu:
-        limit: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.limits.cpu)  "${1}" }}
-        guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.requests.cpu) "${1}" }}
-      memory:
-        limit: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.limits.memory) "${1}" }}
-        guarantee: {{ regexReplaceAll "([A-Za-z])i" (default "" .Values.singleuser.resources.requests.memory) "${1}" }}
+      {{- include "jupyterhub.singleuser.resources" . | nindent 2 }}
       {{- if .Values.singleuser.command }}
-      cmd: {{- include "common.tplvalues.render" (dict "value" .Values.singleuser.command "context" $) | nindent 12 }}
+      cmd: {{- include "common.tplvalues.render" (dict "value" .Values.singleuser.command "context" $) | nindent 4 }}
       {{- else }}
       cmd: jupyterhub-singleuser
       {{- end }}
@@ -337,17 +348,27 @@ hub:
   customReadinessProbe: {}
   ## Hub resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param hub.resources.limits The resources limits for the Hub containers
-  ## @param hub.resources.requests The requested resources for the Hub containers
+  ## @param hub.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if hub.resources is set (hub.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param hub.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## hub containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param hub.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param hub.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param hub.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param hub.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param hub.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param hub.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param hub.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -359,6 +380,7 @@ hub:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -501,7 +523,6 @@ hub:
     create: false
     minAvailable: ""
     maxUnavailable: ""
-
   ## @section Hub RBAC parameters
 
   ## ServiceAccount parameters
@@ -539,7 +560,6 @@ hub:
     ##       - list
     ##
     rules: []
-
   ## @section Hub Traffic Exposure Parameters
 
   ## Network policy
@@ -610,10 +630,8 @@ hub:
     ## @param hub.service.extraPorts Extra port to expose on Hub service
     ##
     extraPorts: []
-
   ## @section Hub Metrics parameters
   ##
-
   metrics:
     ## @param hub.metrics.authenticatePrometheus Use authentication for Prometheus
     ## To allow public access without authentication for prometheus metrics set environment as follows.
@@ -658,9 +676,7 @@ hub:
       ## @param hub.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Proxy deployment parameters
-
 proxy:
   ## @param proxy.image.registry [default: REGISTRY_NAME] Proxy image registry
   ## @param proxy.image.repository [default: REPOSITORY_NAME/configurable-http-proxy] Proxy image repository
@@ -673,7 +689,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.1-debian-11-r5
+    tag: 4.6.1-debian-12-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -777,17 +793,27 @@ proxy:
   customReadinessProbe: {}
   ## Proxy resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param proxy.resources.limits The resources limits for the Proxy containers
-  ## @param proxy.resources.requests The requested resources for the Proxy containers
+  ## @param proxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param proxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Proxy containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param proxy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -799,6 +825,7 @@ proxy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -944,7 +971,6 @@ proxy:
     ## @param proxy.pdb.maxUnavailable Set maximum available proxy instances
     ##
     maxUnavailable: ""
-
   ## @section Proxy RBAC Parameters
 
   ## ServiceAccount parameters
@@ -964,8 +990,6 @@ proxy:
     ## @param proxy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
-
   ## @section Proxy Traffic Exposure Parameters
   ##
 
@@ -1242,9 +1266,7 @@ proxy:
     ##             name: http
     ##
     extraRules: []
-
   ## @section Proxy Metrics parameters
-
   metrics:
     ## Prometheus Operator ServiceMonitor configuration
     ##
@@ -1285,7 +1307,6 @@ proxy:
       ## @param proxy.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
-
 ## @section Image puller deployment parameters
 ##
 
@@ -1325,17 +1346,27 @@ imagePuller:
   customReadinessProbe: {}
   ## ImagePuller resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param imagePuller.resources.limits The resources limits for the ImagePuller containers
-  ## @param imagePuller.resources.requests The requested resources for the ImagePuller containers
+  ## @param imagePuller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if imagePuller.resources is set (imagePuller.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param imagePuller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## ImagePuller containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imagePuller.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param imagePuller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imagePuller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imagePuller.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imagePuller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param imagePuller.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param imagePuller.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1347,6 +1378,7 @@ imagePuller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1492,7 +1524,6 @@ imagePuller:
     ## @param imagePuller.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
 ## @section Singleuser deployment parameters
 ##
 
@@ -1510,7 +1541,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.2-debian-11-r75
+    tag: 4.0.2-debian-12-r26
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1548,17 +1579,27 @@ singleuser:
   containerPort: 8888
   ## Singleuser resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param singleuser.resources.limits The resources limits for the Singleuser containers
-  ## @param singleuser.resources.requests The requested resources for the Singleuser containers
+  ## @param singleuser.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if singleuser.resources is set (singleuser.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param singleuser.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## singleuser containers' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param singleuser.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param singleuser.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param singleuser.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param singleuser.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param singleuser.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param singleuser.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param singleuser.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1570,6 +1611,7 @@ singleuser:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1643,9 +1685,7 @@ singleuser:
   ##         containerPort: 1234
   ##
   sidecars: []
-
   ## @section Single User RBAC parameters
-
   serviceAccount:
     ## @param singleuser.serviceAccount.create Specifies whether a ServiceAccount should be created
     ##
@@ -1661,11 +1701,9 @@ singleuser:
     ## @param singleuser.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
-
   ## @section Single User Persistence parameters
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-
   persistence:
     ## @param singleuser.persistence.enabled Enable persistent volume creation on Single User instances
     ## If true, use a Persistent Volume Claim, If false, use emptyDir
@@ -1686,19 +1724,17 @@ singleuser:
     ## @param singleuser.persistence.size Persistent Volumes size
     ##
     size: 10Gi
-
   ## @param singleuser.profileList  Define JupyterHub profiles
   profileList: []
-    ## - display_name: "Profile 1"
-    ##   description: "Longer description for profile 1."
-    ##   default: true
-    ## - display_name: "Profile 2"
-    ##   description: "Longer description for profile 2."
-    ##   kubespawner_override:
-    ##     image: jupyter/datascience-notebook:latest
+  ## - display_name: "Profile 1"
+  ##   description: "Longer description for profile 1."
+  ##   default: true
+  ## - display_name: "Profile 2"
+  ##   description: "Longer description for profile 2."
+  ##   kubespawner_override:
+  ##     image: jupyter/datascience-notebook:latest
 
   ## @section Traffic exposure parameters
-
   networkPolicy:
     ## @param singleuser.networkPolicy.enabled Deploy Single User network policies
     ##
@@ -1715,7 +1751,6 @@ singleuser:
     ## @param singleuser.networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
     ##
     extraEgress: ""
-
 ## @section Auxiliary image parameters
 ##
 
@@ -1729,7 +1764,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r96
+  tag: 12-debian-12-r16
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1740,7 +1775,6 @@ auxiliaryImage:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## @section JupyterHub database parameters
 
 ## PostgreSQL chart configuration
@@ -1764,7 +1798,6 @@ postgresql:
   service:
     ports:
       postgresql: 5432
-
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host

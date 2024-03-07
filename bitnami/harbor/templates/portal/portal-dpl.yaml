@@ -7,7 +7,7 @@ apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "harbor.portal" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.portal.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -68,7 +68,7 @@ spec:
       serviceAccountName: {{ .Values.portal.serviceAccountName }}
       {{- end }}
       {{- if .Values.portal.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.portal.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
@@ -78,7 +78,7 @@ spec:
           image: {{ include "harbor.portal.image" . }}
           imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
           {{- if .Values.portal.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.portal.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -140,8 +140,13 @@ spec:
           {{- end }}
           {{- if .Values.portal.resources }}
           resources: {{- toYaml .Values.portal.resources | nindent 12 }}
+          {{- else if ne .Values.portal.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.portal.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: portal-config
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
@@ -156,6 +161,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.portal.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: portal-config
           configMap:
             name: {{ include "harbor.portal" . }}

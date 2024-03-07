@@ -19,7 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -47,7 +55,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## Bitnami Pinniped image
 ## ref: https://hub.docker.com/r/bitnami/pinniped/tags/
 ## @param image.registry [default: REGISTRY_NAME] Pinniped image registry
@@ -60,7 +67,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.28.0-debian-11-r5
+  tag: 0.28.0-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -75,7 +82,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-
 ## @section Concierge Parameters
 ##
 ##
@@ -92,7 +98,6 @@ concierge:
   containerPorts:
     api: 10250
     proxy: 8444
-
   ## @param concierge.configurationPorts.aggregatedAPIServerPort Concierge API configuration port
   ## @param concierge.configurationPorts.impersonationProxyServerPort Concierge Proxy configuration port
   ##
@@ -103,15 +108,12 @@ concierge:
   configurationPorts:
     aggregatedAPIServerPort: 10250
     impersonationProxyServerPort: 8444
-
   ## @param concierge.hostNetwork Concierge API and Proxy container hostNetwork
   ##
   hostNetwork: false
-
   ## @param concierge.dnsPolicy Concierge API and Proxy container dnsPolicy
   ##
   dnsPolicy: ""
-
   ## @param concierge.configuration [string] Concierge pinniped.yaml configuration file
   ##
   configuration: |
@@ -209,12 +211,21 @@ concierge:
   customStartupProbe: {}
   ## Concierge resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param concierge.resources.limits The resources limits for the Concierge containers
-  ## @param concierge.resources.requests The requested resources for the Concierge containers
+  ## @param concierge.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if concierge.resources is set (concierge.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param concierge.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param concierge.podSecurityContext.enabled Enabled Concierge pods' Security Context
@@ -234,6 +245,7 @@ concierge:
   ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param concierge.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param concierge.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param concierge.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -245,6 +257,7 @@ concierge:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -253,7 +266,6 @@ concierge:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param concierge.existingConfigmap The name of an existing ConfigMap with your custom configuration for Concierge
   ##
   existingConfigmap: ""
@@ -327,7 +339,6 @@ concierge:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param concierge.priorityClassName Concierge pods' priorityClassName
   ##
   priorityClassName: ""
@@ -386,14 +397,12 @@ concierge:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Concierge RBAC settings
   ##
   rbac:
     ## @param concierge.rbac.create Create Concierge RBAC objects
     ##
     create: true
-
   serviceAccount:
     ## @param concierge.serviceAccount.concierge.name Name of an existing Service Account for the Concierge Deployment
     ## @param concierge.serviceAccount.concierge.create Create a Service Account for the Concierge Deployment
@@ -425,7 +434,6 @@ concierge:
       create: true
       automountServiceAccountToken: false
       annotations: {}
-
   ## @section Concierge Traffic Exposure Parameters
   ##
   ## Concierge proxy service parameters
@@ -542,7 +550,6 @@ concierge:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
 ## @section Supervisor Parameters
 ##
 ##
@@ -569,7 +576,6 @@ supervisor:
       apiService: {{ template "pinniped.supervisor.api.fullname" . }}
     labels: {"app.kubernetes.io/part-of":"pinniped", "app.kubernetes.io/component": "supervisor", "app.kubernetes.io/instance": "{{ .Release.Name }}"}
     insecureAcceptExternalUnencryptedHttpRequests: false
-
   ## Configure extra options for Supervisor containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param supervisor.livenessProbe.enabled Enable livenessProbe on Supervisor containers
@@ -625,12 +631,21 @@ supervisor:
   customStartupProbe: {}
   ## Supervisor resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param supervisor.resources.limits The resources limits for the Supervisor containers
-  ## @param supervisor.resources.requests The requested resources for the Supervisor containers
+  ## @param supervisor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if supervisor.resources is set (supervisor.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resources:
-    limits: {}
-    requests: {}
+  resourcesPreset: "none"
+  ## @param supervisor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param supervisor.podSecurityContext.enabled Enabled Supervisor pods' Security Context
@@ -650,6 +665,7 @@ supervisor:
   ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param supervisor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param supervisor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param supervisor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -661,6 +677,7 @@ supervisor:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -669,7 +686,6 @@ supervisor:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-
   ## @param supervisor.existingConfigmap The name of an existing ConfigMap with your custom configuration for Supervisor
   ##
   existingConfigmap: ""
@@ -740,7 +756,6 @@ supervisor:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
   ## @param supervisor.priorityClassName Supervisor pods' priorityClassName
   ##
   priorityClassName: ""
@@ -799,14 +814,12 @@ supervisor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-
   ## @section Supervisor RBAC settings
   ##
   rbac:
     ## @param supervisor.rbac.create Create Supervisor RBAC objects
     ##
     create: true
-
   serviceAccount:
     ## @param supervisor.serviceAccount.name Name of an existing Service Account for the Supervisor Deployment
     ## @param supervisor.serviceAccount.create Create a Service Account for the Supervisor Deployment
@@ -817,7 +830,6 @@ supervisor:
     create: true
     automountServiceAccountToken: false
     annotations: {}
-
   ## @section Supervisor Traffic Exposure Parameters
   ##
   ## Supervisor proxy service parameters
@@ -882,7 +894,6 @@ supervisor:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
-
     public:
       ## @param supervisor.service.public.type Supervisor user-facing service type
       ##
@@ -992,7 +1003,6 @@ supervisor:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
   ## Configure the ingress resource that allows you to access the Pinniped Supervisor installation
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##

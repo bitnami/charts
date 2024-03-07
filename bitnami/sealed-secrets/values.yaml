@@ -19,7 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -47,7 +55,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy [array] Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section Sealed Secrets Parameters
 ##
 
@@ -64,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets-controller
-  tag: 0.25.0-debian-11-r3
+  tag: 0.26.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -136,12 +143,21 @@ containerPorts:
   http: 8080
 ## Sealed Secret resource requests and limits
 ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resources.limits [object] The resources limits for the Sealed Secret containers
-## @param resources.requests [object] The requested resources for the Sealed Secret containers
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resources:
-  limits: {}
-  requests: {}
+resourcesPreset: "none"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
 ## Configure extra options for Sealed Secret containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on Sealed Secret containers
@@ -202,7 +218,6 @@ customStartupProbe: {}
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Sealed Secret pod's Security Context fsGroup
-## @param podSecurityContext.seccompProfile.type Set Sealed Secret pod's Security Context seccompProfile type
 ##
 podSecurityContext:
   enabled: true
@@ -210,8 +225,6 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
-  seccompProfile:
-    type: RuntimeDefault
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled Sealed Secret containers' Security Context
@@ -221,18 +234,19 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsNonRoot Indicates that the Sealed Secret container must run as a non-root user
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Sealed Secret containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Sealed Secret containers' Security Context runAsGroup
 ## @param containerSecurityContext.seccompProfile.type Set Sealed Secret container's Security Context seccompProfile type
 ##
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: false
   capabilities:
-    drop:
-    - ALL
+    drop: ["ALL"]
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 1001
   seccompProfile:
     type: RuntimeDefault
 ## @param automountServiceAccountToken Mount Service Account token in pod
@@ -354,7 +368,6 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
-
 ## @section Traffic Exposure Parameters
 ##
 
@@ -514,7 +527,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Other Parameters
 ##
 
@@ -561,7 +573,6 @@ rbac:
   ## @param rbac.labels Extra labels to be added to RBAC resources
   ##
   labels: {}
-
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -578,7 +589,6 @@ serviceAccount:
   ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
   ##
   automountServiceAccountToken: false
-
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -591,7 +601,6 @@ networkPolicy:
   ## listening on. When true, the controller accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
-
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param pdb.create Enable a Pod Disruption Budget creation
@@ -602,7 +611,6 @@ pdb:
   create: false
   minAvailable: ""
   maxUnavailable: ""
-
 ## @section Metrics parameters
 ##
 metrics:

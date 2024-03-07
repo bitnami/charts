@@ -567,7 +567,7 @@ Init container definition for waiting for the database to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -602,6 +602,10 @@ Init container definition for waiting for the database to be ready
       value: {{ include "mastodon.database.user" . }}
     - name: MASTODON_DATABASE_NAME
       value: {{ include "mastodon.database.name" . }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -615,7 +619,7 @@ Init container definition for waiting for Redis(TM) to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -648,6 +652,10 @@ Init container definition for waiting for Redis(TM) to be ready
           name: {{ include "mastodon.redis.secretName" . }}
           key: {{ include "mastodon.redis.passwordKey" . }}
     {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -658,7 +666,7 @@ Init container definition for waiting for Elasticsearch to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -691,6 +699,10 @@ Init container definition for waiting for Elasticsearch to be ready
           name: {{ include "mastodon.elasticsearch.secretName" . }}
           key: {{ include "mastodon.elasticsearch.passwordKey" . }}
     {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -701,7 +713,7 @@ Init container definition for waiting for S3 to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -727,6 +739,10 @@ Init container definition for waiting for S3 to be ready
       value: {{ include "mastodon.s3.host" . | quote }}
     - name: MASTODON_S3_PORT_NUMBER
       value: {{ include "mastodon.s3.port" . | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -737,7 +753,7 @@ Init container definition for waiting for Mastodon Web to be ready
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -763,6 +779,10 @@ Init container definition for waiting for Mastodon Web to be ready
       value: {{ include "mastodon.web.fullname" . | quote }}
     - name: MASTODON_WEB_PORT
       value: {{ .Values.web.service.ports.http | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*

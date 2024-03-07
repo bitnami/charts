@@ -11,8 +11,8 @@ addr:
 file:
   {{ .Vars.persistence.mountPath }}:
     exists: true
-    filetype: symlink
-    mode: "0777"
+    filetype: directory
+    mode: "2775"
     owner: root
   /bitnami/rabbitmq/conf:
     exists: true
