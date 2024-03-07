@@ -11,7 +11,6 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-    group: root
   /opt/bitnami/airflow/dags:
     filetype: directory
     exists: true
