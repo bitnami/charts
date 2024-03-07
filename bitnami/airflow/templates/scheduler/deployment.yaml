@@ -68,7 +68,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       {{- if .Values.scheduler.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.scheduler.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.scheduler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.scheduler.containerSecurityContext "context" $) | trim | nindent 8 }}
@@ -87,7 +87,7 @@ spec:
           image: {{ include "airflow.schedulerImage" . | quote }}
           imagePullPolicy: {{ .Values.scheduler.image.pullPolicy | quote }}
           {{- if .Values.scheduler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.scheduler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.scheduler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

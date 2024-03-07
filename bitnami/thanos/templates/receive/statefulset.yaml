@@ -78,7 +78,7 @@ spec:
       schedulerName: {{ .Values.receive.schedulerName }}
       {{- end }}
       {{- if .Values.receive.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.receive.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.receive.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.receive.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -113,7 +113,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.receive.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.receive.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.receive.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.receive.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.receive.command "context" $) | nindent 12 }}
