@@ -94,7 +94,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.2-debian-12-r5
+    tag: 1.2.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -267,7 +267,8 @@ kustomizeController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
   ## @param kustomizeController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
   ## @param kustomizeController.containerSecurityContext.readOnlyRootFilesystem Set Kustomize Controller containers' Security Context runAsNonRoot
@@ -279,6 +280,7 @@ kustomizeController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -780,7 +782,8 @@ helmController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
   ## @param helmController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
   ## @param helmController.containerSecurityContext.readOnlyRootFilesystem Set Helm Controller containers' Security Context runAsNonRoot
@@ -792,6 +795,7 @@ helmController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1120,7 +1124,7 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.2.4-debian-12-r5
+    tag: 1.2.4-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1295,7 +1299,8 @@ sourceController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
   ## @param sourceController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
   ## @param sourceController.containerSecurityContext.readOnlyRootFilesystem Set Source Controller containers' Security Context runAsNonRoot
@@ -1307,6 +1312,7 @@ sourceController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     privileged: false
@@ -1732,7 +1738,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.4-debian-12-r5
+    tag: 1.2.4-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1905,7 +1911,8 @@ notificationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
   ## @param notificationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.privileged Set Notification Controller containers' Security Context privileged
@@ -1917,6 +1924,7 @@ notificationController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -2418,7 +2426,8 @@ imageAutomationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
   ## @param imageAutomationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.privileged Set Image Automation Controller containers' Security Context privileged
@@ -2430,6 +2439,7 @@ imageAutomationController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     privileged: false
@@ -2758,7 +2768,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.2-debian-12-r5
+    tag: 0.31.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2931,7 +2941,8 @@ imageReflectorController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
   ## @param imageReflectorController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
   ## @param imageReflectorController.containerSecurityContext.readOnlyRootFilesystem Set Image Reflector Controller containers' Security Context runAsNonRoot
@@ -2943,6 +2954,7 @@ imageReflectorController:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -3308,7 +3320,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -68,7 +68,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.operator.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.operator.terminationGracePeriodSeconds }}
@@ -82,7 +82,7 @@ spec:
           image: {{ template "kuberay.operator.image" . }}
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           {{- if .Values.operator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.operator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

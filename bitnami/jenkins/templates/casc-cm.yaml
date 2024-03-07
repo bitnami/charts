@@ -76,8 +76,10 @@ data:
                     {{- end }}
                     {{- if .Values.agent.containerSecurityContext.enabled }}
                     privileged: {{ .Values.agent.containerSecurityContext.privileged }}
+                    {{- if not (or (eq .Values.global.compatibility.openshift.adaptSecurityContext "force") (and (eq .Values.global.compatibility.openshift.adaptSecurityContext "auto") (include "common.compatibility.isOpenshift" .))) }}
                     runAsUser: {{ .Values.agent.containerSecurityContext.runAsUser }}
                     runAsGroup: {{ .Values.agent.containerSecurityContext.runAsGroup }}
+                    {{- end }}
                     {{- end }}
                   {{- if .Values.agent.sidecars }}
                   {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 18 }}

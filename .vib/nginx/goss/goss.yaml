@@ -9,9 +9,7 @@ file:
   /opt/bitnami/nginx/conf/nginx.conf:
     exists: true
     filetype: file
-    mode: "0664"
-    owner: root
-    group: root
+    mode: "0644"
     contents:
       - /listen.*{{ .Vars.containerPorts.http }}/
 command:
