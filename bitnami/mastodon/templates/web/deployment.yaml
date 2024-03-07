@@ -62,7 +62,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.web.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.web.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.web.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
@@ -106,7 +106,7 @@ spec:
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

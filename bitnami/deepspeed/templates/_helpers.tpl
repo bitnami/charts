@@ -178,7 +178,7 @@ Return the definition of wait for workers init container
       echo "Connection success"
       exit 0
   {{- if .Values.client.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: ssh-client-config
@@ -220,7 +220,7 @@ Return the definition of the ssh client configuration init container
         echo "Include /etc/ssh/ssh_config.d/*.conf" >> /bitnami/ssh/ssh-config/ssh_config
       fi
   {{- if .Values.client.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: ssh-config
@@ -300,7 +300,7 @@ Return the definition of the ssh server configuration init container
         done < /bitnami/ssh/server-configmap/*.conf
       fi
   {{- if .Values.worker.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: ssh-client-private-key
@@ -337,7 +337,7 @@ Return the definition of the git clone init container
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
       git clone {{ .context.Values.source.git.repository }} {{ if .context.Values.source.git.revision }}--branch {{ .context.Values.source.git.revision }}{{ end }} /app
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: source

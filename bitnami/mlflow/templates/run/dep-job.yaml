@@ -68,7 +68,7 @@ spec:
       runtimeClassName: {{ .Values.run.runtimeClassName | quote }}
       {{- end }}
       {{- if .Values.run.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.run.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.run.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.run.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.run.tolerations "context" .) | nindent 8 }}
@@ -108,7 +108,7 @@ spec:
           image: {{ include "mlflow.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.run.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.run.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.run.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

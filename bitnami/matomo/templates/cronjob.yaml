@@ -45,7 +45,7 @@ spec:
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.archive.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cronjobs.archive.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.cronjobs.archive.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.command "context" $) | nindent 16 }}
@@ -198,7 +198,7 @@ spec:
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.taskScheduler.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.taskScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cronjobs.taskScheduler.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.cronjobs.taskScheduler.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.command "context" $) | nindent 16 }}
