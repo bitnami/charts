@@ -58,7 +58,7 @@ For Redis Sentinel:
 -------------------------------------------------------------------------------
  WARNING
 
-    By specifying ".Values.auth.usePasswordFile=true" and ".Values.auth.usePasswordFileFromSecret=false"
+    By specifying ".Values.auth.usePasswordFiles=true" and ".Values.auth.usePasswordFileFromSecret=false"
     Redis is expecting that the password is mounted as a file in each pod
     (by default in /opt/bitnami/redis/secrets/redis-password)
 
