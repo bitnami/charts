@@ -99,6 +99,7 @@ helm delete my-release
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                               | `true`           |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                   | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                         | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                        | `0`              |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                      | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                        | `false`          |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                            | `false`          |
