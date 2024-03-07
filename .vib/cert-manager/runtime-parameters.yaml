@@ -9,6 +9,13 @@ controller:
   serviceAccount:
     create: true
     automountServiceAccountToken: true
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 webhook:
   httpsPort: 443
 rbac:
