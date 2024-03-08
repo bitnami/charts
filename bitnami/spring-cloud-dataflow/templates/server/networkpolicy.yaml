@@ -45,7 +45,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: rabbitmq
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- end }}
     {{- end }}
     {{- if or (.Values.kafka.enabled) (.Values.externalKafka.enabled) }}
@@ -57,7 +57,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: kafka
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- end }}
     {{- end }}
     # Allow connection to MariaDB
@@ -68,7 +68,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: mariadb
-              app.kubernetes.io/instance: {{ .Release.Name }}              
+              app.kubernetes.io/instance: {{ .Release.Name }}
       {{- end }}
     # Allow connection to skipper
     - ports:
@@ -84,8 +84,8 @@ spec:
     {{- if .Values.metrics.enabled }}
     # Allow connection to prometheus-proxy
     - ports:
-        - port: {{ .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
-        - port: {{ .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
+        - port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
+        - port: {{ coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
       to:
         - podSelector:
             {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.podLabels .Values.commonLabels ) "context" . ) }}

@@ -66,7 +66,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageReflectorController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.imageReflectorController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imageReflectorController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageReflectorController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.imageReflectorController.terminationGracePeriodSeconds }}
@@ -85,7 +85,7 @@ spec:
               mkdir -p {{ .Values.imageReflectorController.persistence.mountPath }}
               find {{ .Values.imageReflectorController.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.imageReflectorController.containerSecurityContext.runAsUser }}:{{ .Values.imageReflectorController.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -105,7 +105,7 @@ spec:
           image: {{ template "flux.image-reflector-controller.image" . }}
           imagePullPolicy: {{ .Values.imageReflectorController.image.pullPolicy }}
           {{- if .Values.imageReflectorController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.imageReflectorController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imageReflectorController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

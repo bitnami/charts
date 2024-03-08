@@ -74,7 +74,7 @@ spec:
       schedulerName: {{ .Values.attu.schedulerName }}
       {{- end }}
       {{- if .Values.attu.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.attu.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.attu.enableDefaultInitContainers }}
@@ -88,7 +88,7 @@ spec:
           image: {{ template "milvus.attu.image" . }}
           imagePullPolicy: {{ .Values.attu.image.pullPolicy }}
           {{- if .Values.attu.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.attu.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

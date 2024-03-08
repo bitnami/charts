@@ -19,7 +19,7 @@ it('is able to display all of the nodes', () => {
   cy.contains('Agent alive and reachable');
   cy.contains('Service Instances').click();
   cy.contains('Metadata').click();
-  cy.get('.ember-view').within(() => {
+  cy.get('tbody.ember-view').within(() => {
     cy.contains('consul-network-segment');
   });
 });
