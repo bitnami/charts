@@ -30,6 +30,7 @@ it('allows submitting a workflow using a template created from a file', () => {
   cy.visit('/workflows');
 
   cy.contains('Submit New').click({ force: true });
+
   cy.get('.sliding-panel__body').should('be.visible').within(() => {
     cy.get('.select').click();
     cy.contains(workflowName).click();

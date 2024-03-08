@@ -56,7 +56,7 @@ spec:
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.worker.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.terminationGracePeriodSeconds }}
-      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }} 
+      terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.worker.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.worker.tolerations "context" $) | nindent 8 }}
@@ -72,9 +72,39 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "airflow.serviceAccountName" . }}
       {{- if .Values.worker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
+        - name: create-default-config
+          image: {{ include "airflow.workerImage" . }}
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy | quote }}
+          {{- if .Values.worker.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              cp "$(find /opt/bitnami/airflow -name default_airflow.cfg)" /default-conf/airflow.cfg
+              cp "$(find /opt/bitnami/airflow -name default_webserver_config.py)" /default-conf/webserver_config.py
+              # HACK: When testing the connection it creates an empty airflow.db file at the
+              # application root
+              touch /default-conf/airflow.db
+          {{- if .Values.worker.resources }}
+          resources: {{- toYaml .Values.worker.resources | nindent 12 }}
+          {{- else if ne .Values.worker.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /default-conf
+              subPath: app-default-conf-dir
         {{- include "airflow.git.containers.clone" (dict "securityContext" .Values.worker.containerSecurityContext "context" $) | trim | nindent 8 }}
         {{- if .Values.dags.existingConfigmap }}
         {{- include "airflow.loadDAGsInitContainer" (dict "component" "worker" "context" . ) | trim | nindent 8 }}
@@ -91,7 +121,7 @@ spec:
           image: {{ include "airflow.workerImage" . }}
           imagePullPolicy: {{ .Values.worker.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -185,19 +215,42 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.worker.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/nss-wrapper
+              subPath: app-nss-wrapper-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-default-conf-dir/airflow.db
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/tmp
+              subPath: app-tmp-dir
             {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
             {{- end }}
             {{- if .Values.dags.existingConfigmap }}
-            - name: external-dag-files
+            - name: empty-dir
               mountPath: /opt/bitnami/airflow/dags/external
+              subPath: app-external-dag-dir
             {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: custom-configuration-file
               mountPath: /opt/bitnami/airflow/airflow.cfg
               subPath: airflow.cfg
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.cfg
+              subPath: app-default-conf-dir/airflow.cfg
             {{- end }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/webserver_config.py
+              subPath: app-default-conf-dir/webserver_config.py
             {{- include "airflow.git.maincontainer.volumeMounts" . | trim | nindent 12 }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -212,12 +265,12 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.dags.existingConfigmap }}
         - name: load-external-dag-files
           configMap:
             name: {{ tpl .Values.dags.existingConfigmap $ }}
-        - name: external-dag-files
-          emptyDir: {}
         {{- end }}
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: custom-configuration-file
@@ -230,7 +283,6 @@ spec:
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- include "airflow.git.volumes" . | trim | nindent 8 }}
   {{- if .Values.worker.extraVolumeClaimTemplates }}
   volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeClaimTemplates "context" $) | nindent 8 }}
   {{- end }}

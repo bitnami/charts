@@ -80,7 +80,7 @@ spec:
       schedulerName: {{ .Values.schedulerName | quote }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -93,7 +93,7 @@ spec:
           image: {{ template "kong.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -106,6 +106,8 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.kong.args "context" $) | nindent 12 }}
           {{- end }}
           env:
+            - name: KONG_PREFIX
+              value: /opt/bitnami/kong/server
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
             {{- if .Values.service.exposeAdmin }}
@@ -236,6 +238,12 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.kong.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/kong/server
+              subPath: app-server-dir
             - name: health
               mountPath: /health
             {{- if .Values.metrics.enabled }}
@@ -264,7 +272,7 @@ spec:
           image: {{ template "kong.ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.ingressController.image.pullPolicy }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -354,6 +362,9 @@ spec:
           volumeMounts:
             - name: health
               mountPath: /health
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.ingressController.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -362,6 +373,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: health
           configMap:
             name: {{ template "common.names.fullname" . }}-scripts

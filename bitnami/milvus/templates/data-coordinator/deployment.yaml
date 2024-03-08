@@ -76,7 +76,7 @@ spec:
       schedulerName: {{ .Values.dataCoord.schedulerName }}
       {{- end }}
       {{- if .Values.dataCoord.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dataCoord.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataCoord.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.dataCoord.enableDefaultInitContainers }}
@@ -93,7 +93,7 @@ spec:
           image: {{ template "milvus.image" . }}
           imagePullPolicy: {{ .Values.milvus.image.pullPolicy }}
           {{- if .Values.dataCoord.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dataCoord.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataCoord.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

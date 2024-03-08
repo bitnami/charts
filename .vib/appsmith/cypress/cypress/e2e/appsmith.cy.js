@@ -13,7 +13,7 @@ it('allows to create a new app from template', () => {
   cy.fixture('app').then((app) => {
     // Create new app
     cy.contains('Create new').click();
-    cy.get('div[data-testid*="create-app"]').click();
+    cy.get('div[data-testid="t--workspace-action-create-app"]').click();
     // Rename application
     cy.get('.t--application-name').click();
     cy.contains('Rename').click();
