@@ -213,10 +213,14 @@ Load DAGs init-container
     - |
       cp /configmap/* /dags
   volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
     - name: load-external-dag-files
       mountPath: /configmap
-    - name: external-dag-files
+    - name: empty-dir
       mountPath: /dags
+      subPath: app-external-dag-dir
 {{- end -}}
 
 {{/*
@@ -381,6 +385,10 @@ Add environment variables to configure airflow common values
       key: airflow-secret-key
 - name: AIRFLOW_LOAD_EXAMPLES
   value: {{ ternary "yes" "no" .Values.loadExamples | quote }}
+{{- if not (or .Values.configuration .Values.existingConfigmap) }}
+- name: AIRFLOW_FORCE_OVERWRITE_CONF_FILE
+  value: "yes"
+{{- end }}
 {{- if .Values.web.image.debug }}
 - name: BASH_DEBUG
   value: "1"

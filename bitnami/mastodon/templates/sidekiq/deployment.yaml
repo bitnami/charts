@@ -210,6 +210,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if not .Values.enableS3 }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -221,14 +224,16 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidekiq.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if not .Values.enableS3 }}
-          - name: data
-            {{- if .Values.persistence.enabled }}
-            persistentVolumeClaim:
-              claimName: {{ include "mastodon.pvc" . }}
-            {{- else }}
-            emptyDir: {}
-            {{- end }}
+        - name: data
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ include "mastodon.pvc" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
         {{- end }}
         {{- if .Values.sidekiq.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.extraVolumes "context" $) | nindent 10 }}
