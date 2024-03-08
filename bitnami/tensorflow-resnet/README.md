@@ -233,6 +233,17 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
 ### To 3.3.0
 
 TensorFlow ResNet's version was updated to `2.7.0`. Although this new version [does not include breaking changes](https://github.com/tensorflow/serving/releases/tag/2.7.0), the client [was updated to work with newer TF Model Garden models](https://github.com/tensorflow/serving/commit/bb1428d53abb53fe938ddf9bb8839d4dfe48d291). Older models may need to adapt their signature [to the newer, common one](https://www.tensorflow.org/hub/common_signatures/images).
