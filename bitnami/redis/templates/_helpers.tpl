@@ -268,6 +268,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "redis.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "redis.validateValues.tls" .) -}}
+{{- $messages := append $messages (include "redis.validateValues.createMaster" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -316,6 +317,7 @@ redis: tls.enabled
     In order to enable TLS, you also need to provide
     an existing secret containing the TLS certificates or
     enable auto-generated certificates.
+{{- end -}}
 {{- end -}}
 
 {{/* Validate values of Redis&reg; - master service enabled */}}
