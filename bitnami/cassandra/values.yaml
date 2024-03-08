@@ -310,7 +310,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -723,7 +723,7 @@ volumePermissions:
   ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
   ##
   securityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section Metrics parameters
 ##
