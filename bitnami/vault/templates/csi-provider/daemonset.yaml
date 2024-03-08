@@ -65,7 +65,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.csiProvider.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.csiProvider.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.csiProvider.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.csiProvider.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.csiProvider.terminationGracePeriodSeconds }}
@@ -79,7 +79,7 @@ spec:
           image: {{ template "vault.csi-provider.image" . }}
           imagePullPolicy: {{ .Values.csiProvider.image.pullPolicy }}
           {{- if .Values.csiProvider.provider.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.csiProvider.provider.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.csiProvider.provider.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -160,7 +160,7 @@ spec:
           image: {{ template "vault.csi-provider.image" . }}
           imagePullPolicy: {{ .Values.csiProvider.image.pullPolicy }}
           {{- if .Values.csiProvider.agent.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.csiProvider.agent.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.csiProvider.agent.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

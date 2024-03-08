@@ -62,7 +62,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.streaming.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.streaming.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.streaming.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.streaming.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.streaming.terminationGracePeriodSeconds }}
@@ -80,7 +80,7 @@ spec:
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.streaming.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.streaming.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.streaming.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -207,6 +207,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if not .Values.enableS3 }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -218,6 +221,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.streaming.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+          - name: empty-dir
+            emptyDir: {}
         {{- if not .Values.enableS3 }}
           - name: data
             {{- if .Values.persistence.enabled }}

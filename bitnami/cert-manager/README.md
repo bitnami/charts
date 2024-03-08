@@ -55,11 +55,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -349,6 +350,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cainjector.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                                           | `""`                         |
 | `cainjector.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                                             | `{}`                         |
 | `cainjector.serviceAccount.automountServiceAccountToken`       | Automount service account token for the server service account                                                                                                                                                                                   | `false`                      |
+| `cainjector.networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                              | `true`                       |
+| `cainjector.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                  | `true`                       |
+| `cainjector.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                                                                                                                                     | `[]`                         |
+| `cainjector.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                     | `[]`                         |
 
 ### Metrics Parameters
 

@@ -75,7 +75,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ingressController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.ingressController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ingressController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingressController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.ingressController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.ingressController.terminationGracePeriodSeconds }}
@@ -93,7 +93,7 @@ spec:
           image: {{ template "apisix.ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.ingressController.image.pullPolicy }}
           {{- if .Values.ingressController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ingressController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingressController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
