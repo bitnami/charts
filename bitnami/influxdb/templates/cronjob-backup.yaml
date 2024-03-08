@@ -28,7 +28,7 @@ spec:
           {{- end }}
         spec:
           {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.backup.cronjob.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
           volumes:
@@ -94,7 +94,7 @@ spec:
                   mountPath: /tmp/backup.sh
                   subPath: backup.sh
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
           containers:
             - name: influxdb-backup-dummy-container
@@ -107,7 +107,7 @@ spec:
                 - "/bin/true"
               {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: gsutil-cp
@@ -131,7 +131,7 @@ spec:
                 - name: google-cloud-key
                   mountPath: /var/secrets/google/
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- end }}
             {{- if .Values.backup.uploadProviders.azure.enabled }}
@@ -164,7 +164,7 @@ spec:
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- end }}
             {{- if .Values.backup.uploadProviders.aws.enabled }}
@@ -224,7 +224,7 @@ spec:
                   mountPath: /tmp/upload-aws.sh
                   subPath: upload-aws.sh
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- end }}
 {{- end }}

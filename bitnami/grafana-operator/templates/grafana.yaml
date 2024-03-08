@@ -96,7 +96,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.grafana.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.grafana.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 12 }}
@@ -130,7 +130,7 @@ spec:
               envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.resources }}
               resources: {{- toYaml .Values.grafana.resources | nindent 16 }}

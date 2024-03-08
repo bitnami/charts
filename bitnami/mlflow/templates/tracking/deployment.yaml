@@ -72,7 +72,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.tracking.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.tracking.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.tracking.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.tracking.terminationGracePeriodSeconds }}
@@ -113,7 +113,7 @@ spec:
           image: {{ include "mlflow.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.tracking.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.tracking.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tracking.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

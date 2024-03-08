@@ -68,7 +68,7 @@ spec:
       serviceAccountName: {{ .Values.portal.serviceAccountName }}
       {{- end }}
       {{- if .Values.portal.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.portal.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.portal.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.portal.initContainers "context" $) | nindent 8 }}
@@ -78,7 +78,7 @@ spec:
           image: {{ include "harbor.portal.image" . }}
           imagePullPolicy: {{ .Values.portal.image.pullPolicy | quote }}
           {{- if .Values.portal.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.portal.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.portal.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
