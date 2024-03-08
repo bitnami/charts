@@ -317,6 +317,14 @@ redis: tls.enabled
     an existing secret containing the TLS certificates or
     enable auto-generated certificates.
 {{- end -}}
+
+{{/* Validate values of Redis&reg; - master service enabled */}}
+{{- define "redis.validateValues.createMaster" -}}
+{{- if and .Values.sentinel.service.createMaster (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken)) }}
+redis: sentinel.service.createMaster
+    In order to redirect requests only to the master pod via the service, you also need to
+    create rbac and enable replica.automountServiceAccountToken.
+{{- end -}}
 {{- end -}}
 
 {{/* Define the suffix utilized for external-dns */}}
