@@ -157,13 +157,29 @@ spec:
           {{- else if ne .Values.taskmanager.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.taskmanager.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.taskmanager.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/flink/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/flink/log
+              subPath: app-logs-dir
+            # HACK: Workaround to bypass the libflink.sh persist_app logic
+            - name: empty-dir
+              mountPath: /bitnami/flink/conf
+              subPath: app-conf-dir
+            {{- if .Values.taskmanager.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.taskmanager.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.taskmanager.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
