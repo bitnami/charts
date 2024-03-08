@@ -320,10 +320,11 @@ redis: tls.enabled
 
 {{/* Validate values of Redis&reg; - master service enabled */}}
 {{- define "redis.validateValues.createMaster" -}}
-{{- if and .Values.sentinel.service.createMaster (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken)) }}
+{{- if and .Values.sentinel.service.createMaster (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
 redis: sentinel.service.createMaster
     In order to redirect requests only to the master pod via the service, you also need to
-    create rbac and enable replica.automountServiceAccountToken.
+    create rbac and serviceAccount. In addition, you need to enable
+    replica.automountServiceAccountToken.
 {{- end -}}
 {{- end -}}
 
