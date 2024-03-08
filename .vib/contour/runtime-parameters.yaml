@@ -16,6 +16,13 @@ contour:
     ports:
       xds: 8002
     type: ClusterIP
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 envoy:
   enabled: true
   containerPorts:
