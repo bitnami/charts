@@ -456,8 +456,8 @@ spec:
             storage: {{ $.Values.shardsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" $.Values.shardsvr.persistence "global" $.Values.global) | nindent 8 }}
   {{- else }}
-        - name: datadir
-          emptyDir: {}
+    - name: datadir
+      emptyDir: {}
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---
