@@ -63,6 +63,9 @@ spec:
         {{- range .Values.aggregator.containerPorts }}
         - port: {{ .containerPort }}
         {{- end }}
+        {{- if .Values.aggregator.port }}
+        - port: {{ .Values.aggregator.port }}
+        {{- end }}
         {{- if .Values.metrics.enabled }}
         {{/* With the current design, there is no containerPort for metrics, it has to be the same as the service port */}}
         - port: {{ .Values.metrics.service.port }}

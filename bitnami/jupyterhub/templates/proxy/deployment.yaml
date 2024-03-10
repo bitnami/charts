@@ -65,7 +65,7 @@ spec:
       schedulerName: {{ .Values.proxy.schedulerName }}
       {{- end }}
       {{- if .Values.proxy.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.proxy.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.proxy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.proxy.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.proxy.terminationGracePeriodSeconds }}
@@ -81,7 +81,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.proxy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.proxy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.proxy.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

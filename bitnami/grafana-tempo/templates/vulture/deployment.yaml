@@ -65,7 +65,7 @@ spec:
       schedulerName: {{ .Values.vulture.schedulerName }}
       {{- end }}
       {{- if .Values.vulture.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.vulture.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.vulture.initContainers }}
@@ -76,7 +76,7 @@ spec:
           image: {{ template "grafana-tempo.vultureImage" . }}
           imagePullPolicy: {{ .Values.vulture.image.pullPolicy }}
           {{- if .Values.vulture.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.vulture.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

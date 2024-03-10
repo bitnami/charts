@@ -29,12 +29,38 @@ spec:
       {{- include "mastodon.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.initJob.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.initJob.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       automountServiceAccountToken: {{ .Values.initJob.automountServiceAccountToken }}
       {{- if .Values.initJob.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      initContainers:
+        - name: copy-assets-dir
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              cp -r /opt/bitnami/mastodon/public/* /public
+          {{- if .Values.initJob.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.initJob.resources }}
+          resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
+          {{- else if ne .Values.initJob.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /public
+              subPath: app-public-dir
       containers:
         # We separate the job in multiple containers to be able to run them in parallel. We put everything on the same job
         # as it follows the Job Pattern best practices
@@ -49,7 +75,7 @@ spec:
           args:
             - /scripts/migrate-and-create-admin.sh
           {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -101,6 +127,9 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: scripts
               mountPath: /scripts
           {{- if .Values.initJob.extraVolumeMounts }}
@@ -122,7 +151,7 @@ spec:
           args:
             - /scripts/precompile-assets.sh
           {{- if .Values.initJob.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.initJob.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -170,6 +199,15 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/mastodon/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mastodon/public
+              subPath: app-public-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: scripts
               mountPath: /scripts
           {{- if not .Values.enableS3 }}
@@ -186,6 +224,8 @@ spec:
           {{- end }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: scripts
           configMap:
             name: {{ printf "%s-init-scripts" (include "common.names.fullname" .) }}

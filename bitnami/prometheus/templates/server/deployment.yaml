@@ -65,7 +65,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
@@ -88,6 +88,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.server.persistence.mountPath }}
               {{- if .Values.server.persistence.subPath }}
@@ -102,7 +105,7 @@ spec:
           image: {{ template "prometheus.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           {{- if .Values.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -190,6 +193,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.server.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: config
               mountPath: /opt/bitnami/prometheus/conf
               readOnly: true
@@ -235,13 +241,16 @@ spec:
               containerPort: 10902
               protocol: TCP
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /prometheus
               name: data
             {{- if .Values.server.thanos.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.server.thanos.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.thanos.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.thanos.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.server.thanos.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.customLivenessProbe "context" $) | nindent 12 }}
@@ -266,6 +275,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.server.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "prometheus.server.configmapName" . }}

@@ -60,7 +60,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.rts.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.rts.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.rts.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rts.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.rts.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.rts.terminationGracePeriodSeconds }}
@@ -78,7 +78,7 @@ spec:
           image: {{ template "appsmith.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.rts.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.rts.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.rts.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

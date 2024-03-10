@@ -72,7 +72,7 @@ spec:
       schedulerName: {{ .Values.ruler.schedulerName }}
       {{- end }}
       {{- if .Values.ruler.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ruler.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.ruler.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -107,7 +107,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.ruler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ruler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.ruler.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.command "context" $) | nindent 12 }}

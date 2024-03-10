@@ -325,7 +325,7 @@ Init container definition for waiting for the database to be ready
   {{- $block = index .context.Values "controlPlane" }}
   {{- end }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -373,7 +373,7 @@ Init container definition for waiting for the database to be ready
           key: {{ include "apisix.etcd.secretPasswordKey" .context }}
     {{- end }}
     {{- if $block.extraEnvVars }}
-    {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" $block.extraEnvVars "context" .context) | nindent 4 }}
     {{- end }}
   envFrom:
     {{- if $block.extraEnvVarsCM }}
@@ -382,7 +382,7 @@ Init container definition for waiting for the database to be ready
     {{- end }}
     {{- if $block.extraEnvVarsSecret }}
     - secretRef:
-        name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" $) }}
+        name: {{ include "common.tplvalues.render" (dict "value" $block.extraEnvVarsSecret "context" .context) }}
     {{- end }}
   volumeMounts:
     - name: empty-dir
@@ -411,7 +411,7 @@ Init container definition for waiting for the database to be ready
   image: {{ template "apisix.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -473,7 +473,7 @@ Init container definition for waiting for the database to be ready
   image: {{ template "apisix.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -545,7 +545,7 @@ Render configuration for the dashboard and ingress-controller components
   {{- $block = index .context.Values "dashboard" }}
   {{- end }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - bash

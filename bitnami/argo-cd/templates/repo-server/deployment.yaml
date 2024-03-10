@@ -66,7 +66,7 @@ spec:
       runtimeClassName: {{ .Values.repoServer.runtimeClassName }}
       {{- end }}
       {{- if .Values.repoServer.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.repoServer.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.repoServer.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
@@ -96,9 +96,9 @@ spec:
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
           {{- if .Values.redisWait.securityContext }}
           # Deprecated: use redisWait.containerSecurityContext
-          securityContext: {{- toYaml .Values.redisWait.securityContext | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.securityContext "context" $) | nindent 12 }}
           {{- else if .Values.redisWait.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.redisWait.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -148,7 +148,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.repoServer.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.repoServer.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.repoServer.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.repoServer.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.command "context" $) | nindent 12 }}
