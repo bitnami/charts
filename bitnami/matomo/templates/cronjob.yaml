@@ -40,6 +40,9 @@ spec:
           {{- end }}
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
+          {{- if .Values.cronjobs.archive.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.cronjobs.archive.podSecurityContext "enabled" | toYaml | nindent 16 }}
+          {{- end }}
           containers:
             - name: {{ include "common.names.fullname" . }}-archive
               image: {{ template "matomo.image" . }}
@@ -199,6 +202,9 @@ spec:
           restartPolicy: OnFailure
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
+          {{- if .Values.cronjobs.taskScheduler.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.cronjobs.taskScheduler.podSecurityContext "enabled" | toYaml | nindent 16 }}
+          {{- end }}
           containers:
             - name: {{ include "common.names.fullname" . }}-scheduled-tasks
               image: {{ template "matomo.image" . }}

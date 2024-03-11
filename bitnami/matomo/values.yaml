@@ -1025,6 +1025,21 @@ cronjobs:
     persistence:
       enable: true
       existingClaim: ""
+
+    ## Configure Pods Security Context for the taskScheduler CronJob
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param cronjobs.taskScheduler.podSecurityContext.enabled Enable Task scheduler cronjob pods' Security Context
+    ## @param cronjobs.taskScheduler.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param cronjobs.taskScheduler.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param cronjobs.taskScheduler.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param cronjobs.taskScheduler.podSecurityContext.fsGroup Task scheduler cronjob pods' group ID
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -1099,3 +1114,18 @@ cronjobs:
     persistence:
       enable: true
       existingClaim: ""
+
+    ## Configure Pods Security Context for the archive CronJob
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param cronjobs.archive.podSecurityContext.enabled Enable Archive cronjob pods' Security Context
+    ## @param cronjobs.archive.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+    ## @param cronjobs.archive.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+    ## @param cronjobs.archive.podSecurityContext.supplementalGroups Set filesystem extra groups
+    ## @param cronjobs.archive.podSecurityContext.fsGroup Archive cronjob pods' group ID
+    ##
+    podSecurityContext:
+      enabled: true
+      fsGroupChangePolicy: Always
+      sysctls: []
+      supplementalGroups: []
+      fsGroup: 1001
