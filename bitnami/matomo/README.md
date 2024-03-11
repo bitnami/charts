@@ -462,6 +462,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 6.0.0
+
+Moved persistence config for the cronjobs from `persistence` to `cronjobs.archive.persistence` and `cronjobs.taskScheduler.persistence` respectively.
+Moved resource config for the archive cronjob from `resources` to `cronjobs.archive.resources`.
+
 ### To 4.0.0
 
 This major release bumps the MariaDB version to 11.2. No major issues are expected during the upgrade.
