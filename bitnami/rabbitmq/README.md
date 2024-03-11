@@ -720,6 +720,17 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq --set auth.
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
 
+### To 13.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
 ### To 12.10.0
 
 This version adds NetworkPolicy objects by default. Its default configuration is setting open `egress` (this can be changed by setting `networkPolicy.allowExternalEgress=false`) and limited `ingress` to the default container ports. If you have any extra port exposed you may need to set the `networkPolicy.extraIngress` value. In the example below an extra port is exposed using `extraContainerPorts` and access is allowed using `networkPolicy.extraIngress`:
