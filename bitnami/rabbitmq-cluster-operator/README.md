@@ -590,6 +590,15 @@ tar xf rabbitmq-cluster-operator-VERSION.tar.gz
 kubectl apply -f rabbitmq-cluster-operator/crds
 ```
 
+### To 4.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
 ### To 2.0.0
 
 This new version adds the following components:
