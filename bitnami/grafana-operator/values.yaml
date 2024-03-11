@@ -244,10 +244,10 @@ operator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -506,7 +506,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 10.3.3-debian-12-r4
+    tag: 10.3.3-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -561,10 +561,10 @@ grafana:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
