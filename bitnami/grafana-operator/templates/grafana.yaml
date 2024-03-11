@@ -96,7 +96,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.grafana.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.grafana.tolerations }}
           tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 12 }}
@@ -105,6 +105,8 @@ spec:
           nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
           {{- end }}
           volumes:
+            - name: empty-dir
+              emptyDir: {}
             - name: grafana-data
               {{- if .Values.grafana.persistence.enabled }}
               persistentVolumeClaim:
@@ -130,7 +132,7 @@ spec:
               envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.resources }}
               resources: {{- toYaml .Values.grafana.resources | nindent 16 }}
@@ -161,10 +163,19 @@ spec:
                   port: 3000
                   scheme: HTTP
               {{- end }}
-              {{- if .Values.grafana.extraVolumeMounts }}
               volumeMounts:
+                - name: empty-dir
+                  mountPath: /tmp
+                  subPath: tmp-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/grafana/conf
+                  subPath: app-conf-dir
+                - name: empty-dir
+                  mountPath: /opt/bitnami/grafana/tmp
+                  subPath: app-tmp-dir
+                {{- if .Values.grafana.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 16 }}
-              {{- end }}
+                {{- end }}
             {{- if .Values.grafana.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
             {{- end }}

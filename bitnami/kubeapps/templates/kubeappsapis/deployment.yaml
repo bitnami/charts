@@ -62,7 +62,7 @@ spec:
       priorityClassName: {{ .Values.kubeappsapis.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.kubeappsapis.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.kubeappsapis.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubeappsapis.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       # Increase termination timeout to let remaining operations to finish before ending the pods
       # This is because new releases/upgrades/deletions are synchronous operations
@@ -75,7 +75,7 @@ spec:
           image: {{ include "kubeapps.kubeappsapis.image" . }}
           imagePullPolicy: {{ .Values.kubeappsapis.image.pullPolicy | quote }}
           {{- if .Values.kubeappsapis.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.kubeappsapis.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubeappsapis.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kubeappsapis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.lifecycleHooks "context" $) | nindent 12 }}
@@ -213,6 +213,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.kubeappsapis.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.clusters }}
             - name: clusters-config
               mountPath: /config
@@ -235,7 +238,7 @@ spec:
           image: {{ include "kubeapps.ociCatalog.image" . }}
           imagePullPolicy: {{ .Values.ociCatalog.image.pullPolicy | quote }}
           {{- if .Values.ociCatalog.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ociCatalog.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ociCatalog.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.kubeappsapis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.lifecycleHooks "context" $) | nindent 12 }}
@@ -310,14 +313,19 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.ociCatalog.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          {{- if .Values.ociCatalog.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.ociCatalog.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- end }}
         {{- if .Values.kubeappsapis.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
       {{- if .Values.clusters }}
         - name: clusters-config
           configMap:

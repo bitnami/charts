@@ -56,11 +56,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### RabbitMQ Image parameters
 
@@ -718,6 +719,25 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq --set auth.
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
+
+### To 12.10.0
+
+This version adds NetworkPolicy objects by default. Its default configuration is setting open `egress` (this can be changed by setting `networkPolicy.allowExternalEgress=false`) and limited `ingress` to the default container ports. If you have any extra port exposed you may need to set the `networkPolicy.extraIngress` value. In the example below an extra port is exposed using `extraContainerPorts` and access is allowed using `networkPolicy.extraIngress`:
+
+```yaml
+  extraContainerPorts:
+    - name: "mqtts"
+      protocol: "TCP"
+      containerPort: 8883
+  networkPolicy:
+    extraIngress:
+      - ports:
+          - protocol: "TCP"
+            containerPort: 8883
+            port: 8883
+```
+
+You can revert this behavior by setting `networkPolicy.enabled=false`.
 
 ### To 11.0.0
 

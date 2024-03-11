@@ -68,7 +68,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.injector.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.injector.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.injector.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.injector.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.injector.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.injector.terminationGracePeriodSeconds }}
@@ -82,7 +82,7 @@ spec:
           image: {{ template "vault.injector.image" . }}
           imagePullPolicy: {{ .Values.injector.image.pullPolicy }}
           {{- if .Values.injector.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.injector.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.injector.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

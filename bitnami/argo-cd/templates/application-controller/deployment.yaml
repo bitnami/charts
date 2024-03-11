@@ -66,7 +66,7 @@ spec:
       runtimeClassName: {{ .Values.controller.runtimeClassName }}
       {{- end }}
       {{- if .Values.controller.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.controller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.redisWait.enabled }}
@@ -75,9 +75,9 @@ spec:
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
           {{- if .Values.redisWait.securityContext }}
           # Deprecated: use redisWait.containerSecurityContext
-          securityContext: {{- toYaml .Values.redisWait.securityContext | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.securityContext "context" $) | nindent 12 }}
           {{- else if .Values.redisWait.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.redisWait.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.redisWait.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -127,7 +127,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.controller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.controller.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.controller.command "context" $) | nindent 12 }}

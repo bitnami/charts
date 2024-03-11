@@ -38,7 +38,7 @@ spec:
     spec:
       {{- include "certmanager.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.controller.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.controller.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.controller.schedulerName }}
       schedulerName: {{ .Values.controller.schedulerName }}
@@ -99,7 +99,7 @@ spec:
             - --acme-http01-solver-image={{ template "certmanager.acmesolver.image" . }}
           {{- end }}
           {{- if .Values.controller.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.controller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.controller.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

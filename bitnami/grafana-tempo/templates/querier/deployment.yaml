@@ -63,7 +63,7 @@ spec:
       schedulerName: {{ .Values.querier.schedulerName }}
       {{- end }}
       {{- if .Values.querier.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.querier.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.querier.initContainers }}
@@ -74,7 +74,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.querier.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.querier.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.querier.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -144,14 +144,19 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.querier.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
             - name: overrides-config
               mountPath: /bitnami/grafana-tempo/conf/overrides.yaml
               subPath: overrides.yaml
-            - name: data
+            # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
+            - name: empty-dir
               mountPath: {{ .Values.tempo.dataDir }}
+              subPath: app-data-dir
           {{- if .Values.querier.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -159,8 +164,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.querier.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        # NOTE: The upstream chart does not create a PVC for this, we assume that it is just for tmp data
-        - name: data
+        - name: empty-dir
           emptyDir: {}
         - name: tempo-config
           configMap:

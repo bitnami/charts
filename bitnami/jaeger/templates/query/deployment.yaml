@@ -49,7 +49,7 @@ spec:
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.query.nodeAffinityPreset.type "key" .Values.query.nodeAffinityPreset.key "values" .Values.query.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.query.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.query.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.query.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.query.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.query.nodeSelector "context" $) | nindent 8 }}
@@ -70,7 +70,7 @@ spec:
           image: {{ include "jaeger.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.query.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.query.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.query.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
