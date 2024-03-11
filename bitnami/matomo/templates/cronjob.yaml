@@ -145,9 +145,9 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-              {{- if .Values.persistence.enabled }}
+              {{- if .Values.cronjobs.archive.persistence.enabled }}
               persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+                claimName: {{ .Values.cronjobs.archive.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
               {{- else }}
               emptyDir: {}
               {{- end }}
@@ -299,9 +299,9 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-              {{- if .Values.persistence.enabled }}
+              {{- if .Values.cronjobs.taskScheduler.persistence.enabled }}
               persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+                claimName: {{ .Values.cronjobs.taskScheduler.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
               {{- else }}
               emptyDir: {}
               {{- end }}

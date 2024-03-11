@@ -1016,6 +1016,15 @@ cronjobs:
     ##     memory: 1024Mi
     ##
     resources: {}
+
+    ## Persistence using Persistent Volume Claims for the taskScheduler CronJob
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param cronjobs.taskScheduler.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.taskScheduler.persistence.existingClaim A manually managed Persistent Volume Claim
+    ##
+    persistence:
+      enable: true
+      existingClaim: ""
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -1067,6 +1076,7 @@ cronjobs:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
+
     ## @param cronjobs.archive.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     # NOTE: If not defined, this will fallback to the main resources request/limit to preserve backwards compatibility. This behaviour might be DEPRECATED
     # in upcoming versions of the chart
@@ -1080,3 +1090,12 @@ cronjobs:
     ##     memory: 1024Mi
     ##
     resources: {}
+
+    ## Persistence using Persistent Volume Claims for the archive CronJob
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param cronjobs.archive.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.archive.persistence.existingClaim A manually managed Persistent Volume Claim
+    ##
+    persistence:
+      enable: true
+      existingClaim: ""

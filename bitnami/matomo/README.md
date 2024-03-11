@@ -398,6 +398,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                                                                        | `{}`             |
 | `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                                                             | `{}`             |
 | `cronjobs.taskScheduler.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
+| `cronjobs.taskScheduler.persistence.enable`                                | Enable persistence using Persistent Volume Claims                                                                 | `true`           |
+| `cronjobs.taskScheduler.persistence.existingClaim`                         | A manually managed Persistent Volume Claim                                                                        | `""`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
@@ -416,6 +418,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                                                                        | `{}`             |
 | `cronjobs.archive.podLabels`                                               | Additional pod labels                                                                                             | `{}`             |
 | `cronjobs.archive.resources`                                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
+| `cronjobs.archive.persistence.enable`                                      | Enable persistence using Persistent Volume Claims                                                                 | `true`           |
+| `cronjobs.archive.persistence.existingClaim`                               | A manually managed Persistent Volume Claim                                                                        | `""`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
