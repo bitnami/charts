@@ -1040,6 +1040,9 @@ cronjobs:
       sysctls: []
       supplementalGroups: []
       fsGroup: 1001
+
+    ## @param cronjobs.taskScheduler.extraEnvVars Extra environment variables for the taskScheduler CronJob
+    extraEnvVars: []
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -1129,3 +1132,6 @@ cronjobs:
       sysctls: []
       supplementalGroups: []
       fsGroup: 1001
+
+    ## @param cronjobs.archive.extraEnvVars Extra environment variables for the archive CronJob
+    extraEnvVars: []

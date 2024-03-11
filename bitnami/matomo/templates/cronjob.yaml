@@ -86,6 +86,9 @@ spec:
                     secretKeyRef:
                       name: {{ include "matomo.databaseSecretName" . }}
                       key: {{ include "matomo.databasePasswordKey" . | quote }}
+                {{- if gt (len .Values.cronjobs.archive.extraEnvVars) 0  }}
+                {{- toYaml .Values.cronjobs.archive.extraEnvVars | nindent 16 }}
+                {{- end }}
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
@@ -248,6 +251,9 @@ spec:
                     secretKeyRef:
                       name: {{ include "matomo.databaseSecretName" . }}
                       key: {{ include "matomo.databasePasswordKey" . | quote }}
+                {{- if gt (len .Values.cronjobs.taskScheduler.extraEnvVars) 0  }}
+                {{- toYaml .Values.cronjobs.taskScheduler.extraEnvVars | nindent 16 }}
+                {{- end }}
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
