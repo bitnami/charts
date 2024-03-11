@@ -48,7 +48,7 @@ spec:
       {{- end }}
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.redis.automountServiceAccountToken }}
@@ -86,7 +86,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -285,8 +285,18 @@ spec:
             - name: default-config
               mountPath: /opt/bitnami/redis/etc/redis-default.conf
               subPath: redis-default.conf
-            - name: redis-tmp-conf
+            - name: empty-dir
               mountPath: /opt/bitnami/redis/etc/
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/redis/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.tls.enabled }}
             - name: redis-certificates
               mountPath: /opt/bitnami/redis/certs
@@ -300,7 +310,7 @@ spec:
           image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -348,6 +358,9 @@ spec:
             {{- end }}
           {{- if or .Values.usePasswordFile .Values.tls.enabled }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.usePasswordFile }}
             - name: redis-password
               mountPath: /opt/bitnami/redis/secrets/
@@ -380,6 +393,9 @@ spec:
           resources:
           {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: redis-data
               mountPath: {{ .Values.persistence.path }}
               subPath: {{ .Values.persistence.subPath }}
@@ -392,13 +408,16 @@ spec:
           {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
           {{- if .Values.sysctlImage.mountHostSys }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: host-sys
               mountPath: /host-sys
           {{- end }}
           command:
           {{- toYaml .Values.sysctlImage.command | nindent 12 }}
           {{- if .Values.sysctlImage.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.sysctlImage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sysctlImage.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.redis.initContainers }}
@@ -426,7 +445,7 @@ spec:
           hostPath:
             path: /sys
         {{- end }}
-        - name: redis-tmp-conf
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.redis.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.extraVolumes "context" $ ) | nindent 8 }}

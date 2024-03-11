@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -70,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.426.3-debian-12-r9
+  tag: 2.440.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -308,6 +317,7 @@ configAsCode:
     ## @param configAsCode.autoReload.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param configAsCode.autoReload.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param configAsCode.autoReload.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param configAsCode.autoReload.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param configAsCode.autoReload.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param configAsCode.autoReload.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param configAsCode.autoReload.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -319,6 +329,7 @@ configAsCode:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -348,7 +359,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3206.0-debian-12-r8
+    tag: 0.3206.0-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -583,6 +594,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -594,6 +606,7 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
@@ -992,7 +1005,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

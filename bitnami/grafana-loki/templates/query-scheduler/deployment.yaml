@@ -71,7 +71,7 @@ spec:
       schedulerName: {{ .Values.queryScheduler.schedulerName }}
       {{- end }}
       {{- if .Values.queryScheduler.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryScheduler.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.queryScheduler.initContainers }}
@@ -82,7 +82,7 @@ spec:
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.queryScheduler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryScheduler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -153,6 +153,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
@@ -163,6 +166,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           configMap:
             name: {{ template "grafana-loki.loki.configmapName" . }}

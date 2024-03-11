@@ -62,7 +62,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.forwarder.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.forwarder.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.forwarder.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.forwarder.extraGems }}
@@ -92,11 +92,34 @@ spec:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
-            - name: gems
+            - name: empty-dir
               mountPath: /gems
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /specifications
+              subPath: app-specifications-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
+        # Source: https://github.com/fluent/fluentd-kubernetes-daemonset/issues/1393
+        - name: tmp-dir-permissions
+          image: {{ include "fluentd.forwarder.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          command:
+            - sh
+            - -c
+          args:
+            - |-
+              #!/bin/sh
+              chmod o-rwx /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- if .Values.forwarder.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
@@ -110,7 +133,7 @@ spec:
           image: {{ include "fluentd.forwarder.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.forwarder.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.forwarder.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.forwarder.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.forwarder.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.lifecycleHooks "context" $ ) | nindent 12 }}
@@ -215,10 +238,12 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.forwarder.extraGems }}
-            - name: gems
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/gems/
-            - name: specifications
+              subPath: app-gems-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/fluentd/specifications/
+              subPath: app-specifications-dir
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: fluentd-forwarder-certificates
@@ -242,6 +267,9 @@ spec:
             - name: varlibdockercontainers
               mountPath: /var/lib/docker/containers
               readOnly: true
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.forwarder.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
@@ -249,17 +277,13 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.sidecars "context" $ ) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.tls.enabled }}
         - name: fluentd-forwarder-certificates
           secret:
             secretName: {{ include "fluentd.forwarder.tlsSecretName" . }}
             defaultMode: 256
-        {{- end }}
-        {{- if .Values.forwarder.extraGems }}
-        - name: gems
-          emptyDir: {}
-        - name: specifications
-          emptyDir: {}
         {{- end }}
         {{- if .Values.forwarder.initScripts }}
         - name: custom-init-scripts

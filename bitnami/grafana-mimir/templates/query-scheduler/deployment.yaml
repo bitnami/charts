@@ -64,7 +64,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.queryScheduler.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryScheduler.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.queryScheduler.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.queryScheduler.terminationGracePeriodSeconds }}
@@ -78,7 +78,7 @@ spec:
           image: {{ template "grafana-mimir.image" . }}
           imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
           {{- if .Values.queryScheduler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryScheduler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryScheduler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -149,6 +149,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: mimir-config
               mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
@@ -160,6 +163,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: mimir-config

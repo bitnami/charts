@@ -28,7 +28,7 @@ spec:
       {{- include "jaeger.imagePullSecrets" . | nindent 6 }}
       restartPolicy: OnFailure
       {{- if .Values.migration.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.migration.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         - name: jaeger-cassandra-schema-grabber
@@ -38,7 +38,7 @@ spec:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
           {{- if .Values.migration.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
       containers:
         - name: jaeger-cassandra-migrator
@@ -71,7 +71,7 @@ spec:
                 /cassandra-schema/docker.sh
               fi
           {{- if .Values.migration.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.migration.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.migration.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: CQLSH

@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -153,7 +162,7 @@ hub:
       {{- end }}
       networkTools:
         image:
-          name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" $) }}
+          name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.auxiliaryImage "global" .Values.global) }}
           tag: {{ .Values.auxiliaryImage.tag }}
           digest: {{ .Values.auxiliaryImage.digest }}
           pullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
@@ -210,12 +219,19 @@ hub:
         extraLabels:
           app.kubernetes.io/component: singleuser
           {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-        {{- if .Values.singleuser.extraVolumes }}
-        extraVolumes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
-        {{- end }}
-        {{- if .Values.singleuser.extraVolumeMounts }}
-        extraVolumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
-        {{- end }}
+        extraVolumes:
+          - name: empty-dir
+            emptyDir: {}
+          {{- if .Values.singleuser.extraVolumes }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
+          {{- end }}
+        extraVolumeMounts:
+          - name: empty-dir
+            mountPath: /tmp
+            subPath: tmp-dir
+          {{- if .Values.singleuser.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
+          {{- end }}
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
         dynamic:
@@ -224,7 +240,7 @@ hub:
           volumeNameTemplate: {{ include "common.names.fullname" . }}-volume-{username}{servername}
           storageAccessModes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.persistence.accessModes "context" $ ) | nindent 8 }}
       image:
-        name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" $) }}
+        name: {{ include "jupyterhub.hubconfiguration.imageEntry" ( dict "imageRoot" .Values.singleuser.image "global" .Values.global) }}
         tag: {{ .Values.singleuser.image.tag }}
         digest: {{ .Values.singleuser.image.digest }}
         pullPolicy: {{ .Values.singleuser.image.pullPolicy }}
@@ -352,6 +368,7 @@ hub:
   ## @param hub.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param hub.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param hub.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param hub.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param hub.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param hub.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param hub.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -363,6 +380,7 @@ hub:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -795,6 +813,7 @@ proxy:
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param proxy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -806,6 +825,7 @@ proxy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1346,6 +1366,7 @@ imagePuller:
   ## @param imagePuller.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param imagePuller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param imagePuller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imagePuller.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imagePuller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param imagePuller.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param imagePuller.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1357,6 +1378,7 @@ imagePuller:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1577,6 +1599,7 @@ singleuser:
   ## @param singleuser.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param singleuser.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param singleuser.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param singleuser.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param singleuser.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param singleuser.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param singleuser.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1588,6 +1611,7 @@ singleuser:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
