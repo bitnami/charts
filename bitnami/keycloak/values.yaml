@@ -283,6 +283,9 @@ containerPorts:
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
+## @param statefulsetAnnotations Optionally add extra annotations on the statefulset resource
+statefulsetAnnotations: {}
+##
 ## Keycloak pods' SecurityContext
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Keycloak pods' Security Context

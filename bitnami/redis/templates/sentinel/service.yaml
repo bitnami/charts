@@ -100,5 +100,62 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
+
+{{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "common.names.fullname" . }}-master"
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: node
+  {{- if or .Values.sentinel.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.sentinel.service.type }}
+  {{- if or (eq .Values.sentinel.service.type "LoadBalancer") (eq .Values.sentinel.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.sentinel.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.sentinel.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer")  .Values.sentinel.service.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.sentinel.service.loadBalancerClass }}
+  {{- end }}
+  {{- if and (eq .Values.sentinel.service.type "LoadBalancer") (not (empty .Values.sentinel.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ toYaml .Values.sentinel.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.sentinel.service.clusterIP (eq .Values.sentinel.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.sentinel.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.sentinel.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.sentinel.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.sentinel.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: tcp-redis
+      {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.redis }}
+      port: {{ .Values.sentinel.service.nodePorts.redis }}
+      {{- else if eq .Values.sentinel.service.type "NodePort" }}
+      port: {{ $redisport }}
+      {{- else}}
+      port: {{ .Values.sentinel.service.ports.redis }}
+      {{- end }}
+      targetPort: {{ .Values.replica.containerPorts.redis }}
+      {{- if and (or (eq .Values.sentinel.service.type "NodePort") (eq .Values.sentinel.service.type "LoadBalancer")) .Values.sentinel.service.nodePorts.redis }}
+      nodePort: {{ .Values.sentinel.service.nodePorts.redis }}
+      {{- else if eq .Values.sentinel.service.type "ClusterIP" }}
+      nodePort: null
+      {{- else if eq .Values.sentinel.service.type "NodePort" }}
+      nodePort:  {{ $redisport }}
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    isMaster: "true"
+{{- end }}
 {{- end }}
 {{- end }}
