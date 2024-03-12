@@ -460,6 +460,17 @@ In this version you can indicate the key to download the GeoLite2 databases usin
 
 ## Upgrading
 
+### To 11.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
 ### To 9.0.0
 
 - Configuration for routing `Ingress` resources with custom `kubernetes.io/ingress.class` annotation is changed in favor of `IngressClass` resource required in NGINX Ingress Controller 1.x
