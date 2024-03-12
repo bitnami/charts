@@ -34,7 +34,6 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
-        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: source-controller
     spec:
       serviceAccountName: {{ template "flux.source-controller.serviceAccountName" . }}
