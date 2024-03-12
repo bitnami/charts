@@ -11,13 +11,13 @@ kind: Deployment
 {{- end }}
 metadata:
   name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{ if not .Values.useDaemonset -}}
+  {{- if not .Values.useDaemonset }}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
   {{- end }}
   {{- if .Values.updateStrategy }}
@@ -728,7 +728,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: empty-dir
-              volumeMounts: /tmp
+              mountPath: /tmp
               subPath: tmp-dir
             {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
             # Alibaba Cloud mountPath(s)
