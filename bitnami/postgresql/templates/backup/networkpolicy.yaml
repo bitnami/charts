@@ -25,7 +25,4 @@ spec:
     - ports:
         - port: 5432
           protocol: TCP
-  podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-        app.kubernetes.io/component: pg_dumpall
 {{- end }}
