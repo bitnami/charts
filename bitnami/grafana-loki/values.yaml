@@ -4451,7 +4451,11 @@ promtail:
           password_file: /bitnami/promtail/conf/secrets/password
         {{- end }}
     positions:
+      {{- if .Values.promtail.containers.enabled }}
       filename: /run/promtail/positions.yaml
+      {{- else }}
+      filename: /tmp/positions.yaml
+      {{- end }}
 
     scrape_configs:
       # See also https://github.com/grafana/loki/blob/master/production/ksonnet/promtail/scrape_config.libsonnet for reference
