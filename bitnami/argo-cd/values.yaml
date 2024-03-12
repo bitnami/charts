@@ -3237,7 +3237,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.38.0-debian-12-r7
+    tag: 2.38.0-debian-12-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

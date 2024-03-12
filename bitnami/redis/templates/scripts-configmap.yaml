@@ -366,6 +366,13 @@ data:
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
     fi
 
+    {{- if .Values.sentinel.service.createMaster }}
+    if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
+        # Add isMaster label to master node for master service
+        echo "${REDIS_MASTER_HOST/.*}" > /etc/shared/current
+    fi
+    {{- end }}
+
     if [[ -n "$REDIS_EXTERNAL_MASTER_HOST" ]]; then
       REDIS_MASTER_HOST="$REDIS_EXTERNAL_MASTER_HOST"
       REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
@@ -481,7 +488,7 @@ data:
 
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_PORT" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
+            redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
         else
             redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_PORT" sentinel "$@"
         fi
@@ -561,7 +568,7 @@ data:
 
     run_sentinel_command() {
         if is_boolean_yes "$REDIS_SENTINEL_TLS_ENABLED"; then
-            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_PORT" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$REDIS_SENTINEL_TLS_CERT_FILE" --key "$REDIS_SENTINEL_TLS_KEY_FILE" --cacert "$REDIS_SENTINEL_TLS_CA_FILE" sentinel "$@"
         else
             {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} redis-cli -h "$REDIS_SERVICE" -p "$REDIS_SENTINEL_PORT" sentinel "$@"
         fi
@@ -596,6 +603,14 @@ data:
         exit 0
     fi
 
+  {{- if .Values.sentinel.service.createMaster}}
+  push-master-label.sh: |
+    #!/bin/bash
+    # https://download.redis.io/redis-stable/sentinel.conf
+
+    echo "${6/.*}" > /etc/shared/current
+    echo "${4/.*}" > /etc/shared/previous
+  {{- end }}
 {{- else }}
   start-master.sh: |
     #!/bin/bash
@@ -754,4 +769,30 @@ data:
     exec redis-server "${ARGS[@]}"
     {{- end }}
   {{- end }}
+{{- end }}
+---
+{{- if .Values.sentinel.service.createMaster}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  update-master-label.sh: |
+    #!/bin/bash
+    while true; do
+        while [ ! -f "/etc/shared/current" ]; do
+            sleep 1
+        done
+        echo "new master elected, updating label(s)..."
+        kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite
+        if [ -f /etc/shared/previous ]; then
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+        fi
+        rm "/etc/shared/current" "/etc/shared/previous"
+    done
 {{- end }}
