@@ -41,11 +41,23 @@ chart = {
     "mixin_vars": {"_config+": {}}
 }
 
-# Thanos PrometheusRule names to Bitnami parameters map
+# Thanos PrometheusRule names to Bitnami PrometheusRule names map
 rule_name_map = {
+    'thanos-bucket-replicate': '{{ template "common.names.fullname" . }}-replicate',
+    'thanos-compact': '{{ include "thanos.compactor.fullname" . }}',
+    'thanos-component-absent': '{{ template "common.names.fullname" . }}-component-absent',
+    'thanos-query': '{{ include "thanos.query.fullname" . }}',
+    'thanos-receive': '{{ include "thanos.receive.fullname" . }}',
+    'thanos-rule': '{{ include "thanos.ruler.fullname" . }}',
+    'thanos-sidecar': '{{ template "common.names.fullname" . }}-sidecar',
+    'thanos-store': '{{ include "thanos.storegateway.fullname" . }}'
+}
+
+# Thanos PrometheusRule names to Bitnami parameters map
+rule_name_parameter_map = {
     'thanos-bucket-replicate': 'replicate',
-    'thanos-component-absent': 'absent_rules',
     'thanos-compact': 'compaction',
+    'thanos-component-absent': 'absent_rules',
     'thanos-query': 'query',
     'thanos-receive': 'receive',
     'thanos-rule': 'ruler',
@@ -71,7 +83,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- /*
-Generated from '%(name)s' group from %(url)s
+Generated from '%(group_name)s' group from %(url)s
 Do not change in-place! In order to change this file run the script in
 https://github.com/bitnami/charts/tree/main/bitnami/thanos/hack
 */ -}}
@@ -277,9 +289,10 @@ def write_group_to_file(group, url, destination):
 
     # initialize header
     lines = header % {
-        'name': sanitize_name(group['name']),
+        'group_name': group['name'],
+        'name': rule_name_map.get(group['name'], group['name']),
         'url': url,
-        'condition': f".Values.metrics.prometheusRule.default.{rule_name_map.get(group['name'], '')}",
+        'condition': f".Values.metrics.prometheusRule.default.{rule_name_parameter_map.get(group['name'], '')}",
         'init_line': init_line,
     }
 
@@ -289,7 +302,7 @@ def write_group_to_file(group, url, destination):
     # footer
     lines += '{{- end }}'
 
-    filename = rule_name_map.get(group['name'], group['name']) + '.yaml'
+    filename = rule_name_parameter_map.get(group['name'], group['name']) + '.yaml'
     new_filename = "%s/%s" % (destination, filename)
 
     # make sure directories to store the file exist

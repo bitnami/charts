@@ -64,7 +64,7 @@ Return the proper Thanos receive fullname
 {{- end -}}
 
 {{/*
-Return the proper Thanos compactor fullname
+Return the proper Thanos ruler fullname
 */}}
 {{- define "thanos.ruler.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "ruler" | trunc 63 | trimSuffix "-" -}}

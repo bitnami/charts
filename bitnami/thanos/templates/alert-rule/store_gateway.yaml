@@ -12,7 +12,7 @@ https://github.com/bitnami/charts/tree/main/bitnami/thanos/hack
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: thanos-store
+  name: {{ include "thanos.storegateway.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- if .Values.metrics.prometheusRule.additionalLabels }}
