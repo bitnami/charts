@@ -190,8 +190,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.imageReflectorController.persistence.mountPath }}
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.imageReflectorController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -206,7 +207,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.imageReflectorController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.extraVolumes "context" $) | nindent 8 }}

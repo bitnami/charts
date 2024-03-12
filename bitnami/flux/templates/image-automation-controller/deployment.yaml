@@ -162,8 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.imageAutomationController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -171,7 +172,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.imageAutomationController.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.imageAutomationController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.extraVolumes "context" $) | nindent 8 }}

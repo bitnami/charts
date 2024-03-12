@@ -196,8 +196,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.sourceController.persistence.mountPath }}
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.sourceController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -212,7 +213,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.sourceController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.extraVolumes "context" $) | nindent 8 }}
