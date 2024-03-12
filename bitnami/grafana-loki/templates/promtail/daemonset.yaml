@@ -151,18 +151,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
             - name: loki-config
               mountPath: /bitnami/promtail/conf/promtail.yaml
               subPath: promtail.yaml
             - name: pods
               mountPath: /var/log/pods
               readOnly: true
+          {{- if .Values.promtail.containers.enabled }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: run
               mountPath: /run/promtail
-          {{- if .Values.promtail.containers.enabled }}
             - name: containers
               mountPath: /var/lib/docker/containers
               readOnly: true
@@ -178,18 +178,18 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.promtail.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: empty-dir
-          emptyDir: {}
         - name: loki-config
           secret:
             secretName: {{ template "grafana-loki.promtail.secretName" . }}
         - name: pods
           hostPath:
             path: /var/log/pods
+      {{- if .Values.promtail.containers.enabled }}
+        - name: empty-dir
+          emptyDir: {}
         - name: run
           hostPath:
             path: /run/promtail
-      {{- if .Values.promtail.containers.enabled }}
         - name: containers
           hostPath:
             path: /var/lib/docker/containers
