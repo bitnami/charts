@@ -1897,7 +1897,7 @@ externalDatabase:
     existingSecret: ""
     ## @param externalDatabase.dataflow.existingSecretPasswordKey Key of the above existing secret with database password, defaults to `datasource-password`
     ##
-    existingPasswordKey: ""
+    existingSecretPasswordKey: ""
   ## Skipper and database
   ##
   skipper:
@@ -1922,7 +1922,7 @@ externalDatabase:
     existingSecret: ""
     ## @param externalDatabase.skipper.existingSecretPasswordKey Key of the above existing secret with database password, defaults to `datasource-password`
     ##
-    existingPasswordKey: ""
+    existingSecretPasswordKey: ""
 
 ## @section RabbitMQ chart parameters
 
