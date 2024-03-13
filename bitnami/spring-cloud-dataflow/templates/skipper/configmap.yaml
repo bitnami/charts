@@ -122,10 +122,12 @@ data:
         url: '{{ include "scdf.database.skipper.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.skipper.user" . }}
-        {{ if .Values.externalDatabase.existingPasswordSecret }}
-        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
-        {{- else -}}
+        {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
+        {{- else if and .Values.externalDatabase.skipper.existingSecret .Values.externalDatabase.skipper.existingSecretPasswordKey }}
+        password: {{ printf "${%s}" .Values.externalDatabase.skipper.existingSecretPasswordKey }}
+        {{- else }}
+        password: ${datasource-password}
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"

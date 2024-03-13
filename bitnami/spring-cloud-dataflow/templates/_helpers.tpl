@@ -238,6 +238,19 @@ Return the Data Flow Database User
 {{- end -}}
 
 {{/*
+Return the Data Flow Database secret name
+*/}}
+{{- define "scdf.database.server.secretName" -}}
+{{- if .Values.externalDatabase.dataflow.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.dataflow.existingSecret -}}
+{{- else if .Values.mariadb.enabled }}
+    {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
+{{- else -}}
+    {{- printf "%s-externaldb" (include "scdf.server.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Skipper Database Name
 */}}
 {{- define "scdf.database.skipper.name" -}}
@@ -260,15 +273,15 @@ Return the Skipper Database User
 {{- end -}}
 
 {{/*
-Return the Database secret name
+Return the Skipper Database secret name
 */}}
-{{- define "scdf.database.secretName" -}}
-{{- if .Values.externalDatabase.existingPasswordSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingPasswordSecret -}}
+{{- define "scdf.database.skipper.secretName" -}}
+{{- if .Values.externalDatabase.skipper.existingSecret -}}
+    {{- printf "%s" .Values.externalDatabase.skipper.existingSecret -}}
 {{- else if .Values.mariadb.enabled }}
     {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" -}}
+    {{- printf "%s-externaldb" (include "scdf.skipper.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 

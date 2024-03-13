@@ -113,10 +113,12 @@ data:
         url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
-        {{ if .Values.externalDatabase.existingPasswordSecret }}
-        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
-        {{- else -}}
+        {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
+        {{- else if and .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.dataflow.existingSecretPasswordKey }}
+        password: {{ printf "${%s}" .Values.externalDatabase.dataflow.existingSecretPasswordKey }}
+        {{- else }}
+        password: ${datasource-password}
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
