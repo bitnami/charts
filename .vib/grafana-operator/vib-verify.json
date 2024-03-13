@@ -51,7 +51,7 @@
             "resources": {
               "path": "/.vib/grafana-operator/cypress"
             },
-            "endpoint": "lb-grafana-operator-grafana-service-grafana-ve",
+            "endpoint": "lb-grafana-operator-grafana-service-grafana",
             "app_protocol": "HTTP",
             "env": {
               "username": "test_admin",
