@@ -358,7 +358,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.resourcesPreset`                       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production). | `none`                             |
 | `backup.uploadProviders.aws.resources`                             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
 
-
 ## RBAC Parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
