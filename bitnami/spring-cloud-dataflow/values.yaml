@@ -1873,6 +1873,15 @@ externalDatabase:
   ## e.g: org.hibernate.dialect.MariaDB102Dialect
   ##
   hibernateDialect: ""
+  ## @param externalDatabase.password External database password (DEPRECATED: use dataflow.password and skipper.password instead)
+  ##
+  password: ""
+  ## @param externalDatabase.existingPasswordSecret Existing secret with database password (DEPRECATED: use dataflow.existingSecret and skipper.existingSecret instead)
+  ##
+  existingPasswordSecret: ""
+  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password (DEPRECATED: use dataflow.existingSecretPasswordKey and skipper.existingSecretPasswordKey instead)
+  ##
+  existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:

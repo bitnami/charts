@@ -241,8 +241,9 @@ Return the Data Flow Database User
 Return the Data Flow Database secret name
 */}}
 {{- define "scdf.database.server.secretName" -}}
-{{- if .Values.externalDatabase.dataflow.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.dataflow.existingSecret -}}
+{{- $secretName := coalesce .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" $secretName -}}
 {{- else if .Values.mariadb.enabled }}
     {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
 {{- else -}}
@@ -276,8 +277,9 @@ Return the Skipper Database User
 Return the Skipper Database secret name
 */}}
 {{- define "scdf.database.skipper.secretName" -}}
-{{- if .Values.externalDatabase.skipper.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.skipper.existingSecret -}}
+{{- $secretName := coalesce .Values.externalDatabase.skipper.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" $secretName -}}
 {{- else if .Values.mariadb.enabled }}
     {{- printf "%s" (include "scdf.mariadb.fullname" .) -}}
 {{- else -}}

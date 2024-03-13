@@ -113,10 +113,12 @@ data:
         url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
+        {{- $secretName := coalesce .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+        {{- $secretPasswordKey := coalesce .Values.externalDatabase.dataflow.existingSecretPasswordKey .Values.externalDatabase.existingPasswordKey -}}
         {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
-        {{- else if and .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.dataflow.existingSecretPasswordKey }}
-        password: {{ printf "${%s}" .Values.externalDatabase.dataflow.existingSecretPasswordKey }}
+        {{- else if and $secretName $secretPasswordKey }}
+        password: {{ printf "${%s}" $secretPasswordKey }}
         {{- else }}
         password: ${datasource-password}
         {{- end }}

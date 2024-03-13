@@ -122,10 +122,12 @@ data:
         url: '{{ include "scdf.database.skipper.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.skipper.user" . }}
+        {{- $secretName := coalesce .Values.externalDatabase.skipper.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+        {{- $secretPasswordKey := coalesce .Values.externalDatabase.skipper.existingSecretPasswordKey .Values.externalDatabase.existingPasswordKey -}}
         {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
-        {{- else if and .Values.externalDatabase.skipper.existingSecret .Values.externalDatabase.skipper.existingSecretPasswordKey }}
-        password: {{ printf "${%s}" .Values.externalDatabase.skipper.existingSecretPasswordKey }}
+        {{- else if and $secretName $secretPasswordKey }}
+        password: {{ printf "${%s}" $secretPasswordKey }}
         {{- else }}
         password: ${datasource-password}
         {{- end }}
