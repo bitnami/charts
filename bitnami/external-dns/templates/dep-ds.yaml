@@ -75,7 +75,7 @@ spec:
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.dnsPolicy  }}
-      dnsPolicy: {{ .Values.dnsPolicy }}
+      dnsPolicy: {{ .Values.dnsPolicy | quote }}
       {{- end }}
       {{- if .Values.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
