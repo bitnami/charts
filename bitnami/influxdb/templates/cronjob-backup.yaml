@@ -86,9 +86,9 @@ spec:
               command:
                 - "/tmp/backup.sh"
               {{- if .Values.backup.cronjob.resources }}
-              resources: {{- toYaml .Values.backup.cronjob.resources | nindent 12 }}
+              resources: {{- toYaml .Values.backup.cronjob.resources | nindent 16 }}
               {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
-              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 12 }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 16 }}
               {{- end }}
               volumeMounts:
                 - name: empty-dir
@@ -113,9 +113,9 @@ spec:
                 - "/bin/true"
               {{- end }}
               {{- if .Values.backup.cronjob.resources }}
-              resources: {{- toYaml .Values.backup.cronjob.resources | nindent 12 }}
+              resources: {{- toYaml .Values.backup.cronjob.resources | nindent 16 }}
               {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
-              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 12 }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 16 }}
               {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
               securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
@@ -131,9 +131,9 @@ spec:
                 - "/tmp/upload-google.sh"
               {{- end }}
               {{- if .Values.backup.uploadProviders.google.resources }}
-              resources: {{- toYaml .Values.backup.uploadProviders.google.resources | nindent 12 }}
+              resources: {{- toYaml .Values.backup.uploadProviders.google.resources | nindent 16 }}
               {{- else if ne .Values.backup.uploadProviders.google.resourcesPreset "none" }}
-              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.google.resourcesPreset) | nindent 12 }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.google.resourcesPreset) | nindent 16 }}
               {{- end }}
               volumeMounts:
                 - name: empty-dir
@@ -161,9 +161,9 @@ spec:
               - "/tmp/upload-azure.sh"
               {{- end }}
               {{- if .Values.backup.uploadProviders.azure.resources }}
-              resources: {{- toYaml .Values.backup.uploadProviders.azure.resources | nindent 12 }}
+              resources: {{- toYaml .Values.backup.uploadProviders.azure.resources | nindent 16 }}
               {{- else if ne .Values.backup.uploadProviders.azure.resourcesPreset "none" }}
-              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.azure.resourcesPreset) | nindent 12 }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.azure.resourcesPreset) | nindent 16 }}
               {{- end }}
               env:
                 - name: AZURE_STORAGE_CONNECTION_STRING
@@ -199,9 +199,9 @@ spec:
               - "/tmp/upload-aws.sh"
               {{- end }}
               {{- if .Values.backup.uploadProviders.aws.resources }}
-              resources: {{- toYaml .Values.backup.uploadProviders.aws.resources | nindent 12 }}
+              resources: {{- toYaml .Values.backup.uploadProviders.aws.resources | nindent 16 }}
               {{- else if ne .Values.backup.uploadProviders.aws.resourcesPreset "none" }}
-              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.aws.resourcesPreset) | nindent 12 }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.aws.resourcesPreset) | nindent 16 }}
               {{- end }}
               env:
                 - name: AWS_ACCESS_KEY_ID
