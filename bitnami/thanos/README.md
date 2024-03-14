@@ -42,14 +42,6 @@ These commands deploy Thanos on the Kubernetes cluster with the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` chart:
-
-```console
-helm uninstall my-release
-```
-
 ## Architecture
 
 This charts allows you install several Thanos components, so you deploy an architecture as the one below:
@@ -82,6 +74,238 @@ This charts allows you install several Thanos components, so you deploy an archi
 > Note: Components marked with (*) are provided by subchart(s) (such as the [Bitnami MinIO&reg; chart](https://github.com/bitnami/charts/tree/main/bitnami/minio)) or external charts (such as the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus)).
 
 Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate-thanos-with-prometheus-and-alertmanager) for detailed instructions to deploy this architecture.
+
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Adding extra flags
+
+In case you want to add extra flags to any Thanos component, you can use `XXX.extraFlags` parameter(s), where XXX is placeholder you need to replace with the actual component(s). For instance, to add extra flags to Thanos Store Gateway, use:
+
+```yaml
+storegateway:
+  extraFlags:
+    - --sync-block-duration=3m
+    - --chunk-pool-size=2GB
+```
+
+This also works for multi-line flags. This can be useful when you want to configure caching for a particular component without using a configMap. For example, to configure the [query-range response cache of the Thanos Query Frontend](https://thanos.io/tip/components/query-frontend.md/#memcached), use:
+
+```yaml
+queryFrontend:
+  extraFlags:
+    - |
+      --query-range.response-cache-config=
+      type: MEMCACHED
+      config:
+        addresses:
+          - <MEMCACHED_SERVER>:11211
+        timeout: 500ms
+        max_idle_connections: 100
+        max_async_concurrency: 10
+        max_async_buffer_size: 10000
+        max_get_multi_concurrency: 100
+        max_get_multi_batch_size: 0
+        dns_provider_update_interval: 10s
+        expiration: 24h
+```
+
+### Using custom Objstore configuration
+
+This helm chart supports using custom Objstore configuration.
+
+You can specify the Objstore configuration using the `objstoreConfig` parameter.
+
+In addition, you can also set an external Secret with the configuration file. This is done by setting the `existingObjstoreSecret` parameter. Note that this will override the previous option. If needed you can also provide a custom Secret Key with `existingObjstoreSecretItems`, please be aware that the Path of your Secret should be `objstore.yml`.
+
+### Using custom Query Service Discovery configuration
+
+This helm chart supports using custom Service Discovery configuration for Query.
+
+You can specify the Service Discovery configuration using the `query.sdConfig` parameter.
+
+In addition, you can also set an external ConfigMap with the Service Discovery configuration file. This is done by setting the `query.existingSDConfigmap` parameter. Note that this will override the previous option.
+
+### Using custom Ruler configuration
+
+This helm chart supports using custom Ruler configuration.
+
+You can specify the Ruler configuration using the `ruler.config` parameter.
+
+In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `ruler.existingConfigmap` parameter. Note that this will override the previous option.
+
+### Running Thanos with HTTPS and basic authentication
+
+This helm charts supports using HTTPS and basic authentication. The underlying feature is experimental and might change in the future, so are the associated settings in the chart.
+For more information, please refer to [Thanos documentation](https://thanos.io/tip/operating/https.md/#running-thanos-with-https-and-basic-authentication).
+
+This feature can be enabled by using the following values:
+
+- `https.enabled=true`. Enabling HTTPS requires the user to provide the TLS certificate and Key for Thanos, which can be done using one of the following options:
+
+  - Provide a secret using `https.existingSecret`. The secret must contain the keys `tls.crt` or `tls.key` (key names can be renamed using the values `https.keyFilename` and `https.certFilename`).
+  - Provide the certificate and key in your values.yaml under the values `https.cert` and `https.key`.
+  - Use `https.autoGenerated=true`, using this value Helm will generate a self-signed key pair during the chart initialization. Not recommended for production environments.
+
+- `auth.basicAuthUsers.*`. An dictionary of key / values, where the keys corresponds to the users that will have access to Thanos and the values are the plaintext passwords. Passwords will be later encrypted with bcrypt.
+- Alternatively, provide your own Thanos http config file using the value `httpConfig` or `existingHttpConfigSecret`. This may cause any settings under `https.*` or `auth.*` to be ignored, except for the settings related to the TLS certificates. When providing a configuration file using these parameters, the chart Probes will fail to initialize unless one of the following fixes are applied:
+  - Set `https.enabled` or `auth.basicAuthUsers` with at least one user, matching the configuration file you provided. That way Probes will be configured with HTTPS and/or basic authentication accordingly.
+  - Configure your own Probes using `<component>.customLivenessProbe`, `<component>.customReadinessProbe` and `<component>.customStartupProbe`.
+  - **Not recommended**. Disable the Probes.
+
+### Store time partitions
+
+Thanos store supports partion based on time.
+
+Setting time partitions will create N number of store statefulsets based on the number of items in the `timePartitioning` list. Each item must contain the min and max time for querying in the supported format (find more details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partitioning)).
+
+> Note: leaving the `timePartitioning` list empty (`[]`) will create a single store for all data.
+
+For instance, to use 3 stores you can use a **values.yaml** like the one below:
+
+```yaml
+timePartitioning:
+  # One store for data older than 6 weeks
+  - min: ""
+    max: -6w
+  # One store for data newer than 6 weeks and older than 2 weeks
+  - min: -6w
+    max: -2w
+  # One store for data newer than 2 weeks
+  - min: -2w
+    max: ""
+```
+
+You can also specify different resources and limits configurations for each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item you wish to change, as shown below:
+
+```yaml
+timePartitioning:
+  # One store for data older than 6 weeks
+  - min: ""
+    max: -6w
+  # One store for data newer than 6 weeks and older than 2 weeks
+  - min: -6w
+    max: -2w
+    resources: #optional resources declaration for partition
+      requests:
+        cpu: 10m
+        memory: 100Mi
+      limits:
+        cpu: 20m
+        memory: 100Mi
+  # One store for data newer than 2 weeks
+  - min: -2w
+    max: ""
+```
+
+### Integrate Thanos with Prometheus and Alertmanager
+
+You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) following the steps below:
+
+> Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
+
+- Create a **values.yaml** like the one below:
+
+```yaml
+objstoreConfig: |-
+  type: s3
+  config:
+    bucket: thanos
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
+    access_key: minio
+    secret_key: minio123
+    insecure: true
+query:
+  dnsDiscovery:
+    sidecarsService: kube-prometheus-prometheus-thanos
+    sidecarsNamespace: monitoring
+bucketweb:
+  enabled: true
+compactor:
+  enabled: true
+storegateway:
+  enabled: true
+ruler:
+  enabled: true
+  alertmanagers:
+    - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
+  config: |-
+    groups:
+      - name: "metamonitoring"
+        rules:
+          - alert: "PrometheusDown"
+            expr: absent(up{prometheus="monitoring/kube-prometheus"})
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+minio:
+  enabled: true
+  auth:
+    rootPassword: minio123
+    rootUser: minio
+  monitoringBuckets: thanos
+  accessKey:
+    password: minio
+  secretKey:
+    password: minio123
+```
+
+- Install Prometheus Operator and Thanos charts:
+
+For Helm 3:
+
+```console
+$ kubectl create namespace monitoring
+helm install kube-prometheus \
+    --set prometheus.thanos.create=true \
+    --namespace monitoring \
+    bitnami/kube-prometheus
+helm install thanos \
+    --values values.yaml \
+    --namespace monitoring \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
+
+### Deploy extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The data is persisted by default using PVC(s) on Thanos components. You can disable the persistence setting the `XXX.persistence.enabled` parameter(s) to `false`. A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `XXX.persistence.storageClass` parameter(s) or set `XXX.persistence.existingClaim` if you have already existing persistent volumes to use.
+
+> Note: you need to substitute the XXX placeholders above with the actual component(s) you want to configure.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volumes. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volumes before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Parameters
 
@@ -1357,238 +1581,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/thano
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/thanos/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Adding extra flags
-
-In case you want to add extra flags to any Thanos component, you can use `XXX.extraFlags` parameter(s), where XXX is placeholder you need to replace with the actual component(s). For instance, to add extra flags to Thanos Store Gateway, use:
-
-```yaml
-storegateway:
-  extraFlags:
-    - --sync-block-duration=3m
-    - --chunk-pool-size=2GB
-```
-
-This also works for multi-line flags. This can be useful when you want to configure caching for a particular component without using a configMap. For example, to configure the [query-range response cache of the Thanos Query Frontend](https://thanos.io/tip/components/query-frontend.md/#memcached), use:
-
-```yaml
-queryFrontend:
-  extraFlags:
-    - |
-      --query-range.response-cache-config=
-      type: MEMCACHED
-      config:
-        addresses:
-          - <MEMCACHED_SERVER>:11211
-        timeout: 500ms
-        max_idle_connections: 100
-        max_async_concurrency: 10
-        max_async_buffer_size: 10000
-        max_get_multi_concurrency: 100
-        max_get_multi_batch_size: 0
-        dns_provider_update_interval: 10s
-        expiration: 24h
-```
-
-### Using custom Objstore configuration
-
-This helm chart supports using custom Objstore configuration.
-
-You can specify the Objstore configuration using the `objstoreConfig` parameter.
-
-In addition, you can also set an external Secret with the configuration file. This is done by setting the `existingObjstoreSecret` parameter. Note that this will override the previous option. If needed you can also provide a custom Secret Key with `existingObjstoreSecretItems`, please be aware that the Path of your Secret should be `objstore.yml`.
-
-### Using custom Query Service Discovery configuration
-
-This helm chart supports using custom Service Discovery configuration for Query.
-
-You can specify the Service Discovery configuration using the `query.sdConfig` parameter.
-
-In addition, you can also set an external ConfigMap with the Service Discovery configuration file. This is done by setting the `query.existingSDConfigmap` parameter. Note that this will override the previous option.
-
-### Using custom Ruler configuration
-
-This helm chart supports using custom Ruler configuration.
-
-You can specify the Ruler configuration using the `ruler.config` parameter.
-
-In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `ruler.existingConfigmap` parameter. Note that this will override the previous option.
-
-### Running Thanos with HTTPS and basic authentication
-
-This helm charts supports using HTTPS and basic authentication. The underlying feature is experimental and might change in the future, so are the associated settings in the chart.
-For more information, please refer to [Thanos documentation](https://thanos.io/tip/operating/https.md/#running-thanos-with-https-and-basic-authentication).
-
-This feature can be enabled by using the following values:
-
-- `https.enabled=true`. Enabling HTTPS requires the user to provide the TLS certificate and Key for Thanos, which can be done using one of the following options:
-
-  - Provide a secret using `https.existingSecret`. The secret must contain the keys `tls.crt` or `tls.key` (key names can be renamed using the values `https.keyFilename` and `https.certFilename`).
-  - Provide the certificate and key in your values.yaml under the values `https.cert` and `https.key`.
-  - Use `https.autoGenerated=true`, using this value Helm will generate a self-signed key pair during the chart initialization. Not recommended for production environments.
-
-- `auth.basicAuthUsers.*`. An dictionary of key / values, where the keys corresponds to the users that will have access to Thanos and the values are the plaintext passwords. Passwords will be later encrypted with bcrypt.
-- Alternatively, provide your own Thanos http config file using the value `httpConfig` or `existingHttpConfigSecret`. This may cause any settings under `https.*` or `auth.*` to be ignored, except for the settings related to the TLS certificates. When providing a configuration file using these parameters, the chart Probes will fail to initialize unless one of the following fixes are applied:
-  - Set `https.enabled` or `auth.basicAuthUsers` with at least one user, matching the configuration file you provided. That way Probes will be configured with HTTPS and/or basic authentication accordingly.
-  - Configure your own Probes using `<component>.customLivenessProbe`, `<component>.customReadinessProbe` and `<component>.customStartupProbe`.
-  - **Not recommended**. Disable the Probes.
-
-### Store time partitions
-
-Thanos store supports partion based on time.
-
-Setting time partitions will create N number of store statefulsets based on the number of items in the `timePartitioning` list. Each item must contain the min and max time for querying in the supported format (find more details at [Thanos documentation](https://thanos.io/tip/components/store.md/#time-based-partitioning)).
-
-> Note: leaving the `timePartitioning` list empty (`[]`) will create a single store for all data.
-
-For instance, to use 3 stores you can use a **values.yaml** like the one below:
-
-```yaml
-timePartitioning:
-  # One store for data older than 6 weeks
-  - min: ""
-    max: -6w
-  # One store for data newer than 6 weeks and older than 2 weeks
-  - min: -6w
-    max: -2w
-  # One store for data newer than 2 weeks
-  - min: -2w
-    max: ""
-```
-
-You can also specify different resources and limits configurations for each storegateway statefulset. This is done by adding a `resources.requests` and `resources.limits` to each item you wish to change, as shown below:
-
-```yaml
-timePartitioning:
-  # One store for data older than 6 weeks
-  - min: ""
-    max: -6w
-  # One store for data newer than 6 weeks and older than 2 weeks
-  - min: -6w
-    max: -2w
-    resources: #optional resources declaration for partition
-      requests:
-        cpu: 10m
-        memory: 100Mi
-      limits:
-        cpu: 20m
-        memory: 100Mi
-  # One store for data newer than 2 weeks
-  - min: -2w
-    max: ""
-```
-
-### Integrate Thanos with Prometheus and Alertmanager
-
-You can integrate Thanos with Prometheus & Alertmanager using this chart and the [Bitnami kube-prometheus chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) following the steps below:
-
-> Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
-
-- Create a **values.yaml** like the one below:
-
-```yaml
-objstoreConfig: |-
-  type: s3
-  config:
-    bucket: thanos
-    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
-    access_key: minio
-    secret_key: minio123
-    insecure: true
-query:
-  dnsDiscovery:
-    sidecarsService: kube-prometheus-prometheus-thanos
-    sidecarsNamespace: monitoring
-bucketweb:
-  enabled: true
-compactor:
-  enabled: true
-storegateway:
-  enabled: true
-ruler:
-  enabled: true
-  alertmanagers:
-    - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-  config: |-
-    groups:
-      - name: "metamonitoring"
-        rules:
-          - alert: "PrometheusDown"
-            expr: absent(up{prometheus="monitoring/kube-prometheus"})
-metrics:
-  enabled: true
-  serviceMonitor:
-    enabled: true
-minio:
-  enabled: true
-  auth:
-    rootPassword: minio123
-    rootUser: minio
-  monitoringBuckets: thanos
-  accessKey:
-    password: minio
-  secretKey:
-    password: minio123
-```
-
-- Install Prometheus Operator and Thanos charts:
-
-For Helm 3:
-
-```console
-$ kubectl create namespace monitoring
-helm install kube-prometheus \
-    --set prometheus.thanos.create=true \
-    --namespace monitoring \
-    bitnami/kube-prometheus
-helm install thanos \
-    --values values.yaml \
-    --namespace monitoring \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
-
-## Persistence
-
-The data is persisted by default using PVC(s) on Thanos components. You can disable the persistence setting the `XXX.persistence.enabled` parameter(s) to `false`. A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `XXX.persistence.storageClass` parameter(s) or set `XXX.persistence.existingClaim` if you have already existing persistent volumes to use.
-
-> Note: you need to substitute the XXX placeholders above with the actual component(s) you want to configure.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volumes. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volumes before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Deploy extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

@@ -22,37 +22,6 @@ This chart bootstraps a [grafana](https://github.com/bitnami/containers/tree/mai
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-## Prerequisites
-
-- Kubernetes 1.23+
-- Helm 3.8.0+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
-
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-These commands deploy grafana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
-
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
-
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
 In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
@@ -135,6 +104,261 @@ The operator will extend the Kubernetes API with the following objects: *Grafana
 ```
 
 This solution allows to easily deploy multiple Grafana instances compared to the *bitnami/grafana* chart. As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy mulitple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
+
+## Prerequisites
+
+- Kubernetes 1.23+
+- Helm 3.8.0+
+- PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+These commands deploy grafana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Using custom configuration
+
+Grafana supports multiples configuration files. Using kubernetes you can mount a file using a ConfigMap or a Secret. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfig
+data:
+  grafana.ini: |-
+    # Raw text of the file
+```
+
+And now you need to pass the ConfigMap name, to the corresponding parameters: `config.useGrafanaIniFile=true` and `config.grafanaIniConfigMap=myconfig`.
+
+To provide dashboards on deployment time, Grafana needs a dashboards provider and the dashboards themselves.
+A default provider is created if enabled, or you can mount your own provider using a ConfigMap, but have in mind that the path to the dashboard folder must be `/opt/bitnami/grafana/dashboards`.
+
+  1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
+  2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
+Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
+
+For example, create the dashboard ConfigMap(s) and datasource Secret as described below:
+
+```console
+kubectl create secret generic datasource-secret --from-file=datasource-secret.yaml
+kubectl create configmap my-dashboard-1 --from-file=my-dashboard-1.json
+kubectl create configmap my-dashboard-2 --from-file=my-dashboard-2.json
+```
+
+> Note: the commands above assume you had previously exported your dashboards in the JSON files: *my-dashboard-1.json* and *my-dashboard-2.json*
+> Note: the commands above assume you had previously created a datasource config file *datasource-secret.yaml*. Find an example at <https://grafana.com/docs/grafana/latest/administration/provisioning/#example-datasource-config-file>
+
+Once you have them, use the following parameters to deploy Grafana with 2 custom dashboards:
+
+```console
+dashboardsProvider.enabled=true
+datasources.secretName=datasource-secret
+dashboardsConfigMaps[0].configMapName=my-dashboard-1
+dashboardsConfigMaps[0].fileName=my-dashboard-1.json
+dashboardsConfigMaps[1].configMapName=my-dashboard-2
+dashboardsConfigMaps[1].fileName=my-dashboard-2.json
+```
+
+More info at [Grafana documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards).
+
+### LDAP configuration
+
+To enable LDAP authentication it is necessary to provide a ConfigMap with the Grafana LDAP configuration file. For instance:
+
+**configmap.yaml**:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap-config
+data:
+  ldap.toml: |-
+      [[servers]]
+      # Ldap server host (specify multiple hosts space separated)
+      host = "ldap"
+      # Default port is 389 or 636 if use_ssl = true
+      port = 389
+      # Set to true if ldap server supports TLS
+      use_ssl = false
+      # Set to true if connect ldap server with STARTTLS pattern (create connection in insecure, then upgrade to secure connection with TLS)
+      start_tls = false
+      # set to true if you want to skip ssl cert validation
+      ssl_skip_verify = false
+      # set to the path to your root CA certificate or leave unset to use system defaults
+      # root_ca_cert = "/path/to/certificate.crt"
+      # Authentication against LDAP servers requiring client certificates
+      # client_cert = "/path/to/client.crt"
+      # client_key = "/path/to/client.key"
+
+      # Search user bind dn
+      bind_dn = "cn=admin,dc=example,dc=org"
+      # Search user bind password
+      # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+      bind_password = 'admin'
+
+      # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
+      # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
+      search_filter = "(uid=%s)"
+
+      # An array of base dns to search through
+      search_base_dns = ["ou=People,dc=support,dc=example,dc=org"]
+
+      # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
+      # group_search_filter_user_attribute = "distinguishedName"
+      # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
+
+      # Specify names of the ldap attributes your ldap uses
+      [servers.attributes]
+      name = "givenName"
+      surname = "sn"
+      username = "cn"
+      member_of = "memberOf"
+      email =  "email"
+```
+
+Create the ConfigMap into the cluster and deploy the Grafana Helm Chart using the existing ConfigMap and the following parameters:
+
+```console
+ldap.enabled=true
+ldap.configMapName=ldap-config
+ldap.allowSignUp=true
+```
+
+### Installing Grafana Image Renderer Plugin
+
+In order to install the [Grafana Image Renderer Plugin](https://github.com/grafana/grafana-image-renderer) so you rely on it to render images and save memory on Grafana pods, follow the steps below:
+
+1. Create a Grafana Image Renderer deployment and service using the K8s manifests below:
+
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-image-renderer
+  namespace: default
+  labels:
+    app.kubernetes.io/name: grafana-image-renderer
+    app.kubernetes.io/instance: grafana-image-renderer
+    app.kubernetes.io/component: image-renderer-plugin
+    app.kubernetes.io/part-of: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-image-renderer
+      app.kubernetes.io/instance: grafana-image-renderer
+      app.kubernetes.io/component: image-renderer-plugin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grafana-image-renderer
+        app.kubernetes.io/instance: grafana-image-renderer
+        app.kubernetes.io/component: image-renderer-plugin
+        app.kubernetes.io/part-of: grafana
+    spec:
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: grafana-image-renderer
+          image: docker.io/bitnami/grafana-image-renderer:3
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: HTTP_HOST
+              value: "::"
+            - name: HTTP_PORT
+              value: "8080"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-image-renderer
+  namespace: default
+  labels:
+    app.kubernetes.io/name: grafana-image-renderer
+    app.kubernetes.io/instance: grafana-image-renderer
+    app.kubernetes.io/component: image-renderer-plugin
+    app.kubernetes.io/part-of: grafana
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: grafana-image-renderer
+    app.kubernetes.io/instance: grafana-image-renderer
+    app.kubernetes.io/component: image-renderer-plugin
+```
+
+1. Upgrade your chart release adding the following block to your `values.yaml` file:
+
+```yaml
+imageRenderer:
+  enabled: true
+  serverURL: "http://grafana-image-renderer.default.svc.cluster.local:8080/render"
+  callbackURL: "http://grafana.default.svc.cluster.local:3000/"
+```
+
+> Note: the steps above assume an installation in the `default` namespace. If you are installing the chart in a different namespace, adjust the manifests and the `serverURL` & `callbackURL` values accordingly.
+
+### Supporting HA (High Availability)
+
+To support HA Grafana just need an external database where store dashboards, users and other persistent data.
+To configure the external database provide a configuration file containing the [database section](https://grafana.com/docs/installation/configuration/#database)
+
+More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_setup/)
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Grafana](https://github.com/bitnami/containers/tree/main/bitnami/grafana) image stores the Grafana data and configurations at the `/opt/bitnami/grafana/data` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Parameters
 
@@ -422,240 +646,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/grafana/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Using custom configuration
-
-Grafana supports multiples configuration files. Using kubernetes you can mount a file using a ConfigMap or a Secret. For example, to mount a custom `grafana.ini` file or `custom.ini` file you can create a ConfigMap like the following:
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: myconfig
-data:
-  grafana.ini: |-
-    # Raw text of the file
-```
-
-And now you need to pass the ConfigMap name, to the corresponding parameters: `config.useGrafanaIniFile=true` and `config.grafanaIniConfigMap=myconfig`.
-
-To provide dashboards on deployment time, Grafana needs a dashboards provider and the dashboards themselves.
-A default provider is created if enabled, or you can mount your own provider using a ConfigMap, but have in mind that the path to the dashboard folder must be `/opt/bitnami/grafana/dashboards`.
-
-  1. To create a dashboard, it is needed to have a datasource for it. The datasources must be created mounting a secret with all the datasource files in it. In this case, it is not a ConfigMap because the datasource could contain sensitive information.
-  2. To load the dashboards themselves you need to create a ConfigMap for each one containing the `json` file that defines the dashboard and set the array with the ConfigMap names into the `dashboardsConfigMaps` parameter.
-Note the difference between the datasources and the dashboards creation. For the datasources we can use just one secret with all of the files, while for the dashboards we need one ConfigMap per file.
-
-For example, create the dashboard ConfigMap(s) and datasource Secret as described below:
-
-```console
-kubectl create secret generic datasource-secret --from-file=datasource-secret.yaml
-kubectl create configmap my-dashboard-1 --from-file=my-dashboard-1.json
-kubectl create configmap my-dashboard-2 --from-file=my-dashboard-2.json
-```
-
-> Note: the commands above assume you had previously exported your dashboards in the JSON files: *my-dashboard-1.json* and *my-dashboard-2.json*
-> Note: the commands above assume you had previously created a datasource config file *datasource-secret.yaml*. Find an example at <https://grafana.com/docs/grafana/latest/administration/provisioning/#example-datasource-config-file>
-
-Once you have them, use the following parameters to deploy Grafana with 2 custom dashboards:
-
-```console
-dashboardsProvider.enabled=true
-datasources.secretName=datasource-secret
-dashboardsConfigMaps[0].configMapName=my-dashboard-1
-dashboardsConfigMaps[0].fileName=my-dashboard-1.json
-dashboardsConfigMaps[1].configMapName=my-dashboard-2
-dashboardsConfigMaps[1].fileName=my-dashboard-2.json
-```
-
-More info at [Grafana documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards).
-
-### LDAP configuration
-
-To enable LDAP authentication it is necessary to provide a ConfigMap with the Grafana LDAP configuration file. For instance:
-
-**configmap.yaml**:
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: ldap-config
-data:
-  ldap.toml: |-
-      [[servers]]
-      # Ldap server host (specify multiple hosts space separated)
-      host = "ldap"
-      # Default port is 389 or 636 if use_ssl = true
-      port = 389
-      # Set to true if ldap server supports TLS
-      use_ssl = false
-      # Set to true if connect ldap server with STARTTLS pattern (create connection in insecure, then upgrade to secure connection with TLS)
-      start_tls = false
-      # set to true if you want to skip ssl cert validation
-      ssl_skip_verify = false
-      # set to the path to your root CA certificate or leave unset to use system defaults
-      # root_ca_cert = "/path/to/certificate.crt"
-      # Authentication against LDAP servers requiring client certificates
-      # client_cert = "/path/to/client.crt"
-      # client_key = "/path/to/client.key"
-
-      # Search user bind dn
-      bind_dn = "cn=admin,dc=example,dc=org"
-      # Search user bind password
-      # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
-      bind_password = 'admin'
-
-      # User search filter, for example "(cn=%s)" or "(sAMAccountName=%s)" or "(uid=%s)"
-      # Allow login from email or username, example "(|(sAMAccountName=%s)(userPrincipalName=%s))"
-      search_filter = "(uid=%s)"
-
-      # An array of base dns to search through
-      search_base_dns = ["ou=People,dc=support,dc=example,dc=org"]
-
-      # group_search_filter = "(&(objectClass=posixGroup)(memberUid=%s))"
-      # group_search_filter_user_attribute = "distinguishedName"
-      # group_search_base_dns = ["ou=groups,dc=grafana,dc=org"]
-
-      # Specify names of the ldap attributes your ldap uses
-      [servers.attributes]
-      name = "givenName"
-      surname = "sn"
-      username = "cn"
-      member_of = "memberOf"
-      email =  "email"
-```
-
-Create the ConfigMap into the cluster and deploy the Grafana Helm Chart using the existing ConfigMap and the following parameters:
-
-```console
-ldap.enabled=true
-ldap.configMapName=ldap-config
-ldap.allowSignUp=true
-```
-
-### Installing Grafana Image Renderer Plugin
-
-In order to install the [Grafana Image Renderer Plugin](https://github.com/grafana/grafana-image-renderer) so you rely on it to render images and save memory on Grafana pods, follow the steps below:
-
-1. Create a Grafana Image Renderer deployment and service using the K8s manifests below:
-
-```yaml
-# deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: grafana-image-renderer
-  namespace: default
-  labels:
-    app.kubernetes.io/name: grafana-image-renderer
-    app.kubernetes.io/instance: grafana-image-renderer
-    app.kubernetes.io/component: image-renderer-plugin
-    app.kubernetes.io/part-of: grafana
-spec:
-  replicas: 1
-  strategy:
-    type: RollingUpdate
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: grafana-image-renderer
-      app.kubernetes.io/instance: grafana-image-renderer
-      app.kubernetes.io/component: image-renderer-plugin
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: grafana-image-renderer
-        app.kubernetes.io/instance: grafana-image-renderer
-        app.kubernetes.io/component: image-renderer-plugin
-        app.kubernetes.io/part-of: grafana
-    spec:
-      securityContext:
-        fsGroup: 1001
-        runAsNonRoot: true
-        runAsUser: 1001
-      containers:
-        - name: grafana-image-renderer
-          image: docker.io/bitnami/grafana-image-renderer:3
-          securityContext:
-            runAsUser: 1001
-          env:
-            - name: HTTP_HOST
-              value: "::"
-            - name: HTTP_PORT
-              value: "8080"
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-# service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: grafana-image-renderer
-  namespace: default
-  labels:
-    app.kubernetes.io/name: grafana-image-renderer
-    app.kubernetes.io/instance: grafana-image-renderer
-    app.kubernetes.io/component: image-renderer-plugin
-    app.kubernetes.io/part-of: grafana
-spec:
-  type: ClusterIP
-  sessionAffinity: None
-  ports:
-    - port: 8080
-      targetPort: http
-      protocol: TCP
-      name: http
-  selector:
-    app.kubernetes.io/name: grafana-image-renderer
-    app.kubernetes.io/instance: grafana-image-renderer
-    app.kubernetes.io/component: image-renderer-plugin
-```
-
-1. Upgrade your chart release adding the following block to your `values.yaml` file:
-
-```yaml
-imageRenderer:
-  enabled: true
-  serverURL: "http://grafana-image-renderer.default.svc.cluster.local:8080/render"
-  callbackURL: "http://grafana.default.svc.cluster.local:3000/"
-```
-
-> Note: the steps above assume an installation in the `default` namespace. If you are installing the chart in a different namespace, adjust the manifests and the `serverURL` & `callbackURL` values accordingly.
-
-### Supporting HA (High Availability)
-
-To support HA Grafana just need an external database where store dashboards, users and other persistent data.
-To configure the external database provide a configuration file containing the [database section](https://grafana.com/docs/installation/configuration/#database)
-
-More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_setup/)
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-## Persistence
-
-The [Bitnami Grafana](https://github.com/bitnami/containers/tree/main/bitnami/grafana) image stores the Grafana data and configurations at the `/opt/bitnami/grafana/data` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Troubleshooting
 
