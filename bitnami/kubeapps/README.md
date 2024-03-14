@@ -937,8 +937,8 @@ helm install --name kubeapps --namespace kubeapps oci://REGISTRY_NAME/REPOSITORY
 It is possible that when upgrading Kubeapps an error appears. That can be caused by a breaking change in the new chart or because the current chart installation is in an inconsistent state. If you find issues upgrading Kubeapps you can follow these steps:
 
 > Note: These steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
-> Note: If you are upgrading from 2.3.1 see the [following section](#upgrading-to-231).
-> Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-20).
+> Note: If you are upgrading from 2.3.1 see the [following section](#to-600).
+> Note: If you are upgrading from 1.X to 2.X see the [following section](#to-400).
 
 1. (Optional) Backup your personal repositories (if you have any):
 

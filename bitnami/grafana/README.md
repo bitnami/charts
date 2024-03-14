@@ -705,7 +705,7 @@ Deployment label selector is immutable after it gets created, so you cannot "upg
 
 In <https://github.com/bitnami/charts/pull/2773> the deployment label selectors of the resources were updated to add the component name. Resulting in compatibility breakage.
 
-In order to "upgrade" from a previous version, you will need to [uninstall](#uninstalling-the-chart) the existing chart manually.
+In order to "upgrade" from a previous version, you will need to uninstall the existing chart manually.
 
 This major version signifies this change.
 
