@@ -111,6 +111,11 @@ spec:
                 {{- end }}
               {{- if not (empty .Values.cronjobs.archive.resources) }}
               resources: {{- toYaml .Values.cronjobs.archive.resources | nindent 16 }}
+              {{- else }}
+              # Fallback to the main resources request/limit to preserve backwards compatibility. This behaviour might be DEPRECATED
+              # in upcoming versions of the chart
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
               {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
