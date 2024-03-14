@@ -255,7 +255,11 @@ Return the queryURL used by Thanos Ruler.
 */}}
 {{- define "thanos.ruler.queryURL" -}}
 {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL -}}
-{{- printf "http://%s" (tpl .Values.queryFrontend.ingress.hostname .) -}}
+  {{- if .Values.queryFrontend.ingress.tls -}}
+    {{- printf "https://%s" (tpl .Values.queryFrontend.ingress.hostname .) -}}
+  {{- else -}}
+    {{- printf "http://%s" (tpl .Values.queryFrontend.ingress.hostname .) -}}
+  {{- end -}}
 {{- else -}}
 {{- if .Values.ruler.queryURL -}}
     {{- printf "%s" (tpl .Values.ruler.queryURL $) -}}
