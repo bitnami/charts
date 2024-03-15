@@ -182,7 +182,11 @@ spec:
             failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
           {{- end }}
           {{- end }}
+          {{- if .Values.contour.resources }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+          {{- else if ne .Values.contour.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.contour.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: contourcert
               mountPath: /certs
