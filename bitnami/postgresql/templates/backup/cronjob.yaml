@@ -83,8 +83,8 @@ spec:
             command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             volumeMounts:
               {{- if .Values.tls.enabled }}
-              - name: certs
-                mountPath: /certs
+              - name: raw-certificates
+                mountPath: /tmp/certs
               {{- end }}
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
@@ -108,7 +108,8 @@ spec:
           volumes:
             {{- if .Values.tls.enabled }}
             - name: raw-certificates
-              emptyDir: /tmp/certs
+              secret:
+                secretName: {{ include "postgresql.v1.tlsSecretName" . }}
             {{- end }}
             {{- if .Values.backup.cronjob.storage.existingClaim }}
             - name: datadir
