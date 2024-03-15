@@ -14,11 +14,6 @@ operator:
   serviceAccount:
     create: true
     automountServiceAccountToken: true
-  networkPolicy:
-    extraEgress:
-      - ports:
-        # Allow access to Grafana's testing port
-        - port: 80
 grafana:
   enabled: true
   config:
