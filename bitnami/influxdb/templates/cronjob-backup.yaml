@@ -30,6 +30,7 @@ spec:
           {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- include "influxdb.imagePullSecrets" . | nindent 10 }}
           serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
           restartPolicy: OnFailure
           volumes:
