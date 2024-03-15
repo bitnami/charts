@@ -178,8 +178,10 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if .Values.dataPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
+            {{- end }}
            {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
             - name: control-plane-certs
               mountPath: /etc/ssl/certs/{{ .Values.controlPlane.tls.certCAFilename }}
