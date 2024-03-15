@@ -322,7 +322,7 @@ influxdb:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param influxdb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+  ## @param influxdb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -980,7 +980,7 @@ backup:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "none"
@@ -1076,7 +1076,7 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
-      ## @param backup.uploadProviders.google.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## @param backup.uploadProviders.google.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
       ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
       resourcesPreset: "none"
@@ -1130,7 +1130,7 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
-      ## @param backup.uploadProviders.azure.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## @param backup.uploadProviders.azure.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
       ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
       resourcesPreset: "none"
@@ -1186,7 +1186,7 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
-      ## @param backup.uploadProviders.aws.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## @param backup.uploadProviders.aws.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
       ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
       resourcesPreset: "none"
