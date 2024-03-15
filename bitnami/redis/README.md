@@ -1,8 +1,8 @@
 <!--- app-name: Redis&reg; -->
 
-# Bitnami package for Redis(R)
+# Bitnami package for Redis&reg;
 
-Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+Redis&reg; is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 
 [Overview of Redis&reg;](http://redis.io)
 
@@ -14,7 +14,7 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
 ```
 
-Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redis&reg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
