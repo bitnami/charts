@@ -1596,6 +1596,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 14.0.0
+
+This major release bumps the MinIO chart version to [13.x.x](https://github.com/bitnami/charts/pull/22058/); no major issues are expected during the upgrade.
+
 ### To 13.0.0
 
 This major version changes the NetworkPolicy objects and creates one per Thanos component. The `networkPolicy` common value was removed in favor of `COMPONENT.networkPolicy`. Also, NetworkPolicy objects are deployed by default. This can be changed by setting `COMPONENT.networkPolicy.enabled=false` being `COMPONENT` one of the Thanos components.
