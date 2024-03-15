@@ -24,7 +24,7 @@ file:
     contents:
       - /http_listen_port.*{{ .Vars.tempo.containerPorts.web }}/
       - /override_config.*\/bitnami\/grafana-tempo\/conf\/overrides.yaml/
-      - /cache.*memcached/
+      - /host.*grafana-tempo-memcached/
   /bitnami/grafana-tempo/conf/overrides.yaml:
     exists: true
     filetype: file
