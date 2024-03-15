@@ -720,6 +720,25 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq --set auth.
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
 
+### To 12.10.0
+
+This version adds NetworkPolicy objects by default. Its default configuration is setting open `egress` (this can be changed by setting `networkPolicy.allowExternalEgress=false`) and limited `ingress` to the default container ports. If you have any extra port exposed you may need to set the `networkPolicy.extraIngress` value. In the example below an extra port is exposed using `extraContainerPorts` and access is allowed using `networkPolicy.extraIngress`:
+
+```yaml
+  extraContainerPorts:
+    - name: "mqtts"
+      protocol: "TCP"
+      containerPort: 8883
+  networkPolicy:
+    extraIngress:
+      - ports:
+          - protocol: "TCP"
+            containerPort: 8883
+            port: 8883
+```
+
+You can revert this behavior by setting `networkPolicy.enabled=false`.
+
 ### To 11.0.0
 
 This major version changes the default RabbitMQ image from 3.10.x to 3.11.x. Follow the [official instructions](https://www.rabbitmq.com/upgrade.html) to upgrade from 3.10 to 3.11.
