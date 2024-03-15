@@ -45,7 +45,7 @@ spec:
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.archive.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cronjobs.archive.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.cronjobs.archive.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.command "context" $) | nindent 16 }}
@@ -109,8 +109,14 @@ spec:
                 {{- if .Values.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
+              {{- if not (empty .Values.cronjobs.archive.resources) }}
+              resources: {{- toYaml .Values.cronjobs.archive.resources | nindent 16 }}
+              {{- else }}
+              # Fallback to the main resources request/limit to preserve backwards compatibility. This behaviour might be DEPRECATED
+              # in upcoming versions of the chart
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+              {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
@@ -198,7 +204,7 @@ spec:
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.taskScheduler.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.taskScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.cronjobs.taskScheduler.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
               {{- if .Values.cronjobs.taskScheduler.command }}
               command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.command "context" $) | nindent 16 }}
@@ -262,6 +268,9 @@ spec:
                 {{- if .Values.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
+              {{- if not (empty .Values.cronjobs.taskScheduler.resources) }}
+              resources: {{- toYaml .Values.cronjobs.taskScheduler.resources | nindent 16 }}
+              {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs

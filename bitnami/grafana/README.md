@@ -140,11 +140,12 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -246,15 +247,16 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                | `[]`             |
 | `grafana.podSecurityContext.fsGroup`                        | Group to configure permissions for volumes                                                                                                                                                                                 | `1001`           |
 | `grafana.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                       | `true`           |
-| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`            |
+| `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`             |
 | `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `1001`           |
+| `grafana.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `1001`           |
 | `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `true`           |
 | `grafana.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                | `false`          |
-| `grafana.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `false`          |
+| `grafana.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `true`           |
 | `grafana.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                  | `false`          |
 | `grafana.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                         | `["ALL"]`        |
 | `grafana.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                           | `RuntimeDefault` |
-| `grafana.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if grafana.resources is set (grafana.resources is recommended for production). | `none`           |
+| `grafana.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if grafana.resources is set (grafana.resources is recommended for production). | `nano`           |
 | `grafana.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`             |
 | `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                                       | `true`           |
 | `grafana.livenessProbe.path`                                | Path for livenessProbe                                                                                                                                                                                                     | `/api/health`    |
@@ -318,35 +320,42 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes Service type                                                                                                          | `ClusterIP`              |
-| `service.clusterIP`                | Grafana service Cluster IP                                                                                                       | `""`                     |
-| `service.ports.grafana`            | Grafana service port                                                                                                             | `3000`                   |
-| `service.nodePorts.grafana`        | Specify the nodePort value for the LoadBalancer and NodePort service types                                                       | `""`                     |
-| `service.loadBalancerIP`           | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                              | `""`                     |
-| `service.loadBalancerClass`        | loadBalancerClass if Grafana service type is `LoadBalancer` (optional, cloud specific)                                           | `""`                     |
-| `service.loadBalancerSourceRanges` | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                    | `[]`                     |
-| `service.annotations`              | Provide any additional annotations which may be required.                                                                        | `{}`                     |
-| `service.externalTrafficPolicy`    | Grafana service external traffic policy                                                                                          | `Cluster`                |
-| `service.extraPorts`               | Extra port to expose on Grafana service                                                                                          | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
-| `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
-| `ingress.hostname`                 | When the ingress is enabled, a host pointing to this will be created                                                             | `grafana.local`          |
-| `ingress.path`                     | Default path for the ingress resource                                                                                            | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`               | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`                 | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.secrets`                  | It is also possible to create and manage the certificates outside of this helm chart                                             | `[]`                     |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Kubernetes Service type                                                                                                          | `ClusterIP`              |
+| `service.clusterIP`                     | Grafana service Cluster IP                                                                                                       | `""`                     |
+| `service.ports.grafana`                 | Grafana service port                                                                                                             | `3000`                   |
+| `service.nodePorts.grafana`             | Specify the nodePort value for the LoadBalancer and NodePort service types                                                       | `""`                     |
+| `service.loadBalancerIP`                | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                              | `""`                     |
+| `service.loadBalancerClass`             | loadBalancerClass if Grafana service type is `LoadBalancer` (optional, cloud specific)                                           | `""`                     |
+| `service.loadBalancerSourceRanges`      | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                    | `[]`                     |
+| `service.annotations`                   | Provide any additional annotations which may be required.                                                                        | `{}`                     |
+| `service.externalTrafficPolicy`         | Grafana service external traffic policy                                                                                          | `Cluster`                |
+| `service.extraPorts`                    | Extra port to expose on Grafana service                                                                                          | `[]`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Set to true to enable ingress record generation                                                                                  | `false`                  |
+| `ingress.pathType`                      | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`                      | When the ingress is enabled, a host pointing to this will be created                                                             | `grafana.local`          |
+| `ingress.path`                          | Default path for the ingress resource                                                                                            | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`                    | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`                    | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`                      | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`                       | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.secrets`                       | It is also possible to create and manage the certificates outside of this helm chart                                             | `[]`                     |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Metrics parameters
 
@@ -379,9 +388,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.image.digest`                            | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                             | `""`                       |
 | `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                                                                                                                                                           | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                                                                                                                                                          | `[]`                       |
-| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `nil`                      |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                | `0`                        |
 
 ### Diagnostic Mode Parameters
@@ -653,6 +662,17 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 9.4.0
 

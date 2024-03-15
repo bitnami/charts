@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -92,7 +101,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.27.1-debian-12-r3
+    tag: 1.28.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -165,7 +174,7 @@ contour:
   ## @param contour.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if contour.resources is set (contour.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param contour.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -286,6 +295,7 @@ contour:
   ## @param contour.containerSecurityContext.enabled Enabled contour containers' Security Context
   ## @param contour.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param contour.containerSecurityContext.runAsUser Set contour containers' Security Context runAsUser
+  ## @param contour.containerSecurityContext.runAsGroup Set contour containers' Security Context runAsGroup
   ## @param contour.containerSecurityContext.runAsNonRoot Set contour containers' Security Context runAsNonRoot
   ## @param contour.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param contour.containerSecurityContext.privileged Set contour container's Security Context privileged
@@ -295,8 +305,9 @@ contour:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -304,7 +315,7 @@ contour:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## @param contour.livenessProbe.enabled Enable/disable the Liveness probe
   ## @param contour.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
   ## @param contour.livenessProbe.periodSeconds How often to perform the probe
@@ -638,7 +649,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.27.3-debian-12-r3
+    tag: 1.28.1-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -686,7 +697,7 @@ envoy:
   ## @param envoy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.resources is set (envoy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param envoy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -715,7 +726,7 @@ envoy:
     extraArgs: []
     port: "8090"
     enabled: true
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## Example:
     ## resources:
     ##   requests:
@@ -730,6 +741,7 @@ envoy:
     ## @param envoy.shutdownManager.containerSecurityContext.enabled Enabled envoy shutdownManager containers' Security Context
     ## @param envoy.shutdownManager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param envoy.shutdownManager.containerSecurityContext.runAsUser Set envoy shutdownManager containers' Security Context runAsUser
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsGroup Set contour containers' Security Context runAsGroup
     ## @param envoy.shutdownManager.containerSecurityContext.runAsNonRoot Set envoy shutdownManager containers' Security Context runAsNonRoot
     ## @param envoy.shutdownManager.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
     ## @param envoy.shutdownManager.containerSecurityContext.privileged Set envoy.shutdownManager container's Security Context privileged
@@ -739,8 +751,9 @@ envoy:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       allowPrivilegeEscalation: false
@@ -749,11 +762,63 @@ envoy:
       seccompProfile:
         type: "RuntimeDefault"
       readOnlyRootFilesystem: true
+    ## @param envoy.shutdownManager.livenessProbe.enabled Enable livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param envoy.shutdownManager.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 120
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 6
+      successThreshold: 1
+    ## @param envoy.shutdownManager.readinessProbe.enabled Enable/disable the readiness probe
+    ## @param envoy.shutdownManager.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+    ## @param envoy.shutdownManager.readinessProbe.periodSeconds How often to perform the probe
+    ## @param envoy.shutdownManager.readinessProbe.timeoutSeconds When the probe times out
+    ## @param envoy.shutdownManager.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+    ## @param envoy.shutdownManager.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 3
+      timeoutSeconds: 1
+      failureThreshold: 3
+      successThreshold: 1
+    ## @param envoy.shutdownManager.startupProbe.enabled Enable/disable the startup probe
+    ## @param envoy.shutdownManager.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+    ## @param envoy.shutdownManager.startupProbe.periodSeconds How often to perform the probe
+    ## @param envoy.shutdownManager.startupProbe.timeoutSeconds When the probe times out
+    ## @param envoy.shutdownManager.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded.
+    ## @param envoy.shutdownManager.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed.
+    ##
+    startupProbe:
+      enabled: false
+      initialDelaySeconds: 15
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+      successThreshold: 1
+    ## @param envoy.shutdownManager.customLivenessProbe Override default liveness probe
+    ##
+    customLivenessProbe: {}
+    ## @param envoy.shutdownManager.customReadinessProbe Override default readiness probe
+    ##
+    customReadinessProbe: {}
+    ## @param envoy.shutdownManager.customStartupProbe Override default startup probe
+    ##
+    customStartupProbe: {}
   ## Envoy Initconfig initcontainer security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.initConfig.containerSecurityContext.enabled Enabled envoy initConfig containers' Security Context
   ## @param envoy.initConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param envoy.initConfig.containerSecurityContext.runAsUser Set envoy initConfig containers' Security Context runAsUser
+  ## @param envoy.initConfig.containerSecurityContext.runAsGroup Set envoy initConfig containers' Security Context runAsUser
   ## @param envoy.initConfig.containerSecurityContext.runAsNonRoot Set envoy initConfig containers' Security Context runAsNonRoot
   ## @param envoy.initConfig.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param envoy.initConfig.containerSecurityContext.privileged Set contraller container's Security Context privileged
@@ -764,8 +829,9 @@ envoy:
   initConfig:
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       allowPrivilegeEscalation: false
@@ -773,7 +839,7 @@ envoy:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
   ## @param envoy.kind Install as deployment or daemonset
   ##
   kind: daemonset
@@ -870,16 +936,17 @@ envoy:
   ## @param envoy.podSecurityContext.sysctls Array of sysctl options to allow
   ##
   podSecurityContext:
+    enabled: true
     fsGroupChangePolicy: Always
     supplementalGroups: []
     fsGroup: 0
     sysctls: []
-    enabled: false
   ## Envoy container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param envoy.containerSecurityContext.enabled Enabled envoy containers' Security Context
   ## @param envoy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param envoy.containerSecurityContext.runAsUser Set envoy containers' Security Context runAsUser
+  ## @param envoy.containerSecurityContext.runAsGroup Set envoy containers' Security Context runAsGroup
   ## @param envoy.containerSecurityContext.runAsNonRoot Set envoy containers' Security Context runAsNonRoot
   ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param envoy.containerSecurityContext.privileged Set envoy container's Security Context privileged
@@ -889,8 +956,9 @@ envoy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -898,7 +966,7 @@ envoy:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## @param envoy.hostNetwork Envoy Pod host network access
   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#host-namespaces
   ##
@@ -1147,9 +1215,9 @@ envoy:
   ## @param envoy.useHostPort.metrics Enable/disable `hostPort` for TCP/8002
   ##
   useHostPort:
-    http: true
-    https: true
-    metrics: true
+    http: false
+    https: false
+    metrics: false
   ## @param envoy.useHostIP Enable/disable `hostIP`
   ##
   useHostIP: false
@@ -1237,7 +1305,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r1
+    tag: 1.25.4-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1337,6 +1405,7 @@ defaultBackend:
   ## @param defaultBackend.containerSecurityContext.enabled Enabled defaultBackend containers' Security Context
   ## @param defaultBackend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param defaultBackend.containerSecurityContext.runAsUser Set defaultBackend containers' Security Context runAsUser
+  ## @param defaultBackend.containerSecurityContext.runAsGroup Set defaultBackend containers' Security Context runAsGroup
   ## @param defaultBackend.containerSecurityContext.runAsNonRoot Set defaultBackend containers' Security Context runAsNonRoot
   ## @param defaultBackend.containerSecurityContext.readOnlyRootFilesystem Set read only root file system pod's Security Conte
   ## @param defaultBackend.containerSecurityContext.privileged Set defaultBackend container's Security Context privileged
@@ -1346,8 +1415,9 @@ defaultBackend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -1355,7 +1425,7 @@ defaultBackend:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Default backend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1364,7 +1434,7 @@ defaultBackend:
   ## @param defaultBackend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if defaultBackend.resources is set (defaultBackend.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param defaultBackend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

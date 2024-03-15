@@ -68,7 +68,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.worker.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.worker.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.worker.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.worker.terminationGracePeriodSeconds }}
@@ -142,10 +142,13 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.security.ssl.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-          - name: certs
-            mountPath: /certs
-          - name: shared-certs
-            mountPath: /opt/bitnami/spark/conf/certs
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: certs
+              mountPath: /certs
+            - name: shared-certs
+              mountPath: /opt/bitnami/spark/conf/certs
         {{- end }}
       {{- end }}
       containers:
@@ -153,7 +156,7 @@ spec:
           image: {{ include "spark.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.worker.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -183,6 +186,21 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/work
+              subPath: app-work-dir
             {{- if .Values.worker.existingConfigmap }}
             - name: config
               mountPath: '/bitnami/spark/conf/'
@@ -342,6 +360,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.worker.existingConfigmap }}
         - name: config
           configMap:

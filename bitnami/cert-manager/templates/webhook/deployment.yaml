@@ -36,7 +36,7 @@ spec:
       hostNetwork: {{ .Values.webhook.hostNetwork }}
       {{- include "certmanager.webhook.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.webhook.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.webhook.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.webhook.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.webhook.schedulerName }}
       schedulerName: {{ .Values.webhook.schedulerName }}
@@ -94,7 +94,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.webhook.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.webhook.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.webhook.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

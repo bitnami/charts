@@ -182,7 +182,11 @@ spec:
             failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
           {{- end }}
           {{- end }}
+          {{- if .Values.contour.resources }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+          {{- else if ne .Values.contour.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.contour.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: contourcert
               mountPath: /certs
@@ -221,7 +225,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.contour.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.contour.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.contour.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.contour.sidecars "context" $) | nindent 8 }}
@@ -229,7 +233,7 @@ spec:
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
       {{- if .Values.contour.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.contour.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.contour.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       volumes:
         - name: contourcert

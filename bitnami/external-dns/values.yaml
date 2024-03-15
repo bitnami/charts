@@ -17,6 +17,15 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -64,7 +73,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.0-debian-12-r15
+  tag: 0.14.0-debian-12-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,6 +120,28 @@ provider: aws
 ## @param initContainers Attach additional init containers to the pod (evaluated as a template)
 ##
 initContainers: []
+## DNS-Pod services
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## @param dnsPolicy Specifies the DNS policy for the external-dns deployment or daemonset
+## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
+## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ""
+## @param dnsConfig  allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## E.g.
+## dnsConfig:
+##   nameservers:
+##     - 192.0.2.1 # this is an example
+##   searches:
+##     - ns1.svc.cluster-domain.example
+##     - my.dns.search.suffix
+##   options:
+##     - name: ndots
+##       value: "2"
+##     - name: edns0
+dnsConfig: {}
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []

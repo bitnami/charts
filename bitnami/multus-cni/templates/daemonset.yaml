@@ -30,7 +30,7 @@ spec:
       hostNetwork: true
       serviceAccountName: {{ include "multus-cni.serviceAccountName" . }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -70,7 +70,7 @@ spec:
             - "/usr/src/multus-cni/bin/multus"
             - "{{ .Values.CNIMountPath }}/opt/cni/bin/"
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: cni-bin-dir
@@ -84,12 +84,15 @@ spec:
             - "--type"
             - "thin"
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: cni-bin-dir
               mountPath: {{ .Values.CNIMountPath }}/opt/cni/bin
               mountPropagation: Bidirectional
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
       containers:
         - name: multus-cni
           image: {{ template "multus-cni.image" . }}
@@ -119,7 +122,7 @@ spec:
             {{- end }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -189,6 +192,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: cni-net-dir
               mountPath: {{ .Values.CNIMountPath }}/etc/cni/net.d
             - name: cni-bin-dir
@@ -200,6 +206,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: cni-bin-dir
           hostPath:
             path: {{ .Values.hostCNIBinDir }}

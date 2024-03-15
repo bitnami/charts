@@ -59,11 +59,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -129,9 +130,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`                  | Enabled Apache Server containers' Security Context                                                                                                                                                                                               | `true`                   |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                 | `nil`                    |
 | `containerSecurityContext.runAsUser`                | Set Apache Server containers' Security Context runAsUser                                                                                                                                                                                         | `1001`                   |
+| `containerSecurityContext.runAsGroup`               | Set Apache Server containers' Security Context runAsGroup                                                                                                                                                                                        | `0`                      |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                                                                                                                                         | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                                                                                                                                              | `false`                  |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                                                                                                                                                | `false`                  |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set primary container's Security Context readOnlyRootFilesystem                                                                                                                                                                                  | `false`                  |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                               | `["ALL"]`                |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                 | `RuntimeDefault`         |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                             | `[]`                     |
@@ -192,35 +195,42 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Apache Service type                                                                                                              | `LoadBalancer`           |
-| `service.ports.http`               | Apache service HTTP port                                                                                                         | `80`                     |
-| `service.ports.https`              | Apache service HTTPS port                                                                                                        | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
-| `service.clusterIP`                | Apache service Cluster IP                                                                                                        | `""`                     |
-| `service.loadBalancerIP`           | Apache service Load Balancer IP                                                                                                  | `""`                     |
-| `service.loadBalancerSourceRanges` | Apache service Load Balancer sources                                                                                             | `[]`                     |
-| `service.annotations`              | Additional custom annotations for Apache service                                                                                 | `{}`                     |
-| `service.externalTrafficPolicy`    | Apache service external traffic policy                                                                                           | `Cluster`                |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Apache                                                                                      | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `example.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Apache Service type                                                                                                              | `LoadBalancer`           |
+| `service.ports.http`                    | Apache service HTTP port                                                                                                         | `80`                     |
+| `service.ports.https`                   | Apache service HTTPS port                                                                                                        | `443`                    |
+| `service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`               | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                     | Apache service Cluster IP                                                                                                        | `""`                     |
+| `service.loadBalancerIP`                | Apache service Load Balancer IP                                                                                                  | `""`                     |
+| `service.loadBalancerSourceRanges`      | Apache service Load Balancer sources                                                                                             | `[]`                     |
+| `service.annotations`                   | Additional custom annotations for Apache service                                                                                 | `{}`                     |
+| `service.externalTrafficPolicy`         | Apache service external traffic policy                                                                                           | `Cluster`                |
+| `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Enable ingress record generation for Apache                                                                                      | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                                              | `example.local`          |
+| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Metrics Parameters
 

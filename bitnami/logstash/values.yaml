@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -70,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/logstash
-  tag: 8.12.2-debian-12-r0
+  tag: 8.12.2-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -337,6 +346,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -346,11 +356,12 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -374,7 +385,7 @@ lifecycleHooks: {}
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "small"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -607,7 +618,7 @@ volumePermissions:
   ## @param volumePermissions.securityContext.runAsUser User ID for the volumePermissions init container
   ##
   securityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
@@ -642,7 +653,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

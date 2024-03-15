@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -59,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.0.2-debian-12-r4
+  tag: 5.0.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -753,7 +762,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.6-debian-12-r7
+    tag: 1.0.6-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -996,6 +1005,17 @@ cronjobs:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
+    ## @param cronjobs.taskScheduler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   archive:
     ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -1047,3 +1067,16 @@ cronjobs:
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
     ##
     podLabels: {}
+    ## @param cronjobs.archive.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    # NOTE: If not defined, this will fallback to the main resources request/limit to preserve backwards compatibility. This behaviour might be DEPRECATED
+    # in upcoming versions of the chart
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}

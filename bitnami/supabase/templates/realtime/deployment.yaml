@@ -71,7 +71,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.realtime.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.realtime.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.realtime.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.realtime.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.realtime.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.realtime.terminationGracePeriodSeconds }}
@@ -84,7 +84,7 @@ spec:
           image: {{ template "supabase.realtime.image" . }}
           imagePullPolicy: {{ .Values.realtime.image.pullPolicy }}
           {{- if .Values.realtime.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.realtime.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.realtime.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -112,7 +112,7 @@ spec:
           image: {{ template "supabase.realtime.image" . }}
           imagePullPolicy: {{ .Values.realtime.image.pullPolicy }}
           {{- if .Values.realtime.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.realtime.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.realtime.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

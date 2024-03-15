@@ -62,7 +62,7 @@ spec:
       priorityClassName: {{ .Values.clusterOperator.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.clusterOperator.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.clusterOperator.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.clusterOperator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.clusterOperator.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.clusterOperator.terminationGracePeriodSeconds }}
@@ -76,7 +76,7 @@ spec:
           image: {{ template "rmqco.clusterOperator.image" . }}
           imagePullPolicy: {{ .Values.clusterOperator.image.pullPolicy }}
           {{- if .Values.clusterOperator.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.clusterOperator.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.clusterOperator.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.clusterOperator.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.command "context" $) | nindent 12 }}

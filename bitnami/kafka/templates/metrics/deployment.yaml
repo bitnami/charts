@@ -63,7 +63,7 @@ spec:
       schedulerName: {{ .Values.metrics.kafka.schedulerName }}
       {{- end }}
       {{- if .Values.metrics.kafka.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metrics.kafka.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.kafka.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "kafka.metrics.kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.metrics.kafka.enableServiceLinks }}
@@ -75,7 +75,7 @@ spec:
           image: {{ include "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
           {{- if .Values.metrics.kafka.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.kafka.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.kafka.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
