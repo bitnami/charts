@@ -627,7 +627,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 ### Backup parameters
 
 | Name                                                               | Description                                                                                                                           | Value               |
-|--------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|---------------------|
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                   | `false`             |
 | `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                    | `@daily`            |
 | `backup.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                           | `Allow`             |
