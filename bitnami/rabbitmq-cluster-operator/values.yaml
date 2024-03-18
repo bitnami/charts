@@ -131,7 +131,7 @@ clusterOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param clusterOperator.revisionHsitoryLimit sets number of replicaset to keep in k8s
+  ## @param clusterOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
   ##
   revisionHistoryLimit: 3
   ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
@@ -664,7 +664,7 @@ msgTopologyOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param msgTopologyOperator.revisionHsitoryLimit sets number of replicaset to keep in k8s
+  ## @param msgTopologyOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
   ##
   revisionHistoryLimit: 3
   ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
