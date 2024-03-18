@@ -27,29 +27,181 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 - Kubernetes 1.23+
 - Helm 3.8.0+
 
-## Installing the Chart
+## Configuration and installation details
 
-To install the chart with the release name `my-release`:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Generate a Fernet key
+
+A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
+
+Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/fernet.html#generating-fernet-key)
+
+### Generate a Secret key
+
+Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with "CSRF session token is missing".
+
+### Load DAG files
+
+There are two different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
+
+#### Option 1: Specify an existing config map
+
+You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dags.existingConfigmap`.
+
+#### Option 2: Get your DAG files from a git repository
+
+You can store all your DAG files on GitHub repositories and then clone to the Airflow pods with an initContainer. The repositories will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
+
+> NOTE: When enabling git synchronization, an init container and sidecar container will be added for all the pods running airflow, this will allow scheduler, worker and web component to reach dags if it was needed.
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/airflow
+git.dags.enabled=true
+git.dags.repositories[0].repository=https://github.com/USERNAME/REPOSITORY
+git.dags.repositories[0].name=REPO-IDENTIFIER
+git.dags.repositories[0].branch=master
 ```
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: `https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY`
 
-These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+### Loading Plugins
 
-> **Tip**: List all releases using `helm list`
+You can load plugins into the chart by specifying a git repository containing the plugin files. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
 
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
+> NOTE: When enabling git synchronization, an init container and sidecar container will be added for all the pods running airflow, this will allow scheduler, worker and web component to reach plugins if it was needed.
 
 ```console
-helm delete my-release
+git.plugins.enabled=true
+git.plugins.repositories[0].repository=https://github.com/teamclairvoyant/airflow-rest-api-plugin.git
+git.plugins.repositories[0].branch=v1.0.9-branch
+git.plugins.repositories[0].path=plugins
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+### Existing Secrets
+
+You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis&reg; passwords:
+
+```console
+postgresql.enabled=false
+externalDatabase.host=my.external.postgres.host
+externalDatabase.user=bn_airflow
+externalDatabase.database=bitnami_airflow
+externalDatabase.existingSecret=all-my-secrets
+externalDatabase.existingSecretPasswordKey=postgresql-password
+
+redis.enabled=false
+externalRedis.host=my.external.redis.host
+externalRedis.existingSecret=all-my-secrets
+externalRedis.existingSecretPasswordKey=redis-password
+
+auth.existingSecret=all-my-secrets
+```
+
+The expected secret resource looks as follows:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: all-my-secrets
+type: Opaque
+data:
+  airflow-password: "Smo1QTJLdGxXMg=="
+  airflow-fernet-key: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
+  airflow-secret-key: "a25mQ1FHTUh3MnFRSk5KMEIyVVU2YmN0VGRyYTVXY08="
+  postgresql-password: "cG9zdGdyZXMK"
+  redis-password: "cmVkaXMK"
+```
+
+This is useful if you plan on using [Bitnami's sealed secrets](https://github.com/bitnami-labs/sealed-secrets) to manage your passwords.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Install extra python packages
+
+This chart allows you to mount volumes using `extraVolumes` and `extraVolumeMounts` in all 3 airflow components (web, scheduler, worker). Mounting a requirements.txt using these options to `/bitnami/python/requirements.txt` will execute `pip install -r /bitnami/python/requirements.txt` on container start.
+
+### Enabling network policies
+
+This chart allows you to set network policies that will rectrict the access to the deployed pods in the cluster. Basically, no other pods apart from Scheduler's pods may access Worker's pods and no other pods apart from Web's pods may access Worker's ones. To do so, set `networkPolicies.enabled=true`.
+
+### Executors
+
+Airflow supports different executors runtimes and this chart provides support for the following ones.
+
+#### CeleryExecutor
+
+Celery executor is the default value for this chart with it you can scale out the number of workers. To point the `executor` parameter to `CeleryExecutor` you need to do something, you just install the chart with default parameters.
+
+#### KubernetesExecutor
+
+The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
+
+> NOTE: Redis&reg; is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
+
+```console
+executor=KubernetesExecutor
+redis.enabled=false
+rbac.create=true
+serviceaccount.create=true
+```
+
+### CeleryKubernetesExecutor
+
+The CeleryKubernetesExecutor is introduced in Airflow 2.0 and is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
+
+#### LocalExecutor
+
+Local executor runs tasks by spawning processes in the Scheduler pods. To enable `LocalExecutor` set the following parameters.
+
+```console
+executor=LocalExecutor
+redis.enabled=false
+```
+
+### LocalKubernetesExecutor
+
+The LocalKubernetesExecutor is introduced in Airflow 2.3 and is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
+
+#### SequentialExecutor
+
+This executor will only run one task instance at a time in the Scheduler pods. For production use case, please use other executors. To enable `SequentialExecutor` set the following parameters.
+
+```console
+executor=SequentialExecutor
+redis.enabled=false
+```
+
+### Scaling worker pods
+
+Sometime when using large workloads a fixed number of worker pods may make task to take a long time to be executed. This chart provide two ways for scaling worker pods.
+
+- If you are using `KubernetesExecutor` auto scaling pods would be done by the Scheduler without adding anything more.
+- If you are using `SequentialExecutor` you would have to enable `worker.autoscaling` to do so, please, set the following parameters. It will use autoscaling by default configuration that you can change using `worker.autoscaling.replicas.*` and `worker.autoscaling.targets.*`.
+
+```console
+worker.autoscaling.enabled=true
+worker.resources.requests.cpu=200m
+worker.resources.requests.memory=250Mi
+```
+
+## Persistence
+
+The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
 ## Parameters
 
@@ -591,182 +743,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/airfl
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/airflow/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Generate a Fernet key
-
-A Fernet key is required in order to encrypt password within connections. The Fernet key must be a base64-encoded 32-byte key.
-
-Learn how to generate one [here](https://airflow.apache.org/docs/apache-airflow/stable/security/secrets/fernet.html#generating-fernet-key)
-
-### Generate a Secret key
-
-Secret key used to run your flask app. It should be as random as possible. However, when running more than 1 instances of webserver, make sure all of them use the same secret_key otherwise one of them will error with "CSRF session token is missing".
-
-### Load DAG files
-
-There are two different ways to load your custom DAG files into the Airflow chart. All of them are compatible so you can use more than one at the same time.
-
-#### Option 1: Specify an existing config map
-
-You can manually create a config map containing all your DAG files and then pass the name when deploying Airflow chart. For that, you can pass the option `dags.existingConfigmap`.
-
-#### Option 2: Get your DAG files from a git repository
-
-You can store all your DAG files on GitHub repositories and then clone to the Airflow pods with an initContainer. The repositories will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
-
-> NOTE: When enabling git synchronization, an init container and sidecar container will be added for all the pods running airflow, this will allow scheduler, worker and web component to reach dags if it was needed.
-
-```console
-git.dags.enabled=true
-git.dags.repositories[0].repository=https://github.com/USERNAME/REPOSITORY
-git.dags.repositories[0].name=REPO-IDENTIFIER
-git.dags.repositories[0].branch=master
-```
-
-If you use a private repository from GitHub, a possible option to clone the files is using a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) and using it as part of the URL: `https://USERNAME:PERSONAL_ACCESS_TOKEN@github.com/USERNAME/REPOSITORY`
-
-### Loading Plugins
-
-You can load plugins into the chart by specifying a git repository containing the plugin files. The repository will be periodically updated using a sidecar container. In order to do that, you can deploy airflow with the following options:
-
-> NOTE: When enabling git synchronization, an init container and sidecar container will be added for all the pods running airflow, this will allow scheduler, worker and web component to reach plugins if it was needed.
-
-```console
-git.plugins.enabled=true
-git.plugins.repositories[0].repository=https://github.com/teamclairvoyant/airflow-rest-api-plugin.git
-git.plugins.repositories[0].branch=v1.0.9-branch
-git.plugins.repositories[0].path=plugins
-```
-
-### Existing Secrets
-
-You can use an existing secret to configure your Airflow auth, external Postgres, and external Redis&reg; passwords:
-
-```console
-postgresql.enabled=false
-externalDatabase.host=my.external.postgres.host
-externalDatabase.user=bn_airflow
-externalDatabase.database=bitnami_airflow
-externalDatabase.existingSecret=all-my-secrets
-externalDatabase.existingSecretPasswordKey=postgresql-password
-
-redis.enabled=false
-externalRedis.host=my.external.redis.host
-externalRedis.existingSecret=all-my-secrets
-externalRedis.existingSecretPasswordKey=redis-password
-
-auth.existingSecret=all-my-secrets
-```
-
-The expected secret resource looks as follows:
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: all-my-secrets
-type: Opaque
-data:
-  airflow-password: "Smo1QTJLdGxXMg=="
-  airflow-fernet-key: "YVRZeVJVWnlXbU4wY1dOalVrdE1SV3cxWWtKeFIzWkVRVTVrVjNaTFR6WT0="
-  airflow-secret-key: "a25mQ1FHTUh3MnFRSk5KMEIyVVU2YmN0VGRyYTVXY08="
-  postgresql-password: "cG9zdGdyZXMK"
-  redis-password: "cmVkaXMK"
-```
-
-This is useful if you plan on using [Bitnami's sealed secrets](https://github.com/bitnami-labs/sealed-secrets) to manage your passwords.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Install extra python packages
-
-This chart allows you to mount volumes using `extraVolumes` and `extraVolumeMounts` in all 3 airflow components (web, scheduler, worker). Mounting a requirements.txt using these options to `/bitnami/python/requirements.txt` will execute `pip install -r /bitnami/python/requirements.txt` on container start.
-
-### Enabling network policies
-
-This chart allows you to set network policies that will rectrict the access to the deployed pods in the cluster. Basically, no other pods apart from Scheduler's pods may access Worker's pods and no other pods apart from Web's pods may access Worker's ones. To do so, set `networkPolicies.enabled=true`.
-
-### Executors
-
-Airflow supports different executors runtimes and this chart provides support for the following ones.
-
-#### CeleryExecutor
-
-Celery executor is the default value for this chart with it you can scale out the number of workers. To point the `executor` parameter to `CeleryExecutor` you need to do something, you just install the chart with default parameters.
-
-#### KubernetesExecutor
-
-The kubernetes executor is introduced in Apache Airflow 1.10.0. The Kubernetes executor will create a new pod for every task instance using the `pod_template.yaml` that you can find [templates/config/configmap.yaml](https://github.com/bitnami/charts/blob/main/bitnami/airflow/templates/config/configmap.yaml), otherwise you can override this template using `worker.podTemplate`. To enable `KubernetesExecutor` set the following parameters.
-
-> NOTE: Redis&reg; is not needed to be deployed when using KubernetesExecutor so you must disable it using `redis.enabled=false`.
-
-```console
-executor=KubernetesExecutor
-redis.enabled=false
-rbac.create=true
-serviceaccount.create=true
-```
-
-### CeleryKubernetesExecutor
-
-The CeleryKubernetesExecutor is introduced in Airflow 2.0 and is a combination of both the Celery and the Kubernetes executors. Tasks will be executed using Celery by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
-
-#### LocalExecutor
-
-Local executor runs tasks by spawning processes in the Scheduler pods. To enable `LocalExecutor` set the following parameters.
-
-```console
-executor=LocalExecutor
-redis.enabled=false
-```
-
-### LocalKubernetesExecutor
-
-The LocalKubernetesExecutor is introduced in Airflow 2.3 and is a combination of both the Local and the Kubernetes executors. Tasks will be executed in the scheduler by default, but those tasks that require it can be executed in a Kubernetes pod using the 'kubernetes' queue.
-
-#### SequentialExecutor
-
-This executor will only run one task instance at a time in the Scheduler pods. For production use case, please use other executors. To enable `SequentialExecutor` set the following parameters.
-
-```console
-executor=SequentialExecutor
-redis.enabled=false
-```
-
-### Scaling worker pods
-
-Sometime when using large workloads a fixed number of worker pods may make task to take a long time to be executed. This chart provide two ways for scaling worker pods.
-
-- If you are using `KubernetesExecutor` auto scaling pods would be done by the Scheduler without adding anything more.
-- If you are using `SequentialExecutor` you would have to enable `worker.autoscaling` to do so, please, set the following parameters. It will use autoscaling by default configuration that you can change using `worker.autoscaling.replicas.*` and `worker.autoscaling.targets.*`.
-
-```console
-worker.autoscaling.enabled=true
-worker.resources.requests.cpu=200m
-worker.resources.requests.memory=250Mi
-```
-
-## Persistence
-
-The Bitnami Airflow chart relies on the PostgreSQL chart persistence. This means that Airflow does not persist anything.
 
 ## Troubleshooting
 
