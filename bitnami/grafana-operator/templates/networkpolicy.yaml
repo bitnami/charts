@@ -39,6 +39,8 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.operator.containerPorts.metrics }}
+        # Allow access to Grafana. As it does not have a label to identify its created grafana instances, we will use the standard grafana port (currently hardcoded in the operator)
+        - port: 3000
       {{- if not .Values.operator.networkPolicy.allowExternal }}
       from:
         - podSelector:

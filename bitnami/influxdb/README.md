@@ -43,15 +43,101 @@ These commands deploy influxdb on the Kubernetes cluster in the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` statefulset:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+This chart installs a deployment with the following configuration:
+
+```text
+                ------------------
+               |     Ingress      |
+               |    Controller    |
+                ------------------
+                        |
+                        | /query
+                        | /write
+                        \/
+                 ----------------
+                |  InfluxDB(TM)  |
+                |      svc       |
+                 ----------------
+                        |
+                        \/
+                  --------------
+                 | InfluxDB(TM) |
+                 |    Server    |
+                 |     Pod      |
+                  --------------
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
+### Configure the way how to expose InfluxDB&trade;
+
+- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB&trade; through Ingress.
+- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
+- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
+
+### Using custom configuration
+
+This helm chart supports to customize the whole configuration file.
+
+Add your custom configuration file to "files/conf" in your working directory. This file will be mounted as a configMap to the containers and it will be used for configuring InfluxDB&trade;.
+
+Alternatively, you can specify the InfluxDB&trade; configuration using the `influxdb.configuration` parameter.
+
+In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `influxdb.existingConfiguration` parameter. Note that this will override the two previous options.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables, you can use the `influxdb.extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
+    value: "true"
+```
+
+### Initialize a fresh instance
+
+The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+
+Alternatively, you can specify custom scripts using the `influxdb.initdbScripts` parameter.
+
+In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `influxdb.initdbScriptsCM` parameter. Note that this will override the two previous options. parameter.
+
+The allowed extensions are `.sh`, and `.txt`.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
+A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
+There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
 
 ## Parameters
 
@@ -358,139 +444,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.resourcesPreset`                       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production). | `none`                             |
 | `backup.uploadProviders.aws.resources`                             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
 
-## RBAC Parameters
-
-| Name                                          | Description                                                                                                                                 | Value   |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
-| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`  |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`    |
-| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
-| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```console
-helm install my-release \
-  --set auth.admin.username=admin-user oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-The above command sets the InfluxDB&trade; admin user to `admin-user`.
-
-> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
-
-```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/influxdb/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-This chart installs a deployment with the following configuration:
-
-```text
-                ------------------
-               |     Ingress      |
-               |    Controller    |
-                ------------------
-                        |
-                        | /query
-                        | /write
-                        \/
-                 ----------------
-                |  InfluxDB(TM)  |
-                |      svc       |
-                 ----------------
-                        |
-                        \/
-                  --------------
-                 | InfluxDB(TM) |
-                 |    Server    |
-                 |     Pod      |
-                  --------------
-```
-
-### Configure the way how to expose InfluxDB&trade;
-
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB&trade; through Ingress.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
-
-### Using custom configuration
-
-This helm chart supports to customize the whole configuration file.
-
-Add your custom configuration file to "files/conf" in your working directory. This file will be mounted as a configMap to the containers and it will be used for configuring InfluxDB&trade;.
-
-Alternatively, you can specify the InfluxDB&trade; configuration using the `influxdb.configuration` parameter.
-
-In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `influxdb.existingConfiguration` parameter. Note that this will override the two previous options.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables, you can use the `influxdb.extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
-    value: "true"
-```
-
-### Initialize a fresh instance
-
-The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
-
-Alternatively, you can specify custom scripts using the `influxdb.initdbScripts` parameter.
-
-In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `influxdb.initdbScriptsCM` parameter. Note that this will override the two previous options. parameter.
-
-The allowed extensions are `.sh`, and `.txt`.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
-
-## Persistence
-
-The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
-A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
-There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Upgrade
+## Upgrading
 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, `auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
@@ -504,8 +462,6 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders _[ADMIN_USER_PASSWORD]_, _[USER_PASSWORD]_, _[READ_USER_PASSWORD]_, and _[WRITE_USER_PASSWORD]_ with the values obtained from instructions in the installation notes.
-
-## Upgrading
 
 ### To 6.0.0
 

@@ -45,15 +45,45 @@ These commands deploy Apache on the Kubernetes cluster in the default configurat
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploying a custom web application
+
+The Apache chart allows you to deploy a custom web application using one of the following methods:
+
+- Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
+- Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
+- Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
+
+Here is an example of deploying a web application from a Git repository using the first method:
+
+```text
+cloneHtdocsFromGit.enabled=true
+cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
+cloneHtdocsFromGit.branch=master
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+To use a custom `httpd.conf` file, mount it using the `httpdConfConfigMap` parameter, which references a Kubernetes ConfigMap with the contents of the `httpd.conf` file. Alternatively, copy the `httpd.conf` file to `files/httpd.conf` in the current working directory to mount it in the container.
+
+To mount different virtual host configurations, use the `vhostsConfigMap` value. This is a pointer to a Kubernetes ConfigMap with the desired Apache virtual host configurations. You can also copy the virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a ConfigMap in the container.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
@@ -286,63 +316,9 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/apach
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/apache/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Deploying a custom web application
-
-The Apache chart allows you to deploy a custom web application using one of the following methods:
-
-- Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
-- Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
-- Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
-
-Here is an example of deploying a web application from a Git repository using the first method:
-
-```text
-cloneHtdocsFromGit.enabled=true
-cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
-cloneHtdocsFromGit.branch=master
-```
-
-To use a custom `httpd.conf` file, mount it using the `httpdConfConfigMap` parameter, which references a Kubernetes ConfigMap with the contents of the `httpd.conf` file. Alternatively, copy the `httpd.conf` file to `files/httpd.conf` in the current working directory to mount it in the container.
-
-To mount different virtual host configurations, use the `vhostsConfigMap` value. This is a pointer to a Kubernetes ConfigMap with the desired Apache virtual host configurations. You can also copy the virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a ConfigMap in the container.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
-
-## Notable changes
-
-### 7.4.0
-
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
-
-### 7.0.0
-
-This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, which is based on Bash instead of Node.js.
-
-### 6.0.0
-
-This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
 
 ## Upgrading
 
@@ -374,6 +350,18 @@ Affected values:
 ### To 8.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+### To 7.4.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### To 7.0.0
+
+This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, which is based on Bash instead of Node.js.
+
+### To 6.0.0
+
+This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
 
 ### To 2.0.0
 
