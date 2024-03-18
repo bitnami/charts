@@ -1815,9 +1815,9 @@ metrics:
     ## @param metrics.serviceMonitor.relabelings Metrics RelabelConfigs to apply to samples before scraping.
     ##
     relabelings: []
-    ## DEPRECATED: Use `metrics.serviceMonitor.relabelings` instead.
+    ## @skip metrics.serviceMonitor.relabellings DEPRECATED: Use `metrics.serviceMonitor.relabelings` instead.
     ##
-    # relabellings: []
+    relabellings: []
     ## @param metrics.serviceMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
     ##
     metricRelabelings: []
@@ -1872,9 +1872,9 @@ metrics:
     ## @param metrics.podMonitor.relabelings Metrics RelabelConfigs to apply to samples before scraping.
     ##
     relabelings: []
-    ## DEPRECATED: Use `metrics.podMonitor.relabelings` instead.
+    ## @skip metrics.podMonitor.relabellings DEPRECATED: Use `metrics.podMonitor.relabelings` instead.
     ##
-    # relabellings: []
+    relabellings: []
     ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
     ##
     metricRelabelings: []
