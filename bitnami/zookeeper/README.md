@@ -42,15 +42,94 @@ These commands deploy ZooKeeper on the Kubernetes cluster in the default configu
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Configure log level
+
+You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable or the parameter `logLevel`. By default, it is set to `ERROR` because each use of the liveness probe and the readiness probe produces an `INFO` message on connection and a `WARN` message on disconnection, generating a high volume of noise in your logs.
+
+In order to remove that log noise so levels can be set to 'INFO', two changes must be made.
+
+First, ensure that you are not getting metrics via the deprecated pattern of polling 'mntr' on the ZooKeeper client port. The preferred method of polling for Apache ZooKeeper metrics is the ZooKeeper metrics server. This is supported in this chart when setting `metrics.enabled` to `true`.
+
+Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which direct them to the ZooKeeper Admin Server instead of the client port. By default, an Admin Server will be started that listens on `localhost` at port `8080`. The following is an example of this use of the Admin Server for probes:
+
+```yaml
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+customLivenessProbe:
+  exec:
+    command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep ruok']
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
+customReadinessProbe:
+  exec:
+    command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep error | grep null']
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 6
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+You can also set the log4j logging level and what log appenders are turned on, by using `ZOO_LOG4J_PROP` set inside of conf/log4j.properties as zookeeper.root.logger by default to
+
+```console
+zookeeper.root.logger=INFO, CONSOLE
+```
+
+the available appender is
+
+- CONSOLE
+- ROLLINGFILE
+- RFAAUDIT
+- TRACEFILE
+
+## Persistence
+
+The [Bitnami ZooKeeper](https://github.com/bitnami/containers/tree/main/bitnami/zookeeper) image stores the ZooKeeper data and configurations at the `/bitnami/zookeeper` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+### Configure the data log directory
+
+You can use a dedicated device for logs (instead of using the data directory) to help avoiding competition between logging and snaphots. To do so, set the `dataLogDir` parameter with the path to be used for writing transaction logs. Alternatively, set this parameter with an empty string and it will result in the log being written to the data directory (Zookeeper's default behavior).
+
+When using a dedicated device for logs, you can use a PVC to persist the logs. To do so, set `persistence.enabled` to `true`. See the [Persistence Parameters](#persistence-parameters) section for more information.
+
+### Set pod affinity
+
+This chart allows you to set custom pod affinity using the `affinity` parameter. Find more information about pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
@@ -355,95 +434,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/zooke
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Configure log level
-
-You can configure the ZooKeeper log level using the `ZOO_LOG_LEVEL` environment variable or the parameter `logLevel`. By default, it is set to `ERROR` because each use of the liveness probe and the readiness probe produces an `INFO` message on connection and a `WARN` message on disconnection, generating a high volume of noise in your logs.
-
-In order to remove that log noise so levels can be set to 'INFO', two changes must be made.
-
-First, ensure that you are not getting metrics via the deprecated pattern of polling 'mntr' on the ZooKeeper client port. The preferred method of polling for Apache ZooKeeper metrics is the ZooKeeper metrics server. This is supported in this chart when setting `metrics.enabled` to `true`.
-
-Second, to avoid the connection/disconnection messages from the probes, you can set custom values for these checks which direct them to the ZooKeeper Admin Server instead of the client port. By default, an Admin Server will be started that listens on `localhost` at port `8080`. The following is an example of this use of the Admin Server for probes:
-
-```yaml
-livenessProbe:
-  enabled: false
-readinessProbe:
-  enabled: false
-customLivenessProbe:
-  exec:
-    command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep ruok']
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 6
-customReadinessProbe:
-  exec:
-    command: ['/bin/bash', '-c', 'curl -s -m 2 http://localhost:8080/commands/ruok | grep error | grep null']
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 5
-  successThreshold: 1
-  failureThreshold: 6
-```
-
-You can also set the log4j logging level and what log appenders are turned on, by using `ZOO_LOG4J_PROP` set inside of conf/log4j.properties as zookeeper.root.logger by default to
-
-```console
-zookeeper.root.logger=INFO, CONSOLE
-```
-
-the available appender is
-
-- CONSOLE
-- ROLLINGFILE
-- RFAAUDIT
-- TRACEFILE
-
-## Persistence
-
-The [Bitnami ZooKeeper](https://github.com/bitnami/containers/tree/main/bitnami/zookeeper) image stores the ZooKeeper data and configurations at the `/bitnami/zookeeper` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Configure the data log directory
-
-You can use a dedicated device for logs (instead of using the data directory) to help avoiding competition between logging and snaphots. To do so, set the `dataLogDir` parameter with the path to be used for writing transaction logs. Alternatively, set this parameter with an empty string and it will result in the log being written to the data directory (Zookeeper's default behavior).
-
-When using a dedicated device for logs, you can use a PVC to persist the logs. To do so, set `persistence.enabled` to `true`. See the [Persistence Parameters](#persistence-parameters) section for more information.
-
-### Set pod affinity
-
-This chart allows you to set custom pod affinity using the `affinity` parameter. Find more information about pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use any of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

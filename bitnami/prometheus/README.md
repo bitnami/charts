@@ -45,15 +45,259 @@ The command deploys Prometheus on the Kubernetes cluster in the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploy extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+### Integrate Prometheus and Alertmanager with Thanos
+
+You can integrate Prometheus & Alertmanager with Thanos using this chart and the [Bitnami Thanos chart](https://github.com/bitnami/charts/tree/main/bitnami/thanos) following the steps below:
+
+> Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
+
+- Create a **values.yaml** like the one below for Thanos:
+
+```yaml
+objstoreConfig: |-
+  type: s3
+  config:
+    bucket: thanos
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
+    access_key: minio
+    secret_key: minio123
+    insecure: true
+query:
+  dnsDiscovery:
+    sidecarsService: prometheus-thanos
+    sidecarsNamespace: monitoring
+bucketweb:
+  enabled: true
+compactor:
+  enabled: true
+storegateway:
+  enabled: true
+ruler:
+  enabled: true
+  alertmanagers:
+    - http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
+  config: |-
+    groups:
+      - name: "metamonitoring"
+        rules:
+          - alert: "PrometheusDown"
+            expr: absent(up{prometheus="monitoring/prometheus"})
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+minio:
+  enabled: true
+  auth:
+    rootPassword: minio123
+    rootUser: minio
+  monitoringBuckets: thanos
+  accessKey:
+    password: minio
+  secretKey:
+    password: minio123
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+- Install Prometheus and Thanos charts:
+
+For Helm 3:
+
+```console
+kubectl create namespace monitoring
+helm install prometheus \
+    --set prometheus.thanos.create=true \
+    --namespace monitoring \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
+helm install thanos \
+    --values values.yaml \
+    --namespace monitoring \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
+
+### Integrate Prometheus with Grafana Mimir
+
+You can integrate Prometheus with Grafana Mimir using this chart and the [Bitnami Grafana Mimir chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir) adding a `remoteWrite` entry:
+
+- Create a **values.yaml** like the one below for Prometheus:
+
+```yaml
+server:
+  remoteWrite:
+    - url: http://grafana-mimir-gateway.svc.cluster.local/api/v1/push
+      headers:
+        X-Scope-OrgID: demo
+```
+
+- Install Prometheus and Grafana Mimir charts:
+
+For Helm 3:
+
+```console
+kubectl create namespace monitoring
+helm install prometheus \
+    --values values.yaml \
+    --namespace monitoring \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
+helm install grafana-mimir \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-mimir
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+That's all! Now you have Prometheus integrated with Grafana Mimir.
+
+### Integrate Prometheus with Grafana
+
+You can integrate Prometheus with Grafana Dashboard using this chart and the [Bitnami Grafana chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana) just adding the prometheus datasources:
+
+- Create a **values.yaml** like the one below for Grafana:
+
+```yaml
+datasources:
+  secretDefinition:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        orgId: 1
+        url: http://prometheus.monitoring.svc.cluster.local
+        version: 1
+        editable: true
+        isDefault: true
+      - name: Alertmanager
+        uid: alertmanager
+        type: alertmanager
+        access: proxy
+        orgId: 1
+        url: http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
+        version: 1
+        editable: true
+```
+
+- Install Prometheus and Grafana charts:
+
+For Helm 3:
+
+```console
+kubectl create namespace monitoring
+helm install prometheus \
+    --namespace monitoring \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
+helm install grafana-mimir \
+    --values values.yaml \
+    --namespace monitoring \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/grafana
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+### How to add new targets
+
+By default this helm chart will monitor its own targets: prometheus and alertmanager. Additional ones can be added setting a list with the [scrape_configs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) in the value `server.extraScrapeConfigs`. Here there is a simple example for wordpress (deployed in the default namespace):
+
+```yaml
+server:
+  extraScrapeConfigs:
+    - job_name: wordpress
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - default
+      metrics_path: /metrics
+      relabel_configs:
+        - source_labels:
+            - job
+          target_label: __tmp_wordpress_job_name
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_service_label_app_kubernetes_io_instance
+            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_instance
+          regex: (wordpress);true
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_service_label_app_kubernetes_io_name
+            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_name
+          regex: (wordpress);true
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_endpoint_port_name
+          regex: metrics
+        - source_labels:
+            - __meta_kubernetes_endpoint_address_target_kind
+            - __meta_kubernetes_endpoint_address_target_name
+          separator: ;
+          regex: Node;(.*)
+          replacement: ${1}
+          target_label: node
+        - source_labels:
+            - __meta_kubernetes_endpoint_address_target_kind
+            - __meta_kubernetes_endpoint_address_target_name
+          separator: ;
+          regex: Pod;(.*)
+          replacement: ${1}
+          target_label: pod
+        - source_labels:
+            - __meta_kubernetes_namespace
+          target_label: namespace
+        - source_labels:
+            - __meta_kubernetes_service_name
+          target_label: service
+        - source_labels:
+            - __meta_kubernetes_pod_name
+          target_label: pod
+        - source_labels:
+            - __meta_kubernetes_pod_container_name
+          target_label: container
+        - action: drop
+          source_labels:
+            - __meta_kubernetes_pod_phase
+          regex: (Failed|Succeeded)
+        - source_labels:
+            - __meta_kubernetes_service_name
+          target_label: job
+          replacement: ${1}
+        - target_label: endpoint
+          replacement: metrics
+        - source_labels:
+            - __address__
+          target_label: __tmp_hash
+          modulus: 1
+          action: hashmod
+        - source_labels:
+            - __tmp_hash
+          regex: 0
+          action: keep
+```
 
 ## Parameters
 
@@ -458,260 +702,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/prome
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/prometheus/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Deploy extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
-
-### Integrate Prometheus and Alertmanager with Thanos
-
-You can integrate Prometheus & Alertmanager with Thanos using this chart and the [Bitnami Thanos chart](https://github.com/bitnami/charts/tree/main/bitnami/thanos) following the steps below:
-
-> Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
-
-- Create a **values.yaml** like the one below for Thanos:
-
-```yaml
-objstoreConfig: |-
-  type: s3
-  config:
-    bucket: thanos
-    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
-    access_key: minio
-    secret_key: minio123
-    insecure: true
-query:
-  dnsDiscovery:
-    sidecarsService: prometheus-thanos
-    sidecarsNamespace: monitoring
-bucketweb:
-  enabled: true
-compactor:
-  enabled: true
-storegateway:
-  enabled: true
-ruler:
-  enabled: true
-  alertmanagers:
-    - http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
-  config: |-
-    groups:
-      - name: "metamonitoring"
-        rules:
-          - alert: "PrometheusDown"
-            expr: absent(up{prometheus="monitoring/prometheus"})
-metrics:
-  enabled: true
-  serviceMonitor:
-    enabled: true
-minio:
-  enabled: true
-  auth:
-    rootPassword: minio123
-    rootUser: minio
-  monitoringBuckets: thanos
-  accessKey:
-    password: minio
-  secretKey:
-    password: minio123
-```
-
-- Install Prometheus and Thanos charts:
-
-For Helm 3:
-
-```console
-kubectl create namespace monitoring
-helm install prometheus \
-    --set prometheus.thanos.create=true \
-    --namespace monitoring \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
-helm install thanos \
-    --values values.yaml \
-    --namespace monitoring \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
-
-### Integrate Prometheus with Grafana Mimir
-
-You can integrate Prometheus with Grafana Mimir using this chart and the [Bitnami Grafana Mimir chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir) adding a `remoteWrite` entry:
-
-- Create a **values.yaml** like the one below for Prometheus:
-
-```yaml
-server:
-  remoteWrite:
-    - url: http://grafana-mimir-gateway.svc.cluster.local/api/v1/push
-      headers:
-        X-Scope-OrgID: demo
-```
-
-- Install Prometheus and Grafana Mimir charts:
-
-For Helm 3:
-
-```console
-kubectl create namespace monitoring
-helm install prometheus \
-    --values values.yaml \
-    --namespace monitoring \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
-helm install grafana-mimir \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-mimir
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-That's all! Now you have Prometheus integrated with Grafana Mimir.
-
-### Integrate Prometheus with Grafana
-
-You can integrate Prometheus with Grafana Dashboard using this chart and the [Bitnami Grafana chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana) just adding the prometheus datasources:
-
-- Create a **values.yaml** like the one below for Grafana:
-
-```yaml
-datasources:
-  secretDefinition:
-    apiVersion: 1
-    datasources:
-      - name: Prometheus
-        type: prometheus
-        access: proxy
-        orgId: 1
-        url: http://prometheus.monitoring.svc.cluster.local
-        version: 1
-        editable: true
-        isDefault: true
-      - name: Alertmanager
-        uid: alertmanager
-        type: alertmanager
-        access: proxy
-        orgId: 1
-        url: http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
-        version: 1
-        editable: true
-```
-
-- Install Prometheus and Grafana charts:
-
-For Helm 3:
-
-```console
-kubectl create namespace monitoring
-helm install prometheus \
-    --namespace monitoring \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
-helm install grafana-mimir \
-    --values values.yaml \
-    --namespace monitoring \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/grafana
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-### How to add new targets
-
-By default this helm chart will monitor its own targets: prometheus and alertmanager. Additional ones can be added setting a list with the [scrape_configs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) in the value `server.extraScrapeConfigs`. Here there is a simple example for wordpress (deployed in the default namespace):
-
-```yaml
-server:
-  extraScrapeConfigs:
-    - job_name: wordpress
-      kubernetes_sd_configs:
-        - role: endpoints
-          namespaces:
-            names:
-            - default
-      metrics_path: /metrics
-      relabel_configs:
-        - source_labels:
-            - job
-          target_label: __tmp_wordpress_job_name
-        - action: keep
-          source_labels:
-            - __meta_kubernetes_service_label_app_kubernetes_io_instance
-            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_instance
-          regex: (wordpress);true
-        - action: keep
-          source_labels:
-            - __meta_kubernetes_service_label_app_kubernetes_io_name
-            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_name
-          regex: (wordpress);true
-        - action: keep
-          source_labels:
-            - __meta_kubernetes_endpoint_port_name
-          regex: metrics
-        - source_labels:
-            - __meta_kubernetes_endpoint_address_target_kind
-            - __meta_kubernetes_endpoint_address_target_name
-          separator: ;
-          regex: Node;(.*)
-          replacement: ${1}
-          target_label: node
-        - source_labels:
-            - __meta_kubernetes_endpoint_address_target_kind
-            - __meta_kubernetes_endpoint_address_target_name
-          separator: ;
-          regex: Pod;(.*)
-          replacement: ${1}
-          target_label: pod
-        - source_labels:
-            - __meta_kubernetes_namespace
-          target_label: namespace
-        - source_labels:
-            - __meta_kubernetes_service_name
-          target_label: service
-        - source_labels:
-            - __meta_kubernetes_pod_name
-          target_label: pod
-        - source_labels:
-            - __meta_kubernetes_pod_container_name
-          target_label: container
-        - action: drop
-          source_labels:
-            - __meta_kubernetes_pod_phase
-          regex: (Failed|Succeeded)
-        - source_labels:
-            - __meta_kubernetes_service_name
-          target_label: job
-          replacement: ${1}
-        - target_label: endpoint
-          replacement: metrics
-        - source_labels:
-            - __address__
-          target_label: __tmp_hash
-          modulus: 1
-          action: hashmod
-        - source_labels:
-            - __tmp_hash
-          regex: 0
-          action: keep
-```
 
 ## Troubleshooting
 
