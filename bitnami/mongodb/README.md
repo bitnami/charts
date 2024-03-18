@@ -22,36 +22,6 @@ This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/containers/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-## Prerequisites
-
-- Kubernetes 1.23+
-- Helm 3.8.0+
-- PV provisioner support in the underlying infrastructure
-
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
-
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
 ## Architecture
 
 This chart allows installing MongoDB(&reg;) using two different architecture setups: `standalone` or `replicaset`. Use the `architecture` parameter to choose the one to use:
@@ -124,6 +94,268 @@ Without the Arbiter, the chart deploys a single statefulset with N MongoDB(&reg;
 There are no services load balancing requests between MongoDB(&reg;) nodes; instead, each node has an associated service to access them individually.
 
 > NOTE: Although the first replica is initially assigned the primary role, any of the secondary nodes can become the primary if it is down, or during upgrades. Do not make any assumption about what replica has the primary role. Instead, configure your MongoDB(&reg;) client with the list of MongoDB(&reg;) hostnames so it can dynamically choose the node to send requests.
+
+## Prerequisites
+
+- Kubernetes 1.23+
+- Helm 3.8.0+
+- PV provisioner support in the underlying infrastructure
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Customize a new MongoDB instance
+
+The [Bitnami MongoDB(&reg;) image](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) supports the use of custom scripts to initialize a fresh instance. In order to execute the scripts, two options are available:
+
+- Specify them using the `initdbScripts` parameter as dict.
+- Define an external Kubernetes ConfigMap with all the initialization scripts by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
+
+The allowed script extensions are `.sh` and `.js`.
+
+### Replicaset: Access MongoDB(&reg;) nodes from outside the cluster
+
+In order to access MongoDB(&reg;) nodes from outside the cluster when using a replicaset architecture, a specific service per MongoDB(&reg;) pod will be created. There are two ways of configuring external access:
+
+- Using LoadBalancer services
+- Using NodePort services.
+
+#### Use LoadBalancer services
+
+Two alternatives are available to use *LoadBalancer* services:
+
+- Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
+
+    ```text
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=LoadBalancer
+    externalAccess.service.port=27017
+    externalAccess.autoDiscovery.enabled=true
+    serviceAccount.create=true
+    rbac.create=true
+    ```
+
+    > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
+
+- Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
+
+    ```text
+    architecture=replicaset
+    replicaCount=2
+    externalAccess.enabled=true
+    externalAccess.service.type=LoadBalancer
+    externalAccess.service.port=27017
+    externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
+    externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+    ```
+
+    > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
+
+#### Use NodePort services
+
+Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
+
+```text
+architecture=replicaset
+replicaCount=2
+externalAccess.enabled=true
+externalAccess.service.type=NodePort
+externalAccess.service.nodePorts[0]='NODE-PORT-1'
+externalAccess.service.nodePorts[1]='NODE-PORT-2'
+```
+
+> NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
+
+The pod will try to get the external IP address of the node using the command `curl -s https://ipinfo.io/IP-ADDRESS` unless the `externalAccess.service.domain` parameter is set.
+
+### Bootstrapping with an External Cluster
+
+This chart is equipped with the ability to bring online a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes. This effectively creates a hybrid MongoDB(&reg;) Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single MongoDB(&reg;) Deployment. This is helpful in situations where one may be migrating MongoDB(&reg;) from Virtual Machines into Kubernetes, for example. To take advantage of this, use the following as an example configuration:
+
+```yaml
+externalAccess:
+  externalMaster:
+    enabled: true
+    host: external-mongodb-0.internal
+```
+
+:warning: To bootstrap MongoDB(&reg;) with an external master that lies outside of Kubernetes, be sure to set up external access using any of the suggested methods in this chart to have connectivity between the MongoDB(&reg;) members. :warning:
+
+### Add extra environment variables
+
+To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` properties.
+
+### Use Sidecars and Init Containers
+
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Backup and restore MongoDB(R) deployments
+
+Two different approaches are available to back up and restore Bitnami MongoDB&reg; Helm chart deployments on Kubernetes:
+
+- Back up the data from the source deployment and restore it in a new deployment using MongoDB&reg; built-in backup/restore tools.
+- Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
+
+#### Method 1: Backup and restore data using MongoDB&reg; built-in tools
+
+This method involves the following steps:
+
+- Use the *mongodump* tool to create a snapshot of the data in the source cluster.
+- Create a new MongoDB&reg; Cluster deployment and forward the MongoDB&reg; Cluster service port for the new deployment.
+- Restore the data using the *mongorestore* tool to import the backup to the new cluster.
+
+> NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
+
+#### Method 2: Back up and restore persistent data volumes
+
+This method involves copying the persistent data volumes for the MongoDB&reg; nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
+
+- The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
+- Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
+- The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
+
+This method involves the following steps:
+
+- Install Velero on the source and destination clusters.
+- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
+- Use Velero to restore the backed-up PVs on the destination cluster.
+- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
+
+Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mongodb-kubernetes/), which covers both these approaches, for more information.
+
+### Use custom Prometheus rules
+
+Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter. A basic configuration example is shown below:
+
+```text
+    metrics:
+      enabled: true
+      prometheusRule:
+        enabled: true
+        rules:
+        - name: rule1
+          rules:
+          - alert: HighRequestLatency
+            expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
+            for: 10m
+            labels:
+              severity: page
+            annotations:
+              summary: High request latency
+```
+
+### Enable SSL/TLS
+
+This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB(&reg;) clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
+
+#### Generate the self-signed certificates via pre-install Helm hooks
+
+The `secrets-ca.yaml` file utilizes the Helm "pre-install" hook to ensure that the certificates will only be generated on chart install.
+
+The `genCA()` function will create a new self-signed x509 certificate authority. The `genSignedCert()` function creates an object with the certificate and key, which are base64-encoded and used in a YAML-like object. The `genSignedCert()` function is passed the CN, an empty IP list (the nil part), the validity and the CA created previously.
+
+A Kubernetes Secret is used to hold the signed certificate created above, and the `initContainer` sets up the rest. Using Helm's hook annotations ensures that the certificates will only be generated on chart install. This will prevent overriding the certificates if the chart is upgraded.
+
+#### Use your own CA
+
+To use your own CA, set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The `secrets-ca.yaml` file will utilize this data to create the Secret.
+
+> NOTE: Currently, only RSA private keys are supported.
+
+#### Access the cluster
+
+To access the cluster, enable the init container which generates the MongoDB(&reg;) server/client PEM key needed to access the cluster. Please be sure to include the `$my_hostname` section with your actual hostname, and the alternative hostnames section should contain the hostnames that should be allowed access to the MongoDB(&reg;) replicaset. Additionally, if external access is enabled, the load balancer IP addresses are added to the alternative names list.
+
+> NOTE: You will be generating self-signed certificates for the MongoDB(&reg;) deployment. The init container generates a new MongoDB(&reg;) private key which will be used to create a Certificate Authority (CA) and the public certificate for the CA. The Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally, the PEM bundle will be created using the private key and public certificate. This process will be repeated for each node in the cluster.
+
+#### Start the cluster
+
+After the certificates have been generated and made available to the containers at the correct mount points, the MongoDB(&reg;) server will be started with TLS enabled. The options for the TLS mode will be one of `disabled`, `allowTLS`, `preferTLS`, or `requireTLS`. This value can be changed via the `MONGODB_EXTRA_FLAGS` field using the `tlsMode` parameter. The client should now be able to connect to the TLS-enabled cluster with the provided certificates.
+
+### Set Pod affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) image stores the MongoDB(&reg;) data and configurations at the `/bitnami/mongodb` path of the container.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
 ## Parameters
 
@@ -735,248 +967,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mongodb/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Customize a new MongoDB instance
-
-The [Bitnami MongoDB(&reg;) image](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) supports the use of custom scripts to initialize a fresh instance. In order to execute the scripts, two options are available:
-
-- Specify them using the `initdbScripts` parameter as dict.
-- Define an external Kubernetes ConfigMap with all the initialization scripts by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
-
-The allowed script extensions are `.sh` and `.js`.
-
-### Replicaset: Access MongoDB(&reg;) nodes from outside the cluster
-
-In order to access MongoDB(&reg;) nodes from outside the cluster when using a replicaset architecture, a specific service per MongoDB(&reg;) pod will be created. There are two ways of configuring external access:
-
-- Using LoadBalancer services
-- Using NodePort services.
-
-#### Use LoadBalancer services
-
-Two alternatives are available to use *LoadBalancer* services:
-
-- Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
-
-    ```text
-    architecture=replicaset
-    replicaCount=2
-    externalAccess.enabled=true
-    externalAccess.service.type=LoadBalancer
-    externalAccess.service.port=27017
-    externalAccess.autoDiscovery.enabled=true
-    serviceAccount.create=true
-    rbac.create=true
-    ```
-
-    > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
-
-- Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
-
-    ```text
-    architecture=replicaset
-    replicaCount=2
-    externalAccess.enabled=true
-    externalAccess.service.type=LoadBalancer
-    externalAccess.service.port=27017
-    externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
-    externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
-    ```
-
-    > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
-
-#### Use NodePort services
-
-Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
-
-```text
-architecture=replicaset
-replicaCount=2
-externalAccess.enabled=true
-externalAccess.service.type=NodePort
-externalAccess.service.nodePorts[0]='NODE-PORT-1'
-externalAccess.service.nodePorts[1]='NODE-PORT-2'
-```
-
-> NOTE: This option requires knowing the node ports that will be exposed, so each MongoDB&reg; node's advertised hostname is configured with it.
-
-The pod will try to get the external IP address of the node using the command `curl -s https://ipinfo.io/IP-ADDRESS` unless the `externalAccess.service.domain` parameter is set.
-
-### Bootstrapping with an External Cluster
-
-This chart is equipped with the ability to bring online a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes. This effectively creates a hybrid MongoDB(&reg;) Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single MongoDB(&reg;) Deployment. This is helpful in situations where one may be migrating MongoDB(&reg;) from Virtual Machines into Kubernetes, for example. To take advantage of this, use the following as an example configuration:
-
-```yaml
-externalAccess:
-  externalMaster:
-    enabled: true
-    host: external-mongodb-0.internal
-```
-
-:warning: To bootstrap MongoDB(&reg;) with an external master that lies outside of Kubernetes, be sure to set up external access using any of the suggested methods in this chart to have connectivity between the MongoDB(&reg;) members. :warning:
-
-### Add extra environment variables
-
-To add extra environment variables (useful for advanced operations like custom init scripts), use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: LOG_LEVEL
-    value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` properties.
-
-### Use Sidecars and Init Containers
-
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
-### Persistence
-
-The [Bitnami MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) image stores the MongoDB(&reg;) data and configurations at the `/bitnami/mongodb` path of the container.
-
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
-
-### Backup and restore MongoDB(R) deployments
-
-Two different approaches are available to back up and restore Bitnami MongoDB&reg; Helm chart deployments on Kubernetes:
-
-- Back up the data from the source deployment and restore it in a new deployment using MongoDB&reg; built-in backup/restore tools.
-- Back up the persistent volumes from the source deployment and attach them to a new deployment using Velero, a Kubernetes backup/restore tool.
-
-#### Method 1: Backup and restore data using MongoDB&reg; built-in tools
-
-This method involves the following steps:
-
-- Use the *mongodump* tool to create a snapshot of the data in the source cluster.
-- Create a new MongoDB&reg; Cluster deployment and forward the MongoDB&reg; Cluster service port for the new deployment.
-- Restore the data using the *mongorestore* tool to import the backup to the new cluster.
-
-> NOTE: Under this approach, it is important to create the new deployment on the destination cluster using the same credentials as the original deployment on the source cluster.
-
-#### Method 2: Back up and restore persistent data volumes
-
-This method involves copying the persistent data volumes for the MongoDB&reg; nodes and reusing them in a new deployment with [Velero](https://velero.io/), an open source Kubernetes backup/restore tool. This method is only suitable when:
-
-- The Kubernetes provider is [supported by Velero](https://velero.io/docs/latest/supported-providers/).
-- Both clusters are on the same Kubernetes provider, as this is a requirement of [Velero's native support for migrating persistent volumes](https://velero.io/docs/latest/migration-case/).
-- The restored deployment on the destination cluster will have the same name, namespace, topology and credentials as the original deployment on the source cluster.
-
-This method involves the following steps:
-
-- Install Velero on the source and destination clusters.
-- Use Velero to back up the PersistentVolumes (PVs) used by the deployment on the source cluster.
-- Use Velero to restore the backed-up PVs on the destination cluster.
-- Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
-
-Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mongodb-kubernetes/), which covers both these approaches, for more information.
-
-### Use custom Prometheus rules
-
-Custom Prometheus rules can be defined for the Prometheus Operator by using the `prometheusRule` parameter. A basic configuration example is shown below:
-
-```text
-    metrics:
-      enabled: true
-      prometheusRule:
-        enabled: true
-        rules:
-        - name: rule1
-          rules:
-          - alert: HighRequestLatency
-            expr: job:request_latency_seconds:mean5m{job="myjob"} > 0.5
-            for: 10m
-            labels:
-              severity: page
-            annotations:
-              summary: High request latency
-```
-
-### Enable SSL/TLS
-
-This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB(&reg;) clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
-
-#### Generate the self-signed certificates via pre-install Helm hooks
-
-The `secrets-ca.yaml` file utilizes the Helm "pre-install" hook to ensure that the certificates will only be generated on chart install.
-
-The `genCA()` function will create a new self-signed x509 certificate authority. The `genSignedCert()` function creates an object with the certificate and key, which are base64-encoded and used in a YAML-like object. The `genSignedCert()` function is passed the CN, an empty IP list (the nil part), the validity and the CA created previously.
-
-A Kubernetes Secret is used to hold the signed certificate created above, and the `initContainer` sets up the rest. Using Helm's hook annotations ensures that the certificates will only be generated on chart install. This will prevent overriding the certificates if the chart is upgraded.
-
-#### Use your own CA
-
-To use your own CA, set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The `secrets-ca.yaml` file will utilize this data to create the Secret.
-
-> NOTE: Currently, only RSA private keys are supported.
-
-#### Access the cluster
-
-To access the cluster, enable the init container which generates the MongoDB(&reg;) server/client PEM key needed to access the cluster. Please be sure to include the `$my_hostname` section with your actual hostname, and the alternative hostnames section should contain the hostnames that should be allowed access to the MongoDB(&reg;) replicaset. Additionally, if external access is enabled, the load balancer IP addresses are added to the alternative names list.
-
-> NOTE: You will be generating self-signed certificates for the MongoDB(&reg;) deployment. The init container generates a new MongoDB(&reg;) private key which will be used to create a Certificate Authority (CA) and the public certificate for the CA. The Certificate Signing Request will be created as well and signed using the private key of the CA previously created. Finally, the PEM bundle will be created using the private key and public certificate. This process will be repeated for each node in the cluster.
-
-#### Start the cluster
-
-After the certificates have been generated and made available to the containers at the correct mount points, the MongoDB(&reg;) server will be started with TLS enabled. The options for the TLS mode will be one of `disabled`, `allowTLS`, `preferTLS`, or `requireTLS`. This value can be changed via the `MONGODB_EXTRA_FLAGS` field using the `tlsMode` parameter. The client should now be able to connect to the TLS-enabled cluster with the provided certificates.
-
-### Set Pod affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
