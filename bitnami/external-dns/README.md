@@ -41,24 +41,69 @@ The command deploys ExternalDNS on the Kubernetes cluster in the default configu
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Using IRSA
+
+If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
+You can use the following arguments:
 
 ```console
-helm delete my-release
+--set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+## Tutorials
+
+Find information about the requirements for each DNS provider on the link below:
+
+- [ExternalDNS Tutorials](https://github.com/kubernetes-sigs/external-dns/tree/master/docs/tutorials)
+
+For instance, to install ExternalDNS on AWS, you need to:
+
+- Provide the K8s worker node which runs the cluster autoscaler with a minimum IAM policy (check [IAM permissions docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions) for more information).
+- Setup a hosted zone on Route53 and annotate the Hosted Zone ID and its associated "nameservers" as described on [these docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone).
+- Install ExternalDNS chart using the command below:
+
+> Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
+
+```console
+helm install my-release \
+  --set provider=aws \
+  --set aws.zoneType=public \
+  --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
+  --set domainFilters[0]=HOSTED_ZONE_NAME \
+  oci://REGISTRY_NAME/REPOSITORY_NAME/external-dns
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -91,6 +136,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sources`                                           | K8s resources type to be observed for new DNS entries by ExternalDNS                                                                                                                                       | `[]`                           |
 | `provider`                                          | DNS provider where the DNS records will be created.                                                                                                                                                        | `aws`                          |
 | `initContainers`                                    | Attach additional init containers to the pod (evaluated as a template)                                                                                                                                     | `[]`                           |
+| `dnsPolicy`                                         | Specifies the DNS policy for the external-dns deployment or daemonset                                                                                                                                      | `""`                           |
+| `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                          | `{}`                           |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                          | `[]`                           |
 | `namespace`                                         | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                               | `""`                           |
 | `fqdnTemplates`                                     | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                 | `[]`                           |
@@ -264,6 +311,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `txtSuffix`                                         | When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)                                    | `""`                           |
 | `txtOwnerId`                                        | A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)                                                                                             | `""`                           |
 | `forceTxtOwnerId`                                   | (backward compatibility) When using the non-TXT registry, it will pass the value defined by `txtOwnerId` down to the application (optional)                                                                | `false`                        |
+| `txtEncrypt.enabled`                                | Enable TXT record encrypencryption                                                                                                                                                                         | `false`                        |
+| `txtEncrypt.aesKey`                                 | 32-byte AES-256-GCM encryption key.                                                                                                                                                                        | `""`                           |
+| `txtEncrypt.secretName`                             | Use an existing secret with key "txt_aes_encryption_key" defined.                                                                                                                                          | `""`                           |
 | `extraArgs`                                         | Extra arguments to be passed to external-dns                                                                                                                                                               | `{}`                           |
 | `extraEnvVars`                                      | An array to add extra env vars                                                                                                                                                                             | `[]`                           |
 | `extraEnvVarsCM`                                    | ConfigMap containing extra env vars                                                                                                                                                                        | `""`                           |
@@ -320,20 +370,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.apiVersion`                                   | Version of the RBAC API                                                                                                                                                                                    | `v1`                           |
 | `rbac.pspEnabled`                                   | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later                                                                | `false`                        |
 | `containerSecurityContext.enabled`                  | Enabled Apache Server containers' Security Context                                                                                                                                                         | `true`                         |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`                          |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `{}`                           |
 | `containerSecurityContext.runAsUser`                | Set ExternalDNS containers' Security Context runAsUser                                                                                                                                                     | `1001`                         |
+| `containerSecurityContext.runAsGroup`               | Set ExternalDNS containers' Security Context runAsGroup                                                                                                                                                    | `1001`                         |
 | `containerSecurityContext.runAsNonRoot`             | Set ExternalDNS container's Security Context runAsNonRoot                                                                                                                                                  | `true`                         |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                                                                                                        | `false`                        |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                                                                                                          | `false`                        |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`                      |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set container readonlyRootFilesystem                                                                                                                                                                       | `false`                        |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container readonlyRootFilesystem                                                                                                                                                                       | `true`                         |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault`               |
 | `podSecurityContext.enabled`                        | Enable pod security context                                                                                                                                                                                | `true`                         |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`                       |
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                             | `[]`                           |
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                | `[]`                           |
 | `podSecurityContext.fsGroup`                        | Group ID for the container                                                                                                                                                                                 | `1001`                         |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`                         |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                         |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                           |
 | `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                       | `true`                         |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                    | `10`                           |
@@ -394,65 +445,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/exter
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/external-dns/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Using IRSA
-
-If you are deploying to AWS EKS and you want to leverage [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html). You will need to override `fsGroup` and `runAsUser` with `65534`(nfsnobody) and `0` respectively. Otherwise service account token will not be properly mounted.
-You can use the following arguments:
-
-```console
---set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
-```
-
-## Tutorials
-
-Find information about the requirements for each DNS provider on the link below:
-
-- [ExternalDNS Tutorials](https://github.com/kubernetes-sigs/external-dns/tree/master/docs/tutorials)
-
-For instance, to install ExternalDNS on AWS, you need to:
-
-- Provide the K8s worker node which runs the cluster autoscaler with a minimum IAM policy (check [IAM permissions docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-permissions) for more information).
-- Setup a hosted zone on Route53 and annotate the Hosted Zone ID and its associated "nameservers" as described on [these docs](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#set-up-a-hosted-zone).
-- Install ExternalDNS chart using the command below:
-
-> Note: replace the placeholder HOSTED_ZONE_IDENTIFIER and HOSTED_ZONE_NAME, with your hosted zoned identifier and name, respectively.
-
-```console
-helm install my-release \
-  --set provider=aws \
-  --set aws.zoneType=public \
-  --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
-  --set domainFilters[0]=HOSTED_ZONE_NAME \
-  oci://REGISTRY_NAME/REPOSITORY_NAME/external-dns
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 7.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 6.0.0
 

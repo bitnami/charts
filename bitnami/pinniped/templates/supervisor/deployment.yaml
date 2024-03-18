@@ -32,6 +32,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: supervisor
+        app.kubernetes.io/part-of: pinniped
     spec:
       serviceAccountName: {{ template "pinniped.supervisor.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}
@@ -63,7 +64,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.supervisor.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.supervisor.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.supervisor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.supervisor.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.supervisor.terminationGracePeriodSeconds }}
@@ -77,7 +78,7 @@ spec:
           image: {{ template "pinniped.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.supervisor.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.supervisor.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.supervisor.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.supervisor.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.command "context" $) | nindent 12 }}
@@ -144,7 +145,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
             - name: config-volume
               mountPath: /bitnami/pinniped/conf
@@ -159,10 +160,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.supervisor.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
-          emptyDir:
-            medium: Memory
-            sizeLimit: 100Mi
+        - name: empty-dir
+          emptyDir: {}
         - name: config-volume
           configMap:
             name: {{ template "pinniped.supervisor.configmapName" . }}

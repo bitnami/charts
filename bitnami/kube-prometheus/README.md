@@ -51,25 +51,82 @@ The command deploys kube-prometheus on the Kubernetes cluster in the default con
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` release:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Additional scrape configurations
+
+The following values have been deprecated. See [Upgrading](#upgrading) below.
 
 ```console
-helm delete my-release
+prometheus.additionalScrapeConfigsExternal.enabled
+prometheus.additionalScrapeConfigsExternal.name
+prometheus.additionalScrapeConfigsExternal.key
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the flag `--purge` to delete all history too.
+It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `external`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalScrapeConfigs.external.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigs.external.key`.
+
+```text
+prometheus.additionalScrapeConfigs.enabled=true
+prometheus.additionalScrapeConfigs.type=external
+prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scrape-config
+prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
+```
+
+It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
+
+```text
+prometheus.additionalScrapeConfigs.enabled=true
+prometheus.additionalScrapeConfigs.type=internal
+prometheus.additionalScrapeConfigs.internal.jobList=
+      - job_name: 'opentelemetry-collector'
+        # metrics_path defaults to '/metrics'
+        # scheme defaults to 'http'.
+        static_configs:
+          - targets: ['opentelemetry-collector:8889']
+```
+
+For more information, see the [additional scrape configuration documentation](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md).
+
+### Additional alert relabel configurations
+
+It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace as the chart deployment.
+
+Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
+
+```text
+prometheus.additionalAlertRelabelConfigsExternal.enabled=true
+prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus-alert-relabel-config
+prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
+```
+
+### Set Pod affinity
+
+This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -122,6 +179,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.containerSecurityContext.enabled`                                           | Enabled containers' Security Context                                                                                                                                                                                         | `true`                                |
 | `operator.containerSecurityContext.seLinuxOptions`                                    | Set SELinux options in container                                                                                                                                                                                             | `nil`                                 |
 | `operator.containerSecurityContext.runAsUser`                                         | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                                |
+| `operator.containerSecurityContext.runAsGroup`                                        | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `0`                                   |
 | `operator.containerSecurityContext.runAsNonRoot`                                      | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                                |
 | `operator.containerSecurityContext.privileged`                                        | Set container's Security Context privileged                                                                                                                                                                                  | `false`                               |
 | `operator.containerSecurityContext.readOnlyRootFilesystem`                            | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`                               |
@@ -202,6 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.prometheusConfigReloader.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                                |
 | `operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`                                 |
 | `operator.prometheusConfigReloader.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                                |
+| `operator.prometheusConfigReloader.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `0`                                   |
 | `operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                                |
 | `operator.prometheusConfigReloader.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                               |
 | `operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`                               |
@@ -243,6 +302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.containerSecurityContext.enabled`                         | Enabled containers' Security Context                                                                                                                                                                                                           | `true`                       |
 | `prometheus.containerSecurityContext.seLinuxOptions`                  | Set SELinux options in container                                                                                                                                                                                                               | `nil`                        |
 | `prometheus.containerSecurityContext.runAsUser`                       | Set containers' Security Context runAsUser                                                                                                                                                                                                     | `1001`                       |
+| `prometheus.containerSecurityContext.runAsGroup`                      | Set containers' Security Context runAsGroup                                                                                                                                                                                                    | `0`                          |
 | `prometheus.containerSecurityContext.runAsNonRoot`                    | Set container's Security Context runAsNonRoot                                                                                                                                                                                                  | `true`                       |
 | `prometheus.containerSecurityContext.privileged`                      | Set container's Security Context privileged                                                                                                                                                                                                    | `false`                      |
 | `prometheus.containerSecurityContext.readOnlyRootFilesystem`          | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                        | `false`                      |
@@ -402,6 +462,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                           | `true`                       |
 | `prometheus.thanos.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                               | `nil`                        |
 | `prometheus.thanos.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                     | `1001`                       |
+| `prometheus.thanos.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                    | `0`                          |
 | `prometheus.thanos.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                  | `true`                       |
 | `prometheus.thanos.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                    | `false`                      |
 | `prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                        | `false`                      |
@@ -502,6 +563,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                                                       | `true`                         |
 | `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                                                           | `nil`                          |
 | `alertmanager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                                                                 | `1001`                         |
+| `alertmanager.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                                                                | `0`                            |
 | `alertmanager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                                                              | `true`                         |
 | `alertmanager.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                                                                | `false`                        |
 | `alertmanager.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                                                    | `false`                        |
@@ -692,6 +754,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                         | `true`                              |
 | `blackboxExporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                             | `nil`                               |
 | `blackboxExporter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                   | `1001`                              |
+| `blackboxExporter.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                  | `0`                                 |
 | `blackboxExporter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                | `true`                              |
 | `blackboxExporter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                  | `false`                             |
 | `blackboxExporter.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                      | `false`                             |
@@ -847,72 +910,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kube-
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Additional scrape configurations
-
-The following values have been deprecated. See [Upgrading](#upgrading) below.
-
-```console
-prometheus.additionalScrapeConfigsExternal.enabled
-prometheus.additionalScrapeConfigsExternal.name
-prometheus.additionalScrapeConfigsExternal.key
-```
-
-It is possible to inject externally managed scrape configurations via a Secret by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `external`. The secret must exist in the same namespace as the chart deployment. Set the secret name using the parameter `prometheus.additionalScrapeConfigs.external.name`, and the key containing the additional scrape configuration using the `prometheus.additionalScrapeConfigs.external.key`.
-
-```text
-prometheus.additionalScrapeConfigs.enabled=true
-prometheus.additionalScrapeConfigs.type=external
-prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scrape-config
-prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
-```
-
-It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
-
-```text
-prometheus.additionalScrapeConfigs.enabled=true
-prometheus.additionalScrapeConfigs.type=internal
-prometheus.additionalScrapeConfigs.internal.jobList=
-      - job_name: 'opentelemetry-collector'
-        # metrics_path defaults to '/metrics'
-        # scheme defaults to 'http'.
-        static_configs:
-          - targets: ['opentelemetry-collector:8889']
-```
-
-For more information, see the [additional scrape configuration documentation](https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/additional-scrape-config.md).
-
-### Additional alert relabel configurations
-
-It is possible to inject externally managed Prometheus alert relabel configurations via a Secret by setting `prometheus.additionalAlertRelabelConfigsExternal.enabled` to `true`. The secret must exist in the same namespace as the chart deployment.
-
-Set the secret name using the parameter `prometheus.additionalAlertRelabelConfigsExternal.name`, and the key containing the additional alert relabel configuration using the `prometheus.additionalAlertRelabelConfigsExternal.key`. For instance, if you created a secret named `kube-prometheus-prometheus-alert-relabel-config` and it contains a file named `additional-alert-relabel-configs.yaml`, use the parameters below:
-
-```text
-prometheus.additionalAlertRelabelConfigsExternal.enabled=true
-prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus-alert-relabel-config
-prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
-```
-
-### Set Pod affinity
-
-This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

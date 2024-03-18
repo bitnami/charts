@@ -44,24 +44,55 @@ These commands deploy metallb on the Kubernetes cluster in the default configura
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` helm release:
+### Resource requests and limits
 
-```console
-helm uninstall my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
+
+### Example IP addresses to assing to the LoadBalancer configuration
+
+```yaml
+# The address-pools lists the IP addresses that MetalLB is
+# allowed to allocate. You can have as many
+# address pools as you want.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  # A name for the address pool. Services can request allocation
+  # from a specific address pool using this name.
+  name: first-pool
+  namespace: metallb-system
+spec:
+  # A list of IP address ranges over which MetalLB has
+  # authority. You can list multiple ranges in a single pool, they
+  # will all share the same settings. Each range can be either a
+  # CIDR prefix, or an explicit start-end range of IPs.
+  addresses:
+  - 192.168.10.0/24
+  - 192.168.9.1-192.168.9.5
+  - fc00:f853:0ccd:e799::/124
 ```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -113,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                                                                                                                   | `""`                                 |
 | `controller.terminationGracePeriodSeconds`                     | In seconds, time the given to the MetalLB controller pod needs to terminate gracefully                                                                                                                                           | `0`                                  |
 | `controller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                                   | `[]`                                 |
-| `controller.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `none`                               |
+| `controller.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production). | `nano`                               |
 | `controller.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`                                 |
 | `controller.nodeSelector`                                      | Node labels for controller pod assignment                                                                                                                                                                                        | `{}`                                 |
 | `controller.tolerations`                                       | Tolerations for controller pod assignment                                                                                                                                                                                        | `[]`                                 |
@@ -132,7 +163,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.podSecurityContext.fsGroup`                        | Set MetalLB Controller pod's Security Context fsGroup                                                                                                                                                                            | `1001`                               |
 | `controller.containerSecurityContext.enabled`                  | Enabled MetalLB Controller containers' Security Context                                                                                                                                                                          | `true`                               |
 | `controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                 | `nil`                                |
-| `controller.containerSecurityContext.runAsUser`                | Set MetalLB Controller containers' Security Context runAsUser                                                                                                                                                                    | `1001`                               |
+| `controller.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                       | `1001`                               |
+| `controller.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                      | `1001`                               |
 | `controller.containerSecurityContext.runAsNonRoot`             | Set MetalLB Controller container's Security Context runAsNonRoot                                                                                                                                                                 | `true`                               |
 | `controller.containerSecurityContext.allowPrivilegeEscalation` | Enables privilege Escalation context for the pod.                                                                                                                                                                                | `false`                              |
 | `controller.containerSecurityContext.readOnlyRootFilesystem`   | Allows the pod to mount the RootFS as ReadOnly                                                                                                                                                                                   | `true`                               |
@@ -225,7 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.priorityClassName`                                 | Speaker pods' priorityClassName                                                                                                                                                                                            | `""`                              |
 | `speaker.runtimeClassName`                                  | Name of the runtime class to be used by Speaker pod(s)                                                                                                                                                                     | `""`                              |
 | `speaker.terminationGracePeriodSeconds`                     | In seconds, time the given to the Speaker pod needs to terminate gracefully                                                                                                                                                | `2`                               |
-| `speaker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production). | `none`                            |
+| `speaker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production). | `nano`                            |
 | `speaker.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                              |
 | `speaker.nodeSelector`                                      | Node labels for speaker pod assignment                                                                                                                                                                                     | `{}`                              |
 | `speaker.tolerations`                                       | Tolerations for speaker pod assignment                                                                                                                                                                                     | `[]`                              |
@@ -244,7 +276,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.podSecurityContext.fsGroup`                        | Set Speaker pod's Security Context fsGroup                                                                                                                                                                                 | `0`                               |
 | `speaker.containerSecurityContext.enabled`                  | Enabled Speaker containers' Security Context                                                                                                                                                                               | `true`                            |
 | `speaker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`                             |
-| `speaker.containerSecurityContext.runAsUser`                | Set Speaker containers' Security Context runAsUser                                                                                                                                                                         | `0`                               |
+| `speaker.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `0`                               |
+| `speaker.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `0`                               |
 | `speaker.containerSecurityContext.allowPrivilegeEscalation` | Enables privilege Escalation context for the pod.                                                                                                                                                                          | `false`                           |
 | `speaker.containerSecurityContext.readOnlyRootFilesystem`   | Allows the pod to mount the RootFS as ReadOnly                                                                                                                                                                             | `true`                            |
 | `speaker.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                                                                                                                                  | `[]`                              |
@@ -319,51 +352,20 @@ helm install my-release \
 
 The above command sets the `readinessProbe.successThreshold` to `5`.
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
-
-### Example IP addresses to assing to the LoadBalancer configuration
-
-```yaml
-# The address-pools lists the IP addresses that MetalLB is
-# allowed to allocate. You can have as many
-# address pools as you want.
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  # A name for the address pool. Services can request allocation
-  # from a specific address pool using this name.
-  name: first-pool
-  namespace: metallb-system
-spec:
-  # A list of IP address ranges over which MetalLB has
-  # authority. You can list multiple ranges in a single pool, they
-  # will all share the same settings. Each range can be either a
-  # CIDR prefix, or an explicit start-end range of IPs.
-  addresses:
-  - 192.168.10.0/24
-  - 192.168.9.1-192.168.9.5
-  - fc00:f853:0ccd:e799::/124
-```
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 4.0.0
 

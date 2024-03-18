@@ -34,6 +34,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: image-automation-controller
     spec:
       serviceAccountName: {{ template "flux.image-automation-controller.serviceAccountName" . }}
@@ -66,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageAutomationController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.imageAutomationController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imageAutomationController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.imageAutomationController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.imageAutomationController.terminationGracePeriodSeconds }}
@@ -80,7 +81,7 @@ spec:
           image: {{ template "flux.image-automation-controller.image" . }}
           imagePullPolicy: {{ .Values.imageAutomationController.image.pullPolicy }}
           {{- if .Values.imageAutomationController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.imageAutomationController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.imageAutomationController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -161,8 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.imageAutomationController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -170,7 +172,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.imageAutomationController.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.imageAutomationController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.imageAutomationController.extraVolumes "context" $) | nindent 8 }}

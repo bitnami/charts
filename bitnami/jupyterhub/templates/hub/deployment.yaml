@@ -69,7 +69,7 @@ spec:
       schedulerName: {{ .Values.hub.schedulerName }}
       {{- end }}
       {{- if .Values.hub.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.hub.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hub.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.hub.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.hub.terminationGracePeriodSeconds }}
@@ -108,7 +108,7 @@ spec:
                   info "Connected to the PostgreSQL instance"
               fi
           {{- if .Values.hub.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.hub.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hub.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: POSTGRESQL_CLIENT_DATABASE_HOST
@@ -135,7 +135,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.hub.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.hub.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.hub.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.hub.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -228,6 +228,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - mountPath: /etc/jupyterhub/jupyterhub_config.py
               subPath: jupyterhub_config.py
               name: config
@@ -236,13 +239,15 @@ spec:
               name: config
             - mountPath: /usr/local/etc/jupyterhub/secret/
               name: secret
-          {{- if .Values.hub.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- if .Values.hub.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.hub.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.hub.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.hub.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "jupyterhub.hubConfigmapName" . }}

@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -69,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.3-debian-12-r12
+  tag: 1.16.4-debian-12-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -114,9 +123,6 @@ forwarder:
   ## K8s Security Context for forwarder pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param forwarder.podSecurityContext.enabled Enable security context for forwarder pods
-  ## @param forwarder.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param forwarder.podSecurityContext.runAsUser User ID for forwarder's containers
-  ## @param forwarder.podSecurityContext.runAsGroup Group ID for forwarder's containers
   ## @param forwarder.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param forwarder.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param forwarder.podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -124,9 +130,6 @@ forwarder:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
-    runAsUser: 0
-    runAsGroup: 0
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
@@ -134,6 +137,9 @@ forwarder:
   ## K8s Security Context for forwarder container
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param forwarder.containerSecurityContext.enabled Enable security context for the forwarder container
+  ## @param forwarder.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param forwarder.containerSecurityContext.runAsUser User ID for forwarder's containers
+  ## @param forwarder.containerSecurityContext.runAsGroup Group ID for forwarder's containers
   ## @param forwarder.containerSecurityContext.privileged Run as privileged
   ## @param forwarder.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param forwarder.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
@@ -142,11 +148,12 @@ forwarder:
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
+    runAsUser: 0
+    runAsGroup: 0
     privileged: false
     allowPrivilegeEscalation: false
-    ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
-    ##
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL
@@ -526,7 +533,7 @@ forwarder:
   ## @param forwarder.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if forwarder.resources is set (forwarder.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param forwarder.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -724,9 +731,6 @@ aggregator:
   ## K8s Security Context for Aggregator pods
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param aggregator.podSecurityContext.enabled Enable security context for aggregator pods
-  ## @param aggregator.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param aggregator.podSecurityContext.runAsUser User ID for aggregator's containers
-  ## @param aggregator.podSecurityContext.runAsGroup Group ID for aggregator's containers
   ## @param aggregator.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param aggregator.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param aggregator.podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -734,9 +738,6 @@ aggregator:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
-    runAsUser: 1001
-    runAsGroup: 1001
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
@@ -752,6 +753,9 @@ aggregator:
   ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param aggregator.containerSecurityContext.enabled Enable security context for the aggregator container
   ## @param aggregator.containerSecurityContext.privileged Run as privileged
+  ## @param aggregator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param aggregator.containerSecurityContext.runAsUser User ID for aggregator's containers
+  ## @param aggregator.containerSecurityContext.runAsGroup Group ID for aggregator's containers
   ## @param aggregator.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation
   ## @param aggregator.containerSecurityContext.readOnlyRootFilesystem Require the use of a read only root file system
   ## @param aggregator.containerSecurityContext.capabilities.drop [array] Drop capabilities for the securityContext
@@ -760,10 +764,11 @@ aggregator:
   containerSecurityContext:
     enabled: true
     privileged: false
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
     allowPrivilegeEscalation: false
-    ## Requires mounting an `extraVolume` of type `emptyDir` into /tmp
-    ##
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL
@@ -1189,7 +1194,7 @@ aggregator:
   ## @param aggregator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param aggregator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

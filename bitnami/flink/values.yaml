@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -37,6 +46,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param clusterDomain Default Kubernetes cluster domain
+##
+clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
@@ -70,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/flink
-  tag: 1.18.1-debian-12-r10
+  tag: 1.18.1-debian-12-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -188,7 +200,7 @@ jobmanager:
   ## @param jobmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jobmanager.resources is set (jobmanager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param jobmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -374,18 +386,22 @@ jobmanager:
   ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param jobmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param jobmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
+  ## @param jobmanager.containerSecurityContext.runAsGroup Set Apache Flink container's Security Context runAsGroup
   ## @param jobmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param jobmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param jobmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param jobmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param jobmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param jobmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     privileged: false
     capabilities:
       drop: ["ALL"]
@@ -451,12 +467,12 @@ jobmanager:
   ##
   schedulerName: ""
   ## @param jobmanager.updateStrategy.type Apache Flink jobmanager deployment strategy type
-  ## @param jobmanager.updateStrategy.rollingUpdate Apache Flink jobmanager deployment rolling update configuration parameters
+  ## @param jobmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink jobmanager deployment rolling update configuration parameters
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param jobmanager.extraVolumes Optionally specify extra list of additional volumes for flink container
   ##
   extraVolumes: []
@@ -566,7 +582,7 @@ taskmanager:
   ## @param taskmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if taskmanager.resources is set (taskmanager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param taskmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -742,19 +758,23 @@ taskmanager:
   ## @param taskmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param taskmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param taskmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
+  ## @param taskmanager.containerSecurityContext.runAsGroup Set Apache Flink container's Security Context runAsGroup
   ## @param taskmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
   ## @param taskmanager.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param taskmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param taskmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
   ## @param taskmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param taskmanager.containerSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -818,13 +838,17 @@ taskmanager:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param taskmanager.updateStrategy.type Apache Flink taskmanager deployment strategy type
-  ## @param taskmanager.updateStrategy.rollingUpdate Apache Flink taskmanager deployment rolling update configuration parameters
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## @param taskmanager.podManagementPolicy Pod management policy for the Apache Flink taskmanager statefulset
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param taskmanager.updateStrategy.type Apache Flink taskmanager statefulset strategy type
+  ## @param taskmanager.updateStrategy.rollingUpdate [object,nullable] Apache Flink taskmanager statefulset rolling update configuration parameters
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
   updateStrategy:
     type: RollingUpdate
-    rollingUpdate: {}
+    rollingUpdate: null
   ## @param taskmanager.extraVolumes Optionally specify extra list of additional volumes for flink container
   ##
   extraVolumes: []

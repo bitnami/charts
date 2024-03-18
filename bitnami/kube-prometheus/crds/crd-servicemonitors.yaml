@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-# Version: 0.71.2
+# Version: 0.72.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-    operator.prometheus.io/version: 0.71.2
+    operator.prometheus.io/version: 0.72.0
   name: servicemonitors.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -478,9 +478,9 @@ spec:
                       anyOf:
                       - type: integer
                       - type: string
-                      description: "Name or number of the target port of the `Pod`
-                        object behind the Service, the port must be specified with
-                        container port property. \n Deprecated: use `port` instead."
+                      description: Name or number of the target port of the `Pod`
+                        object behind the Service. The port must be specified with
+                        the container's port property.
                       x-kubernetes-int-or-string: true
                     tlsConfig:
                       description: TLS configuration to use when scraping the target.
@@ -677,6 +677,28 @@ spec:
                   of scraped samples that will be accepted.'
                 format: int64
                 type: integer
+              scrapeClass:
+                description: The scrape class to apply.
+                minLength: 1
+                type: string
+              scrapeProtocols:
+                description: "`scrapeProtocols` defines the protocols to negotiate
+                  during a scrape. It tells clients the protocols supported by Prometheus
+                  in order of preference (from most to least preferred). \n If unset,
+                  Prometheus uses its default value. \n It requires Prometheus >=
+                  v2.49.0."
+                items:
+                  description: 'ScrapeProtocol represents a protocol used by Prometheus
+                    for scraping metrics. Supported values are: * `OpenMetricsText0.0.1`
+                    * `OpenMetricsText1.0.0` * `PrometheusProto` * `PrometheusText0.0.4`'
+                  enum:
+                  - PrometheusProto
+                  - OpenMetricsText0.0.1
+                  - OpenMetricsText1.0.0
+                  - PrometheusText0.0.4
+                  type: string
+                type: array
+                x-kubernetes-list-type: set
               selector:
                 description: Label selector to select the Kubernetes `Endpoints` objects.
                 properties:

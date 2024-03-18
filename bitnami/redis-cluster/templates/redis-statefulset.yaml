@@ -48,7 +48,7 @@ spec:
       {{- end }}
       {{- include "redis-cluster.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "redis-cluster.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.redis.automountServiceAccountToken }}
@@ -86,7 +86,7 @@ spec:
           image: {{ include "redis-cluster.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -269,8 +269,9 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.redis.resources }}
-          resources:
-          {{- include "common.tplvalues.render" (dict "value" .Values.redis.resources "context" $) | nindent 12 }}
+          resources: {{- toYaml .Values.redis.resources | nindent 12 }}
+          {{- else if ne .Values.redis.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.redis.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -310,7 +311,7 @@ spec:
           image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -374,8 +375,11 @@ spec:
           ports:
             - name: http-metrics
               containerPort: {{ .Values.metrics.containerPorts.http }}
-          resources:
-        {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.redis.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.redis.sidecars "context" $ ) | nindent 8 }}
@@ -390,8 +394,11 @@ spec:
           command: ["/bin/chown", "-R", "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}", "{{ .Values.persistence.path }}"]
           securityContext:
             runAsUser: 0
-          resources:
-          {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
@@ -404,8 +411,11 @@ spec:
         - name: init-sysctl
           image: {{ template "redis-cluster.sysctl.image" . }}
           imagePullPolicy: {{ default "" .Values.sysctlImage.pullPolicy | quote }}
-          resources:
-          {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- if .Values.sysctlImage.resources }}
+          resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+          {{- else if ne .Values.sysctlImage.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
+          {{- end }}
           {{- if .Values.sysctlImage.mountHostSys }}
           volumeMounts:
             - name: empty-dir
@@ -417,7 +427,7 @@ spec:
           command:
           {{- toYaml .Values.sysctlImage.command | nindent 12 }}
           {{- if .Values.sysctlImage.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.sysctlImage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sysctlImage.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.redis.initContainers }}

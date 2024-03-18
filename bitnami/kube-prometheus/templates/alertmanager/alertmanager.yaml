@@ -45,7 +45,7 @@ spec:
   {{- end }}
   routePrefix: "{{ .Values.alertmanager.routePrefix }}"
   {{- if .Values.alertmanager.podSecurityContext.enabled }}
-  securityContext: {{- omit .Values.alertmanager.podSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.podSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.alertmanager.storageSpec }}
   storage: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.storageSpec "context" $) | nindent 4 }}
@@ -99,12 +99,19 @@ spec:
   {{- if .Values.alertmanager.tolerations }}
   tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.tolerations "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.alertmanager.volumes }}
-  volumes: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.alertmanager.volumeMounts }}
-  volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
-  {{- end }}
+  volumes:
+    - name: empty-dir
+      emptyDir: {}
+    {{- if .Values.alertmanager.volumes }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumes "context" $) | nindent 4 }}
+    {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    {{- if .Values.alertmanager.volumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.volumeMounts "context" $) | nindent 4 }}
+    {{- end }}
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.alertmanager.containers .Values.alertmanager.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   containers:
@@ -116,7 +123,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: alertmanager
       {{- if .Values.alertmanager.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.alertmanager.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.alertmanager.livenessProbe.enabled }}
       livenessProbe:
@@ -151,7 +158,7 @@ spec:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/strategic-merge-patch.md
     - name: config-reloader
       {{- if .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.operator.prometheusConfigReloader.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.prometheusConfigReloader.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.prometheusConfigReloader.livenessProbe.enabled }}
       livenessProbe:

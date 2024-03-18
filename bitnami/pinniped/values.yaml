@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -58,7 +67,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.28.0-debian-12-r9
+  tag: 0.29.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -205,7 +214,7 @@ concierge:
   ## @param concierge.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if concierge.resources is set (concierge.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param concierge.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -236,6 +245,7 @@ concierge:
   ## @param concierge.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param concierge.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param concierge.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param concierge.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param concierge.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param concierge.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param concierge.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -247,9 +257,10 @@ concierge:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -623,7 +634,7 @@ supervisor:
   ## @param supervisor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if supervisor.resources is set (supervisor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param supervisor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -654,6 +665,7 @@ supervisor:
   ## @param supervisor.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param supervisor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param supervisor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param supervisor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param supervisor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param supervisor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param supervisor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -665,9 +677,10 @@ supervisor:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]

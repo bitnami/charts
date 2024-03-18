@@ -11,13 +11,13 @@ kind: Deployment
 {{- end }}
 metadata:
   name: {{ template "external-dns.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{ if not .Values.useDaemonset -}}
+  {{- if not .Values.useDaemonset }}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
   {{- end }}
   {{- if .Values.updateStrategy }}
@@ -44,7 +44,7 @@ spec:
     spec:
       {{- include "external-dns.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
@@ -73,6 +73,12 @@ spec:
       serviceAccountName: {{ template "external-dns.serviceAccountName" . }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy | quote }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -317,6 +323,11 @@ spec:
             # TransIP arguments
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
+            {{- end }}
+            {{- if .Values.txtEncrypt.enabled }}
+            # TXT registry encryption
+            - --txt-encrypt-enabled
+            - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
             {{- end }}
             {{- range $key, $value := .Values.extraArgs }}
              # Extra arguments
@@ -664,6 +675,13 @@ spec:
                   key: ns1-api-key
             {{- end }}
             {{- end }}
+            {{- if and .Values.txtEncrypt.enabled }}
+            - name: TXT_AES_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.txtEncryptKeySecretName" . }}
+                  key: txt_aes_encryption_key
+            {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
             - configMapRef:
@@ -716,7 +734,7 @@ spec:
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
@@ -727,6 +745,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
             # Alibaba Cloud mountPath(s)
             - name: alibabacloud-config-file
@@ -797,6 +818,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if and (eq .Values.provider "alibabacloud") (or (and .Values.alibabacloud.accessKeyId .Values.alibabacloud.accessKeySecret) .Values.alibabacloud.secretName) }}
         # Alibaba Cloud volume(s)
         - name: alibabacloud-config-file

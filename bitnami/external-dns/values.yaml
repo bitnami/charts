@@ -17,6 +17,15 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -64,7 +73,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.0-debian-12-r15
+  tag: 0.14.0-debian-12-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -111,6 +120,28 @@ provider: aws
 ## @param initContainers Attach additional init containers to the pod (evaluated as a template)
 ##
 initContainers: []
+## DNS-Pod services
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## @param dnsPolicy Specifies the DNS policy for the external-dns deployment or daemonset
+## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
+## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ""
+## @param dnsConfig  allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## E.g.
+## dnsConfig:
+##   nameservers:
+##     - 192.0.2.1 # this is an example
+##   searches:
+##     - ns1.svc.cluster-domain.example
+##     - my.dns.search.suffix
+##   options:
+##     - name: ndots
+##       value: "2"
+##     - name: edns0
+dnsConfig: {}
 ## @param sidecars Attach additional containers to the pod (evaluated as a template)
 ##
 sidecars: []
@@ -768,6 +799,22 @@ txtOwnerId: ""
 ## value passed as txtOwnerId when forceTxtOwnerId=true
 ##
 forceTxtOwnerId: false
+## TXT registry record encryption
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#encryption
+##
+txtEncrypt:
+  ## @param txtEncrypt.enabled Enable TXT record encrypencryption
+  ##
+  enabled: false
+  ## @param txtEncrypt.aesKey 32-byte AES-256-GCM encryption key.
+  ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#generating-the-txt-encryption-key
+  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set a default key will be generated.
+  ##
+  aesKey: ""
+  ## @param txtEncrypt.secretName Use an existing secret with key "txt_aes_encryption_key" defined.
+  ## This ignores txtEncrypt.aesKey
+  ##
+  secretName: ""
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
@@ -1018,6 +1065,7 @@ rbac:
 ## @param containerSecurityContext.enabled Enabled Apache Server containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set ExternalDNS containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set ExternalDNS containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set ExternalDNS container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set primary container's Security Context privileged
 ## @param containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
@@ -1034,12 +1082,13 @@ rbac:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
   seccompProfile:
@@ -1065,7 +1114,7 @@ podSecurityContext:
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "nano"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:

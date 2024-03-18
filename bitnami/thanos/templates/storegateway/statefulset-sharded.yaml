@@ -50,9 +50,9 @@ spec:
         app.kubernetes.io/component: storegateway
         shard: {{ $index | quote }}
       annotations:
-        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") $ | sha256sum }}
+        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- if (include "thanos.storegateway.createConfigmap" $) }}
-        checksum/storegateway-configuration: {{ include (print $.Template.BasePath "/storegateway/configmap.yaml") $ | sha256sum }}
+        checksum/storegateway-configuration: {{ include "thanos.storegatewayConfigMap" . | sha256sum }}
         {{- end }}
         {{- if $.Values.storegateway.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.podAnnotations "context" $) | nindent 8 }}
@@ -88,7 +88,7 @@ spec:
       schedulerName: {{ $.Values.storegateway.schedulerName }}
       {{- end }}
       {{- if $.Values.storegateway.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.storegateway.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.storegateway.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -123,7 +123,7 @@ spec:
           image: {{ include "thanos.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy | quote }}
           {{- if $.Values.storegateway.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.storegateway.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.storegateway.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if $.Values.storegateway.command }}
           command: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.command "context" $) | nindent 12 }}

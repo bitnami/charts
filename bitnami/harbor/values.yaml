@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common Parameters
 ##
 
@@ -588,7 +597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -643,7 +652,7 @@ nginx:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r1
+    tag: 1.25.4-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -796,6 +805,7 @@ nginx:
   ## @param nginx.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param nginx.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param nginx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param nginx.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param nginx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param nginx.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param nginx.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -807,6 +817,7 @@ nginx:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -994,7 +1005,7 @@ portal:
   image:
     registry: docker.io
     repository: bitnami/harbor-portal
-    tag: 2.10.0-debian-12-r8
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1133,6 +1144,7 @@ portal:
   ## @param portal.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param portal.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param portal.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param portal.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param portal.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param portal.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param portal.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1144,6 +1156,7 @@ portal:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1339,7 +1352,7 @@ core:
   image:
     registry: docker.io
     repository: bitnami/harbor-core
-    tag: 2.10.0-debian-12-r10
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1536,6 +1549,7 @@ core:
   ## @param core.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param core.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param core.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param core.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param core.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param core.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param core.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1547,6 +1561,7 @@ core:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1744,7 +1759,7 @@ jobservice:
   image:
     registry: docker.io
     repository: bitnami/harbor-jobservice
-    tag: 2.10.0-debian-12-r11
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1904,6 +1919,7 @@ jobservice:
   ## @param jobservice.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param jobservice.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param jobservice.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param jobservice.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param jobservice.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param jobservice.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param jobservice.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1915,6 +1931,7 @@ jobservice:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2349,7 +2366,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registry
-      tag: 2.10.0-debian-12-r11
+      tag: 2.10.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2467,6 +2484,7 @@ registry:
     ## @param registry.server.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param registry.server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param registry.server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param registry.server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param registry.server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param registry.server.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param registry.server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2478,6 +2496,7 @@ registry:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -2519,7 +2538,7 @@ registry:
     image:
       registry: docker.io
       repository: bitnami/harbor-registryctl
-      tag: 2.10.0-debian-12-r10
+      tag: 2.10.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2633,6 +2652,7 @@ registry:
     ## @param registry.controller.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param registry.controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param registry.controller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param registry.controller.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param registry.controller.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param registry.controller.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param registry.controller.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2644,6 +2664,7 @@ registry:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -2683,7 +2704,7 @@ trivy:
   image:
     registry: docker.io
     repository: bitnami/harbor-adapter-trivy
-    tag: 2.10.0-debian-12-r13
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2866,6 +2887,7 @@ trivy:
   ## @param trivy.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param trivy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param trivy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param trivy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param trivy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param trivy.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param trivy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2877,6 +2899,7 @@ trivy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -3072,7 +3095,7 @@ exporter:
   image:
     registry: docker.io
     repository: bitnami/harbor-exporter
-    tag: 2.10.0-debian-12-r10
+    tag: 2.10.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3206,6 +3229,7 @@ exporter:
   ## @param exporter.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param exporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param exporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param exporter.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param exporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param exporter.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param exporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -3217,6 +3241,7 @@ exporter:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -3404,7 +3429,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 13.14.0-debian-12-r4
+    tag: 13.14.0-debian-12-r8
     digest: ""
   auth:
     enablePostgresUser: true

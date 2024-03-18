@@ -31,7 +31,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: bucketweb
       annotations:
-        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- if .Values.bucketweb.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
@@ -69,7 +69,7 @@ spec:
       schedulerName: {{ .Values.bucketweb.schedulerName }}
       {{- end }}
       {{- if .Values.bucketweb.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.bucketweb.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.bucketweb.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.bucketweb.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -85,7 +85,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.bucketweb.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.bucketweb.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.bucketweb.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.bucketweb.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.command "context" $) | nindent 12 }}

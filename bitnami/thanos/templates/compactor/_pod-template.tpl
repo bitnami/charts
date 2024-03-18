@@ -14,7 +14,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
   annotations:
-    checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+    checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
     {{- if .Values.compactor.podAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 4 }}
     {{- end }}
@@ -52,7 +52,7 @@ spec:
   schedulerName: {{ .Values.compactor.schedulerName }}
   {{- end }}
   {{- if .Values.compactor.podSecurityContext.enabled }}
-  securityContext: {{- omit .Values.compactor.podSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.compactor.podSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.compactor.topologySpreadConstraints }}
   topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.topologySpreadConstraints "context" $) | nindent 4 }}
@@ -92,7 +92,7 @@ spec:
       image: {{ include "thanos.image" . }}
       imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
       {{- if .Values.compactor.containerSecurityContext.enabled }}
-      securityContext: {{- omit .Values.compactor.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.compactor.containerSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.compactor.command }}
       command: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.command "context" $) | nindent 8 }}

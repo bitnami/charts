@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -73,7 +82,7 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.9.2-debian-12-r5
+  tag: 2.9.3-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -110,7 +119,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.0.0-debian-12-r14
+    tag: 1.0.0-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -204,7 +213,7 @@ operator:
   ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param operator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -235,6 +244,7 @@ operator:
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -244,8 +254,9 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -760,7 +771,7 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.0.0-debian-12-r11
+    tag: 1.0.0-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -851,7 +862,7 @@ apiserver:
   ## @param apiserver.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if apiserver.resources is set (apiserver.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param apiserver.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -882,6 +893,7 @@ apiserver:
   ## @param apiserver.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param apiserver.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param apiserver.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param apiserver.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param apiserver.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param apiserver.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param apiserver.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -891,8 +903,9 @@ apiserver:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1412,7 +1425,7 @@ cluster:
     ## @param cluster.head.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.head.resources is set (cluster.head.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "medium"
     ## @param cluster.head.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1443,6 +1456,7 @@ cluster:
     ## @param cluster.head.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param cluster.head.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param cluster.head.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param cluster.head.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param cluster.head.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param cluster.head.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param cluster.head.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1452,8 +1466,9 @@ cluster:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1612,7 +1627,7 @@ cluster:
       ## @param cluster.worker.common.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.worker.common.resources is set (cluster.worker.common.resources is recommended for production).
       ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
-      resourcesPreset: "none"
+      resourcesPreset: "small"
       ## @param cluster.worker.common.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
       ## Example:
       ## resources:
@@ -1643,6 +1658,7 @@ cluster:
       ## @param cluster.worker.common.containerSecurityContext.enabled Enabled containers' Security Context
       ## @param cluster.worker.common.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
       ## @param cluster.worker.common.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+      ## @param cluster.worker.common.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
       ## @param cluster.worker.common.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
       ## @param cluster.worker.common.containerSecurityContext.privileged Set container's Security Context privileged
       ## @param cluster.worker.common.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1652,8 +1668,9 @@ cluster:
       ##
       containerSecurityContext:
         enabled: true
-        seLinuxOptions: null
+        seLinuxOptions: {}
         runAsUser: 1001
+        runAsGroup: 1001
         runAsNonRoot: true
         privileged: false
         readOnlyRootFilesystem: true

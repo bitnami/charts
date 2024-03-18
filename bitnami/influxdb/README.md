@@ -43,25 +43,112 @@ These commands deploy influxdb on the Kubernetes cluster in the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` statefulset:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+This chart installs a deployment with the following configuration:
+
+```text
+                ------------------
+               |     Ingress      |
+               |    Controller    |
+                ------------------
+                        |
+                        | /query
+                        | /write
+                        \/
+                 ----------------
+                |  InfluxDB(TM)  |
+                |      svc       |
+                 ----------------
+                        |
+                        \/
+                  --------------
+                 | InfluxDB(TM) |
+                 |    Server    |
+                 |     Pod      |
+                  --------------
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
+### Configure the way how to expose InfluxDB&trade;
+
+- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB&trade; through Ingress.
+- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
+- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
+
+### Using custom configuration
+
+This helm chart supports to customize the whole configuration file.
+
+Add your custom configuration file to "files/conf" in your working directory. This file will be mounted as a configMap to the containers and it will be used for configuring InfluxDB&trade;.
+
+Alternatively, you can specify the InfluxDB&trade; configuration using the `influxdb.configuration` parameter.
+
+In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `influxdb.existingConfiguration` parameter. Note that this will override the two previous options.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables, you can use the `influxdb.extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
+    value: "true"
+```
+
+### Initialize a fresh instance
+
+The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
+
+Alternatively, you can specify custom scripts using the `influxdb.initdbScripts` parameter.
+
+In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `influxdb.initdbScriptsCM` parameter. Note that this will override the two previous options. parameter.
+
+The allowed extensions are `.sh`, and `.txt`.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
+A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
+There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global storage class for dynamic provisioning                                                                                                                                                                                                                                                                                                                       | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -134,16 +221,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `influxdb.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                                          | `[]`                       |
 | `influxdb.podSecurityContext.fsGroup`                        | Set InfluxDB&trade; pod's Security Context fsGroup                                                                                                                                                                                                                   | `1001`                     |
 | `influxdb.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                 | `true`                     |
-| `influxdb.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                     | `nil`                      |
+| `influxdb.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                     | `{}`                       |
 | `influxdb.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                           | `1001`                     |
-| `influxdb.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                          | `0`                        |
+| `influxdb.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                          | `1001`                     |
 | `influxdb.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                        | `true`                     |
 | `influxdb.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                          | `false`                    |
-| `influxdb.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                              | `false`                    |
+| `influxdb.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                              | `true`                     |
 | `influxdb.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                            | `false`                    |
 | `influxdb.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                                   | `["ALL"]`                  |
 | `influxdb.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                                     | `RuntimeDefault`           |
-| `influxdb.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).                                         | `none`                     |
+| `influxdb.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).                                         | `nano`                     |
 | `influxdb.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                    | `{}`                       |
 | `influxdb.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                                                 | `[]`                       |
 | `influxdb.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                                                    | `[]`                       |
@@ -280,208 +367,88 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.digest`                   | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`               | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
-| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `nil`                      |
+| `volumePermissions.securityContext.seLinuxOptions` | Set SELinux options in container                                                                                                  | `{}`                       |
 | `volumePermissions.securityContext.runAsUser`      | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                 | `0`                        |
 
 ### InfluxDB&trade; backup parameters
 
-| Name                                                               | Description                                                                                                      | Value                              |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `backup.enabled`                                                   | Enable InfluxDB&trade; backup                                                                                    | `false`                            |
-| `backup.directory`                                                 | Directory where backups are stored                                                                               | `/backups`                         |
-| `backup.retentionDays`                                             | Retention time in days for backups (older backups are deleted)                                                   | `10`                               |
-| `backup.cronjob.schedule`                                          | Schedule in Cron format to save snapshots                                                                        | `0 2 * * *`                        |
-| `backup.cronjob.historyLimit`                                      | Number of successful finished jobs to retain                                                                     | `1`                                |
-| `backup.cronjob.podAnnotations`                                    | Pod annotations                                                                                                  | `{}`                               |
-| `backup.cronjob.podSecurityContext.enabled`                        | Enable security context for InfluxDB&trade; backup pods                                                          | `true`                             |
-| `backup.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                               | `Always`                           |
-| `backup.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                   | `[]`                               |
-| `backup.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                      | `[]`                               |
-| `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the InfluxDB&trade; filesystem                                                                      | `1001`                             |
-| `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                             | `true`                             |
-| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                 | `nil`                              |
-| `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                       | `1001`                             |
-| `backup.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                      | `1001`                             |
-| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                    | `true`                             |
-| `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                      | `false`                            |
-| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                          | `true`                             |
-| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                        | `false`                            |
-| `backup.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                               | `["ALL"]`                          |
-| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                 | `RuntimeDefault`                   |
-| `backup.podAffinityPreset`                                         | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`                               |
-| `backup.podAntiAffinityPreset`                                     | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                             |
-| `backup.nodeAffinityPreset.type`                                   | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`          | `""`                               |
-| `backup.nodeAffinityPreset.key`                                    | Backup&trade; Node label key to match Ignored if `affinity` is set.                                              | `""`                               |
-| `backup.nodeAffinityPreset.values`                                 | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                          | `[]`                               |
-| `backup.affinity`                                                  | Backup&trade; Affinity for backup pod assignment                                                                 | `{}`                               |
-| `backup.nodeSelector`                                              | Backup&trade; Node labels for backup pod assignment                                                              | `{}`                               |
-| `backup.tolerations`                                               | Backup&trade; Tolerations for backup pod assignment                                                              | `[]`                               |
-| `backup.uploadProviders.google.enabled`                            | enable upload to google storage bucket                                                                           | `false`                            |
-| `backup.uploadProviders.google.secret`                             | json secret with serviceaccount data to access Google storage bucket                                             | `""`                               |
-| `backup.uploadProviders.google.secretKey`                          | service account secret key name                                                                                  | `key.json`                         |
-| `backup.uploadProviders.google.existingSecret`                     | Name of existing secret object with Google serviceaccount json credentials                                       | `""`                               |
-| `backup.uploadProviders.google.bucketName`                         | google storage bucket name name                                                                                  | `gs://bucket/influxdb`             |
-| `backup.uploadProviders.google.image.registry`                     | Google Cloud SDK image registry                                                                                  | `REGISTRY_NAME`                    |
-| `backup.uploadProviders.google.image.repository`                   | Google Cloud SDK image name                                                                                      | `REPOSITORY_NAME/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.digest`                       | Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                               |
-| `backup.uploadProviders.google.image.pullPolicy`                   | Google Cloud SDK image pull policy                                                                               | `IfNotPresent`                     |
-| `backup.uploadProviders.google.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                 | `[]`                               |
-| `backup.uploadProviders.azure.enabled`                             | Enable upload to azure storage container                                                                         | `false`                            |
-| `backup.uploadProviders.azure.secret`                              | Secret with credentials to access Azure storage                                                                  | `""`                               |
-| `backup.uploadProviders.azure.secretKey`                           | Service account secret key name                                                                                  | `connection-string`                |
-| `backup.uploadProviders.azure.existingSecret`                      | Name of existing secret object                                                                                   | `""`                               |
-| `backup.uploadProviders.azure.containerName`                       | Destination container                                                                                            | `influxdb-container`               |
-| `backup.uploadProviders.azure.image.registry`                      | Azure CLI image registry                                                                                         | `REGISTRY_NAME`                    |
-| `backup.uploadProviders.azure.image.repository`                    | Azure CLI image repository                                                                                       | `REPOSITORY_NAME/azure-cli`        |
-| `backup.uploadProviders.azure.image.digest`                        | Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                               |
-| `backup.uploadProviders.azure.image.pullPolicy`                    | Azure CLI image pull policy                                                                                      | `IfNotPresent`                     |
-| `backup.uploadProviders.azure.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                 | `[]`                               |
-| `backup.uploadProviders.aws.enabled`                               | Enable upload to aws s3 bucket                                                                                   | `false`                            |
-| `backup.uploadProviders.aws.accessKeyID`                           | Access Key ID to access aws s3                                                                                   | `""`                               |
-| `backup.uploadProviders.aws.secretAccessKey`                       | Secret Access Key to access aws s3                                                                               | `""`                               |
-| `backup.uploadProviders.aws.region`                                | Region of aws s3 bucket                                                                                          | `us-east-1`                        |
-| `backup.uploadProviders.aws.existingSecret`                        | Name of existing secret object                                                                                   | `""`                               |
-| `backup.uploadProviders.aws.bucketName`                            | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`             |
-| `backup.uploadProviders.aws.endpoint`                              | aws s3 endpoint, no value default public endpoint aws s3 endpoint                                                | `""`                               |
-| `backup.uploadProviders.aws.image.registry`                        | AWS CLI image registry                                                                                           | `REGISTRY_NAME`                    |
-| `backup.uploadProviders.aws.image.repository`                      | AWS CLI image repository                                                                                         | `REPOSITORY_NAME/aws-cli`          |
-| `backup.uploadProviders.aws.image.digest`                          | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                               |
-| `backup.uploadProviders.aws.image.pullPolicy`                      | AWS CLI image pull policy                                                                                        | `IfNotPresent`                     |
-| `backup.uploadProviders.aws.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                 | `[]`                               |
-
-## RBAC Parameters
-
-| Name                                          | Description                                                                                                                                 | Value   |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
-| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`  |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`    |
-| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
-| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```console
-helm install my-release \
-  --set auth.admin.username=admin-user oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-The above command sets the InfluxDB&trade; admin user to `admin-user`.
-
-> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
-
-```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/influxdb/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-This chart installs a deployment with the following configuration:
-
-```text
-                ------------------
-               |     Ingress      |
-               |    Controller    |
-                ------------------
-                        |
-                        | /query
-                        | /write
-                        \/
-                 ----------------
-                |  InfluxDB(TM)  |
-                |      svc       |
-                 ----------------
-                        |
-                        \/
-                  --------------
-                 | InfluxDB(TM) |
-                 |    Server    |
-                 |     Pod      |
-                  --------------
-```
-
-### Configure the way how to expose InfluxDB&trade;
-
-- **Ingress**: The ingress controller must be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose InfluxDB&trade; through Ingress.
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `influxdb.service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `influxdb.service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `influxdb.service.type=LoadBalancer` to choose this service type.
-
-### Using custom configuration
-
-This helm chart supports to customize the whole configuration file.
-
-Add your custom configuration file to "files/conf" in your working directory. This file will be mounted as a configMap to the containers and it will be used for configuring InfluxDB&trade;.
-
-Alternatively, you can specify the InfluxDB&trade; configuration using the `influxdb.configuration` parameter.
-
-In addition to these options, you can also set an external ConfigMap with all the configuration files. This is done by setting the `influxdb.existingConfiguration` parameter. Note that this will override the two previous options.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables, you can use the `influxdb.extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: INFLUXDB_DATA_QUERY_LOG_ENABLED
-    value: "true"
-```
-
-### Initialize a fresh instance
-
-The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, they must be located inside the chart folder `files/docker-entrypoint-initdb.d` so they can be consumed as a ConfigMap.
-
-Alternatively, you can specify custom scripts using the `influxdb.initdbScripts` parameter.
-
-In addition to these options, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `influxdb.initdbScriptsCM` parameter. Note that this will override the two previous options. parameter.
-
-The allowed extensions are `.sh`, and `.txt`.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
-
-## Persistence
-
-The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
-A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this **initContainer** by setting `volumePermissions.enabled` to `true`.
-There are K8s distribution, such as OpenShift, where you can dynamically define the UID to run this **initContainer**. To do so, set the `volumePermissions.securityContext.runAsUser` to `auto`.
+| Name                                                               | Description                                                                                                                                                                                                                  | Value                              |
+| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `backup.enabled`                                                   | Enable InfluxDB&trade; backup                                                                                                                                                                                                | `false`                            |
+| `backup.directory`                                                 | Directory where backups are stored                                                                                                                                                                                           | `/backups`                         |
+| `backup.retentionDays`                                             | Retention time in days for backups (older backups are deleted)                                                                                                                                                               | `10`                               |
+| `backup.cronjob.schedule`                                          | Schedule in Cron format to save snapshots                                                                                                                                                                                    | `0 2 * * *`                        |
+| `backup.cronjob.historyLimit`                                      | Number of successful finished jobs to retain                                                                                                                                                                                 | `1`                                |
+| `backup.cronjob.podAnnotations`                                    | Pod annotations                                                                                                                                                                                                              | `{}`                               |
+| `backup.cronjob.podSecurityContext.enabled`                        | Enable security context for InfluxDB&trade; backup pods                                                                                                                                                                      | `true`                             |
+| `backup.cronjob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                           | `Always`                           |
+| `backup.cronjob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                               | `[]`                               |
+| `backup.cronjob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                  | `[]`                               |
+| `backup.cronjob.podSecurityContext.fsGroup`                        | Group ID for the InfluxDB&trade; filesystem                                                                                                                                                                                  | `1001`                             |
+| `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                             |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `{}`                               |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                             |
+| `backup.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `1001`                             |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                             |
+| `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                            |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `true`                             |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                    | `false`                            |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                           | `["ALL"]`                          |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                             | `RuntimeDefault`                   |
+| `backup.cronjob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production). | `none`                             |
+| `backup.cronjob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
+| `backup.podAffinityPreset`                                         | Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                           | `""`                               |
+| `backup.podAntiAffinityPreset`                                     | Backup&trade; Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                       | `soft`                             |
+| `backup.nodeAffinityPreset.type`                                   | Backup&trade; Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                      | `""`                               |
+| `backup.nodeAffinityPreset.key`                                    | Backup&trade; Node label key to match Ignored if `affinity` is set.                                                                                                                                                          | `""`                               |
+| `backup.nodeAffinityPreset.values`                                 | Backup&trade; Node label values to match. Ignored if `affinity` is set.                                                                                                                                                      | `[]`                               |
+| `backup.affinity`                                                  | Backup&trade; Affinity for backup pod assignment                                                                                                                                                                             | `{}`                               |
+| `backup.nodeSelector`                                              | Backup&trade; Node labels for backup pod assignment                                                                                                                                                                          | `{}`                               |
+| `backup.tolerations`                                               | Backup&trade; Tolerations for backup pod assignment                                                                                                                                                                          | `[]`                               |
+| `backup.uploadProviders.google.enabled`                            | enable upload to google storage bucket                                                                                                                                                                                       | `false`                            |
+| `backup.uploadProviders.google.secret`                             | json secret with serviceaccount data to access Google storage bucket                                                                                                                                                         | `""`                               |
+| `backup.uploadProviders.google.secretKey`                          | service account secret key name                                                                                                                                                                                              | `key.json`                         |
+| `backup.uploadProviders.google.existingSecret`                     | Name of existing secret object with Google serviceaccount json credentials                                                                                                                                                   | `""`                               |
+| `backup.uploadProviders.google.bucketName`                         | google storage bucket name name                                                                                                                                                                                              | `gs://bucket/influxdb`             |
+| `backup.uploadProviders.google.image.registry`                     | Google Cloud SDK image registry                                                                                                                                                                                              | `REGISTRY_NAME`                    |
+| `backup.uploadProviders.google.image.repository`                   | Google Cloud SDK image name                                                                                                                                                                                                  | `REPOSITORY_NAME/google-cloud-sdk` |
+| `backup.uploadProviders.google.image.digest`                       | Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                             | `""`                               |
+| `backup.uploadProviders.google.image.pullPolicy`                   | Google Cloud SDK image pull policy                                                                                                                                                                                           | `IfNotPresent`                     |
+| `backup.uploadProviders.google.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                                                                                             | `[]`                               |
+| `backup.uploadProviders.google.resourcesPreset`                    | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production). | `none`                             |
+| `backup.uploadProviders.google.resources`                          | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
+| `backup.uploadProviders.azure.enabled`                             | Enable upload to azure storage container                                                                                                                                                                                     | `false`                            |
+| `backup.uploadProviders.azure.secret`                              | Secret with credentials to access Azure storage                                                                                                                                                                              | `""`                               |
+| `backup.uploadProviders.azure.secretKey`                           | Service account secret key name                                                                                                                                                                                              | `connection-string`                |
+| `backup.uploadProviders.azure.existingSecret`                      | Name of existing secret object                                                                                                                                                                                               | `""`                               |
+| `backup.uploadProviders.azure.containerName`                       | Destination container                                                                                                                                                                                                        | `influxdb-container`               |
+| `backup.uploadProviders.azure.image.registry`                      | Azure CLI image registry                                                                                                                                                                                                     | `REGISTRY_NAME`                    |
+| `backup.uploadProviders.azure.image.repository`                    | Azure CLI image repository                                                                                                                                                                                                   | `REPOSITORY_NAME/azure-cli`        |
+| `backup.uploadProviders.azure.image.digest`                        | Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                    | `""`                               |
+| `backup.uploadProviders.azure.image.pullPolicy`                    | Azure CLI image pull policy                                                                                                                                                                                                  | `IfNotPresent`                     |
+| `backup.uploadProviders.azure.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                                             | `[]`                               |
+| `backup.uploadProviders.azure.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production). | `none`                             |
+| `backup.uploadProviders.azure.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
+| `backup.uploadProviders.aws.enabled`                               | Enable upload to aws s3 bucket                                                                                                                                                                                               | `false`                            |
+| `backup.uploadProviders.aws.accessKeyID`                           | Access Key ID to access aws s3                                                                                                                                                                                               | `""`                               |
+| `backup.uploadProviders.aws.secretAccessKey`                       | Secret Access Key to access aws s3                                                                                                                                                                                           | `""`                               |
+| `backup.uploadProviders.aws.region`                                | Region of aws s3 bucket                                                                                                                                                                                                      | `us-east-1`                        |
+| `backup.uploadProviders.aws.existingSecret`                        | Name of existing secret object                                                                                                                                                                                               | `""`                               |
+| `backup.uploadProviders.aws.bucketName`                            | aws s3 bucket name                                                                                                                                                                                                           | `s3://bucket/influxdb`             |
+| `backup.uploadProviders.aws.endpoint`                              | aws s3 endpoint, no value default public endpoint aws s3 endpoint                                                                                                                                                            | `""`                               |
+| `backup.uploadProviders.aws.image.registry`                        | AWS CLI image registry                                                                                                                                                                                                       | `REGISTRY_NAME`                    |
+| `backup.uploadProviders.aws.image.repository`                      | AWS CLI image repository                                                                                                                                                                                                     | `REPOSITORY_NAME/aws-cli`          |
+| `backup.uploadProviders.aws.image.digest`                          | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                      | `""`                               |
+| `backup.uploadProviders.aws.image.pullPolicy`                      | AWS CLI image pull policy                                                                                                                                                                                                    | `IfNotPresent`                     |
+| `backup.uploadProviders.aws.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                                                                                             | `[]`                               |
+| `backup.uploadProviders.aws.resourcesPreset`                       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production). | `none`                             |
+| `backup.uploadProviders.aws.resources`                             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
 
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Upgrade
+## Upgrading
 
 It's necessary to specify the existing passwords while performing an upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `auth.admin.password`, `user.pwd`, `auth.readUser.password` and `auth.writeUser.password` parameters when upgrading the chart:
 
@@ -496,7 +463,16 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/influxdb \
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders _[ADMIN_USER_PASSWORD]_, _[USER_PASSWORD]_, _[READ_USER_PASSWORD]_, and _[WRITE_USER_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
-## Upgrading
+### To 6.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 5.0.0
 

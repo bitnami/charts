@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -119,7 +128,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -184,7 +193,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.8.1-debian-12-r11
+    tag: 2.8.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -322,9 +331,11 @@ web:
   ## @param web.containerSecurityContext.enabled Enabled Airflow web containers' Security Context
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set Airflow web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsGroup Set Airflow web containers' Security Context runAsGroup
   ## @param web.containerSecurityContext.runAsNonRoot Set Airflow web containers' Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
   ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set web container's Security Context readOnlyRootFilesystem
   ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -332,9 +343,11 @@ web:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -525,7 +538,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.8.1-debian-12-r10
+    tag: 2.8.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -639,9 +652,11 @@ scheduler:
   ## @param scheduler.containerSecurityContext.enabled Enabled Airflow scheduler containers' Security Context
   ## @param scheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param scheduler.containerSecurityContext.runAsUser Set Airflow scheduler containers' Security Context runAsUser
+  ## @param scheduler.containerSecurityContext.runAsGroup Set Airflow scheduler containers' Security Context runAsGroup
   ## @param scheduler.containerSecurityContext.runAsNonRoot Set Airflow scheduler containers' Security Context runAsNonRoot
   ## @param scheduler.containerSecurityContext.privileged Set scheduler container's Security Context privileged
   ## @param scheduler.containerSecurityContext.allowPrivilegeEscalation Set scheduler container's Security Context allowPrivilegeEscalation
+  ## @param scheduler.containerSecurityContext.readOnlyRootFilesystem Set scheduler container's Security Context readOnlyRootFilesystem
   ## @param scheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param scheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -649,9 +664,11 @@ scheduler:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -842,7 +859,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.8.1-debian-12-r10
+    tag: 2.8.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -974,9 +991,11 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled Airflow worker containers' Security Context
   ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set Airflow worker containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsGroup Set Airflow worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Airflow worker containers' Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.privileged Set worker container's Security Context privileged
   ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set worker container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set worker container's Security Context readOnlyRootFilesystem
   ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
@@ -984,9 +1003,11 @@ worker:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -1199,7 +1220,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.43.2-debian-12-r1
+    tag: 2.44.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1579,7 +1600,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r24
+    tag: 0.20220314.0-debian-12-r27
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1639,9 +1660,11 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enable Airflow exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set Airflow exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Airflow exporter containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set Airflow exporter containers' Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set metrics container's Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## e.g:
@@ -1649,15 +1672,17 @@ metrics:
   ##     enabled: true
   ##     capabilities:
   ##       drop: ["NET_RAW"]
-  ##     readOnlyRootFilesystem: true
+  ##     readOnlyRootFilesystem: false
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:

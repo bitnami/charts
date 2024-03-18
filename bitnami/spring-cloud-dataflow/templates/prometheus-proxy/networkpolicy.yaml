@@ -35,8 +35,8 @@ spec:
     {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
-        - port: {{ .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
+        - port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
+        - port: {{ coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
         - port: {{ .Values.metrics.containerPorts.http }}
         - port: {{ .Values.metrics.containerPorts.rsocket }}
       {{- if not .Values.metrics.networkPolicy.allowExternal }}

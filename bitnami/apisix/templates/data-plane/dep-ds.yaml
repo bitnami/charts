@@ -76,7 +76,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.dataPlane.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.dataPlane.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataPlane.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.dataPlane.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.dataPlane.terminationGracePeriodSeconds }}
@@ -94,7 +94,7 @@ spec:
           image: {{ template "apisix.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.dataPlane.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.dataPlane.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.dataPlane.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -172,10 +172,12 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: apisix-dir
+            - name: empty-dir
               mountPath: /usr/local/apisix
-            - name: tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
             - name: certs
               mountPath: /bitnami/certs
            {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
@@ -203,15 +205,13 @@ spec:
           secret:
             secretName: {{ template "apisix.data-plane.tlsSecretName" . }}
         {{- end }}
-        - name: apisix-dir
+        - name: empty-dir
           emptyDir: {}
         {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
         - name: control-plane-certs
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}
         {{- end }}
-        - name: tmp
-          emptyDir: {}
         {{- if .Values.dataPlane.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

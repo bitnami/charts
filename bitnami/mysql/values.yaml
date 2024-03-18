@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -327,21 +336,25 @@ primary:
   ## @param primary.containerSecurityContext.enabled MySQL primary container securityContext
   ## @param primary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param primary.containerSecurityContext.runAsUser User ID for the MySQL primary container
+  ## @param primary.containerSecurityContext.runAsGroup Group ID for the MySQL primary container
   ## @param primary.containerSecurityContext.runAsNonRoot Set MySQL primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.seccompProfile.type Set Client container's Security Context seccomp profile
+  ## @param primary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## MySQL primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -351,7 +364,7 @@ primary:
   ## @param primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -740,21 +753,25 @@ secondary:
   ## @param secondary.containerSecurityContext.enabled MySQL secondary container securityContext
   ## @param secondary.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param secondary.containerSecurityContext.runAsUser User ID for the MySQL secondary container
+  ## @param secondary.containerSecurityContext.runAsGroup Group ID for the MySQL secondary container
   ## @param secondary.containerSecurityContext.runAsNonRoot Set MySQL secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
   ## @param secondary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param secondary.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## MySQL secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -764,7 +781,7 @@ secondary:
   ## @param secondary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if secondary.resources is set (secondary.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param secondary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1126,7 +1143,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1173,13 +1190,25 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the MySQL metrics container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+  ## @param metrics.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: true
   ## @param metrics.containerPorts.http Container port for http
   ##
   containerPorts:
@@ -1250,7 +1279,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

@@ -45,25 +45,94 @@ The command deploys Matomo on the Kubernetes cluster in the default configuratio
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Image
+
+The `image` parameter allows specifying which image will be pulled for the chart.
+
+#### Private registry
+
+If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
+
+1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
+2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
+
+3. Install the chart
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo) image stores the Matomo data and configurations at the `/bitnami/matomo` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+### Existing PersistentVolumeClaim
+
+1. Create the PersistentVolume
+2. Create the PersistentVolumeClaim
+3. Install the chart
 
 ```console
-helm delete my-release
+helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/matomo
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+### Host path
+
+#### System compatibility
+
+- The local filesystem accessibility to a container in a pod with `hostPath` has been tested on OSX/MacOS with xhyve, and Linux with VirtualBox.
+- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://minikube.sigs.k8s.io/docs/handbook/mount/) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
+
+#### Mounting steps
+
+1. The specified `hostPath` directory must already exist (create one if it does not).
+2. Install the chart
+
+    ```console
+    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://REGISTRY_NAME/REPOSITORY_NAME/matomo
+    ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+    This will mount the `matomo-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+3. Because the container cannot control the host machine's directory permissions, you must set the Matomo file directory permissions yourself
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -309,42 +378,44 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### CronJob parameters
 
-| Name                                                                       | Description                                                          | Value            |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------- |
-| `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
-| `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
-| `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                  | `false`          |
-| `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                  | `{}`             |
-| `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images) | `[]`             |
-| `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)    | `[]`             |
-| `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                 | `true`           |
-| `cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                     | `nil`            |
-| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                           | `1001`           |
-| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                        | `true`           |
-| `cronjobs.taskScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                          | `false`          |
-| `cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem              | `false`          |
-| `cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation            | `false`          |
-| `cronjobs.taskScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                   | `["ALL"]`        |
-| `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
-| `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                           | `{}`             |
-| `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                | `{}`             |
-| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                     | `true`           |
-| `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                          | `*/5 * * * *`    |
-| `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                  | `false`          |
-| `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                  | `{}`             |
-| `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images) | `[]`             |
-| `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)    | `[]`             |
-| `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                 | `true`           |
-| `cronjobs.archive.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                     | `nil`            |
-| `cronjobs.archive.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                           | `1001`           |
-| `cronjobs.archive.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                        | `true`           |
-| `cronjobs.archive.containerSecurityContext.privileged`                     | Set container's Security Context privileged                          | `false`          |
-| `cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem`         | Set container's Security Context readOnlyRootFilesystem              | `false`          |
-| `cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation`       | Set container's Security Context allowPrivilegeEscalation            | `false`          |
-| `cronjobs.archive.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                   | `["ALL"]`        |
-| `cronjobs.archive.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                     | `RuntimeDefault` |
-| `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                           | `{}`             |
-| `cronjobs.archive.podLabels`                                               | Additional pod labels                                                | `{}`             |
+| Name                                                                       | Description                                                                                                       | Value            |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
+| `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                                                               | `false`          |
+| `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images)                                              | `[]`             |
+| `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)                                                 | `[]`             |
+| `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                              | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                  | `nil`            |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                        | `1001`           |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                     | `true`           |
+| `cronjobs.taskScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                       | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                           | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                         | `false`          |
+| `cronjobs.taskScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                | `["ALL"]`        |
+| `cronjobs.taskScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
+| `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                                                                        | `{}`             |
+| `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                                                             | `{}`             |
+| `cronjobs.taskScheduler.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
+| `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
+| `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
+| `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images)                                              | `[]`             |
+| `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)                                                 | `[]`             |
+| `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                                                              | `true`           |
+| `cronjobs.archive.containerSecurityContext.seLinuxOptions`                 | Set SELinux options in container                                                                                  | `nil`            |
+| `cronjobs.archive.containerSecurityContext.runAsUser`                      | Set containers' Security Context runAsUser                                                                        | `1001`           |
+| `cronjobs.archive.containerSecurityContext.runAsNonRoot`                   | Set container's Security Context runAsNonRoot                                                                     | `true`           |
+| `cronjobs.archive.containerSecurityContext.privileged`                     | Set container's Security Context privileged                                                                       | `false`          |
+| `cronjobs.archive.containerSecurityContext.readOnlyRootFilesystem`         | Set container's Security Context readOnlyRootFilesystem                                                           | `false`          |
+| `cronjobs.archive.containerSecurityContext.allowPrivilegeEscalation`       | Set container's Security Context allowPrivilegeEscalation                                                         | `false`          |
+| `cronjobs.archive.containerSecurityContext.capabilities.drop`              | List of capabilities to be dropped                                                                                | `["ALL"]`        |
+| `cronjobs.archive.containerSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault` |
+| `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                                                                        | `{}`             |
+| `cronjobs.archive.podLabels`                                               | Additional pod labels                                                                                             | `{}`             |
+| `cronjobs.archive.resources`                                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -368,84 +439,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/matom
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/matomo/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Image
-
-The `image` parameter allows specifying which image will be pulled for the chart.
-
-#### Private registry
-
-If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
-
-1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
-
-    ```yaml
-    imagePullSecrets:
-      - name: SECRET_NAME
-    ```
-
-3. Install the chart
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-## Persistence
-
-The [Bitnami Matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo) image stores the Matomo data and configurations at the `/bitnami/matomo` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-### Existing PersistentVolumeClaim
-
-1. Create the PersistentVolume
-2. Create the PersistentVolumeClaim
-3. Install the chart
-
-```console
-helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/matomo
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-### Host path
-
-#### System compatibility
-
-- The local filesystem accessibility to a container in a pod with `hostPath` has been tested on OSX/MacOS with xhyve, and Linux with VirtualBox.
-- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://minikube.sigs.k8s.io/docs/handbook/mount/) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
-
-#### Mounting steps
-
-1. The specified `hostPath` directory must already exist (create one if it does not).
-2. Install the chart
-
-    ```console
-    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://REGISTRY_NAME/REPOSITORY_NAME/matomo
-    ```
-
-    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-    This will mount the `matomo-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-3. Because the container cannot control the host machine's directory permissions, you must set the Matomo file directory permissions yourself
 
 ## Troubleshooting
 

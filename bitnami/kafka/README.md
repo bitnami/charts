@@ -42,25 +42,391 @@ These commands deploy Kafka on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Listeners configuration
+
+This chart allows you to automatically configure Kafka with 3 listeners:
+
+- One for inter-broker communications.
+- A second one for communications with clients within the K8s cluster.
+- (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-cluster) for more information.
+
+For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
+
+### Enable security for Kafka and Zookeeper
+
+You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
+
+| Method    | Authentication               | Encryption via TLS |
+|-----------|------------------------------|--------------------|
+| plaintext | None                         | No                 |
+| tls       | None                         | Yes                |
+| mtls      | Yes (two-way authentication) | Yes                |
+| sasl      | Yes (via SASL)               | No                 |
+| sasl_tls  | Yes (via SASL)               | Yes                |
+
+Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
+
+If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
+
+- `auth.sasl.jaas.clientUsers`/`auth.sasl.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
+- `auth.sasl.jaas.interBrokerUser`/`auth.sasl.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
+- `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
+
+In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `tls.existingSecret` parameter when deploying the chart.
+
+> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `tls.password` parameter to provide your password.
+
+For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka brokers use the commands below to create the secrets:
 
 ```console
-helm delete my-release
+kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
+kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+> **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
+
+If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
+
+- `tls.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `tls.password`
+- `tls.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
+
+> **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
+> **Note**: The truststore/keystore from above **must** be protected with the same password as in `tls.password`
+
+You can deploy the chart with authentication using the following parameters:
+
+```console
+replicaCount=2
+listeners.client.client.protocol=SASL
+listeners.client.interbroker.protocol=TLS
+tls.existingSecret=kafka-jks
+tls.password=jksPassword
+sasl.client.users[0]=brokerUser
+sasl.client.passwords[0]=brokerPassword
+sasl.zookeeper.user=zookeeperUser
+sasl.zookeeper.password=zookeeperPassword
+zookeeper.auth.enabled=true
+zookeeper.auth.serverUsers=zookeeperUser
+zookeeper.auth.serverPasswords=zookeeperPassword
+zookeeper.auth.clientUser=zookeeperUser
+zookeeper.auth.clientPassword=zookeeperPassword
+```
+
+You can deploy the chart with AclAuthorizer using the following parameters:
+
+```console
+replicaCount=2
+listeners.client.protocol=SASL
+listeners.interbroker.protocol=SASL_TLS
+tls.existingSecret=kafka-jks-0
+tls.password=jksPassword
+sasl.client.users[0]=brokerUser
+sasl.client.passwords[0]=brokerPassword
+sasl.zookeeper.user=zookeeperUser
+sasl.zookeeper.password=zookeeperPassword
+zookeeper.auth.enabled=true
+zookeeper.auth.serverUsers=zookeeperUser
+zookeeper.auth.serverPasswords=zookeeperPassword
+zookeeper.auth.clientUser=zookeeperUser
+zookeeper.auth.clientPassword=zookeeperPassword
+authorizerClassName=kafka.security.authorizer.AclAuthorizer
+allowEveryoneIfNoAclFound=false
+superUsers=User:admin
+```
+
+If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the following event: `[...] Principal = User:ANONYMOUS is Allowed Operation [...]`.
+
+By setting the following parameter: `listeners.client.protocol=SSL` and `listener.client.sslClientAuth=required`, Kafka will require the clients to authenticate to Kafka brokers via certificate.
+
+As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
+
+If you also enable exposing metrics using the Kafka exporter, and you are using `SSL` or `SASL_SSL` security protocols protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
+
+```console
+metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
+```
+
+### Accessing Kafka brokers from outside the cluster
+
+In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
+
+There are three ways of configuring external access. Using LoadBalancer services, using NodePort services or using ClusterIP services.
+
+#### Using LoadBalancer services
+
+You have two alternatives to use LoadBalancer services:
+
+- Option A) Use random load balancer IPs using an **initContainer** that waits for the IPs to be ready and discover them automatically.
+
+```console
+externalAccess.enabled=true
+externalAccess.service.broker.type=LoadBalancer
+externalAccess.service.controller.type=LoadBalancer
+externalAccess.service.broker.ports.external=9094
+externalAccess.service.controller.containerPorts.external=9094
+externalAccess.autoDiscovery.enabled=true
+serviceAccount.create=true
+rbac.create=true
+```
+
+Note: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
+
+- Option B) Manually specify the load balancer IPs:
+
+```console
+externalAccess.enabled=true
+externalAccess.service.controller.type=LoadBalancer
+externalAccess.service.controller.containerPorts.external=9094
+externalAccess.service.controller.loadBalancerIPs[0]='external-ip-1'
+externalAccess.service.controller.loadBalancerIPs[1]='external-ip-2'
+externalAccess.service.broker.type=LoadBalancer
+externalAccess.service.broker.ports.external=9094
+externalAccess.service.broker.loadBalancerIPs[0]='external-ip-3'
+externalAccess.service.broker.loadBalancerIPs[1]='external-ip-4'
+```
+
+Note: You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.
+
+Following the aforementioned steps will also allow to connect the brokers from the outside using the cluster's default service (when `service.type` is `LoadBalancer` or `NodePort`). Use the property `service.externalPort` to specify the port used for external connections.
+
+#### Using NodePort services
+
+You have two alternatives to use NodePort services:
+
+- Option A) Use random node ports using an **initContainer** that discover them automatically.
+
+  ```console
+  externalAccess.enabled=true
+  externalAccess.controller.service.type=NodePort
+  externalAccess.broker.service.type=NodePort
+  externalAccess.autoDiscovery.enabled=true
+  serviceAccount.create=true
+  rbac.create=true
+  ```
+
+  Note: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
+
+- Option B) Manually specify the node ports:
+
+  ```console
+  externalAccess.enabled=true
+  externalAccess.controller.service.type=NodePort
+  externalAccess.controller.service.nodePorts[0]='node-port-1'
+  externalAccess.controller.service.nodePorts[1]='node-port-2'
+  ```
+
+  Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
+
+  The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
+
+- Option C) Manually specify distinct external IPs (using controller+broker nodes)
+
+  ```console
+  externalAccess.enabled=true
+  externalAccess.controller.service.type=NodePort
+  externalAccess.controller.service.externalIPs[0]='172.16.0.20'
+  externalAccess.controller.service.externalIPs[1]='172.16.0.21'
+  externalAccess.controller.service.externalIPs[2]='172.16.0.22'
+  ```
+
+  Note: You need to know in advance the available IP of your cluster that will be exposed so each Kafka broker advertised listener is configured with it.
+
+#### Using ClusterIP services
+
+Note: This option requires that an ingress is deployed within your cluster
+
+```console
+externalAccess.enabled=true
+externalAccess.controller.service.type=ClusterIP
+externalAccess.controller.service.ports.external=9094
+externalAccess.controller.service.domain='ingress-ip'
+externalAccess.broker.service.type=ClusterIP
+externalAccess.broker.service.ports.external=9094
+externalAccess.broker.service.domain='ingress-ip'
+```
+
+Note: the deployed ingress must contain the following block:
+
+```console
+tcp:
+  9094: "{{ include "common.names.namespace" . }}/{{ include "common.names.fullname" . }}-0-external:9094"
+  9095: "{{ include "common.names.namespace" . }}/{{ include "common.names.fullname" . }}-1-external:9094"
+  9096: "{{ include "common.names.namespace" . }}/{{ include "common.names.fullname" . }}-2-external:9094"
+```
+
+#### Name resolution with External-DNS
+
+You can use the following values to generate External-DNS annotations which automatically creates DNS records for each ReplicaSet pod:
+
+```yaml
+externalAccess:
+  service:
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
+```
+
+### Enable metrics
+
+The chart can optionally start two metrics exporters:
+
+- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
+- JMX exporter, to expose JMX metrics. By default, it uses port 5556.
+
+To create a separate Kafka exporter, use the parameter below:
+
+```text
+metrics.kafka.enabled: true
+```
+
+To expose JMX metrics to Prometheus, use the parameter below:
+
+```text
+metrics.jmx.enabled: true
+```
+
+- To enable Zookeeper chart metrics, use the parameter below:
+
+```text
+zookeeper.metrics.enabled: true
+```
+
+### Sidecars
+
+If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy:
+  - |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {{ include "common.names.fullname" . }}-connect
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+        app.kubernetes.io/component: connector
+    spec:
+      replicas: 1
+      selector:
+        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+          app.kubernetes.io/component: connector
+      template:
+        metadata:
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
+            app.kubernetes.io/component: connector
+        spec:
+          containers:
+            - name: connect
+              image: KAFKA-CONNECT-IMAGE
+              imagePullPolicy: IfNotPresent
+              ports:
+                - name: connector
+                  containerPort: 8083
+              volumeMounts:
+                - name: configuration
+                  mountPath: /bitnami/kafka/config
+          volumes:
+            - name: configuration
+              configMap:
+                name: {{ include "common.names.fullname" . }}-connect
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ include "common.names.fullname" . }}-connect
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+        app.kubernetes.io/component: connector
+    data:
+      connect-standalone.properties: |-
+        bootstrap.servers = {{ include "common.names.fullname" . }}-0.{{ include "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
+        ...
+      mongodb.properties: |-
+        connection.uri=mongodb://root:password@mongodb-hostname:27017
+        ...
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ include "common.names.fullname" . }}-connect
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+        app.kubernetes.io/component: connector
+    spec:
+      ports:
+        - protocol: TCP
+          port: 8083
+          targetPort: connector
+      selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+        app.kubernetes.io/component: connector
+```
+
+You can create the Kafka Connect image using the Dockerfile below:
+
+```Dockerfile
+FROM bitnami/kafka:latest
+# Download MongoDB&reg; Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
+RUN mkdir -p /opt/bitnami/kafka/plugins && \
+    cd /opt/bitnami/kafka/plugins && \
+    curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar
+CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
+```
+
+## Persistence
+
+The [Bitnami Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -733,460 +1099,9 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kafka
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kafka/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Listeners configuration
-
-This chart allows you to automatically configure Kafka with 3 listeners:
-
-- One for inter-broker communications.
-- A second one for communications with clients within the K8s cluster.
-- (optional) a third listener for communications with clients outside the K8s cluster. Check [this section](#accessing-kafka-brokers-from-outside-the-cluster) for more information.
-
-For more complex configurations, set the `listeners`, `advertisedListeners` and `listenerSecurityProtocolMap` parameters as needed.
-
-### Enable security for Kafka and Zookeeper
-
-You can configure different authentication protocols for each listener you configure in Kafka. For instance, you can use `sasl_tls` authentication for client communications, while using `tls` for inter-broker communications. This table shows the available protocols and the security they provide:
-
-| Method    | Authentication               | Encryption via TLS |
-|-----------|------------------------------|--------------------|
-| plaintext | None                         | No                 |
-| tls       | None                         | Yes                |
-| mtls      | Yes (two-way authentication) | Yes                |
-| sasl      | Yes (via SASL)               | No                 |
-| sasl_tls  | Yes (via SASL)               | Yes                |
-
-Configure the authentication protocols for client and inter-broker communications by setting the *auth.clientProtocol* and *auth.interBrokerProtocol* parameters to the desired ones, respectively.
-
-If you enabled SASL authentication on any listener, you can set the SASL credentials using the parameters below:
-
-- `auth.sasl.jaas.clientUsers`/`auth.sasl.jaas.clientPasswords`: when enabling SASL authentication for communications with clients.
-- `auth.sasl.jaas.interBrokerUser`/`auth.sasl.jaas.interBrokerPassword`:  when enabling SASL authentication for inter-broker communications.
-- `auth.jaas.zookeeperUser`/`auth.jaas.zookeeperPassword`: In the case that the Zookeeper chart is deployed with SASL authentication enabled.
-
-In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `tls.existingSecret` parameter when deploying the chart.
-
-> **Note**: If the JKS files are password protected (recommended), you will need to provide the password to get access to the keystores. To do so, use the `tls.password` parameter to provide your password.
-
-For instance, to configure TLS authentication on a Kafka cluster with 2 Kafka brokers use the commands below to create the secrets:
-
-```console
-kubectl create secret generic kafka-jks-0 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-0.keystore.jks
-kubectl create secret generic kafka-jks-1 --from-file=kafka.truststore.jks=./kafka.truststore.jks --from-file=kafka.keystore.jks=./kafka-1.keystore.jks
-```
-
-> **Note**: the command above assumes you already created the truststore and keystores files. This [script](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) can help you with the JKS files generation.
-
-If, for some reason (like using Cert-Manager) you can not use the default JKS secret scheme, you can use the additional parameters:
-
-- `tls.jksTruststoreSecret` to define additional secret, where the `kafka.truststore.jks` is being kept. The truststore password **must** be the same as in `tls.password`
-- `tls.jksTruststore` to overwrite the default value of the truststore key (`kafka.truststore.jks`).
-
-> **Note**: If you are using cert-manager, particularly when an ACME issuer is used, the `ca.crt` field is not put in the `Secret` that cert-manager creates. To handle this, the `tls.pemChainIncluded` property can be set to `true` and the initContainer created by this Chart will attempt to extract the intermediate certs from the `tls.crt` field of the secret (which is a PEM chain)
-> **Note**: The truststore/keystore from above **must** be protected with the same password as in `tls.password`
-
-You can deploy the chart with authentication using the following parameters:
-
-```console
-replicaCount=2
-listeners.client.client.protocol=SASL
-listeners.client.interbroker.protocol=TLS
-tls.existingSecret=kafka-jks
-tls.password=jksPassword
-sasl.client.users[0]=brokerUser
-sasl.client.passwords[0]=brokerPassword
-sasl.zookeeper.user=zookeeperUser
-sasl.zookeeper.password=zookeeperPassword
-zookeeper.auth.enabled=true
-zookeeper.auth.serverUsers=zookeeperUser
-zookeeper.auth.serverPasswords=zookeeperPassword
-zookeeper.auth.clientUser=zookeeperUser
-zookeeper.auth.clientPassword=zookeeperPassword
-```
-
-You can deploy the chart with AclAuthorizer using the following parameters:
-
-```console
-replicaCount=2
-listeners.client.protocol=SASL
-listeners.interbroker.protocol=SASL_TLS
-tls.existingSecret=kafka-jks-0
-tls.password=jksPassword
-sasl.client.users[0]=brokerUser
-sasl.client.passwords[0]=brokerPassword
-sasl.zookeeper.user=zookeeperUser
-sasl.zookeeper.password=zookeeperPassword
-zookeeper.auth.enabled=true
-zookeeper.auth.serverUsers=zookeeperUser
-zookeeper.auth.serverPasswords=zookeeperPassword
-zookeeper.auth.clientUser=zookeeperUser
-zookeeper.auth.clientPassword=zookeeperPassword
-authorizerClassName=kafka.security.authorizer.AclAuthorizer
-allowEveryoneIfNoAclFound=false
-superUsers=User:admin
-```
-
-If you are using Kafka ACLs, you might encounter in kafka-authorizer.log the following event: `[...] Principal = User:ANONYMOUS is Allowed Operation [...]`.
-
-By setting the following parameter: `listeners.client.protocol=SSL` and `listener.client.sslClientAuth=required`, Kafka will require the clients to authenticate to Kafka brokers via certificate.
-
-As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
-
-If you also enable exposing metrics using the Kafka exporter, and you are using `SSL` or `SASL_SSL` security protocols protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
-
-```console
-metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
-```
-
-### Accessing Kafka brokers from outside the cluster
-
-In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
-
-There are three ways of configuring external access. Using LoadBalancer services, using NodePort services or using ClusterIP services.
-
-#### Using LoadBalancer services
-
-You have two alternatives to use LoadBalancer services:
-
-- Option A) Use random load balancer IPs using an **initContainer** that waits for the IPs to be ready and discover them automatically.
-
-```console
-externalAccess.enabled=true
-externalAccess.service.broker.type=LoadBalancer
-externalAccess.service.controller.type=LoadBalancer
-externalAccess.service.broker.ports.external=9094
-externalAccess.service.controller.containerPorts.external=9094
-externalAccess.autoDiscovery.enabled=true
-serviceAccount.create=true
-rbac.create=true
-```
-
-Note: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
-
-- Option B) Manually specify the load balancer IPs:
-
-```console
-externalAccess.enabled=true
-externalAccess.service.controller.type=LoadBalancer
-externalAccess.service.controller.containerPorts.external=9094
-externalAccess.service.controller.loadBalancerIPs[0]='external-ip-1'
-externalAccess.service.controller.loadBalancerIPs[1]='external-ip-2'
-externalAccess.service.broker.type=LoadBalancer
-externalAccess.service.broker.ports.external=9094
-externalAccess.service.broker.loadBalancerIPs[0]='external-ip-3'
-externalAccess.service.broker.loadBalancerIPs[1]='external-ip-4'
-```
-
-Note: You need to know in advance the load balancer IPs so each Kafka broker advertised listener is configured with it.
-
-Following the aforementioned steps will also allow to connect the brokers from the outside using the cluster's default service (when `service.type` is `LoadBalancer` or `NodePort`). Use the property `service.externalPort` to specify the port used for external connections.
-
-#### Using NodePort services
-
-You have two alternatives to use NodePort services:
-
-- Option A) Use random node ports using an **initContainer** that discover them automatically.
-
-  ```console
-  externalAccess.enabled=true
-  externalAccess.controller.service.type=NodePort
-  externalAccess.broker.service.type=NodePort
-  externalAccess.autoDiscovery.enabled=true
-  serviceAccount.create=true
-  rbac.create=true
-  ```
-
-  Note: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
-
-- Option B) Manually specify the node ports:
-
-  ```console
-  externalAccess.enabled=true
-  externalAccess.controller.service.type=NodePort
-  externalAccess.controller.service.nodePorts[0]='node-port-1'
-  externalAccess.controller.service.nodePorts[1]='node-port-2'
-  ```
-
-  Note: You need to know in advance the node ports that will be exposed so each Kafka broker advertised listener is configured with it.
-
-  The pod will try to get the external ip of the node using `curl -s https://ipinfo.io/ip` unless `externalAccess.service.domain` or `externalAccess.service.useHostIPs` is provided.
-
-- Option C) Manually specify distinct external IPs (using controller+broker nodes)
-
-  ```console
-  externalAccess.enabled=true
-  externalAccess.controller.service.type=NodePort
-  externalAccess.controller.service.externalIPs[0]='172.16.0.20'
-  externalAccess.controller.service.externalIPs[1]='172.16.0.21'
-  externalAccess.controller.service.externalIPs[2]='172.16.0.22'
-  ```
-
-  Note: You need to know in advance the available IP of your cluster that will be exposed so each Kafka broker advertised listener is configured with it.
-
-#### Using ClusterIP services
-
-Note: This option requires that an ingress is deployed within your cluster
-
-```console
-externalAccess.enabled=true
-externalAccess.controller.service.type=ClusterIP
-externalAccess.controller.service.ports.external=9094
-externalAccess.controller.service.domain='ingress-ip'
-externalAccess.broker.service.type=ClusterIP
-externalAccess.broker.service.ports.external=9094
-externalAccess.broker.service.domain='ingress-ip'
-```
-
-Note: the deployed ingress must contain the following block:
-
-```console
-tcp:
-  9094: "{{ include "common.names.namespace" . }}/{{ include "common.names.fullname" . }}-0-external:9094"
-  9095: "{{ include "common.names.namespace" . }}/{{ include "common.names.fullname" . }}-1-external:9094"
-  9096: "{{ include "common.names.namespace" . }}/{{ include "common.names.fullname" . }}-2-external:9094"
-```
-
-#### Name resolution with External-DNS
-
-You can use the following values to generate External-DNS annotations which automatically creates DNS records for each ReplicaSet pod:
-
-```yaml
-externalAccess:
-  service:
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
-```
-
-### Enable metrics
-
-The chart can optionally start two metrics exporters:
-
-- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
-- JMX exporter, to expose JMX metrics. By default, it uses port 5556.
-
-To create a separate Kafka exporter, use the parameter below:
-
-```text
-metrics.kafka.enabled: true
-```
-
-To expose JMX metrics to Prometheus, use the parameter below:
-
-```text
-metrics.jmx.enabled: true
-```
-
-- To enable Zookeeper chart metrics, use the parameter below:
-
-```text
-zookeeper.metrics.enabled: true
-```
-
-### Sidecars
-
-If you have a need for additional containers to run within the same pod as Kafka (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such as Kafka Connect. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a deployment including a Kafka Connect deployment so you can connect Kafka with MongoDB&reg;:
-
-```yaml
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy:
-  - |
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-        app.kubernetes.io/component: connector
-    spec:
-      replicas: 1
-      selector:
-        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-          app.kubernetes.io/component: connector
-      template:
-        metadata:
-          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
-            app.kubernetes.io/component: connector
-        spec:
-          containers:
-            - name: connect
-              image: KAFKA-CONNECT-IMAGE
-              imagePullPolicy: IfNotPresent
-              ports:
-                - name: connector
-                  containerPort: 8083
-              volumeMounts:
-                - name: configuration
-                  mountPath: /bitnami/kafka/config
-          volumes:
-            - name: configuration
-              configMap:
-                name: {{ include "common.names.fullname" . }}-connect
-  - |
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-        app.kubernetes.io/component: connector
-    data:
-      connect-standalone.properties: |-
-        bootstrap.servers = {{ include "common.names.fullname" . }}-0.{{ include "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.port }}
-        ...
-      mongodb.properties: |-
-        connection.uri=mongodb://root:password@mongodb-hostname:27017
-        ...
-  - |
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-        app.kubernetes.io/component: connector
-    spec:
-      ports:
-        - protocol: TCP
-          port: 8083
-          targetPort: connector
-      selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-        app.kubernetes.io/component: connector
-```
-
-You can create the Kafka Connect image using the Dockerfile below:
-
-```Dockerfile
-FROM bitnami/kafka:latest
-# Download MongoDB&reg; Connector for Apache Kafka https://www.confluent.io/hub/mongodb/kafka-connect-mongodb
-RUN mkdir -p /opt/bitnami/kafka/plugins && \
-    cd /opt/bitnami/kafka/plugins && \
-    curl --remote-name --location --silent https://search.maven.org/remotecontent?filepath=org/mongodb/kafka/mongo-kafka-connect/1.2.0/mongo-kafka-connect-1.2.0-all.jar
-CMD /opt/bitnami/kafka/bin/connect-standalone.sh /opt/bitnami/kafka/config/connect-standalone.properties /opt/bitnami/kafka/config/mongo.properties
-```
-
-## Persistence
-
-The [Bitnami Kafka](https://github.com/bitnami/containers/tree/main/bitnami/kafka) image stores the Kafka data at the `/bitnami/kafka` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
-
-## Migrating from Zookeeper (Early access)
-
-This guide is an adaptation from upstream documentation: [Migrate from ZooKeeper to KRaft](https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html)
-
-1. Retrieve the cluster ID from Zookeeper:
-
-    ```console
-    $ kubectl exec -it <your-zookeeper-pod> -- zkCli.sh get /cluster/id
-    /opt/bitnami/java/bin/java
-    Connecting to localhost:2181
-
-    WATCHER::
-
-    WatchedEvent state:SyncConnected type:None path:null
-    {"version":"1","id":"TEr3HVPvTqSWixWRHngP5g"}
-    ```
-
-2. Deploy at least one Kraft controller-only in your deployment and enable `zookeeperMigrationMode=true`. The Kraft controllers will migrate the data from your Kafka ZkBroker to Kraft mode.
-
-    To do so add the following values to your Zookeeper deployment when upgrading:
-
-    ```yaml
-    controller:
-      replicaCount: 1
-      controllerOnly: true
-      zookeeperMigrationMode: true
-      # If needed, set controllers minID to avoid conflict with your ZK brokers' ids.
-      # minID: 0
-    broker:
-      zookeeperMigrationMode: true
-    kraft:
-      enabled: true
-      clusterId: "<your_cluster_id>"
-    ```
-
-3. Wait until until all brokers are ready. You should see the following log in the broker logs:
-
-    ```console
-    INFO [KafkaServer id=100] Finished catching up on KRaft metadata log, requesting that the KRaft controller unfence this broker (kafka.server.KafkaServer)
-    INFO [BrokerLifecycleManager id=100 isZkBroker=true] The broker has been unfenced. Transitioning from RECOVERY to RUNNING. (kafka.server.BrokerLifecycleManager)
-    ```
-
-    In the controllers, the following message should show up:
-
-    ```console
-    Transitioning ZK migration state from PRE_MIGRATION to MIGRATION (org.apache.kafka.controller.FeatureControlManager)
-    ```
-
-4. Once all brokers have been successfully migrated, set `broker.zookeeperMigrationMode=false` to fully migrate them.
-
-    ```yaml
-    broker:
-      zookeeperMigrationMode: false
-    ```
-
-5. To conclude the migration, switch off migration mode on controllers and stop Zookeeper:
-
-    ```yaml
-    controller:
-      zookeeperMigrationMode: false
-    zookeeper:
-      enabled: false
-    ```
-
-    After migration is complete, you should see the following message in your controllers:
-
-    ```console
-    [2023-07-13 13:07:45,226] INFO [QuorumController id=1] Transitioning ZK migration state from MIGRATION to POST_MIGRATION (org.apache.kafka.controller.FeatureControlManager)
-    ```
-
-6. (**Optional**) If you would like to switch to a non-dedicated cluster, set `controller.controllerOnly=false`. This will cause controller-only nodes to switch to controller+broker nodes.
-
-    At that point, you could manually decommission broker-only nodes by reassigning its partitions to controller-eligible nodes.
-
-    For more information about decommissioning kafka broker check the [Kafka documentation](https://www.confluent.io/blog/remove-kafka-brokers-from-any-cluster-the-easy-way/).
 
 ## Upgrading
 
@@ -1274,7 +1189,83 @@ If upgrading from Kraft mode, existing PVCs from Kafka containers should be reat
 #### Upgrading from Zookeeper mode
 
 If upgrading from Zookeeper mode, make sure you set 'controller.replicaCount=0' and reattach the existing PVCs to 'broker' pods.
-This will allow you to perform a migration to Kraft mode in the future by following the 'Migrating from Zookeeper' section of this documentation.
+This will allow you to perform a migration to Kraft mode in the future by following the following section.
+
+##### Migrating from Zookeeper (Early access)
+
+This guide is an adaptation from upstream documentation: [Migrate from ZooKeeper to KRaft](https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html)
+
+1. Retrieve the cluster ID from Zookeeper:
+
+    ```console
+    $ kubectl exec -it <your-zookeeper-pod> -- zkCli.sh get /cluster/id
+    /opt/bitnami/java/bin/java
+    Connecting to localhost:2181
+
+    WATCHER::
+
+    WatchedEvent state:SyncConnected type:None path:null
+    {"version":"1","id":"TEr3HVPvTqSWixWRHngP5g"}
+    ```
+
+2. Deploy at least one Kraft controller-only in your deployment and enable `zookeeperMigrationMode=true`. The Kraft controllers will migrate the data from your Kafka ZkBroker to Kraft mode.
+
+    To do so add the following values to your Zookeeper deployment when upgrading:
+
+    ```yaml
+    controller:
+      replicaCount: 1
+      controllerOnly: true
+      zookeeperMigrationMode: true
+      # If needed, set controllers minID to avoid conflict with your ZK brokers' ids.
+      # minID: 0
+    broker:
+      zookeeperMigrationMode: true
+    kraft:
+      enabled: true
+      clusterId: "<your_cluster_id>"
+    ```
+
+3. Wait until until all brokers are ready. You should see the following log in the broker logs:
+
+    ```console
+    INFO [KafkaServer id=100] Finished catching up on KRaft metadata log, requesting that the KRaft controller unfence this broker (kafka.server.KafkaServer)
+    INFO [BrokerLifecycleManager id=100 isZkBroker=true] The broker has been unfenced. Transitioning from RECOVERY to RUNNING. (kafka.server.BrokerLifecycleManager)
+    ```
+
+    In the controllers, the following message should show up:
+
+    ```console
+    Transitioning ZK migration state from PRE_MIGRATION to MIGRATION (org.apache.kafka.controller.FeatureControlManager)
+    ```
+
+4. Once all brokers have been successfully migrated, set `broker.zookeeperMigrationMode=false` to fully migrate them.
+
+    ```yaml
+    broker:
+      zookeeperMigrationMode: false
+    ```
+
+5. To conclude the migration, switch off migration mode on controllers and stop Zookeeper:
+
+    ```yaml
+    controller:
+      zookeeperMigrationMode: false
+    zookeeper:
+      enabled: false
+    ```
+
+    After migration is complete, you should see the following message in your controllers:
+
+    ```console
+    [2023-07-13 13:07:45,226] INFO [QuorumController id=1] Transitioning ZK migration state from MIGRATION to POST_MIGRATION (org.apache.kafka.controller.FeatureControlManager)
+    ```
+
+6. (**Optional**) If you would like to switch to a non-dedicated cluster, set `controller.controllerOnly=false`. This will cause controller-only nodes to switch to controller+broker nodes.
+
+    At that point, you could manually decommission broker-only nodes by reassigning its partitions to controller-eligible nodes.
+
+    For more information about decommissioning kafka broker check the [Kafka documentation](https://www.confluent.io/blog/remove-kafka-brokers-from-any-cluster-the-easy-way/).
 
 #### Retaining PersistentVolumes
 
