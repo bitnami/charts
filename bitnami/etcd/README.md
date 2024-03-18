@@ -107,7 +107,7 @@ I | rafthttp: peer XXXXXXXX became inactive (message send to peer failed)
 W | rafthttp: health check for peer XXXXXXXX could not connect: dial tcp A.B.C.D:2380: i/o timeout
 ```
 
-Learn more about [etcd runtime configuration](https://etcd.io/docs/current/op-guide/runtime-configuration/) and how to safely drain a Kubernetes node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/).
+Learn more about [etcd runtime configuration](https://etcd.io/docs/current/op-guide/runtime-configuration/) and how to safely [drain a Kubernetes node](https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/).
 
 #### Cluster updates
 
