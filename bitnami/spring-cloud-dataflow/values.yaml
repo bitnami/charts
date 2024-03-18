@@ -1970,9 +1970,15 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
+  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)
   ##
   existingPasswordSecret: ""
+  ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
+  ##
+  existingSecret: ""
+  ## @param externalRabbitmq.existingSecretPasswordKey Key of the above existing secret with RabbitMQ password, defaults to `password`
+  ##
+  existingSecretPasswordKey: ""
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
