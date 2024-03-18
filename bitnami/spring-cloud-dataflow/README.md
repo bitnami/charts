@@ -709,17 +709,19 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 ### RabbitMQ chart parameters
 
-| Name                                      | Description                                                                     | Value       |
-| ----------------------------------------- | ------------------------------------------------------------------------------- | ----------- |
-| `rabbitmq.enabled`                        | Enable/disable RabbitMQ chart installation                                      | `true`      |
-| `rabbitmq.auth.username`                  | RabbitMQ username                                                               | `user`      |
-| `externalRabbitmq.enabled`                | Enable/disable external RabbitMQ                                                | `false`     |
-| `externalRabbitmq.host`                   | Host of the external RabbitMQ                                                   | `localhost` |
-| `externalRabbitmq.port`                   | External RabbitMQ port number                                                   | `5672`      |
-| `externalRabbitmq.username`               | External RabbitMQ username                                                      | `guest`     |
-| `externalRabbitmq.password`               | External RabbitMQ password. It will be saved in a kubernetes secret             | `guest`     |
-| `externalRabbitmq.vhost`                  | External RabbitMQ virtual host. It will be saved in a kubernetes secret         | `""`        |
-| `externalRabbitmq.existingPasswordSecret` | Existing secret with RabbitMQ password. It will be saved in a kubernetes secret | `""`        |
+| Name                                         | Description                                                                                      | Value       |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| `rabbitmq.enabled`                           | Enable/disable RabbitMQ chart installation                                                       | `true`      |
+| `rabbitmq.auth.username`                     | RabbitMQ username                                                                                | `user`      |
+| `externalRabbitmq.enabled`                   | Enable/disable external RabbitMQ                                                                 | `false`     |
+| `externalRabbitmq.host`                      | Host of the external RabbitMQ                                                                    | `localhost` |
+| `externalRabbitmq.port`                      | External RabbitMQ port number                                                                    | `5672`      |
+| `externalRabbitmq.username`                  | External RabbitMQ username                                                                       | `guest`     |
+| `externalRabbitmq.password`                  | External RabbitMQ password. It will be saved in a kubernetes secret                              | `guest`     |
+| `externalRabbitmq.vhost`                     | External RabbitMQ virtual host. It will be saved in a kubernetes secret                          | `""`        |
+| `externalRabbitmq.existingPasswordSecret`    | Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead) | `""`        |
+| `externalRabbitmq.existingSecret`            | Name of the existing secret containing RabbitMQ credentials                                      | `""`        |
+| `externalRabbitmq.existingSecretPasswordKey` | Key of the above existing secret with RabbitMQ password, defaults to `password`                  | `""`        |
 
 ### Kafka chart parameters
 
