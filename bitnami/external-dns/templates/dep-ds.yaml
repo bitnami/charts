@@ -324,6 +324,11 @@ spec:
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
             {{- end }}
+            {{- if .Values.txtEncrypt.enabled }}
+            # TXT registry encryption
+            - --txt-encrypt-enabled
+            - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
+            {{- end }}
             {{- range $key, $value := .Values.extraArgs }}
              # Extra arguments
               {{- if $value }}
@@ -669,6 +674,13 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: ns1-api-key
             {{- end }}
+            {{- end }}
+            {{- if and .Values.txtEncrypt.enabled }}
+            - name: TXT_AES_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.txtEncryptKeySecretName" . }}
+                  key: txt_aes_encryption_key
             {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
