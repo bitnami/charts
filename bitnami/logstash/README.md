@@ -41,15 +41,120 @@ These commands deploy logstash on the Kubernetes cluster in the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` statefulset:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Expose the Logstash service
+
+The service(s) created by the deployment can be exposed within or outside the cluster using any of the following approaches:
+
+- **Ingress**: This requires an Ingress controller to be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose the corresponding service(s) through Ingress.
+- **ClusterIP**: This exposes the service(s) on a cluster-internal IP address. This approach makes the corresponding service(s) reachable only from within the cluster. Set `service.type=ClusterIP` to choose this approach.
+- **NodePort**: This exposes the service() on each node's IP address at a static port (the NodePort). This approach makes the corresponding service(s) reachable from outside the cluster by requesting the static port using the node's IP address, such as *NODE-IP:NODE-PORT*. Set `service.type=NodePort` to choose this approach.
+- **LoadBalancer**: This exposes the service(s) externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this approach.
+
+### Use custom configuration
+
+By default, this Helm chart provides a basic configuration for Logstash: listening to HTTP requests on port 8080 and writing them to the standard output.
+
+This Logstash configuration can be adjusted using the *input*, *filter*, and *output* parameters, which allow specification of the input, filter and output plugins configuration respectively. In addition to these options, the chart also supports reading configuration from an external ConfigMap via the *existingConfiguration* parameter. Note that this will override the parameters discussed previously.
+
+### Create and use multiple pipelines
+
+The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the `enableMultiplePipelines` parameter to `true`.
+
+To do this, place the `pipelines.yml` file in the `files/conf` directory, together with the rest of the desired configuration files. If the `enableMultiplePipelines` parameter is set to `true` but the `pipelines.yml` file does not exist in the mounted volume, a dummy file is created using the default configuration (a single pipeline).
+
+The chart also supports setting an external ConfigMap with all the configuration filesvia the `existingConfiguration` parameter.
+
+Here is an example of creating multiple pipelines using a ConfigMap:
+
+- Create a ConfigMap with the configuration files:
+
+  ```bash
+  $ cat bye.conf
+  input {
+    file {
+      path => "/tmp/bye"
+    }
+  }
+  output {
+    stdout { }
+  }
+
+  $ cat hello.conf
+  input {
+    file {
+      path => "/tmp/hello"
+    }
+  }
+  output {
+    stdout { }
+  }
+
+  $ cat pipelines.yml
+  - pipeline.id: hello
+    path.config: "/opt/bitnami/logstash/config/hello.conf"
+  - pipeline.id: bye
+    path.config: "/opt/bitnami/logstash/config/bye.conf"
+
+  $ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
+  ```
+
+- Deploy the Helm chart with the `enableMultiplePipelines` parameter:
+
+  ```bash
+  helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
+  ```
+
+- Create dummy events in the tracked files and check the result in the Logstash output:
+
+  ```bash
+  kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
+  kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
+  ```
+
+### Add extra environment variables
+
+To add extra environment variables, use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: ELASTICSEARCH_HOST
+    value: "x.y.z"
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
+To add extra environment variables from an external ConfigMap or secret, use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Note that the secret and ConfigMap should be already available in the namespace.
+
+```yaml
+extraEnvVarsSecret: logstash-secrets
+extraEnvVarsCM: logstash-configmap
+```
+
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Logstash](https://github.com/bitnami/containers/tree/main/bitnami/logstash) image stores the Logstash data at the `/bitnami/logstash/data` path of the container.
+
+Persistent Volume Claims (PVCs) are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Parameters
 
@@ -240,121 +345,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/logst
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/logstash/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Expose the Logstash service
-
-The service(s) created by the deployment can be exposed within or outside the cluster using any of the following approaches:
-
-- **Ingress**: This requires an Ingress controller to be installed in the Kubernetes cluster. Set `ingress.enabled=true` to expose the corresponding service(s) through Ingress.
-- **ClusterIP**: This exposes the service(s) on a cluster-internal IP address. This approach makes the corresponding service(s) reachable only from within the cluster. Set `service.type=ClusterIP` to choose this approach.
-- **NodePort**: This exposes the service() on each node's IP address at a static port (the NodePort). This approach makes the corresponding service(s) reachable from outside the cluster by requesting the static port using the node's IP address, such as *NODE-IP:NODE-PORT*. Set `service.type=NodePort` to choose this approach.
-- **LoadBalancer**: This exposes the service(s) externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this approach.
-
-### Use custom configuration
-
-By default, this Helm chart provides a basic configuration for Logstash: listening to HTTP requests on port 8080 and writing them to the standard output.
-
-This Logstash configuration can be adjusted using the *input*, *filter*, and *output* parameters, which allow specification of the input, filter and output plugins configuration respectively. In addition to these options, the chart also supports reading configuration from an external ConfigMap via the *existingConfiguration* parameter. Note that this will override the parameters discussed previously.
-
-### Create and use multiple pipelines
-
-The chart supports the use of [multiple pipelines](https://www.elastic.co/guide/en/logstash/master/multiple-pipelines.html) by setting the `enableMultiplePipelines` parameter to `true`.
-
-To do this, place the `pipelines.yml` file in the `files/conf` directory, together with the rest of the desired configuration files. If the `enableMultiplePipelines` parameter is set to `true` but the `pipelines.yml` file does not exist in the mounted volume, a dummy file is created using the default configuration (a single pipeline).
-
-The chart also supports setting an external ConfigMap with all the configuration filesvia the `existingConfiguration` parameter.
-
-Here is an example of creating multiple pipelines using a ConfigMap:
-
-- Create a ConfigMap with the configuration files:
-
-  ```bash
-  $ cat bye.conf
-  input {
-    file {
-      path => "/tmp/bye"
-    }
-  }
-  output {
-    stdout { }
-  }
-
-  $ cat hello.conf
-  input {
-    file {
-      path => "/tmp/hello"
-    }
-  }
-  output {
-    stdout { }
-  }
-
-  $ cat pipelines.yml
-  - pipeline.id: hello
-    path.config: "/opt/bitnami/logstash/config/hello.conf"
-  - pipeline.id: bye
-    path.config: "/opt/bitnami/logstash/config/bye.conf"
-
-  $ kubectl create cm multipleconfig --from-file=pipelines.yml --from-file=hello.conf --from-file=bye.conf
-  ```
-
-- Deploy the Helm chart with the `enableMultiplePipelines` parameter:
-
-  ```bash
-  helm install logstash . --set enableMultiplePipelines=true --set existingConfiguration=multipleconfig
-  ```
-
-- Create dummy events in the tracked files and check the result in the Logstash output:
-
-  ```bash
-  kubectl exec -ti logstash-0 -- bash -c 'echo hi >> /tmp/hello'
-  kubectl exec -ti logstash-0 -- bash -c 'echo bye >> /tmp/bye'
-  ```
-
-### Add extra environment variables
-
-To add extra environment variables, use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: ELASTICSEARCH_HOST
-    value: "x.y.z"
-```
-
-To add extra environment variables from an external ConfigMap or secret, use the `extraEnvVarsCM` and `extraEnvVarsSecret` properties. Note that the secret and ConfigMap should be already available in the namespace.
-
-```yaml
-extraEnvVarsSecret: logstash-secrets
-extraEnvVarsCM: logstash-configmap
-```
-
-### Set Pod affinity
-
-This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-## Persistence
-
-The [Bitnami Logstash](https://github.com/bitnami/containers/tree/main/bitnami/logstash) image stores the Logstash data at the `/bitnami/logstash/data` path of the container.
-
-Persistent Volume Claims (PVCs) are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Troubleshooting
 

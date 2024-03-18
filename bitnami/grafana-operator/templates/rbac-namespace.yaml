@@ -188,6 +188,32 @@ rules:
       - patch
       - update
   - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanaalertrulegroups/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
       - networking.k8s.io
     resources:
       - ingresses

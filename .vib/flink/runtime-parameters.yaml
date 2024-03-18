@@ -69,6 +69,8 @@ extraDeploy:
                     do
                     ./bin/flink run ./examples/batch/EnumTriangles.jar --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }}
                     echo "1" > /tmp/ready
+                    # Adding a sleep to not overload the deployment
+                    sleep 10
                     done
                   fi
               startupProbe:
