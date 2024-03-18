@@ -274,6 +274,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mongodb/logs
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             - name: replicaset-entrypoint-configmap
               mountPath: /entrypoint
             - name: datadir
@@ -456,8 +459,8 @@ spec:
             storage: {{ $.Values.shardsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" $.Values.shardsvr.persistence "global" $.Values.global) | nindent 8 }}
   {{- else }}
-        - name: datadir
-          emptyDir: {}
+    - name: datadir
+      emptyDir: {}
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---
