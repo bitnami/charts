@@ -141,6 +141,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -559,6 +560,7 @@ dashboard:
   ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
