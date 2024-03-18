@@ -44,19 +44,121 @@ These commands deploy contour on the Kubernetes cluster in the default configura
 
 > **Tip**: List all releases using `helm list` or `helm ls --all-namespaces`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-:warning: Uninstalling this chart will also remove CRDs. Removing CRDs will **remove all instances of it's Custom Resources**. If you wish to retain your Custom Resources for the future, run the following commands before uninstalling.
+### Resource requests and limits
 
-```console
-kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://projectcontour.io/docs/main/configuration/).
+
+### Example Quickstart Contour Confiuration
+
+```yaml
+configInline:
+  # should contour expect to be running inside a k8s cluster
+  # incluster: true
+  #
+  # path to kubeconfig (if not running inside a k8s cluster)
+  # kubeconfig: /path/to/.kube/config
+  #
+  # Client request timeout to be passed to Envoy
+  # as the connection manager request_timeout.
+  # Defaults to 0, which Envoy interprets as disabled.
+  # Note that this is the timeout for the whole request,
+  # not an idle timeout.
+  # request-timeout: 0s
+  # disable ingressroute permitInsecure field
+  disablePermitInsecure: false
+  tls:
+    #   minimum TLS version that Contour will negotiate
+    #   minimum-protocol-version: "1.1"
+    # Defines the Kubernetes name/namespace matching a secret to use
+    # as the fallback certificate when requests which don't match the
+    # SNI defined for a vhost.
+    fallback-certificate:
+  #   name: fallback-secret-name
+  #   namespace: projectcontour
+  # The following config shows the defaults for the leader election.
+  # leaderelection:
+  #   configmap-name: leader-elect
+  #   configmap-namespace: projectcontour
+  ### Logging options
+  # Default setting
+  accesslog-format: envoy
+  # To enable JSON logging in Envoy
+  # accesslog-format: json
+  # The default fields that will be logged are specified below.
+  # To customise this list, just add or remove entries.
+  # The canonical list is available at
+  # https://godoc.org/github.com/projectcontour/contour/internal/envoy#JSONFields
+  # json-fields:
+  #   - "@timestamp"
+  #   - "authority"
+  #   - "bytes_received"
+  #   - "bytes_sent"
+  #   - "downstream_local_address"
+  #   - "downstream_remote_address"
+  #   - "duration"
+  #   - "method"
+  #   - "path"
+  #   - "protocol"
+  #   - "request_id"
+  #   - "requested_server_name"
+  #   - "response_code"
+  #   - "response_flags"
+  #   - "uber_trace_id"
+  #   - "upstream_cluster"
+  #   - "upstream_host"
+  #   - "upstream_local_address"
+  #   - "upstream_service_time"
+  #   - "user_agent"
+  #   - "x_forwarded_for"
+  #
+  # default-http-versions:
+  # - "HTTP/2"
+  # - "HTTP/1.1"
+  #
+  # The following shows the default proxy timeout settings.
+  # timeouts:
+  #   request-timeout: infinity
+  #   connection-idle-timeout: 60s
+  #   stream-idle-timeout: 5m
+  #   max-connection-duration: infinity
+  #   connection-shutdown-grace-period: 5s
 ```
 
-To uninstall/delete the `my-release` helm release:
+### Deploying Contour with an AWS NLB
 
-```console
-helm uninstall my-release
+By default, Contour is launched with an AWS Classic ELB. To launch contour backed by a NLB, please set [these settings](https://github.com/projectcontour/contour/tree/master/examples/contour#deploying-with-host-networking-enabled-for-envoy):
+
+```yaml
+envoy:
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm: arn:aws:acm:XX-XXXX-X:XXXXXXXXX:certificate/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX
+
+  containerPorts:
+    http: 80
+    https: 80
 ```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Parameters
 
@@ -557,122 +659,6 @@ helm install my-release \
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the `envoy.readinessProbe.successThreshold` to `5`.
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-To configure [Contour](https://projectcontour.io) please look into the configuration section [Contour Configuration](https://projectcontour.io/docs/main/configuration/).
-
-### Example Quickstart Contour Confiuration
-
-```yaml
-configInline:
-  # should contour expect to be running inside a k8s cluster
-  # incluster: true
-  #
-  # path to kubeconfig (if not running inside a k8s cluster)
-  # kubeconfig: /path/to/.kube/config
-  #
-  # Client request timeout to be passed to Envoy
-  # as the connection manager request_timeout.
-  # Defaults to 0, which Envoy interprets as disabled.
-  # Note that this is the timeout for the whole request,
-  # not an idle timeout.
-  # request-timeout: 0s
-  # disable ingressroute permitInsecure field
-  disablePermitInsecure: false
-  tls:
-    #   minimum TLS version that Contour will negotiate
-    #   minimum-protocol-version: "1.1"
-    # Defines the Kubernetes name/namespace matching a secret to use
-    # as the fallback certificate when requests which don't match the
-    # SNI defined for a vhost.
-    fallback-certificate:
-  #   name: fallback-secret-name
-  #   namespace: projectcontour
-  # The following config shows the defaults for the leader election.
-  # leaderelection:
-  #   configmap-name: leader-elect
-  #   configmap-namespace: projectcontour
-  ### Logging options
-  # Default setting
-  accesslog-format: envoy
-  # To enable JSON logging in Envoy
-  # accesslog-format: json
-  # The default fields that will be logged are specified below.
-  # To customise this list, just add or remove entries.
-  # The canonical list is available at
-  # https://godoc.org/github.com/projectcontour/contour/internal/envoy#JSONFields
-  # json-fields:
-  #   - "@timestamp"
-  #   - "authority"
-  #   - "bytes_received"
-  #   - "bytes_sent"
-  #   - "downstream_local_address"
-  #   - "downstream_remote_address"
-  #   - "duration"
-  #   - "method"
-  #   - "path"
-  #   - "protocol"
-  #   - "request_id"
-  #   - "requested_server_name"
-  #   - "response_code"
-  #   - "response_flags"
-  #   - "uber_trace_id"
-  #   - "upstream_cluster"
-  #   - "upstream_host"
-  #   - "upstream_local_address"
-  #   - "upstream_service_time"
-  #   - "user_agent"
-  #   - "x_forwarded_for"
-  #
-  # default-http-versions:
-  # - "HTTP/2"
-  # - "HTTP/1.1"
-  #
-  # The following shows the default proxy timeout settings.
-  # timeouts:
-  #   request-timeout: infinity
-  #   connection-idle-timeout: 60s
-  #   stream-idle-timeout: 5m
-  #   max-connection-duration: infinity
-  #   connection-shutdown-grace-period: 5s
-```
-
-### Deploying Contour with an AWS NLB
-
-By default, Contour is launched with an AWS Classic ELB. To launch contour backed by a NLB, please set [these settings](https://github.com/projectcontour/contour/tree/master/examples/contour#deploying-with-host-networking-enabled-for-envoy):
-
-```yaml
-envoy:
-  service:
-    annotations:
-      service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm: arn:aws:acm:XX-XXXX-X:XXXXXXXXX:certificate/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX
-
-  containerPorts:
-    http: 80
-    https: 80
-```
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

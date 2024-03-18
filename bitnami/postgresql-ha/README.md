@@ -55,15 +55,255 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete --purge my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Use a different PostgreSQL version
+
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+### Use a volume for /dev/shm
+
+When working with huge databeses, `/dev/shm` can run out of space. A way to fix this is to use the `postgresql.extraVolumes` and `postgresql.extraVolumeMounts` values. In the example below, we set an `emptyDir` volume with 512Mb:
+
+```yaml
+postgresql:
+  extraVolumes:
+    - name: dshm
+      emptyDir:
+        medium: Memory
+        sizeLimit: 512Mi
+  extraVolumeMounts:
+    - name: dshm
+      mountPath: /dev/shm
 ```
 
-Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
+### Configure the way how to expose PostgreSQL
+
+- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
+- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You will be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
+- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+### LDAP
+
+LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
+
+- **ldap.enabled**: Enable LDAP support. Defaults to `false`.
+- **ldap.uri**: LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`. No defaults.
+- **ldap.base**: LDAP base DN. No defaults.
+- **ldap.binddn**: LDAP bind DN. No defaults.
+- **ldap.bindpw**: LDAP bind password. No defaults.
+- **ldap.bslookup**: LDAP base lookup. No defaults.
+- **ldap.nss_initgroups_ignoreusers**: LDAP ignored users. `root,nslcd`.
+- **ldap.scope**: LDAP search scope. No defaults.
+- **ldap.tls_reqcert**: LDAP TLS check on server certificates. No defaults.
+
+For example:
+
+```text
+ldap.enabled="true"
+ldap.uri="ldap://my_ldap_server"
+ldap.base="dc=example\,dc=org"
+ldap.binddn="cn=admin\,dc=example\,dc=org"
+ldap.bindpw="admin"
+ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
+ldap.nss_initgroups_ignoreusers="root\,nslcd"
+ldap.scope="sub"
+ldap.tls_reqcert="demand"
+```
+
+Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
+
+> Note: Parameters including commas must be escaped as shown in the above example.
+
+### Securing traffic using TLS
+
+The chart handles two main flows of traffic information:
+
+- Connections between end-clients and PgPool (sometimes referred to as *frontend* connections).
+- Internal connections between PgPool and PostgreSQL nodes (sometimes referred to as *backend* connections).
+
+The Bitnami postgresql-ha chart allows configuring the securitization of both types of traffic using TLS.
+
+#### Encrypt traffic between clients and Pgpool (frontend)
+
+TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.*` parameters when installing a release. Below you can find detailed information about these parameters:
+
+- `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`.
+- `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `pgpool.tls.certFilename`: Certificate filename. No defaults.
+- `pgpool.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+- First, create a secret with the certificates files. You will need to generate previously the certificate files:
+
+    ```console
+    kubectl create secret generic pgpool-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+> Note: Although certificate generation is out of the scope of this guide, bear in mind that PostgreSQL requires that server TLS certificates specify the actual DNS server name in the CN (Common Name) field.
+
+- Then, install the chart using the following parameters:
+
+    ```console
+    pgpool.tls.enabled=true
+    pgpool.tls.certificatesSecret="pgpool-tls-secret"
+    pgpool.tls.certFilename="cert.crt"
+    pgpool.tls.certKeyFilename="cert.key"
+    ```
+
+> Note: Certificates permissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+
+##### Enable client certificate authentication
+
+When TLS is configured for *frontend* connections, the server can be configured to authenticate clients by verifying their provided TLS certificate is valid and trusted. Hence, the client will not be sent a password prompt.
+
+You can enable this authentication feature additionally specifying the following parameter:
+
+- `postgresql.tls.certCAFilename`: CA Certificate filename. No defaults.
+
+    ```console
+    $ psql --host postgresql-ha-pgpool -d "dbname=XXXXX user=YYYYYY sslcert=client.crt sslkey=client.key sslmode=require"
+    psql (14.4)
+    SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
+    Type "help" for help.
+
+    postgres=>
+    ```
+
+Clients using this method to authenticate will be required to provide a certificate with the CN (Common Name) field matching the requested database user name. Please, refer to [the official documentation](https://www.postgresql.org/docs/current/auth-cert.html) for further information.
+
+> Note: As with traditional password-based authentication, database users must exist in both PgPool and PostgreSQL nodes and have the correct privileges to connect to a database. You may use the `postgresql.initdbScripts` and `pgpool.customUsers` properties to create them in advance.
+
+#### Encrypt traffic between Pgpool and PostgreSQL nodes (backend)
+
+TLS for backend connections can be enabled in the chart by specifying the `postgresql.tls.*` parameters while creating a release. Below you can find detailed information about these parameters:
+
+- `postgresql.tls.enabled`: Enable TLS support. Defaults to `false`
+- `postgresql.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
+- `postgresql.tls.certFilename`: Certificate filename. No defaults.
+- `postgresql.tls.certKeyFilename`: Certificate key filename. No defaults.
+
+For example:
+
+- First, create a secret with the certificates files. You will need to generate previously the certificate files:
+
+    ```console
+    kubectl create secret generic postgresql-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
+    ```
+
+- Then, install the chart using the following parameters:
+
+    ```console
+    postgresql.tls.enabled=true
+    postgresql.tls.certificatesSecret="postgresql-tls-secret"
+    postgresql.tls.certFilename="cert.crt"
+    postgresql.tls.certKeyFilename="cert.key"
+    ```
+
+> Note: Certificates permissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
+
+If you want to encrypt both *frontend* and *backend* traffics, you may use the same secret for Pgpool and PostgreSQL TLS configuration.
+
+### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
+
+This helm chart also supports to customize the whole configuration file.
+
+You can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters. The corresponding files will be mounted as ConfigMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
+
+In addition to this option, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the previous options.
+
+### Allow settings to be loaded from files other than the default `postgresql.conf`
+
+If you don't want to provide the whole PostgreSQL configuration file and only specify certain parameters, you can specify the extended configuration using the `postgresql.extendedConf` parameter. A file will be mounted as configMap to the containers adding/overwriting the default configuration using the `include_dir` directive that allows settings to be loaded from files other than the default `postgresql.conf`.
+
+In addition to this option, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the previous option.
+
+### Initialize a fresh instance
+
+The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
+
+In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
+
+The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecret`) are supported in both StatefulSet by prepending `postgresql` or `pgpool` to the parameter, depending on the use case (see above parameters table).
+
+The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
+
++info: <https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance> and <https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts>
+
+### Use of global variables
+
+In more complex scenarios, we may have the following tree of dependencies
+
+```text
+                     +--------------+
+                     |              |
+        +------------+   Chart 1    +-----------+
+        |            |              |           |
+        |            --------+------+           |
+        |                    |                  |
+        |                    |                  |
+        |                    |                  |
+        |                    |                  |
+        v                    v                  v
++-------+------+    +--------+------+  +--------+------+
+|              |    |               |  |               |
+| PostgreSQL HA |  | Sub-chart 1 |  | Sub-chart 2 |
+|---------------|--|-------------|--|-------------|
++--------------+    +---------------+  +---------------+
+```
+
+The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
+
+```text
+postgresql.postgresqlPassword=testtest
+subchart1.postgresql.postgresqlPassword=testtest
+subchart2.postgresql.postgresqlPassword=testtest
+postgresql.postgresqlDatabase=db1
+subchart1.postgresql.postgresqlDatabase=db1
+subchart2.postgresql.postgresqlDatabase=db1
+```
+
+If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
+
+```text
+global.postgresql.postgresqlPassword=testtest
+global.postgresql.postgresqlDatabase=db1
+```
+
+This way, the credentials will be available in all of the subcharts.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
+A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
 
 ## Parameters
 
@@ -698,256 +938,6 @@ helm install my-release \
     -f values.yaml \
     bitnami/postgresql-ha
 ```
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Use a different PostgreSQL version
-
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
-
-### Use a volume for /dev/shm
-
-When working with huge databeses, `/dev/shm` can run out of space. A way to fix this is to use the `postgresql.extraVolumes` and `postgresql.extraVolumeMounts` values. In the example below, we set an `emptyDir` volume with 512Mb:
-
-```yaml
-postgresql:
-  extraVolumes:
-    - name: dshm
-      emptyDir:
-        medium: Memory
-        sizeLimit: 512Mi
-  extraVolumeMounts:
-    - name: dshm
-      mountPath: /dev/shm
-```
-
-### Configure the way how to expose PostgreSQL
-
-- **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster. Set `service.type=ClusterIP` to choose this service type.
-- **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You will be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`. Set `service.type=NodePort` to choose this service type.
-- **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer. Set `service.type=LoadBalancer` to choose this service type.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### LDAP
-
-LDAP support can be enabled in the chart by specifying the `ldap.` parameters while creating a release. The following parameters should be configured to properly enable the LDAP support in the chart.
-
-- **ldap.enabled**: Enable LDAP support. Defaults to `false`.
-- **ldap.uri**: LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`. No defaults.
-- **ldap.base**: LDAP base DN. No defaults.
-- **ldap.binddn**: LDAP bind DN. No defaults.
-- **ldap.bindpw**: LDAP bind password. No defaults.
-- **ldap.bslookup**: LDAP base lookup. No defaults.
-- **ldap.nss_initgroups_ignoreusers**: LDAP ignored users. `root,nslcd`.
-- **ldap.scope**: LDAP search scope. No defaults.
-- **ldap.tls_reqcert**: LDAP TLS check on server certificates. No defaults.
-
-For example:
-
-```text
-ldap.enabled="true"
-ldap.uri="ldap://my_ldap_server"
-ldap.base="dc=example\,dc=org"
-ldap.binddn="cn=admin\,dc=example\,dc=org"
-ldap.bindpw="admin"
-ldap.bslookup="ou=group-ok\,dc=example\,dc=org"
-ldap.nss_initgroups_ignoreusers="root\,nslcd"
-ldap.scope="sub"
-ldap.tls_reqcert="demand"
-```
-
-Next, login to the PostgreSQL server using the `psql` client and add the PAM authenticated LDAP users.
-
-> Note: Parameters including commas must be escaped as shown in the above example.
-
-### Securing traffic using TLS
-
-The chart handles two main flows of traffic information:
-
-- Connections between end-clients and PgPool (sometimes referred to as *frontend* connections).
-- Internal connections between PgPool and PostgreSQL nodes (sometimes referred to as *backend* connections).
-
-The Bitnami postgresql-ha chart allows configuring the securitization of both types of traffic using TLS.
-
-#### Encrypt traffic between clients and Pgpool (frontend)
-
-TLS for end-client connections can be enabled in the chart by specifying the `pgpool.tls.*` parameters when installing a release. Below you can find detailed information about these parameters:
-
-- `pgpool.tls.enabled`: Enable TLS support. Defaults to `false`.
-- `pgpool.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
-- `pgpool.tls.certFilename`: Certificate filename. No defaults.
-- `pgpool.tls.certKeyFilename`: Certificate key filename. No defaults.
-
-For example:
-
-- First, create a secret with the certificates files. You will need to generate previously the certificate files:
-
-    ```console
-    kubectl create secret generic pgpool-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
-    ```
-
-> Note: Although certificate generation is out of the scope of this guide, bear in mind that PostgreSQL requires that server TLS certificates specify the actual DNS server name in the CN (Common Name) field.
-
-- Then, install the chart using the following parameters:
-
-    ```console
-    pgpool.tls.enabled=true
-    pgpool.tls.certificatesSecret="pgpool-tls-secret"
-    pgpool.tls.certFilename="cert.crt"
-    pgpool.tls.certKeyFilename="cert.key"
-    ```
-
-> Note: Certificates permissions: PgPool requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
-
-##### Enable client certificate authentication
-
-When TLS is configured for *frontend* connections, the server can be configured to authenticate clients by verifying their provided TLS certificate is valid and trusted. Hence, the client will not be sent a password prompt.
-
-You can enable this authentication feature additionally specifying the following parameter:
-
-- `postgresql.tls.certCAFilename`: CA Certificate filename. No defaults.
-
-    ```console
-    $ psql --host postgresql-ha-pgpool -d "dbname=XXXXX user=YYYYYY sslcert=client.crt sslkey=client.key sslmode=require"
-    psql (14.4)
-    SSL connection (protocol: TLSv1.3, cipher: TLS_AES_256_GCM_SHA384, bits: 256, compression: off)
-    Type "help" for help.
-
-    postgres=>
-    ```
-
-Clients using this method to authenticate will be required to provide a certificate with the CN (Common Name) field matching the requested database user name. Please, refer to [the official documentation](https://www.postgresql.org/docs/current/auth-cert.html) for further information.
-
-> Note: As with traditional password-based authentication, database users must exist in both PgPool and PostgreSQL nodes and have the correct privileges to connect to a database. You may use the `postgresql.initdbScripts` and `pgpool.customUsers` properties to create them in advance.
-
-#### Encrypt traffic between Pgpool and PostgreSQL nodes (backend)
-
-TLS for backend connections can be enabled in the chart by specifying the `postgresql.tls.*` parameters while creating a release. Below you can find detailed information about these parameters:
-
-- `postgresql.tls.enabled`: Enable TLS support. Defaults to `false`
-- `postgresql.tls.certificatesSecret`: Name of an existing secret that contains the certificates. No defaults.
-- `postgresql.tls.certFilename`: Certificate filename. No defaults.
-- `postgresql.tls.certKeyFilename`: Certificate key filename. No defaults.
-
-For example:
-
-- First, create a secret with the certificates files. You will need to generate previously the certificate files:
-
-    ```console
-    kubectl create secret generic postgresql-tls-secret --from-file=./cert.crt --from-file=./cert.key --from-file=./ca.crt
-    ```
-
-- Then, install the chart using the following parameters:
-
-    ```console
-    postgresql.tls.enabled=true
-    postgresql.tls.certificatesSecret="postgresql-tls-secret"
-    postgresql.tls.certFilename="cert.crt"
-    postgresql.tls.certKeyFilename="cert.key"
-    ```
-
-> Note: Certificates permissions: PostgreSQL requires certain permissions on sensitive files (such as certificate keys) to start up. Due to an on-going [issue](https://github.com/kubernetes/kubernetes/issues/57923) regarding K8s permissions and the use of `containerSecurityContext.runAsUser`, an init container will adapt the permissions to ensure everything works as expected.
-
-If you want to encrypt both *frontend* and *backend* traffics, you may use the same secret for Pgpool and PostgreSQL TLS configuration.
-
-### repmgr.conf / postgresql.conf / pg_hba.conf / pgpool.conf files as configMap
-
-This helm chart also supports to customize the whole configuration file.
-
-You can specify the Pgpool, PostgreSQL and Repmgr configuration using the `pgpool.configuration`, `postgresql.configuration`, `postgresql.pgHbaConfiguration`, and `postgresql.repmgrConfiguration` parameters. The corresponding files will be mounted as ConfigMap to the containers and it will be used for configuring Pgpool, Repmgr and the PostgreSQL server.
-
-In addition to this option, you can also set an external ConfigMap(s) with all the configuration files. This is done by setting the `postgresql.configurationCM` and `pgpool.configurationCM` parameters. Note that this will override the previous options.
-
-### Allow settings to be loaded from files other than the default `postgresql.conf`
-
-If you don't want to provide the whole PostgreSQL configuration file and only specify certain parameters, you can specify the extended configuration using the `postgresql.extendedConf` parameter. A file will be mounted as configMap to the containers adding/overwriting the default configuration using the `include_dir` directive that allows settings to be loaded from files other than the default `postgresql.conf`.
-
-In addition to this option, you can also set an external ConfigMap with all the extra configuration files. This is done by setting the `postgresql.extendedConfCM` parameter. Note that this will override the previous option.
-
-### Initialize a fresh instance
-
-The [Bitnami PostgreSQL with Repmgr](https://github.com/bitnami/containers/tree/main/bitnami/postgresql-repmgr) image allows you to use your custom scripts to initialize a fresh instance. You can specify custom scripts using the `initdbScripts` parameter as dict so they can be consumed as a ConfigMap.
-
-In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsCM` parameter. Note that this will override the two previous options. If your initialization scripts contain sensitive information such as credentials or passwords, you can use the `initdbScriptsSecret` parameter.
-
-The above parameters (`initdbScripts`, `initdbScriptsCM`, and `initdbScriptsSecret`) are supported in both StatefulSet by prepending `postgresql` or `pgpool` to the parameter, depending on the use case (see above parameters table).
-
-The allowed extensions are `.sh`, `.sql` and `.sql.gz` in the **postgresql** container while only `.sh` in the case of the **pgpool** one.
-
-+info: <https://github.com/bitnami/containers/tree/main/bitnami/postgresql#initializing-a-new-instance> and <https://github.com/bitnami/containers/tree/main/bitnami/pgpool#initializing-with-custom-scripts>
-
-### Use of global variables
-
-In more complex scenarios, we may have the following tree of dependencies
-
-```text
-                     +--------------+
-                     |              |
-        +------------+   Chart 1    +-----------+
-        |            |              |           |
-        |            --------+------+           |
-        |                    |                  |
-        |                    |                  |
-        |                    |                  |
-        |                    |                  |
-        v                    v                  v
-+-------+------+    +--------+------+  +--------+------+
-|              |    |               |  |               |
-| PostgreSQL HA |  | Sub-chart 1 |  | Sub-chart 2 |
-|---------------|--|-------------|--|-------------|
-+--------------+    +---------------+  +---------------+
-```
-
-The three charts below depend on the parent chart Chart 1. However, subcharts 1 and 2 may need to connect to PostgreSQL HA as well. In order to do so, subcharts 1 and 2 need to know the PostgreSQL HA credentials, so one option for deploying could be deploy Chart 1 with the following parameters:
-
-```text
-postgresql.postgresqlPassword=testtest
-subchart1.postgresql.postgresqlPassword=testtest
-subchart2.postgresql.postgresqlPassword=testtest
-postgresql.postgresqlDatabase=db1
-subchart1.postgresql.postgresqlDatabase=db1
-subchart2.postgresql.postgresqlDatabase=db1
-```
-
-If the number of dependent sub-charts increases, installing the chart with parameters can become increasingly difficult. An alternative would be to set the credentials using global variables as follows:
-
-```text
-global.postgresql.postgresqlPassword=testtest
-global.postgresql.postgresqlDatabase=db1
-```
-
-This way, the credentials will be available in all of the subcharts.
-
-### Persistence
-
-The data is persisted by default using PVC templates in the PostgreSQL statefulset. You can disable the persistence setting the `persistence.enabled` parameter to `false`.
-A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

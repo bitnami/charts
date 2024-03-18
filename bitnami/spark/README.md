@@ -43,15 +43,113 @@ These commands deploy Apache Spark on the Kubernetes cluster in the default conf
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` statefulset:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Define custom configuration
+
+To use a custom configuration, a ConfigMap should be created with the `spark-env.sh` file inside the ConfigMap. The ConfigMap name must be provided at deployment time.
+
+To set the configuration on the master use `master.configurationConfigMap=configMapName`. To set the configuration on the worker, use `worker.configurationConfigMap=configMapName`.
+
+These values can be set at the same time in a single ConfigMap or using two ConfigMaps. An additional `spark-defaults.conf` file can be provided in the ConfigMap. You can use both files or one without the other.
+
+### Submit an application
+
+To submit an application to the Apache Spark cluster, use the `spark-submit` script, which is available at [https://github.com/apache/spark/tree/master/bin](https://github.com/apache/spark/tree/master/bin).
+
+The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host`, `k8s-apiserver-port`, `spark-master-svc`, and `spark-master-port` placeholders with the correct master host/IP address and port for your deployment.
 
 ```console
-helm delete my-release
+$ ./bin/spark-submit \
+    --class org.apache.spark.examples.SparkPi \
+    --conf spark.kubernetes.container.image=bitnami/spark:3 \
+    --master k8s://https://k8s-apiserver-host:k8s-apiserver-port \
+    --conf spark.kubernetes.driverEnv.SPARK_MASTER_URL=spark://spark-master-svc:spark-master-port \
+    --deploy-mode cluster \
+    ./examples/jars/spark-examples_2.12-3.2.0.jar 1000
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
+This command example assumes that you have downloaded a Spark binary distribution, which can be found at [Download Apache Spark](https://spark.apache.org/downloads.html).
+
+For a complete walkthrough of the process using a custom application, refer to Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
+
+> Be aware that it is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about the issue](https://issues.apache.org/jira/browse/SPARK-25078).
+
+### Configuring Spark Master as reverse proxy
+
+Spark offers configuration to enable running Spark Master as reverse proxy for worker and application UIs. This can be useful as the Spark Master UI may otherwise use private IPv4 addresses for links to Spark workers and Spark apps.
+
+Coupled with `ingress` configuration, you can set `master.configOptions` and `worker.configOptions` to tell Spark to reverse proxy the worker and application UIs to enable access without requiring direct access to their hosts:
+
+```yaml
+master:
+  configOptions:
+    -Dspark.ui.reverseProxy=true
+    -Dspark.ui.reverseProxyUrl=https://spark.your-domain.com
+worker:
+  configOptions:
+    -Dspark.ui.reverseProxy=true
+    -Dspark.ui.reverseProxyUrl=https://spark.your-domain.com
+ingress:
+  enabled: true
+  hostname: spark.your-domain.com
+```
+
+See the [Spark Configuration](https://spark.apache.org/docs/latest/configuration.html) docs for detail on the parameters.
+
+### Configure security for Apache Spark
+
+### Configure SSL communication
+
+In order to enable secure transport between workers and master, deploy the Helm chart with the `ssl.enabled=true` chart parameter.
+
+### Create certificate and password secrets
+
+It is necessary to create two secrets for the passwords and certificates. The names of the two secrets should be configured using the `security.passwordsSecretName` and `security.ssl.existingSecret` chart parameters.
+
+#### Create certificates and the certificate secret
+
+To generate the certificates secret, first generate the two certificates and rename them to `spark-keystore.jks` and `spark-truststore.jks`. Use [this script to generate certificates](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) for test purposes if required.
+
+Once the certificates are created, create a secret for them with the file names as keys. The keys must be named `spark-keystore.jks` and `spark-truststore.jks`, and the content must be text in JKS format.
+
+#### Create the password secret
+
+The secret for passwords should have three keys: `rpc-authentication-secret`, `ssl-keystore-password` and `ssl-truststore-password`.
+
+#### Configure the chart
+
+Once the secrets are created, configure the chart and set the various security-related parameters, including the `security.certificatesSecretName` and  `security.passwordsSecretName` parameters referencing the secrets created previously. Here is an example configuration for chart deployment:
+
+```text
+security.certificatesSecretName=my-secret
+security.passwordsSecretName=my-passwords-secret
+security.rpc.authenticationEnabled=true
+security.rpc.encryptionEnabled=true
+security.storageEncrytionEnabled=true
+security.ssl.enabled=true
+security.ssl.needClientAuth=true
+```
+
+> NOTE: It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
+
+### Set Pod affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Parameters
 
@@ -377,114 +475,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/spark
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/spark/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Define custom configuration
-
-To use a custom configuration, a ConfigMap should be created with the `spark-env.sh` file inside the ConfigMap. The ConfigMap name must be provided at deployment time.
-
-To set the configuration on the master use `master.configurationConfigMap=configMapName`. To set the configuration on the worker, use `worker.configurationConfigMap=configMapName`.
-
-These values can be set at the same time in a single ConfigMap or using two ConfigMaps. An additional `spark-defaults.conf` file can be provided in the ConfigMap. You can use both files or one without the other.
-
-### Submit an application
-
-To submit an application to the Apache Spark cluster, use the `spark-submit` script, which is available at [https://github.com/apache/spark/tree/master/bin](https://github.com/apache/spark/tree/master/bin).
-
-The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host`, `k8s-apiserver-port`, `spark-master-svc`, and `spark-master-port` placeholders with the correct master host/IP address and port for your deployment.
-
-```console
-$ ./bin/spark-submit \
-    --class org.apache.spark.examples.SparkPi \
-    --conf spark.kubernetes.container.image=bitnami/spark:3 \
-    --master k8s://https://k8s-apiserver-host:k8s-apiserver-port \
-    --conf spark.kubernetes.driverEnv.SPARK_MASTER_URL=spark://spark-master-svc:spark-master-port \
-    --deploy-mode cluster \
-    ./examples/jars/spark-examples_2.12-3.2.0.jar 1000
-```
-
-This command example assumes that you have downloaded a Spark binary distribution, which can be found at [Download Apache Spark](https://spark.apache.org/downloads.html).
-
-For a complete walkthrough of the process using a custom application, refer to Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
-
-> Be aware that it is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about the issue](https://issues.apache.org/jira/browse/SPARK-25078).
-
-### Configuring Spark Master as reverse proxy
-
-Spark offers configuration to enable running Spark Master as reverse proxy for worker and application UIs. This can be useful as the Spark Master UI may otherwise use private IPv4 addresses for links to Spark workers and Spark apps.
-
-Coupled with `ingress` configuration, you can set `master.configOptions` and `worker.configOptions` to tell Spark to reverse proxy the worker and application UIs to enable access without requiring direct access to their hosts:
-
-```yaml
-master:
-  configOptions:
-    -Dspark.ui.reverseProxy=true
-    -Dspark.ui.reverseProxyUrl=https://spark.your-domain.com
-worker:
-  configOptions:
-    -Dspark.ui.reverseProxy=true
-    -Dspark.ui.reverseProxyUrl=https://spark.your-domain.com
-ingress:
-  enabled: true
-  hostname: spark.your-domain.com
-```
-
-See the [Spark Configuration](https://spark.apache.org/docs/latest/configuration.html) docs for detail on the parameters.
-
-### Configure security for Apache Spark
-
-### Configure SSL communication
-
-In order to enable secure transport between workers and master, deploy the Helm chart with the `ssl.enabled=true` chart parameter.
-
-### Create certificate and password secrets
-
-It is necessary to create two secrets for the passwords and certificates. The names of the two secrets should be configured using the `security.passwordsSecretName` and `security.ssl.existingSecret` chart parameters.
-
-#### Create certificates and the certificate secret
-
-To generate the certificates secret, first generate the two certificates and rename them to `spark-keystore.jks` and `spark-truststore.jks`. Use [this script to generate certificates](https://raw.githubusercontent.com/confluentinc/confluent-platform-security-tools/master/kafka-generate-ssl.sh) for test purposes if required.
-
-Once the certificates are created, create a secret for them with the file names as keys. The keys must be named `spark-keystore.jks` and `spark-truststore.jks`, and the content must be text in JKS format.
-
-#### Create the password secret
-
-The secret for passwords should have three keys: `rpc-authentication-secret`, `ssl-keystore-password` and `ssl-truststore-password`.
-
-#### Configure the chart
-
-Once the secrets are created, configure the chart and set the various security-related parameters, including the `security.certificatesSecretName` and  `security.passwordsSecretName` parameters referencing the secrets created previously. Here is an example configuration for chart deployment:
-
-```text
-security.certificatesSecretName=my-secret
-security.passwordsSecretName=my-passwords-secret
-security.rpc.authenticationEnabled=true
-security.rpc.encryptionEnabled=true
-security.storageEncrytionEnabled=true
-security.ssl.enabled=true
-security.ssl.needClientAuth=true
-```
-
-> NOTE: It is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about this issue](https://issues.apache.org/jira/browse/SPARK-25078).
-
-### Set Pod affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
