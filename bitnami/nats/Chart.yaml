@@ -31,4 +31,4 @@ maintainers:
 name: nats
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nats
-version: 7.18.1
+version: 8.0.0
