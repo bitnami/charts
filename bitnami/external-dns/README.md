@@ -426,6 +426,7 @@ helm install my-release \
 | `metrics.googlePodMonitor.namespace`                | Namespace in which PodMonitoring created                                                                                                                                                                   | `""`                           |
 | `metrics.googlePodMonitor.interval`                 | Interval at which metrics should be scraped by Google Managed Prometheus                                                                                                                                   | `60s`                          |
 | `metrics.googlePodMonitor.endpoint`                 | The endpoint for Google Managed Prometheus scraping the metrics                                                                                                                                            | `/metrics`                     |
+| `revisionHistoryLimit`                 | number of replicasets to keep in k8s cluster                                                                                                                                             | `3`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

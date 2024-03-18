@@ -18,6 +18,7 @@ metadata:
   {{- end }}
 spec:
   {{- if not .Values.useDaemonset }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
   {{- end }}
   {{- if .Values.updateStrategy }}
@@ -664,7 +665,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: pihole_password
-            {{- end }}  
+            {{- end }}
             {{- if eq .Values.provider "ns1" }}
             # NS1 environment variables
             {{- if or (.Values.ns1.apiKey) (.Values.ns1.secretName) }}
