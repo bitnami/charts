@@ -44,15 +44,73 @@ The command deploys grafana-mimir on the Kubernetes cluster in the default confi
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Mimir configuration
+
+The mimir configuration file `mimir.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier`, `query-frontend` and `store-gateway`. This is set in the `mimir.configuration` value. That value is templated, so you can use other chart values or templates in your configuration. Check the official [Mimir Mimir documentation](https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters) for the list of possible configurations.
+
+### Data
+
+The [Bitnami grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image stores the data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`. This is very useful if you need to [use enviroment variables in your config file](https://grafana.com/docs/mimir/v2.6.x/reference-configuration-parameters/#use-environment-variables-in-the-configuration) for example to set
+
+```yaml
+mimir:
+  blockStorage:
+    backend: s3
+    config: |
+      access_key_id: ${S3_ACCESS_KEY_ID}
+      secret_access_key: ${S3_SECRET_ACCESS_KEY}
+      bucket_name: mimir
+      endpoint: s3.us-east-1.amazonaws.com
+      insecure: false
+storeGateway:
+  extraEnvVars:
+    - name: S3_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: s3-credentials-secret
+          key: access-key-id
+    - name: S3_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: s3-credentials-secret
+          key: secret-access-key
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`.
+
+### External cache support
+
+You may want to have Grafana Mimir connect to an external Memcached rather than installing one inside your cluster. Typical reasons for this are to use a managed cache service, or to share a common cache server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalMemcached*` parameters](#parameters). You should also disable the Memcached installation with the `enabled` option. Here is an example:
+
+```console
+memcachedchunks.enabled=false
+externalMemcachedChunks.host=myexternalhost
+externalMemcachedChunks.port=11211
+```
 
 ## Parameters
 
@@ -1443,74 +1501,6 @@ Once the chart is installed the remote write endpoints for Prometheus or Grafana
       http://grafana-mimir-gateway.default.svc.cluster.local/api/v1/push
     Read address, Grafana data source (Prometheus) URL:
       http://grafana-mimir-gateway.default.svc.cluster.local/prometheus
-```
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Mimir configuration
-
-The mimir configuration file `mimir.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier`, `query-frontend` and `store-gateway`. This is set in the `mimir.configuration` value. That value is templated, so you can use other chart values or templates in your configuration. Check the official [Mimir Mimir documentation](https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters) for the list of possible configurations.
-
-### Data
-
-The [Bitnami grafana-mimir](https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir) image stores the data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`. This is very useful if you need to [use enviroment variables in your config file](https://grafana.com/docs/mimir/v2.6.x/reference-configuration-parameters/#use-environment-variables-in-the-configuration) for example to set
-
-```yaml
-mimir:
-  blockStorage:
-    backend: s3
-    config: |
-      access_key_id: ${S3_ACCESS_KEY_ID}
-      secret_access_key: ${S3_SECRET_ACCESS_KEY}
-      bucket_name: mimir
-      endpoint: s3.us-east-1.amazonaws.com
-      insecure: false
-storeGateway:
-  extraEnvVars:
-    - name: S3_ACCESS_KEY_ID
-      valueFrom:
-        secretKeyRef:
-          name: s3-credentials-secret
-          key: access-key-id
-    - name: S3_SECRET_ACCESS_KEY
-      valueFrom:
-        secretKeyRef:
-          name: s3-credentials-secret
-          key: secret-access-key
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Pod affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `storeGateway`.
-
-### External cache support
-
-You may want to have Grafana Mimir connect to an external Memcached rather than installing one inside your cluster. Typical reasons for this are to use a managed cache service, or to share a common cache server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalMemcached*` parameters](#parameters). You should also disable the Memcached installation with the `enabled` option. Here is an example:
-
-```console
-memcachedchunks.enabled=false
-externalMemcachedChunks.host=myexternalhost
-externalMemcachedChunks.port=11211
 ```
 
 ## Troubleshooting

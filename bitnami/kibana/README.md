@@ -45,15 +45,177 @@ This chart requires an Elasticsearch instance to work. You can use an already ex
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` statefulset:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Change Kibana version
+
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+### Use custom configuration
+
+The Bitnami Kibana chart supports using custom configuration settings. For example, to mount a custom `kibana.yml` you can create a ConfigMap like the following:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfig
+data:
+  kibana.yml: |-
+    # Raw text of the file
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
+And now you need to pass the ConfigMap name, to the corresponding parameter: `configurationCM=myconfig`
+
+An alternative is to provide extra configuration settings to the default kibana.yml that the chart deploys. This is done using the `extraConfiguration` value:
+
+```yaml
+extraConfiguration:
+  "server.maxPayloadBytes": 1048576
+  "server.pingTimeout": 1500
+```
+
+### Add extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: ELASTICSEARCH_VERSION
+    value: 6
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Use custom initialization scripts
+
+For advanced operations, the Bitnami Kibana chart allows using custom initialization scripts that will be mounted in `/docker-entrypoint.init-db`. Mount these extra scripts using a ConfigMap or a Secret (in case of sensitive data) and specify them via the `initScriptsCM` and `initScriptsSecret` chart parameters, as shown below:
+
+```text
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+```
+
+### Install plugins
+
+The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` chart parameter, as shown in the example below:
+
+```text
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
+plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
+```
+
+> **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
+
+### Import saved objects
+
+If you have visualizations and dashboards (in NDJSON format) to import to Kibana, create a ConfigMap that includes them and then install the chart with the `savedObjects.configmap` chart parameter, as shown below:
+
+```text
+savedObjects.configmap=my-import
+```
+
+Alternatively, if the saved objects are available at a URL, import them with the `savedObjects.urls` chart parameter, as shown below:
+
+```text
+savedObjects.urls[0]=www.my-site.com/import.ndjson
+```
+
+### Use Sidecars and Init Containers
+
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+#### Add a sample Elasticsearch container as sidecar
+
+This chart requires an Elasticsearch instance to work. For production, the options are to use an already existing Elasticsearch instance or deploy the [Elasticsearch chart](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch) with the [`global.kibanaEnabled=true` parameter](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#enable-bundled-kibana).
+
+For testing purposes, use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
+
+```text
+elasticsearch.hosts[0]=localhost
+elasticsearch.port=9200
+sidecars[0].name=elasticsearch
+sidecars[0].image=bitnami/elasticsearch:latest
+sidecars[0].imagePullPolicy=IfNotPresent
+sidecars[0].ports[0].name=http
+sidecars[0].ports[0].containerPort=9200
+```
+
+### Set Pod affinity
+
+This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Kibana](https://github.com/bitnami/containers/tree/main/bitnami/kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Add extra volumes
+
+The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets or configmaps) by using the `extraVolumes` and `extraVolumeMounts` property. This can be combined with advanced operations like adding extra init containers and sidecars.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Parameters
 
@@ -285,178 +447,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kiban
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kibana/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Change Kibana version
-
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
-
-### Use custom configuration
-
-The Bitnami Kibana chart supports using custom configuration settings. For example, to mount a custom `kibana.yml` you can create a ConfigMap like the following:
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: myconfig
-data:
-  kibana.yml: |-
-    # Raw text of the file
-```
-
-And now you need to pass the ConfigMap name, to the corresponding parameter: `configurationCM=myconfig`
-
-An alternative is to provide extra configuration settings to the default kibana.yml that the chart deploys. This is done using the `extraConfiguration` value:
-
-```yaml
-extraConfiguration:
-  "server.maxPayloadBytes": 1048576
-  "server.pingTimeout": 1500
-```
-
-### Add extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: ELASTICSEARCH_VERSION
-    value: 6
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Use custom initialization scripts
-
-For advanced operations, the Bitnami Kibana chart allows using custom initialization scripts that will be mounted in `/docker-entrypoint.init-db`. Mount these extra scripts using a ConfigMap or a Secret (in case of sensitive data) and specify them via the `initScriptsCM` and `initScriptsSecret` chart parameters, as shown below:
-
-```text
-elasticsearch.hosts[0]=elasticsearch-host
-elasticsearch.port=9200
-initScriptsCM=special-scripts
-initScriptsSecret=special-scripts-sensitive
-```
-
-### Install plugins
-
-The Bitnami Kibana chart allows you to install a set of plugins at deployment time using the `plugins` chart parameter, as shown in the example below:
-
-```text
-elasticsearch.hosts[0]=elasticsearch-host
-elasticsearch.port=9200
-plugins[0]=https://github.com/fbaligand/kibana-enhanced-table/releases/download/v1.5.0/enhanced-table-1.5.0_7.3.2.zip
-```
-
-> **NOTE** Make sure that the plugin is available for the Kibana version you are deploying
-
-### Import saved objects
-
-If you have visualizations and dashboards (in NDJSON format) to import to Kibana, create a ConfigMap that includes them and then install the chart with the `savedObjects.configmap` chart parameter, as shown below:
-
-```text
-savedObjects.configmap=my-import
-```
-
-Alternatively, if the saved objects are available at a URL, import them with the `savedObjects.urls` chart parameter, as shown below:
-
-```text
-savedObjects.urls[0]=www.my-site.com/import.ndjson
-```
-
-### Use Sidecars and Init Containers
-
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
-#### Add a sample Elasticsearch container as sidecar
-
-This chart requires an Elasticsearch instance to work. For production, the options are to use an already existing Elasticsearch instance or deploy the [Elasticsearch chart](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch) with the [`global.kibanaEnabled=true` parameter](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#enable-bundled-kibana).
-
-For testing purposes, use a sidecar Elasticsearch container setting the following parameters during the Kibana chart installation:
-
-```text
-elasticsearch.hosts[0]=localhost
-elasticsearch.port=9200
-sidecars[0].name=elasticsearch
-sidecars[0].image=bitnami/elasticsearch:latest
-sidecars[0].imagePullPolicy=IfNotPresent
-sidecars[0].ports[0].name=http
-sidecars[0].ports[0].containerPort=9200
-```
-
-### Set Pod affinity
-
-This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-## Persistence
-
-The [Bitnami Kibana](https://github.com/bitnami/containers/tree/main/bitnami/kibana) image can persist data. If enabled, the persisted path is `/bitnami/kibana` by default.
-
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-### Add extra volumes
-
-The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets or configmaps) by using the `extraVolumes` and `extraVolumeMounts` property. This can be combined with advanced operations like adding extra init containers and sidecars.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Troubleshooting
 
