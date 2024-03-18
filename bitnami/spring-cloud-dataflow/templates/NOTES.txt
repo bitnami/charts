@@ -84,7 +84,8 @@ To access Spring Cloud Data Flow dashboard from outside the cluster execute the 
 {{/* Rabbitmq required password */}}
 {{- if or .Values.rabbitmq.enabled (and .Values.externalRabbitmq.enabled (not $existingRabbitmqSecret)) -}}
   {{- $rabbitmqValidations := list -}}
-  {{- $rabbitmqValidations = append $rabbitmqValidations (dict "valueKey" "rabbitmq.auth.password" "secret" $secretNameRabbitmq "field" "rabbitmq-password") -}}
+  {{- $passwordValueKey := ternary "rabbitmq.auth.password" "externalRabbitmq.password" .Values.rabbitmq.enabled }}
+  {{- $rabbitmqValidations = append $rabbitmqValidations (dict "valueKey" $passwordValueKey "secret" $secretNameRabbitmq "field" "rabbitmq-password") -}}
   {{- if .Values.rabbitmq.enabled -}}
     {{- $rabbitmqValidations = append $rabbitmqValidations (dict "valueKey" "rabbitmq.auth.erlangCookie" "secret" $secretNameRabbitmq "field" "rabbitmq-erlang-cookie") -}}
   {{- end -}}
