@@ -339,6 +339,7 @@ extraDeploy:
 | `clusterOperator.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                                     | `""`                                             |
 | `clusterOperator.serviceAccount.annotations`                        | Add annotations                                                                                                                                                                                                                            | `{}`                                             |
 | `clusterOperator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                                                                                                                           | `false`                                          |
+| `clusterOperator.revisionHsitoryLimit`       | number of replicasets to keep in k8s  .                                                                                                                                                                                           | `3`                                          |
 
 ### RabbitMQ Cluster Operator Metrics parameters
 
@@ -491,6 +492,7 @@ extraDeploy:
 | `msgTopologyOperator.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                                             | `""`                                              |
 | `msgTopologyOperator.serviceAccount.annotations`                        | Add annotations                                                                                                                                                                                                                                    | `{}`                                              |
 | `msgTopologyOperator.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                                                                                                                                   | `false`                                           |
+| `msgTopologyOperator.revisionHistoryLimit`       | number of replicasets to keep in k8s  account.                                                                                                                                                                                                   | `3`                                           |
 
 ### RabbitMQ Messaging Topology Operator parameters
 
