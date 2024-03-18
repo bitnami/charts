@@ -358,6 +358,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `taskmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                            | `[]`             |
 | `taskmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                   | `[]`             |
 | `taskmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                                | `[]`             |
+
 ## Upgrading
 
 ### To 1.0.0
