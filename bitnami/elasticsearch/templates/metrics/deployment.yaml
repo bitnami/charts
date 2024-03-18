@@ -91,7 +91,7 @@ spec:
           {{- else }}
           args:
             {{- $protocol := (ternary "https" "http" (and .Values.security.enabled .Values.security.tls.restEncryption)) }}
-            - --es.uri={{$protocol}}://{{ include "common.names.fullname" . }}:{{ include "elasticsearch.service.ports.restAPI" . }}
+            - --es.uri={{$protocol}}://{{ include "elasticsearch.service.name" . }}:{{ include "elasticsearch.service.ports.restAPI" . }}
             - --es.all
             {{- if .Values.security.tls.restEncryption }}
             - --es.ssl-skip-verify

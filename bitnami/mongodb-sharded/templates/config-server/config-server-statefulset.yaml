@@ -449,7 +449,7 @@ spec:
             storage: {{ .Values.configsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" .Values.configsvr.persistence "global" .Values.global) | nindent 8 }}
   {{- else }}
-        - name: datadir
-          emptyDir: {}
+    - name: datadir
+      emptyDir: {}
   {{- end }}
 {{- end }}

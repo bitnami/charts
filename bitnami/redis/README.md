@@ -1,8 +1,8 @@
 <!--- app-name: Redis&reg; -->
 
-# Bitnami package for Redis(R)
+# Bitnami package for Redis&reg;
 
-Redis(R) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+Redis&reg; is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 
 [Overview of Redis&reg;](http://redis.io)
 
@@ -14,7 +14,7 @@ Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are
 helm install my-release oci://registry-1.docker.io/bitnamicharts/redis
 ```
 
-Looking to use Redisreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Redis&reg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
@@ -57,15 +57,377 @@ The command deploys Redis&reg; on the Kubernetes cluster in the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Use a different Redis&reg; version
+
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+### Bootstrapping with an External Cluster
+
+This chart is equipped with the ability to bring online a set of Pods that connect to an existing Redis deployment that lies outside of Kubernetes.  This effectively creates a hybrid Redis Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single Redis Deployment. This is helpful in situations where one may be migrating Redis from Virtual Machines into Kubernetes, for example.  To take advantage of this, use the following as an example configuration:
+
+```yaml
+replica:
+  externalMaster:
+    enabled: true
+    host: external-redis-0.internal
+sentinel:
+  externalMaster:
+    enabled: true
+    host: external-redis-0.internal
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+:warning: This is currently limited to clusters in which Sentinel and Redis run on the same node! :warning:
+
+Please also note that the external sentinel must be listening on port `26379`, and this is currently not configurable.
+
+Once the Kubernetes Redis Deployment is online and confirmed to be working with the existing cluster, the configuration can then be removed and the cluster will remain connected.
+
+### External DNS
+
+This chart is equipped to allow leveraging the ExternalDNS project. Doing so will enable ExternalDNS to publish the FQDN for each instance, in the format of `<pod-name>.<release-name>.<dns-suffix>`.
+Example, when using the following configuration:
+
+```yaml
+useExternalDNS:
+  enabled: true
+  suffix: prod.example.org
+  additionalAnnotations:
+    ttl: 10
+```
+
+On a cluster where the name of the Helm release is `a`, the hostname of a Pod is generated as: `a-redis-node-0.a-redis.prod.example.org`. The IP of that FQDN will match that of the associated Pod. This modifies the following parameters of the Redis/Sentinel configuration using this new FQDN:
+
+- `replica-announce-ip`
+- `known-sentinel`
+- `known-replica`
+- `announce-ip`
+
+:warning: This requires a working installation of `external-dns` to be fully functional. :warning:
+
+See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns) for additional configuration options.
+
+### Cluster topologies
+
+#### Default: Master-Replicas
+
+When installing the chart with `architecture=replication`, it will deploy a Redis&reg; master StatefulSet and a Redis&reg; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
+
+- Redis&reg; Master service: Points to the master, where read-write operations can be performed
+- Redis&reg; Replicas service: Points to the replicas, where only read operations are allowed by default.
+
+In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
+
+#### Standalone
+
+When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&reg; StatefulSet. A single service will be exposed:
+
+- Redis&reg; Master service: Points to the master, where read-write operations can be performed
+
+#### Master-Replicas with Sentinel
+
+When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis&reg; master StatefulSet (only one master allowed) and a Redis&reg; replicas StatefulSet. In this case, the pods will contain an extra container with Redis&reg; Sentinel. This container will form a cluster of Redis&reg; Sentinel nodes, which will promote a new master in case the actual one fails.
+
+On graceful termination of the Redis&reg; master pod, a failover of the master is initiated to promote a new master. The Redis&reg; Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.redisShutdownWaitFailover=true` is set (the default), the Redis&reg; container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new master.
+
+In addition to this, only one service is exposed:
+
+- Redis&reg; service: Exposes port 6379 for Redis&reg; read-only operations and port 26379 for accessing Redis&reg; Sentinel.
+
+For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis&reg; Sentinel cluster and query the current master using the command below (using redis-cli or similar):
+
+```console
+SENTINEL get-master-addr-by-name <name of your MasterSet. e.g: mymaster>
+```
+
+This command will return the address of the current master, which can be accessed from inside the cluster.
+
+In case the current master crashes, the Sentinel containers will elect a new master node.
+
+`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
+
+### Multiple masters (experimental)
+
+When `master.count` is greater than `1`, special care must be taken to create a consistent setup.
+
+An example of use case is the creation of a redundant set of standalone masters or master-replicas per Kubernetes node where you must ensure:
+
+- No more than `1` master can be deployed per Kubernetes node
+- Replicas and writers can only see the single master of their own Kubernetes node
+
+One way of achieving this is by setting `master.service.internalTrafficPolicy=Local` in combination with a `master.affinity.podAntiAffinity` spec to never schedule more than one master per Kubernetes node.
+
+It's recommended to only change `master.count` if you know what you are doing.
+`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
+
+### Using a password file
+
+To use a password file for Redis&reg; you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:
+
+- Create the secret with the password. It is important that the file with the password must be called `redis-password`.
+
+```console
+kubectl create secret generic redis-password-secret --from-file=redis-password.yaml
+```
+
+- Deploy the Helm Chart using the secret name as parameter:
+
+```text
+usePassword=true
+usePasswordFile=true
+existingSecret=redis-password-secret
+sentinels.enabled=true
+metrics.enabled=true
+```
+
+### Securing traffic using TLS
+
+TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the cluster:
+
+- `tls.enabled`: Enable TLS support. Defaults to `false`
+- `tls.existingSecret`: Name of the secret that contains the certificates. No defaults.
+- `tls.certFilename`: Certificate filename. No defaults.
+- `tls.certKeyFilename`: Certificate key filename. No defaults.
+- `tls.certCAFilename`: CA Certificate filename. No defaults.
+
+For example:
+
+First, create the secret with the certificates files:
+
+```console
+kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
+```
+
+Then, use the following parameters:
+
+```console
+tls.enabled="true"
+tls.existingSecret="certificates-tls-secret"
+tls.certFilename="cert.pem"
+tls.certKeyFilename="cert.key"
+tls.certCAFilename="ca.pem"
+```
+
+### Metrics
+
+The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
+
+If you have enabled TLS by specifying `tls.enabled=true` you also need to specify TLS option to the metrics exporter. You can do that via `metrics.extraArgs`. You can find the metrics exporter CLI flags for TLS [here](https://github.com/oliver006/redis_exporter#command-line-flags). For example:
+
+You can either specify `metrics.extraArgs.skip-tls-verification=true` to skip TLS verification or providing the following values under `metrics.extraArgs` for TLS client authentication:
+
+```console
+tls-client-key-file
+tls-client-cert-file
+tls-ca-cert-file
+```
+
+### Deploy a custom metrics script in the sidecar
+
+A custom Lua script can be added to the `redis-exporter` sidecar by way of the `metrics.extraArgs.script` parameter.  The pathname of the script must exist on the container, or the `redis_exporter` process (and therefore the whole pod) will refuse to start.  The script can be provided to the sidecar containers via the `metrics.extraVolumes` and `metrics.extraVolumeMounts` parameters:
+
+```yaml
+metrics:
+  extraVolumeMounts:
+    - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+      mountPath: '{{ printf "/mnt/%s/" (include "common.names.name" .) }}'
+      readOnly: true
+  extraVolumes:
+    - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
+      configMap:
+        name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+  extraArgs:
+    script: '{{ printf "/mnt/%s/my_custom_metrics.lua" (include "common.names.name" .) }}'
+```
+
+Then deploy the script into the correct location via `extraDeploy`:
+
+```yaml
+extraDeploy:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
+    data:
+      my_custom_metrics.lua: |
+        -- LUA SCRIPT CODE HERE, e.g.,
+        return {'bitnami_makes_the_best_charts', '1'}
+```
+
+### Host Kernel Settings
+
+Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:
+
+```yaml
+sysctlImage:
+  enabled: true
+  mountHostSys: true
+  command:
+    - /bin/sh
+    - -c
+    - |-
+      install_packages procps
+      sysctl -w net.core.somaxconn=10000
+      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
+```
+
+Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure `sysctls` for master and slave pods. Example:
+
+```yaml
+securityContext:
+  sysctls:
+  - name: net.core.somaxconn
+    value: "10000"
+```
+
+Note that this will not disable transparent huge tables.
+
+### Backup and restore
+
+To backup and restore Redis deployments on Kubernetes, you will need to create a snapshot of the data in the source cluster, and later restore it in a new cluster with the new parameters. Follow the instructions below:
+
+#### Step 1: Backup the deployment
+
+- Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
+
+    ```text
+    $ kubectl exec -it my-release-master-0 bash
+    $ redis-cli
+    127.0.0.1:6379> auth your_current_redis_password
+    OK
+    127.0.0.1:6379> save
+    OK
+    ```
+
+- Copy the dump file from the Redis node:
+
+    ```console
+    kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
+    ```
+
+#### Step 2: Restore the data on the destination cluster
+
+To restore the data in a new cluster, you will need to create a PVC and then upload the *dump.rdb* file to the new volume.
+
+Follow the following steps:
+
+- In the [*values.yaml*](https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
+
+    ```yaml
+    commonConfiguration: |-
+       # Enable AOF https://redis.io/topics/persistence#append-only-file
+       appendonly no
+       # Disable RDB persistence, AOF persistence already enabled.
+       save ""
+    ```
+
+    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
+
+- Start the new cluster to create the PVCs. Use the command below as an example:
+
+    ```console
+    helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+    ```
+
+- Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
+
+    ```text
+    $ helm delete new-redis
+
+    $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
+    {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "metadata": {
+            "name": "redisvolpod"
+        },
+        "spec": {
+            "containers": [{
+               "command": [
+                    "tail",
+                    "-f",
+                    "/dev/null"
+               ],
+               "image": "bitnami/minideb",
+               "name": "mycontainer",
+               "volumeMounts": [{
+                   "mountPath": "/mnt",
+                   "name": "redisdata"
+                }]
+            }],
+            "restartPolicy": "Never",
+            "volumes": [{
+                "name": "redisdata",
+                "persistentVolumeClaim": {
+                    "claimName": "redis-data-new-redis-master-0"
+                }
+            }]
+        }
+    }' --image="bitnami/minideb"
+
+    $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
+    $ kubectl delete pod volpod
+    ```
+
+- Restart the cluster:
+
+    > **INFO:** The *appendonly* parameter can be safely restored to your desired value.
+
+    ```console
+    helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
+    ```
+
+### NetworkPolicy
+
+To enable network policy for Redis&reg;, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
+
+With NetworkPolicy enabled, only pods with the generated client label will be able to connect to Redis. This label will be displayed in the output after a successful install.
+
+With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to Redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
+
+```yaml
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    redis: external
+  ingressNSPodMatchLabels:
+    redis-client: true
+```
+
+#### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at the `/data` path. The volume is created using dynamic volume provisioning. If a Persistent Volume Claim already exists, specify it during installation.
+
+### Existing PersistentVolumeClaim
+
+1. Create the PersistentVolume
+2. Create the PersistentVolumeClaim
+3. Install the chart
+
+```console
+helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/redis
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Parameters
 
@@ -655,378 +1017,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redis
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redis/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Use a different Redis&reg; version
-
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
-
-### Bootstrapping with an External Cluster
-
-This chart is equipped with the ability to bring online a set of Pods that connect to an existing Redis deployment that lies outside of Kubernetes.  This effectively creates a hybrid Redis Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single Redis Deployment. This is helpful in situations where one may be migrating Redis from Virtual Machines into Kubernetes, for example.  To take advantage of this, use the following as an example configuration:
-
-```yaml
-replica:
-  externalMaster:
-    enabled: true
-    host: external-redis-0.internal
-sentinel:
-  externalMaster:
-    enabled: true
-    host: external-redis-0.internal
-```
-
-:warning: This is currently limited to clusters in which Sentinel and Redis run on the same node! :warning:
-
-Please also note that the external sentinel must be listening on port `26379`, and this is currently not configurable.
-
-Once the Kubernetes Redis Deployment is online and confirmed to be working with the existing cluster, the configuration can then be removed and the cluster will remain connected.
-
-### External DNS
-
-This chart is equipped to allow leveraging the ExternalDNS project. Doing so will enable ExternalDNS to publish the FQDN for each instance, in the format of `<pod-name>.<release-name>.<dns-suffix>`.
-Example, when using the following configuration:
-
-```yaml
-useExternalDNS:
-  enabled: true
-  suffix: prod.example.org
-  additionalAnnotations:
-    ttl: 10
-```
-
-On a cluster where the name of the Helm release is `a`, the hostname of a Pod is generated as: `a-redis-node-0.a-redis.prod.example.org`. The IP of that FQDN will match that of the associated Pod. This modifies the following parameters of the Redis/Sentinel configuration using this new FQDN:
-
-- `replica-announce-ip`
-- `known-sentinel`
-- `known-replica`
-- `announce-ip`
-
-:warning: This requires a working installation of `external-dns` to be fully functional. :warning:
-
-See the [official ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns) for additional configuration options.
-
-### Cluster topologies
-
-#### Default: Master-Replicas
-
-When installing the chart with `architecture=replication`, it will deploy a Redis&reg; master StatefulSet and a Redis&reg; replicas StatefulSet. The replicas will be read-replicas of the master. Two services will be exposed:
-
-- Redis&reg; Master service: Points to the master, where read-write operations can be performed
-- Redis&reg; Replicas service: Points to the replicas, where only read operations are allowed by default.
-
-In case the master crashes, the replicas will wait until the master node is respawned again by the Kubernetes Controller Manager.
-
-#### Standalone
-
-When installing the chart with `architecture=standalone`, it will deploy a standalone Redis&reg; StatefulSet. A single service will be exposed:
-
-- Redis&reg; Master service: Points to the master, where read-write operations can be performed
-
-#### Master-Replicas with Sentinel
-
-When installing the chart with `architecture=replication` and `sentinel.enabled=true`, it will deploy a Redis&reg; master StatefulSet (only one master allowed) and a Redis&reg; replicas StatefulSet. In this case, the pods will contain an extra container with Redis&reg; Sentinel. This container will form a cluster of Redis&reg; Sentinel nodes, which will promote a new master in case the actual one fails.
-
-On graceful termination of the Redis&reg; master pod, a failover of the master is initiated to promote a new master. The Redis&reg; Sentinel container in this pod will wait for the failover to occur before terminating. If `sentinel.redisShutdownWaitFailover=true` is set (the default), the Redis&reg; container will wait for the failover as well before terminating. This increases availability for reads during failover, but may cause stale reads until all clients have switched to the new master.
-
-In addition to this, only one service is exposed:
-
-- Redis&reg; service: Exposes port 6379 for Redis&reg; read-only operations and port 26379 for accessing Redis&reg; Sentinel.
-
-For read-only operations, access the service using port 6379. For write operations, it's necessary to access the Redis&reg; Sentinel cluster and query the current master using the command below (using redis-cli or similar):
-
-```console
-SENTINEL get-master-addr-by-name <name of your MasterSet. e.g: mymaster>
-```
-
-This command will return the address of the current master, which can be accessed from inside the cluster.
-
-In case the current master crashes, the Sentinel containers will elect a new master node.
-
-`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
-
-### Multiple masters (experimental)
-
-When `master.count` is greater than `1`, special care must be taken to create a consistent setup.
-
-An example of use case is the creation of a redundant set of standalone masters or master-replicas per Kubernetes node where you must ensure:
-
-- No more than `1` master can be deployed per Kubernetes node
-- Replicas and writers can only see the single master of their own Kubernetes node
-
-One way of achieving this is by setting `master.service.internalTrafficPolicy=Local` in combination with a `master.affinity.podAntiAffinity` spec to never schedule more than one master per Kubernetes node.
-
-It's recommended to only change `master.count` if you know what you are doing.
-`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
-
-### Using a password file
-
-To use a password file for Redis&reg; you need to create a secret containing the password and then deploy the chart using that secret. Follow these instructions:
-
-- Create the secret with the password. It is important that the file with the password must be called `redis-password`.
-
-```console
-kubectl create secret generic redis-password-secret --from-file=redis-password.yaml
-```
-
-- Deploy the Helm Chart using the secret name as parameter:
-
-```text
-usePassword=true
-usePasswordFile=true
-existingSecret=redis-password-secret
-sentinels.enabled=true
-metrics.enabled=true
-```
-
-### Securing traffic using TLS
-
-TLS support can be enabled in the chart by specifying the `tls.` parameters while creating a release. The following parameters should be configured to properly enable the TLS support in the cluster:
-
-- `tls.enabled`: Enable TLS support. Defaults to `false`
-- `tls.existingSecret`: Name of the secret that contains the certificates. No defaults.
-- `tls.certFilename`: Certificate filename. No defaults.
-- `tls.certKeyFilename`: Certificate key filename. No defaults.
-- `tls.certCAFilename`: CA Certificate filename. No defaults.
-
-For example:
-
-First, create the secret with the certificates files:
-
-```console
-kubectl create secret generic certificates-tls-secret --from-file=./cert.pem --from-file=./cert.key --from-file=./ca.pem
-```
-
-Then, use the following parameters:
-
-```console
-tls.enabled="true"
-tls.existingSecret="certificates-tls-secret"
-tls.certFilename="cert.pem"
-tls.certKeyFilename="cert.key"
-tls.certCAFilename="ca.pem"
-```
-
-### Metrics
-
-The chart optionally can start a metrics exporter for [prometheus](https://prometheus.io). The metrics endpoint (port 9121) is exposed in the service. Metrics can be scraped from within the cluster using something similar as the described in the [example Prometheus scrape configuration](https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml). If metrics are to be scraped from outside the cluster, the Kubernetes API proxy can be utilized to access the endpoint.
-
-If you have enabled TLS by specifying `tls.enabled=true` you also need to specify TLS option to the metrics exporter. You can do that via `metrics.extraArgs`. You can find the metrics exporter CLI flags for TLS [here](https://github.com/oliver006/redis_exporter#command-line-flags). For example:
-
-You can either specify `metrics.extraArgs.skip-tls-verification=true` to skip TLS verification or providing the following values under `metrics.extraArgs` for TLS client authentication:
-
-```console
-tls-client-key-file
-tls-client-cert-file
-tls-ca-cert-file
-```
-
-### Deploy a custom metrics script in the sidecar
-
-A custom Lua script can be added to the `redis-exporter` sidecar by way of the `metrics.extraArgs.script` parameter.  The pathname of the script must exist on the container, or the `redis_exporter` process (and therefore the whole pod) will refuse to start.  The script can be provided to the sidecar containers via the `metrics.extraVolumes` and `metrics.extraVolumeMounts` parameters:
-
-```yaml
-metrics:
-  extraVolumeMounts:
-    - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
-      mountPath: '{{ printf "/mnt/%s/" (include "common.names.name" .) }}'
-      readOnly: true
-  extraVolumes:
-    - name: '{{ printf "%s-metrics-script-file" (include "common.names.fullname" .) }}'
-      configMap:
-        name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
-  extraArgs:
-    script: '{{ printf "/mnt/%s/my_custom_metrics.lua" (include "common.names.name" .) }}'
-```
-
-Then deploy the script into the correct location via `extraDeploy`:
-
-```yaml
-extraDeploy:
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: '{{ printf "%s-metrics-script" (include "common.names.fullname" .) }}'
-    data:
-      my_custom_metrics.lua: |
-        -- LUA SCRIPT CODE HERE, e.g.,
-        return {'bitnami_makes_the_best_charts', '1'}
-```
-
-### Host Kernel Settings
-
-Redis&reg; may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:
-
-```yaml
-sysctlImage:
-  enabled: true
-  mountHostSys: true
-  command:
-    - /bin/sh
-    - -c
-    - |-
-      install_packages procps
-      sysctl -w net.core.somaxconn=10000
-      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
-```
-
-Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure `sysctls` for master and slave pods. Example:
-
-```yaml
-securityContext:
-  sysctls:
-  - name: net.core.somaxconn
-    value: "10000"
-```
-
-Note that this will not disable transparent huge tables.
-
-## Persistence
-
-By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at the `/data` path. The volume is created using dynamic volume provisioning. If a Persistent Volume Claim already exists, specify it during installation.
-
-### Existing PersistentVolumeClaim
-
-1. Create the PersistentVolume
-2. Create the PersistentVolumeClaim
-3. Install the chart
-
-```console
-helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/redis
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-## Backup and restore
-
-To backup and restore Redis deployments on Kubernetes, you will need to create a snapshot of the data in the source cluster, and later restore it in a new cluster with the new parameters. Follow the instructions below:
-
-### Step 1: Backup the deployment
-
-- Connect to one of the nodes and start the Redis CLI tool. Then, run the commands below:
-
-    ```text
-    $ kubectl exec -it my-release-master-0 bash
-    $ redis-cli
-    127.0.0.1:6379> auth your_current_redis_password
-    OK
-    127.0.0.1:6379> save
-    OK
-    ```
-
-- Copy the dump file from the Redis node:
-
-    ```console
-    kubectl cp my-release-master-0:/data/dump.rdb dump.rdb -c redis
-    ```
-
-### Step 2: Restore the data on the destination cluster
-
-To restore the data in a new cluster, you will need to create a PVC and then upload the *dump.rdb* file to the new volume.
-
-Follow the following steps:
-
-- In the [*values.yaml*](https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml) file set the *appendonly* parameter to *no*. You can skip this step if it is already configured as *no*
-
-    ```yaml
-    commonConfiguration: |-
-       # Enable AOF https://redis.io/topics/persistence#append-only-file
-       appendonly no
-       # Disable RDB persistence, AOF persistence already enabled.
-       save ""
-    ```
-
-    > *Note that the `Enable AOF` comment belongs to the original config file and what you're actually doing is disabling it. This change will only be neccessary for the temporal cluster you're creating to upload the dump.*
-
-- Start the new cluster to create the PVCs. Use the command below as an example:
-
-    ```console
-    helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
-    ```
-
-- Now that the PVC were created, stop it and copy the *dump.rdp* file on the persisted data by using a helping pod.
-
-    ```text
-    $ helm delete new-redis
-
-    $ kubectl run --generator=run-pod/v1 -i --rm --tty volpod --overrides='
-    {
-        "apiVersion": "v1",
-        "kind": "Pod",
-        "metadata": {
-            "name": "redisvolpod"
-        },
-        "spec": {
-            "containers": [{
-               "command": [
-                    "tail",
-                    "-f",
-                    "/dev/null"
-               ],
-               "image": "bitnami/minideb",
-               "name": "mycontainer",
-               "volumeMounts": [{
-                   "mountPath": "/mnt",
-                   "name": "redisdata"
-                }]
-            }],
-            "restartPolicy": "Never",
-            "volumes": [{
-                "name": "redisdata",
-                "persistentVolumeClaim": {
-                    "claimName": "redis-data-new-redis-master-0"
-                }
-            }]
-        }
-    }' --image="bitnami/minideb"
-
-    $ kubectl cp dump.rdb redisvolpod:/mnt/dump.rdb
-    $ kubectl delete pod volpod
-    ```
-
-- Restart the cluster:
-
-    > **INFO:** The *appendonly* parameter can be safely restored to your desired value.
-
-    ```console
-    helm install new-redis  -f values.yaml .  --set cluster.enabled=true  --set cluster.slaveCount=3
-    ```
-
-## NetworkPolicy
-
-To enable network policy for Redis&reg;, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
-
-With NetworkPolicy enabled, only pods with the generated client label will be able to connect to Redis. This label will be displayed in the output after a successful install.
-
-With `networkPolicy.ingressNSMatchLabels` pods from other namespaces can connect to Redis. Set `networkPolicy.ingressNSPodMatchLabels` to match pod labels in matched namespace. For example, for a namespace labeled `redis=external` and pods in that namespace labeled `redis-client=true` the fields should be set:
-
-```yaml
-networkPolicy:
-  enabled: true
-  ingressNSMatchLabels:
-    redis: external
-  ingressNSPodMatchLabels:
-    redis-client: true
-```
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

@@ -74,6 +74,12 @@ spec:
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.dnsPolicy  }}
+      dnsPolicy: {{ .Values.dnsPolicy | quote }}
+      {{- end }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
@@ -317,6 +323,11 @@ spec:
             # TransIP arguments
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
+            {{- end }}
+            {{- if .Values.txtEncrypt.enabled }}
+            # TXT registry encryption
+            - --txt-encrypt-enabled
+            - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
             {{- end }}
             {{- range $key, $value := .Values.extraArgs }}
              # Extra arguments
@@ -663,6 +674,13 @@ spec:
                   name: {{ template "external-dns.secretName" . }}
                   key: ns1-api-key
             {{- end }}
+            {{- end }}
+            {{- if and .Values.txtEncrypt.enabled }}
+            - name: TXT_AES_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "external-dns.txtEncryptKeySecretName" . }}
+                  key: txt_aes_encryption_key
             {{- end }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
