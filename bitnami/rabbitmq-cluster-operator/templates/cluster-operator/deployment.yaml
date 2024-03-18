@@ -16,6 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.clusterOperator.replicaCount }}
+  revisionHistoryLimit: {{ .Values.clusterOperator.revisionHistoryLimit }}
   {{- if .Values.clusterOperator.updateStrategy }}
   strategy: {{- toYaml .Values.clusterOperator.updateStrategy | nindent 4 }}
   {{- end }}
@@ -95,7 +96,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if not .Values.clusterOperator.watchAllNamespaces }}      
+            {{- if not .Values.clusterOperator.watchAllNamespaces }}
             {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.clusterOperator.watchNamespaces }}
             - name: OPERATOR_SCOPE_NAMESPACE
               value: {{ join "," $watchNamespaces | quote }}
