@@ -129,12 +129,17 @@ spec:
               info "Copying base dir to empty dir"
               # In order to not break the application functionality (such as upgrades or plugins) we need
               # to make the base directory writable, so we need to copy it to an empty dir volume
-              cp -r --preserve=mode /opt/bitnami/wordpress /bitnami
+              cp -r --preserve=mode /opt/bitnami/wordpress /emptydir/app-base-dir
+
+              info "Copying symlinks to stdout/stderr"
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/apache/logs; then
+                cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
+              fi
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir
-              mountPath: /bitnami
-              subPath: app-base-dir
+              mountPath: /emptydir
         - name: preserve-logs-symlinks
           image: {{ include "wordpress.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -156,15 +161,7 @@ spec:
               . /opt/bitnami/scripts/libfs.sh
               . /opt/bitnami/scripts/liblog.sh
 
-              info "Copying symlinks to stdout/stderr"
-              # We copy the logs folder because it has symlinks to stdout and stderr
-              if ! is_dir_empty /opt/bitnami/apache/logs; then
-                cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
-              fi
-              info "Copy operation completed"
           volumeMounts:
-            - name: empty-dir
-              mountPath: /emptydir
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -351,7 +348,7 @@ spec:
               subPath: tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/wordpress
-              subPath: app-base-dir/wordpress
+              subPath: app-base-dir
             - mountPath: /bitnami/wordpress
               name: wordpress-data
               subPath: wordpress
