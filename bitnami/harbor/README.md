@@ -1087,7 +1087,8 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `postgresql.auth.postgresPassword`         | Password for the "postgres" admin user                                                                     | `not-secure-database-password` |
 | `postgresql.auth.existingSecret`           | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                           |
 | `postgresql.architecture`                  | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`                   |
-| `postgresql.primary.extendedConfiguration` | Extended PostgreSQL Primary configuration (appended to main or default configuration)                      | `max_connections = 1024`       |
+| `postgresql.primary.extendedConfiguration` | Extended PostgreSQL Primary configuration (appended to main or default configuration)                      | `max_connections = 1024
+`      |
 | `postgresql.primary.initdb.scripts`        | Initdb scripts to create Harbor databases                                                                  | `{}`                           |
 | `postgresql.image.registry`                | PostgreSQL image registry                                                                                  | `REGISTRY_NAME`                |
 | `postgresql.image.repository`              | PostgreSQL image repository                                                                                | `REPOSITORY_NAME/postgresql`   |
