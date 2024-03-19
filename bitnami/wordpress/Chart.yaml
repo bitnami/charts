@@ -17,11 +17,11 @@ dependencies:
 - condition: memcached.enabled
   name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 6.x.x
+  version: 7.x.x
 - condition: mariadb.enabled
   name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 16.x.x
+  version: 17.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -44,4 +44,4 @@ maintainers:
 name: wordpress
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/wordpress
-version: 20.2.0
+version: 21.0.0
