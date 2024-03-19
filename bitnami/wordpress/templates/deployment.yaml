@@ -106,9 +106,17 @@ spec:
               name: wordpress-data
               subPath: wordpress
         {{- end }}
-        - name: setup-application
+        - name: prepare-base-dir
           image: {{ include "wordpress.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           command:
             - /bin/bash
           args:
@@ -116,37 +124,66 @@ spec:
             - |
               #!/bin/bash
 
-              set -o errexit
-              set -o nounset
-              set -o pipefail
-              # set -o xtrace # Uncomment this line for debugging purposes
-
-              # Load WordPress environment
-              . /opt/bitnami/scripts/wordpress-env.sh
-
-              # Load libraries
-              . /opt/bitnami/scripts/libbitnami.sh
               . /opt/bitnami/scripts/liblog.sh
-              . /opt/bitnami/scripts/libwebserver.sh
 
-              print_welcome_page
-
-              info "** Starting WordPress setup **"
-              /opt/bitnami/scripts/"$(web_server_type)"/setup.sh
-              /opt/bitnami/scripts/php/setup.sh
-              /opt/bitnami/scripts/mysql-client/setup.sh
-              /opt/bitnami/scripts/wordpress/setup.sh
-              /post-init.sh
-              info "** WordPress setup finished! **"
-              {{- if not .Values.htaccessPersistenceEnabled }}
-              cp /opt/bitnami/wordpress/.htaccess /bitnami/wordpress-htaccess
-              {{- end }}
+              info "Copying base dir to empty dir"
+              # In order to not break the application functionality (such as upgrades or plugins) we need
+              # to make the base directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/wordpress /bitnami
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /bitnami
+              subPath: app-base-dir
+        - name: preserve-logs-symlinks
+          image: {{ include "wordpress.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
-          {{- $securityContext := deepCopy .Values.containerSecurityContext }}
-          # readOnlyRootFilesystem is not compatible in this step
-          {{- $securityContext = set $securityContext "readOnlyRootFilesystem" false }}
-          {{- $securityContext = set $securityContext "runAsGroup" 0 }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $securityContext "context" $) | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/libfs.sh
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying symlinks to stdout/stderr"
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/apache/logs; then
+                cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
+              fi
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: wordpress
+          image: {{ include "wordpress.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
+          command: {{- include "common.tplvalues.render" ( dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
+          args: {{- include "common.tplvalues.render" ( dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG
@@ -257,120 +294,6 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
             {{- end }}
-          volumeMounts:
-            - mountPath: /bitnami/wordpress
-              name: wordpress-data
-              subPath: wordpress
-            {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
-            - name: wordpress-config
-              mountPath: /opt/bitnami/wordpress/wp-config.php
-              subPath: wp-config.php
-            {{- end }}
-            {{- if or .Values.apacheConfiguration .Values.existingApacheConfigurationConfigMap }}
-            - name: apache-config
-              mountPath: /opt/bitnami/apache/conf/httpd.conf
-              subPath: httpd.conf
-            {{- end }}
-            {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
-            - mountPath: /opt/bitnami/apache/conf/vhosts/htaccess
-              name: custom-htaccess
-            {{- end }}
-            {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
-            - mountPath: /docker-entrypoint-init.d
-              name: custom-postinit
-            {{- end }}
-            - name: empty-dir
-              mountPath: /opt/bitnami/apache/conf
-              subPath: apache-conf-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/apache/logs
-              subPath: apache-logs-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/apache/var/run
-              subPath: apcahe-tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/php/etc
-              subPath: php-conf-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/php/tmp
-              subPath: php-tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/php/var
-              subPath: php-var-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/wordpress/tmp
-              subPath: app-tmp-dir
-            {{- if not .Values.htaccessPersistenceEnabled }}
-            - name: empty-dir
-              mountPath: /bitnami/wordpress-htaccess
-              subPath: app-htaccess-dir
-            {{- end }}
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            {{- if .Values.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-        {{- if .Values.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-        {{- end }}
-      containers:
-        - name: wordpress
-          image: {{ include "wordpress.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.command }}
-          command: {{- include "common.tplvalues.render" ( dict "value" .Values.command "context" $) | nindent 12 }}
-          {{- else }}
-          command:
-            - /bin/bash
-          {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.args }}
-          args: {{- include "common.tplvalues.render" ( dict "value" .Values.args "context" $) | nindent 12 }}
-          {{- else }}
-          args:
-            - -ec
-            - |
-              #!/bin/bash
-
-              set -o errexit
-              set -o nounset
-              set -o pipefail
-              # set -o xtrace # Uncomment this line for debugging purposes
-
-              # Load WordPress environment
-              . /opt/bitnami/scripts/wordpress-env.sh
-
-              # Load libraries
-              . /opt/bitnami/scripts/libbitnami.sh
-              . /opt/bitnami/scripts/liblog.sh
-              . /opt/bitnami/scripts/libwebserver.sh
-
-              print_welcome_page
-
-              /opt/bitnami/scripts/apache/run.sh
-          {{- end }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if .Values.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
-            {{- end }}
-          envFrom:
-            {{- if .Values.extraEnvVarsCM }}
-            - configMapRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
-            {{- end }}
-            {{- if .Values.extraEnvVarsSecret }}
-            - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
-            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
@@ -405,27 +328,6 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - mountPath: /opt/bitnami/wordpress/wp-content
-              name: wordpress-data
-              subPath: wordpress/wp-content
-            {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
-            - name: wordpress-config
-              mountPath: /opt/bitnami/wordpress/wp-config.php
-              subPath: wp-config.php
-            {{- else }}
-            - mountPath: /opt/bitnami/wordpress/wp-config.php
-              name: wordpress-data
-              subPath: wordpress/wp-config.php
-            {{- end }}
-            {{- if or .Values.apacheConfiguration .Values.existingApacheConfigurationConfigMap }}
-            - name: apache-config
-              mountPath: /opt/bitnami/apache/conf/httpd.conf
-              subPath: httpd.conf
-            {{- end }}
-            {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
-            - mountPath: /opt/bitnami/apache/conf/vhosts/htaccess
-              name: custom-htaccess
-            {{- end }}
             - name: empty-dir
               mountPath: /opt/bitnami/apache/conf
               subPath: apache-conf-dir
@@ -447,14 +349,29 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.htaccessPersistenceEnabled }}
-            - name: wordpress-data
-              mountPath: /opt/bitnami/wordpress/.htaccess
-              subPath: wordpress/.htaccess
-            {{- else }}
             - name: empty-dir
-              mountPath: /opt/bitnami/wordpress/.htaccess
-              subPath: app-htaccess-dir/.htaccess
+              mountPath: /opt/bitnami/wordpress
+              subPath: app-base-dir/wordpress
+            - mountPath: /bitnami/wordpress
+              name: wordpress-data
+              subPath: wordpress
+            {{- if or .Values.wordpressConfiguration .Values.existingWordPressConfigurationSecret }}
+            - name: wordpress-config
+              mountPath: /opt/bitnami/wordpress/wp-config.php
+              subPath: wp-config.php
+            {{- end }}
+            {{- if or .Values.apacheConfiguration .Values.existingApacheConfigurationConfigMap }}
+            - name: apache-config
+              mountPath: /opt/bitnami/apache/conf/httpd.conf
+              subPath: httpd.conf
+            {{- end }}
+            {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
+            - mountPath: /opt/bitnami/apache/conf/vhosts/htaccess
+              name: custom-htaccess
+            {{- end }}
+            {{- if or .Values.customPostInitScripts .Values.wordpressConfigureCache }}
+            - mountPath: /docker-entrypoint-init.d
+              name: custom-postinit
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
