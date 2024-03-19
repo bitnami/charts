@@ -1812,7 +1812,10 @@ metrics:
     ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.relabellings Metrics RelabelConfigs to apply to samples before scraping.
+    ## @param metrics.serviceMonitor.relabelings Metrics RelabelConfigs to apply to samples before scraping.
+    ##
+    relabelings: []
+    ## @skip metrics.serviceMonitor.relabellings DEPRECATED: Use `metrics.serviceMonitor.relabelings` instead.
     ##
     relabellings: []
     ## @param metrics.serviceMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
@@ -1866,7 +1869,10 @@ metrics:
     ## @param metrics.podMonitor.scrapeTimeout The timeout after which the scrape is ended
     ##
     scrapeTimeout: ""
-    ## @param metrics.podMonitor.relabellings Metrics RelabelConfigs to apply to samples before scraping.
+    ## @param metrics.podMonitor.relabelings Metrics RelabelConfigs to apply to samples before scraping.
+    ##
+    relabelings: []
+    ## @skip metrics.podMonitor.relabellings DEPRECATED: Use `metrics.podMonitor.relabelings` instead.
     ##
     relabellings: []
     ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.

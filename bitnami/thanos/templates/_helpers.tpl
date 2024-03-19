@@ -120,6 +120,62 @@ Return true if a secret object should be created
 {{- end -}}
 
 {{/*
+Return the object store config
+*/}}
+{{- define "thanos.objstoreConfig" -}}
+objstore.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.objstoreConfig "context" $) | b64enc | nindent 2 }}
+{{- if .Values.indexCacheConfig }}
+index-cache.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | b64enc | nindent 2 }}
+{{- end }}
+{{- if .Values.bucketCacheConfig }}
+bucket-cache.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | b64enc | nindent 2 }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Return the storegateway config
+*/}}
+{{- define "thanos.storegatewayConfigMap" -}}
+config.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 2 }}
+{{- end -}}
+
+{{/*
+Return the ruler config
+*/}}
+{{- define "thanos.rulerConfigMap" -}}
+ruler.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.ruler.config "context" $) | nindent 2 }}
+{{- end -}}
+
+{{/*
+Return the receive config
+*/}}
+{{- define "thanos.receiveConfigMap" -}}
+hashrings.json: |-
+  {{- include "common.tplvalues.render" (dict "value" (include "thanos.receive.config" .) "context" .) | nindent 2 }}
+{{- end -}}
+
+{{/*
+Return the query config
+*/}}
+{{- define "thanos.querySDConfigMap" -}}
+servicediscovery.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.query.sdConfig "context" $) | nindent 2 }}
+{{- end -}}
+
+{{/*
+Return the query frontend config
+*/}}
+{{- define "thanos.queryFrontendConfigMap" -}}
+config.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.config "context" $) | nindent 2 }}
+{{- end -}}
+
+{{/*
 Return the Thanos HTTPS and basic auth configuration secret.
 */}}
 {{- define "thanos.httpConfigEnabled" -}}
