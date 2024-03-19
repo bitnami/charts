@@ -1518,7 +1518,7 @@ podSecurityPolicy:
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
-  create: true
+  create: false
   ## @param rbac.rules Custom RBAC rules to set
   ## e.g:
   ## rules:
