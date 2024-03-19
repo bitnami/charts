@@ -354,6 +354,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `configuration`                  | Keycloak Configuration. Auto-generated based on other parameters when not specified                                          | `""`                          |
 | `existingConfigmap`              | Name of existing ConfigMap with Keycloak configuration                                                                       | `""`                          |
 | `extraStartupArgs`               | Extra default startup args                                                                                                   | `""`                          |
+| `enableDefaultInitContainers`    | Deploy default init containers                                                                                               | `true`                        |
 | `initdbScripts`                  | Dictionary of initdb scripts                                                                                                 | `{}`                          |
 | `initdbScriptsConfigMap`         | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                          | `""`                          |
 | `command`                        | Override default container command (useful when using custom images)                                                         | `[]`                          |
