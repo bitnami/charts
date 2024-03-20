@@ -384,7 +384,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `backend.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                        | `{}`                  |
 | `backend.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                       | `{}`                  |
 | `backend.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                         | `{}`                  |
-| `backend.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if backend.resources is set (backend.resources is recommended for production). | `medium`              |
+| `backend.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if backend.resources is set (backend.resources is recommended for production). | `large`               |
 | `backend.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                  |
 | `backend.podSecurityContext.enabled`                        | Enabled Appsmith backend pods' Security Context                                                                                                                                                                            | `true`                |
 | `backend.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                         | `Always`              |
@@ -620,27 +620,31 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Redis sub-chart parameters
 
-| Name                               | Description                                    | Value        |
-| ---------------------------------- | ---------------------------------------------- | ------------ |
-| `redis.enabled`                    | Deploy Redis subchart                          | `true`       |
-| `redis.architecture`               | Set Redis architecture                         | `standalone` |
-| `redis.existingSecret`             | Name of a secret containing redis credentials  | `""`         |
-| `redis.master.service.ports.redis` | Redis port                                     | `6379`       |
-| `redis.auth.enabled`               | Enable Redis auth                              | `true`       |
-| `redis.auth.password`              | Redis password                                 | `""`         |
-| `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
+| Name                               | Description                                                                                                                                                                                                              | Value        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
+| `redis.enabled`                    | Deploy Redis subchart                                                                                                                                                                                                    | `true`       |
+| `redis.architecture`               | Set Redis architecture                                                                                                                                                                                                   | `standalone` |
+| `redis.existingSecret`             | Name of a secret containing redis credentials                                                                                                                                                                            | `""`         |
+| `redis.master.service.ports.redis` | Redis port                                                                                                                                                                                                               | `6379`       |
+| `redis.master.resourcesPreset`     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production). | `nano`       |
+| `redis.master.resources`           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`         |
+| `redis.auth.enabled`               | Enable Redis auth                                                                                                                                                                                                        | `true`       |
+| `redis.auth.password`              | Redis password                                                                                                                                                                                                           | `""`         |
+| `redis.auth.existingSecret`        | Name of a secret containing the Redis password                                                                                                                                                                           | `""`         |
 
 ### MongoDB sub-chart parameters
 
-| Name                             | Description                                            | Value        |
-| -------------------------------- | ------------------------------------------------------ | ------------ |
-| `mongodb.enabled`                | Deploy MongoDB subchart                                | `true`       |
-| `mongodb.architecture`           | MongoDB architecture (Appsmith requires a Replica Set) | `replicaset` |
-| `mongodb.replicaCount`           | MongoDB number of replicas                             | `2`          |
-| `mongodb.auth.usernames`         | MongoDB non-root username creation                     | `[]`         |
-| `mongodb.auth.databases`         | MongoDB database creation                              | `[]`         |
-| `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
-| `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
+| Name                             | Description                                                                                                                                                                                                | Value        |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `mongodb.enabled`                | Deploy MongoDB subchart                                                                                                                                                                                    | `true`       |
+| `mongodb.architecture`           | MongoDB architecture (Appsmith requires a Replica Set)                                                                                                                                                     | `replicaset` |
+| `mongodb.replicaCount`           | MongoDB number of replicas                                                                                                                                                                                 | `2`          |
+| `mongodb.auth.usernames`         | MongoDB non-root username creation                                                                                                                                                                         | `[]`         |
+| `mongodb.auth.databases`         | MongoDB database creation                                                                                                                                                                                  | `[]`         |
+| `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)                                                                                                                                                      | `27017`      |
+| `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                                                                                                                                                                     | `false`      |
+| `mongodb.resourcesPreset`        | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `small`      |
+| `mongodb.resources`              | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`         |
 
 The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
 
