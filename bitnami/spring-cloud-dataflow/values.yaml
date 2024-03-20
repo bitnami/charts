@@ -1869,49 +1869,70 @@ externalDatabase:
   ## @param externalDatabase.scheme The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL
   ##
   scheme: ""
-  ## @param externalDatabase.password Password for the above username
+  ## @param externalDatabase.hibernateDialect Hibernate Dialect used by Dataflow/Skipper servers
+  ## e.g: org.hibernate.dialect.MariaDB102Dialect
+  ##
+  hibernateDialect: ""
+  ## @param externalDatabase.password External database password (DEPRECATED: use dataflow.password and skipper.password instead)
   ##
   password: ""
-  ## @param externalDatabase.existingPasswordSecret Existing secret with database password
+  ## @param externalDatabase.existingPasswordSecret Existing secret with database password (DEPRECATED: use dataflow.existingSecret and skipper.existingSecret instead)
   ##
   existingPasswordSecret: ""
-  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password, defaults to `datasource-password`
+  ## @param externalDatabase.existingPasswordKey Key of the existing secret with database password (DEPRECATED: use dataflow.existingSecretPasswordKey and skipper.existingSecretPasswordKey instead)
   ##
   existingPasswordKey: ""
   ## Data Flow user and database
   ##
   dataflow:
-    ## @param externalDatabase.dataflow.url JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.
+    ## @param externalDatabase.dataflow.url JDBC URL for dataflow server. Overrides external scheme, host, port, password, and dataflow.database parameters.
     ## This provides a mechanism to define a fully customized JDBC URL for the data flow server rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
-    ## individual attributes (scheme, host, port, database)
+    ## individual attributes (scheme, host, port, dataflow.database)
+    ## Ensure you don't include userspec in the URL and use the username and password fields instead
     ##
     url: ""
-    ## @param externalDatabase.dataflow.database Name of the existing database to be used by Dataflow server
+    ## @param externalDatabase.dataflow.database Name of the existing database to be used by Dataflow server. Ignored if url is provided
     ##
     database: dataflow
     ## @param externalDatabase.dataflow.username Existing username in the external db to be used by Dataflow server
     ##
     username: dataflow
+    ## @param externalDatabase.dataflow.password Password for the above username. Ignored if existing secret is provided
+    ##
+    password: ""
+    ## @param externalDatabase.dataflow.existingSecret Name of the existing secret containing database credentials for Dataflow server
+    ##
+    existingSecret: ""
+    ## @param externalDatabase.dataflow.existingSecretPasswordKey Key of the above existing secret with database password, defaults to `datasource-password`
+    ##
+    existingSecretPasswordKey: ""
   ## Skipper and database
   ##
   skipper:
-    ## @param externalDatabase.skipper.url JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.
+    ## @param externalDatabase.skipper.url JDBC URL for skipper. Overrides external scheme, host, port, database, and skipper.database parameters.
     ## This provides a mechanism to define a fully customized JDBC URL for skipper rather than having it
     ## derived from the common, individual attributes. This property, when defined, has precedence over the
-    ## individual attributes (scheme, host, port, database)
+    ## individual attributes (scheme, host, port, skipper.database)
+    ## Ensure you don't include userspec in the URL and use the username and password fields instead
     ##
     url: ""
-    ## @param externalDatabase.skipper.database Name of the existing database to be used by Skipper server
+    ## @param externalDatabase.skipper.database Name of the existing database to be used by Skipper server. Ignored if url is provided
     ##
     database: skipper
     ## @param externalDatabase.skipper.username Existing username in the external db to be used by Skipper server
     ##
     username: skipper
-  ## @param externalDatabase.hibernateDialect Hibernate Dialect used by Dataflow/Skipper servers
-  ## e.g: org.hibernate.dialect.MariaDB102Dialect
-  ##
-  hibernateDialect: ""
+    ## @param externalDatabase.skipper.password Password for the above username. Ignored if existing secret is provided
+    ##
+    password: ""
+    ## @param externalDatabase.skipper.existingSecret Name of the existing secret containing database credentials for Skipper server
+    ##
+    existingSecret: ""
+    ## @param externalDatabase.skipper.existingSecretPasswordKey Key of the above existing secret with database password, defaults to `datasource-password`
+    ##
+    existingSecretPasswordKey: ""
+
 ## @section RabbitMQ chart parameters
 
 ## RabbitMQ chart configuration
@@ -1949,9 +1970,15 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
+  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)
   ##
   existingPasswordSecret: ""
+  ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
+  ##
+  existingSecret: ""
+  ## @param externalRabbitmq.existingSecretPasswordKey Key of the above existing secret with RabbitMQ password, defaults to `password`
+  ##
+  existingSecretPasswordKey: ""
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration
