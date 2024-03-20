@@ -62,6 +62,6 @@ it('allows deploying a healthy app for a new project', () => {
   cy.get('[qe-id="application-sync-panel-button-synchronize"]').click();
   cy.contains('Succeeded a few seconds ago', {timeout: 120000});
   cy.get('[class*="application-details__status-panel"]').within(() => {
-    cy.get('[title="Healthy"]', {timeout: 60000});
+    cy.get('[title="Healthy"]', {timeout: 120000});
   });
 });
