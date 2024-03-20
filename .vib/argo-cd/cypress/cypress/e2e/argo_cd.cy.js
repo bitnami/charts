@@ -58,6 +58,9 @@ it('allows deploying a healthy app for a new project', () => {
       cy.contains(`${applications.newApplication.name}-${random}`, {timeout: 60000}).click();
     });
   });
+  // Ensure that UI shows the basic K8s objects
+  cy.contains('svc');
+  cy.contains('deploy');
   cy.get('i[class*="fa-sync"]').click();
   cy.get('[qe-id="application-sync-panel-button-synchronize"]').click();
   cy.contains('Succeeded a few seconds ago', {timeout: 120000});
