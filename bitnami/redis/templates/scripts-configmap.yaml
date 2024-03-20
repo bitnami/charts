@@ -57,7 +57,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -290,7 +290,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -366,7 +366,7 @@ data:
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
     fi
 
-    {{- if .Values.sentinel.service.createMaster }}
+    {{- if or .Values.sentinel.masterService.createMaster .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
         echo "${REDIS_MASTER_HOST/.*}" > /etc/shared/current
@@ -474,7 +474,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -554,7 +554,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -603,7 +603,7 @@ data:
         exit 0
     fi
 
-  {{- if .Values.sentinel.service.createMaster}}
+  {{- if or .Values.sentinel.masterService.createMaster .Values.sentinel.service.createMaster }}
   push-master-label.sh: |
     #!/bin/bash
     # https://download.redis.io/redis-stable/sentinel.conf
@@ -700,7 +700,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -771,7 +771,7 @@ data:
   {{- end }}
 {{- end }}
 ---
-{{- if .Values.sentinel.service.createMaster}}
+{{- if or .Values.sentinel.masterService.createMaster .Values.sentinel.service.createMaster }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
