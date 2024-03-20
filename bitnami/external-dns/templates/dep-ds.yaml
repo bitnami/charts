@@ -290,7 +290,7 @@ spec:
             - --pihole-server={{ .Values.pihole.server }}
               {{- end }}
               {{- if .Values.pihole.tlsSkipVerify }}
-            - --pihole-tls-skip-verify={{ .Values.pihole.tlsSkipVerify }}
+            - --pihole-tls-skip-verify
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
@@ -664,7 +664,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: pihole_password
-            {{- end }}  
+            {{- end }}
             {{- if eq .Values.provider "ns1" }}
             # NS1 environment variables
             {{- if or (.Values.ns1.apiKey) (.Values.ns1.secretName) }}
