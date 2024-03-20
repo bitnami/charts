@@ -1319,6 +1319,10 @@ backup:
     ##   limits:
     ##     cpu: 2
     ##     memory: 1024Mi
+    networkPolicy:
+      ## @param backup.cronjob.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+      ##
+      enabled: true
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
