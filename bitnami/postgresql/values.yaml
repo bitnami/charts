@@ -1324,6 +1324,9 @@ backup:
       ##
       enabled: true
     storage:
+      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume 
+      ##
+      enabled: true
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
       ##
@@ -1363,6 +1366,12 @@ backup:
         ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
         ##
         selector: {}
+    ## @param backup.cronjob.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the backup container
+    ##
+    extraVolumeMounts: []
+    ## @param backup.cronjob.extraVolumes Optionally specify extra list of additional volumes for the backup container
+    ##
+    extraVolumes: []
 ## @section Volume Permissions parameters
 ##
 
