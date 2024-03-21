@@ -26,7 +26,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -65,7 +65,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.10.3-debian-12-r0
+  tag: 2.10.4-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -149,7 +149,7 @@ controller:
   ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -190,11 +190,11 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
@@ -947,11 +947,11 @@ applicationSet:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
@@ -997,7 +997,7 @@ applicationSet:
   ## @param applicationSet.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if applicationSet.resources is set (applicationSet.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param applicationSet.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1418,11 +1418,11 @@ notifications:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
@@ -1434,7 +1434,7 @@ notifications:
   ## @param notifications.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if notifications.resources is set (notifications.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param notifications.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1852,11 +1852,11 @@ notifications:
       ##
       containerSecurityContext:
         enabled: true
-        seLinuxOptions: null
+        seLinuxOptions: {}
         runAsUser: 1001
-        runAsGroup: 0
+        runAsGroup: 1001
         runAsNonRoot: true
-        readOnlyRootFilesystem: false
+        readOnlyRootFilesystem: true
         allowPrivilegeEscalation: false
         privileged: false
         capabilities:
@@ -1868,7 +1868,7 @@ notifications:
       ## @param notifications.bots.slack.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if notifications.bots.slack.resources is set (notifications.bots.slack.resources is recommended for production).
       ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
-      resourcesPreset: "none"
+      resourcesPreset: "nano"
       ## @param notifications.bots.slack.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
       ## Example:
       ## resources:
@@ -1990,7 +1990,7 @@ server:
   ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2031,11 +2031,11 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
@@ -2786,7 +2786,7 @@ repoServer:
   ## @param repoServer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if repoServer.resources is set (repoServer.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param repoServer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2827,11 +2827,11 @@ repoServer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
@@ -3320,7 +3320,7 @@ dex:
   ## @param dex.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dex.resources is set (dex.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param dex.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3361,11 +3361,11 @@ dex:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:
@@ -3939,7 +3939,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3960,7 +3960,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section Other Parameters
 
@@ -4076,11 +4076,11 @@ redisWait:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     privileged: false
     capabilities:

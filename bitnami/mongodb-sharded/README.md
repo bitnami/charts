@@ -47,15 +47,103 @@ The command deploys MongoDB&reg; on the Kubernetes cluster in the default config
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Change MongoDB&reg; version
+
+To modify the MongoDB&reg; version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb-sharded/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
+### Sharding
+
+This chart deploys a sharded cluster by default. Some characteristics of this chart are:
+
+- It allows HA by enabling replication on the shards and the config servers. The mongos instances can be scaled horizontally as well.
+- The number of secondary and arbiter nodes can be scaled out independently.
+
+### Initialize a fresh instance
+
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
+
+The allowed extensions are `.sh`, and `.js`.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections). Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections) property.
+
+```yaml
+extraEnvVars:
+  - name: MONGODB_VERSION
+    value: 4.0
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Using an external config server
+
+It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB&reg; sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
+### Adding extra volumes
+
+The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets or configmaps) by using the `extraVolumes` and `extraVolumeMounts` properties (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections). This can be combined with advanced operations like adding extra init containers and sidecars.
 
 ## Parameters
 
@@ -160,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                          | Description                                                                                                                                                                                                                    | Value                                                  |
 | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
 | `configsvr.replicaCount`                                      | Number of nodes in the replica set (the first node will be primary)                                                                                                                                                            | `1`                                                    |
-| `configsvr.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if configsvr.resources is set (configsvr.resources is recommended for production). | `micro`                                                |
+| `configsvr.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if configsvr.resources is set (configsvr.resources is recommended for production). | `small`                                                |
 | `configsvr.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                              | `{}`                                                   |
 | `configsvr.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                             | `false`                                                |
 | `configsvr.hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                                    | `[]`                                                   |
@@ -254,7 +342,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                       | Description                                                                                                                                                                                                              | Value            |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `mongos.replicaCount`                                      | Number of replicas                                                                                                                                                                                                       | `1`              |
-| `mongos.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if mongos.resources is set (mongos.resources is recommended for production). | `micro`          |
+| `mongos.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if mongos.resources is set (mongos.resources is recommended for production). | `small`          |
 | `mongos.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`             |
 | `mongos.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                       | `false`          |
 | `mongos.hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                              | `[]`             |
@@ -447,7 +535,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.replicaCount`                                      | Number of arbiters in each shard replica set (the first node will be primary)                                                                                                                                                                | `0`              |
 | `shardsvr.arbiter.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                           | `false`          |
 | `shardsvr.arbiter.hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                                                  | `[]`             |
-| `shardsvr.arbiter.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if shardsvr.arbiter.resources is set (shardsvr.arbiter.resources is recommended for production). | `micro`          |
+| `shardsvr.arbiter.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if shardsvr.arbiter.resources is set (shardsvr.arbiter.resources is recommended for production). | `small`          |
 | `shardsvr.arbiter.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                            | `{}`             |
 | `shardsvr.arbiter.mongodbExtraFlags`                                 | MongoDB&reg; additional command line flags                                                                                                                                                                                                   | `[]`             |
 | `shardsvr.arbiter.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                                                     | `[]`             |
@@ -592,104 +680,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mongo
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Change MongoDB&reg; version
-
-To modify the MongoDB&reg; version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/mongodb-sharded/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
-
-### Sharding
-
-This chart deploys a sharded cluster by default. Some characteristics of this chart are:
-
-- It allows HA by enabling replication on the shards and the config servers. The mongos instances can be scaled horizontally as well.
-- The number of secondary and arbiter nodes can be scaled out independently.
-
-### Initialize a fresh instance
-
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
-
-The allowed extensions are `.sh`, and `.js`.
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as Kibana (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections). Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections) property.
-
-```yaml
-extraEnvVars:
-  - name: MONGODB_VERSION
-    value: 4.0
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Using an external config server
-
-It is possible to not deploy any shards or a config server. For example, it is possible to simply deploy `mongos` instances that point to an external MongoDB&reg; sharded database. If that is the case, set the `configsvr.external.host` and `configsvr.external.replicasetName` for the mongos instances to connect. For authentication, set the `configsvr.external.rootPassword` and `configsvr.external.replicasetKey` values.
-
-## Persistence
-
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
-
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Adding extra volumes
-
-The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets or configmaps) by using the `extraVolumes` and `extraVolumeMounts` properties (available in the `mongos`, `shardsvr.dataNode`, `shardsvr.arbiter`, `configsvr` and `common` sections). This can be combined with advanced operations like adding extra init containers and sidecars.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

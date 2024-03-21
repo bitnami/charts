@@ -336,12 +336,13 @@ Return the RabbitMQ username
 Return the RabbitMQ secret name
 */}}
 {{- define "scdf.rabbitmq.secretName" -}}
-{{- if .Values.externalRabbitmq.existingPasswordSecret -}}
-    {{- printf "%s" .Values.externalRabbitmq.existingPasswordSecret -}}
+{{- $secretName := coalesce .Values.externalRabbitmq.existingSecret .Values.externalRabbitmq.existingPasswordSecret -}}
+{{- if $secretName -}}
+    {{- printf "%s" $secretName -}}
 {{- else if .Values.rabbitmq.enabled }}
     {{- printf "%s" (include "scdf.rabbitmq.fullname" .) -}}
 {{- else -}}
-    {{- printf "%s-%s" (include "common.names.fullname" .) "externalrabbitmq" -}}
+    {{- printf "%s-externalrabbitmq" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
