@@ -768,6 +768,7 @@ speaker:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     capabilities:
+      # In order to use `tcpdump` you would need to comment out the `drop` block
       drop:
         - ALL
       add:
