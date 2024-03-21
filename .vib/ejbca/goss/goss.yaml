@@ -14,7 +14,7 @@ file:
   /opt/bitnami/wildfly/standalone/configuration/standalone.xml:
     exists: true
     filetype: file
-    mode: "0664"
+    mode: "0644"
     contents:
       - /http.*{{ .Vars.containerPorts.http }}/
       - /https.*{{ .Vars.containerPorts.https }}/
