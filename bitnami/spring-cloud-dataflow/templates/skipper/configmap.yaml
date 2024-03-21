@@ -74,6 +74,7 @@ data:
                       {{- $environmentVariables | nindent 22 }}
                       {{- end }}
                     {{- else }}
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
                     {{- if $environmentVariables }}
                     environmentVariables: {{- $environmentVariables  | trim | nindent 22 }}
                     {{- end }}
