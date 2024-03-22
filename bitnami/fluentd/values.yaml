@@ -1289,6 +1289,7 @@ aggregator:
   ## @param aggregator.autoscaling.minReplicas Minimum number of replicas for the HPA
   ## @param aggregator.autoscaling.maxReplicas Maximum number of replicas for the HPA
   ## @param aggregator.autoscaling.metrics [array] Metrics for the HPA to manage the scaling
+  ## @param aggregator.autoscaling.behavior HPA Behavior
   ##
   autoscaling:
     enabled: false
@@ -1307,6 +1308,7 @@ aggregator:
           target:
             type: Utilization
             averageUtilization: 60
+    behavior: {}
   ## Persist data to a persistent volume
   ##
   persistence:

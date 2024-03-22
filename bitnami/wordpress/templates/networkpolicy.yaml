@@ -5,7 +5,7 @@ SPDX-License-Identifier: APACHE-2.0
 
 {{- if .Values.networkPolicy.enabled }}
 kind: NetworkPolicy
-apiVersion: {{ template "common.capabilities.networkPolicy.apiVersion" . }}
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -14,8 +14,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress
@@ -30,53 +31,46 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow connection to other cluster pods
+    # Allow outbound connections to MariaDB
     - ports:
-        - port: {{ .Values.primary.containerPorts.mysql }}
-        - port: {{ .Values.secondary.containerPorts.mysql }}
-        - port: {{ .Values.primary.service.ports.mysql }}
-        - port: {{ .Values.secondary.service.ports.mysql }}
+        - port: {{ include "wordpress.databasePort" . }}
+      {{- if .Values.mariadb.enabled }}
+      to: 
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mariadb
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
+    {{- if .Values.wordpressConfigureCache }}
+    # Allow outbound connections to Memcached
+    - ports:
+        - port: {{ include "wordpress.cachePort" . }}
+      {{- if .Values.memcached.enabled }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+            matchLabels:
+              app.kubernetes.io/name: memcached
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
+    {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.primary.containerPorts.mysql }}
-        - port: {{ .Values.secondary.containerPorts.mysql }}
-      {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPorts.http }}
-      {{- end }}
-      {{- if .Values.primary.extraPorts }}
-        {{- range $value := .Values.primary.extraPorts }}
-        - port: {{ $value.containerPort }}
+        - port: {{ .Values.containerPorts.http }}
+        - port: {{ .Values.containerPorts.https }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ . }}
         {{- end }}
-      {{- end }}
-      {{- if .Values.primary.service.extraPorts }}
-        {{- range $value := .Values.primary.service.extraPorts }}
-        - port: {{ $value.port }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.secondary.extraPorts }}
-        {{- range $value := .Values.secondary.extraPorts }}
-        - port: {{ $value.containerPort }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.secondary.service.extraPorts }}
-        {{- range $value := .Values.secondary.service.extraPorts }}
-        - port: {{ $value.port }}
-        {{- end }}
-      {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
