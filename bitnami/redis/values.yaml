@@ -1352,7 +1352,7 @@ sentinel:
   ##
   extraVolumeMounts: []
   ## Redis&reg; Sentinel service parameters
-  ##
+  ## Note: values passed in this section also configure the master service, unless the sentinel.masterService is explicitly overridden.
   service:
     ## @param sentinel.service.type Redis&reg; Sentinel service type
     ##
@@ -1383,7 +1383,7 @@ sentinel:
     ## @param sentinel.service.clusterIP Redis&reg; Sentinel service Cluster IP
     ##
     clusterIP: ""
-    ## @param sentinel.service.createMaster DEPRECATED. Use sentinel.masterService.createMaster instead
+    ## @param sentinel.masterService.createMaster Enable master service pointing to the current master (experimental)
     ##
     createMaster: false
 
