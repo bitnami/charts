@@ -123,15 +123,9 @@ Return true if a secret object should be created
 Return the object store config
 */}}
 {{- define "thanos.objstoreConfig" -}}
+{{- if and .Values.objstoreConfig (not .Values.existingObjstoreSecret) }}
 objstore.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.objstoreConfig "context" $) | b64enc | nindent 2 }}
-{{- if .Values.indexCacheConfig }}
-index-cache.yml: |-
-  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | b64enc | nindent 2 }}
-{{- end }}
-{{- if .Values.bucketCacheConfig }}
-bucket-cache.yml: |-
-  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | b64enc | nindent 2 }}
 {{- end }}
 {{- end -}}
 
@@ -141,6 +135,14 @@ Return the storegateway config
 {{- define "thanos.storegatewayConfigMap" -}}
 config.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 2 }}
+{{- if .Values.indexCacheConfig }}
+index-cache.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | b64enc | nindent 2 }}
+{{- end }}
+{{- if .Values.bucketCacheConfig }}
+bucket-cache.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | b64enc | nindent 2 }}
+{{- end }}
 {{- end -}}
 
 {{/*

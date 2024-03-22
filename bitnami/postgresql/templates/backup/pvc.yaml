@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.backup.enabled (not .Values.backup.cronjob.storage.existingClaim) -}}
+{{- if and .Values.backup.enabled .Values.backup.cronjob.storage.enabled (not .Values.backup.cronjob.storage.existingClaim) -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

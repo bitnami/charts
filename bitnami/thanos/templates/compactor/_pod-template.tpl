@@ -14,7 +14,9 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
   annotations:
+    {{- if (include "thanos.objstoreConfig" $) }}
     checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+    {{- end }}
     {{- if .Values.compactor.podAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 4 }}
     {{- end }}

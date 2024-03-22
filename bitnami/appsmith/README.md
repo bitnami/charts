@@ -205,12 +205,12 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -261,7 +261,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                      | `{}`             |
 | `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                     | `{}`             |
 | `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                       | `{}`             |
-| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `none`           |
+| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `nano`           |
 | `client.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Appsmith client pods' Security Context                                                                                                                                                                           | `true`           |
 | `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                       | `Always`         |
@@ -269,10 +269,11 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                              | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Appsmith client pod's Security Context fsGroup                                                                                                                                                                       | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Appsmith client containers' Security Context                                                                                                                                                                     | `true`           |
-| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `nil`            |
-| `client.containerSecurityContext.runAsUser`                | Set Appsmith client containers' Security Context runAsUser                                                                                                                                                               | `1001`           |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `{}`             |
+| `client.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                               | `1001`           |
+| `client.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                              | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Appsmith client containers' Security Context runAsNonRoot                                                                                                                                                            | `true`           |
-| `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith client containers' Security Context runAsNonRoot                                                                                                                                                            | `false`          |
+| `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith client containers' Security Context runAsNonRoot                                                                                                                                                            | `true`           |
 | `client.containerSecurityContext.privileged`               | Set client container's Security Context privileged                                                                                                                                                                       | `false`          |
 | `client.containerSecurityContext.allowPrivilegeEscalation` | Set client container's Security Context allowPrivilegeEscalation                                                                                                                                                         | `false`          |
 | `client.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                       | `["ALL"]`        |
@@ -307,15 +308,15 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Appsmith Client Network Policies
 
-| Name                                           | Description                                                     | Value   |
-| ---------------------------------------------- | --------------------------------------------------------------- | ------- |
-| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `false` |
-| `client.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true`  |
-| `client.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true`  |
-| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`    |
-| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`    |
-| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`    |
-| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`    |
+| Name                                           | Description                                                     | Value  |
+| ---------------------------------------------- | --------------------------------------------------------------- | ------ |
+| `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `client.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
+| `client.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 ### Appsmith Client Traffic Exposure Parameters
 
@@ -383,7 +384,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `backend.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                        | `{}`                  |
 | `backend.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                       | `{}`                  |
 | `backend.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                         | `{}`                  |
-| `backend.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if backend.resources is set (backend.resources is recommended for production). | `none`                |
+| `backend.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if backend.resources is set (backend.resources is recommended for production). | `large`               |
 | `backend.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                  |
 | `backend.podSecurityContext.enabled`                        | Enabled Appsmith backend pods' Security Context                                                                                                                                                                            | `true`                |
 | `backend.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                         | `Always`              |
@@ -391,10 +392,11 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `backend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                | `[]`                  |
 | `backend.podSecurityContext.fsGroup`                        | Set Appsmith backend pod's Security Context fsGroup                                                                                                                                                                        | `1001`                |
 | `backend.containerSecurityContext.enabled`                  | Enabled Appsmith backend containers' Security Context                                                                                                                                                                      | `true`                |
-| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`                 |
-| `backend.containerSecurityContext.runAsUser`                | Set Appsmith backend containers' Security Context runAsUser                                                                                                                                                                | `1001`                |
+| `backend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`                  |
+| `backend.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `1001`                |
+| `backend.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `1001`                |
 | `backend.containerSecurityContext.runAsNonRoot`             | Set Appsmith backend containers' Security Context runAsNonRoot                                                                                                                                                             | `true`                |
-| `backend.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith backend containers' Security Context runAsNonRoot                                                                                                                                                             | `false`               |
+| `backend.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith backend containers' Security Context runAsNonRoot                                                                                                                                                             | `true`                |
 | `backend.containerSecurityContext.privileged`               | Set backend container's Security Context privileged                                                                                                                                                                        | `false`               |
 | `backend.containerSecurityContext.allowPrivilegeEscalation` | Set backend container's Security Context allowPrivilegeEscalation                                                                                                                                                          | `false`               |
 | `backend.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                         | `["ALL"]`             |
@@ -429,15 +431,15 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Appsmith Backend Network Policies
 
-| Name                                            | Description                                                     | Value   |
-| ----------------------------------------------- | --------------------------------------------------------------- | ------- |
-| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `false` |
-| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true`  |
-| `backend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true`  |
-| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                     | `[]`    |
-| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`    |
-| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`    |
-| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`    |
+| Name                                            | Description                                                     | Value  |
+| ----------------------------------------------- | --------------------------------------------------------------- | ------ |
+| `backend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `backend.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
+| `backend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `backend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolic                     | `[]`   |
+| `backend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `backend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `backend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 ### Appsmith Backend Traffic Exposure Parameters
 
@@ -498,7 +500,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `rts.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                | `{}`             |
 | `rts.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                               | `{}`             |
 | `rts.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                 | `{}`             |
-| `rts.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rts.resources is set (rts.resources is recommended for production). | `none`           |
+| `rts.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rts.resources is set (rts.resources is recommended for production). | `nano`           |
 | `rts.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                  | `{}`             |
 | `rts.podSecurityContext.enabled`                        | Enabled Appsmith rts pods' Security Context                                                                                                                                                                        | `true`           |
 | `rts.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                 | `Always`         |
@@ -506,10 +508,11 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `rts.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                        | `[]`             |
 | `rts.podSecurityContext.fsGroup`                        | Set Appsmith rts pod's Security Context fsGroup                                                                                                                                                                    | `1001`           |
 | `rts.containerSecurityContext.enabled`                  | Enabled Appsmith rts containers' Security Context                                                                                                                                                                  | `true`           |
-| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                   | `nil`            |
-| `rts.containerSecurityContext.runAsUser`                | Set Appsmith rts containers' Security Context runAsUser                                                                                                                                                            | `1001`           |
+| `rts.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                   | `{}`             |
+| `rts.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                         | `1001`           |
+| `rts.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                        | `1001`           |
 | `rts.containerSecurityContext.runAsNonRoot`             | Set Appsmith rts containers' Security Context runAsNonRoot                                                                                                                                                         | `true`           |
-| `rts.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith rts containers' Security Context runAsNonRoot                                                                                                                                                         | `false`          |
+| `rts.containerSecurityContext.readOnlyRootFilesystem`   | Set Appsmith rts containers' Security Context runAsNonRoot                                                                                                                                                         | `true`           |
 | `rts.containerSecurityContext.privileged`               | Set rts container's Security Context privileged                                                                                                                                                                    | `false`          |
 | `rts.containerSecurityContext.allowPrivilegeEscalation` | Set rts container's Security Context allowPrivilegeEscalation                                                                                                                                                      | `false`          |
 | `rts.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                 | `["ALL"]`        |
@@ -544,15 +547,15 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Appsmith RTS Network Policies
 
-| Name                                        | Description                                                     | Value   |
-| ------------------------------------------- | --------------------------------------------------------------- | ------- |
-| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `false` |
-| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true`  |
-| `rts.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true`  |
-| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`    |
-| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`    |
-| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`    |
-| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`    |
+| Name                                        | Description                                                     | Value  |
+| ------------------------------------------- | --------------------------------------------------------------- | ------ |
+| `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `rts.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
+| `rts.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 ### Appsmith RTS Traffic Exposure Parameters
 
@@ -579,9 +582,9 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                                                                                                                                            | `REPOSITORY_NAME/os-shell` |
 | `volumePermissions.image.pullPolicy`                        | OS Shell + Utility image pull policy                                                                                                                                                                                                           | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                                                                                                                                                          | `[]`                       |
-| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `nil`                      |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                | `0`                        |
 
 ### Other Parameters
@@ -617,27 +620,31 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 
 ### Redis sub-chart parameters
 
-| Name                               | Description                                    | Value        |
-| ---------------------------------- | ---------------------------------------------- | ------------ |
-| `redis.enabled`                    | Deploy Redis subchart                          | `true`       |
-| `redis.architecture`               | Set Redis architecture                         | `standalone` |
-| `redis.existingSecret`             | Name of a secret containing redis credentials  | `""`         |
-| `redis.master.service.ports.redis` | Redis port                                     | `6379`       |
-| `redis.auth.enabled`               | Enable Redis auth                              | `true`       |
-| `redis.auth.password`              | Redis password                                 | `""`         |
-| `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
+| Name                               | Description                                                                                                                                                                                                              | Value        |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
+| `redis.enabled`                    | Deploy Redis subchart                                                                                                                                                                                                    | `true`       |
+| `redis.architecture`               | Set Redis architecture                                                                                                                                                                                                   | `standalone` |
+| `redis.existingSecret`             | Name of a secret containing redis credentials                                                                                                                                                                            | `""`         |
+| `redis.master.service.ports.redis` | Redis port                                                                                                                                                                                                               | `6379`       |
+| `redis.master.resourcesPreset`     | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production). | `nano`       |
+| `redis.master.resources`           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`         |
+| `redis.auth.enabled`               | Enable Redis auth                                                                                                                                                                                                        | `true`       |
+| `redis.auth.password`              | Redis password                                                                                                                                                                                                           | `""`         |
+| `redis.auth.existingSecret`        | Name of a secret containing the Redis password                                                                                                                                                                           | `""`         |
 
 ### MongoDB sub-chart parameters
 
-| Name                             | Description                                            | Value        |
-| -------------------------------- | ------------------------------------------------------ | ------------ |
-| `mongodb.enabled`                | Deploy MongoDB subchart                                | `true`       |
-| `mongodb.architecture`           | MongoDB architecture (Appsmith requires a Replica Set) | `replicaset` |
-| `mongodb.replicaCount`           | MongoDB number of replicas                             | `2`          |
-| `mongodb.auth.usernames`         | MongoDB non-root username creation                     | `[]`         |
-| `mongodb.auth.databases`         | MongoDB database creation                              | `[]`         |
-| `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
-| `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
+| Name                             | Description                                                                                                                                                                                                | Value        |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `mongodb.enabled`                | Deploy MongoDB subchart                                                                                                                                                                                    | `true`       |
+| `mongodb.architecture`           | MongoDB architecture (Appsmith requires a Replica Set)                                                                                                                                                     | `replicaset` |
+| `mongodb.replicaCount`           | MongoDB number of replicas                                                                                                                                                                                 | `2`          |
+| `mongodb.auth.usernames`         | MongoDB non-root username creation                                                                                                                                                                         | `[]`         |
+| `mongodb.auth.databases`         | MongoDB database creation                                                                                                                                                                                  | `[]`         |
+| `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)                                                                                                                                                      | `27017`      |
+| `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                                                                                                                                                                     | `false`      |
+| `mongodb.resourcesPreset`        | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `small`      |
+| `mongodb.resources`              | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`         |
 
 The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
 
@@ -671,6 +678,17 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/appsm
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 2.0.0
 
