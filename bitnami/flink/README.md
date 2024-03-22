@@ -43,7 +43,7 @@ These commands deploy flink on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Configuration and installation details
+### Configuration and installation details
 
 ### Resource requests and limits
 
