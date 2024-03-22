@@ -387,6 +387,9 @@ server:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
@@ -965,6 +968,9 @@ skipper:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param skipper.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param skipper.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
@@ -1537,6 +1543,9 @@ metrics:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param metrics.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
     ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
     ## e.g:
     ## extraIngress:
@@ -1970,9 +1979,15 @@ externalRabbitmq:
   ## vhost: /
   ##
   vhost: ""
-  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password. It will be saved in a kubernetes secret
+  ## @param externalRabbitmq.existingPasswordSecret Existing secret with RabbitMQ password (DEPRECATED: use externalRabbitmq.existingSecret instead)
   ##
   existingPasswordSecret: ""
+  ## @param externalRabbitmq.existingSecret Name of the existing secret containing RabbitMQ credentials
+  ##
+  existingSecret: ""
+  ## @param externalRabbitmq.existingSecretPasswordKey Key of the above existing secret with RabbitMQ password, defaults to `password`
+  ##
+  existingSecretPasswordKey: ""
 ## @section Kafka chart parameters
 
 ## Kafka chart configuration

@@ -291,7 +291,7 @@ spec:
             - --pihole-server={{ .Values.pihole.server }}
               {{- end }}
               {{- if .Values.pihole.tlsSkipVerify }}
-            - --pihole-tls-skip-verify={{ .Values.pihole.tlsSkipVerify }}
+            - --pihole-tls-skip-verify
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
