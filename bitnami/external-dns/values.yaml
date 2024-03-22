@@ -665,7 +665,7 @@ scaleway:
   ## @param scaleway.scwSecretKey When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)
   ##
   scwSecretKey: ""
-  ## @param scaleway.secretName Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined.
+  ## @param scaleway.secretName Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).
   ## This ignores scaleway.scwAccessKey and scaleway.scwSecretKey
   ##
   secretName: ""
