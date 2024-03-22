@@ -1383,7 +1383,7 @@ sentinel:
     ## @param sentinel.service.clusterIP Redis&reg; Sentinel service Cluster IP
     ##
     clusterIP: ""
-    ## @param sentinel.masterService.createMaster Enable master service pointing to the current master (experimental)
+    ## @param sentinel.service.createMaster Enable master service pointing to the current master (experimental)
     ##
     createMaster: false
 
