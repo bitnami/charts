@@ -306,7 +306,7 @@ There are K8s distribution, such as OpenShift, where you can dynamically define 
 | `ingress.pathType`         | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`         | Default host for the ingress resource (evaluated as template)                                                                    | `influxdb.local`         |
-| `ingress.path`             | Ingress path\*' in order to use this                                                                                             | `/`                      |
+| `ingress.path`             | Ingress path*' in order to use this                                                                                              | `/`                      |
 | `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.extraHosts`       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
 | `ingress.extraPaths`       | Additional arbitrary path/backend objects                                                                                        | `[]`                     |
