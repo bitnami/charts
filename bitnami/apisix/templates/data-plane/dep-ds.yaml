@@ -178,9 +178,11 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+           {{- if .Values.dataPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
-           {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
+           {{- end }}
+           {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
             - name: control-plane-certs
               mountPath: /etc/ssl/certs/{{ .Values.controlPlane.tls.certCAFilename }}
               subPath: {{ .Values.controlPlane.tls.certCAFilename }}
@@ -207,7 +209,7 @@ spec:
         {{- end }}
         - name: empty-dir
           emptyDir: {}
-        {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
+        {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
         - name: control-plane-certs
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}

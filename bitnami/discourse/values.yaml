@@ -282,6 +282,9 @@ discourse:
   ## @param discourse.persistPlugins Persist plugins across container restarts
   ##
   persistPlugins: true
+  ## @param discourse.compatiblePlugins Updates plugins to a compatible version on container initialization
+  ##
+  compatiblePlugins: true
   ## @param discourse.command Custom command to override image cmd
   ##
   command: []
