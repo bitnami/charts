@@ -119,7 +119,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.sentinel.service.type }}
+  type: {{ coalesce .Values.sentinel.masterService.type .Values.sentinel.service.type }}
   {{- if or (eq $serviceType "LoadBalancer") (eq $serviceType "NodePort") }}
   externalTrafficPolicy: {{ coalesce .Values.sentinel.masterService.externalTrafficPolicy .Values.sentinel.service.externalTrafficPolicy | quote }}
   {{- end }}
