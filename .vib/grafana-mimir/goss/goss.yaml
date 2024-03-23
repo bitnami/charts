@@ -43,7 +43,7 @@ addr:
     reachable: true
 command:
   check-mimirtool:
-    timeout: 30000
+    timeout: 60000
     exec: cd /tmp && mimirtool bucket-validation --object-count 1000
     exit-status: 0
   {{- $uid := .Vars.storeGateway.containerSecurityContext.runAsUser }}

@@ -19,27 +19,27 @@ dependencies:
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.x.x
+  version: 14.x.x
 - alias: memcachedmetadata
   condition: memcachedmetadata.enabled
   name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 6.x.x
+  version: 7.x.x
 - alias: memcachedindex
   condition: memcachedindex.enabled
   name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 6.x.x
+  version: 7.x.x
 - alias: memcachedfrontend
   condition: memcachedfrontend.enabled
   name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 6.x.x
+  version: 7.x.x
 - alias: memcachedchunks
   condition: memcachedchunks.enabled
   name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 6.x.x
+  version: 7.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -59,4 +59,4 @@ maintainers:
 name: grafana-mimir
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 0.14.1
+version: 1.0.0

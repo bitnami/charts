@@ -322,6 +322,18 @@ data:
     fi
     {{- end }}
 
+    {{- if .Values.sasl.zookeeper.user }}
+    export KAFKA_CONFIG_FILE=/config/kafka_jaas.conf
+    cat << EOF > /config/kafka_jaas.conf
+    Client {
+      org.apache.kafka.common.security.plain.PlainLoginModule required
+      username="{{ .Values.sasl.zookeeper.user }}"
+      password="zookeeper-password-placeholder";
+    };
+    EOF
+    replace_placeholder "zookeeper-password-placeholder" "$KAFKA_ZOOKEEPER_PASSWORD"
+    {{- end }}
+
     export KAFKA_CONFIG_FILE=/config/server.properties
     cp /configmaps/server.properties $KAFKA_CONFIG_FILE
 

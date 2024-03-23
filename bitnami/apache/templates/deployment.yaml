@@ -137,7 +137,7 @@ spec:
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
               while true; do
-                  cd /app && git pull origin {{ .Values.cloneHtdocsFromGit.branch }}
+                  cd /app && git -c safe.directory=/app pull origin {{ .Values.cloneHtdocsFromGit.branch }}
                   sleep {{ .Values.cloneHtdocsFromGit.interval }}
               done
           {{- if .Values.cloneHtdocsFromGit.resources }}

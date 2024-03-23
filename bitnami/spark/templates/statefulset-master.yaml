@@ -194,6 +194,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/spark/logs
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/spark/work
+              subPath: app-work-dir
             {{- if .Values.master.existingConfigmap }}
             - name: config
               mountPath: /bitnami/spark/conf/

@@ -37,10 +37,18 @@ spec:
     - ports:
         - port: {{ .Values.rts.service.ports.http }}
         - port: {{ .Values.backend.service.ports.http }}
-        - port: {{ include "appsmith.mongodb.port" . }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    - ports:
+        - port: {{ include "appsmith.mongodb.port" . }}
+      {{- if .Values.mongodb.enabled }}
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mongodb
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
     {{- if .Values.rts.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
@@ -48,7 +56,6 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.rts.containerPorts.http }}
-        - port: {{ .Values.rts.service.ports.http }}
       {{- if not .Values.rts.networkPolicy.allowExternal }}
       from:
         - podSelector:

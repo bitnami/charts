@@ -108,6 +108,48 @@ spec:
           {{- else if ne .Values.envoy.shutdownManager.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.shutdownManager.resourcesPreset) | nindent 12 }}
           {{- end }}
+          {{- if .Values.envoy.shutdownManager.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.shutdownManager.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.envoy.shutdownManager.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.envoy.shutdownManager.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.envoy.shutdownManager.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.envoy.shutdownManager.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.envoy.shutdownManager.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.envoy.shutdownManager.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.shutdownManager.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.envoy.shutdownManager.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.envoy.shutdownManager.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.envoy.shutdownManager.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.envoy.shutdownManager.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.shutdownManager.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - pgrep
+                - contour
+            initialDelaySeconds: {{ .Values.envoy.shutdownManager.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.failureThreshold }}
+          {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /admin
@@ -168,8 +210,8 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.envoy.containerPorts.http }}
-              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.http) }}
+
+              {{- if .Values.envoy.useHostPort.http }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -178,8 +220,7 @@ spec:
               name: http
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.https }}
-              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.https) }}
+              {{- if .Values.envoy.useHostPort.https }}
               hostPort: {{ .Values.envoy.hostPorts.https }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -188,8 +229,7 @@ spec:
               name: https
               protocol: TCP
             - containerPort: {{ .Values.envoy.containerPorts.metrics }}
-              # Use of .Values.envoy.useHostPort as boolean is DEPRECATED. Support will be removed in upcoming versions.
-              {{- if or (and (kindIs "boolean" .Values.envoy.useHostPort) .Values.envoy.useHostPort) (and (kindIs "map" .Values.envoy.useHostPort) .Values.envoy.useHostPort.metrics) }}
+              {{- if .Values.envoy.useHostPort.metrics }}
               hostPort: {{ .Values.envoy.hostPorts.metrics }}
               {{- end }}
               {{- if .Values.envoy.useHostIP }}
@@ -272,7 +312,11 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           name: envoy-initconfig
+          {{- if .Values.envoy.resources }}
           resources: {{ toYaml .Values.envoy.resources | nindent 12 }}
+          {{- else if ne .Values.envoy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.envoy.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /config

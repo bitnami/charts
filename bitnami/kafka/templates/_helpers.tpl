@@ -676,11 +676,6 @@ Zookeeper connection section of the server.properties
 {{- define "kafka.zookeeperConfig" -}}
 zookeeper.connect={{ include "kafka.zookeeperConnect" . }}
 #broker.id=
-{{- if .Values.sasl.zookeeper.user }}
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
-    username="{{ .Values.sasl.zookeeper.user }}" \
-    password="zookeeper-password-placeholder";
-{{- end }}
 {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
 zookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty
 zookeeper.ssl.client.enable=true

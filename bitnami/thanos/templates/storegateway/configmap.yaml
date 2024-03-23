@@ -15,6 +15,5 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  config.yml: |-
-    {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 4 }}
-{{ end }}
+  {{- include "thanos.storegatewayConfigMap" . | nindent 2 }}
+{{- end }}

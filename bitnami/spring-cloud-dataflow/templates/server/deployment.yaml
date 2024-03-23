@@ -266,7 +266,7 @@ spec:
           emptyDir: {}
         - name: database
           secret:
-            secretName: {{ include "scdf.database.secretName" . }}
+            secretName: {{ include "scdf.database.server.secretName" . }}
         - name: config
           configMap:
             name: {{ include "scdf.server.configmapName" . }}

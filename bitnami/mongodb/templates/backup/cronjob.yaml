@@ -36,6 +36,9 @@ spec:
   {{- end }}
   jobTemplate:
     spec:
+      {{- if .Values.backup.cronjob.backoffLimit }}
+      backoffLimit: {{ .Values.backup.cronjob.backoffLimit }}
+      {{- end }}
       {{- if .Values.backup.cronjob.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ .Values.backup.cronjob.ttlSecondsAfterFinished }}
       {{- end }}

@@ -33,7 +33,7 @@ spec:
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
-        checksum/query-frontend-configuration: {{ include (print $.Template.BasePath "/query-frontend/configmap.yaml") . | sha256sum }}
+        checksum/query-frontend-configuration: {{ include "thanos.queryFrontendConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.queryFrontend.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}

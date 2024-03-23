@@ -30,4 +30,4 @@ maintainers:
 name: rabbitmq
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
-version: 12.15.0
+version: 13.0.0

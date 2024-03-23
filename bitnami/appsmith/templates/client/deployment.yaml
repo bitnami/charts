@@ -155,6 +155,30 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.client.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/appsmith/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/conf
+              subPath: nginx-conf-dir
+            - name: empty-dir
+              mountPath: /certs
+              subPath: nginx-certs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/tmp
+              subPath: nginx-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/nginx/logs
+              subPath: nginx-logs-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.client.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.client.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -162,6 +186,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.client.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.client.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.client.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

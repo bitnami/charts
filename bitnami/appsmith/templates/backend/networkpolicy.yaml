@@ -38,11 +38,27 @@ spec:
         - port: {{ .Values.backend.service.ports.http}}
         - port: {{ .Values.rts.containerPorts.http }}
         - port: {{ .Values.backend.containerPorts.http }}
-        - port: {{ include "appsmith.redis.port" . }}
-        - port: {{ include "appsmith.mongodb.port" . }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    - ports:
+        - port: {{ include "appsmith.redis.port" . }}
+          {{- if .Values.redis.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: redis
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    - ports:
+        - port: {{ include "appsmith.mongodb.port" . }}
+          {{- if .Values.mongodb.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: mongodb
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
     {{- if .Values.backend.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.backend.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
@@ -50,7 +66,6 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.backend.containerPorts.http }}
-        - port: {{ .Values.backend.service.ports.http}}
       {{- if not .Values.backend.networkPolicy.allowExternal }}
       from:
         - podSelector:

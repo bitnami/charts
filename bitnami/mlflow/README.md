@@ -45,18 +45,6 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
-
-> Note: [PVCs are not removed](https://github.com/helm/helm/issues/5156) and we still don't have created a remove hook. You need to remove PVCs manually.
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
 ## Parameters
 
 ### Global parameters

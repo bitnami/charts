@@ -32,6 +32,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: supervisor
+        app.kubernetes.io/part-of: pinniped
     spec:
       serviceAccountName: {{ template "pinniped.supervisor.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}

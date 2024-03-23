@@ -28,8 +28,8 @@ spec:
       {{- if .Values.metrics.podMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.podMonitor.honorLabels }}
       {{- end }}
-      {{- if .Values.metrics.podMonitor.relabellings }}
-      relabelings: {{- toYaml .Values.metrics.podMonitor.relabellings | nindent 6 }}
+      {{- with concat .Values.metrics.podMonitor.relabelings .Values.metrics.podMonitor.relabellings }}
+      relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .Values.metrics.podMonitor.metricRelabelings }}
       metricRelabelings: {{- toYaml .Values.metrics.podMonitor.metricRelabelings | nindent 6 }}
@@ -45,8 +45,8 @@ spec:
       {{- if .honorLabels }}
       honorLabels: {{ .honorLabels }}
       {{- end }}
-      {{- if .relabellings }}
-      relabelings: {{- toYaml .relabellings | nindent 6 }}
+      {{- with concat .Values.metrics.podMonitor.relabelings .Values.metrics.podMonitor.relabellings }}
+      relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .metricRelabelings }}
       metricRelabelings: {{- toYaml .metricRelabelings | nindent 6 }}

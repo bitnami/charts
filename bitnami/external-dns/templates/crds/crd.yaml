@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/kubernetes-sigs/external-dns/v{version}/docs/contributing/crd-source/crd-manifest.yaml
-# Version: 0.14.0
+# Version: 0.14.1
 # Conditional: .Values.crd.create
 {{- if .Values.crd.create }}
 

@@ -184,15 +184,17 @@ Return the definition of wait for workers init container
     - name: ssh-client-config
       mountPath: /etc/ssh/ssh_config.d/deepspeed_ssh_client.conf
       subPath: deepspeed_ssh_client.conf
-    - name: ssh-config
+    - name: empty-dir
       mountPath: /etc/ssh/ssh_config
-      subPath: ssh_config
+      subPath: ssh-conf-dir/ssh_config
     - name: ssh-client-private-key
       mountPath: /bitnami/ssh/client-private-key
-    - name: ssh-local-folder
+    - name: empty-dir
       mountPath: /home/deepspeed/.ssh
-    - name: tmp
+      subPath: app-ssh-dir
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -223,10 +225,12 @@ Return the definition of the ssh client configuration init container
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.client.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   volumeMounts:
-    - name: ssh-config
-      mountPath: /bitnami/ssh/ssh-config/
-    - name: tmp
+    - name: empty-dir
+      mountPath: /bitnami/ssh/ssh-config
+      subPath: ssh-conf-dir
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
@@ -306,16 +310,20 @@ Return the definition of the ssh server configuration init container
     - name: ssh-client-private-key
       mountPath: /bitnami/ssh/client-private-key
     # ssh-keygen -A forces /etc/ssh in the prefix path
-    - name: ssh-worker-private-key
+    - name: empty-dir
       mountPath: /bitnami/ssh/server-private-key/etc/ssh
+      subPath: app-worker-private-key-dir
     - name: ssh-server-config
       mountPath: /bitnami/ssh/server-configmap
-    - name: sshd-config
-      mountPath: /bitnami/ssh/sshd-config/
-    - name: worker-home
-      mountPath: /home/
-    - name: tmp
+    - name: empty-dir
+      mountPath: /bitnami/ssh/sshd-config
+      subPath: sshd-conf-dir
+    - name: empty-dir
+      mountPath: /home
+      subPath: home-dir
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 
@@ -342,11 +350,13 @@ Return the definition of the git clone init container
   volumeMounts:
     - name: source
       mountPath: /app
-    - name: tmp
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
     # It creates at startup ssh in case it performs ssh-based git clone
-    - name: tmp
+    - name: empty-dir
       mountPath: /etc/ssh
+      subPath: etc-ssh-dir
   {{- if .context.Values.source.git.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .context.Values.source.git.extraVolumeMounts "context" .context) | nindent 12 }}
   {{- end }}
@@ -379,8 +389,9 @@ Return the volume-permissions init container
   volumeMounts:
     - name: data
       mountPath: {{ $block.persistence.mountPath }}
-    - name: tmp
+    - name: empty-dir
       mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*

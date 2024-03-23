@@ -18,6 +18,9 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  policyTypes:
+    - Ingress
+    - Egress
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kustomizeController.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}

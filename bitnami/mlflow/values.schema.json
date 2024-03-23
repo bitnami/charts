@@ -948,17 +948,13 @@
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
                             "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
+                            "items": {}
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
                             "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
+                            "items": {}
                         }
                     }
                 },
@@ -1584,17 +1580,13 @@
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
                             "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
+                            "items": {}
                         },
                         "extraEgress": {
                             "type": "array",
                             "description": "Add extra ingress rules to the NetworkPolicy",
                             "default": "[]",
-                            "items": {
-                                "type": "string"
-                            }
+                            "items": {}
                         }
                     }
                 },

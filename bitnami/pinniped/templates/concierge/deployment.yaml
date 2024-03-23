@@ -33,6 +33,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app: pinniped-concierge
         app.kubernetes.io/component: concierge
+        app.kubernetes.io/part-of: pinniped
     spec:
       serviceAccountName: {{ template "pinniped.concierge.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}

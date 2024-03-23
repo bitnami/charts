@@ -232,7 +232,7 @@ spec:
           emptyDir: {}
         - name: database
           secret:
-            secretName: {{ include "scdf.database.secretName" . }}
+            secretName: {{ include "scdf.database.skipper.secretName" . }}
         - name: config
           configMap:
             name: {{ include "scdf.skipper.configmapName" . }}
