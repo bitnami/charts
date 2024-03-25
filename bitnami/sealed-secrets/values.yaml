@@ -621,6 +621,11 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    port:
+      ## @param metrics.serviceMonitor.port.number Port number for the serviceMonitor
+      name: "metrics"
+      ## @param metrics.serviceMonitor.port.name Port name for the serviceMonitor
+      number: 8081
     ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
