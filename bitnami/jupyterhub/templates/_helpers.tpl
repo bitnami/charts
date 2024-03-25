@@ -320,7 +320,7 @@ Get the Postgresql credentials secret.
 {{- if .Values.singleuser.resources -}}
     {{ $resources = .Values.singleuser.resources -}}
 {{- else if ne .Values.singleuser.resourcesPreset "none" -}}
-    {{ $resources = include "common.resources.preset" (dict "type" .Values.singleuser.resourcesPreset) -}}
+    {{ $resources = include "common.resources.preset" (dict "type" .Values.singleuser.resourcesPreset) | fromYaml -}}
 {{- end -}}
 cpu:
   limit: {{ regexReplaceAll "([A-Za-z])i" (default "" $resources.limits.cpu)  "${1}" }}
