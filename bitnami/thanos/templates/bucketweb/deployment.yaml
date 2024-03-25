@@ -31,7 +31,9 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: bucketweb
       annotations:
+        {{- if (include "thanos.objstoreConfig" $) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+        {{- end }}
         {{- if .Values.bucketweb.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.podAnnotations "context" $) | nindent 8 }}
         {{- end }}

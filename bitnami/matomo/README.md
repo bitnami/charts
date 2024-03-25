@@ -398,6 +398,14 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.podAnnotations`                                    | Additional pod annotations                                                                                        | `{}`             |
 | `cronjobs.taskScheduler.podLabels`                                         | Additional pod labels                                                                                             | `{}`             |
 | `cronjobs.taskScheduler.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
+| `cronjobs.taskScheduler.persistence.enable`                                | Enable persistence using Persistent Volume Claims                                                                 | `true`           |
+| `cronjobs.taskScheduler.persistence.existingClaim`                         | A manually managed Persistent Volume Claim                                                                        | `""`             |
+| `cronjobs.taskScheduler.podSecurityContext.enabled`                        | Enable Task scheduler cronjob pods' Security Context                                                              | `true`           |
+| `cronjobs.taskScheduler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                | `Always`         |
+| `cronjobs.taskScheduler.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                    | `[]`             |
+| `cronjobs.taskScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                       | `[]`             |
+| `cronjobs.taskScheduler.podSecurityContext.fsGroup`                        | Task scheduler cronjob pods' group ID                                                                             | `1001`           |
+| `cronjobs.taskScheduler.extraEnvVars`                                      | Extra environment variables for the taskScheduler CronJob                                                         | `[]`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
@@ -416,6 +424,14 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.archive.podAnnotations`                                          | Additional pod annotations                                                                                        | `{}`             |
 | `cronjobs.archive.podLabels`                                               | Additional pod labels                                                                                             | `{}`             |
 | `cronjobs.archive.resources`                                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads) | `{}`             |
+| `cronjobs.archive.persistence.enable`                                      | Enable persistence using Persistent Volume Claims                                                                 | `true`           |
+| `cronjobs.archive.persistence.existingClaim`                               | A manually managed Persistent Volume Claim                                                                        | `""`             |
+| `cronjobs.archive.podSecurityContext.enabled`                              | Enable Archive cronjob pods' Security Context                                                                     | `true`           |
+| `cronjobs.archive.podSecurityContext.fsGroupChangePolicy`                  | Set filesystem group change policy                                                                                | `Always`         |
+| `cronjobs.archive.podSecurityContext.sysctls`                              | Set kernel settings using the sysctl interface                                                                    | `[]`             |
+| `cronjobs.archive.podSecurityContext.supplementalGroups`                   | Set filesystem extra groups                                                                                       | `[]`             |
+| `cronjobs.archive.podSecurityContext.fsGroup`                              | Archive cronjob pods' group ID                                                                                    | `1001`           |
+| `cronjobs.archive.extraEnvVars`                                            | Extra environment variables for the archive CronJob                                                               | `[]`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -445,6 +461,11 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/matom
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+Moved persistence config for the cronjobs from `persistence` to `cronjobs.archive.persistence` and `cronjobs.taskScheduler.persistence` respectively.
+Moved resource config for the archive cronjob from `resources` to `cronjobs.archive.resources`.
 
 ### To 4.0.0
 

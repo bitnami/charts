@@ -39,6 +39,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: argo-workflows
         app.kubernetes.io/component: server
+        app.kubernetes.io/part-of: argo-workflows
     spec:
       {{- if .Values.server.schedulerName }}
       schedulerName: {{ .Values.server.schedulerName | quote }}
