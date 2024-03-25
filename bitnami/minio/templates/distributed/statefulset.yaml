@@ -189,6 +189,8 @@ spec:
               value: {{ .Values.tls.mountPath | quote }}
             - name: MINIO_CONSOLE_PORT_NUMBER
               value: {{ .Values.containerPorts.console | quote }}
+            - name: MINIO_API_PORT_NUMBER
+              value: {{ .Values.containerPorts.api | quote }}
             {{- end }}
             - name: MINIO_DATA_DIR
               value: {{ $mountPath | quote }}
