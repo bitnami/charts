@@ -78,7 +78,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.readReplicas.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.readReplicas.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.readReplicas.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.readReplicas.hostNetwork }}
       hostIPC: {{ .Values.readReplicas.hostIPC }}
@@ -95,7 +95,7 @@ spec:
           {{- end }}
           # We don't require a privileged container in this case
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -185,7 +185,7 @@ spec:
           image: {{ include "postgresql.v1.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.readReplicas.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.readReplicas.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.readReplicas.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -428,7 +428,7 @@ spec:
           image: {{ include "postgresql.v1.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -555,7 +555,9 @@ spec:
     whenScaled: {{ .Values.readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         {{- if .Values.readReplicas.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.persistence.annotations "context" $) | nindent 10 }}

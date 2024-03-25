@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -64,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kiam
-  tag: 4.2.0-debian-12-r21
+  tag: 4.2.0-debian-12-r22
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -243,7 +252,7 @@ server:
   ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -257,17 +266,28 @@ server:
   resources: {}
   ## SecurityContext configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param server.containerSecurityContext.enabled Enabled kiam server containers' Security Context
-  ## @param server.containerSecurityContext.runAsUser Set kiam server container's Security Context runAsUser
-  ## @param server.containerSecurityContext.runAsNonRoot Set kiam server container's Security Context runAsNonRoot
-  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set kiam server container's Security Context SE Linux options
+  ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param server.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param server.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param server.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsNonRoot: true
-    seLinuxOptions: null
+    runAsGroup: 1001
+    runAsNonRoot: false
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param server.podSecurityContext.enabled Enabled kiam server pods' Security Context
@@ -730,7 +750,7 @@ agent:
   ## @param agent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param agent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -744,21 +764,30 @@ agent:
   resources: {}
   ## SecurityContext configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-  ## @param agent.containerSecurityContext.enabled Enabled agent containers' Security Context
-  ## @param agent.containerSecurityContext.runAsUser Set agent container's Security Context runAsUser
-  ## @param agent.containerSecurityContext.runAsNonRoot Set agent container's Security Context runAsNonRoot
-  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] [object] Set agent container's Security Context SE Linux options
-  ## @param agent.containerSecurityContext.capabilities.add Add capabilities for the securityContext
+  ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param agent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param agent.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param agent.containerSecurityContext.capabilities.add List of capabilities to be added
+  ## @param agent.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param agent.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
+    seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
     runAsNonRoot: false
-    seLinuxOptions: null
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
     capabilities:
-      add:
-        - NET_ADMIN
+      add: ["NET_ADMIN"]
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param agent.podSecurityContext.enabled Enabled agent pods' Security Context

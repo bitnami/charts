@@ -17,6 +17,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -68,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.2-debian-12-r5
+  tag: 7.11.2-debian-12-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -522,15 +531,28 @@ web:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param web.containerSecurityContext.enabled Enabled web containers' Security Context
+  ## @param web.containerSecurityContext.enabled web container securityContext
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param web.containerSecurityContext.runAsUser Set web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsUser User ID for the web container
+  ## @param web.containerSecurityContext.runAsGroup Group ID for the web container
+  ## @param web.containerSecurityContext.runAsNonRoot Set web container's Security Context runAsNonRoot
+  ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
+  ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param web.automountServiceAccountToken Mount Service Account token in pod
@@ -887,17 +909,28 @@ worker:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param worker.containerSecurityContext.enabled Enabled worker containers' Security Context
-  ## @param worker.containerSecurityContext.privileged Set worker containers' Security Context with privileged or not
+  ## @param worker.containerSecurityContext.enabled worker container securityContext
   ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param worker.containerSecurityContext.runAsUser Set worker containers' Security Context user
+  ## @param worker.containerSecurityContext.runAsUser User ID for the worker container
+  ## @param worker.containerSecurityContext.runAsGroup Group ID for the worker container
+  ## @param worker.containerSecurityContext.runAsNonRoot Set worker container's Security Context runAsNonRoot
+  ## @param worker.containerSecurityContext.privileged Set worker container's Security Context privileged
+  ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set worker container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    privileged: true
     seLinuxOptions: null
     runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    privileged: true
+    allowPrivilegeEscalation: true
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param worker.automountServiceAccountToken Mount Service Account token in pod
@@ -1363,7 +1396,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -676,11 +676,6 @@ Zookeeper connection section of the server.properties
 {{- define "kafka.zookeeperConfig" -}}
 zookeeper.connect={{ include "kafka.zookeeperConnect" . }}
 #broker.id=
-{{- if .Values.sasl.zookeeper.user }}
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
-    username="{{ .Values.sasl.zookeeper.user }}" \
-    password="zookeeper-password-placeholder";
-{{- end }}
 {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
 zookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty
 zookeeper.ssl.client.enable=true
@@ -739,7 +734,7 @@ Init container definition for Kafka initialization
   image: {{ include "kafka.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy }}
   {{- if $roleSettings.containerSecurityContext.enabled }}
-  securityContext: {{- omit $roleSettings.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $roleSettings.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   {{- if $roleSettings.initContainerResources }}
   resources: {{- toYaml $roleSettings.initContainerResources | nindent 4 }}  
@@ -965,7 +960,7 @@ Init container definition for waiting for Kubernetes autodiscovery
     - name: AUTODISCOVERY_SERVICE_TYPE
       value: {{ $externalAccessService.service.type | quote }}
   {{- if .context.Values.externalAccess.autoDiscovery.containerSecurityContext.enabled }}
-  securityContext: {{- omit .context.Values.externalAccess.autoDiscovery.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.externalAccess.autoDiscovery.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   {{- if .context.Values.externalAccess.autoDiscovery.resources }}
   resources: {{- toYaml .context.Values.externalAccess.autoDiscovery.resources | nindent 12 }}

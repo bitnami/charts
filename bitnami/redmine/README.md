@@ -45,17 +45,9 @@ The command deploys Redmine on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Using PostgreSQL instead of MariaDB
+### Using PostgreSQL instead of MariaDB
 
 This chart includes the option to use a PostgreSQL database for Redmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
 
@@ -65,15 +57,189 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
+### Certificates
+
+#### CA Certificates
+
+Custom CA certificates not included in the base docker image can be added with
+the following configuration. The secret must exist in the same namespace as the
+deployment. Will load all certificates files it finds in the secret.
+
+```yaml
+certificates:
+  customCAs:
+    - secret: my-ca-1
+    - secret: my-ca-2
+```
+
+##### CA Certificates Secret
+
+Secret can be created with:
+
+```console
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```
+
+#### TLS Certificate
+
+A web server TLS Certificate can be injected into the container with the
+following configuration. The certificate will be stored at the location
+specified in the certificateLocation value.
+
+```yaml
+certificates:
+  customCertificate:
+    certificateSecret: my-secret
+    certificateLocation: /ssl/server.pem
+    keyLocation: /ssl/key.pem
+    chainSecret:
+      name: my-cert-chain
+      key: chain.pem
+```
+
+##### TLS Certificate Secret
+
+The certificate tls secret can be created with:
+
+```console
+kubectl create secret tls my-secret --cert tls.crt --key tls.key
+```
+
+The certificate chain is created with:
+
+```console
+kubectl create secret generic my-cert-chain --from-file chain.pem
+```
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Replicas
+
+Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
+
+> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
+> This can be achieved by setting
+>
+> ```yaml
+>   extraEnvVars:
+>    - name: SECRET_KEY_BASE
+>      value: someredminesecretkeybase
+> ```
+
+### Deploying to a sub-URI
+
+(adapted from <https://github.com/bitnami/containers/tree/main/bitnami/redmine>)
+
+On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
+
+#### Create a configmap containing an altered version of post-init.sh
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redmine-init-configmap
+  namespace: <same-namespace-as-the-chart>
+  labels:
+  ...
+data:
+
+  post-init.sh: |-
+    #!/bin/bash
+
+    # REPLACE WITH YOUR OWN SUB-URI
+    SUB_URI_PATH='/redmine'
+
+    #Config files where to apply changes
+    config1=/opt/bitnami/redmine/config.ru
+    config2=/opt/bitnami/redmine/config/environment.rb
+
+    sed -i '$ d' ${config1}
+    echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
+    echo 'run Rails.application' >> ${config1}
+    echo 'end' >> ${config1}
+    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
+
+    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
+    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
+```
+
+#### Add this confimap as a volume/volume mount in the chart values
+
+```yaml
+## Extra volumes to add to the deployment
+##
+extraVolumes:
+  - name: redmine-init-volume
+    configMap:
+      name: redmine-init-configmap
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts:
+  - name: "redmine-init-volume"
+    mountPath: "/post-init.sh"
+    subPath: post-init.sh
+```
+
+#### Change the probes URI
+
+```yaml
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  path: /redmine/
+---
+readinessProbe:
+  enabled: true
+  path: /redmine/
+```
+
+## Persistence
+
+The [Bitnami Redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image stores the Redmine data and configurations at the `/bitnami/redmine` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
+
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+### Existing PersistentVolumeClaims
+
+The following example includes two PVCs, one for Redmine and another for MariaDB.
+
+1. Create the PersistentVolume
+2. Create the PersistentVolumeClaim
+3. Create the directory, on a worker
+4. Install the chart
+
+```console
+helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB oci://REGISTRY_NAME/REPOSITORY_NAME/redmine
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -399,186 +565,15 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redmi
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redmine/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Replicas
-
-Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
-
-> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
-> This can be achieved by setting
->
-> ```yaml
->   extraEnvVars:
->    - name: SECRET_KEY_BASE
->      value: someredminesecretkeybase
-> ```
-
-### Deploying to a sub-URI
-
-(adapted from <https://github.com/bitnami/containers/tree/main/bitnami/redmine>)
-
-On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
-
-#### Create a configmap containing an altered version of post-init.sh
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redmine-init-configmap
-  namespace: <same-namespace-as-the-chart>
-  labels:
-  ...
-data:
-
-  post-init.sh: |-
-    #!/bin/bash
-
-    # REPLACE WITH YOUR OWN SUB-URI
-    SUB_URI_PATH='/redmine'
-
-    #Config files where to apply changes
-    config1=/opt/bitnami/redmine/config.ru
-    config2=/opt/bitnami/redmine/config/environment.rb
-
-    sed -i '$ d' ${config1}
-    echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
-    echo 'run Rails.application' >> ${config1}
-    echo 'end' >> ${config1}
-    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
-
-    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
-    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
-```
-
-#### Add this confimap as a volume/volume mount in the chart values
-
-```yaml
-## Extra volumes to add to the deployment
-##
-extraVolumes:
-  - name: redmine-init-volume
-    configMap:
-      name: redmine-init-configmap
-
-## Extra volume mounts to add to the container
-##
-extraVolumeMounts:
-  - name: "redmine-init-volume"
-    mountPath: "/post-init.sh"
-    subPath: post-init.sh
-```
-
-#### Change the probes URI
-
-```yaml
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-##
-livenessProbe:
-  enabled: true
-  path: /redmine/
----
-readinessProbe:
-  enabled: true
-  path: /redmine/
-```
-
-## Persistence
-
-The [Bitnami Redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image stores the Redmine data and configurations at the `/bitnami/redmine` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
-
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-### Existing PersistentVolumeClaims
-
-The following example includes two PVCs, one for Redmine and another for MariaDB.
-
-1. Create the PersistentVolume
-2. Create the PersistentVolumeClaim
-3. Create the directory, on a worker
-4. Install the chart
-
-```console
-helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB oci://REGISTRY_NAME/REPOSITORY_NAME/redmine
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-## Certificates
-
-### CA Certificates
-
-Custom CA certificates not included in the base docker image can be added with
-the following configuration. The secret must exist in the same namespace as the
-deployment. Will load all certificates files it finds in the secret.
-
-```yaml
-certificates:
-  customCAs:
-    - secret: my-ca-1
-    - secret: my-ca-2
-```
-
-#### CA Certificates Secret
-
-Secret can be created with:
-
-```console
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
-```
-
-### TLS Certificate
-
-A web server TLS Certificate can be injected into the container with the
-following configuration. The certificate will be stored at the location
-specified in the certificateLocation value.
-
-```yaml
-certificates:
-  customCertificate:
-    certificateSecret: my-secret
-    certificateLocation: /ssl/server.pem
-    keyLocation: /ssl/key.pem
-    chainSecret:
-      name: my-cert-chain
-      key: chain.pem
-```
-
-#### TLS Certificate Secret
-
-The certificate tls secret can be created with:
-
-```console
-kubectl create secret tls my-secret --cert tls.crt --key tls.key
-```
-
-The certificate chain is created with:
-
-```console
-kubectl create secret generic my-cert-chain --from-file chain.pem
-```
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 27.0.0
+
+This major release bumps the PostgreSQL chart version to [14.x.x](https://github.com/bitnami/charts/pull/22750) and MariaDB to [16.x.x](https://github.com/bitnami/charts/pull/23054); no major issues are expected during the upgrade.
 
 ### To 26.0.0
 

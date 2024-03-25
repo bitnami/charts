@@ -50,7 +50,7 @@ spec:
       priorityClassName: {{ .Values.notifications.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.notifications.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.notifications.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: notifications
@@ -138,7 +138,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.notifications.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.notifications.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.notifications.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notifications.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if .Values.config.tlsCerts }}
@@ -147,10 +147,15 @@ spec:
             {{- end }}
             - mountPath: /app/config/server/tls
               name: argocd-repo-server-tls
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.notifications.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.config.tlsCerts }}
         - name: tls-certs
           configMap:

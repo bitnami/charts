@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -93,7 +102,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.5.0-debian-12-r18
+  tag: 3.5.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -174,9 +183,6 @@ master:
   ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups
   ## @param master.podSecurityContext.fsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.runAsUser Set master pod's Security Context User ID
-  ## @param master.podSecurityContext.runAsGroup Set master pod's Security Context Group ID
-  ## @param master.podSecurityContext.seLinuxOptions [object,nullable] Set master pod's Security Context SELinux options
   ##
   podSecurityContext:
     enabled: true
@@ -184,14 +190,12 @@ master:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-    runAsUser: 1001
-    runAsGroup: 0
-    seLinuxOptions: null
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -203,9 +207,10 @@ master:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -310,7 +315,7 @@ master:
   ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -542,6 +547,7 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -553,9 +559,10 @@ worker:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -664,7 +671,7 @@ worker:
   ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -882,7 +889,7 @@ security:
     ## @param security.ssl.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if security.ssl.resources is set (security.ssl.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "small"
     ## @param security.ssl.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:

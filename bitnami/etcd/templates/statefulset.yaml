@@ -75,7 +75,7 @@ spec:
       runtimeClassName: {{ .Values.runtimeClassName }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.shareProcessNamespace }}
       shareProcessNamespace: {{ .Values.shareProcessNamespace }}
@@ -99,6 +99,8 @@ spec:
             runAsUser: 0
           {{- if .Values.volumePermissions.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -121,7 +123,7 @@ spec:
           image: {{ include "etcd.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -333,6 +335,8 @@ spec:
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.configuration .Values.existingConfigmap }}

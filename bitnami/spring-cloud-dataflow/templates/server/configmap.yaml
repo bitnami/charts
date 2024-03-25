@@ -97,6 +97,10 @@ data:
           metrics.dashboard:
             url: {{ .Values.server.configuration.grafanaInfo }}
           {{- end }}
+          {{- if .Values.server.security.authorization }}
+          security:
+            authorization: {{- include "common.tplvalues.render" (dict "value" .Values.server.security.authorization) | nindent 14 }}
+          {{- end }}
         task:
           closecontextEnabled: true
       {{- if .Values.externalDatabase.hibernateDialect }}
@@ -109,13 +113,21 @@ data:
         url: '{{ include "scdf.database.dataflow.url" . }}'
         driverClassName: {{ include "scdf.database.driver" . }}
         username: {{ include "scdf.database.server.user" . }}
-        {{ if .Values.externalDatabase.existingPasswordSecret }}
-        password: {{ .Values.externalDatabase.existingPasswordKey | default "datasource-password" | printf "${%s}" }}
-        {{- else -}}
+        {{- $secretName := coalesce .Values.externalDatabase.dataflow.existingSecret .Values.externalDatabase.existingPasswordSecret -}}
+        {{- $secretPasswordKey := coalesce .Values.externalDatabase.dataflow.existingSecretPasswordKey .Values.externalDatabase.existingPasswordKey -}}
+        {{- if .Values.mariadb.enabled }}
         password: ${mariadb-password}
+        {{- else if and $secretName $secretPasswordKey }}
+        password: {{ printf "${%s}" $secretPasswordKey }}
+        {{- else }}
+        password: ${datasource-password}
         {{- end }}
         testOnBorrow: true
         validationQuery: "SELECT 1"
       flyway:
         enabled: {{ .Values.flyway.enabled }}
+      {{- if .Values.server.security.oauth2 }}
+      security:
+        oauth2: {{- include "common.tplvalues.render" (dict "value" .Values.server.security.oauth2) | nindent 10 }}
+      {{- end }}
 {{ end }}

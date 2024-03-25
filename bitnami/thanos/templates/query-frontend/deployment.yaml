@@ -33,7 +33,7 @@ spec:
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
-        checksum/query-frontend-configuration: {{ include (print $.Template.BasePath "/query-frontend/configmap.yaml") . | sha256sum }}
+        checksum/query-frontend-configuration: {{ include "thanos.queryFrontendConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.queryFrontend.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podAnnotations "context" $) | nindent 8 }}
@@ -73,7 +73,7 @@ spec:
       schedulerName: {{ .Values.queryFrontend.schedulerName }}
       {{- end }}
       {{- if .Values.queryFrontend.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.queryFrontend.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.queryFrontend.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -89,7 +89,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.queryFrontend.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.queryFrontend.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.queryFrontend.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.command "context" $) | nindent 12 }}

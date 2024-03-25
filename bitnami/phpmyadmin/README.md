@@ -43,24 +43,128 @@ The command deploys phpMyAdmin on the Kubernetes cluster in the default configur
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+
+To enable ingress integration, please set `ingress.enabled` to `true`.
+
+#### Hosts
+
+Most likely you will only want to have one hostname that maps to this phpMyAdmin installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
+
+For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
+
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+
+### TLS Secrets
+
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are some common use cases:
+
+- Helm generates and manages certificate secrets (default).
+- User generates certificates and helm manages secrets.
+- User generates and manages certificates separately.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+
+In the second case, a certificate and a key are needed. We would expect them to look like this:
+
+- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+
+    ```console
+    -----BEGIN CERTIFICATE-----
+    MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+    ...
+    jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+    -----END CERTIFICATE-----
+    ```
+
+- keys should look like:
+
+    ```console
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+    ...
+    wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+    -----END RSA PRIVATE KEY-----
+    ```
+
+If you are going to generate certificates yourself and want helm to manage the secret, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
+
+If you want to manage TLS secrets outside of Helm, please know that you can create a TLS secret and pass its name via the parameter `ingress.existingSecretName`.
+
+To make use of cert-manager, you need to add the the `cert-manager.io/cluster-issuer:` annotation to the ingress object via `ingress.annotations`.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: DEBUG
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as the PhpMyAdmin app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `XpodAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -293,119 +397,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/phpmy
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/phpmyadmin/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Ingress
-
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
-
-To enable ingress integration, please set `ingress.enabled` to `true`.
-
-#### Hosts
-
-Most likely you will only want to have one hostname that maps to this phpMyAdmin installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
-
-For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
-
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
-
-### TLS Secrets
-
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are some common use cases:
-
-- Helm generates and manages certificate secrets (default).
-- User generates certificates and helm manages secrets.
-- User generates and manages certificates separately.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-
-In the second case, a certificate and a key are needed. We would expect them to look like this:
-
-- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
-
-    ```console
-    -----BEGIN CERTIFICATE-----
-    MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-    ...
-    jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
-    -----END CERTIFICATE-----
-    ```
-
-- keys should look like:
-
-    ```console
-    -----BEGIN RSA PRIVATE KEY-----
-    MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-    ...
-    wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
-    -----END RSA PRIVATE KEY-----
-    ```
-
-If you are going to generate certificates yourself and want helm to manage the secret, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
-
-If you want to manage TLS secrets outside of Helm, please know that you can create a TLS secret and pass its name via the parameter `ingress.existingSecretName`.
-
-To make use of cert-manager, you need to add the the `cert-manager.io/cluster-issuer:` annotation to the ingress object via `ingress.annotations`.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: LOG_LEVEL
-    value: DEBUG
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as the PhpMyAdmin app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `XpodAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 

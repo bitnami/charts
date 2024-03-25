@@ -44,25 +44,138 @@ The command deploys grafana-loki on the Kubernetes cluster in the default config
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Loki configuration
+
+The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+
+```yaml
+compactor:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+distributor:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+ingester:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+querier:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+queryFrontend:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+vulture:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars
+
+If additional containers are needed in the same pod as grafana-loki (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+
+### External cache support
+
+You may want to have Grafana Loki connect to an external Memcached rather than installing one inside your cluster. Typical reasons for this are to use a managed cache service, or to share a common cache server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalMemcached` parameter](#parameters). You should also disable the Memcached installation with the `memcached.enabled` option. Here is an example:
+
+```console
+memcached.enabled=false
+externalMemcached.host=myexternalhost
+externalMemcached.port=11211
+```
+
+## Persistence
+
+### Limitation
+
+This chart does not function fully when using local filesystem as a persistence store. When using a local filesystem as a persistence store, querying will not be possible (or limited to the ingesters' in-memory caches). For a fully functional deployment of this helm chart, an object storage backend is required.
+
+### Data
+
+The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -131,7 +244,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                            | `{}`                |
 | `compactor.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                           | `{}`                |
 | `compactor.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                             | `{}`                |
-| `compactor.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production). | `none`              |
+| `compactor.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production). | `nano`              |
 | `compactor.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                              | `{}`                |
 | `compactor.podSecurityContext.enabled`                        | Enabled Compactor pods' Security Context                                                                                                                                                                                       | `true`              |
 | `compactor.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                             | `Always`            |
@@ -139,11 +252,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                    | `[]`                |
 | `compactor.podSecurityContext.fsGroup`                        | Set Compactor pod's Security Context fsGroup                                                                                                                                                                                   | `1001`              |
 | `compactor.containerSecurityContext.enabled`                  | Enable containers' Security Context                                                                                                                                                                                            | `true`              |
-| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `nil`               |
+| `compactor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `{}`                |
 | `compactor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                     | `1001`              |
+| `compactor.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                    | `1001`              |
 | `compactor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                  | `true`              |
 | `compactor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                    | `false`             |
-| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                        | `false`             |
+| `compactor.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                        | `true`              |
 | `compactor.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                      | `false`             |
 | `compactor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                             | `["ALL"]`           |
 | `compactor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                               | `RuntimeDefault`    |
@@ -246,7 +360,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                       | `{}`                    |
 | `gateway.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                         | `{}`                    |
 | `gateway.containerPorts.http`                               | Gateway HTTP port                                                                                                                                                                                                          | `8080`                  |
-| `gateway.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if gateway.resources is set (gateway.resources is recommended for production). | `none`                  |
+| `gateway.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if gateway.resources is set (gateway.resources is recommended for production). | `nano`                  |
 | `gateway.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                    |
 | `gateway.podSecurityContext.enabled`                        | Enabled Gateway pods' Security Context                                                                                                                                                                                     | `true`                  |
 | `gateway.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                         | `Always`                |
@@ -254,11 +368,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                | `[]`                    |
 | `gateway.podSecurityContext.fsGroup`                        | Set Gateway pod's Security Context fsGroup                                                                                                                                                                                 | `1001`                  |
 | `gateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                       | `true`                  |
-| `gateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`                   |
+| `gateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`                    |
 | `gateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `1001`                  |
+| `gateway.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `1001`                  |
 | `gateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `true`                  |
 | `gateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                | `false`                 |
-| `gateway.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `false`                 |
+| `gateway.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `true`                  |
 | `gateway.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                  | `false`                 |
 | `gateway.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                         | `["ALL"]`               |
 | `gateway.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                           | `RuntimeDefault`        |
@@ -355,7 +470,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                  | `{}`             |
 | `indexGateway.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                 | `{}`             |
 | `indexGateway.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                   | `{}`             |
-| `indexGateway.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexGateway.resources is set (indexGateway.resources is recommended for production). | `none`           |
+| `indexGateway.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexGateway.resources is set (indexGateway.resources is recommended for production). | `nano`           |
 | `indexGateway.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`             |
 | `indexGateway.podSecurityContext.enabled`                        | Enabled index-gateway pods' Security Context                                                                                                                                                                                         | `true`           |
 | `indexGateway.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                   | `Always`         |
@@ -363,11 +478,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                          | `[]`             |
 | `indexGateway.podSecurityContext.fsGroup`                        | Set index-gateway pod's Security Context fsGroup                                                                                                                                                                                     | `1001`           |
 | `indexGateway.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                 | `true`           |
-| `indexGateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `nil`            |
+| `indexGateway.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `{}`             |
 | `indexGateway.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                           | `1001`           |
+| `indexGateway.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                          | `1001`           |
 | `indexGateway.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                        | `true`           |
 | `indexGateway.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                          | `false`          |
-| `indexGateway.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `false`          |
+| `indexGateway.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `true`           |
 | `indexGateway.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                            | `false`          |
 | `indexGateway.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                   | `["ALL"]`        |
 | `indexGateway.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                     | `RuntimeDefault` |
@@ -451,7 +567,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                | `{}`             |
 | `distributor.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                               | `{}`             |
 | `distributor.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                 | `{}`             |
-| `distributor.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production). | `none`           |
+| `distributor.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production). | `nano`           |
 | `distributor.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                  | `{}`             |
 | `distributor.podSecurityContext.enabled`                        | Enabled Distributor pods' Security Context                                                                                                                                                                                         | `true`           |
 | `distributor.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                 | `Always`         |
@@ -459,11 +575,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                        | `[]`             |
 | `distributor.podSecurityContext.fsGroup`                        | Set Distributor pod's Security Context fsGroup                                                                                                                                                                                     | `1001`           |
 | `distributor.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                               | `true`           |
-| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                   | `nil`            |
+| `distributor.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                   | `{}`             |
 | `distributor.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                         | `1001`           |
+| `distributor.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                        | `1001`           |
 | `distributor.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                      | `true`           |
 | `distributor.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                        | `false`          |
-| `distributor.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                            | `false`          |
+| `distributor.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                            | `true`           |
 | `distributor.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                          | `false`          |
 | `distributor.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                 | `["ALL"]`        |
 | `distributor.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                   | `RuntimeDefault` |
@@ -548,7 +665,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                         | `{}`             |
 | `ingester.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                           | `{}`             |
 | `ingester.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                                                                                                                                              | `{}`             |
-| `ingester.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production). | `none`           |
+| `ingester.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production). | `nano`           |
 | `ingester.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`             |
 | `ingester.podSecurityContext.enabled`                        | Enabled Ingester pods' Security Context                                                                                                                                                                                      | `true`           |
 | `ingester.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                           | `Always`         |
@@ -556,11 +673,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                  | `[]`             |
 | `ingester.podSecurityContext.fsGroup`                        | Set Ingester pod's Security Context fsGroup                                                                                                                                                                                  | `1001`           |
 | `ingester.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`           |
-| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`            |
+| `ingester.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `{}`             |
 | `ingester.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`           |
+| `ingester.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `1001`           |
 | `ingester.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`           |
 | `ingester.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`          |
-| `ingester.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`          |
+| `ingester.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `true`           |
 | `ingester.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                    | `false`          |
 | `ingester.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                           | `["ALL"]`        |
 | `ingester.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                             | `RuntimeDefault` |
@@ -657,7 +775,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                        | `{}`             |
 | `querier.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                       | `{}`             |
 | `querier.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                         | `{}`             |
-| `querier.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production). | `none`           |
+| `querier.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production). | `nano`           |
 | `querier.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`             |
 | `querier.podSecurityContext.enabled`                        | Enabled Querier pods' Security Context                                                                                                                                                                                     | `true`           |
 | `querier.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                         | `Always`         |
@@ -665,11 +783,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                | `[]`             |
 | `querier.podSecurityContext.fsGroup`                        | Set Querier pod's Security Context fsGroup                                                                                                                                                                                 | `1001`           |
 | `querier.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                       | `true`           |
-| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`            |
+| `querier.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`             |
 | `querier.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `1001`           |
+| `querier.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `1001`           |
 | `querier.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `true`           |
 | `querier.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                | `false`          |
-| `querier.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `false`          |
+| `querier.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `true`           |
 | `querier.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                  | `false`          |
 | `querier.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                         | `["ALL"]`        |
 | `querier.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                           | `RuntimeDefault` |
@@ -765,7 +884,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                    | `{}`             |
 | `queryFrontend.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                   | `{}`             |
 | `queryFrontend.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                     | `{}`             |
-| `queryFrontend.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production). | `none`           |
+| `queryFrontend.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production). | `nano`           |
 | `queryFrontend.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                      | `{}`             |
 | `queryFrontend.podSecurityContext.enabled`                        | Enabled queryFrontend pods' Security Context                                                                                                                                                                                           | `true`           |
 | `queryFrontend.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                     | `Always`         |
@@ -773,11 +892,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                            | `[]`             |
 | `queryFrontend.podSecurityContext.fsGroup`                        | Set queryFrontend pod's Security Context fsGroup                                                                                                                                                                                       | `1001`           |
 | `queryFrontend.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                   | `true`           |
-| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                       | `nil`            |
+| `queryFrontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                       | `{}`             |
 | `queryFrontend.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                             | `1001`           |
+| `queryFrontend.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                            | `1001`           |
 | `queryFrontend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                          | `true`           |
 | `queryFrontend.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                            | `false`          |
-| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                | `false`          |
+| `queryFrontend.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                | `true`           |
 | `queryFrontend.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                              | `false`          |
 | `queryFrontend.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                     | `["ALL"]`        |
 | `queryFrontend.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                       | `RuntimeDefault` |
@@ -863,7 +983,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                      | `{}`             |
 | `queryScheduler.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                     | `{}`             |
 | `queryScheduler.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                       | `{}`             |
-| `queryScheduler.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryScheduler.resources is set (queryScheduler.resources is recommended for production). | `none`           |
+| `queryScheduler.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryScheduler.resources is set (queryScheduler.resources is recommended for production). | `nano`           |
 | `queryScheduler.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                        | `{}`             |
 | `queryScheduler.podSecurityContext.enabled`                        | Enabled queryScheduler pods' Security Context                                                                                                                                                                                            | `true`           |
 | `queryScheduler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                       | `Always`         |
@@ -871,11 +991,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                              | `[]`             |
 | `queryScheduler.podSecurityContext.fsGroup`                        | Set queryScheduler pod's Security Context fsGroup                                                                                                                                                                                        | `1001`           |
 | `queryScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                     | `true`           |
-| `queryScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                         | `nil`            |
+| `queryScheduler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                         | `{}`             |
 | `queryScheduler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                               | `1001`           |
+| `queryScheduler.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                              | `1001`           |
 | `queryScheduler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                            | `true`           |
 | `queryScheduler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                              | `false`          |
-| `queryScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                  | `false`          |
+| `queryScheduler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                  | `true`           |
 | `queryScheduler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                | `false`          |
 | `queryScheduler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                       | `["ALL"]`        |
 | `queryScheduler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                         | `RuntimeDefault` |
@@ -962,7 +1083,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                   | `{}`             |
 | `ruler.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                     | `{}`             |
 | `ruler.lifecycleHooks`                                    | for the ruler container(s) to automate configuration before or after startup                                                                                                                                           | `{}`             |
-| `ruler.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production). | `none`           |
+| `ruler.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production). | `nano`           |
 | `ruler.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                      | `{}`             |
 | `ruler.podSecurityContext.enabled`                        | Enabled Ruler pods' Security Context                                                                                                                                                                                   | `true`           |
 | `ruler.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                     | `Always`         |
@@ -970,11 +1091,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                            | `[]`             |
 | `ruler.podSecurityContext.fsGroup`                        | Set Ruler pod's Security Context fsGroup                                                                                                                                                                               | `1001`           |
 | `ruler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                   | `true`           |
-| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                       | `nil`            |
+| `ruler.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                       | `{}`             |
 | `ruler.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                             | `1001`           |
+| `ruler.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                            | `1001`           |
 | `ruler.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                          | `true`           |
 | `ruler.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                            | `false`          |
-| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                | `false`          |
+| `ruler.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                | `true`           |
 | `ruler.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                              | `false`          |
 | `ruler.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                     | `["ALL"]`        |
 | `ruler.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                       | `RuntimeDefault` |
@@ -1070,7 +1192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                  | `{}`             |
 | `tableManager.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                 | `{}`             |
 | `tableManager.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                   | `{}`             |
-| `tableManager.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tableManager.resources is set (tableManager.resources is recommended for production). | `none`           |
+| `tableManager.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tableManager.resources is set (tableManager.resources is recommended for production). | `nano`           |
 | `tableManager.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`             |
 | `tableManager.podSecurityContext.enabled`                        | Enabled table-manager pods' Security Context                                                                                                                                                                                         | `true`           |
 | `tableManager.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                   | `Always`         |
@@ -1078,11 +1200,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                          | `[]`             |
 | `tableManager.podSecurityContext.fsGroup`                        | Set table-manager pod's Security Context fsGroup                                                                                                                                                                                     | `1001`           |
 | `tableManager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                 | `true`           |
-| `tableManager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `nil`            |
+| `tableManager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `{}`             |
 | `tableManager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                           | `1001`           |
+| `tableManager.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                          | `1001`           |
 | `tableManager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                        | `true`           |
 | `tableManager.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                          | `false`          |
-| `tableManager.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `false`          |
+| `tableManager.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `true`           |
 | `tableManager.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                            | `false`          |
 | `tableManager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                   | `["ALL"]`        |
 | `tableManager.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                     | `RuntimeDefault` |
@@ -1173,7 +1296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                         | `{}`                       |
 | `promtail.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                           | `{}`                       |
 | `promtail.lifecycleHooks`                                    | for the promtail container(s) to automate configuration before or after startup                                                                                                                                              | `{}`                       |
-| `promtail.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if promtail.resources is set (promtail.resources is recommended for production). | `none`                     |
+| `promtail.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if promtail.resources is set (promtail.resources is recommended for production). | `nano`                     |
 | `promtail.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                       |
 | `promtail.podSecurityContext.enabled`                        | Enabled Promtail pods' Security Context                                                                                                                                                                                      | `true`                     |
 | `promtail.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                           | `Always`                   |
@@ -1181,11 +1304,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                  | `[]`                       |
 | `promtail.podSecurityContext.fsGroup`                        | Set Promtail pod's Security Context fsGroup                                                                                                                                                                                  | `0`                        |
 | `promtail.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                     |
-| `promtail.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`                      |
+| `promtail.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `{}`                       |
 | `promtail.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `0`                        |
+| `promtail.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `0`                        |
 | `promtail.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `false`                    |
 | `promtail.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                    |
-| `promtail.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`                    |
+| `promtail.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `true`                     |
 | `promtail.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                    | `false`                    |
 | `promtail.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                           | `["ALL"]`                  |
 | `promtail.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                             | `RuntimeDefault`           |
@@ -1253,9 +1377,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.digest`                                 | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                             | `""`                       |
 | `volumePermissions.image.pullPolicy`                             | OS Shell + Utility image pull policy                                                                                                                                                                                                           | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                            | OS Shell + Utility image pull secrets                                                                                                                                                                                                          | `[]`                       |
-| `volumePermissions.resourcesPreset`                              | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`                              | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`                                    | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                                                                                                                               | `nil`                      |
+| `volumePermissions.containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                                                                                                                               | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`           | Set init container's Security Context runAsUser                                                                                                                                                                                                | `0`                        |
 | `volumePermissions.containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                                                                                                                               | `RuntimeDefault`           |
 
@@ -1293,15 +1417,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                                                                                               | Value                       |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
-| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
-| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                        |
-| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
-| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
+| Name                                      | Description                                                                                                                                                                                                | Value                       |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`                      |
+| `memcachedchunks.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
+| `memcachedchunks.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
+| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
+| `memcachedchunks.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
+| `memcachedchunks.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
 
 ### External Memcached (Frontend) Parameters
 
@@ -1312,15 +1438,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                                                                                               | Value                       |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
-| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
-| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
-| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                        |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
+| Name                                        | Description                                                                                                                                                                                                | Value                       |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`                      |
+| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
+| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
+| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
+| `memcachedfrontend.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
+| `memcachedfrontend.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
 
 ### External Memcached (Index-Queries) Parameters
 
@@ -1331,15 +1459,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index-Queries)
 
-| Name                                            | Description                                                                                               | Value                       |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
-| `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
-| `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
-| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                | `""`                        |
-| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
+| Name                                            | Description                                                                                                                                                                                                | Value                       |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `true`                      |
+| `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
+| `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
+| `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
+| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
+| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
+| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
+| `memcachedindexqueries.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
+| `memcachedindexqueries.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
 
 ### External Memcached (IndexWrites) Parameters
 
@@ -1350,15 +1480,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index-Writes)
 
-| Name                                           | Description                                                                                               | Value                       |
-| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                | `false`                     |
-| `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
-| `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
-| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                        |
-| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                    | `11211`                     |
+| Name                                           | Description                                                                                                                                                                                                | Value                       |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                                                                                                                 | `false`                     |
+| `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                                                                                                                   | `REGISTRY_NAME`             |
+| `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                                                                                                                 | `REPOSITORY_NAME/memcached` |
+| `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                  | `""`                        |
+| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                                                                                                                     | `high-availability`         |
+| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                                                                                                                 | `""`                        |
+| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                                                                                                                     | `11211`                     |
+| `memcachedindexwrites.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                      |
+| `memcachedindexwrites.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                        |
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table.
 
@@ -1385,133 +1517,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Loki configuration
-
-The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
-
-## Persistence
-
-### Limitation
-
-This chart does not function fully when using local filesystem as a persistence store. When using a local filesystem as a persistence store, querying will not be possible (or limited to the ingesters' in-memory caches). For a fully functional deployment of this helm chart, an object storage backend is required.
-
-### Data
-
-The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
-
-```yaml
-compactor:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-distributor:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-ingester:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-querier:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-queryFrontend:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-vulture:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars
-
-If additional containers are needed in the same pod as grafana-loki (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
-### Pod affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
-
-### External cache support
-
-You may want to have Grafana Loki connect to an external Memcached rather than installing one inside your cluster. Typical reasons for this are to use a managed cache service, or to share a common cache server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalMemcached` parameter](#parameters). You should also disable the Memcached installation with the `memcached.enabled` option. Here is an example:
-
-```console
-memcached.enabled=false
-externalMemcached.host=myexternalhost
-externalMemcached.port=11211
-```
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 1.0.0
 

@@ -70,7 +70,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.shardsvr.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.shardsvr.arbiter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.arbiter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ $.Values.shardsvr.arbiter.terminationGracePeriodSeconds }}
@@ -90,7 +90,7 @@ spec:
           image: {{ include "mongodb-sharded.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           {{- if $.Values.shardsvr.arbiter.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.shardsvr.arbiter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.shardsvr.arbiter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ $.Values.common.containerPorts.mongodb }}
@@ -240,6 +240,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mongodb/logs
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             {{- if or $.Values.shardsvr.arbiter.config $.Values.shardsvr.arbiter.configCM }}
             - name: config
               mountPath: /bitnami/mongodb/conf/
@@ -272,7 +275,7 @@ spec:
           image: {{ include "mongodb-sharded.metrics.image" $ }}
           imagePullPolicy: {{ $.Values.metrics.image.pullPolicy | quote }}
           {{- if $.Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
           {{- if $.Values.auth.enabled }}

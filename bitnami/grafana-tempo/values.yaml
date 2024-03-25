@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -72,7 +81,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.3.1-debian-12-r14
+    tag: 2.4.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -126,6 +135,16 @@ tempo:
   ##
   configuration: |
     multitenancy_enabled: false
+    cache:
+      caches:
+        - memcached:
+            host: {{ include "grafana-tempo.memcached.url" . }}
+            service: memcache
+            timeout: 500ms
+            consistent_hash: true
+          roles:
+            - bloom
+            - trace-id-index
     compactor:
       compaction:
         block_retention: 48h
@@ -210,12 +229,6 @@ tempo:
           path: {{ .Values.tempo.dataDir }}/traces
         wal:
           path: {{ .Values.tempo.dataDir }}/wal
-        cache: memcached
-        memcached:
-          consistent_hash: true
-          host: {{ include "grafana-tempo.memcached.url" . }}
-          service: memcache
-          timeout: 500ms
   ## @param tempo.existingConfigmap Name of a ConfigMap with the Tempo configuration
   ##
   existingConfigmap: ""
@@ -333,7 +346,7 @@ compactor:
   ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param compactor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -364,6 +377,7 @@ compactor:
   ## @param compactor.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param compactor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param compactor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param compactor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param compactor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param compactor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param compactor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -373,11 +387,12 @@ compactor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -677,7 +692,7 @@ distributor:
   ## @param distributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param distributor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -708,6 +723,7 @@ distributor:
   ## @param distributor.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param distributor.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param distributor.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param distributor.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param distributor.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param distributor.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param distributor.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -717,11 +733,12 @@ distributor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1027,7 +1044,7 @@ metricsGenerator:
   ## @param metricsGenerator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metricsGenerator.resources is set (metricsGenerator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metricsGenerator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1058,6 +1075,7 @@ metricsGenerator:
   ## @param metricsGenerator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metricsGenerator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metricsGenerator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metricsGenerator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param metricsGenerator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metricsGenerator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param metricsGenerator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1067,11 +1085,12 @@ metricsGenerator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1372,7 +1391,7 @@ ingester:
   ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param ingester.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1403,6 +1422,7 @@ ingester:
   ## @param ingester.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param ingester.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingester.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingester.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param ingester.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ingester.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param ingester.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1412,11 +1432,12 @@ ingester:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1759,7 +1780,7 @@ querier:
   ## @param querier.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param querier.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1790,6 +1811,7 @@ querier:
   ## @param querier.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param querier.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param querier.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param querier.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param querier.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param querier.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param querier.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1799,11 +1821,12 @@ querier:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2107,7 +2130,7 @@ queryFrontend:
   ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param queryFrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2138,6 +2161,7 @@ queryFrontend:
   ## @param queryFrontend.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param queryFrontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryFrontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryFrontend.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param queryFrontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryFrontend.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param queryFrontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2147,11 +2171,12 @@ queryFrontend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2273,7 +2298,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 2.3.1-debian-12-r14
+      tag: 2.4.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2381,6 +2406,8 @@ queryFrontend:
     ## @param queryFrontend.query.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param queryFrontend.query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param queryFrontend.query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+
+    ## @param queryFrontend.query.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param queryFrontend.query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param queryFrontend.query.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param queryFrontend.query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2390,11 +2417,12 @@ queryFrontend:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
@@ -2405,7 +2433,7 @@ queryFrontend:
     ## @param queryFrontend.query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.query.resources is set (queryFrontend.query.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param queryFrontend.query.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -2559,7 +2587,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 2.3.1-debian-12-r14
+    tag: 2.4.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2654,7 +2682,7 @@ vulture:
   ## @param vulture.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if vulture.resources is set (vulture.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param vulture.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2685,6 +2713,7 @@ vulture:
   ## @param vulture.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param vulture.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param vulture.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param vulture.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param vulture.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param vulture.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param vulture.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2694,11 +2723,12 @@ vulture:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2942,7 +2972,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2958,7 +2988,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2979,7 +3009,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section Other Parameters
 
@@ -3078,3 +3108,20 @@ memcached:
   service:
     ports:
       memcached: 11211
+  ## Memcached resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param memcached.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param memcached.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

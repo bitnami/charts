@@ -72,12 +72,38 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.primary.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.primary.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.primary.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.primary.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        - name: preserve-logs-symlinks
+          image: {{ include "mysql.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.primary.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.primary.resources }}
+          resources: {{ toYaml .Values.primary.resources | nindent 12 }}
+          {{- else if ne .Values.primary.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.primary.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/libfs.sh
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/mysql/logs; then
+                cp -r /opt/bitnami/mysql/logs /emptydir/app-logs-dir
+              fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if and .Values.primary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.primary.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "mysql.volumePermissions.image" . }}
@@ -102,6 +128,9 @@ spec:
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
               {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.primary.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.initContainers "context" $) | nindent 8 }}
@@ -111,7 +140,7 @@ spec:
           image: {{ include "mysql.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.primary.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.primary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -255,6 +284,18 @@ spec:
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
               {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mysql/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mysql/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/mysql/logs
+              subPath: app-logs-dir
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -280,7 +321,7 @@ spec:
           image: {{ include "mysql.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.auth.usePasswordFiles }}
@@ -329,11 +370,14 @@ spec:
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
           volumeMounts:
+          {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mysql-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
           {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.primary.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.sidecars "context" $) | nindent 8 }}
@@ -368,6 +412,8 @@ spec:
                 path: mysql-replication-password
               {{- end }}
         {{- end }}
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.primary.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

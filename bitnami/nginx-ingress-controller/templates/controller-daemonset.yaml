@@ -60,7 +60,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.hostNetwork }}
       {{- if .Values.topologySpreadConstraints }}
@@ -71,15 +71,37 @@ spec:
       {{- end }}
       serviceAccountName: {{ template "nginx-ingress-controller.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
-      {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      {{- end }}
+      initContainers:
+        - name: prepare-nginx-folder
+          image: {{ include "nginx-ingress-controller.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              cp -r /etc/nginx/* /nginx
+              cp -r /etc/ingress-controller/* /ingress-controller
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /nginx
+              subPath: app-nginx-dir
+            - name: empty-dir
+              mountPath: /ingress-controller
+              subPath: app-controller-dir
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: controller
           image: {{ include "nginx-ingress-controller.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
@@ -216,12 +238,26 @@ spec:
               name: nginx-template-volume
               readOnly: true
             {{- end }}
+            - name: empty-dir
+              mountPath: /etc/nginx
+              subPath: app-nginx-dir
+            - name: empty-dir
+              mountPath: /etc/ingress-controller
+              subPath: app-controller-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /tmp/nginx
+              subPath: app-tmp-dir
             {{- if .Values.maxmindLicenseKey }}
-            - name: geoip
+            - name: empty-dir
               mountPath: /etc/ingress-controller/geoip
+              subPath: app-geoip-dir
             {{- end }}
-            - name: telemetry
+            - name: empty-dir
               mountPath: /etc/ingress-controller/telemetry
+              subPath: app-telemetry-dir
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -229,6 +265,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.customTemplate.configMapName }}
         - name: nginx-template-volume
           configMap:
@@ -237,12 +275,6 @@ spec:
               - key: {{ .Values.customTemplate.configMapKey }}
                 path: nginx.tmpl
         {{- end }}
-        {{- if .Values.maxmindLicenseKey }}
-        - name: geoip
-          emptyDir: {}
-        {{- end }}
-        - name: telemetry
-          emptyDir: {}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

@@ -18,12 +18,14 @@ Returns the volume mounts that will be used by git containers (clone and sync)
 */}}
 {{- define "airflow.git.volumeMounts" -}}
 {{- if .Values.git.dags.enabled }}
-- name: git-cloned-dags
+- name: empty-dir
   mountPath: /dags
+  subPath: app-git-dags-dir
 {{- end }}
 {{- if .Values.git.plugins.enabled }}
-- name: git-cloned-plugins
+- name: empty-dir
   mountPath: /plugins
+  subPath: app-git-plugins-dir
 {{- end }}
 {{- end -}}
 
@@ -33,39 +35,25 @@ Returns the volume mounts that will be used by the main container
 {{- define "airflow.git.maincontainer.volumeMounts" -}}
 {{- if .Values.git.dags.enabled }}
   {{- range .Values.git.dags.repositories }}
-- name: git-cloned-dags
+- name: empty-dir
   mountPath: /opt/bitnami/airflow/dags/git_{{ include "airflow.git.repository.name" . }}
   {{- if .path }}
-  subPath: {{ include "airflow.git.repository.name" . }}/{{ .path }}
+  subPath: app-git-dags-dir/{{ include "airflow.git.repository.name" . }}/{{ .path }}
   {{- else }}
-  subPath: {{ include "airflow.git.repository.name" . }}
+  subPath: app-git-dags-dir/{{ include "airflow.git.repository.name" . }}
   {{- end }}
   {{- end }}
 {{- end }}
 {{- if .Values.git.plugins.enabled }}
   {{- range .Values.git.plugins.repositories }}
-- name: git-cloned-plugins
+- name: empty-dir
   mountPath: /opt/bitnami/airflow/plugins/git_{{ include "airflow.git.repository.name" . }}
   {{- if .path }}
-  subPath: {{ include "airflow.git.repository.name" . }}/{{ .path }}
+  subPath: app-git-plugins-dir/{{ include "airflow.git.repository.name" . }}/{{ .path }}
   {{- else }}
-  subPath: {{ include "airflow.git.repository.name" . }}
+  subPath: app-git-plugins-dir/{{ include "airflow.git.repository.name" . }}
   {{- end }}
   {{- end }}
-{{- end }}
-{{- end -}}
-
-{{/*
-Returns the volumes that will be attached to the workload resources (deployment, statefulset, etc)
-*/}}
-{{- define "airflow.git.volumes" -}}
-{{- if .Values.git.dags.enabled }}
-- name: git-cloned-dags
-  emptyDir: {}
-{{- end }}
-{{- if .Values.git.plugins.enabled }}
-- name: git-cloned-plugins
-  emptyDir: {}
 {{- end }}
 {{- end -}}
 
@@ -80,7 +68,7 @@ Usage:
   image: {{ include "git.image" .context | quote }}
   imagePullPolicy: {{ .context.Values.git.image.pullPolicy | quote }}
 {{- if .securityContext.enabled }}
-  securityContext: {{- omit .securityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .securityContext "context" .context) | nindent 4 }}
 {{- end }}
 {{- if .context.Values.git.clone.resources }}
   resources: {{- toYaml .context.Values.git.clone.resources | nindent 4 }}
@@ -113,6 +101,9 @@ Usage:
     {{- end }}
 {{- end }}
   volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
     {{- include "airflow.git.volumeMounts" .context | trim | nindent 4 }}
   {{- if .context.Values.git.clone.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.extraVolumeMounts "context" .context) | nindent 4 }}
@@ -145,7 +136,7 @@ Usage:
   image: {{ include "git.image" .context | quote }}
   imagePullPolicy: {{ .context.Values.git.image.pullPolicy | quote }}
 {{- if .securityContext.enabled }}
-  securityContext: {{- omit .securityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .securityContext "context" .context) | nindent 4 }}
 {{- end }}
 {{- if .context.Values.git.sync.resources }}
   resources: {{- toYaml .context.Values.git.sync.resources | nindent 4 }}

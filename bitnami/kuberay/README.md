@@ -41,25 +41,93 @@ The command deploys kuberay on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside the `operator`, `apiserver` and `cluster` sections.
+
+```yaml
+operator:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside the `operator`, `apiserver` and `cluster` sections.
+
+### Sidecars
+
+If additional containers are needed in the same pod as KubeRay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Deploying Ray Cluster
+
+The Bitnami KubeRay chart allows deploying a RayCluster object. It is possible to define the head parameters under the `cluster.head` section, as well as the properties of the workers using the `cluster.worker` section. It is possible to describe different groupspecs under the `cluster.worker.groupSpecs` section (any parameter not defined will be taken from the `cluster.worker.common` section).
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `operator`, `apiserver` and `cluster` sections.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -121,7 +189,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.watchAllNamespaces`                                | Watch for KubeRay resources in all namespaces                                                                                                                                                                                | `true`                             |
 | `operator.watchNamespaces`                                   | Watch for KubeRay resources in the given namespaces                                                                                                                                                                          | `[]`                               |
 | `operator.enableBatchScheduler`                              | Enable batch scheduler component                                                                                                                                                                                             | `false`                            |
-| `operator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production). | `none`                             |
+| `operator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production). | `nano`                             |
 | `operator.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                               |
 | `operator.podSecurityContext.enabled`                        | Enabled Kuberay Operator pods' Security Context                                                                                                                                                                              | `true`                             |
 | `operator.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                           | `Always`                           |
@@ -129,8 +197,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                  | `[]`                               |
 | `operator.podSecurityContext.fsGroup`                        | Set Kuberay Operator pod's Security Context fsGroup                                                                                                                                                                          | `1001`                             |
 | `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                             |
-| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`                              |
+| `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `{}`                               |
 | `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                             |
+| `operator.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `1001`                             |
 | `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                             |
 | `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                            |
 | `operator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `true`                             |
@@ -283,7 +352,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiserver.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                             | `{}`                                |
 | `apiserver.watchAllNamespaces`                                | Watch for KubeRay resources in all namespaces                                                                                                                                                                                  | `true`                              |
 | `apiserver.watchNamespaces`                                   | Watch for KubeRay resources in the given namespaces                                                                                                                                                                            | `[]`                                |
-| `apiserver.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if apiserver.resources is set (apiserver.resources is recommended for production). | `none`                              |
+| `apiserver.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if apiserver.resources is set (apiserver.resources is recommended for production). | `nano`                              |
 | `apiserver.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                              | `{}`                                |
 | `apiserver.podSecurityContext.enabled`                        | Enabled Kuberay API Server pods' Security Context                                                                                                                                                                              | `true`                              |
 | `apiserver.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                             | `Always`                            |
@@ -291,8 +360,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apiserver.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                    | `[]`                                |
 | `apiserver.podSecurityContext.fsGroup`                        | Set Kuberay API Server pod's Security Context fsGroup                                                                                                                                                                          | `1001`                              |
 | `apiserver.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                           | `true`                              |
-| `apiserver.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `nil`                               |
+| `apiserver.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `{}`                                |
 | `apiserver.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                     | `1001`                              |
+| `apiserver.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                    | `1001`                              |
 | `apiserver.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                  | `true`                              |
 | `apiserver.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                    | `false`                             |
 | `apiserver.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                        | `true`                              |
@@ -422,7 +492,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                             | Description                                                                                                                                                                                                                          | Value            |
 | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
 | `cluster.head.rayStartParams`                                    | Set Ray start parameters                                                                                                                                                                                                             | `{}`             |
-| `cluster.head.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.head.resources is set (cluster.head.resources is recommended for production). | `none`           |
+| `cluster.head.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.head.resources is set (cluster.head.resources is recommended for production). | `medium`         |
 | `cluster.head.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`             |
 | `cluster.head.podSecurityContext.enabled`                        | Enabled Ray Cluster Worker (common) pods' Security Context                                                                                                                                                                           | `true`           |
 | `cluster.head.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                   | `Always`         |
@@ -430,8 +500,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.head.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                          | `[]`             |
 | `cluster.head.podSecurityContext.fsGroup`                        | Set Ray Cluster Worker (common) pod's Security Context fsGroup                                                                                                                                                                       | `1001`           |
 | `cluster.head.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                 | `true`           |
-| `cluster.head.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `nil`            |
+| `cluster.head.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `{}`             |
 | `cluster.head.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                           | `1001`           |
+| `cluster.head.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                          | `1001`           |
 | `cluster.head.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                        | `true`           |
 | `cluster.head.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                          | `false`          |
 | `cluster.head.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `true`           |
@@ -477,7 +548,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                    | `{}`             |
 | `cluster.worker.common.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                   | `{}`             |
 | `cluster.worker.common.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                     | `{}`             |
-| `cluster.worker.common.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.worker.common.resources is set (cluster.worker.common.resources is recommended for production). | `none`           |
+| `cluster.worker.common.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.worker.common.resources is set (cluster.worker.common.resources is recommended for production). | `small`          |
 | `cluster.worker.common.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                      | `{}`             |
 | `cluster.worker.common.podSecurityContext.enabled`                        | Enabled Ray Cluster Worker (common) pods' Security Context                                                                                                                                                                                             | `true`           |
 | `cluster.worker.common.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                     | `Always`         |
@@ -485,8 +556,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.worker.common.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                            | `[]`             |
 | `cluster.worker.common.podSecurityContext.fsGroup`                        | Set Ray Cluster Worker (common) pod's Security Context fsGroup                                                                                                                                                                                         | `1001`           |
 | `cluster.worker.common.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                   | `true`           |
-| `cluster.worker.common.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                       | `nil`            |
+| `cluster.worker.common.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                       | `{}`             |
 | `cluster.worker.common.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                             | `1001`           |
+| `cluster.worker.common.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                            | `1001`           |
 | `cluster.worker.common.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                          | `true`           |
 | `cluster.worker.common.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                            | `false`          |
 | `cluster.worker.common.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                | `true`           |
@@ -548,86 +620,20 @@ helm install my-release -f values.yaml REGISTRY_NAME/REPOSITORY_NAME/kuberay
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kuberay/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside the `operator`, `apiserver` and `cluster` sections.
-
-```yaml
-operator:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside the `operator`, `apiserver` and `cluster` sections.
-
-### Sidecars
-
-If additional containers are needed in the same pod as KubeRay (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the `operator`, `apiserver` and `cluster` sections.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
-### Deploying Ray Cluster
-
-The Bitnami KubeRay chart allows deploying a RayCluster object. It is possible to define the head parameters under the `cluster.head` section, as well as the properties of the workers using the `cluster.worker` section. It is possible to describe different groupspecs under the `cluster.worker.groupSpecs` section (any parameter not defined will be taken from the `cluster.worker.common` section).
-
-### Pod affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the `operator`, `apiserver` and `cluster` sections.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ## License
 

@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -175,7 +184,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.12.0-debian-12-r0
+  tag: 2.12.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -541,7 +550,7 @@ master:
   ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -579,6 +588,7 @@ master:
   ## @param master.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param master.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param master.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param master.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -590,9 +600,10 @@ master:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -957,7 +968,7 @@ data:
   ## @param data.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "medium"
   ## @param data.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -995,6 +1006,7 @@ data:
   ## @param data.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param data.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param data.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param data.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param data.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param data.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param data.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1006,9 +1018,10 @@ data:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1374,7 +1387,7 @@ coordinating:
   ## @param coordinating.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param coordinating.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1412,6 +1425,7 @@ coordinating:
   ## @param coordinating.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param coordinating.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param coordinating.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param coordinating.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param coordinating.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param coordinating.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param coordinating.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1423,9 +1437,10 @@ coordinating:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1754,7 +1769,7 @@ ingest:
   ## @param ingest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param ingest.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1792,6 +1807,7 @@ ingest:
   ## @param ingest.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param ingest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ingest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ingest.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param ingest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ingest.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param ingest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1803,9 +1819,10 @@ ingest:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2297,7 +2314,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2348,7 +2365,7 @@ sysctlImage:
   ## @param sysctlImage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param sysctlImage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2377,7 +2394,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.11.1-debian-12-r6
+    tag: 2.12.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2591,7 +2608,7 @@ dashboards:
   ## @param dashboards.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dashboards.resources is set (dashboards.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param dashboards.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2629,6 +2646,7 @@ dashboards:
   ## @param dashboards.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param dashboards.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboards.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboards.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dashboards.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboards.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dashboards.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2640,9 +2658,10 @@ dashboards:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2938,3 +2957,48 @@ dashboards:
     ## Otherwise, the new node certs won't match the existing certs.
     ##
     autoGenerated: true
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param dashboards.persistence.enabled Enable persistence using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param dashboards.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/opensearch-dashboards
+    ## @param dashboards.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param dashboards.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param dashboards.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param dashboards.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param dashboards.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param dashboards.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param dashboards.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param dashboards.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}

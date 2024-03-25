@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -202,7 +211,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r1
+    tag: 1.25.4-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -301,6 +310,7 @@ frontend:
   ## @param frontend.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param frontend.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param frontend.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param frontend.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param frontend.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param frontend.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param frontend.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -312,6 +322,7 @@ frontend:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -547,7 +558,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.9.0-debian-12-r17
+    tag: 2.9.0-debian-12-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -678,6 +689,7 @@ dashboard:
   ## @param dashboard.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param dashboard.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dashboard.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dashboard.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dashboard.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dashboard.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dashboard.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -689,6 +701,7 @@ dashboard:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -880,7 +893,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.9.0-debian-12-r16
+    tag: 2.9.0-debian-12-r18
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -907,7 +920,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.9.0-debian-12-r17
+    tag: 2.9.0-debian-12-r19
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1051,6 +1064,7 @@ apprepository:
   ## @param apprepository.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param apprepository.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param apprepository.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param apprepository.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param apprepository.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param apprepository.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param apprepository.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1062,6 +1076,7 @@ apprepository:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1217,7 +1232,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.6.0-debian-12-r1
+    tag: 7.6.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1315,6 +1330,7 @@ authProxy:
   ## @param authProxy.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param authProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param authProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param authProxy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param authProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param authProxy.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param authProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1326,6 +1342,7 @@ authProxy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1372,7 +1389,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.9.0-debian-12-r16
+    tag: 2.9.0-debian-12-r17
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1444,6 +1461,7 @@ pinnipedProxy:
   ## @param pinnipedProxy.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param pinnipedProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param pinnipedProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param pinnipedProxy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param pinnipedProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param pinnipedProxy.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param pinnipedProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1455,6 +1473,7 @@ pinnipedProxy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1685,7 +1704,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.9.0-debian-12-r17
+    tag: 2.9.0-debian-12-r19
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1781,6 +1800,7 @@ kubeappsapis:
   ## @param kubeappsapis.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param kubeappsapis.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param kubeappsapis.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kubeappsapis.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param kubeappsapis.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param kubeappsapis.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param kubeappsapis.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1792,6 +1812,7 @@ kubeappsapis:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1996,7 +2017,7 @@ ociCatalog:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-oci-catalog
-    tag: 2.9.0-debian-12-r16
+    tag: 2.9.0-debian-12-r17
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2057,6 +2078,7 @@ ociCatalog:
   ## @param ociCatalog.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param ociCatalog.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param ociCatalog.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param ociCatalog.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param ociCatalog.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param ociCatalog.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param ociCatalog.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2068,6 +2090,7 @@ ociCatalog:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false

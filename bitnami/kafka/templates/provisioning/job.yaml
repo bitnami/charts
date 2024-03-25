@@ -37,7 +37,7 @@ spec:
       schedulerName: {{ .Values.provisioning.schedulerName | quote }}
       {{- end }}
       {{- if .Values.provisioning.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.provisioning.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
@@ -54,7 +54,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -82,7 +82,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

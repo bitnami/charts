@@ -45,25 +45,85 @@ The command deploys MediaWiki on the Kubernetes cluster in the default configura
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: DEBUG
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as the Mediawki app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami MediaWiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -316,80 +376,15 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/media
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mediawiki/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-## Persistence
-
-The [Bitnami MediaWiki](https://github.com/bitnami/containers/tree/main/bitnami/mediawiki) image stores the MediaWiki data and configurations at the `/bitnami/mediawiki` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: LOG_LEVEL
-    value: DEBUG
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as the Mediawki app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major release bumps the and MariaDB chart version to [16.x.x](https://github.com/bitnami/charts/pull/23054); no major issues are expected during the upgrade
 
 ### To 18.0.0
 

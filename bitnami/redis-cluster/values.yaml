@@ -22,6 +22,15 @@ global:
   storageClass: ""
   redis:
     password: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Redis&reg; Cluster Common parameters
 ##
 
@@ -206,6 +215,7 @@ maxUnavailable: ""
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -217,9 +227,10 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -433,7 +444,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -561,7 +572,7 @@ redis:
   ## @param redis.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if redis.resources is set (redis.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param redis.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -787,7 +798,7 @@ updateJob:
   ## @param updateJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if updateJob.resources is set (updateJob.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param updateJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -909,7 +920,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -947,12 +958,30 @@ metrics:
   ##
   podLabels: {}
   ## Containers' Security Context - All fields other than `enabled` get added to the metrics container's security context
-  ## @param metrics.containerSecurityContext.enabled Enable Metrics Containers' Security Context
-  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Allow Privilege Escalation for metrics container
+  ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    enabled: false
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Enable this if you're using https://github.com/coreos/prometheus-operator
   ##
   serviceMonitor:
@@ -1113,7 +1142,7 @@ sysctlImage:
   ## @param sysctlImage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param sysctlImage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

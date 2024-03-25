@@ -73,7 +73,7 @@ spec:
       schedulerName: {{ .Values.ruler.schedulerName }}
       {{- end }}
       {{- if .Values.ruler.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ruler.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.ruler.initContainers }}
@@ -105,13 +105,16 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.loki.dataDir }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       containers:
         - name: grafana-loki-ruler
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.ruler.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ruler.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ruler.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -181,6 +184,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
@@ -193,6 +199,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.ruler.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           configMap:
             name: {{ template "grafana-loki.loki.configmapName" . }}

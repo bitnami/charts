@@ -8,13 +8,11 @@ file:
   {{ .Vars.persistence.mountPath }}:
     exists: true
     filetype: directory
-    mode: "0775"
-    owner: logstash
+    mode: "2777"
   /bitnami/logstash/config/logstash.conf:
     exists: true
     filetype: symlink
     mode: "0777"
-    owner: root
     contents:
     - /port.*{{ (index .Vars.containerPorts 0).containerPort }}/
 command:

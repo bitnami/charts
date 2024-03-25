@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -70,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.5-debian-12-r12
+  tag: 2.7.5-debian-12-r13
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -296,12 +305,12 @@ influxdb:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -316,7 +325,7 @@ influxdb:
   ## @param influxdb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param influxdb.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -878,7 +887,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -904,7 +913,7 @@ volumePermissions:
   ## @param volumePermissions.securityContext.runAsUser User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")
   ##
   securityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section InfluxDB&trade; backup parameters
 backup:
@@ -960,7 +969,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
@@ -971,6 +980,21 @@ backup:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
+    ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param backup.cronjob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## @param backup.podAffinityPreset Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1038,7 +1062,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.464.0-debian-12-r3
+        tag: 0.466.0-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1052,6 +1076,21 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
+      ## @param backup.uploadProviders.google.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "none"
+      ## @param backup.uploadProviders.google.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
     ## Azure Storage Container configuration
     ##
     azure:
@@ -1077,7 +1116,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.57.0-debian-12-r5
+        tag: 2.58.0-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1091,6 +1130,21 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
+      ## @param backup.uploadProviders.azure.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "none"
+      ## @param backup.uploadProviders.azure.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
     aws:
       ## @param backup.uploadProviders.aws.enabled Enable upload to aws s3 bucket
       ## @param backup.uploadProviders.aws.accessKeyID Access Key ID to access aws s3
@@ -1132,3 +1186,18 @@ backup:
         ##   - myRegistryKeySecretName
         ##
         pullSecrets: []
+      ## @param backup.uploadProviders.aws.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if influxdb.resources is set (influxdb.resources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "none"
+      ## @param backup.uploadProviders.aws.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## resources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}

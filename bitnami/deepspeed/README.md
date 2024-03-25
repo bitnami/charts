@@ -54,15 +54,135 @@ helm delete my-release
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploy as Job
+
+By default, the chart will deploy the client container (the one that connects to the Deepspeed workers) as a Deployment. This allows you to enter the container via `kubectl exec` and perform operations. In case you want to deploy it as a Kubernetes job, set the `client.useJob=true` value.
+
+### Loading your files
+
+The DeepSpeed chart supports three different ways to load your files. In order of priority, they are:
+
+1. Existing config map
+2. Add files in the values.yaml
+3. Cloning a git repository
+
+This means that if you specify a config map with your files, it won't check the files defined in `values.yaml` directory nor the git repository.
+
+In order to use an existing config map, set the `source.existingConfigMap=my-config-map` parameter.
+
+To add your files in the values.yaml file, set the `source.configmap` object with the files.
+
+Finally, if you want to clone a git repository you can use those parameters:
+
+```console
+source.type=git
+source.git.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
+source.git.revision=master
+```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `client`, `worker`.
+
+```yaml
+client:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+
+worker:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars
+
+If additional containers are needed in the same pod as Milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+## Persistence
+
+The [Bitnami DeepSpeed](https://github.com/bitnami/containers/tree/main/bitnami/deepspeed) image can persist data. If enabled, the persisted path is `/bitnami/deepspeed/data` by default.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
+
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -130,7 +250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.readinessProbe.enabled`                            | Enable readinessProbe on Client nodes                                                                                                                                                                                    | `true`           |
 | `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                 | `5`              |
 | `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                        | `30`             |
-| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                       | `20`             |
+| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                       | `30`             |
 | `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                     | `5`              |
 | `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                     | `1`              |
 | `client.startupProbe.enabled`                              | Enable startupProbe on Client containers                                                                                                                                                                                 | `false`          |
@@ -142,7 +262,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                      | `{}`             |
 | `client.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                     | `{}`             |
 | `client.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                       | `{}`             |
-| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `none`           |
+| `client.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production). | `small`          |
 | `client.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`             |
 | `client.podSecurityContext.enabled`                        | Enabled Client pods' Security Context                                                                                                                                                                                    | `true`           |
 | `client.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                       | `Always`         |
@@ -150,7 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                              | `[]`             |
 | `client.podSecurityContext.fsGroup`                        | Set Client pod's Security Context fsGroup                                                                                                                                                                                | `1001`           |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                                                                                                                                              | `true`           |
-| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `nil`            |
+| `client.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `{}`             |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                                                                                                                                        | `1001`           |
 | `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                                                                                                                                                       | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                                                                                                                                                     | `true`           |
@@ -243,7 +363,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                      | `{}`             |
 | `worker.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                     | `{}`             |
 | `worker.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                       | `{}`             |
-| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `none`           |
+| `worker.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production). | `small`          |
 | `worker.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`             |
 | `worker.podSecurityContext.enabled`                        | Enabled Worker pods' Security Context                                                                                                                                                                                    | `true`           |
 | `worker.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                       | `Always`         |
@@ -251,7 +371,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                              | `[]`             |
 | `worker.podSecurityContext.fsGroup`                        | Set Worker pod's Security Context fsGroup                                                                                                                                                                                | `1001`           |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                                                                                                                                              | `true`           |
-| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `nil`            |
+| `worker.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `{}`             |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                                                                                                                                        | `1001`           |
 | `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                                                                                                                                       | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                                                                                                                                                     | `true`           |
@@ -345,7 +465,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                              | `""`                       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                                                                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                                                                                                               | `[]`                       |
-| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -369,128 +489,20 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/deeps
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/deepspeed/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Deploy as Job
-
-By default, the chart will deploy the client container (the one that connects to the Deepspeed workers) as a Deployment. This allows you to enter the container via `kubectl exec` and perform operations. In case you want to deploy it as a Kubernetes job, set the `client.useJob=true` value.
-
-### Loading your files
-
-The DeepSpeed chart supports three different ways to load your files. In order of priority, they are:
-
-1. Existing config map
-2. Add files in the values.yaml
-3. Cloning a git repository
-
-This means that if you specify a config map with your files, it won't check the files defined in `values.yaml` directory nor the git repository.
-
-In order to use an existing config map, set the `source.existingConfigMap=my-config-map` parameter.
-
-To add your files in the values.yaml file, set the `source.configmap` object with the files.
-
-Finally, if you want to clone a git repository you can use those parameters:
-
-```console
-source.type=git
-source.git.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
-source.git.revision=master
-```
-
-## Persistence
-
-The [Bitnami DeepSpeed](https://github.com/bitnami/containers/tree/main/bitnami/deepspeed) image can persist data. If enabled, the persisted path is `/bitnami/deepspeed/data` by default.
-
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `client`, `worker`.
-
-```yaml
-client:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-
-worker:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars
-
-If additional containers are needed in the same pod as Milvus (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ## License
 

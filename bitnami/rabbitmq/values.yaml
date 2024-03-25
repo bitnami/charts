@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section RabbitMQ Image parameters
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
@@ -481,7 +490,7 @@ configuration: |-
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
   ##
-  total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
+  total_memory_available_override_value = {{ include "rabbitmq.toBytes" (dig "limits" "memory" "" .Values.resources) }}
   {{- if (eq .Values.memoryHighWatermark.type "absolute") }}
   vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ include "rabbitmq.toBytes" .Values.memoryHighWatermark.value }}
   {{- else if (eq .Values.memoryHighWatermark.type "relative") }}
@@ -738,8 +747,10 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set RabbitMQ containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
@@ -753,8 +764,10 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
   seccompProfile:
@@ -768,7 +781,7 @@ containerSecurityContext:
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -934,7 +947,7 @@ persistence:
   ## @param persistence.mountPath The path the volume will be mounted at
   ## Note: useful when using custom RabbitMQ images
   ##
-  mountPath: /bitnami/rabbitmq/mnesia
+  mountPath: /opt/bitnami/rabbitmq/.rabbitmq/mnesia
   ## @param persistence.subPath The subdirectory of the volume to mount to
   ## Useful in dev environments and one PV for multiple services
   ##
@@ -1457,7 +1470,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

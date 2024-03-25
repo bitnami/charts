@@ -34,6 +34,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: source-controller
     spec:
       serviceAccountName: {{ template "flux.source-controller.serviceAccountName" . }}
@@ -66,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.sourceController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.sourceController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sourceController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.sourceController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.sourceController.terminationGracePeriodSeconds }}
@@ -85,7 +86,7 @@ spec:
               mkdir -p {{ .Values.sourceController.persistence.mountPath }}
               find {{ .Values.sourceController.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.sourceController.containerSecurityContext.runAsUser }}:{{ .Values.sourceController.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
@@ -105,7 +106,7 @@ spec:
           image: {{ template "flux.source-controller.image" . }}
           imagePullPolicy: {{ .Values.sourceController.image.pullPolicy }}
           {{- if .Values.sourceController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.sourceController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sourceController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -195,8 +196,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.sourceController.persistence.mountPath }}
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.sourceController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -211,7 +213,7 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.sourceController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.extraVolumes "context" $) | nindent 8 }}

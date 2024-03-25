@@ -76,7 +76,7 @@ spec:
       runtimeClassName: {{ .Values.runtimeClassName | quote }}
       {{- end }}
       {{- if .Values.primary.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if or .Values.primary.initContainers (and .Values.primary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.primary.persistence.enabled) }}
       initContainers:
@@ -105,8 +105,9 @@ spec:
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
               {{- end }}
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
       {{- end }}
       containers:
@@ -114,7 +115,7 @@ spec:
           image: {{ include "mariadb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.primary.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.primary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -250,6 +251,8 @@ spec:
           {{- end }}
           {{- if .Values.primary.resources }}
           resources: {{ toYaml .Values.primary.resources | nindent 12 }}
+          {{- else if ne .Values.primary.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.primary.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
@@ -270,14 +273,18 @@ spec:
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mariadb/secrets/
             {{- end }}
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: app-conf-dir
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/mariadb/conf
-            - name: app-tmp-dir
+              subPath: app-conf-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/mariadb/tmp
-            - name: app-logs-dir
+              subPath: app-tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/mariadb/logs
+              subPath: app-logs-dir
             {{- if .Values.primary.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -286,7 +293,7 @@ spec:
           image: {{ include "mariadb.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             {{- if .Values.auth.usePasswordFiles }}
@@ -336,8 +343,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp-dir
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
             - name: mariadb-credentials
               mountPath: /opt/bitnami/mysqld-exporter/secrets/
@@ -350,13 +358,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.primary.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: app-conf-dir
-          emptyDir: {}
-        - name: app-tmp-dir
-          emptyDir: {}
-        - name: app-logs-dir
-          emptyDir: {}
-        - name: tmp-dir
+        - name: empty-dir
           emptyDir: {}
         {{- if or .Values.primary.configuration .Values.primary.existingConfigmap }}
         - name: config

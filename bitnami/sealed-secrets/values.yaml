@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -62,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets-controller
-  tag: 0.26.0-debian-12-r2
+  tag: 0.26.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -137,7 +146,7 @@ containerPorts:
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "nano"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -209,7 +218,6 @@ customStartupProbe: {}
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
 ## @param podSecurityContext.fsGroup Set Sealed Secret pod's Security Context fsGroup
-## @param podSecurityContext.seccompProfile.type Set Sealed Secret pod's Security Context seccompProfile type
 ##
 podSecurityContext:
   enabled: true
@@ -217,8 +225,6 @@ podSecurityContext:
   sysctls: []
   supplementalGroups: []
   fsGroup: 1001
-  seccompProfile:
-    type: RuntimeDefault
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param containerSecurityContext.enabled Enabled Sealed Secret containers' Security Context
@@ -228,18 +234,19 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsNonRoot Indicates that the Sealed Secret container must run as a non-root user
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Sealed Secret containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Sealed Secret containers' Security Context runAsGroup
 ## @param containerSecurityContext.seccompProfile.type Set Sealed Secret container's Security Context seccompProfile type
 ##
 containerSecurityContext:
   enabled: true
   allowPrivilegeEscalation: false
   capabilities:
-    drop:
-      - ALL
+    drop: ["ALL"]
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 1001
   seccompProfile:
     type: RuntimeDefault
 ## @param automountServiceAccountToken Mount Service Account token in pod

@@ -33,7 +33,7 @@ spec:
       {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap .Values.query.podAnnotations }}
       annotations:
         {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap }}
-        checksum/ruler-configuration: {{ include (print $.Template.BasePath "/query/sd-configmap.yaml") . | sha256sum }}
+        checksum/ruler-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.query.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
@@ -73,7 +73,7 @@ spec:
       schedulerName: {{ .Values.query.schedulerName }}
       {{- end }}
       {{- if .Values.query.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.query.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.query.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.query.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.query.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -89,7 +89,7 @@ spec:
           image: {{ include "thanos.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.query.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.query.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.query.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.query.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.query.command "context" $) | nindent 12 }}

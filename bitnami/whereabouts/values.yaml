@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -73,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/whereabouts
-  tag: 0.6.3-debian-12-r10
+  tag: 0.6.3-debian-12-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -203,7 +212,7 @@ nodeSelector: {}
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "nano"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -234,16 +243,25 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enable Whereabouts containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Whereabouts containers' Security Context
+## @param containerSecurityContext.runAsGroup Whereabouts containers' Security Context
 ## @param containerSecurityContext.runAsNonRoot Set Whereabouts container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set Whereabouts container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 0
+  runAsGroup: 0
   runAsNonRoot: false
   privileged: true
+  allowPrivilegeEscalation: true
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
 ## Configure extra options for startup probe

@@ -41,25 +41,176 @@ These commands deploy a ASP.NET Core application on the Kubernetes cluster in th
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploying your custom ASP.NET Core application
+
+The ASP.NET Core chart allows you to deploy a custom application using one of the following methods:
+
+- Using a Docker image containing your ASP.NET Core application ready to be executed.
+- Cloning your ASP.NET Core application code from a GIT repository.
+- Mounting your ASP.NET Core application from an existing PVC
+
+#### Using a Docker image containing your ASP.NET Core application ready to be executed
+
+You can build your own Docker image containing your ASP.NET Core application ready to be executed. To do so, overwrite the default image setting the `image.*` parameters, and set your custom command and arguments setting the `command` and `args` parameters:
 
 ```console
-helm delete my-release
+appFromExternalRepo.enabled=false
+image.registry=docker.io
+image.repository=your-image
+image.tag=your-tag
+command=[command]
+args=[arguments]
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+Find more information about the process to create your own image in the guide below:
+
+- [Develop and Publish an ASP.NET Core Web Application using Bitnami Containers](https://docs.bitnami.com/tutorials/develop-aspnet-application-bitnami-containers).
+
+#### Cloning your ASP.NET Core application code from a GIT repository
+
+This is done using two different init containers:
+
+- `clone-repository`: uses the [Bitnami GIT Image](https://github.com/bitnami/containers/tree/main/bitnami/git) to download the repository.
+- `dotnet-publish`: uses the [Bitnami .Net SDK Image](https://github.com/bitnami/containers/tree/main/bitnami/dotnet-sdk) to build/publish the ASP.NET Core application.
+
+To use this feature, set the `appFromExternalRepo.enabled` to `true` and set the repository and branch to use setting the `appFromExternalRepo.clone.repository` and `appFromExternalRepo.clone.revision` parameters. Then, specify the sub folder under the Git repository containing the ASP.NET Core app setting the `appFromExternalRepo.publish.subFolder` parameter. Finally, provide the start command to use setting the `appFromExternalRepo.startCommand`.
+
+> Note: you can append any custom flag for the "dotnet publish" command setting the `appFromExternalRepo.publish.extraFlags` parameter.
+
+For example, you can deploy a sample [OCMinimal](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output) using the parameters below:
+
+```console
+appFromExternalRepo.enabled=true
+appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
+appFromExternalRepo.clone.revision=main
+appFromExternalRepo.publish.aspnetcore/performance/caching/output/samples/7.x/
+appFromExternalRepo.startCommand[0]=dotnet
+appFromExternalRepo.startCommand[1]=OCMinimal.dll
+```
+
+#### Mounting your ASP.NET Core application from an existing PVC
+
+If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of your existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
+
+For example, if you created a PVC named `my-custom-apsnet-core-app` containing your application, use the parameters below:
+
+```console
+appFromExistingPVC.enabled=true
+appFromExistingPVC.existingClaim=my-custom-apsnet-core-app
+```
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+kong:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as the ASP.NET Core app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a ConfigMap including some app's configuration, and it will mount it in the ASP.NET Core app's container:
+
+```yaml
+extraDeploy: |-
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: aspnet-core-configuration
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      {{- if .Values.commonAnnotations }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
+      {{- end }}
+    data:
+      appsettings.json: |-
+        {
+          "AllowedHosts": "*"
+        }
+extraVolumeMounts:
+  - name: configuration
+    mountPath: /app/config/
+    readOnly: true
+extraVolumes:
+  - name: configuration
+    configMap:
+      name: aspnet-core-configuration
+```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+
+To enable ingress integration, please set `ingress.enabled` to `true`.
+
+#### Hosts
+
+Most likely you will only want to have one hostname that maps to this ASP.NET Core installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
+
+For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
+
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -255,166 +406,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/aspne
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Deploying your custom ASP.NET Core application
-
-The ASP.NET Core chart allows you to deploy a custom application using one of the following methods:
-
-- Using a Docker image containing your ASP.NET Core application ready to be executed.
-- Cloning your ASP.NET Core application code from a GIT repository.
-- Mounting your ASP.NET Core application from an existing PVC
-
-#### Using a Docker image containing your ASP.NET Core application ready to be executed
-
-You can build your own Docker image containing your ASP.NET Core application ready to be executed. To do so, overwrite the default image setting the `image.*` parameters, and set your custom command and arguments setting the `command` and `args` parameters:
-
-```console
-appFromExternalRepo.enabled=false
-image.registry=docker.io
-image.repository=your-image
-image.tag=your-tag
-command=[command]
-args=[arguments]
-```
-
-Find more information about the process to create your own image in the guide below:
-
-- [Develop and Publish an ASP.NET Core Web Application using Bitnami Containers](https://docs.bitnami.com/tutorials/develop-aspnet-application-bitnami-containers).
-
-#### Cloning your ASP.NET Core application code from a GIT repository
-
-This is done using two different init containers:
-
-- `clone-repository`: uses the [Bitnami GIT Image](https://github.com/bitnami/containers/tree/main/bitnami/git) to download the repository.
-- `dotnet-publish`: uses the [Bitnami .Net SDK Image](https://github.com/bitnami/containers/tree/main/bitnami/dotnet-sdk) to build/publish the ASP.NET Core application.
-
-To use this feature, set the `appFromExternalRepo.enabled` to `true` and set the repository and branch to use setting the `appFromExternalRepo.clone.repository` and `appFromExternalRepo.clone.revision` parameters. Then, specify the sub folder under the Git repository containing the ASP.NET Core app setting the `appFromExternalRepo.publish.subFolder` parameter. Finally, provide the start command to use setting the `appFromExternalRepo.startCommand`.
-
-> Note: you can append any custom flag for the "dotnet publish" command setting the `appFromExternalRepo.publish.extraFlags` parameter.
-
-For example, you can deploy a sample [OCMinimal](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output) using the parameters below:
-
-```console
-appFromExternalRepo.enabled=true
-appFromExternalRepo.clone.repository=https://github.com/dotnet/AspNetCore.Docs.git
-appFromExternalRepo.clone.revision=main
-appFromExternalRepo.publish.aspnetcore/performance/caching/output/samples/7.x/
-appFromExternalRepo.startCommand[0]=dotnet
-appFromExternalRepo.startCommand[1]=OCMinimal.dll
-```
-
-#### Mounting your ASP.NET Core application from an existing PVC
-
-If you previously created a PVC with your application code ready to be executed, you can mount it in the ASP.NET Core container setting the `appFromExistingPVC.enabled` parameter to `true`. Then, specify the name of your existing PVC setting the `appFromExistingPVC.existingClaim` parameter.
-
-For example, if you created a PVC named `my-custom-apsnet-core-app` containing your application, use the parameters below:
-
-```console
-appFromExistingPVC.enabled=true
-appFromExistingPVC.existingClaim=my-custom-apsnet-core-app
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-kong:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as the ASP.NET Core app (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would create a ConfigMap including some app's configuration, and it will mount it in the ASP.NET Core app's container:
-
-```yaml
-extraDeploy: |-
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: aspnet-core-configuration
-      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-      {{- if .Values.commonAnnotations }}
-      annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
-      {{- end }}
-    data:
-      appsettings.json: |-
-        {
-          "AllowedHosts": "*"
-        }
-extraVolumeMounts:
-  - name: configuration
-    mountPath: /app/config/
-    readOnly: true
-extraVolumes:
-  - name: configuration
-    configMap:
-      name: aspnet-core-configuration
-```
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Ingress
-
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
-
-To enable ingress integration, please set `ingress.enabled` to `true`.
-
-#### Hosts
-
-Most likely you will only want to have one hostname that maps to this ASP.NET Core installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
-
-For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
-
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Troubleshooting
 

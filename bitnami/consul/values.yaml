@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -73,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.17.3-debian-12-r2
+  tag: 1.18.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -289,17 +298,19 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled Consul containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup
 ## @param containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
-## @param containerSecurityContext.capabilities.drop Set Argo CD containers' repo server Security Context capabilities to be dropped
-## @param containerSecurityContext.readOnlyRootFilesystem Set Argo CD containers' repo server Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
@@ -307,7 +318,7 @@ containerSecurityContext:
     drop: ["ALL"]
   seccompProfile:
     type: "RuntimeDefault"
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
 ## Container's resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -317,7 +328,7 @@ containerSecurityContext:
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "nano"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -707,7 +718,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -723,7 +734,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -756,7 +767,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.11.0-debian-12-r10
+    tag: 0.11.0-debian-12-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -769,16 +780,30 @@ metrics:
     pullSecrets: []
   ## Container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param metrics.containerSecurityContext.enabled HashiCorp Consul Prometheus Exporter securityContext
+  ## @param metrics.containerSecurityContext.enabled Enabled Consul containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser User ID for the HashiCorp Consul Prometheus Exporter
-  ## @param metrics.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param metrics.containerSecurityContext.runAsUser Set Consul containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Consul containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Consul containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop Set containers' repo server Security Context capabilities to be dropped
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set containers' repo server Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Consul containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+    readOnlyRootFilesystem: false
   ## Consul Prometheus exporter service type
   ##
   service:
@@ -807,7 +832,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

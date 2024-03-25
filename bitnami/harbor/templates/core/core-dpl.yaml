@@ -73,7 +73,7 @@ spec:
       serviceAccountName: {{ .Values.core.serviceAccountName }}
       {{- end }}
       {{- if .Values.core.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.core.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.core.initContainers }}
       initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.core.initContainers "context" $) | nindent 8 }}
@@ -83,7 +83,7 @@ spec:
           image: {{ include "harbor.core.image" . }}
           imagePullPolicy: {{ .Values.core.image.pullPolicy | quote }}
           {{- if .Values.core.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.core.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -202,6 +202,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.core.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: config
               mountPath: /etc/core/app.conf
               subPath: app.conf
@@ -236,6 +239,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.core.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: config
           configMap:
             name: {{ include "harbor.core" . }}

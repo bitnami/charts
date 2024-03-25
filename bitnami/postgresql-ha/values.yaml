@@ -45,6 +45,15 @@ global:
     adminUsername: ""
     adminPassword: ""
     existingSecret: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -102,7 +111,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql-repmgr
-    tag: 16.2.0-debian-12-r4
+    tag: 16.2.0-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -238,6 +247,7 @@ postgresql:
   ## @param postgresql.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param postgresql.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param postgresql.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param postgresql.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param postgresql.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param postgresql.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param postgresql.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -255,9 +265,10 @@ postgresql:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -305,7 +316,7 @@ postgresql:
   ## @param postgresql.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.resources is set (postgresql.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param postgresql.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -802,6 +813,7 @@ witness:
   ## @param witness.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param witness.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param witness.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param witness.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param witness.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param witness.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param witness.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -813,15 +825,16 @@ witness:
   ##     enabled: true
   ##     capabilities:
   ##       drop: ["NET_RAW"]
-  ##     readOnlyRootFilesystem: true
+  ##     readOnlyRootFilesystem: false
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -869,7 +882,7 @@ witness:
   ## @param witness.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if witness.resources is set (witness.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param witness.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1115,7 +1128,7 @@ pgpool:
   image:
     registry: docker.io
     repository: bitnami/pgpool
-    tag: 4.5.0-debian-12-r9
+    tag: 4.5.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1295,6 +1308,7 @@ pgpool:
   ## @param pgpool.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param pgpool.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param pgpool.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param pgpool.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param pgpool.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param pgpool.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param pgpool.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1306,15 +1320,16 @@ pgpool:
   ##     enabled: true
   ##     capabilities:
   ##       drop: ["NET_RAW"]
-  ##     readOnlyRootFilesystem: true
+  ##     readOnlyRootFilesystem: false
   ##
   containerSecurityContext:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1329,7 +1344,7 @@ pgpool:
   ## @param pgpool.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if pgpool.resources is set (pgpool.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param pgpool.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1692,7 +1707,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r13
+    tag: 0.15.0-debian-12-r14
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1722,7 +1737,7 @@ metrics:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
@@ -1735,7 +1750,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1983,7 +1998,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2172,7 +2187,7 @@ backup:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
-      runAsGroup: 0
+      runAsGroup: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true

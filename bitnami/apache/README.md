@@ -45,25 +45,56 @@ These commands deploy Apache on the Kubernetes cluster in the default configurat
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploying a custom web application
+
+The Apache chart allows you to deploy a custom web application using one of the following methods:
+
+- Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
+- Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
+- Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
+
+Here is an example of deploying a web application from a Git repository using the first method:
+
+```text
+cloneHtdocsFromGit.enabled=true
+cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
+cloneHtdocsFromGit.branch=master
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+To use a custom `httpd.conf` file, mount it using the `httpdConfConfigMap` parameter, which references a Kubernetes ConfigMap with the contents of the `httpd.conf` file. Alternatively, copy the `httpd.conf` file to `files/httpd.conf` in the current working directory to mount it in the container.
+
+To mount different virtual host configurations, use the `vhostsConfigMap` value. This is a pointer to a Kubernetes ConfigMap with the desired Apache virtual host configurations. You can also copy the virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a ConfigMap in the container.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -108,7 +139,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneHtdocsFromGit.branch`                         | Branch inside the git repository                                                                                                                                                                                                                 | `""`                     |
 | `cloneHtdocsFromGit.enableAutoRefresh`              | Enables an automatic git pull with a sidecar container                                                                                                                                                                                           | `true`                   |
 | `cloneHtdocsFromGit.interval`                       | Interval for sidecar container pull from the repository                                                                                                                                                                                          | `60`                     |
-| `cloneHtdocsFromGit.resourcesPreset`                | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cloneHtdocsFromGit.resources is set (cloneHtdocsFromGit.resources is recommended for production). | `none`                   |
+| `cloneHtdocsFromGit.resourcesPreset`                | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if cloneHtdocsFromGit.resources is set (cloneHtdocsFromGit.resources is recommended for production). | `nano`                   |
 | `cloneHtdocsFromGit.resources`                      | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                | `{}`                     |
 | `cloneHtdocsFromGit.extraVolumeMounts`              | Add extra volume mounts for the GIT containers                                                                                                                                                                                                   | `[]`                     |
 | `htdocsConfigMap`                                   | Name of a config map with the server static content                                                                                                                                                                                              | `""`                     |
@@ -127,17 +158,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                      | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Set Apache Server pod's Security Context fsGroup                                                                                                                                                                                                 | `1001`                   |
 | `containerSecurityContext.enabled`                  | Enabled Apache Server containers' Security Context                                                                                                                                                                                               | `true`                   |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                 | `nil`                    |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                 | `{}`                     |
 | `containerSecurityContext.runAsUser`                | Set Apache Server containers' Security Context runAsUser                                                                                                                                                                                         | `1001`                   |
+| `containerSecurityContext.runAsGroup`               | Set Apache Server containers' Security Context runAsGroup                                                                                                                                                                                        | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                                                                                                                                         | `true`                   |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                                                                                                                                              | `false`                  |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                                                                                                                                                | `false`                  |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set primary container's Security Context readOnlyRootFilesystem                                                                                                                                                                                  | `true`                   |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                               | `["ALL"]`                |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                 | `RuntimeDefault`         |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                                                                                                             | `[]`                     |
 | `args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                                | `[]`                     |
 | `lifecycleHooks`                                    | for the Apache server container(s) to automate configuration before or after startup                                                                                                                                                             | `{}`                     |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).                                       | `none`                   |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).                                       | `nano`                   |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                | `{}`                     |
 | `startupProbe.enabled`                              | Enable startupProbe                                                                                                                                                                                                                              | `false`                  |
 | `startupProbe.path`                                 | Path to access on the HTTP server                                                                                                                                                                                                                | `/`                      |
@@ -192,35 +225,42 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Apache Service type                                                                                                              | `LoadBalancer`           |
-| `service.ports.http`               | Apache service HTTP port                                                                                                         | `80`                     |
-| `service.ports.https`              | Apache service HTTPS port                                                                                                        | `443`                    |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
-| `service.clusterIP`                | Apache service Cluster IP                                                                                                        | `""`                     |
-| `service.loadBalancerIP`           | Apache service Load Balancer IP                                                                                                  | `""`                     |
-| `service.loadBalancerSourceRanges` | Apache service Load Balancer sources                                                                                             | `[]`                     |
-| `service.annotations`              | Additional custom annotations for Apache service                                                                                 | `{}`                     |
-| `service.externalTrafficPolicy`    | Apache service external traffic policy                                                                                           | `Cluster`                |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Apache                                                                                      | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `example.local`          |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | Apache Service type                                                                                                              | `LoadBalancer`           |
+| `service.ports.http`                    | Apache service HTTP port                                                                                                         | `80`                     |
+| `service.ports.https`                   | Apache service HTTPS port                                                                                                        | `443`                    |
+| `service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
+| `service.nodePorts.https`               | Node port for HTTPS                                                                                                              | `""`                     |
+| `service.clusterIP`                     | Apache service Cluster IP                                                                                                        | `""`                     |
+| `service.loadBalancerIP`                | Apache service Load Balancer IP                                                                                                  | `""`                     |
+| `service.loadBalancerSourceRanges`      | Apache service Load Balancer sources                                                                                             | `[]`                     |
+| `service.annotations`                   | Additional custom annotations for Apache service                                                                                 | `{}`                     |
+| `service.externalTrafficPolicy`         | Apache service external traffic policy                                                                                           | `Cluster`                |
+| `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
+| `ingress.enabled`                       | Enable ingress record generation for Apache                                                                                      | `false`                  |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress record                                                                                              | `example.local`          |
+| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraPaths`                    | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Metrics Parameters
 
@@ -276,65 +316,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/apach
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/apache/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Deploying a custom web application
-
-The Apache chart allows you to deploy a custom web application using one of the following methods:
-
-- Cloning from a git repository: Set `cloneHtdocsFromGit.enabled` to `true` and set the repository and branch using the `cloneHtdocsFromGit.repository` and  `cloneHtdocsFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneHtdocsFromGit.interval`.
-- Providing a ConfigMap: Set the `htdocsConfigMap` value to mount a ConfigMap in the Apache htdocs folder.
-- Using an existing PVC: Set the `htdocsPVC` value to mount an PersistentVolumeClaim with the web application content.
-
-Here is an example of deploying a web application from a Git repository using the first method:
-
-```text
-cloneHtdocsFromGit.enabled=true
-cloneHtdocsFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
-cloneHtdocsFromGit.branch=master
-```
-
-To use a custom `httpd.conf` file, mount it using the `httpdConfConfigMap` parameter, which references a Kubernetes ConfigMap with the contents of the `httpd.conf` file. Alternatively, copy the `httpd.conf` file to `files/httpd.conf` in the current working directory to mount it in the container.
-
-To mount different virtual host configurations, use the `vhostsConfigMap` value. This is a pointer to a Kubernetes ConfigMap with the desired Apache virtual host configurations. You can also copy the virtual host configurations under the `files/vhosts/` directory in your current working directory to mount them as a ConfigMap in the container.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use  the preset configurations for pod affinity, pod anti-affinity, and node affinity available in the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Notable changes
-
-### 7.4.0
-
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
-
-### 7.0.0
-
-This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, which is based on Bash instead of Node.js.
-
-### 6.0.0
-
-This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
-
 ## Upgrading
+
+### To 11.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 10.0.0
 
@@ -353,6 +350,18 @@ Affected values:
 ### To 8.0.0
 
 [On November 13, 2020, Helm v2 support formally ended](https://github.com/helm/charts#status-of-the-project). This major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
+
+### To 7.4.0
+
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+
+### To 7.0.0
+
+This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, which is based on Bash instead of Node.js.
+
+### To 6.0.0
+
+This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
 
 ### To 2.0.0
 

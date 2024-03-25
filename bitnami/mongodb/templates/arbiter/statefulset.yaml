@@ -73,7 +73,7 @@ spec:
       runtimeClassName: {{ .Values.arbiter.runtimeClassName }}
       {{- end }}
       {{- if .Values.arbiter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.arbiter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.arbiter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{ if .Values.arbiter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.arbiter.terminationGracePeriodSeconds }}
@@ -125,7 +125,7 @@ spec:
           image: {{ include "mongodb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.arbiter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.arbiter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.arbiter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -254,6 +254,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mongodb/logs
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /bitnami/mongodb
+              subPath: app-volume-dir
             {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mongodb/conf/mongodb.conf
@@ -269,10 +272,10 @@ spec:
         {{- if .Values.arbiter.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumes .Values.tls.enabled }}
       volumes:
         - name: empty-dir
           emptyDir: {}
+      {{- if or .Values.arbiter.configuration .Values.arbiter.existingConfigmap .Values.arbiter.extraVolumes .Values.tls.enabled }}
         - name: common-scripts
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}

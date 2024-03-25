@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -85,7 +94,7 @@ kustomizeController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-kustomize-controller
-    tag: 1.2.2-debian-12-r5
+    tag: 1.2.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -228,7 +237,7 @@ kustomizeController:
   ## @param kustomizeController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if kustomizeController.resources is set (kustomizeController.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param kustomizeController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -258,7 +267,8 @@ kustomizeController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kustomizeController.containerSecurityContext.enabled Enabled Kustomize Controller containers' Security Context
   ## @param kustomizeController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param kustomizeController.containerSecurityContext.runAsUser Set Kustomize Controller containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param kustomizeController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param kustomizeController.containerSecurityContext.runAsNonRoot Set Kustomize Controller containers' Security Context runAsNonRoot
   ## @param kustomizeController.containerSecurityContext.privileged Set Kustomize Controller containers' Security Context privileged
   ## @param kustomizeController.containerSecurityContext.readOnlyRootFilesystem Set Kustomize Controller containers' Security Context runAsNonRoot
@@ -268,8 +278,9 @@ kustomizeController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -598,7 +609,7 @@ helmController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-helm-controller
-    tag: 0.37.4-debian-12-r5
+    tag: 0.37.4-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -741,7 +752,7 @@ helmController:
   ## @param helmController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if helmController.resources is set (helmController.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param helmController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -771,7 +782,8 @@ helmController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param helmController.containerSecurityContext.enabled Enabled Helm Controller containers' Security Context
   ## @param helmController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param helmController.containerSecurityContext.runAsUser Set Helm Controller containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param helmController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param helmController.containerSecurityContext.runAsNonRoot Set Helm Controller containers' Security Context runAsNonRoot
   ## @param helmController.containerSecurityContext.privileged Set Helm Controller containers' Security Context privileged
   ## @param helmController.containerSecurityContext.readOnlyRootFilesystem Set Helm Controller containers' Security Context runAsNonRoot
@@ -781,8 +793,9 @@ helmController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1111,7 +1124,7 @@ sourceController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-source-controller
-    tag: 1.2.4-debian-12-r5
+    tag: 1.2.4-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1256,7 +1269,7 @@ sourceController:
   ## @param sourceController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sourceController.resources is set (sourceController.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param sourceController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1286,7 +1299,8 @@ sourceController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param sourceController.containerSecurityContext.enabled Enabled Source Controller containers' Security Context
   ## @param sourceController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param sourceController.containerSecurityContext.runAsUser Set Source Controller containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sourceController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param sourceController.containerSecurityContext.runAsNonRoot Set Source Controller containers' Security Context runAsNonRoot
   ## @param sourceController.containerSecurityContext.privileged Set Source Controller containers' Security Context privileged
   ## @param sourceController.containerSecurityContext.readOnlyRootFilesystem Set Source Controller containers' Security Context runAsNonRoot
@@ -1296,8 +1310,9 @@ sourceController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     privileged: false
@@ -1723,7 +1738,7 @@ notificationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-notification-controller
-    tag: 1.2.4-debian-12-r5
+    tag: 1.2.4-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1866,7 +1881,7 @@ notificationController:
   ## @param notificationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if notificationController.resources is set (notificationController.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param notificationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1896,7 +1911,8 @@ notificationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param notificationController.containerSecurityContext.enabled Enabled Notification Controller containers' Security Context
   ## @param notificationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param notificationController.containerSecurityContext.runAsUser Set Notification Controller containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param notificationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param notificationController.containerSecurityContext.runAsNonRoot Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.readOnlyRootFilesystem Set Notification Controller containers' Security Context runAsNonRoot
   ## @param notificationController.containerSecurityContext.privileged Set Notification Controller containers' Security Context privileged
@@ -1906,8 +1922,9 @@ notificationController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -2236,7 +2253,7 @@ imageAutomationController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-automation-controller
-    tag: 0.37.1-debian-12-r5
+    tag: 0.37.1-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2379,7 +2396,7 @@ imageAutomationController:
   ## @param imageAutomationController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if imageAutomationController.resources is set (imageAutomationController.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param imageAutomationController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2409,7 +2426,8 @@ imageAutomationController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageAutomationController.containerSecurityContext.enabled Enabled Image Automation Controller containers' Security Context
   ## @param imageAutomationController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param imageAutomationController.containerSecurityContext.runAsUser Set Image Automation Controller containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageAutomationController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imageAutomationController.containerSecurityContext.runAsNonRoot Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.readOnlyRootFilesystem Set Image Automation Controller containers' Security Context runAsNonRoot
   ## @param imageAutomationController.containerSecurityContext.privileged Set Image Automation Controller containers' Security Context privileged
@@ -2419,8 +2437,9 @@ imageAutomationController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     privileged: false
@@ -2749,7 +2768,7 @@ imageReflectorController:
   image:
     registry: docker.io
     repository: bitnami/fluxcd-image-reflector-controller
-    tag: 0.31.2-debian-12-r5
+    tag: 0.31.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2892,7 +2911,7 @@ imageReflectorController:
   ## @param imageReflectorController.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if imageReflectorController.resources is set (imageReflectorController.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param imageReflectorController.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2922,7 +2941,8 @@ imageReflectorController:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param imageReflectorController.containerSecurityContext.enabled Enabled Image Reflector Controller containers' Security Context
   ## @param imageReflectorController.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param imageReflectorController.containerSecurityContext.runAsUser Set Image Reflector Controller containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param imageReflectorController.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param imageReflectorController.containerSecurityContext.runAsNonRoot Set Image Reflector Controller containers' Security Context runAsNonRoot
   ## @param imageReflectorController.containerSecurityContext.privileged Set Image Reflector Controller containers' Security Context privileged
   ## @param imageReflectorController.containerSecurityContext.readOnlyRootFilesystem Set Image Reflector Controller containers' Security Context runAsNonRoot
@@ -2932,8 +2952,9 @@ imageReflectorController:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -3299,7 +3320,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3315,7 +3336,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3335,5 +3356,5 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0

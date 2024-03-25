@@ -42,29 +42,129 @@ These commands deploy OpenSearch on the Kubernetes cluster in the default config
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` release:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Change OpenSearch version
+
+To modify the OpenSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/opensearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+
+### Default kernel settings
+
+Currently, OpenSearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+
+- [File Descriptor requirements](https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html)
+- [Virtual memory requirements](https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html)
+
+This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
+You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: OPENSEARCH_VERSION
+    value: 7.0
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Remove also the chart using `--purge` option:
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Using custom init scripts
+
+For advanced operations, the Bitnami OpenSearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
-helm delete --purge my-release
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
 ```
+
+### Snapshot and restore operations
+
+As it's described in the [official documentation](https://www.open.co/guide/en/opensearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
+
+This chart allows you to configure OpenSearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every OpenSearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Persistent Volume:
+
+```yaml
+extraVolumes:
+  - name: snapshot-repository
+    nfs:
+      server: nfs.example.com # Please change this to your NFS server
+      path: /share1
+extraVolumeMounts:
+  - name: snapshot-repository
+    mountPath: /snapshots
+snapshotRepoPath: "/snapshots"
+```
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as OpenSearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami OpenSearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) image stores the OpenSearch data at the `/bitnami/opensearch/data` path of the container.
+
+By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -203,7 +303,7 @@ helm delete --purge my-release
 | `master.servicenameOverride`                               | String to fully override opensearch.master.servicename                                                                                                                                                                   | `""`                |
 | `master.annotations`                                       | Annotations for the master statefulset                                                                                                                                                                                   | `{}`                |
 | `master.updateStrategy.type`                               | Master-eligible nodes statefulset strategy type                                                                                                                                                                          | `RollingUpdate`     |
-| `master.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production). | `none`              |
+| `master.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production). | `small`             |
 | `master.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`                |
 | `master.heapSize`                                          | OpenSearch master-eligible node heap size.                                                                                                                                                                               | `128m`              |
 | `master.podSecurityContext.enabled`                        | Enabled master-eligible pods' Security Context                                                                                                                                                                           | `true`              |
@@ -214,9 +314,10 @@ helm delete --purge my-release
 | `master.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                     | `true`              |
 | `master.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `nil`               |
 | `master.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                               | `1001`              |
+| `master.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                              | `1001`              |
 | `master.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                            | `true`              |
 | `master.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                              | `false`             |
-| `master.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                  | `false`             |
+| `master.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                  | `true`              |
 | `master.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                | `false`             |
 | `master.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                       | `["ALL"]`           |
 | `master.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                         | `RuntimeDefault`    |
@@ -313,7 +414,7 @@ helm delete --purge my-release
 | `data.servicenameOverride`                               | String to fully override opensearch.data.servicename                                                                                                                                                                 | `""`                |
 | `data.annotations`                                       | Annotations for the data statefulset                                                                                                                                                                                 | `{}`                |
 | `data.updateStrategy.type`                               | Data-only nodes statefulset strategy type                                                                                                                                                                            | `RollingUpdate`     |
-| `data.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production). | `none`              |
+| `data.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production). | `medium`            |
 | `data.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                    | `{}`                |
 | `data.heapSize`                                          | OpenSearch data node heap size.                                                                                                                                                                                      | `1024m`             |
 | `data.podSecurityContext.enabled`                        | Enabled data pods' Security Context                                                                                                                                                                                  | `true`              |
@@ -324,9 +425,10 @@ helm delete --purge my-release
 | `data.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                 | `true`              |
 | `data.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                     | `nil`               |
 | `data.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                           | `1001`              |
+| `data.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                          | `1001`              |
 | `data.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                        | `true`              |
 | `data.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                          | `false`             |
-| `data.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                              | `false`             |
+| `data.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                              | `true`              |
 | `data.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                            | `false`             |
 | `data.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                   | `["ALL"]`           |
 | `data.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                     | `RuntimeDefault`    |
@@ -423,7 +525,7 @@ helm delete --purge my-release
 | `coordinating.servicenameOverride`                               | String to fully override opensearch.coordinating.servicename                                                                                                                                                                         | `""`             |
 | `coordinating.annotations`                                       | Annotations for the coordinating-only statefulset                                                                                                                                                                                    | `{}`             |
 | `coordinating.updateStrategy.type`                               | Coordinating-only nodes statefulset strategy type                                                                                                                                                                                    | `RollingUpdate`  |
-| `coordinating.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production). | `none`           |
+| `coordinating.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production). | `small`          |
 | `coordinating.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`             |
 | `coordinating.heapSize`                                          | OpenSearch coordinating node heap size.                                                                                                                                                                                              | `128m`           |
 | `coordinating.podSecurityContext.enabled`                        | Enabled coordinating-only pods' Security Context                                                                                                                                                                                     | `true`           |
@@ -434,9 +536,10 @@ helm delete --purge my-release
 | `coordinating.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                 | `true`           |
 | `coordinating.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                     | `nil`            |
 | `coordinating.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                           | `1001`           |
+| `coordinating.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                          | `1001`           |
 | `coordinating.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                        | `true`           |
 | `coordinating.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                          | `false`          |
-| `coordinating.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `false`          |
+| `coordinating.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `true`           |
 | `coordinating.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                            | `false`          |
 | `coordinating.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                   | `["ALL"]`        |
 | `coordinating.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                     | `RuntimeDefault` |
@@ -526,7 +629,7 @@ helm delete --purge my-release
 | `ingest.servicenameOverride`                               | String to fully override ingest.master.servicename                                                                                                                                                                       | `""`                      |
 | `ingest.annotations`                                       | Annotations for the ingest statefulset                                                                                                                                                                                   | `{}`                      |
 | `ingest.updateStrategy.type`                               | Ingest-only nodes statefulset strategy type                                                                                                                                                                              | `RollingUpdate`           |
-| `ingest.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production). | `none`                    |
+| `ingest.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production). | `small`                   |
 | `ingest.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`                      |
 | `ingest.heapSize`                                          | OpenSearch ingest-only node heap size.                                                                                                                                                                                   | `128m`                    |
 | `ingest.podSecurityContext.enabled`                        | Enabled ingest-only pods' Security Context                                                                                                                                                                               | `true`                    |
@@ -537,9 +640,10 @@ helm delete --purge my-release
 | `ingest.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                     | `true`                    |
 | `ingest.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `nil`                     |
 | `ingest.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                               | `1001`                    |
+| `ingest.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                              | `1001`                    |
 | `ingest.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                            | `true`                    |
 | `ingest.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                              | `false`                   |
-| `ingest.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                  | `false`                   |
+| `ingest.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                  | `true`                    |
 | `ingest.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                | `false`                   |
 | `ingest.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                       | `["ALL"]`                 |
 | `ingest.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                         | `RuntimeDefault`          |
@@ -652,7 +756,7 @@ helm delete --purge my-release
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                              | `""`                       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                                                                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets` | Init container volume-permissions image pull secrets                                                                                                                                                                                           | `[]`                       |
-| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
 | `sysctlImage.enabled`                 | Enable kernel settings modifier image                                                                                                                                                                                                          | `true`                     |
 | `sysctlImage.registry`                | Kernel settings modifier image registry                                                                                                                                                                                                        | `REGISTRY_NAME`            |
@@ -660,7 +764,7 @@ helm delete --purge my-release
 | `sysctlImage.digest`                  | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                       | `""`                       |
 | `sysctlImage.pullPolicy`              | Kernel settings modifier image pull policy                                                                                                                                                                                                     | `IfNotPresent`             |
 | `sysctlImage.pullSecrets`             | Kernel settings modifier image pull secrets                                                                                                                                                                                                    | `[]`                       |
-| `sysctlImage.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).             | `none`                     |
+| `sysctlImage.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).             | `nano`                     |
 | `sysctlImage.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
 
 ### OpenSearch Dashboards Parameters
@@ -709,7 +813,7 @@ helm delete --purge my-release
 | `dashboards.fullnameOverride`                                  | String to fully override opensearch.dashboards.fullname                                                                                                                                                                          | `""`                                    |
 | `dashboards.servicenameOverride`                               | String to fully override opensearch.dashboards.servicename                                                                                                                                                                       | `""`                                    |
 | `dashboards.updateStrategy.type`                               | Data-only nodes statefulset strategy type                                                                                                                                                                                        | `RollingUpdate`                         |
-| `dashboards.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dashboards.resources is set (dashboards.resources is recommended for production). | `none`                                  |
+| `dashboards.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dashboards.resources is set (dashboards.resources is recommended for production). | `small`                                 |
 | `dashboards.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`                                    |
 | `dashboards.heapSize`                                          | OpenSearch data node heap size.                                                                                                                                                                                                  | `1024m`                                 |
 | `dashboards.podSecurityContext.enabled`                        | Enabled data pods' Security Context                                                                                                                                                                                              | `true`                                  |
@@ -720,9 +824,10 @@ helm delete --purge my-release
 | `dashboards.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                             | `true`                                  |
 | `dashboards.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                 | `nil`                                   |
 | `dashboards.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                       | `1001`                                  |
+| `dashboards.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                      | `1001`                                  |
 | `dashboards.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                    | `true`                                  |
 | `dashboards.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                      | `false`                                 |
-| `dashboards.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                          | `false`                                 |
+| `dashboards.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                          | `true`                                  |
 | `dashboards.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                        | `false`                                 |
 | `dashboards.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                               | `["ALL"]`                               |
 | `dashboards.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                 | `RuntimeDefault`                        |
@@ -798,6 +903,16 @@ helm delete --purge my-release
 | `dashboards.tls.enabled`                                       | Enable TLS for OpenSearch Dashboards webserver                                                                                                                                                                                   | `false`                                 |
 | `dashboards.tls.existingSecret`                                | Existing secret containing the certificates for OpenSearch Dashboards webserver                                                                                                                                                  | `""`                                    |
 | `dashboards.tls.autoGenerated`                                 | Create self-signed TLS certificates.                                                                                                                                                                                             | `true`                                  |
+| `dashboards.persistence.enabled`                               | Enable persistence using Persistent Volume Claims                                                                                                                                                                                | `false`                                 |
+| `dashboards.persistence.mountPath`                             | Path to mount the volume at.                                                                                                                                                                                                     | `/bitnami/opensearch-dashboards`        |
+| `dashboards.persistence.subPath`                               | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                                                                                          | `""`                                    |
+| `dashboards.persistence.storageClass`                          | Storage class of backing PVC                                                                                                                                                                                                     | `""`                                    |
+| `dashboards.persistence.annotations`                           | Persistent Volume Claim annotations                                                                                                                                                                                              | `{}`                                    |
+| `dashboards.persistence.accessModes`                           | Persistent Volume Access Modes                                                                                                                                                                                                   | `["ReadWriteOnce"]`                     |
+| `dashboards.persistence.size`                                  | Size of data volume                                                                                                                                                                                                              | `8Gi`                                   |
+| `dashboards.persistence.existingClaim`                         | The name of an existing PVC to use for persistence                                                                                                                                                                               | `""`                                    |
+| `dashboards.persistence.selector`                              | Selector to match an existing Persistent Volume for WordPress data PVC                                                                                                                                                           | `{}`                                    |
+| `dashboards.persistence.dataSource`                            | Custom PVC data source                                                                                                                                                                                                           | `{}`                                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -820,122 +935,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/opens
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/opensearch/values.yaml).
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Change OpenSearch version
-
-To modify the OpenSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/opensearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
-
-### Default kernel settings
-
-Currently, OpenSearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
-
-- [File Descriptor requirements](https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html)
-- [Virtual memory requirements](https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html)
-
-This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
-You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: OPENSEARCH_VERSION
-    value: 7.0
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Using custom init scripts
-
-For advanced operations, the Bitnami OpenSearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
-
-```console
-initScriptsCM=special-scripts
-initScriptsSecret=special-scripts-sensitive
-```
-
-### Snapshot and restore operations
-
-As it's described in the [official documentation](https://www.open.co/guide/en/opensearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
-
-This chart allows you to configure OpenSearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every OpenSearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Persistent Volume:
-
-```yaml
-extraVolumes:
-  - name: snapshot-repository
-    nfs:
-      server: nfs.example.com # Please change this to your NFS server
-      path: /share1
-extraVolumeMounts:
-  - name: snapshot-repository
-    mountPath: /snapshots
-snapshotRepoPath: "/snapshots"
-```
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as OpenSearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-```
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
-
-## Persistence
-
-The [Bitnami OpenSearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) image stores the OpenSearch data at the `/bitnami/opensearch/data` path of the container.
-
-By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the image run as non-root by default, it is necessary to adjust the ownership of the persistent volume so that the container can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ## License
 

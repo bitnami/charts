@@ -44,23 +44,175 @@ These commands deploy kong on the Kubernetes cluster in the default configuratio
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Database backend
+
+The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassandra. For each option, there are two extra possibilities: deploy a sub-chart with the database installation or use an existing one. The list below details the different options (replace the placeholders specified between _UNDERSCORES_):
+
+- Deploy the PostgreSQL sub-chart (default)
 
 ```console
-helm delete my-release
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+- Use an external PostgreSQL database
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
+    --set postgresql.enabled=false \
+    --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
+    --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
+    --set postgresql.external.user=_USER_OF_YOUR_POSTGRESQL_INSTALLATION_
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+- Deploy the Cassandra sub-chart
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
+    --set database=cassandra \
+    --set postgresql.enabled=false \
+    --set cassandra.enabled=true
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+- Use an existing Cassandra installation
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
+    --set database=cassandra \
+    --set postgresql.enabled=false \
+    --set cassandra.enabled=false \
+    --set cassandra.external.hosts[0]=_CONTACT_POINT_0_OF_YOUR_CASSANDRA_CLUSTER_ \
+    --set cassandra.external.hosts[1]=_CONTACT_POINT_1_OF_YOUR_CASSANDRA_CLUSTER_ \
+    ...
+    --set cassandra.external.user=_USER_OF_YOUR_CASSANDRA_INSTALLATION_ \
+    --set cassandra.external.password=_PASSWORD_OF_YOUR_CASSANDRA_INSTALLATION_
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+### DB-less
+
+Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://legacy-gateway--kongdocs.netlify.app/gateway-oss/1.1.x/db-less-and-declarative-config/)).
+As is said in step 4 of [kong official docker installation](https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/#declarative-configuration), just add the env variable "KONG_DATABASE=off".
+
+#### How to enable it
+
+1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
+2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
+
+```yaml
+kong.extraEnvVars:
+- name: KONG_DATABASE
+  value: "off"
+```
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Kong (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `kong.extraEnvVars` property.
+
+```yaml
+kong:
+  extraEnvVars:
+    - name: KONG_LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `kong.extraEnvVarsCM` or the `kong.extraEnvVarsSecret` values.
+
+The Kong Ingress Controller and the Kong Migration job also allow this kind of configuration via the `ingressController.extraEnvVars`, `ingressController.extraEnvVarsCM`, `ingressController.extraEnvVarsSecret`, `migration.extraEnvVars`, `migration.extraEnvVarsCM` and `migration.extraEnvVarsSecret` values.
+
+### Using custom init scripts
+
+For advanced operations, the Bitnami Kong charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `kong.initScriptsCM` and `kong.initScriptsSecret` values.
+
+```console
+elasticsearch.hosts[0]=elasticsearch-host
+elasticsearch.port=9200
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+```
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such as KongPlugins, KongConsumers, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.
+
+```yaml
+## Extra objects to deploy (value evaluated as a template)
+##
+extraDeploy:
+  - |
+    apiVersion: configuration.konghq.com/v1
+    kind: KongPlugin
+    metadata:
+      name: {{ include "common.names.fullname" . }}-plugin-correlation
+      namespace: {{ .Release.Namespace }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+    config:
+      header_name: my-request-id
+    plugin: correlation-id
+```
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -98,6 +250,7 @@ helm delete my-release
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                               | `true`           |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                   | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                         | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                        | `0`              |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                      | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                        | `false`          |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                            | `false`          |
@@ -378,165 +531,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/kong
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kong/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Database backend
-
-The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassandra. For each option, there are two extra possibilities: deploy a sub-chart with the database installation or use an existing one. The list below details the different options (replace the placeholders specified between _UNDERSCORES_):
-
-- Deploy the PostgreSQL sub-chart (default)
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-- Use an external PostgreSQL database
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
-    --set postgresql.enabled=false \
-    --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
-    --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
-    --set postgresql.external.user=_USER_OF_YOUR_POSTGRESQL_INSTALLATION_
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-- Deploy the Cassandra sub-chart
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
-    --set database=cassandra \
-    --set postgresql.enabled=false \
-    --set cassandra.enabled=true
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-- Use an existing Cassandra installation
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
-    --set database=cassandra \
-    --set postgresql.enabled=false \
-    --set cassandra.enabled=false \
-    --set cassandra.external.hosts[0]=_CONTACT_POINT_0_OF_YOUR_CASSANDRA_CLUSTER_ \
-    --set cassandra.external.hosts[1]=_CONTACT_POINT_1_OF_YOUR_CASSANDRA_CLUSTER_ \
-    ...
-    --set cassandra.external.user=_USER_OF_YOUR_CASSANDRA_INSTALLATION_ \
-    --set cassandra.external.password=_PASSWORD_OF_YOUR_CASSANDRA_INSTALLATION_
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-### DB-less
-
-Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://legacy-gateway--kongdocs.netlify.app/gateway-oss/1.1.x/db-less-and-declarative-config/)).
-As is said in step 4 of [kong official docker installation](https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/#declarative-configuration), just add the env variable "KONG_DATABASE=off".
-
-#### How to enable it
-
-1. Set `database` value with any value other than "postgresql" or "cassandra". For example `database: "off"`
-2. Use `kong.extraEnvVars` value to set the `KONG_DATABASE` environment variable:
-
-```yaml
-kong.extraEnvVars:
-- name: KONG_DATABASE
-  value: "off"
-```
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as Kong (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `kong.extraEnvVars` property.
-
-```yaml
-kong:
-  extraEnvVars:
-    - name: KONG_LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `kong.extraEnvVarsCM` or the `kong.extraEnvVarsSecret` values.
-
-The Kong Ingress Controller and the Kong Migration job also allow this kind of configuration via the `ingressController.extraEnvVars`, `ingressController.extraEnvVarsCM`, `ingressController.extraEnvVarsSecret`, `migration.extraEnvVars`, `migration.extraEnvVarsCM` and `migration.extraEnvVarsSecret` values.
-
-### Using custom init scripts
-
-For advanced operations, the Bitnami Kong charts allows using custom init scripts that will be mounted in `/docker-entrypoint.init-db`. You can use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. Then use the `kong.initScriptsCM` and `kong.initScriptsSecret` values.
-
-```console
-elasticsearch.hosts[0]=elasticsearch-host
-elasticsearch.port=9200
-initScriptsCM=special-scripts
-initScriptsSecret=special-scripts-sensitive
-```
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such as KongPlugins, KongConsumers, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.
-
-```yaml
-## Extra objects to deploy (value evaluated as a template)
-##
-extraDeploy:
-  - |
-    apiVersion: configuration.konghq.com/v1
-    kind: KongPlugin
-    metadata:
-      name: {{ include "common.names.fullname" . }}-plugin-correlation
-      namespace: {{ .Release.Namespace }}
-      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-    config:
-      header_name: my-request-id
-    plugin: correlation-id
-```
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -555,6 +549,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kong \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders _[POSTGRESQL_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 11.0.0
+
+This major release bumps the PostgreSQL chart version to [14.x.x](https://github.com/bitnami/charts/pull/22750); no major issues are expected during the upgrade.
 
 ### To 10.0.0
 

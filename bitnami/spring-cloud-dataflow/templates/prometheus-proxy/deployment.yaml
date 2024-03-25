@@ -58,7 +58,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metrics.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.priorityClassName }}
       priorityClassName: {{ .Values.metrics.priorityClassName | quote }}
@@ -71,7 +71,7 @@ spec:
           image: {{ include "scdf.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
@@ -152,7 +152,10 @@ spec:
       {{- if .Values.metrics.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sidecars "context" $) | trim | nindent 8 }}
       {{- end }}
-      {{- if .Values.metrics.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

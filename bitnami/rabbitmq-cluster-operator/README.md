@@ -44,16 +44,6 @@ The command deploy the RabbitMQ Cluster Kubernetes Operator on the Kubernetes cl
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
 ## Differences between the Bitnami RabbitMQ chart and the Bitnami RabbitMQ Operator chart
 
 In the Bitnami catalog we offer both the *bitnami/rabbitmq* and *bitnami/rabbitmq-operator* charts. Each solution covers different needs and use cases.
@@ -132,15 +122,108 @@ The operator will extend the Kubernetes API with the following object: *Rabbitmq
 
 This solution allows to easily deploy multiple RabbitMQ instances compared to the *bitnami/rabbitmq* chart. As the operator automatically deploys RabbitMQ installations, the RabbitMQ Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+rabbitmq-cluster-operator:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars
+
+If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such your custom *RabbitmqCluster* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+For instance, to deploy your custom *RabbitmqCluster* definition, you can install the RabbitMQ Cluster Operator using the values below:
+
+```yaml
+extraDeploy:
+  - apiVersion: rabbitmq.com/v1beta1
+    kind: RabbitmqCluster
+    metadata:
+      name: rabbitmq-custom-configuration
+    spec:
+      replicas: 1
+      rabbitmq:
+        additionalConfig: |
+          log.console.level = debug
+```
+
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -199,7 +282,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                        | `{}`                                             |
 | `clusterOperator.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                       | `{}`                                             |
 | `clusterOperator.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                         | `{}`                                             |
-| `clusterOperator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production). | `none`                                           |
+| `clusterOperator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production). | `nano`                                           |
 | `clusterOperator.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                          | `{}`                                             |
 | `clusterOperator.podSecurityContext.enabled`                        | Enabled RabbitMQ Cluster Operator pods' Security Context                                                                                                                                                                                   | `true`                                           |
 | `clusterOperator.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                         | `Always`                                         |
@@ -209,6 +292,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                       | `true`                                           |
 | `clusterOperator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                           | `nil`                                            |
 | `clusterOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                 | `1001`                                           |
+| `clusterOperator.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                | `1001`                                           |
 | `clusterOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                              | `true`                                           |
 | `clusterOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                | `false`                                          |
 | `clusterOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                    | `true`                                           |
@@ -338,7 +422,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                 | `{}`                                              |
 | `msgTopologyOperator.existingWebhookCertSecret`                         | name of a secret containing the certificates (use it to avoid certManager creating one)                                                                                                                                                            | `""`                                              |
 | `msgTopologyOperator.existingWebhookCertCABundle`                       | PEM-encoded CA Bundle of the existing secret provided in existingWebhookCertSecret (only if useCertManager=false)                                                                                                                                  | `""`                                              |
-| `msgTopologyOperator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production). | `none`                                            |
+| `msgTopologyOperator.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production). | `nano`                                            |
 | `msgTopologyOperator.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                  | `{}`                                              |
 | `msgTopologyOperator.podSecurityContext.enabled`                        | Enabled RabbitMQ Messaging Topology Operator pods' Security Context                                                                                                                                                                                | `true`                                            |
 | `msgTopologyOperator.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                 | `Always`                                          |
@@ -348,6 +432,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `msgTopologyOperator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                               | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                   | `nil`                                             |
 | `msgTopologyOperator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                         | `1001`                                            |
+| `msgTopologyOperator.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                        | `1001`                                            |
 | `msgTopologyOperator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                      | `true`                                            |
 | `msgTopologyOperator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                        | `false`                                           |
 | `msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                            | `true`                                            |
@@ -473,98 +558,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/rabbi
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Additional environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-rabbitmq-cluster-operator:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars
-
-If additional containers are needed in the same pod as rabbitmq-cluster-operator (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
-### Pod affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such your custom *RabbitmqCluster* objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-For instance, to deploy your custom *RabbitmqCluster* definition, you can install the RabbitMQ Cluster Operator using the values below:
-
-```yaml
-extraDeploy:
-  - apiVersion: rabbitmq.com/v1beta1
-    kind: RabbitmqCluster
-    metadata:
-      name: rabbitmq-custom-configuration
-    spec:
-      replicas: 1
-      rabbitmq:
-        additionalConfig: |
-          log.console.level = debug
-```
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -586,6 +579,15 @@ helm fetch bitnami/rabbitmq-cluster-operator --version VERSION
 tar xf rabbitmq-cluster-operator-VERSION.tar.gz
 kubectl apply -f rabbitmq-cluster-operator/crds
 ```
+
+### To 4.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 2.0.0
 

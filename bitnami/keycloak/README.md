@@ -43,25 +43,262 @@ These commands deploy a Keycloak application on the Kubernetes cluster in the de
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Use an external database
+
+Sometimes, you may want to have Keycloak connect to an external PostgreSQL database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
+
+```text
+postgresql.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=5432
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+> NOTE: Only PostgreSQL database server is supported as external database
+
+It is not supported but possible to run Keycloak with an external MSSQL database with the following settings:
+
+```yaml
+externalDatabase:
+  host: "mssql.example.com"
+  port: 1433
+  user: keycloak
+  database: keycloak
+  existingSecret: passwords
+extraEnvVars:
+  - name: KC_DB # override values from the conf file
+    value: 'mssql'
+  - name: KC_DB_URL
+    value: 'jdbc:sqlserver://mssql.example.com:1433;databaseName=keycloak;'
+```
+
+### Importing and exporting a realm
+
+#### Importing a realm
+
+You can import a realm by setting the `KEYCLOAK_EXTRA_ARGS` to contain the `--import-realm` argument.
+
+This will import all `*.json` under `/opt/bitnami/keycloak/data/import` files as a realm into keycloak as per the
+official documentation [here](https://www.keycloak.org/server/importExport#_importing_a_realm_from_a_directory). You
+can supply the files by mounting a volume e.g. with docker compose as follows:
+
+```yaml
+keycloak:
+  image: bitnami/keycloak:latest
+  volumes:
+    - /local/path/to/realms/folder:/opt/bitnami/keycloak/data/import
+```
+
+#### Exporting a realm
+
+You can export a realm through the GUI but it will not export users even the option is set, this is a known keycloak
+[bug](https://github.com/keycloak/keycloak/issues/23970).
+
+By using the `kc.sh` script you can export a realm with users. Be sure to mount the export folder to a local folder:
+
+```yaml
+keycloak:
+  image: bitnami/keycloak:latest
+  volumes:
+    - /local/path/to/export/folder:/export
+```
+
+Then open a terminal in the running keycloak container and run:
+
+```bash
+kc.sh export --dir /export/ --users realm_file 
+````
+
+This will export the all the realms with users to the `/export` folder.
+
+### Configure Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
+
+The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
+
+However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
+
+> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
+
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+
+[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
+
+### Configure admin Ingress
+
+In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the admin area of Keycloak, for example the `master` realm.  
+
+For this scenario, you can use the Keycloak Config CLI integration with the following values, where `keycloak-admin.example.com` is to be replaced by the actual hostname:
+
+```yaml
+adminIngress:
+  enabled: true
+  hostname: keycloak-admin.example.com
+keycloakConfigCli:
+  configuration: |
+    {
+      "realm" : "master",
+      "attributes": {
+        "frontendUrl": "https://keycloak-admin.example.com"
+      }
+    }
+```
+
+### Configure TLS Secrets for use with Ingress
+
+This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
+
+- Generate certificate secrets based on chart parameters.
+- Enable externally generated certificates.
+- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
+- Create self-signed certificates within the chart (if supported).
+
+In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
+
+Here is an example of a certificate file:
+
+> NOTE: There may be more than one certificate if there is a certificate chain.
+
+```text
+-----BEGIN CERTIFICATE-----
+MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+...
+jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+-----END CERTIFICATE-----
+```
+
+Here is an example of a certificate key:
+
+```text
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+...
+wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+-----END RSA PRIVATE KEY-----
+```
+
+- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
+- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
+- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
+
+### Use with ingress offloading SSL
+
+If your ingress controller has the SSL Termination, you should set `proxy` to `edge`.
+
+### Manage secrets and passwords
+
+This chart provides several ways to manage passwords:
+
+- Values passed to the chart: In this scenario, a new secret including all the passwords will be created during the chart installation. When upgrading, it is necessary to provide the secrets to the chart as shown below. Replace the KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_MANAGEMENT_PASSWORD, POSTGRESQL_PASSWORD and POSTGRESQL_PVC placeholders with the correct passwords and PVC name.
+
+```console
+helm upgrade keycloak bitnami/keycloak \
+  --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD \
+  --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD \
+  --set postgresql.postgresqlPassword=POSTGRESQL_PASSWORD \
+  --set postgresql.persistence.existingClaim=POSTGRESQL_PVC
+```
+
+- An existing secret with all the passwords via the `existingSecret` parameter.
+
+### Add extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: KEYCLOAK_LOG_LEVEL
+    value: DEBUG
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Use Sidecars and Init Containers
+
+If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
+
+```yaml
+sidecars:
+- name: your-image-name
+  image: your-image
+  imagePullPolicy: Always
+  ports:
+  - name: portname
+    containerPort: 1234
+```
+
+If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
+
+```yaml
+service:
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
+
+If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
+
+### Initialize a fresh instance
+
+The [Bitnami Keycloak](https://github.com/bitnami/containers/tree/main/bitnami/keycloak) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify custom scripts using the `initdbScripts` parameter as dict.
+
+In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
+
+The allowed extensions is `.sh`.
+
+### Deploy extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Set Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -135,6 +372,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.https`                              | Keycloak HTTPS container port                                                                                                                                                                              | `8443`           |
 | `containerPorts.infinispan`                         | Keycloak infinispan container port                                                                                                                                                                         | `7800`           |
 | `extraContainerPorts`                               | Optionally specify extra list of additional port-mappings for Keycloak container                                                                                                                           | `[]`             |
+| `statefulsetAnnotations`                            | Optionally add extra annotations on the statefulset resource                                                                                                                                               | `{}`             |
 | `podSecurityContext.enabled`                        | Enabled Keycloak pods' Security Context                                                                                                                                                                    | `true`           |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`         |
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                             | `[]`             |
@@ -143,6 +381,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                       | `true`           |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                | `0`              |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                              | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                | `false`          |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`          |
@@ -329,6 +568,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.containerSecurityContext.enabled`                  | Enabled keycloak-config-cli Security Context                                                                                                                                                                                                   | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                               | `nil`                                 |
 | `keycloakConfigCli.containerSecurityContext.runAsUser`                | Set keycloak-config-cli Security Context runAsUser                                                                                                                                                                                             | `1001`                                |
+| `keycloakConfigCli.containerSecurityContext.runAsGroup`               | Set keycloak-config-cli Security Context runAsGroup                                                                                                                                                                                            | `0`                                   |
 | `keycloakConfigCli.containerSecurityContext.runAsNonRoot`             | Set keycloak-config-cli Security Context runAsNonRoot                                                                                                                                                                                          | `true`                                |
 | `keycloakConfigCli.containerSecurityContext.privileged`               | Set keycloak-config-cli Security Context privileged                                                                                                                                                                                            | `false`                               |
 | `keycloakConfigCli.containerSecurityContext.readOnlyRootFilesystem`   | Set keycloak-config-cli Security Context readOnlyRootFilesystem                                                                                                                                                                                | `false`                               |
@@ -419,257 +659,15 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/keycl
 
 Keycloak realms, users and clients can be created from the Keycloak administration panel. Refer to the [tutorial on adding user authentication to applications with Keycloak](https://docs.bitnami.com/tutorials/integrate-keycloak-authentication-kubernetes) for more details on these operations.
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Use an external database
-
-Sometimes, you may want to have Keycloak connect to an external PostgreSQL database rather than a database within your cluster - for example, when using a managed database service, or when running a single database server for all your applications. To do this, set the `postgresql.enabled` parameter to `false` and specify the credentials for the external database using the `externalDatabase.*` parameters. Here is an example:
-
-```text
-postgresql.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.database=mydatabase
-externalDatabase.port=5432
-```
-
-> NOTE: Only PostgreSQL database server is supported as external database
-
-It is not supported but possible to run Keycloak with an external MSSQL database with the following settings:
-
-```yaml
-externalDatabase:
-  host: "mssql.example.com"
-  port: 1433
-  user: keycloak
-  database: keycloak
-  existingSecret: passwords
-extraEnvVars:
-  - name: KC_DB # override values from the conf file
-    value: 'mssql'
-  - name: KC_DB_URL
-    value: 'jdbc:sqlserver://mssql.example.com:1433;databaseName=keycloak;'
-```
-
-### Importing and exporting a realm
-
-#### Importing a realm
-
-You can import a realm by setting the `KEYCLOAK_EXTRA_ARGS` to contain the `--import-realm` argument.
-
-This will import all `*.json` under `/opt/bitnami/keycloak/data/import` files as a realm into keycloak as per the
-official documentation [here](https://www.keycloak.org/server/importExport#_importing_a_realm_from_a_directory). You
-can supply the files by mounting a volume e.g. with docker compose as follows:
-
-```yaml
-keycloak:
-  image: bitnami/keycloak:latest
-  volumes:
-    - /local/path/to/realms/folder:/opt/bitnami/keycloak/data/import
-```
-
-#### Exporting a realm
-
-You can export a realm through the GUI but it will not export users even the option is set, this is a known keycloak
-[bug](https://github.com/keycloak/keycloak/issues/23970).
-
-By using the `kc.sh` script you can export a realm with users. Be sure to mount the export folder to a local folder:
-
-```yaml
-keycloak:
-  image: bitnami/keycloak:latest
-  volumes:
-    - /local/path/to/export/folder:/export
-```
-
-Then open a terminal in the running keycloak container and run:
-
-```bash
-kc.sh export --dir /export/ --users realm_file 
-````
-
-This will export the all the realms with users to the `/export` folder.
-
-### Add extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: KEYCLOAK_LOG_LEVEL
-    value: DEBUG
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Use Sidecars and Init Containers
-
-If additional containers are needed in the same pod (such as additional metrics or logging exporters), they can be defined using the `sidecars` config parameter.
-
-```yaml
-sidecars:
-- name: your-image-name
-  image: your-image
-  imagePullPolicy: Always
-  ports:
-  - name: portname
-    containerPort: 1234
-```
-
-If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter (where available), as shown in the example below:
-
-```yaml
-service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
-
-If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
-
-### Initialize a fresh instance
-
-The [Bitnami Keycloak](https://github.com/bitnami/containers/tree/main/bitnami/keycloak) image allows you to use your custom scripts to initialize a fresh instance. In order to execute the scripts, you can specify custom scripts using the `initdbScripts` parameter as dict.
-
-In addition to this option, you can also set an external ConfigMap with all the initialization scripts. This is done by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
-
-The allowed extensions is `.sh`.
-
-### Deploy extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Set Pod affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Configure Ingress
-
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
-
-The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
-
-However, it is also possible to have more than one host. To facilitate this, the `ingress.extraHosts` parameter (if available) can be set with the host names specified as an array. The `ingress.extraTLS` parameter (if available) can also be used to add the TLS configuration for extra hosts.
-
-> NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
-
-Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
-
-[Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
-
-### Configure admin Ingress
-
-In addition to the Ingress resource described above, this chart also provides the ability to define an Ingress for the admin area of Keycloak, for example the `master` realm.  
-
-For this scenario, you can use the Keycloak Config CLI integration with the following values, where `keycloak-admin.example.com` is to be replaced by the actual hostname:
-
-```yaml
-adminIngress:
-  enabled: true
-  hostname: keycloak-admin.example.com
-keycloakConfigCli:
-  configuration: |
-    {
-      "realm" : "master",
-      "attributes": {
-        "frontendUrl": "https://keycloak-admin.example.com"
-      }
-    }
-```
-
-### Configure TLS Secrets for use with Ingress
-
-This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
-
-- Generate certificate secrets based on chart parameters.
-- Enable externally generated certificates.
-- Manage application certificates via an external service (like [cert-manager](https://github.com/jetstack/cert-manager/)).
-- Create self-signed certificates within the chart (if supported).
-
-In the first two cases, a certificate and a key are needed. Files are expected in `.pem` format.
-
-Here is an example of a certificate file:
-
-> NOTE: There may be more than one certificate if there is a certificate chain.
-
-```text
------BEGIN CERTIFICATE-----
-MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-...
-jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
------END CERTIFICATE-----
-```
-
-Here is an example of a certificate key:
-
-```text
------BEGIN RSA PRIVATE KEY-----
-MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-...
-wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
------END RSA PRIVATE KEY-----
-```
-
-- If using Helm to manage the certificates based on the parameters, copy these values into the `certificate` and `key` values for a given `*.ingress.secrets` entry.
-- If managing TLS secrets separately, it is necessary to create a TLS secret with name `INGRESS_HOSTNAME-tls` (where INGRESS_HOSTNAME is a placeholder to be replaced with the hostname you set using the `*.ingress.hostname` parameter).
-- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, add to `*.ingress.annotations` the [corresponding ones](https://cert-manager.io/docs/usage/ingress/#supported-annotations) for cert-manager.
-- If using self-signed certificates created by Helm, set both `*.ingress.tls` and `*.ingress.selfSigned` to `true`.
-
-### Use with ingress offloading SSL
-
-If your ingress controller has the SSL Termination, you should set `proxy` to `edge`.
-
-### Manage secrets and passwords
-
-This chart provides several ways to manage passwords:
-
-- Values passed to the chart: In this scenario, a new secret including all the passwords will be created during the chart installation. When upgrading, it is necessary to provide the secrets to the chart as shown below. Replace the KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_MANAGEMENT_PASSWORD, POSTGRESQL_PASSWORD and POSTGRESQL_PVC placeholders with the correct passwords and PVC name.
-
-```console
-helm upgrade keycloak bitnami/keycloak \
-  --set auth.adminPassword=KEYCLOAK_ADMIN_PASSWORD \
-  --set auth.managementPassword=KEYCLOAK_MANAGEMENT_PASSWORD \
-  --set postgresql.postgresqlPassword=POSTGRESQL_PASSWORD \
-  --set postgresql.persistence.existingClaim=POSTGRESQL_PVC
-```
-
-- An existing secret with all the passwords via the `existingSecret` parameter.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major release bumps the PostgreSQL chart version to [14.x.x](https://github.com/bitnami/charts/pull/22750); no major issues are expected during the upgrade.
 
 ### To 17.0.0
 

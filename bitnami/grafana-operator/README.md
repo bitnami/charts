@@ -24,35 +24,6 @@ This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-## Prerequisites
-
-- Kubernetes 1.23+
-- Helm 3.8.0+
-
-## Installing the Chart
-
-To install the chart with the release name `my-release`:
-
-```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-operator
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-These commands deploy grafana-operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
-
-> **Tip**: List all releases using `helm list`
-
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` helm release:
-
-```console
-helm uninstall my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
 The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-operator` charts. Each solution covers different needs and use cases.
@@ -137,14 +108,98 @@ The Operator will extend the Kubernetes API with the following objects: _Grafana
 
 [Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
+## Prerequisites
+
+- Kubernetes 1.23+
+- Helm 3.8.0+
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```console
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-operator
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+These commands deploy grafana-operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Create Grafana Dashboards
+
+After the installation, create Dashboards under a CRD of your Kubernetes cluster.
+
+For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/integr8ly/grafana-operator/blob/master/documentation/dashboards.md).
+
+### Deploy extra Grafana resources or objects
+
+There are cases where you may want to deploy extra objects, such as custom _Grafana_, _GrafanaDashboard_ or _GrafanaDataSource_ objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+For instance, to deploy a custom Grafana definition, install the Grafana Operator chart using the values below:
+
+```yaml
+grafana:
+  enabled: false
+extraDeploy:
+  - apiVersion: integreatly.org/v1alpha1
+    baseImage: docker.io/bitnami/grafana:7
+    kind: Grafana
+    metadata:
+      name: grafana
+    spec:
+      deployment:
+        securityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+        containerSecurityContext:
+          runAsUser: 1001
+          fsGroup: 1001
+          allowPrivilegeEscalation: false
+      service:
+        type: LoadBalancer
+      ingress:
+        enabled: false
+      config:
+        log:
+          mode: "console"
+          level: "warn"
+        security:
+          admin_user: "admin"
+          admin_password: "hello"
+        auth.anonymous:
+          enabled: true
+      dashboardLabelSelector:
+        - matchExpressions:
+            - { key: app, operator: In, values: [grafana] }
+```
+
+[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
+
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -208,6 +263,7 @@ The Operator will extend the Kubernetes API with the following objects: _Grafana
 | `operator.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                             |
 | `operator.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`                              |
 | `operator.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                             |
+| `operator.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `0`                                |
 | `operator.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                             |
 | `operator.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                            |
 | `operator.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`                            |
@@ -288,6 +344,7 @@ The Operator will extend the Kubernetes API with the following objects: _Grafana
 | `grafana.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`                     |
 | `grafana.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                 | `1001`                    |
 | `grafana.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `0`                       |
+| `grafana.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `0`                       |
 | `grafana.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `true`                    |
 | `grafana.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                | `false`                   |
 | `grafana.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                    | `false`                   |
@@ -365,70 +422,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Create Grafana Dashboards
-
-After the installation, create Dashboards under a CRD of your Kubernetes cluster.
-
-For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/integr8ly/grafana-operator/blob/master/documentation/dashboards.md).
-
-### Deploy extra Grafana resources or objects
-
-There are cases where you may want to deploy extra objects, such as custom _Grafana_, _GrafanaDashboard_ or _GrafanaDataSource_ objects. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-For instance, to deploy a custom Grafana definition, install the Grafana Operator chart using the values below:
-
-```yaml
-grafana:
-  enabled: false
-extraDeploy:
-  - apiVersion: integreatly.org/v1alpha1
-    baseImage: docker.io/bitnami/grafana:7
-    kind: Grafana
-    metadata:
-      name: grafana
-    spec:
-      deployment:
-        securityContext:
-          runAsUser: 1001
-          fsGroup: 1001
-        containerSecurityContext:
-          runAsUser: 1001
-          fsGroup: 1001
-          allowPrivilegeEscalation: false
-      service:
-        type: LoadBalancer
-      ingress:
-        enabled: false
-      config:
-        log:
-          mode: "console"
-          level: "warn"
-        security:
-          admin_user: "admin"
-          admin_password: "hello"
-        auth.anonymous:
-          enabled: true
-      dashboardLabelSelector:
-        - matchExpressions:
-            - { key: app, operator: In, values: [grafana] }
-```
-
-[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
 
 ## Troubleshooting
 

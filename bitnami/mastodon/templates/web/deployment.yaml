@@ -62,12 +62,35 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.web.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.web.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.web.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.web.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.web.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        - name: prepare-tmp-dir
+          image: {{ template "mastodon.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.web.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              # HACK: Mastodon does not allow having a /tmp directory world-writable, so we need to create a /tmp dir
+              # with more restricted permissions
+              mkdir /tmp/tmp-dir
+          {{- if .Values.web.resources }}
+          resources: {{- toYaml .Values.web.resources | nindent 12 }}
+          {{- else if ne .Values.web.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.web.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
         {{- if not .Values.diagnosticMode.enabled }}
         {{- if and (not .Values.enableS3) .Values.volumePermissions.enabled .Values.web.containerSecurityContext.enabled }}
         - name: volume-permissions
@@ -81,9 +104,11 @@ spec:
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs --no-run-if-empty chown -R {{ .Values.web.containerSecurityContext.runAsUser }}:{{ .Values.web.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -106,7 +131,7 @@ spec:
           image: {{ template "mastodon.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.web.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.web.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -238,6 +263,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.web.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if not .Values.enableS3 }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
@@ -249,6 +277,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.web.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+          - name: empty-dir
+            emptyDir: {}
         {{- if not .Values.enableS3 }}
           - name: data
             {{- if .Values.persistence.enabled }}

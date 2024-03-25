@@ -65,7 +65,7 @@ spec:
       schedulerName: {{ .Values.vulture.schedulerName }}
       {{- end }}
       {{- if .Values.vulture.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.vulture.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.vulture.initContainers }}
@@ -76,7 +76,7 @@ spec:
           image: {{ template "grafana-tempo.vultureImage" . }}
           imagePullPolicy: {{ .Values.vulture.image.pullPolicy }}
           {{- if .Values.vulture.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.vulture.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -142,6 +142,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf
           {{- if .Values.vulture.extraVolumeMounts }}
@@ -151,6 +154,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.vulture.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}

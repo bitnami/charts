@@ -66,7 +66,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.server.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.server.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.server.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
@@ -83,11 +83,13 @@ spec:
               mkdir -p {{ .Values.server.persistence.mountPath }}
               find {{ .Values.server.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs --no-run-if-empty chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.server.persistence.mountPath }}
@@ -100,7 +102,7 @@ spec:
           image: {{ template "vault.server.image" . }}
           imagePullPolicy: {{ .Values.server.image.pullPolicy }}
           {{- if .Values.server.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.server.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}

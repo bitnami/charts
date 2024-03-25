@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -96,9 +105,6 @@ daemonset:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param daemonset.podSecurityContext.enabled Enable security context for daemonset pods
-  ## @param daemonset.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param daemonset.podSecurityContext.runAsUser User ID for daemonset containers
-  ## @param daemonset.podSecurityContext.runAsGroup Group ID for daemonset containers
   ## @param daemonset.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param daemonset.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param daemonset.podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -106,9 +112,6 @@ daemonset:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
-    runAsUser: 0
-    runAsGroup: 0
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
@@ -227,7 +230,7 @@ customReadinessProbe: {}
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "nano"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -397,6 +400,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled Fluent Bit containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set Fluent Bit containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Fluent Bit containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set Fluent Bit container's Security Context runAsNonRoot
 ## @param containerSecurityContext.readOnlyRootFilesystem Set Fluent Bit container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set primary container's Security Context privileged
@@ -406,12 +410,13 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
   seccompProfile:
@@ -511,6 +516,8 @@ config:
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
         HTTP_Port    {{ .Values.containerPorts.http }}
+        Parsers_File /opt/bitnami/fluent-bit/conf/parsers.conf
+        Parsers_File /opt/bitnami/fluent-bit/conf/custom_parsers.conf
   ## @param config.inputs [string] Defines the source from where Fluent Bit can collect data
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   ##

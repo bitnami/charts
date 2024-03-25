@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -79,7 +88,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.15.5-debian-12-r7
+    tag: 1.15.6-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -169,7 +178,7 @@ server:
   ## @param server.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if server.resources is set (server.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param server.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -200,6 +209,7 @@ server:
   ## @param server.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param server.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param server.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param server.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param server.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param server.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -211,6 +221,7 @@ server:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -793,7 +804,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.1-debian-12-r15
+    tag: 1.4.1-debian-12-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1053,7 +1064,7 @@ csiProvider:
     ## @param csiProvider.provider.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if csiProvider.provider.resources is set (csiProvider.provider.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param csiProvider.provider.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1070,6 +1081,7 @@ csiProvider:
     ## @param csiProvider.provider.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param csiProvider.provider.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param csiProvider.provider.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.provider.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param csiProvider.provider.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.provider.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param csiProvider.provider.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1081,6 +1093,7 @@ csiProvider:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1177,6 +1190,7 @@ csiProvider:
     ## @param csiProvider.agent.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param csiProvider.agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param csiProvider.agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param csiProvider.agent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param csiProvider.agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param csiProvider.agent.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param csiProvider.agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1188,6 +1202,7 @@ csiProvider:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: true
@@ -1201,7 +1216,7 @@ csiProvider:
     ## @param csiProvider.agent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if csiProvider.agent.resources is set (csiProvider.agent.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param csiProvider.agent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1294,7 +1309,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.3.1-debian-12-r15
+    tag: 1.4.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1377,7 +1392,7 @@ injector:
   ## @param injector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if injector.resources is set (injector.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param injector.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1408,6 +1423,7 @@ injector:
   ## @param injector.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param injector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param injector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param injector.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param injector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param injector.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param injector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1419,6 +1435,7 @@ injector:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1760,7 +1777,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

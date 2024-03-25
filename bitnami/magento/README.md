@@ -45,25 +45,232 @@ The command deploys Magento on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Image
+
+The `image` parameter allows specifying which image will be pulled for the chart.
+
+#### Private registry
+
+If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
+
+1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
+2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
+
+3. Install the chart
+
+### Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+
+To enable ingress integration, please set `ingress.enabled` to `true`.
+
+#### Hosts
+
+Most likely you will only want to have one hostname that maps to this Magento installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
+
+For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
+
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
+
+### Certificates
+
+#### TLS Secrets
+
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
+
+- Helm generates/manages certificate secrets.
+- User generates/manages certificates separately.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+
+In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
+
+- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+
+    ```console
+    -----BEGIN CERTIFICATE-----
+    MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+    ...
+    jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+    -----END CERTIFICATE-----
+    ```
+
+- keys should look like:
+
+    ```console
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+    ...
+    wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+    -----END RSA PRIVATE KEY-----
+    ```
+
+If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
+
+If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `magento.local-tls` for example).
+
+#### CA Certificates
+
+Custom CA certificates not included in the base docker image can be added by means of existing secrets. The secret must exist in the same namespace and contain the desired CA certificates to import. By default, all found certificate files will be loaded.
+
+```yaml
+certificates:
+  customCAs:
+  - secret: my-ca-1
+  - secret: my-ca-2
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+> Tip! You can create a secret containing your CA certificates using the following command:
+
+```console
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
+
+```yaml
+extraEnvVars:
+  - name: LOG_LEVEL
+    value: DEBUG
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as Magento (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+       containerPort: 1234
+```
+
+If these sidecars export extra ports, you can add extra port definitions using the `service.extraPorts` value:
+
+```yaml
+service:
+...
+  extraPorts:
+  - name: extraPort
+    port: 11311
+    targetPort: 11311
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+### Using an external database
+
+Sometimes you may want to have Magento connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. For example with the following parameters:
+
+```console
+mariadb.enabled=false
+externalDatabase.host=myexternalhost
+externalDatabase.user=myuser
+externalDatabase.password=mypassword
+externalDatabase.database=mydatabase
+externalDatabase.port=3306
+```
+
+Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
+
+In case the database already contains data from a previous Magento installation, you need to set the `magentoSkipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Magento installation wizard. This is necessary in case you use a database that already has Magento data [+info](https://github.com/bitnami/containers/tree/main/bitnami/magento#connect-magento-docker-container-to-an-existing-database).
+
+### Deploying extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
+
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+### Existing PersistentVolumeClaim
+
+1. Create the PersistentVolume
+2. Create the PersistentVolumeClaim
+3. Install the chart
+
+    ```console
+    helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/magento
+    ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+### Host path
+
+#### System compatibility
+
+- The local filesystem accessibility to a container in a pod with `hostPath` has been tested on OSX/MacOS with xhyve, and Linux with VirtualBox.
+- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://minikube.sigs.k8s.io/docs/handbook/mount/) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
+
+#### Mounting steps
+
+1. The specified `hostPath` directory must already exist (create one if it does not).
+2. Install the chart
+
+    ```console
+    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://REGISTRY_NAME/REPOSITORY_NAME/magento
+    ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+    This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
+3. Because the container cannot control the host machine's directory permissions, you must set the Magento file directory permissions yourself and disable or clear Magento cache.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -386,220 +593,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/magen
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/magento/values.yaml)
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Image
-
-The `image` parameter allows specifying which image will be pulled for the chart.
-
-#### Private registry
-
-If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
-
-1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
-
-    ```yaml
-    imagePullSecrets:
-      - name: SECRET_NAME
-    ```
-
-3. Install the chart
-
-### Ingress
-
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
-
-To enable ingress integration, please set `ingress.enabled` to `true`.
-
-#### Hosts
-
-Most likely you will only want to have one hostname that maps to this Magento installation. If that's your case, the property `ingress.hostname` will set it. However, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object can be specified as an array. You can also use `ingress.extraTLS` to add the TLS configuration for extra hosts.
-
-For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path`, and any `annotations` that you may want the ingress controller to know about.
-
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
-
-### TLS Secrets
-
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are three common use cases:
-
-- Helm generates/manages certificate secrets.
-- User generates/manages certificates separately.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-
-In the first two cases, it's needed a certificate and a key. We would expect them to look like this:
-
-- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
-
-    ```console
-    -----BEGIN CERTIFICATE-----
-    MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-    ...
-    jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
-    -----END CERTIFICATE-----
-    ```
-
-- keys should look like:
-
-    ```console
-    -----BEGIN RSA PRIVATE KEY-----
-    MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-    ...
-    wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
-    -----END RSA PRIVATE KEY-----
-    ```
-
-If you are going to use Helm to manage the certificates, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
-
-If you are going to manage TLS secrets outside of Helm, please know that you can create a TLS secret (named `magento.local-tls` for example).
-
-## Persistence
-
-The [Bitnami Magento](https://github.com/bitnami/containers/tree/main/bitnami/magento) image stores the Magento data and configurations at the `/bitnami/magento` and `/bitnami/apache` paths of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. There is a [known issue](https://github.com/kubernetes/kubernetes/issues/39178) in Kubernetes Clusters with EBS in different availability zones. Ensure your cluster is configured properly to create Volumes in the same availability zone where the nodes are running. Kuberentes 1.12 solved this issue with the [Volume Binding Mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode).
-
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
-
-```yaml
-extraEnvVars:
-  - name: LOG_LEVEL
-    value: DEBUG
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as Magento (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-       containerPort: 1234
-```
-
-If these sidecars export extra ports, you can add extra port definitions using the `service.extraPorts` value:
-
-```yaml
-service:
-...
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-### Using an external database
-
-Sometimes you may want to have Magento connect to an external database rather than installing one inside your cluster, e.g. to use a managed database service, or use run a single database server for all your applications. To do this, the chart allows you to specify credentials for an external database under the [`externalDatabase` parameter](#parameters). You should also disable the MariaDB installation with the `mariadb.enabled` option. For example with the following parameters:
-
-```console
-mariadb.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.database=mydatabase
-externalDatabase.port=3306
-```
-
-Note also if you disable MariaDB per above you MUST supply values for the `externalDatabase` connection.
-
-In case the database already contains data from a previous Magento installation, you need to set the `magentoSkipInstall` parameter to _true_. Otherwise, the container would execute the installation wizard and could modify the existing data in the database. This parameter force the container to not execute the Magento installation wizard. This is necessary in case you use a database that already has Magento data [+info](https://github.com/bitnami/containers/tree/main/bitnami/magento#connect-magento-docker-container-to-an-existing-database).
-
-### Deploying extra resources
-
-There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
-
-### Existing PersistentVolumeClaim
-
-1. Create the PersistentVolume
-2. Create the PersistentVolumeClaim
-3. Install the chart
-
-    ```console
-    helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/magento
-    ```
-
-    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-### Host path
-
-#### System compatibility
-
-- The local filesystem accessibility to a container in a pod with `hostPath` has been tested on OSX/MacOS with xhyve, and Linux with VirtualBox.
-- Windows has not been tested with the supported VM drivers. Minikube does however officially support [Mounting Host Folders](https://minikube.sigs.k8s.io/docs/handbook/mount/) per pod. Or you may manually sync your container whenever host files are changed with tools like [docker-sync](https://github.com/EugenMayer/docker-sync) or [docker-bg-sync](https://github.com/cweagans/docker-bg-sync).
-
-#### Mounting steps
-
-1. The specified `hostPath` directory must already exist (create one if it does not).
-2. Install the chart
-
-    ```console
-    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://REGISTRY_NAME/REPOSITORY_NAME/magento
-    ```
-
-    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-    This will mount the `magento-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-3. Because the container cannot control the host machine's directory permissions, you must set the Magento file directory permissions yourself and disable or clear Magento cache.
-
-## CA Certificates
-
-Custom CA certificates not included in the base docker image can be added by means of existing secrets. The secret must exist in the same namespace and contain the desired CA certificates to import. By default, all found certificate files will be loaded.
-
-```yaml
-certificates:
-  customCAs:
-  - secret: my-ca-1
-  - secret: my-ca-2
-```
-
-> Tip! You can create a secret containing your CA certificates using the following command:
-
-```console
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
-```
 
 ## Troubleshooting
 

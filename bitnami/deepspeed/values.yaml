@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -71,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.13.2-debian-12-r4
+  tag: 0.14.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -231,7 +240,7 @@ client:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 30
-    timeoutSeconds: 20
+    timeoutSeconds: 30
     failureThreshold: 5
     successThreshold: 1
   ## @param client.startupProbe.enabled Enable startupProbe on Client containers
@@ -262,7 +271,7 @@ client:
   ## @param client.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if client.resources is set (client.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param client.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -303,7 +312,7 @@ client:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -630,7 +639,7 @@ worker:
   ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -671,7 +680,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1006,7 +1015,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.2-debian-12-r2
+  tag: 2.44.0-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1053,7 +1062,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

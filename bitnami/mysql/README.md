@@ -42,25 +42,111 @@ These commands deploy MySQL on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Use a different MySQL version
+
+To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+### Customize a new MySQL instance
+
+The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
+
+The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
+
+These scripts are treated differently depending on their extension. While `.sh` scripts are executed on all the nodes, `.sql` and `.sql.gz` scripts are only executed on the primary nodes. This is because `.sh` scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in `.sql` or `sql.gz` files.
+
+When using a `.sh` script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the script to ensure that it is executed only on one node, as shown in the example below:
+
+```yaml
+initdbScripts:
+  my_init_script.sh: |
+    #!/bin/sh
+    if [[ $(hostname) == *master* ]]; then
+      echo "Master node"
+      mysql -P 3306 -uroot -prandompassword -e "create database new_database";
+    else
+      echo "No master node"
+    fi
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release.
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as MySQL, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+sidecars:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+initContainers:
+  - name: your-image-name
+    image: your-image
+    imagePullPolicy: Always
+    ports:
+      - name: portname
+        containerPort: 1234
+```
+
+### Network Policy config
+
+To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
+
+For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
+
+```console
+kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+```
+
+With NetworkPolicy enabled, traffic will be limited to just port 3306.
+
+For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to MySQL.
+This label will be displayed in the output of a successful install.
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+## Persistence
+
+The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
+
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
+
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -141,13 +227,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                | `[]`                |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                                                                                                                               | `1001`              |
 | `primary.containerSecurityContext.enabled`                  | MySQL primary container securityContext                                                                                                                                                                                    | `true`              |
-| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `nil`               |
+| `primary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`                |
 | `primary.containerSecurityContext.runAsUser`                | User ID for the MySQL primary container                                                                                                                                                                                    | `1001`              |
+| `primary.containerSecurityContext.runAsGroup`               | Group ID for the MySQL primary container                                                                                                                                                                                   | `1001`              |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set MySQL primary container's Security Context runAsNonRoot                                                                                                                                                                | `true`              |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                                                                       | `false`             |
 | `primary.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `["ALL"]`           |
 | `primary.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                                                                                                                                                    | `RuntimeDefault`    |
-| `primary.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `none`              |
+| `primary.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context read-only root filesystem                                                                                                                                                                 | `true`              |
+| `primary.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `small`             |
 | `primary.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                |
 | `primary.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                                       | `true`              |
 | `primary.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                    | `5`                 |
@@ -244,13 +332,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                    | `[]`                |
 | `secondary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                                                                                                                                   | `1001`              |
 | `secondary.containerSecurityContext.enabled`                  | MySQL secondary container securityContext                                                                                                                                                                                      | `true`              |
-| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `nil`               |
+| `secondary.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `{}`                |
 | `secondary.containerSecurityContext.runAsUser`                | User ID for the MySQL secondary container                                                                                                                                                                                      | `1001`              |
+| `secondary.containerSecurityContext.runAsGroup`               | Group ID for the MySQL secondary container                                                                                                                                                                                     | `1001`              |
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set MySQL secondary container's Security Context runAsNonRoot                                                                                                                                                                  | `true`              |
 | `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                                                                           | `false`             |
 | `secondary.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                                                                                                  | `["ALL"]`           |
 | `secondary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                               | `RuntimeDefault`    |
-| `secondary.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if secondary.resources is set (secondary.resources is recommended for production). | `none`              |
+| `secondary.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context read-only root filesystem                                                                                                                                                                     | `true`              |
+| `secondary.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if secondary.resources is set (secondary.resources is recommended for production). | `small`             |
 | `secondary.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                              | `{}`                |
 | `secondary.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                                           | `true`              |
 | `secondary.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                        | `5`                 |
@@ -344,59 +434,64 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                              | `""`                       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                                                                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                                                                                                               | `[]`                       |
-| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
 
 ### Metrics parameters
 
-| Name                                              | Description                                                                                                                                                                                                                | Value                             |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `metrics.enabled`                                 | Start a side-car prometheus exporter                                                                                                                                                                                       | `false`                           |
-| `metrics.image.registry`                          | Exporter image registry                                                                                                                                                                                                    | `REGISTRY_NAME`                   |
-| `metrics.image.repository`                        | Exporter image repository                                                                                                                                                                                                  | `REPOSITORY_NAME/mysqld-exporter` |
-| `metrics.image.digest`                            | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                   | `""`                              |
-| `metrics.image.pullPolicy`                        | Exporter image pull policy                                                                                                                                                                                                 | `IfNotPresent`                    |
-| `metrics.image.pullSecrets`                       | Specify docker-registry secret names as an array                                                                                                                                                                           | `[]`                              |
-| `metrics.containerSecurityContext.enabled`        | MySQL metrics container securityContext                                                                                                                                                                                    | `true`                            |
-| `metrics.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                           | `nil`                             |
-| `metrics.containerSecurityContext.runAsUser`      | User ID for the MySQL metrics container                                                                                                                                                                                    | `1001`                            |
-| `metrics.containerSecurityContext.runAsNonRoot`   | Set MySQL metrics container's Security Context runAsNonRoot                                                                                                                                                                | `true`                            |
-| `metrics.containerPorts.http`                     | Container port for http                                                                                                                                                                                                    | `9104`                            |
-| `metrics.service.type`                            | Kubernetes service type for MySQL Prometheus Exporter                                                                                                                                                                      | `ClusterIP`                       |
-| `metrics.service.clusterIP`                       | Kubernetes service clusterIP for MySQL Prometheus Exporter                                                                                                                                                                 | `""`                              |
-| `metrics.service.port`                            | MySQL Prometheus Exporter service port                                                                                                                                                                                     | `9104`                            |
-| `metrics.service.annotations`                     | Prometheus exporter service annotations                                                                                                                                                                                    | `{}`                              |
-| `metrics.extraArgs.primary`                       | Extra args to be passed to mysqld_exporter on Primary pods                                                                                                                                                                 | `[]`                              |
-| `metrics.extraArgs.secondary`                     | Extra args to be passed to mysqld_exporter on Secondary pods                                                                                                                                                               | `[]`                              |
-| `metrics.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `none`                            |
-| `metrics.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                              |
-| `metrics.livenessProbe.enabled`                   | Enable livenessProbe                                                                                                                                                                                                       | `true`                            |
-| `metrics.livenessProbe.initialDelaySeconds`       | Initial delay seconds for livenessProbe                                                                                                                                                                                    | `120`                             |
-| `metrics.livenessProbe.periodSeconds`             | Period seconds for livenessProbe                                                                                                                                                                                           | `10`                              |
-| `metrics.livenessProbe.timeoutSeconds`            | Timeout seconds for livenessProbe                                                                                                                                                                                          | `1`                               |
-| `metrics.livenessProbe.failureThreshold`          | Failure threshold for livenessProbe                                                                                                                                                                                        | `3`                               |
-| `metrics.livenessProbe.successThreshold`          | Success threshold for livenessProbe                                                                                                                                                                                        | `1`                               |
-| `metrics.readinessProbe.enabled`                  | Enable readinessProbe                                                                                                                                                                                                      | `true`                            |
-| `metrics.readinessProbe.initialDelaySeconds`      | Initial delay seconds for readinessProbe                                                                                                                                                                                   | `30`                              |
-| `metrics.readinessProbe.periodSeconds`            | Period seconds for readinessProbe                                                                                                                                                                                          | `10`                              |
-| `metrics.readinessProbe.timeoutSeconds`           | Timeout seconds for readinessProbe                                                                                                                                                                                         | `1`                               |
-| `metrics.readinessProbe.failureThreshold`         | Failure threshold for readinessProbe                                                                                                                                                                                       | `3`                               |
-| `metrics.readinessProbe.successThreshold`         | Success threshold for readinessProbe                                                                                                                                                                                       | `1`                               |
-| `metrics.serviceMonitor.enabled`                  | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                                                                                                               | `false`                           |
-| `metrics.serviceMonitor.namespace`                | Specify the namespace in which the serviceMonitor resource will be created                                                                                                                                                 | `""`                              |
-| `metrics.serviceMonitor.jobLabel`                 | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                          | `""`                              |
-| `metrics.serviceMonitor.interval`                 | Specify the interval at which metrics should be scraped                                                                                                                                                                    | `30s`                             |
-| `metrics.serviceMonitor.scrapeTimeout`            | Specify the timeout after which the scrape is ended                                                                                                                                                                        | `""`                              |
-| `metrics.serviceMonitor.relabelings`              | RelabelConfigs to apply to samples before scraping                                                                                                                                                                         | `[]`                              |
-| `metrics.serviceMonitor.metricRelabelings`        | MetricRelabelConfigs to apply to samples before ingestion                                                                                                                                                                  | `[]`                              |
-| `metrics.serviceMonitor.selector`                 | ServiceMonitor selector labels                                                                                                                                                                                             | `{}`                              |
-| `metrics.serviceMonitor.honorLabels`              | Specify honorLabels parameter to add the scrape endpoint                                                                                                                                                                   | `false`                           |
-| `metrics.serviceMonitor.labels`                   | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                                                                                                      | `{}`                              |
-| `metrics.serviceMonitor.annotations`              | ServiceMonitor annotations                                                                                                                                                                                                 | `{}`                              |
-| `metrics.prometheusRule.enabled`                  | Creates a Prometheus Operator prometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)                                                                                             | `false`                           |
-| `metrics.prometheusRule.namespace`                | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                                                                                                              | `""`                              |
-| `metrics.prometheusRule.additionalLabels`         | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                                                                                                                      | `{}`                              |
-| `metrics.prometheusRule.rules`                    | Prometheus Rule definitions                                                                                                                                                                                                | `[]`                              |
+| Name                                                        | Description                                                                                                                                                                                                                | Value                             |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                                                                                                                       | `false`                           |
+| `metrics.image.registry`                                    | Exporter image registry                                                                                                                                                                                                    | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                                  | Exporter image repository                                                                                                                                                                                                  | `REPOSITORY_NAME/mysqld-exporter` |
+| `metrics.image.digest`                                      | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                   | `""`                              |
+| `metrics.image.pullPolicy`                                  | Exporter image pull policy                                                                                                                                                                                                 | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                           | `[]`                              |
+| `metrics.containerSecurityContext.enabled`                  | MySQL metrics container securityContext                                                                                                                                                                                    | `true`                            |
+| `metrics.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                           | `{}`                              |
+| `metrics.containerSecurityContext.runAsUser`                | User ID for the MySQL metrics container                                                                                                                                                                                    | `1001`                            |
+| `metrics.containerSecurityContext.runAsGroup`               | Group ID for the MySQL metrics container                                                                                                                                                                                   | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set MySQL metrics container's Security Context runAsNonRoot                                                                                                                                                                | `true`                            |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                                                                       | `false`                           |
+| `metrics.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                                                                                              | `["ALL"]`                         |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                           | `RuntimeDefault`                  |
+| `metrics.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context read-only root filesystem                                                                                                                                                                 | `true`                            |
+| `metrics.containerPorts.http`                               | Container port for http                                                                                                                                                                                                    | `9104`                            |
+| `metrics.service.type`                                      | Kubernetes service type for MySQL Prometheus Exporter                                                                                                                                                                      | `ClusterIP`                       |
+| `metrics.service.clusterIP`                                 | Kubernetes service clusterIP for MySQL Prometheus Exporter                                                                                                                                                                 | `""`                              |
+| `metrics.service.port`                                      | MySQL Prometheus Exporter service port                                                                                                                                                                                     | `9104`                            |
+| `metrics.service.annotations`                               | Prometheus exporter service annotations                                                                                                                                                                                    | `{}`                              |
+| `metrics.extraArgs.primary`                                 | Extra args to be passed to mysqld_exporter on Primary pods                                                                                                                                                                 | `[]`                              |
+| `metrics.extraArgs.secondary`                               | Extra args to be passed to mysqld_exporter on Secondary pods                                                                                                                                                               | `[]`                              |
+| `metrics.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `nano`                            |
+| `metrics.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                              |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                                       | `true`                            |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                    | `120`                             |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                           | `10`                              |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                          | `1`                               |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                                        | `3`                               |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                                        | `1`                               |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                                                                                                      | `true`                            |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                                   | `30`                              |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                          | `10`                              |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                         | `1`                               |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                       | `3`                               |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                       | `1`                               |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                                                                                                               | `false`                           |
+| `metrics.serviceMonitor.namespace`                          | Specify the namespace in which the serviceMonitor resource will be created                                                                                                                                                 | `""`                              |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                          | `""`                              |
+| `metrics.serviceMonitor.interval`                           | Specify the interval at which metrics should be scraped                                                                                                                                                                    | `30s`                             |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Specify the timeout after which the scrape is ended                                                                                                                                                                        | `""`                              |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                                                                                                                         | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                                                                                                                  | `[]`                              |
+| `metrics.serviceMonitor.selector`                           | ServiceMonitor selector labels                                                                                                                                                                                             | `{}`                              |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                                                                                                                                   | `false`                           |
+| `metrics.serviceMonitor.labels`                             | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                                                                                                      | `{}`                              |
+| `metrics.serviceMonitor.annotations`                        | ServiceMonitor annotations                                                                                                                                                                                                 | `{}`                              |
+| `metrics.prometheusRule.enabled`                            | Creates a Prometheus Operator prometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)                                                                                             | `false`                           |
+| `metrics.prometheusRule.namespace`                          | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                                                                                                              | `""`                              |
+| `metrics.prometheusRule.additionalLabels`                   | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                                                                                                                      | `{}`                              |
+| `metrics.prometheusRule.rules`                              | Prometheus Rule definitions                                                                                                                                                                                                | `[]`                              |
 
 The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image documentation.
 
@@ -423,101 +518,6 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mysql
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/mysql/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Use a different MySQL version
-
-To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
-
-### Customize a new MySQL instance
-
-The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image allows you to use your custom scripts to initialize a fresh instance. Custom scripts may be specified using the `initdbScripts` parameter. Alternatively, an external ConfigMap may be created with all the initialization scripts and the ConfigMap passed to the chart via the `initdbScriptsConfigMap` parameter. Note that this will override the `initdbScripts` parameter.
-
-The allowed extensions are `.sh`, `.sql` and `.sql.gz`.
-
-These scripts are treated differently depending on their extension. While `.sh` scripts are executed on all the nodes, `.sql` and `.sql.gz` scripts are only executed on the primary nodes. This is because `.sh` scripts support conditional tests to identify the type of node they are running on, while such tests are not supported in `.sql` or `sql.gz` files.
-
-When using a `.sh` script, you may wish to perform a "one-time" action like creating a database. This can be achieved by adding a condition in the script to ensure that it is executed only on one node, as shown in the example below:
-
-```yaml
-initdbScripts:
-  my_init_script.sh: |
-    #!/bin/sh
-    if [[ $(hostname) == *master* ]]; then
-      echo "Master node"
-      mysql -P 3306 -uroot -prandompassword -e "create database new_database";
-    else
-      echo "No master node"
-    fi
-```
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as MySQL, you can do so via the `sidecars` config parameter. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-sidecars:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-initContainers:
-  - name: your-image-name
-    image: your-image
-    imagePullPolicy: Always
-    ports:
-      - name: portname
-        containerPort: 1234
-```
-
-## Persistence
-
-The [Bitnami MySQL](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image stores the MySQL data and configurations at the `/bitnami/mysql` path of the container.
-
-The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at this location. The volume is created using dynamic volume provisioning by default. An existing PersistentVolumeClaim can also be defined for this purpose.
-
-If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
-
-## Network Policy config
-
-To enable network policy for MySQL, install [a networking plugin that implements the Kubernetes NetworkPolicy spec](https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy#before-you-begin), and set `networkPolicy.enabled` to `true`.
-
-For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
-
-```console
-kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
-```
-
-With NetworkPolicy enabled, traffic will be limited to just port 3306.
-
-For more precise policy, set `networkPolicy.allowExternal=false`. This will only allow pods with the generated client label to connect to MySQL.
-This label will be displayed in the output of a successful install.
-
-## Pod affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
@@ -533,6 +533,17 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.roo
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
+
+### To 10.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 9.0.0
 
