@@ -925,6 +925,17 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
+### To 9.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
 ### To 8.0.0
 
 This major updates the kube-state-metrics subchart to its newest major, 3.0.0, and the node-exporter subchart to its newest major, 3.0.0. Both releases contains name changes to a few of its values. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-300) and [node-exporter upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/node-exporter#to-300).
