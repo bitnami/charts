@@ -310,7 +310,7 @@ customStartupProbe: {}
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "xlarge"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -341,6 +341,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -350,11 +351,12 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -736,17 +738,33 @@ caCerts:
   resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param caCerts.containerSecurityContext.enabled Enable container security context
+  ## @param caCerts.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param caCerts.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param caCerts.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## @param caCerts.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param caCerts.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param caCerts.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param caCerts.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param caCerts.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param caCerts.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param caCerts.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param caCerts.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
-    runAsUser: 0
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 ## @section SonarQube plugin provisioning parameters
 ##
 plugins:
@@ -806,15 +824,33 @@ plugins:
   resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param plugins.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param plugins.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param plugins.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## @param plugins.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param plugins.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param plugins.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param plugins.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param plugins.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param plugins.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param plugins.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param plugins.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
   ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: null
-    runAsUser: 0
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
 ## @section Persistence Parameters
 ##
 
@@ -904,7 +940,7 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section Sysctl Image parameters
 ##
@@ -1061,16 +1097,30 @@ metrics:
     resources: {}
     ## Configure Container Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param metrics.jmx.containerSecurityContext.enabled Enabled JMX Exporter containers' Security Context
+    ## @param metrics.jmx.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param metrics.jmx.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param metrics.jmx.containerSecurityContext.runAsUser Set JMX Exporter containers' Security Context runAsUser
-    ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set JMX Exporter containers' Security Context runAsNonRoot
+    ## @param metrics.jmx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+    ## @param metrics.jmx.containerSecurityContext.privileged Set container's Security Context privileged
+    ## @param metrics.jmx.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+    ## @param metrics.jmx.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+    ## @param metrics.jmx.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+    ## @param metrics.jmx.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: "RuntimeDefault"
     ## @param metrics.jmx.whitelistObjectNames [array] Allows setting which JMX objects you want to expose to via JMX stats to JMX Exporter
     ## Only whitelisted values will be exposed via JMX Exporter. They must also be exposed via Rules. To expose all metrics
     ## (warning its crazy excessive and they aren't formatted in a prometheus style) (1) `whitelistObjectNames: []`
