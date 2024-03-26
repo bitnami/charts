@@ -784,7 +784,7 @@ ingressController:
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   lifecycleHooks: {}
-  ## @param ingressController.serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods
+  ## @param ingressController.serviceAccount.create Enable the creation of a ServiceAccount for Kong pods
   ## @param ingressController.serviceAccount.name Name of the created ServiceAccount (name generated using common.names.fullname template otherwise)
   ## @param ingressController.serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ## @param ingressController.serviceAccount.annotations Additional custom annotations for the ServiceAccount
