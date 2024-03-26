@@ -348,7 +348,7 @@ hub:
   customReadinessProbe: {}
   ## Hub resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param hub.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if hub.resources is set (hub.resources is recommended for production).
+  ## @param hub.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if hub.resources is set (hub.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -793,7 +793,7 @@ proxy:
   customReadinessProbe: {}
   ## Proxy resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param proxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).
+  ## @param proxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1346,7 +1346,7 @@ imagePuller:
   customReadinessProbe: {}
   ## ImagePuller resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param imagePuller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if imagePuller.resources is set (imagePuller.resources is recommended for production).
+  ## @param imagePuller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if imagePuller.resources is set (imagePuller.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1579,7 +1579,7 @@ singleuser:
   containerPort: 8888
   ## Singleuser resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param singleuser.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if singleuser.resources is set (singleuser.resources is recommended for production).
+  ## @param singleuser.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if singleuser.resources is set (singleuser.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"

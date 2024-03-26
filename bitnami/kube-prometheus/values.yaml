@@ -381,7 +381,7 @@ operator:
     ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
-  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -948,7 +948,7 @@ prometheus:
   ## externalUrl: https://prometheus.example.com
   ##
   externalUrl: ""
-  ## @param prometheus.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.resources is set (prometheus.resources is recommended for production).
+  ## @param prometheus.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.resources is set (prometheus.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1458,7 +1458,7 @@ prometheus:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param prometheus.thanos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production).
+    ## @param prometheus.thanos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "none"
@@ -2141,7 +2141,7 @@ alertmanager:
   ## externalUrl: https://alertmanager.example.com
   ##
   externalUrl: ""
-  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
+  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2630,7 +2630,7 @@ blackboxExporter:
     annotations: {}
   ## Blackbox Exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param blackboxExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if blackboxExporter.resources is set (blackboxExporter.resources is recommended for production).
+  ## @param blackboxExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if blackboxExporter.resources is set (blackboxExporter.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"

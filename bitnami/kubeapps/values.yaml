@@ -258,7 +258,7 @@ frontend:
     type: RollingUpdate
   ## Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param frontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if frontend.resources is set (frontend.resources is recommended for production).
+  ## @param frontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if frontend.resources is set (frontend.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -654,7 +654,7 @@ dashboard:
     http: 8080
   ## Dashboard containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dashboard.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dashboard.resources is set (dashboard.resources is recommended for production).
+  ## @param dashboard.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dashboard.resources is set (dashboard.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1029,7 +1029,7 @@ apprepository:
     type: RollingUpdate
   ## AppRepository Controller containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param apprepository.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if apprepository.resources is set (apprepository.resources is recommended for production).
+  ## @param apprepository.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if apprepository.resources is set (apprepository.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1353,7 +1353,7 @@ authProxy:
       type: "RuntimeDefault"
   ## OAuth2 Proxy containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param authProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if authProxy.resources is set (authProxy.resources is recommended for production).
+  ## @param authProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if authProxy.resources is set (authProxy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1484,7 +1484,7 @@ pinnipedProxy:
       type: "RuntimeDefault"
   ## Pinniped Proxy containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param pinnipedProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if pinnipedProxy.resources is set (pinnipedProxy.resources is recommended for production).
+  ## @param pinnipedProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if pinnipedProxy.resources is set (pinnipedProxy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1609,7 +1609,7 @@ postgresql:
     enabled: false
   ## PostgreSQL containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param postgresql.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.resources is set (postgresql.resources is recommended for production).
+  ## @param postgresql.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.resources is set (postgresql.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1765,7 +1765,7 @@ kubeappsapis:
     http: 50051
   ## KubeappsAPIs containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param kubeappsapis.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if kubeappsapis.resources is set (kubeappsapis.resources is recommended for production).
+  ## @param kubeappsapis.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if kubeappsapis.resources is set (kubeappsapis.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2057,7 +2057,7 @@ ociCatalog:
     grpc: 50061
   ## OCI Catalog containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-  ## @param ociCatalog.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ociCatalog.resources is set (ociCatalog.resources is recommended for production).
+  ## @param ociCatalog.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ociCatalog.resources is set (ociCatalog.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"

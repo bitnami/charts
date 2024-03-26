@@ -232,7 +232,7 @@ jwt:
     extraVolumeMounts: []
     ## Container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param jwt.autoGenerate.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jwt.autoGenerate.resources is set (jwt.autoGenerate.resources is recommended for production).
+    ## @param jwt.autoGenerate.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if jwt.autoGenerate.resources is set (jwt.autoGenerate.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "none"
@@ -406,7 +406,7 @@ auth:
   customStartupProbe: {}
   ## Supabase auth resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param auth.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if auth.resources is set (auth.resources is recommended for production).
+  ## @param auth.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if auth.resources is set (auth.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -808,7 +808,7 @@ meta:
   customStartupProbe: {}
   ## Supabase Postgres Meta resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param meta.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if meta.resources is set (meta.resources is recommended for production).
+  ## @param meta.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if meta.resources is set (meta.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1226,7 +1226,7 @@ realtime:
   customStartupProbe: {}
   ## Supabase realtime resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param realtime.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if realtime.resources is set (realtime.resources is recommended for production).
+  ## @param realtime.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if realtime.resources is set (realtime.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1626,7 +1626,7 @@ rest:
   customStartupProbe: {}
   ## Supabase rest resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param rest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rest.resources is set (rest.resources is recommended for production).
+  ## @param rest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if rest.resources is set (rest.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2032,7 +2032,7 @@ storage:
   customStartupProbe: {}
   ## Supabase storage resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storage.resources is set (storage.resources is recommended for production).
+  ## @param storage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if storage.resources is set (storage.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2483,7 +2483,7 @@ studio:
   customStartupProbe: {}
   ## Supabase studio resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param studio.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if studio.resources is set (studio.resources is recommended for production).
+  ## @param studio.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if studio.resources is set (studio.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2905,7 +2905,7 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
