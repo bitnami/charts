@@ -151,7 +151,7 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-              {{- if .Values.cronjobs.archive.persistence.enabled }}
+              {{- if .Values.cronjobs.archive.persistence.enable }}
               persistentVolumeClaim:
                 claimName: {{ .Values.cronjobs.archive.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
               {{- else }}
@@ -311,7 +311,7 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-              {{- if .Values.cronjobs.taskScheduler.persistence.enabled }}
+              {{- if .Values.cronjobs.taskScheduler.persistence.enable }}
               persistentVolumeClaim:
                 claimName: {{ .Values.cronjobs.taskScheduler.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
               {{- else }}
