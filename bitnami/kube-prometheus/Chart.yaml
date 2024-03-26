@@ -21,11 +21,11 @@ dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.x.x
+  version: 4.x.x
 - condition: exporters.enabled,exporters.kube-state-metrics.enabled
   name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.x.x
+  version: 4.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -46,4 +46,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.30.1
+version: 9.0.0
