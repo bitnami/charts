@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 3.6.1-debian-12-r2
+  tag: 3.6.1-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -663,7 +663,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 3.1.1-debian-12-r1
+    tag: 3.1.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -784,7 +784,7 @@ ingressController:
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
   lifecycleHooks: {}
-  ## @param ingressController.serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods
+  ## @param ingressController.serviceAccount.create Enable the creation of a ServiceAccount for Kong pods
   ## @param ingressController.serviceAccount.name Name of the created ServiceAccount (name generated using common.names.fullname template otherwise)
   ## @param ingressController.serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ## @param ingressController.serviceAccount.annotations Additional custom annotations for the ServiceAccount
@@ -905,7 +905,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 14.11.0-debian-12-r7
+    tag: 14.11.0-debian-12-r9
     digest: ""
   auth:
     username: kong

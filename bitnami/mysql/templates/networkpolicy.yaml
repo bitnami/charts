@@ -50,6 +50,26 @@ spec:
       {{- if .Values.metrics.enabled }}
         - port: {{ .Values.metrics.containerPorts.http }}
       {{- end }}
+      {{- if .Values.primary.extraPorts }}
+        {{- range $value := .Values.primary.extraPorts }}
+        - port: {{ $value.containerPort }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.primary.service.extraPorts }}
+        {{- range $value := .Values.primary.service.extraPorts }}
+        - port: {{ $value.port }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.secondary.extraPorts }}
+        {{- range $value := .Values.secondary.extraPorts }}
+        - port: {{ $value.containerPort }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.secondary.service.extraPorts }}
+        {{- range $value := .Values.secondary.service.extraPorts }}
+        - port: {{ $value.port }}
+        {{- end }}
+      {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

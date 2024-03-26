@@ -83,15 +83,20 @@ spec:
             command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             volumeMounts:
               {{- if .Values.tls.enabled }}
-              - name: certs
-                mountPath: /certs
+              - name: raw-certificates
+                mountPath: /tmp/certs
               {{- end }}
+              {{- if .Values.backup.cronjob.storage.enabled }}
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
                 subPath: {{ .Values.backup.cronjob.storage.subPath }}
+              {{- end }}
               - name: empty-dir
                 mountPath: /tmp
                 subPath: tmp-dir
+              {{- if .Values.backup.cronjob.extraVolumeMounts }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.extraVolumeMounts "context" $) | nindent 14 }}
+              {{- end }}
             {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
             securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
             {{- end }}
@@ -108,8 +113,10 @@ spec:
           volumes:
             {{- if .Values.tls.enabled }}
             - name: raw-certificates
-              emptyDir: /tmp/certs
+              secret:
+                secretName: {{ include "postgresql.v1.tlsSecretName" . }}
             {{- end }}
+            {{- if .Values.backup.cronjob.storage.enabled }}
             {{- if .Values.backup.cronjob.storage.existingClaim }}
             - name: datadir
               persistentVolumeClaim:
@@ -119,6 +126,10 @@ spec:
               persistentVolumeClaim:
                 claimName: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
             {{- end }}
+            {{- end }}
             - name: empty-dir
               emptyDir: {}
+            {{- if .Values.backup.cronjob.extraVolumes }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.extraVolumes "context" $ ) | nindent 12 }}
+            {{- end }}
 {{- end }}
