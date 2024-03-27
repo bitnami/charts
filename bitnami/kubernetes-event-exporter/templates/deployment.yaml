@@ -26,9 +26,11 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include "kubernetes-event-exporter.config" . | sha256sum }}
-        {{- if or .Values.podAnnotations .Values.commonAnnotations }}
-        {{- $podAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.podAnnotations .Values.commonAnnotations ) "context" . ) }}
-        {{- include "common.tplvalues.render" ( dict "value" $podAnnotations "context" $ ) | nindent 8 }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kubernetes-event-exporter
