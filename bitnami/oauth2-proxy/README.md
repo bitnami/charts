@@ -373,7 +373,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 4.0.0
+### To 5.0.0
 
 This major bump changes the following security defaults:
 
