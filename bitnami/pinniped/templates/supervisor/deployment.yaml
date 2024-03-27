@@ -114,6 +114,8 @@ spec:
           ports:
             - name: https
               containerPort: {{ .Values.supervisor.containerPorts.https }}
+            - name: https-api
+              containerPort: {{ .Values.supervisor.containerPorts.api }}
           {{- if .Values.supervisor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.supervisor.livenessProbe.enabled }}
