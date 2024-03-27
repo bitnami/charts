@@ -98,7 +98,7 @@ spec:
               #!/bin/bash
               cp -r /opt/bitnami/keycloak/lib/quarkus/* /quarkus
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
