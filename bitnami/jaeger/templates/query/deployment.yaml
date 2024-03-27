@@ -158,7 +158,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.query.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.query.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.query.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.query.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.query.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.query.sidecars "context" $) | nindent 8 }}
