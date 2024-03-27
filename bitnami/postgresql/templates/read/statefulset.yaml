@@ -413,13 +413,11 @@ spec:
             - name: dshm
               mountPath: /dev/shm
             {{- end }}
-            {{- if .Values.readReplicas.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.readReplicas.persistence.mountPath }}
               {{- if .Values.readReplicas.persistence.subPath }}
               subPath: {{ .Values.readReplicas.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if .Values.readReplicas.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
