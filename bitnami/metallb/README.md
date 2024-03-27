@@ -44,15 +44,45 @@ These commands deploy metallb on the Kubernetes cluster in the default configura
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` helm release:
+### Resource requests and limits
 
-```console
-helm uninstall my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
+
+### Example IP addresses to assing to the LoadBalancer configuration
+
+```yaml
+# The address-pools lists the IP addresses that MetalLB is
+# allowed to allocate. You can have as many
+# address pools as you want.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  # A name for the address pool. Services can request allocation
+  # from a specific address pool using this name.
+  name: first-pool
+  namespace: metallb-system
+spec:
+  # A list of IP address ranges over which MetalLB has
+  # authority. You can list multiple ranges in a single pool, they
+  # will all share the same settings. Each range can be either a
+  # CIDR prefix, or an explicit start-end range of IPs.
+  addresses:
+  - 192.168.10.0/24
+  - 192.168.9.1-192.168.9.5
+  - fc00:f853:0ccd:e799::/124
 ```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Parameters
 
@@ -250,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                | `0`                               |
 | `speaker.containerSecurityContext.allowPrivilegeEscalation` | Enables privilege Escalation context for the pod.                                                                                                                                                                          | `false`                           |
 | `speaker.containerSecurityContext.readOnlyRootFilesystem`   | Allows the pod to mount the RootFS as ReadOnly                                                                                                                                                                             | `true`                            |
-| `speaker.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext                                                                                                                                                                                  | `[]`                              |
+| `speaker.containerSecurityContext.capabilities.drop`        | Drop capabilities for the securityContext. You need to comment out this block if you would like to use `tcpdump` for debugging purposes.                                                                                   | `[]`                              |
 | `speaker.containerSecurityContext.capabilities.add`         | Add capabilities for the securityContext                                                                                                                                                                                   | `[]`                              |
 | `speaker.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                           | `RuntimeDefault`                  |
 | `speaker.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                       | `[]`                              |
@@ -321,46 +351,6 @@ helm install my-release \
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the `readinessProbe.successThreshold` to `5`.
-
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-To configure [MetalLB](https://metallb.universe.tf) please look into the configuration section [MetalLB Configuration](https://metallb.universe.tf/configuration/).
-
-### Example IP addresses to assing to the LoadBalancer configuration
-
-```yaml
-# The address-pools lists the IP addresses that MetalLB is
-# allowed to allocate. You can have as many
-# address pools as you want.
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  # A name for the address pool. Services can request allocation
-  # from a specific address pool using this name.
-  name: first-pool
-  namespace: metallb-system
-spec:
-  # A list of IP address ranges over which MetalLB has
-  # authority. You can list multiple ranges in a single pool, they
-  # will all share the same settings. Each range can be either a
-  # CIDR prefix, or an explicit start-end range of IPs.
-  addresses:
-  - 192.168.10.0/24
-  - 192.168.9.1-192.168.9.5
-  - fc00:f853:0ccd:e799::/124
-```
 
 ## Troubleshooting
 

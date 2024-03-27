@@ -87,7 +87,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.3.10-debian-12-r0
+    tag: 2.3.12-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -268,7 +268,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.6-debian-12-r6
+    tag: 2.3.7-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -923,8 +923,8 @@ dataCoord:
     ##
     enabled: true
     ## @param dataCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param dataCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1428,8 +1428,8 @@ rootCoord:
     ##
     enabled: true
     ## @param rootCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param rootCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1933,8 +1933,8 @@ queryCoord:
     ##
     enabled: true
     ## @param queryCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param queryCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -2438,8 +2438,8 @@ indexCoord:
     ##
     enabled: true
     ## @param indexCoord.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param indexCoord.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -2943,8 +2943,8 @@ dataNode:
     ##
     enabled: true
     ## @param dataNode.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param dataNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -3448,8 +3448,8 @@ queryNode:
     ##
     enabled: true
     ## @param queryNode.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param queryNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -3953,8 +3953,8 @@ indexNode:
     ##
     enabled: true
     ## @param indexNode.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param indexNode.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -4486,8 +4486,8 @@ proxy:
     ##
     enabled: true
     ## @param proxy.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param proxy.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -5103,8 +5103,8 @@ attu:
     ##
     enabled: true
     ## @param attu.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Milvus is
+    ## listening on. When true, Milvus will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param attu.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.

@@ -534,8 +534,8 @@ web:
     ##
     enabled: true
     ## @param web.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Mastodon is
+    ## listening on. When true, Mastodon will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param web.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -830,8 +830,8 @@ sidekiq:
     ##
     enabled: true
     ## @param sidekiq.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Mastodon is
+    ## listening on. When true, Mastodon will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param sidekiq.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1183,8 +1183,8 @@ streaming:
     ##
     enabled: true
     ## @param streaming.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Mastodon is
+    ## listening on. When true, Mastodon will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param streaming.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1273,8 +1273,8 @@ tootctlMediaManagement:
     ##
     enabled: true
     ## @param tootctlMediaManagement.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Mastodon is
+    ## listening on. When true, Mastodon will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param tootctlMediaManagement.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1443,8 +1443,8 @@ initJob:
     ##
     enabled: true
     ## @param initJob.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports Mastodon is
+    ## listening on. When true, Mastodon will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param initJob.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
