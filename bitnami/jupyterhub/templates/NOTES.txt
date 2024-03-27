@@ -17,7 +17,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 1. Get the JupyterHub URL by running:
 
-{{- $port := coalesce .Values.proxy.service.public.ports.http .Values.proxy.service.public.port | toString }}
+{{- $port := .Values.proxy.service.public.ports.http | toString }}
 {{- if eq .Values.proxy.service.public.type "NodePort" }}
 
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }}-proxy-public)
