@@ -84,9 +84,6 @@ spec:
             - name: empty-dir
               mountPath: /wildfly-standalone-conf-dir
               subPath: wildfly-standalone-conf-dir
-            - name: empty-dir
-              mountPath: /wildfly-domain-conf-dir
-              subPath: wildfly-domain-conf-dir
       {{- if .Values.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
