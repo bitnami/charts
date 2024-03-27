@@ -1321,8 +1321,8 @@ networkPolicy:
   ##
   enabled: true
   ## @param networkPolicy.allowExternal The Policy model to apply
-  ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-  ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+  ## When set to false, only pods with the correct client label will have network access to the ports MariaDB is
+  ## listening on. When true, MariaDB will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.

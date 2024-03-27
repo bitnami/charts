@@ -23,9 +23,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: argo-workflows
       app.kubernetes.io/component: controller
-  {{- if .Values.controller.networkPolicy.extraEgress }}
-  egress: {{- include "common.tplvalues.render" ( dict "value" .Values.controller.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
-  {{- end }}
+  policyTypes:
+    - Ingress
+    - Egress
   {{- if .Values.controller.networkPolicy.allowExternalEgress }}
   egress:
     - {}
