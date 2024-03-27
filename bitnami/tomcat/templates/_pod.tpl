@@ -150,6 +150,24 @@ containers:
     volumeMounts:
       - name: data
         mountPath: /bitnami/tomcat
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/webapps
+        subPath: app-webapps-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/temp
+        subPath: app-tmp-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/conf
+        subPath: app-conf-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/logs
+        subPath: app-logs-dir
+      - name: empty-dir
+        mountPath: /opt/bitnami/tomcat/work
+        subPath: app-work-dir
+      - name: empty-dir
+        mountPath: /tmp
+        subPath: tmp-dir
       {{- if .Values.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
@@ -182,11 +200,16 @@ containers:
     volumeMounts:
       - name: jmx-config
         mountPath: /etc/jmx-tomcat
+      - name: empty-dir
+        mountPath: /tmp
+        subPath: tmp-dir
   {{- end }}
   {{- if .Values.sidecars }}
   {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 2 }}
   {{- end }}
 volumes:
+  - name: empty-dir
+    emptyDir: {}
   {{- if (eq .Values.deployment.type "deployment") }}
   {{- if and .Values.persistence.enabled }}
   - name: data
