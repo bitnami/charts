@@ -1320,6 +1320,7 @@ waitContainer:
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitContainer.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set containers' Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set containers' Security Context privileged
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set containers' Security Context runAsNonRoot
