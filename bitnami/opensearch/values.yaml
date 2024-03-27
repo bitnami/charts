@@ -842,8 +842,8 @@ master:
     ##
     enabled: true
     ## @param master.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param master.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1260,8 +1260,8 @@ data:
     ##
     enabled: true
     ## @param data.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param data.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -1640,8 +1640,8 @@ coordinating:
     ##
     enabled: true
     ## @param coordinating.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param coordinating.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -2022,8 +2022,8 @@ ingest:
     ##
     enabled: true
     ## @param ingest.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param ingest.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -2857,8 +2857,8 @@ dashboards:
     ##
     enabled: true
     ## @param dashboards.networkPolicy.allowExternal The Policy model to apply
-    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
-    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ## When set to false, only pods with the correct client label will have network access to the ports OpenSearch is
+    ## listening on. When true, OpenSearch will accept connections from any source (with the correct destination port).
     ##
     allowExternal: true
     ## @param dashboards.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
