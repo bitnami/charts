@@ -257,6 +257,12 @@ region = {{ .Values.aws.region }}
 }
 {{ end }}
 {{- define "external-dns.oci-credentials" -}}
+{{- if .Values.useWorkloadIdentity }}
+auth:
+  region: {{ .Values.oci.region }}
+  useWorkloadIdentity: true
+compartment: {{ .Values.oci.compartmentOCID }}
+{{- else }}
 auth:
   region: {{ .Values.oci.region }}
   tenancy: {{ .Values.oci.tenancyOCID }}
@@ -268,7 +274,8 @@ auth:
   passphrase: {{ .Values.oci.privateKeyPassphrase }}
   {{- end }}
 compartment: {{ .Values.oci.compartmentOCID }}
-{{ end }}
+{{- end }}
+{{- end }}
 
 {{/*
 Compile all warnings into a single message, and call fail if the validation is enabled

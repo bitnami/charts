@@ -612,6 +612,12 @@ oci:
   ## Ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/oracle.md#deploy-externaldns
   ##
   secretName: ""
+  ## @param oci.enableInstancePrincipal When using the OCI provider, enable IAM Instance Principal
+  ## Ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/oracle.md#oci-iam-instance-principal
+  useInstancePrincipal: false
+  ## @param oci.enableWorkloadIdentity When using the OCI provider, enable IAM Workload Identity
+  ## Ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/oracle.md#oci-iam-instance-principal
+  useWorkloadIdentity: false
 ## OVH configuration to be set via arguments/env. variables
 ##
 ovh:
