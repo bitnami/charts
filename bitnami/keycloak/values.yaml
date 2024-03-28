@@ -232,6 +232,10 @@ existingConfigmap: ""
 ## @param extraStartupArgs Extra default startup args
 ##
 extraStartupArgs: ""
+## @param enableDefaultInitContainers Deploy default init containers
+## Disable this parameter could be helpful for 3rd party images e.g native Keycloak image.
+##
+enableDefaultInitContainers: true
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#initializing-a-new-instance
