@@ -598,8 +598,9 @@ spec:
           image: {{ template "redis.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
           command: {{- toYaml .Values.kubectl.command | nindent 12 }}
-          securityContext:
-            runAsUser: 0
+          {{- if .Values.kubectl.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubectl.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: kubectl-shared
               mountPath: /etc/shared
