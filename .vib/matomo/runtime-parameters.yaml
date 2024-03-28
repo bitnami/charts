@@ -10,7 +10,7 @@ readinessProbe:
   initialDelaySeconds: 90
 cronjobs:
   archive:
-    enabled: false
+    enable: false
   taskScheduler:
-    enabled: false
+    enable: false
 
