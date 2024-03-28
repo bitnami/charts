@@ -15,7 +15,7 @@ dependencies:
 - condition: zookeeper.enabled
   name: zookeeper
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.x.x
+  version: 13.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -34,4 +34,4 @@ maintainers:
 name: solr
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/solr
-version: 8.10.0
+version: 9.0.0
