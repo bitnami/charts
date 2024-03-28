@@ -22,7 +22,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
-  version: 2.x.x
+  version: 2.19.1
 description: MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
