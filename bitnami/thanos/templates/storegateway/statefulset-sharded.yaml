@@ -49,16 +49,18 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: storegateway
         shard: {{ $index | quote }}
+      {{- if or $.Values.storegateway.podAnnotations (include "thanos.storegateway.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
-        {{- if (include "thanos.objstoreConfig" $) }}
-        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+        {{- if (include "thanos.createObjstoreSecret" $) }}
+        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" $ | sha256sum }}
         {{- end }}
         {{- if (include "thanos.storegateway.createConfigmap" $) }}
-        checksum/storegateway-configuration: {{ include "thanos.storegatewayConfigMap" . | sha256sum }}
+        checksum/storegateway-configuration: {{ include "thanos.storegatewayConfigMap" $ | sha256sum }}
         {{- end }}
         {{- if $.Values.storegateway.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" $ | nindent 6 }}
       serviceAccountName: {{ include "thanos.storegateway.serviceAccountName" $ }}
