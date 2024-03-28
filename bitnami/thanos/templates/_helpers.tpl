@@ -133,8 +133,10 @@ objstore.yml: |-
 Return the storegateway config
 */}}
 {{- define "thanos.storegatewayConfigMap" -}}
+{{- if and .Values.storegateway.config (not .Values.storegateway.existingConfigmap) }}
 config.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 2 }}
+{{- end }}
 {{- if .Values.indexCacheConfig }}
 index-cache.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | b64enc | nindent 2 }}
@@ -149,8 +151,10 @@ bucket-cache.yml: |-
 Return the ruler config
 */}}
 {{- define "thanos.rulerConfigMap" -}}
+{{- if and .Values.ruler.config (not .Values.ruler.existingConfigmap) }}
 ruler.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.ruler.config "context" $) | nindent 2 }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -165,16 +169,20 @@ hashrings.json: |-
 Return the query config
 */}}
 {{- define "thanos.querySDConfigMap" -}}
+{{- if and .Values.query.sdConfig (not .Values.query.existingSDConfigmap) }}
 servicediscovery.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.query.sdConfig "context" $) | nindent 2 }}
+{{- end }}
 {{- end -}}
 
 {{/*
 Return the query frontend config
 */}}
 {{- define "thanos.queryFrontendConfigMap" -}}
+{{- if and .Values.queryFrontend.config (not .Values.queryFrontend.existingConfigmap) }}
 config.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.config "context" $) | nindent 2 }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -562,6 +570,7 @@ Usage:
 {{ include "thanos.receive.config" . }}
 */}}
 {{- define "thanos.receive.config" -}}
+{{- if not .Values.receive.existingConfigmap }}
 {{- if not .Values.receive.config -}}
 {{- if .Values.receive.service.additionalHeadless -}}
 {{- $count := int .Values.receive.replicaCount -}}
@@ -592,6 +601,7 @@ Usage:
 {{- .Values.receive.config -}}
 {{- else -}}
 {{- .Values.receive.config | toPrettyJson -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 {{- end -}}
