@@ -41,8 +41,8 @@ spec:
         {{- end }}
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.concierge.service.ports.proxy }}
-        - port: {{ .Values.concierge.service.ports.api }}
+        - port: {{ .Values.concierge.containerPorts.proxy }}
+        - port: {{ .Values.concierge.containerPorts.api }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -55,6 +55,7 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.supervisor.containerPorts.https }}
+        - port: {{ .Values.supervisor.containerPorts.api }}
       {{- if not .Values.supervisor.networkPolicy.allowExternal }}
       from:
         - podSelector:

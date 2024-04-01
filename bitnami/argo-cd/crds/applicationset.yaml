@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/argoproj/argo-cd/v{version}/manifests/crds/applicationset-crd.yaml
-# Version: 2.10.2
+# Version: 2.10.5
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -2372,8 +2372,6 @@ spec:
                           - metadata
                           - spec
                           type: object
-                      required:
-                      - elements
                       type: object
                     matrix:
                       properties:
@@ -4716,8 +4714,6 @@ spec:
                                     - metadata
                                     - spec
                                     type: object
-                                required:
-                                - elements
                                 type: object
                               matrix:
                                 x-kubernetes-preserve-unknown-fields: true
@@ -9743,8 +9739,6 @@ spec:
                                     - metadata
                                     - spec
                                     type: object
-                                required:
-                                - elements
                                 type: object
                               matrix:
                                 x-kubernetes-preserve-unknown-fields: true

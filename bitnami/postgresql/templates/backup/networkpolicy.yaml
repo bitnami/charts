@@ -3,21 +3,26 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.networkPolicy.enabled .Values.networkPolicy.egressRules.customRules }}
+{{- if and .Values.backup.enabled .Values.backup.cronjob.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ printf "%s-egress" (include "common.names.fullname" .) }}
+  name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: pg_dumpall
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: pg_dumpall
   policyTypes:
     - Egress
   egress:
-    {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.egressRules.customRules "context" $) | nindent 4 }}
+    - ports:
+        - port: 5432
+          protocol: TCP
 {{- end }}

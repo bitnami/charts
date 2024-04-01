@@ -67,7 +67,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.28.0-debian-12-r10
+  tag: 0.29.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -560,9 +560,11 @@ supervisor:
   ## @param supervisor.replicaCount Number of Supervisor replicas to deploy
   ##
   replicaCount: 1
-  ## @param supervisor.containerPorts.https Supervisor HTTP container port
+  ## @param supervisor.containerPorts.api Supervisor API container port
+  ## @param supervisor.containerPorts.https Supervisor HTTPS container port
   ##
   containerPorts:
+    api: 10250
     https: 8443
   ## @param supervisor.deployAPIService Deploy the APIService objects
   ##

@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/pytorch
-  tag: 2.2.1-debian-12-r0
+  tag: 2.2.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -117,7 +117,7 @@ livenessProbe:
   enabled: true
   initialDelaySeconds: 5
   periodSeconds: 5
-  timeoutSeconds: 5
+  timeoutSeconds: 20
   successThreshold: 1
   failureThreshold: 5
 ## Configure extra options for readiness probe
@@ -133,7 +133,7 @@ readinessProbe:
   enabled: true
   initialDelaySeconds: 5
   periodSeconds: 5
-  timeoutSeconds: 3
+  timeoutSeconds: 20
   successThreshold: 1
   failureThreshold: 5
 ## Configure extra options for startup probe
@@ -149,7 +149,7 @@ startupProbe:
   enabled: true
   initialDelaySeconds: 5
   periodSeconds: 5
-  timeoutSeconds: 3
+  timeoutSeconds: 20
   successThreshold: 1
   failureThreshold: 5
 ## @param customLivenessProbe Custom livenessProbe that overrides the default one
@@ -199,10 +199,10 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
-  runAsGroup: 0
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -213,7 +213,7 @@ containerSecurityContext:
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "small"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -548,7 +548,7 @@ networkPolicy:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.43.2-debian-12-r2
+  tag: 2.44.0-debian-12-r1
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -577,7 +577,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r17
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -597,7 +597,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
