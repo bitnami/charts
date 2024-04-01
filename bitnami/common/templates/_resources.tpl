@@ -11,7 +11,7 @@ These presets are for basic testing and not meant to be used in production
 {{ include "common.resources.preset" (dict "type" "nano") -}}
 */}}
 {{- define "common.resources.preset" -}}
-{{/* The limits are the requests increased by 50% (except ephemeral-storage)*/}}
+{{/* The limits are the requests increased by 50% (except ephemeral-storage and xlarge/2xlarge sizes)*/}}
 {{- $presets := dict 
   "nano" (dict 
       "requests" (dict "cpu" "100m" "memory" "128Mi" "ephemeral-storage" "50Mi")
@@ -34,11 +34,11 @@ These presets are for basic testing and not meant to be used in production
       "limits" (dict "cpu" "1.5" "memory" "3072Mi" "ephemeral-storage" "1024Mi")
    )
   "xlarge" (dict 
-      "requests" (dict "cpu" "2.0" "memory" "4096Mi" "ephemeral-storage" "50Mi")
+      "requests" (dict "cpu" "1.5" "memory" "4096Mi" "ephemeral-storage" "50Mi")
       "limits" (dict "cpu" "3.0" "memory" "6144Mi" "ephemeral-storage" "1024Mi")
    )
   "2xlarge" (dict 
-      "requests" (dict "cpu" "4.0" "memory" "8192Mi" "ephemeral-storage" "50Mi")
+      "requests" (dict "cpu" "1.5" "memory" "4096Mi" "ephemeral-storage" "50Mi")
       "limits" (dict "cpu" "6.0" "memory" "12288Mi" "ephemeral-storage" "1024Mi")
    )
  }}
