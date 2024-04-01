@@ -58,37 +58,6 @@ initContainers:
       - name: data
         mountPath: /bitnami/tomcat
 {{- end }}
-  - name: prepare-webapps-dir
-    image: {{ include "tomcat.image" . }}
-    imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-    {{- if .Values.resources }}
-    resources: {{- toYaml .Values.resources | nindent 6 }}
-    {{- else if ne .Values.resourcesPreset "none" }}
-    resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 6 }}
-    {{- end }}
-    {{- if .Values.containerSecurityContext.enabled }}
-    securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 6 }}
-    {{- end }}
-    command:
-      - /bin/bash
-    args:
-      - -ec
-      - |
-        #!/bin/bash
-
-        . /opt/bitnami/scripts/liblog.sh
-        . /opt/bitnami/scripts/libfs.sh
-
-        if ! is_dir_empty /opt/bitnami/tomcat/webapps; then
-          info "Copying default webapps"
-          cp -r /opt/bitnami/tomcat/webapps /emptydir/app-webapps-dir
-          info "Copy operation completed"
-        else
-          info "Webapps folder empty, no need to copy"
-        fi
-    volumeMounts:
-      - name: empty-dir
-        mountPath: /emptydir
 {{- if .Values.initContainers }}
 {{ include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) }}
 {{- end }}
@@ -181,9 +150,6 @@ containers:
     volumeMounts:
       - name: data
         mountPath: /bitnami/tomcat
-      - name: empty-dir
-        mountPath: /opt/bitnami/tomcat/webapps
-        subPath: app-webapps-dir
       - name: empty-dir
         mountPath: /opt/bitnami/tomcat/temp
         subPath: app-tmp-dir
