@@ -162,7 +162,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - name: data
+            - name: {{ .Values.primary.persistence.volumeName }}
               mountPath: {{ .Values.primary.persistence.mountPath }}
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
@@ -495,7 +495,7 @@ spec:
               mountPath: /dev/shm
             {{- end }}
             {{- if .Values.primary.persistence.enabled }}
-            - name: data
+            - name: {{ .Values.primary.persistence.volumeName }}
               mountPath: {{ .Values.primary.persistence.mountPath }}
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
@@ -650,11 +650,11 @@ spec:
             {{- end }}
         {{- end }}
   {{- if and .Values.primary.persistence.enabled .Values.primary.persistence.existingClaim }}
-        - name: data
+        - name: {{ .Values.primary.persistence.volumeName }}
           persistentVolumeClaim:
             claimName: {{ tpl .Values.primary.persistence.existingClaim $ }}
   {{- else if not .Values.primary.persistence.enabled }}
-        - name: data
+        - name: {{ .Values.primary.persistence.volumeName }}
           emptyDir: {}
   {{- else }}
   {{- if .Values.primary.persistentVolumeClaimRetentionPolicy.enabled }}
@@ -666,7 +666,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: data
+        name: {{ .Values.primary.persistence.volumeName }}
         {{- if .Values.primary.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

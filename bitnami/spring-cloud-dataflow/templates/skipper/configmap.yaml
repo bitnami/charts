@@ -39,6 +39,7 @@ data:
               kubernetes:
                 accounts:
                   {{ .Values.skipper.configuration.accountName }}:
+                    {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
                     {{- if or (.Values.rabbitmq.enabled) (.Values.externalRabbitmq.enabled) }}
                     {{- $rabbitmqHost := include "scdf.rabbitmq.host" . }}
                     {{- $rabbitmqPort := include "scdf.rabbitmq.port" . }}
@@ -55,7 +56,6 @@ data:
                       {{- else }}
                       - SPRING_RABBITMQ_PASSWORD=${rabbitmq-password}
                       {{- end }}
-                      {{- $environmentVariables := include "scdf.deployer.environmentVariables" . }}
                       {{- if $environmentVariables }}
                       {{- $environmentVariables | nindent 22 }}
                       {{- end }}
