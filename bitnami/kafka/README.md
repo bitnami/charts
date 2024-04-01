@@ -274,9 +274,10 @@ You can use the following values to generate External-DNS annotations which auto
 
 ```yaml
 externalAccess:
-  service:
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
+  controller:
+    service:
+      annotations:
+        external-dns.alpha.kubernetes.io/hostname: "{{ .targetPod }}.example.com"
 ```
 
 ### Enable metrics
