@@ -105,7 +105,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.2.0-debian-12-r8
+  tag: 16.2.0-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -738,6 +738,9 @@ primary:
     ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
     ##
     enabled: true
+    ## @param primary.persistence.volumeName Name to assign the volume
+    ##
+    volumeName: "data"
     ## @param primary.persistence.existingClaim Name of an existing PVC to use
     ##
     existingClaim: ""
@@ -1319,7 +1322,14 @@ backup:
     ##   limits:
     ##     cpu: 2
     ##     memory: 1024Mi
+    networkPolicy:
+      ## @param backup.cronjob.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+      ##
+      enabled: true
     storage:
+      ## @param backup.cronjob.storage.enabled Enable using a `PersistentVolumeClaim` as backup data volume 
+      ##
+      enabled: true
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
       ##
@@ -1359,6 +1369,12 @@ backup:
         ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
         ##
         selector: {}
+    ## @param backup.cronjob.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the backup container
+    ##
+    extraVolumeMounts: []
+    ## @param backup.cronjob.extraVolumes Optionally specify extra list of additional volumes for the backup container
+    ##
+    extraVolumes: []
 ## @section Volume Permissions parameters
 ##
 
@@ -1379,7 +1395,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r17
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
