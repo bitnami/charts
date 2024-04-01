@@ -103,7 +103,6 @@ spec:
               #!/bin/bash
 
               . /opt/bitnami/scripts/liblog.sh
-              . /opt/bitnami/scripts/libfs.sh
 
               info "Copying base dir to empty dir"
               # In order to not break the application functionality (such as upgrades or plugins) we need
