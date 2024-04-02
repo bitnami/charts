@@ -73,7 +73,7 @@ spec:
               info "Writable files successfully copied"
           volumeMounts:
             - name: empty-dir
-              mountPath: /wildfly-standalone-conf-dir
+              mountPath: /app-standalone-conf-dir
               subPath: app-standalone-conf-dir
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
