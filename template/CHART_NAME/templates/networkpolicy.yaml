@@ -10,55 +10,36 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: %%COMPONENT_NAME%%
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: %%COMPONENT_NAME%%
   policyTypes:
     - Ingress
     - Egress
-  {{- if .Values.networkPolicy.allowExternalEgress }}
   egress:
+    {{- if .Values.networkPolicy.allowExternalEgress }}
     - {}
-  {{- else }}
-  egress:
-    # Allow dns resolution
+    {{- else }}
     - ports:
+        # Allow dns resolution
         - port: 53
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to MariaDB
-    - ports:
-        - port: {{ include "wordpress.databasePort" . }}
-      {{- if .Values.mariadb.enabled }}
-      to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: mariadb
-              app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- end }}
-    {{- if .Values.wordpressConfigureCache }}
-    # Allow outbound connections to Memcached
-    - ports:
-        - port: {{ include "wordpress.cachePort" . }}
-      {{- if .Values.memcached.enabled }}
-      to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: memcached
-              app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- end }}
-    {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- end }}
+    {{- end }}
   ingress:
-    - ports: {{- include "tomcat.ports" . | nindent 8 }}
+    - ports:
+        - port: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
+        - port: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -81,11 +62,6 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- if .Values.metrics.jmx.enabled }}
-    # Allow prometheus scrapes
-    - ports:
-        - port: {{ .Values.metrics.jmx.ports.metrics }}
-    {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

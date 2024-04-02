@@ -738,6 +738,9 @@ primary:
     ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
     ##
     enabled: true
+    ## @param primary.persistence.volumeName Name to assign the volume
+    ##
+    volumeName: "data"
     ## @param primary.persistence.existingClaim Name of an existing PVC to use
     ##
     existingClaim: ""
