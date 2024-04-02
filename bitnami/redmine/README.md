@@ -571,6 +571,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 28.0.0
+
+This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
 ### To 27.0.0
 
 This major release bumps the PostgreSQL chart version to [14.x.x](https://github.com/bitnami/charts/pull/22750) and MariaDB to [16.x.x](https://github.com/bitnami/charts/pull/23054); no major issues are expected during the upgrade.
