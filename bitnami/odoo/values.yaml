@@ -716,9 +716,9 @@ postgresql:
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for Keycloak
-## @param externalDatabase.password Password for the non-root username for Keycloak
-## @param externalDatabase.database Keycloak database name
+## @param externalDatabase.user Non-root username for Odoo
+## @param externalDatabase.password Password for the non-root username for Odoo
+## @param externalDatabase.database Odoo database name
 ## @param externalDatabase.create Enable PostgreSQL user and database creation (when using an external db)
 ## @param externalDatabase.postgresqlPostgresUser External Database admin username
 ## @param externalDatabase.postgresqlPostgresPassword External Database admin password

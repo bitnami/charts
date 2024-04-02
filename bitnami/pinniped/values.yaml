@@ -560,9 +560,11 @@ supervisor:
   ## @param supervisor.replicaCount Number of Supervisor replicas to deploy
   ##
   replicaCount: 1
-  ## @param supervisor.containerPorts.https Supervisor HTTP container port
+  ## @param supervisor.containerPorts.api Supervisor API container port
+  ## @param supervisor.containerPorts.https Supervisor HTTPS container port
   ##
   containerPorts:
+    api: 10250
     https: 8443
   ## @param supervisor.deployAPIService Deploy the APIService objects
   ##
