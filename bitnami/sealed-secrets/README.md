@@ -338,21 +338,21 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                      | Value   |
-| ------------------------------------------ | -------------------------------------------------------------------------------- | ------- |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false` |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                         | `""`    |
-| `metrics.serviceMonitor.port.number`       | Port number for metrics endpoint                                                 | `8081`  |
-| `metrics.serviceMonitor.port.name`         | Port name for the serviceMonitor                                                 | `metrics`|
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                              | `{}`    |
-| `metrics.serviceMonitor.annotations`       | Additional ServiceMonitor annotations (evaluated as a template)                  | `{}`    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus | `""`    |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels         | `false` |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                     | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                          | `""`    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                         | `[]`    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`    |
+| Name                                       | Description                                                                      | Value     |
+| ------------------------------------------ | -------------------------------------------------------------------------------- | --------- |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`   |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                         | `""`      |
+| `metrics.serviceMonitor.port.number`       | Port number for the serviceMonitor                                               | `8081`    |
+| `metrics.serviceMonitor.port.name`         | Port name for the serviceMonitor                                                 | `metrics` |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                              | `{}`      |
+| `metrics.serviceMonitor.annotations`       | Additional ServiceMonitor annotations (evaluated as a template)                  | `{}`      |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus | `""`      |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels         | `false`   |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                     | `""`      |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                          | `""`      |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                         | `[]`      |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`      |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
