@@ -600,6 +600,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Notable changes
 
+### To 26.0.0
+
+This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
 ### To 23.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading/) for upgrading to MariaDB 10.6. No major issues are expected during the upgrade.
