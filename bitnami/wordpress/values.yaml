@@ -727,7 +727,7 @@ ingress:
   extraRules: []
 
 ## Configure second ingress resource that allows you to access the WordPress installation
-## This may be used to secure /wp-admin behind authentication or IP restrictions 
+## This may be used to secure /wp-admin behind authentication or IP restrictions
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 secondaryIngress:
