@@ -225,7 +225,8 @@ spec:
         {{- end }}
       volumes:
         - name: empty-dir
-          emptyDir: {}
+          emptyDir:
+            medium: Memory
         {{- if not .Values.enableS3 }}
         - name: data
           {{- if .Values.persistence.enabled }}
