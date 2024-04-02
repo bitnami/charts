@@ -29,7 +29,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - dataflow-database
-  version: 17.x.x
+  version: 18.x.x
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts

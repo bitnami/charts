@@ -782,6 +782,8 @@ This major bump changes the following security defaults:
 
 This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
+Also, this major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
 ### To 25.0.0
 
 This major updates the Kafka subchart to its newest major, 26.0.0.  For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2600).
