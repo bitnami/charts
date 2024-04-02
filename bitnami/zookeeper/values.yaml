@@ -362,7 +362,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: {}
+  seLinuxOptions: null
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -797,7 +797,7 @@ volumePermissions:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: {}
+    seLinuxOptions: null
     runAsUser: 0
 ## @section Metrics parameters
 ##
