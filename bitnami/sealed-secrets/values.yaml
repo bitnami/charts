@@ -616,7 +616,7 @@ pdb:
 ## @section Metrics parameters
 ##
 metrics:
-  ## @param metrics.enable Sealed Secrets toggle metrics service definition
+  ## @param metrics.enabled Sealed Secrets toggle metrics service definition
   enabled: false
   service:
     ## @param metrics.service.type Sealed Secrets metrics service type
