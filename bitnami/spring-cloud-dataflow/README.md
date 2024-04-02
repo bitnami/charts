@@ -762,7 +762,9 @@ Find more information about how to deal with common errors related to Bitnami He
 
 ## Upgrading
 
-If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+### To 27.0.0
+
+This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
 
 ### To 25.0.0
 
@@ -904,6 +906,8 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### v0.x.x
+
+If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
 
 ```console
 helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
