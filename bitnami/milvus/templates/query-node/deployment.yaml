@@ -163,15 +163,19 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: rendered-config
+            - name: empty-dir
               mountPath: /opt/bitnami/milvus/configs
-            - name: tmp
+              subPath: app-rendered-conf-dir
+            - name: empty-dir
               mountPath: /tmp
-            - name: tmp-milvus
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /opt/bitnami/milvus/tmp
+              subPath: app-tmp-dir
               # We are using a s3 backend, so this data dir is temporary
-            - name: tmp-data-milvus
+            - name: empty-dir
               mountPath: /bitnami/milvus/data
+              subPath: app-data-dir
             {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
             - name: etcd-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/etcd/client
@@ -184,11 +188,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-data-milvus
-          emptyDir: {}
-        - name: tmp-milvus
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         - name: config-common
           configMap:
@@ -212,8 +212,6 @@ spec:
             secretName: {{ .Values.externalEtcd.tls.existingSecret }}
             defaultMode: 256
         {{- end }}
-        - name: rendered-config
-          emptyDir: {}
         {{- if .Values.queryNode.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
