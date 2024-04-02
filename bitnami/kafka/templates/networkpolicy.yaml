@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
@@ -31,41 +31,40 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
-    # Allow outbound connections to MariaDB
+    # Allow internal communications between nodes
     - ports:
-        - port: {{ include "wordpress.databasePort" . }}
-      {{- if .Values.mariadb.enabled }}
+        - port: {{ .Values.listeners.client.containerPort }}
+        - port: {{ .Values.listeners.interbroker.containerPort }}
+        {{- if .Values.externalAccess.enabled }}
+        - port: {{ .Values.listeners.external.containerPort }}
+        {{- end }}
       to:
         - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: mariadb
-              app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- end }}
-    {{- if .Values.wordpressConfigureCache }}
-    # Allow outbound connections to Memcached
-    - ports:
-        - port: {{ include "wordpress.cachePort" . }}
-      {{- if .Values.memcached.enabled }}
-      to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: memcached
-              app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- end }}
-    {{- end }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
-    - ports: {{- include "tomcat.ports" . | nindent 8 }}
+    # Allow client connections
+    - ports:
+        - port: {{ .Values.listeners.client.containerPort }}
+        - port: {{ .Values.listeners.interbroker.containerPort }}
+        {{- if .Values.externalAccess.enabled }}
+        - port: {{ .Values.listeners.external.containerPort }}
+        {{- end }}
+        {{- if .Values.metrics.kafka.enabled }}
+        - port: {{ .Values.metrics.kafka.containerPorts.metrics }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         - podSelector:
             matchLabels:
-              {{ template "common.names.fullname" . }}-client: "true"
+              {{ include "common.names.fullname" . }}-client: "true"
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
@@ -81,11 +80,6 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- if .Values.metrics.jmx.enabled }}
-    # Allow prometheus scrapes
-    - ports:
-        - port: {{ .Values.metrics.jmx.ports.metrics }}
-    {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

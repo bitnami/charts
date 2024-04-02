@@ -118,6 +118,43 @@ spec:
           {{- if .Values.initJob.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.initJob.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.initJob.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - python
+            initialDelaySeconds: {{ .Values.initJob.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.initJob.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.initJob.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.initJob.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.initJob.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.initJob.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - pgrep
+                - python
+            initialDelaySeconds: {{ .Values.initJob.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.initJob.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.initJob.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.initJob.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.initJob.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.initJob.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.initJob.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.initJob.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.initJob.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - pgrep
+                - python
+          {{- end }}
           {{- if or .Values.initJob.extraEnvVarsCM .Values.initJob.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.initJob.extraEnvVarsCM }}
@@ -130,8 +167,9 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
             {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
             - name: milvus-client-certs
               mountPath: /opt/bitnami/milvus/configs/cert/milvus/client
@@ -146,7 +184,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.initJob.resourcesPreset) | nindent 12 }}
           {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if and (ne (int .Values.proxy.tls.mode) 0) (not (empty .Values.initJob.tls.existingSecret)) }}
         - name: milvus-client-certs
