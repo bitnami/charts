@@ -161,9 +161,9 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
-          {{- if .Values.metrics.serviceMonitor.enabled }}
-            - name: {{ .Values.metrics.serviceMonitor.port.name }}
-              containerPort: 8081
+          {{- if .Values.metrics.enabled }}
+            - name: metrics 
+              containerPort: {{ .Values.containerPorts.metrics }}
               protocol: TCP
           {{- end }}
           {{- if .Values.resources }}
