@@ -437,6 +437,7 @@ persistence:
     ## @param persistence.imageChartStorage.s3.rootdirectory S3 storage type setting: Root directory name
     ## @param persistence.imageChartStorage.s3.storageClass S3 storage type setting: Storage class
     ## @param persistence.imageChartStorage.s3.sse S3 storage type setting: SSE name
+    ## @param persistence.imageChartStorage.s3.multipartcopythresholdsize S3 storage type setting: Threshold size for multipart copy
     ##
     s3:
       region: us-west-1
@@ -453,6 +454,7 @@ persistence:
       rootdirectory: ""
       storageClass: ""
       sse: ""
+      multipartcopythresholdsize: ""
     ## Images/charts storage parameters when type is "swift"
     ## @param persistence.imageChartStorage.swift.authurl Swift storage type setting: Authentication url
     ## @param persistence.imageChartStorage.swift.username Swift storage type setting: Authentication url
