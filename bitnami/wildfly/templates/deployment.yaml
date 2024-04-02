@@ -196,6 +196,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/wildfly/domain/configuration
               subPath: app-domain-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/wildfly
             {{- if .Values.extraVolumeMounts }}
