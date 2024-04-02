@@ -133,7 +133,7 @@ clusterOperator:
     pullSecrets: []
   ## @param clusterOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
   ##
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: 10
   ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -666,7 +666,7 @@ msgTopologyOperator:
     pullSecrets: []
   ## @param msgTopologyOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
   ##
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: 10
   ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
