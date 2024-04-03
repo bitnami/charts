@@ -232,13 +232,13 @@ resourcesPreset: "micro"
 ##
 resources: {}
 ## Container ports
-## @param containerPorts.http WordPress HTTP container port
-## @param containerPorts.https WordPress HTTPS container port
+## @param containerPorts.http MediaWiki HTTP container port
+## @param containerPorts.https MediaWiki HTTPS container port
 ##
 containerPorts:
   http: 8080
   https: 8443
-## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## @param extraContainerPorts Optionally specify extra list of additional ports for MediaWiki container(s)
 ## e.g:
 ## extraContainerPorts:
 ##   - name: myservice

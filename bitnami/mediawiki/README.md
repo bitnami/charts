@@ -191,9 +191,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`                                  |
 | `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                                           |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                                              |
-| `containerPorts.http`                               | WordPress HTTP container port                                                                                                                                                                                     | `8080`                                            |
-| `containerPorts.https`                              | WordPress HTTPS container port                                                                                                                                                                                    | `8443`                                            |
-| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                                                                                                                      | `[]`                                              |
+| `containerPorts.http`                               | MediaWiki HTTP container port                                                                                                                                                                                     | `8080`                                            |
+| `containerPorts.https`                              | MediaWiki HTTPS container port                                                                                                                                                                                    | `8443`                                            |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for MediaWiki container(s)                                                                                                                                      | `[]`                                              |
 | `startupProbe.enabled`                              | Enable startupProbe                                                                                                                                                                                               | `false`                                           |
 | `startupProbe.httpGet.path`                         | Request path for startupProbe                                                                                                                                                                                     | `/api.php?action=query&meta=siteinfo&format=none` |
 | `startupProbe.httpGet.port`                         | Port for startupProbe                                                                                                                                                                                             | `http`                                            |
@@ -390,8 +390,8 @@ This major bump changes the following security defaults:
 
 This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
-Also, this major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
-    
+Also, this major release bumps the MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
 ### To 19.0.0
 
 This major release bumps the and MariaDB chart version to [16.x.x](https://github.com/bitnami/charts/pull/23054); no major issues are expected during the upgrade
