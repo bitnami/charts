@@ -237,7 +237,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
-    add: ["CAP_CHOWN"]
+    add: ["CAP_CHOWN", "CAP_SETGID", "CAP_SETUID", "CAP_DAC_OVERRIDE"]
   seccompProfile:
     type: "RuntimeDefault"
 ## Configure extra options for Redmine containers' liveness, readiness and startup probes
