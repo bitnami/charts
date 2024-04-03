@@ -143,12 +143,12 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -220,13 +220,15 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 | `command`                                           | Custom command to override image cmd                                                                                                                                                                       | `[]`                    |
 | `args`                                              | Custom args for the custom command                                                                                                                                                                         | `[]`                    |
 | `lifecycleHooks`                                    | for the EJBCA container(s) to automate configuration before or after startup                                                                                                                               | `{}`                    |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`                  |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `xlarge`                |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                    |
 | `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                                                                                                                 | `true`                  |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`                   |
 | `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                                                                                                                           | `1001`                  |
+| `containerSecurityContext.runAsGroup`               | Set EJBCA containers' Security Context runAsGroup                                                                                                                                                          | `1001`                  |
 | `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                                                                                                   | `true`                  |
 | `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                                                                                                        | `false`                 |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set primary container's Security Context readOnlyRootFilesystem                                                                                                                                            | `true`                  |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                                                                                                          | `false`                 |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`               |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault`        |
@@ -252,6 +254,7 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 | `customLivenessProbe`                               | Custom liveness probe to execute (when the main one is disabled)                                                                                                                                           | `{}`                    |
 | `customReadinessProbe`                              | Custom readiness probe to execute (when the main one is disabled)                                                                                                                                          | `{}`                    |
 | `containerPorts`                                    | EJBCA Container ports to open                                                                                                                                                                              | `{}`                    |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                                                                                                               | `[]`                    |
 | `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                                                                                                                        | `true`                  |
 | `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                     | `""`                    |
 | `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                     | `false`                 |
@@ -296,43 +299,40 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 
 ### Database parameters
 
-| Name                                        | Description                                                                                | Value           |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.      | `true`          |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                       | `standalone`    |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                       | `""`            |
-| `mariadb.auth.database`                     | Database name to create                                                                    | `bitnami_ejbca` |
-| `mariadb.auth.username`                     | Database user to create                                                                    | `bn_ejbca`      |
-| `mariadb.auth.password`                     | Password for the database                                                                  | `""`            |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                      | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                            | `""`            |
-| `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                              | `ReadWriteOnce` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                            | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)   | `""`            |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                   | `""`            |
-| `externalDatabase.host`                     | Host of the external database                                                              | `localhost`     |
-| `externalDatabase.user`                     | non-root Username for EJBCA Database                                                       | `bn_ejbca`      |
-| `externalDatabase.password`                 | Password for the above username                                                            | `""`            |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key | `""`            |
-| `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca` |
-| `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
+| Name                                        | Description                                                                                                                                                                                                                | Value           |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                                                                                                                                      | `true`          |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                                                                                                                                       | `standalone`    |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                                                                                                                       | `""`            |
+| `mariadb.auth.database`                     | Database name to create                                                                                                                                                                                                    | `bitnami_ejbca` |
+| `mariadb.auth.username`                     | Database user to create                                                                                                                                                                                                    | `bn_ejbca`      |
+| `mariadb.auth.password`                     | Password for the database                                                                                                                                                                                                  | `""`            |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                                                                                                                      | `true`          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                                                                                                                            | `""`            |
+| `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                                                                                                                                                              | `ReadWriteOnce` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                                                                                                                            | `8Gi`           |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                                                                                                   | `""`            |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                                                                                                                                   | `""`            |
+| `mariadb.primary.resourcesPreset`           | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`         |
+| `mariadb.primary.resources`                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`            |
+| `externalDatabase.host`                     | Host of the external database                                                                                                                                                                                              | `localhost`     |
+| `externalDatabase.user`                     | non-root Username for EJBCA Database                                                                                                                                                                                       | `bn_ejbca`      |
+| `externalDatabase.password`                 | Password for the above username                                                                                                                                                                                            | `""`            |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key                                                                                                                                 | `""`            |
+| `externalDatabase.database`                 | Name of the existing database                                                                                                                                                                                              | `bitnami_ejbca` |
+| `externalDatabase.port`                     | Database port number                                                                                                                                                                                                       | `3306`          |
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                               | Value   |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                   | `false` |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                 | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.             | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                         | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by EJBCA's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                          | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes EJBCA only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access EJBCA. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access EJBCA. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca) image documentation.
 
@@ -364,6 +364,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ejbca
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
+### To 13.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 12.0.0
 

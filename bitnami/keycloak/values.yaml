@@ -232,6 +232,10 @@ existingConfigmap: ""
 ## @param extraStartupArgs Extra default startup args
 ##
 extraStartupArgs: ""
+## @param enableDefaultInitContainers Deploy default init containers
+## Disable this parameter could be helpful for 3rd party images e.g native Keycloak image.
+##
+enableDefaultInitContainers: true
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#initializing-a-new-instance
@@ -328,7 +332,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
 ## Keycloak resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "none"
@@ -1078,7 +1082,7 @@ keycloakConfigCli:
   hostAliases: []
   ## Keycloak config CLI resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param keycloakConfigCli.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if keycloakConfigCli.resources is set (keycloakConfigCli.resources is recommended for production).
+  ## @param keycloakConfigCli.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if keycloakConfigCli.resources is set (keycloakConfigCli.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
