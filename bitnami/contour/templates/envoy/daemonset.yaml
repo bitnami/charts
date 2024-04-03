@@ -248,6 +248,9 @@ spec:
             successThreshold: {{ .Values.envoy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.readinessProbe.failureThreshold }}
           {{- end }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- end }}
           {{- if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
