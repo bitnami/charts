@@ -237,7 +237,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
-    add: ["CHOWN", "CHMOD", "FOWNER", "SETGID", "SETUID", "DAC_OVERRIDE"]
+    add: ["CHOWN", "CHMOD", "SYS_CHROOT", "FOWNER", "SETGID", "SETUID", "DAC_OVERRIDE"]
   seccompProfile:
     type: "RuntimeDefault"
 ## Configure extra options for Redmine containers' liveness, readiness and startup probes
