@@ -131,6 +131,9 @@ clusterOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param clusterOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
   ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -207,7 +210,7 @@ clusterOperator:
   customStartupProbe: {}
   ## RabbitMQ Cluster Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
+  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -661,6 +664,9 @@ msgTopologyOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param msgTopologyOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
   ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -749,7 +755,7 @@ msgTopologyOperator:
   existingWebhookCertCABundle: ""
   ## RabbitMQ Messaging Topology Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
+  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
