@@ -127,12 +127,12 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -187,6 +187,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `smtpPassword`                                      | SMTP password                                                                                                                                                                                              | `""`                       |
 | `smtpProtocol`                                      | SMTP Protocol (options: ssl,tls, nil)                                                                                                                                                                      | `""`                       |
 | `containerPorts`                                    | Container ports                                                                                                                                                                                            | `{}`                       |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                                                                                                               | `[]`                       |
 | `persistence.enabled`                               | Enable persistence using PVC                                                                                                                                                                               | `true`                     |
 | `persistence.storageClass`                          | OpenCart Data Persistent Volume Storage Class                                                                                                                                                              | `""`                       |
 | `persistence.accessModes`                           | PVC Access Mode for OpenCart volume                                                                                                                                                                        | `["ReadWriteOnce"]`        |
@@ -201,7 +202,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                  | `[]`                       |
 | `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                | `{}`                       |
 | `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                             | `{}`                       |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`                     |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                    |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                       |
 | `podSecurityContext.enabled`                        | Enable OpenCart pods' Security Context                                                                                                                                                                     | `true`                     |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`                   |
@@ -211,9 +212,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                       | `true`                     |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `1001`                     |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                | `1001`                     |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                              | `true`                     |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                | `false`                    |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`                    |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `true`                     |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                  | `false`                    |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`                  |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault`           |
@@ -282,26 +284,28 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value               |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`              |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`        |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_opencart`  |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_opencart`       |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`                |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`              |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`               |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`              |
-| `externalDatabase.user`                     | Existing username in the external db                                                     | `bn_opencart`       |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_opencart`  |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                |
+| Name                                        | Description                                                                                                                                                                                                                | Value               |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements                                                                                                                                       | `true`              |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                                                                                                                        | `standalone`        |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                                                                                                                       | `""`                |
+| `mariadb.auth.database`                     | Database name to create                                                                                                                                                                                                    | `bitnami_opencart`  |
+| `mariadb.auth.username`                     | Database user to create                                                                                                                                                                                                    | `bn_opencart`       |
+| `mariadb.auth.password`                     | Password for the database                                                                                                                                                                                                  | `""`                |
+| `mariadb.primary.resourcesPreset`           | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`             |
+| `mariadb.primary.resources`                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                                                                                                                      | `true`              |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                                                                                                                            | `""`                |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                                                                                                                                    | `["ReadWriteOnce"]` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                                                                                                                            | `8Gi`               |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                                                                                                   | `""`                |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                                                                                                                                   | `""`                |
+| `externalDatabase.host`                     | Host of the existing database                                                                                                                                                                                              | `""`                |
+| `externalDatabase.port`                     | Port of the existing database                                                                                                                                                                                              | `3306`              |
+| `externalDatabase.user`                     | Existing username in the external db                                                                                                                                                                                       | `bn_opencart`       |
+| `externalDatabase.password`                 | Password for the above username                                                                                                                                                                                            | `""`                |
+| `externalDatabase.database`                 | Name of the existing database                                                                                                                                                                                              | `bitnami_opencart`  |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                                                                                                                                                             | `""`                |
 
 ### Volume Permissions parameters
 
@@ -313,7 +317,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                              | `""`                       |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                                                                                                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                                                                                                               | `[]`                       |
-| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
 
 ### Metrics parameters
@@ -326,7 +330,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                            | `""`                              |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                                                                                                                                          | `IfNotPresent`                    |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                                                                                                           | `[]`                              |
-| `metrics.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `none`                            |
+| `metrics.resourcesPreset`   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `nano`                            |
 | `metrics.resources`         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                              |
 | `metrics.podAnnotations`    | Metrics exporter pod Annotation and Labels                                                                                                                                                                                 | `{}`                              |
 
@@ -354,23 +358,15 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                                  | Value   |
-| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                      | `false` |
-| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                               | `false` |
-| `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                       | `{}`    |
-| `networkPolicy.metrics.podSelector`                           | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                   | `{}`    |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                    | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                            | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by OpenCart's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                             | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes OpenCart only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access OpenCart. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access OpenCart. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                           | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                               | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                   | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 The above parameters map to the env variables defined in [bitnami/opencart](https://github.com/bitnami/containers/tree/main/bitnami/opencart). For more information please refer to the [bitnami/opencart](https://github.com/bitnami/containers/tree/main/bitnami/opencart) image documentation.
 
@@ -416,6 +412,20 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/openc
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 18.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
+Also, this major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
 
 ### To 17.0.0
 
