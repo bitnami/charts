@@ -1416,9 +1416,9 @@ externalDatabase:
   type: ""
   host: localhost
   port: 3306
-  username: bn_argo-workflows
+  username: bn_wordpress
   password: ""
-  database: bitnami_argo-workflows
+  database: bitnami_wordpress
   ## NOTE: Must contain key `database-password`
   ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
   ##
