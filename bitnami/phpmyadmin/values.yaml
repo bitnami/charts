@@ -50,7 +50,7 @@ clusterDomain: cluster.local
 extraDeploy: []
 ## @section phpMyAdmin parameters
 
-## Bitnami WordPress image version
+## Bitnami PhpMyAdmin image version
 ## ref: https://hub.docker.com/r/bitnami/phpmyadmin/tags/
 ## @param image.registry [default: REGISTRY_NAME] phpMyAdmin image registry
 ## @param image.repository [default: REPOSITORY_NAME/phpmyadmin] phpMyAdmin image repository
