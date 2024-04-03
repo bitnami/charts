@@ -253,7 +253,7 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
-    add: ["CHOWN", "SYS_CHROOT", "SETGID", "SETUID", "DAC_OVERRIDE"]
+    add: ["CHOWN", "CHMOD", "FOWNER", "SYS_CHROOT", "SETGID", "SETUID", "DAC_OVERRIDE"]
   seccompProfile:
     type: "RuntimeDefault"
 ## Configure extra options for Odoo containers' liveness and readiness probes
