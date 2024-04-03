@@ -50,7 +50,7 @@ spec:
         - port: {{ .Values.containerPorts.http }}
         - port: {{ .Values.containerPorts.https }}
         {{- range .Values.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
