@@ -203,7 +203,7 @@ smtpProtocol: ""
 containerPorts:
   http: 8080
   https: 8443
-## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## @param extraContainerPorts Optionally specify extra list of additional ports for OpenCart container(s)
 ## e.g:
 ## extraContainerPorts:
 ##   - name: myservice

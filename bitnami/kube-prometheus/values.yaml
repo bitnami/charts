@@ -2614,7 +2614,7 @@ blackboxExporter:
   containerPorts:
     http: 19115
   serviceAccount:
-    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for Prometheus Operator pod
     ##
     create: true
     ## @param blackboxExporter.serviceAccount.name The name of the ServiceAccount to use.

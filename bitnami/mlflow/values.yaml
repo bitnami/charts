@@ -735,7 +735,7 @@ tracking:
     ## @param tracking.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-    ## @param tracking.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## @param tracking.persistence.selector Selector to match an existing Persistent Volume for MLflow data PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.
     ## selector:

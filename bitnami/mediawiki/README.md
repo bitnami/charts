@@ -394,7 +394,7 @@ Also, this major release bumps the MariaDB chart version to [18.x.x](https://git
 
 ### To 19.0.0
 
-This major release bumps the and MariaDB chart version to [16.x.x](https://github.com/bitnami/charts/pull/23054); no major issues are expected during the upgrade
+This major release bumps the MariaDB chart version to [16.x.x](https://github.com/bitnami/charts/pull/23054); no major issues are expected during the upgrade
 
 ### To 18.0.0
 

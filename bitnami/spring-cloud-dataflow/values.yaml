@@ -488,7 +488,7 @@ server:
     ## @param server.ingress.enabled Enable ingress controller resource
     ##
     enabled: false
-    ## @param server.ingress.path The Path to WordPress. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+    ## @param server.ingress.path The Path to Spring Cloud Dataflow. You may need to set this to '/*' in order to use this with ALB ingress controllers.
     ##
     path: /
     ## @param server.ingress.apiVersion Force Ingress API version (automatically detected if not set)
