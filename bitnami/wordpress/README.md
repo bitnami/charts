@@ -617,6 +617,10 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 22.0.0
+
+This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
 ### To 21.0.0
 
 This major bump changes the following security defaults:
