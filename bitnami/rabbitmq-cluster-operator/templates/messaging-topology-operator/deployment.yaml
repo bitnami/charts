@@ -19,6 +19,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.msgTopologyOperator.replicaCount }}
+  revisionHistoryLimit: {{ .Values.msgTopologyOperator.revisionHistoryLimit }}
   {{- if .Values.msgTopologyOperator.updateStrategy }}
   strategy: {{- toYaml .Values.msgTopologyOperator.updateStrategy | nindent 4 }}
   {{- end }}
@@ -104,7 +105,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if not .Values.msgTopologyOperator.watchAllNamespaces }}      
+            {{- if not .Values.msgTopologyOperator.watchAllNamespaces }}
             {{- $watchNamespaces := default (list (include "common.names.namespace" .)) .Values.msgTopologyOperator.watchNamespaces }}
             - name: OPERATOR_SCOPE_NAMESPACE
               value: {{ join "," $watchNamespaces | quote }}
