@@ -12,7 +12,7 @@ Return  the proper Storage Class
 
 {{- $storageClass := .persistence.storageClass -}}
 {{- if .global -}}
-    {{- if .global.storageClass -}}
+    {{- if and ( not ( empty .global.storageClass ) ) ( empty .persistence.storageClass ) -}}
         {{- $storageClass = .global.storageClass -}}
     {{- end -}}
 {{- end -}}
