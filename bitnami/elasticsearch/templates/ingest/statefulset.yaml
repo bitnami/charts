@@ -127,7 +127,7 @@ spec:
               . /opt/bitnami/scripts/elasticsearch-env.sh
 
               if ! is_dir_empty "$DB_DEFAULT_PLUGINS_DIR"; then
-                  cp -nr / "$DB_DEFAULT_PLUGINS_DIR"/* /plugins
+                  cp -nr "$DB_DEFAULT_PLUGINS_DIR"/* /plugins
               fi
           volumeMounts:
             - name: empty-dir
