@@ -552,15 +552,26 @@ server:
     ## key and certificate should start with -----BEGIN CERTIFICATE----- or
     ## -----BEGIN RSA PRIVATE KEY-----
     ##
-    ## name should line up with a tlsSecret set further up
+    ## name should line up with a tlsSecret set further up:
+    ## e.g:
+    ## secrets:
+    ##   - name: dataflow.local-tls
+    ##     key: |
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##     certificate: |
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##
     ## If you're using cert-manager, this is unneeded, as it will create the secret for you if it is not set
     ##
     ## It is also possible to create and manage the certificates outside of this helm chart
-    ## Please see README.md for more information
+    ## In this case specify only the name of existing secret without entries for container and key:
     ## e.g:
-    ## - name: dataflow.local-tls
-    ##   key:
-    ##   certificate:
+    ## secrets:
+    ##   - name: dataflow.local-tls
+    ##
+    ## Please see README.md for more information
     ##
     secrets: []
     ## @param server.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
