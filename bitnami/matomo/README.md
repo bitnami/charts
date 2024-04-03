@@ -467,10 +467,10 @@ This major bump changes the following security defaults:
 - `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
 - `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
 - The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
-- This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804).
+
 This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
-; no major issues are expected during the upgrade.
+Also, this major release bumps the MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
 
 ### To 6.0.0
 
