@@ -565,7 +565,7 @@ sidekiq:
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
-      add: ["CAP_CHOWN"]
+    add: ["CAP_CHOWN", "CAP_SETGID", "CAP_SETUID", "CAP_DAC_OVERRIDE"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param sidekiq.lifecycleHooks for the Sidekiq container(s) to automate configuration before or after startup
