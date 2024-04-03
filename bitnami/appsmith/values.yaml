@@ -978,7 +978,7 @@ backend:
     ## @param backend.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-    ## @param backend.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## @param backend.persistence.selector Selector to match an existing Persistent Volume for Appsmith data PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.
     ## selector:
