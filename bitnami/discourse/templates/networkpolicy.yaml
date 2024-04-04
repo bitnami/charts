@@ -49,7 +49,7 @@ spec:
     - ports:
         - port: {{ .Values.discourse.containerPorts.http }}
         {{- range .Values.discourse.extraContainerPorts }}
-        - port: {{ . }}
+        - port: {{ .containerPort }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
