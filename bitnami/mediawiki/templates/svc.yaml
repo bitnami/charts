@@ -35,14 +35,14 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
+      port: {{ .Values.service.ports.http }}
       targetPort: http
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.http))) }}
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- end }}
-    {{- if or .Values.service.ports.https .Values.service.httpsPort }}
+    {{- if .Values.service.ports.https }}
     - name: https
-      port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
+      port: {{ .Values.service.ports.https }}
       targetPort: https
       {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePorts.https))) }}
       nodePort: {{ .Values.service.nodePorts.https }}

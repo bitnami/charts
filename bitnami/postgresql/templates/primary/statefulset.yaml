@@ -494,13 +494,11 @@ spec:
             - name: dshm
               mountPath: /dev/shm
             {{- end }}
-            {{- if .Values.primary.persistence.enabled }}
             - name: {{ .Values.primary.persistence.volumeName }}
               mountPath: {{ .Values.primary.persistence.mountPath }}
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if or .Values.primary.configuration .Values.primary.pgHbaConfiguration .Values.primary.existingConfigmap }}
             - name: postgresql-config
               mountPath: {{ .Values.primary.persistence.mountPath }}/conf
