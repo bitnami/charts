@@ -190,7 +190,7 @@ replicaCount: 1
 ##
 containerPorts:
   http: 8069
-## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## @param extraContainerPorts Optionally specify extra list of additional ports for Odoo container(s)
 ## e.g:
 ## extraContainerPorts:
 ##   - name: myservice
