@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -180,6 +180,13 @@ smtpProtocol: ""
 containerPorts:
   http: 8080
   https: 8443
+## @param extraContainerPorts Optionally specify extra list of additional ports for Joomla! container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ## @param persistence.enabled Enable persistence using PVC
@@ -262,7 +269,7 @@ tolerations: []
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -293,6 +300,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -302,8 +310,9 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
@@ -629,6 +638,27 @@ mariadb:
       ## Use an existing PVC
       ##
       existingClaim: ""
+    ## MariaDB primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mariadb.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param mariadb.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External database configuration
 ##
 externalDatabase:
@@ -681,7 +711,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -704,91 +734,58 @@ metrics:
 
 ## Add networkpolicies
 ##
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  metrics:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: monitoring
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: monitoring
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingress:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: ingress
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: ingress
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by Joomla's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Joomla only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Joomla. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Joomla. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  ingressRules:
-    ## mariadb backend only can be accessed from Joomla
-    ##
-    backendOnlyAccessibleByFrontend: false
-    customBackendSelector: {}
-    ## Allow only from the indicated:
-    ##
-    accessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-    ## custom ingress rules
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
   ##
-  egressRules:
-    ## Deny connections to external. This is not compatible with an external database.
-    ##
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}

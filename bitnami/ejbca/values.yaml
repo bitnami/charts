@@ -421,7 +421,7 @@ customReadinessProbe: {}
 containerPorts:
   http: 8080
   https: 8443
-## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## @param extraContainerPorts Optionally specify extra list of additional ports for EJBCA container(s)
 ## e.g:
 ## extraContainerPorts:
 ##   - name: myservice
@@ -432,7 +432,7 @@ extraContainerPorts: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for EJBCA pod
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.

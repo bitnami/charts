@@ -667,7 +667,7 @@ persistence:
   ## SubPathExpr and SubPath are mutually exclusive.
   ##
   subPathExpr: ""
-  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Solr data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
   ## selector:
