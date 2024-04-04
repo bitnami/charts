@@ -9,4 +9,8 @@ service:
 readinessProbe:
   initialDelaySeconds: 90
 cronjobs:
-  enabled: false
+  archive:
+    enabled: false
+  taskScheduler:
+    enabled: false
+

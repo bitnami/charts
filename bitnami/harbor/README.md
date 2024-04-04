@@ -49,26 +49,131 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/harbor
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
+### Resource requests and limits
 
-```console
-helm delete --purge my-release
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Configure the way how to expose Harbor core
+
+You can expose Harbor core using two methods:
+
+- An Ingress Controller, `exposureType` should be set to `ingress`.
+  - An ingress controller must be installed in the Kubernetes cluster.
+  - If the TLS is disabled, the port must be included in the command when pulling/pushing images. Refer to issue [#5291](https://github.com/goharbor/harbor/issues/5291) for the detail.
+- An NGINX Proxy, `exposureType` should be set to `proxy`. There are three ways to do so depending on the NGINX Proxy service type:
+  - **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster:
+  - **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`.
+  - **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer.
+
+### Configure the external URL
+
+The external URL for Harbor core service is used to:
+
+1. populate the docker/helm commands showed on portal
+
+Format: `protocol://domain[:port]`. Usually:
+
+- if expose Harbor core service via Ingress, the `domain` should be the value of `ingress.core.hostname`.
+- if expose Harbor core via NGINX proxy using a `ClusterIP` service type, the `domain` should be the value of `service.clusterIP`.
+- if expose Harbor core via NGINX proxy using a `NodePort` service type, the `domain` should be the IP address of one Kubernetes node.
+- if expose Harbor core via NGINX proxy using a `LoadBalancer` service type, set the `domain` as your own domain name and add a CNAME record to map the domain name to the one you got from the cloud provider.
+
+If Harbor is deployed behind the proxy, set it as the URL of proxy.
+
+### Sidecars and Init Containers
+
+If you have a need for additional containers to run within the same pod as any of the Harbor components (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter inside each component subsection. Simply define your container according to the Kubernetes container spec.
+
+```yaml
+core:
+  sidecars:
+    - name: your-image-name
+      image: your-image
+      imagePullPolicy: Always
+      ports:
+        - name: portname
+        containerPort: 1234
 ```
 
-Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manually delete the PVCs.
+Similarly, you can add extra init containers using the `initContainers` parameter.
+
+```yaml
+core:
+  initContainers:
+    - name: your-image-name
+      image: your-image
+      imagePullPolicy: Always
+      ports:
+        - name: portname
+          containerPort: 1234
+```
+
+### Adding extra environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each component subsection.
+
+```yaml
+core:
+  extraEnvVars:
+    - name: LOG_LEVEL
+      value: error
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
+
+### Configure data persistence
+
+- **Disable**: The data does not survive the termination of a pod.
+- **Persistent Volume Claim(default)**: A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `storageClass` or set `existingClaim` if you have already existing persistent volumes to use.
+- **External Storage(only for images and charts)**: For images and charts, the external storages are supported: `azure`, `gcs`, `s3` `swift` and `oss`.
+
+### Configure the secrets
+
+- **Secrets**: Secrets are used for encryption and to secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure then statically through the helm values. it expects the "key or password", not the secret name where secrets are stored.
+- **Certificates**: Used for token encryption/decryption. Fill `core.secretName` to configure.
+
+Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
+
+If you want to manage full Secret objects by your own, you can use existingSecret & existingEnvVarsSecret parameters. This could be useful for some secure GitOps workflows, of course, you will have to ensure to define all expected keys for those secrets.
+
+The core service have two `Secret` objects, the default one for data & communication which is very important as it's contains the data encryption key of your harbor instance ! and a second one which contains standard passwords, database access password, ...
+Keep in mind that the `HARBOR_ADMIN_PASSWORD` is only used to boostrap your harbor instance, if you update it after the deployment, the password is updated in database, but the secret will remain the initial one.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+### Adjust permissions of persistent volume mountpoint
+
+As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
+
+By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
+As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
+
+You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
 
 ## Parameters
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common Parameters
 
@@ -250,10 +355,10 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.image.digest`                            | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                              | `""`                       |
 | `volumePermissions.image.pullPolicy`                        | Init container volume-permissions image pull policy                                                                                                                                                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                       | Init container volume-permissions image pull secrets                                                                                                                                                                                           | `[]`                       |
-| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`                     |
+| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable init container Security Context                                                                                                                                                                                                         | `true`                     |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `nil`                      |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`      | User ID for the init container                                                                                                                                                                                                                 | `0`                        |
 
 ### NGINX Parameters
@@ -299,7 +404,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `nginx.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                    | `{}`                    |
 | `nginx.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                   | `{}`                    |
 | `nginx.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                     | `{}`                    |
-| `nginx.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if nginx.resources is set (nginx.resources is recommended for production). | `none`                  |
+| `nginx.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if nginx.resources is set (nginx.resources is recommended for production). | `small`                 |
 | `nginx.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                      | `{}`                    |
 | `nginx.podSecurityContext.enabled`                        | Enabled NGINX pods' Security Context                                                                                                                                                                                   | `true`                  |
 | `nginx.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                     | `Always`                |
@@ -307,12 +412,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `nginx.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                            | `[]`                    |
 | `nginx.podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                                                                                                                                               | `1001`                  |
 | `nginx.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                   | `true`                  |
-| `nginx.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                       | `nil`                   |
+| `nginx.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                       | `{}`                    |
 | `nginx.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                             | `1001`                  |
-| `nginx.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                            | `0`                     |
+| `nginx.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                            | `1001`                  |
 | `nginx.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                          | `true`                  |
 | `nginx.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                            | `false`                 |
-| `nginx.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                | `false`                 |
+| `nginx.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                | `true`                  |
 | `nginx.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                              | `false`                 |
 | `nginx.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                     | `["ALL"]`               |
 | `nginx.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                       | `RuntimeDefault`        |
@@ -386,7 +491,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `portal.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                      | `{}`                            |
 | `portal.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                     | `{}`                            |
 | `portal.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                       | `{}`                            |
-| `portal.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if portal.resources is set (portal.resources is recommended for production). | `none`                          |
+| `portal.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if portal.resources is set (portal.resources is recommended for production). | `small`                         |
 | `portal.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`                            |
 | `portal.podSecurityContext.enabled`                        | Enabled Harbor Portal pods' Security Context                                                                                                                                                                             | `true`                          |
 | `portal.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                       | `Always`                        |
@@ -394,12 +499,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `portal.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                              | `[]`                            |
 | `portal.podSecurityContext.fsGroup`                        | Set Harbor Portal pod's Security Context fsGroup                                                                                                                                                                         | `1001`                          |
 | `portal.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                     | `true`                          |
-| `portal.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `nil`                           |
+| `portal.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                         | `{}`                            |
 | `portal.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                               | `1001`                          |
-| `portal.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                              | `0`                             |
+| `portal.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                              | `1001`                          |
 | `portal.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                            | `true`                          |
 | `portal.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                              | `false`                         |
-| `portal.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                  | `false`                         |
+| `portal.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                  | `true`                          |
 | `portal.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                | `false`                         |
 | `portal.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                       | `["ALL"]`                       |
 | `portal.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                         | `RuntimeDefault`                |
@@ -488,7 +593,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `core.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                                                      | `{}`                          |
 | `core.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                                                     | `{}`                          |
 | `core.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                                                       | `{}`                          |
-| `core.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if core.resources is set (core.resources is recommended for production).                                                                     | `none`                        |
+| `core.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if core.resources is set (core.resources is recommended for production).                                                                     | `small`                       |
 | `core.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                                        | `{}`                          |
 | `core.podSecurityContext.enabled`                        | Enabled Harbor Core pods' Security Context                                                                                                                                                                                                                                               | `true`                        |
 | `core.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                                                       | `Always`                      |
@@ -496,12 +601,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `core.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                                                              | `[]`                          |
 | `core.podSecurityContext.fsGroup`                        | Set Harbor Core pod's Security Context fsGroup                                                                                                                                                                                                                                           | `1001`                        |
 | `core.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                                     | `true`                        |
-| `core.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                                         | `nil`                         |
+| `core.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                                         | `{}`                          |
 | `core.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                                               | `1001`                        |
-| `core.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                                              | `0`                           |
+| `core.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                                              | `1001`                        |
 | `core.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                                            | `true`                        |
 | `core.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                                              | `false`                       |
-| `core.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                                  | `false`                       |
+| `core.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                                  | `true`                        |
 | `core.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                                                | `false`                       |
 | `core.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                                                       | `["ALL"]`                     |
 | `core.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                                                         | `RuntimeDefault`              |
@@ -584,7 +689,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `jobservice.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                              | `{}`                                |
 | `jobservice.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                             | `{}`                                |
 | `jobservice.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                               | `{}`                                |
-| `jobservice.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jobservice.resources is set (jobservice.resources is recommended for production). | `none`                              |
+| `jobservice.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jobservice.resources is set (jobservice.resources is recommended for production). | `small`                             |
 | `jobservice.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                | `{}`                                |
 | `jobservice.podSecurityContext.enabled`                        | Enabled Harbor Jobservice pods' Security Context                                                                                                                                                                                 | `true`                              |
 | `jobservice.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                               | `Always`                            |
@@ -592,12 +697,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `jobservice.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                      | `[]`                                |
 | `jobservice.podSecurityContext.fsGroup`                        | Set Harbor Jobservice pod's Security Context fsGroup                                                                                                                                                                             | `1001`                              |
 | `jobservice.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                             | `true`                              |
-| `jobservice.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                 | `nil`                               |
+| `jobservice.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                 | `{}`                                |
 | `jobservice.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                       | `1001`                              |
-| `jobservice.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                      | `0`                                 |
+| `jobservice.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                      | `1001`                              |
 | `jobservice.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                    | `true`                              |
 | `jobservice.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                      | `false`                             |
-| `jobservice.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                          | `false`                             |
+| `jobservice.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                          | `true`                              |
 | `jobservice.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                        | `false`                             |
 | `jobservice.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                               | `["ALL"]`                           |
 | `jobservice.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                 | `RuntimeDefault`                    |
@@ -721,15 +826,15 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.server.customLivenessProbe`                                   | Custom livenessProbe that overrides the default one                                                                                                                                                                                                                       | `{}`                                                                                |
 | `registry.server.customReadinessProbe`                                  | Custom readinessProbe that overrides the default one                                                                                                                                                                                                                      | `{}`                                                                                |
 | `registry.server.customStartupProbe`                                    | Custom startupProbe that overrides the default one                                                                                                                                                                                                                        | `{}`                                                                                |
-| `registry.server.resourcesPreset`                                       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if registry.server.resources is set (registry.server.resources is recommended for production).                                | `none`                                                                              |
+| `registry.server.resourcesPreset`                                       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if registry.server.resources is set (registry.server.resources is recommended for production).                                | `small`                                                                             |
 | `registry.server.resources`                                             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                         | `{}`                                                                                |
 | `registry.server.containerSecurityContext.enabled`                      | Enabled containers' Security Context                                                                                                                                                                                                                                      | `true`                                                                              |
-| `registry.server.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                                                                                                                                                                                          | `nil`                                                                               |
+| `registry.server.containerSecurityContext.seLinuxOptions`               | Set SELinux options in container                                                                                                                                                                                                                                          | `{}`                                                                                |
 | `registry.server.containerSecurityContext.runAsUser`                    | Set containers' Security Context runAsUser                                                                                                                                                                                                                                | `1001`                                                                              |
-| `registry.server.containerSecurityContext.runAsGroup`                   | Set containers' Security Context runAsGroup                                                                                                                                                                                                                               | `0`                                                                                 |
+| `registry.server.containerSecurityContext.runAsGroup`                   | Set containers' Security Context runAsGroup                                                                                                                                                                                                                               | `1001`                                                                              |
 | `registry.server.containerSecurityContext.runAsNonRoot`                 | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                             | `true`                                                                              |
 | `registry.server.containerSecurityContext.privileged`                   | Set container's Security Context privileged                                                                                                                                                                                                                               | `false`                                                                             |
-| `registry.server.containerSecurityContext.readOnlyRootFilesystem`       | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                   | `false`                                                                             |
+| `registry.server.containerSecurityContext.readOnlyRootFilesystem`       | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                   | `true`                                                                              |
 | `registry.server.containerSecurityContext.allowPrivilegeEscalation`     | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                                 | `false`                                                                             |
 | `registry.server.containerSecurityContext.capabilities.drop`            | List of capabilities to be dropped                                                                                                                                                                                                                                        | `["ALL"]`                                                                           |
 | `registry.server.containerSecurityContext.seccompProfile.type`          | Set container's Security Context seccomp profile                                                                                                                                                                                                                          | `RuntimeDefault`                                                                    |
@@ -772,15 +877,15 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `registry.controller.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                                       | `{}`                                                                                |
 | `registry.controller.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                                      | `{}`                                                                                |
 | `registry.controller.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                                        | `{}`                                                                                |
-| `registry.controller.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if registry.controller.resources is set (registry.controller.resources is recommended for production).                        | `none`                                                                              |
+| `registry.controller.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if registry.controller.resources is set (registry.controller.resources is recommended for production).                        | `small`                                                                             |
 | `registry.controller.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                         | `{}`                                                                                |
 | `registry.controller.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                                      | `true`                                                                              |
-| `registry.controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                          | `nil`                                                                               |
+| `registry.controller.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                                          | `{}`                                                                                |
 | `registry.controller.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                                                | `1001`                                                                              |
-| `registry.controller.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                               | `0`                                                                                 |
+| `registry.controller.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                                               | `1001`                                                                              |
 | `registry.controller.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                                             | `true`                                                                              |
 | `registry.controller.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                                               | `false`                                                                             |
-| `registry.controller.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                   | `false`                                                                             |
+| `registry.controller.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                                                   | `true`                                                                              |
 | `registry.controller.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                                                 | `false`                                                                             |
 | `registry.controller.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                                        | `["ALL"]`                                                                           |
 | `registry.controller.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                                          | `RuntimeDefault`                                                                    |
@@ -838,7 +943,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `trivy.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                    | `{}`                                   |
 | `trivy.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                   | `{}`                                   |
 | `trivy.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                     | `{}`                                   |
-| `trivy.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if trivy.resources is set (trivy.resources is recommended for production). | `none`                                 |
+| `trivy.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if trivy.resources is set (trivy.resources is recommended for production). | `small`                                |
 | `trivy.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                      | `{}`                                   |
 | `trivy.podSecurityContext.enabled`                        | Enabled Trivy pods' Security Context                                                                                                                                                                                   | `true`                                 |
 | `trivy.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                     | `Always`                               |
@@ -846,12 +951,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `trivy.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                            | `[]`                                   |
 | `trivy.podSecurityContext.fsGroup`                        | Set Trivy pod's Security Context fsGroup                                                                                                                                                                               | `1001`                                 |
 | `trivy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                   | `true`                                 |
-| `trivy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                       | `nil`                                  |
+| `trivy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                       | `{}`                                   |
 | `trivy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                             | `1001`                                 |
-| `trivy.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                            | `0`                                    |
+| `trivy.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                            | `1001`                                 |
 | `trivy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                          | `true`                                 |
 | `trivy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                            | `false`                                |
-| `trivy.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                | `false`                                |
+| `trivy.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                | `true`                                 |
 | `trivy.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                              | `false`                                |
 | `trivy.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                     | `["ALL"]`                              |
 | `trivy.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                       | `RuntimeDefault`                       |
@@ -925,7 +1030,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `exporter.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                          | `{}`                              |
 | `exporter.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                         | `{}`                              |
 | `exporter.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                           | `{}`                              |
-| `exporter.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if exporter.resources is set (exporter.resources is recommended for production). | `none`                            |
+| `exporter.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if exporter.resources is set (exporter.resources is recommended for production). | `nano`                            |
 | `exporter.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                            | `{}`                              |
 | `exporter.podSecurityContext.enabled`                        | Enabled Exporter pods' Security Context                                                                                                                                                                                      | `true`                            |
 | `exporter.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                           | `Always`                          |
@@ -933,12 +1038,12 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `exporter.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                  | `[]`                              |
 | `exporter.podSecurityContext.fsGroup`                        | Set Exporter pod's Security Context fsGroup                                                                                                                                                                                  | `1001`                            |
 | `exporter.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                            |
-| `exporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`                             |
+| `exporter.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `{}`                              |
 | `exporter.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                            |
-| `exporter.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `0`                               |
+| `exporter.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `1001`                            |
 | `exporter.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                            |
 | `exporter.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                           |
-| `exporter.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`                           |
+| `exporter.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `true`                            |
 | `exporter.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                    | `false`                           |
 | `exporter.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                           | `["ALL"]`                         |
 | `exporter.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                             | `RuntimeDefault`                  |
@@ -975,48 +1080,52 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 ### PostgreSQL Parameters
 
-| Name                                       | Description                                                                                                | Value                          |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `postgresql.enabled`                       | Switch to enable or disable the PostgreSQL helm chart                                                      | `true`                         |
-| `postgresql.auth.enablePostgresUser`       | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user     | `true`                         |
-| `postgresql.auth.postgresPassword`         | Password for the "postgres" admin user                                                                     | `not-secure-database-password` |
-| `postgresql.auth.existingSecret`           | Name of existing secret to use for PostgreSQL credentials                                                  | `""`                           |
-| `postgresql.architecture`                  | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`                   |
-| `postgresql.primary.extendedConfiguration` | Extended PostgreSQL Primary configuration (appended to main or default configuration)                      | `max_connections = 1024
+| Name                                       | Description                                                                                                                                                                                                                | Value                          |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `postgresql.enabled`                       | Switch to enable or disable the PostgreSQL helm chart                                                                                                                                                                      | `true`                         |
+| `postgresql.auth.enablePostgresUser`       | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user                                                                                                                     | `true`                         |
+| `postgresql.auth.postgresPassword`         | Password for the "postgres" admin user                                                                                                                                                                                     | `not-secure-database-password` |
+| `postgresql.auth.existingSecret`           | Name of existing secret to use for PostgreSQL credentials                                                                                                                                                                  | `""`                           |
+| `postgresql.architecture`                  | PostgreSQL architecture (`standalone` or `replication`)                                                                                                                                                                    | `standalone`                   |
+| `postgresql.primary.extendedConfiguration` | Extended PostgreSQL Primary configuration (appended to main or default configuration)                                                                                                                                      | `max_connections = 1024
 `      |
-| `postgresql.primary.initdb.scripts`        | Initdb scripts to create Harbor databases                                                                  | `{}`                           |
-| `postgresql.image.registry`                | PostgreSQL image registry                                                                                  | `REGISTRY_NAME`                |
-| `postgresql.image.repository`              | PostgreSQL image repository                                                                                | `REPOSITORY_NAME/postgresql`   |
-| `postgresql.image.digest`                  | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
-| `externalDatabase.host`                    | Database host                                                                                              | `localhost`                    |
-| `externalDatabase.port`                    | Database port number                                                                                       | `5432`                         |
-| `externalDatabase.user`                    | Non-root username for Harbor                                                                               | `bn_harbor`                    |
-| `externalDatabase.password`                | Password for the non-root username for Harbor                                                              | `""`                           |
-| `externalDatabase.sslmode`                 | External database ssl mode                                                                                 | `disable`                      |
-| `externalDatabase.coreDatabase`            | External database name for core                                                                            | `""`                           |
+| `postgresql.primary.initdb.scripts`        | Initdb scripts to create Harbor databases                                                                                                                                                                                  | `{}`                           |
+| `postgresql.image.registry`                | PostgreSQL image registry                                                                                                                                                                                                  | `REGISTRY_NAME`                |
+| `postgresql.image.repository`              | PostgreSQL image repository                                                                                                                                                                                                | `REPOSITORY_NAME/postgresql`   |
+| `postgresql.image.digest`                  | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                 | `""`                           |
+| `postgresql.primary.resourcesPreset`       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `nano`                         |
+| `postgresql.primary.resources`             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                           |
+| `externalDatabase.host`                    | Database host                                                                                                                                                                                                              | `localhost`                    |
+| `externalDatabase.port`                    | Database port number                                                                                                                                                                                                       | `5432`                         |
+| `externalDatabase.user`                    | Non-root username for Harbor                                                                                                                                                                                               | `bn_harbor`                    |
+| `externalDatabase.password`                | Password for the non-root username for Harbor                                                                                                                                                                              | `""`                           |
+| `externalDatabase.sslmode`                 | External database ssl mode                                                                                                                                                                                                 | `disable`                      |
+| `externalDatabase.coreDatabase`            | External database name for core                                                                                                                                                                                            | `""`                           |
 
 ### Redis&reg; parameters
 
-| Name                                      | Description                                                            | Value        |
-| ----------------------------------------- | ---------------------------------------------------------------------- | ------------ |
-| `redis.enabled`                           | Switch to enable or disable the Redis&reg; helm                        | `true`       |
-| `redis.auth.enabled`                      | Enable password authentication                                         | `false`      |
-| `redis.auth.password`                     | Redis&reg; password                                                    | `""`         |
-| `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials             | `""`         |
-| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication` | `standalone` |
-| `redis.sentinel.enabled`                  | Use Redis&reg; Sentinel on Redis&reg; pods.                            | `false`      |
-| `redis.sentinel.masterSet`                | Master set name                                                        | `mymaster`   |
-| `redis.sentinel.service.ports.sentinel`   | Redis&reg; service port for Redis&reg; Sentinel                        | `26379`      |
-| `externalRedis.host`                      | Redis&reg; host                                                        | `localhost`  |
-| `externalRedis.port`                      | Redis&reg; port number                                                 | `6379`       |
-| `externalRedis.password`                  | Redis&reg; password                                                    | `""`         |
-| `externalRedis.coreDatabaseIndex`         | Index for core database                                                | `0`          |
-| `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                          | `1`          |
-| `externalRedis.registryDatabaseIndex`     | Index for registry database                                            | `2`          |
-| `externalRedis.trivyAdapterDatabaseIndex` | Index for trivy adapter database                                       | `5`          |
-| `externalRedis.sentinel.enabled`          | If external redis with sentinal is used, set it to `true`              | `false`      |
-| `externalRedis.sentinel.masterSet`        | Name of sentinel masterSet if sentinel is used                         | `mymaster`   |
-| `externalRedis.sentinel.hosts`            | Sentinel hosts and ports in the format                                 | `""`         |
+| Name                                      | Description                                                                                                                                                                                                              | Value        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
+| `redis.enabled`                           | Switch to enable or disable the Redis&reg; helm                                                                                                                                                                          | `true`       |
+| `redis.auth.enabled`                      | Enable password authentication                                                                                                                                                                                           | `false`      |
+| `redis.auth.password`                     | Redis&reg; password                                                                                                                                                                                                      | `""`         |
+| `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials                                                                                                                                                               | `""`         |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                                                                                                                                   | `standalone` |
+| `redis.sentinel.enabled`                  | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                                                                                              | `false`      |
+| `redis.sentinel.masterSet`                | Master set name                                                                                                                                                                                                          | `mymaster`   |
+| `redis.sentinel.service.ports.sentinel`   | Redis&reg; service port for Redis&reg; Sentinel                                                                                                                                                                          | `26379`      |
+| `redis.master.resourcesPreset`            | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production). | `nano`       |
+| `redis.master.resources`                  | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                        | `{}`         |
+| `externalRedis.host`                      | Redis&reg; host                                                                                                                                                                                                          | `localhost`  |
+| `externalRedis.port`                      | Redis&reg; port number                                                                                                                                                                                                   | `6379`       |
+| `externalRedis.password`                  | Redis&reg; password                                                                                                                                                                                                      | `""`         |
+| `externalRedis.coreDatabaseIndex`         | Index for core database                                                                                                                                                                                                  | `0`          |
+| `externalRedis.jobserviceDatabaseIndex`   | Index for jobservice database                                                                                                                                                                                            | `1`          |
+| `externalRedis.registryDatabaseIndex`     | Index for registry database                                                                                                                                                                                              | `2`          |
+| `externalRedis.trivyAdapterDatabaseIndex` | Index for trivy adapter database                                                                                                                                                                                         | `5`          |
+| `externalRedis.sentinel.enabled`          | If external redis with sentinal is used, set it to `true`                                                                                                                                                                | `false`      |
+| `externalRedis.sentinel.masterSet`        | Name of sentinel masterSet if sentinel is used                                                                                                                                                                           | `mymaster`   |
+| `externalRedis.sentinel.hosts`            | Sentinel hosts and ports in the format                                                                                                                                                                                   | `""`         |
 
 ### Harbor metrics parameters
 
@@ -1057,126 +1166,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/harbo
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Configure the way how to expose Harbor core
-
-You can expose Harbor core using two methods:
-
-- An Ingress Controller, `exposureType` should be set to `ingress`.
-  - An ingress controller must be installed in the Kubernetes cluster.
-  - If the TLS is disabled, the port must be included in the command when pulling/pushing images. Refer to issue [#5291](https://github.com/goharbor/harbor/issues/5291) for the detail.
-- An NGINX Proxy, `exposureType` should be set to `proxy`. There are three ways to do so depending on the NGINX Proxy service type:
-  - **ClusterIP**: Exposes the service on a cluster-internal IP. Choosing this value makes the service only reachable from within the cluster:
-  - **NodePort**: Exposes the service on each Node's IP at a static port (the NodePort). You'll be able to contact the NodePort service, from outside the cluster, by requesting `NodeIP:NodePort`.
-  - **LoadBalancer**: Exposes the service externally using a cloud provider's load balancer.
-
-### Configure the external URL
-
-The external URL for Harbor core service is used to:
-
-1. populate the docker/helm commands showed on portal
-
-Format: `protocol://domain[:port]`. Usually:
-
-- if expose Harbor core service via Ingress, the `domain` should be the value of `ingress.core.hostname`.
-- if expose Harbor core via NGINX proxy using a `ClusterIP` service type, the `domain` should be the value of `service.clusterIP`.
-- if expose Harbor core via NGINX proxy using a `NodePort` service type, the `domain` should be the IP address of one Kubernetes node.
-- if expose Harbor core via NGINX proxy using a `LoadBalancer` service type, set the `domain` as your own domain name and add a CNAME record to map the domain name to the one you got from the cloud provider.
-
-If Harbor is deployed behind the proxy, set it as the URL of proxy.
-
-### Sidecars and Init Containers
-
-If you have a need for additional containers to run within the same pod as any of the Harbor components (e.g. an additional metrics or logging exporter), you can do so via the `sidecars` config parameter inside each component subsection. Simply define your container according to the Kubernetes container spec.
-
-```yaml
-core:
-  sidecars:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-        containerPort: 1234
-```
-
-Similarly, you can add extra init containers using the `initContainers` parameter.
-
-```yaml
-core:
-  initContainers:
-    - name: your-image-name
-      image: your-image
-      imagePullPolicy: Always
-      ports:
-        - name: portname
-          containerPort: 1234
-```
-
-### Adding extra environment variables
-
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each component subsection.
-
-```yaml
-core:
-  extraEnvVars:
-    - name: LOG_LEVEL
-      value: error
-```
-
-Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values inside each component subsection.
-
-### Configure data persistence
-
-- **Disable**: The data does not survive the termination of a pod.
-- **Persistent Volume Claim(default)**: A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `storageClass` or set `existingClaim` if you have already existing persistent volumes to use.
-- **External Storage(only for images and charts)**: For images and charts, the external storages are supported: `azure`, `gcs`, `s3` `swift` and `oss`.
-
-### Configure the secrets
-
-- **Secrets**: Secrets are used for encryption and to secure communication between components. Fill `core.secret`, `jobservice.secret` and `registry.secret` to configure then statically through the helm values. it expects the "key or password", not the secret name where secrets are stored.
-- **Certificates**: Used for token encryption/decryption. Fill `core.secretName` to configure.
-
-Secrets and certificates must be setup to avoid changes on every Helm upgrade (see: [#107](https://github.com/goharbor/harbor-helm/issues/107)).
-
-If you want to manage full Secret objects by your own, you can use existingSecret & existingEnvVarsSecret parameters. This could be useful for some secure GitOps workflows, of course, you will have to ensure to define all expected keys for those secrets.
-
-The core service have two `Secret` objects, the default one for data & communication which is very important as it's contains the data encryption key of your harbor instance ! and a second one which contains standard passwords, database access password, ...
-Keep in mind that the `HARBOR_ADMIN_PASSWORD` is only used to boostrap your harbor instance, if you update it after the deployment, the password is updated in database, but the secret will remain the initial one.
-
-### Setting Pod's affinity
-
-This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
-
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
-
-### Adjust permissions of persistent volume mountpoint
-
-As the images run as non-root by default, it is necessary to adjust the ownership of the persistent volumes so that the containers can write data into it.
-
-By default, the chart is configured to use Kubernetes Security Context to automatically change the ownership of the volume. However, this feature does not work in all Kubernetes distributions.
-As an alternative, this chart supports using an initContainer to change the ownership of the volume before mounting it in the final destination.
-
-You can enable this initContainer by setting `volumePermissions.enabled` to `true`.
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 21.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 20.0.0
 

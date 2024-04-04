@@ -34,6 +34,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: kustomize-controller
     spec:
       serviceAccountName: {{ template "flux.kustomize-controller.serviceAccountName" . }}
@@ -161,8 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.kustomizeController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -170,7 +172,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.kustomizeController.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.kustomizeController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraVolumes "context" $) | nindent 8 }}

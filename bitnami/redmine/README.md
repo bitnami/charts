@@ -45,17 +45,9 @@ The command deploys Redmine on the Kubernetes cluster in the default configurati
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
+## Configuration and installation details
 
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Using PostgreSQL instead of MariaDB
+### Using PostgreSQL instead of MariaDB
 
 This chart includes the option to use a PostgreSQL database for Redmine instead of MariaDB. To use this, set the `databaseType` parameter to `postgresql`:
 
@@ -65,16 +57,189 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
+### Certificates
+
+#### CA Certificates
+
+Custom CA certificates not included in the base docker image can be added with
+the following configuration. The secret must exist in the same namespace as the
+deployment. Will load all certificates files it finds in the secret.
+
+```yaml
+certificates:
+  customCAs:
+    - secret: my-ca-1
+    - secret: my-ca-2
+```
+
+##### CA Certificates Secret
+
+Secret can be created with:
+
+```console
+kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
+```
+
+#### TLS Certificate
+
+A web server TLS Certificate can be injected into the container with the
+following configuration. The certificate will be stored at the location
+specified in the certificateLocation value.
+
+```yaml
+certificates:
+  customCertificate:
+    certificateSecret: my-secret
+    certificateLocation: /ssl/server.pem
+    keyLocation: /ssl/key.pem
+    chainSecret:
+      name: my-cert-chain
+      key: chain.pem
+```
+
+##### TLS Certificate Secret
+
+The certificate tls secret can be created with:
+
+```console
+kubectl create secret tls my-secret --cert tls.crt --key tls.key
+```
+
+The certificate chain is created with:
+
+```console
+kubectl create secret generic my-cert-chain --from-file chain.pem
+```
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Replicas
+
+Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
+
+> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
+> This can be achieved by setting
+>
+> ```yaml
+>   extraEnvVars:
+>    - name: SECRET_KEY_BASE
+>      value: someredminesecretkeybase
+> ```
+
+### Deploying to a sub-URI
+
+(adapted from <https://github.com/bitnami/containers/tree/main/bitnami/redmine>)
+
+On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
+
+#### Create a configmap containing an altered version of post-init.sh
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redmine-init-configmap
+  namespace: <same-namespace-as-the-chart>
+  labels:
+  ...
+data:
+
+  post-init.sh: |-
+    #!/bin/bash
+
+    # REPLACE WITH YOUR OWN SUB-URI
+    SUB_URI_PATH='/redmine'
+
+    #Config files where to apply changes
+    config1=/opt/bitnami/redmine/config.ru
+    config2=/opt/bitnami/redmine/config/environment.rb
+
+    sed -i '$ d' ${config1}
+    echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
+    echo 'run Rails.application' >> ${config1}
+    echo 'end' >> ${config1}
+    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
+
+    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
+    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
+```
+
+#### Add this confimap as a volume/volume mount in the chart values
+
+```yaml
+## Extra volumes to add to the deployment
+##
+extraVolumes:
+  - name: redmine-init-volume
+    configMap:
+      name: redmine-init-configmap
+
+## Extra volume mounts to add to the container
+##
+extraVolumeMounts:
+  - name: "redmine-init-volume"
+    mountPath: "/post-init.sh"
+    subPath: post-init.sh
+```
+
+#### Change the probes URI
+
+```yaml
+## Configure extra options for liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
+##
+livenessProbe:
+  enabled: true
+  path: /redmine/
+---
+readinessProbe:
+  enabled: true
+  path: /redmine/
+```
+
+## Persistence
+
+The [Bitnami Redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image stores the Redmine data and configurations at the `/bitnami/redmine` path of the container.
+
+Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
+
+See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
+
+### Existing PersistentVolumeClaims
+
+The following example includes two PVCs, one for Redmine and another for MariaDB.
+
+1. Create the PersistentVolume
+2. Create the PersistentVolumeClaim
+3. Create the directory, on a worker
+4. Install the chart
+
+```console
+helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB oci://REGISTRY_NAME/REPOSITORY_NAME/redmine
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
 ## Parameters
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -122,68 +287,75 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### Redmine deployment parameters
 
-| Name                                           | Description                                                                                                                                                                                                | Value            |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `replicaCount`                                 | Number of Redmine replicas to deploy                                                                                                                                                                       | `1`              |
-| `containerPorts.http`                          | Redmine HTTP container port                                                                                                                                                                                | `3000`           |
-| `resourcesPreset`                              | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`           |
-| `resources`                                    | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`             |
-| `podSecurityContext.enabled`                   | Enabled Redmine pods' Security Context                                                                                                                                                                     | `true`           |
-| `podSecurityContext.fsGroupChangePolicy`       | Set filesystem group change policy                                                                                                                                                                         | `Always`         |
-| `podSecurityContext.sysctls`                   | Set kernel settings using the sysctl interface                                                                                                                                                             | `[]`             |
-| `podSecurityContext.supplementalGroups`        | Set filesystem extra groups                                                                                                                                                                                | `[]`             |
-| `podSecurityContext.fsGroup`                   | Set Redmine pod's Security Context fsGroup                                                                                                                                                                 | `0`              |
-| `containerSecurityContext.enabled`             | Enabled Redmine containers' Security Context                                                                                                                                                               | `true`           |
-| `containerSecurityContext.seLinuxOptions`      | Set SELinux options in container                                                                                                                                                                           | `nil`            |
-| `containerSecurityContext.runAsUser`           | Set Redmine container's Security Context runAsUser                                                                                                                                                         | `0`              |
-| `containerSecurityContext.seccompProfile.type` | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault` |
-| `livenessProbe.enabled`                        | Enable livenessProbe on Redmine containers                                                                                                                                                                 | `true`           |
-| `livenessProbe.path`                           | Path for to check for livenessProbe                                                                                                                                                                        | `/`              |
-| `livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                                                                                                                    | `300`            |
-| `livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                                                                                                           | `10`             |
-| `livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                                                                                                          | `5`              |
-| `livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                                                                                                        | `6`              |
-| `livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                                                                                                        | `1`              |
-| `readinessProbe.enabled`                       | Enable readinessProbe on Redmine containers                                                                                                                                                                | `true`           |
-| `readinessProbe.path`                          | Path to check for readinessProbe                                                                                                                                                                           | `/`              |
-| `readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                                                                                                                   | `5`              |
-| `readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                                                                                                          | `10`             |
-| `readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                                                                                                         | `5`              |
-| `readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                                                                                                                       | `6`              |
-| `readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                                                                                                                       | `1`              |
-| `startupProbe.enabled`                         | Enable startupProbe on Redmine containers                                                                                                                                                                  | `false`          |
-| `startupProbe.path`                            | Path to check for startupProbe                                                                                                                                                                             | `/`              |
-| `startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                                                                                                                     | `300`            |
-| `startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                                                                                                            | `10`             |
-| `startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                                                                                                           | `5`              |
-| `startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                                                                                                                         | `6`              |
-| `startupProbe.successThreshold`                | Success threshold for startupProbe                                                                                                                                                                         | `1`              |
-| `customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                                                                                                                                        | `{}`             |
-| `customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                                                                                                       | `{}`             |
-| `customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                                                                                                         | `{}`             |
-| `lifecycleHooks`                               | LifecycleHooks to set additional configuration at startup                                                                                                                                                  | `{}`             |
-| `automountServiceAccountToken`                 | Mount Service Account token in pod                                                                                                                                                                         | `false`          |
-| `hostAliases`                                  | Redmine pod host aliases                                                                                                                                                                                   | `[]`             |
-| `podLabels`                                    | Extra labels for Redmine pods                                                                                                                                                                              | `{}`             |
-| `podAnnotations`                               | Annotations for Redmine pods                                                                                                                                                                               | `{}`             |
-| `podAffinityPreset`                            | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `""`             |
-| `podAntiAffinityPreset`                        | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                   | `soft`           |
-| `nodeAffinityPreset.type`                      | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`             |
-| `nodeAffinityPreset.key`                       | Node label key to match. Ignored if `affinity` is set                                                                                                                                                      | `""`             |
-| `nodeAffinityPreset.values`                    | Node label values to match. Ignored if `affinity` is set                                                                                                                                                   | `[]`             |
-| `affinity`                                     | Affinity for pod assignment                                                                                                                                                                                | `{}`             |
-| `nodeSelector`                                 | Node labels for pod assignment                                                                                                                                                                             | `{}`             |
-| `tolerations`                                  | Tolerations for pod assignment                                                                                                                                                                             | `[]`             |
-| `priorityClassName`                            | Redmine pods' Priority Class Name                                                                                                                                                                          | `""`             |
-| `schedulerName`                                | Alternate scheduler                                                                                                                                                                                        | `""`             |
-| `terminationGracePeriodSeconds`                | Seconds Redmine pod needs to terminate gracefully                                                                                                                                                          | `""`             |
-| `topologySpreadConstraints`                    | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                   | `[]`             |
-| `updateStrategy.type`                          | Redmine statefulset strategy type                                                                                                                                                                          | `RollingUpdate`  |
-| `updateStrategy.rollingUpdate`                 | Redmine statefulset rolling update configuration parameters                                                                                                                                                | `{}`             |
-| `extraVolumes`                                 | Optionally specify extra list of additional volumes for Redmine pods                                                                                                                                       | `[]`             |
-| `extraVolumeMounts`                            | Optionally specify extra list of additional volumeMounts for Redmine container(s)                                                                                                                          | `[]`             |
-| `initContainers`                               | Add additional init containers to the Redmine pods                                                                                                                                                         | `[]`             |
-| `sidecars`                                     | Add additional sidecar containers to the Redmine pod                                                                                                                                                       | `[]`             |
+| Name                                                | Description                                                                                                                                                                                                | Value                                                                      |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `replicaCount`                                      | Number of Redmine replicas to deploy                                                                                                                                                                       | `1`                                                                        |
+| `containerPorts.http`                               | Redmine HTTP container port                                                                                                                                                                                | `3000`                                                                     |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                                                                    |
+| `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                                                                       |
+| `podSecurityContext.enabled`                        | Enabled Redmine pods' Security Context                                                                                                                                                                     | `true`                                                                     |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`                                                                   |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                             | `[]`                                                                       |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                | `[]`                                                                       |
+| `podSecurityContext.fsGroup`                        | Set Redmine pod's Security Context fsGroup                                                                                                                                                                 | `0`                                                                        |
+| `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                       | `true`                                                                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `{}`                                                                       |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `0`                                                                        |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                | `0`                                                                        |
+| `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                              | `false`                                                                    |
+| `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                | `false`                                                                    |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`                                                                    |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                  | `false`                                                                    |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`                                                                  |
+| `containerSecurityContext.capabilities.add`         | List of capabilities to be added                                                                                                                                                                           | `["CHOWN","CHMOD","SYS_CHROOT","FOWNER","SETGID","SETUID","DAC_OVERRIDE"]` |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault`                                                           |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Redmine containers                                                                                                                                                                 | `true`                                                                     |
+| `livenessProbe.path`                                | Path for to check for livenessProbe                                                                                                                                                                        | `/`                                                                        |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                    | `300`                                                                      |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                           | `10`                                                                       |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                          | `5`                                                                        |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                        | `6`                                                                        |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                        | `1`                                                                        |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Redmine containers                                                                                                                                                                | `true`                                                                     |
+| `readinessProbe.path`                               | Path to check for readinessProbe                                                                                                                                                                           | `/`                                                                        |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                   | `5`                                                                        |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                          | `10`                                                                       |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                         | `5`                                                                        |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                       | `6`                                                                        |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                       | `1`                                                                        |
+| `startupProbe.enabled`                              | Enable startupProbe on Redmine containers                                                                                                                                                                  | `false`                                                                    |
+| `startupProbe.path`                                 | Path to check for startupProbe                                                                                                                                                                             | `/`                                                                        |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                     | `300`                                                                      |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                            | `10`                                                                       |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                           | `5`                                                                        |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                         | `6`                                                                        |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                         | `1`                                                                        |
+| `customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                        | `{}`                                                                       |
+| `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                       | `{}`                                                                       |
+| `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                         | `{}`                                                                       |
+| `lifecycleHooks`                                    | LifecycleHooks to set additional configuration at startup                                                                                                                                                  | `{}`                                                                       |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                         | `false`                                                                    |
+| `hostAliases`                                       | Redmine pod host aliases                                                                                                                                                                                   | `[]`                                                                       |
+| `podLabels`                                         | Extra labels for Redmine pods                                                                                                                                                                              | `{}`                                                                       |
+| `podAnnotations`                                    | Annotations for Redmine pods                                                                                                                                                                               | `{}`                                                                       |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `""`                                                                       |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                   | `soft`                                                                     |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`                                                                       |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                                                                                                      | `""`                                                                       |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                                                                                                   | `[]`                                                                       |
+| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                | `{}`                                                                       |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                             | `{}`                                                                       |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                             | `[]`                                                                       |
+| `priorityClassName`                                 | Redmine pods' Priority Class Name                                                                                                                                                                          | `""`                                                                       |
+| `schedulerName`                                     | Alternate scheduler                                                                                                                                                                                        | `""`                                                                       |
+| `terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                                                                                                          | `""`                                                                       |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                   | `[]`                                                                       |
+| `updateStrategy.type`                               | Redmine statefulset strategy type                                                                                                                                                                          | `RollingUpdate`                                                            |
+| `updateStrategy.rollingUpdate`                      | Redmine statefulset rolling update configuration parameters                                                                                                                                                | `{}`                                                                       |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for Redmine pods                                                                                                                                       | `[]`                                                                       |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Redmine container(s)                                                                                                                          | `[]`                                                                       |
+| `initContainers`                                    | Add additional init containers to the Redmine pods                                                                                                                                                         | `[]`                                                                       |
+| `sidecars`                                          | Add additional sidecar containers to the Redmine pod                                                                                                                                                       | `[]`                                                                       |
 
 ### Traffic Exposure Parameters
 
@@ -228,7 +400,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 | `persistence.selector`                                      | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                                                                                                                                        | `{}`    |
 | `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                                                                                                                                             | `""`    |
 | `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                                                                                                                                | `false` |
-| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `none`  |
+| `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`  |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`    |
 | `volumePermissions.containerSecurityContext.enabled`        | Enable init container's Security Context                                                                                                                                                                                                       | `true`  |
 | `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                               | `nil`   |
@@ -360,20 +532,15 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/redmine --set databa
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                                 | Value   |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                     | `false` |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                   | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.               | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                           | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                            | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes Redmine only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                          | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                              | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                  | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 The above parameters map to the env variables defined in [bitnami/redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine). For more information please refer to the [bitnami/redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image documentation.
 
@@ -400,186 +567,23 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/redmi
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/redmine/values.yaml)
 
-## Configuration and installation details
-
-### Resource requests and limits
-
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
-
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
-
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
-
-It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
-
-Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
-
-### Replicas
-
-Redmine writes uploaded files to a persistent volume. By default that volume cannot be shared between pods (RWO). In such a configuration the `replicas` option must be set to `1`. If the persistent volume supports more than one writer (RWX), ie NFS, `replicas` can be greater than `1`.
-
-> **Important**: When running more than one instance of Redmine they must share the same `secret_key_base` to have sessions working acreoss all instances.
-> This can be achieved by setting
->
-> ```yaml
->   extraEnvVars:
->    - name: SECRET_KEY_BASE
->      value: someredminesecretkeybase
-> ```
-
-### Deploying to a sub-URI
-
-(adapted from <https://github.com/bitnami/containers/tree/main/bitnami/redmine>)
-
-On certain occasions, you may need that Redmine is available under a specific sub-URI path rather than the root. A common scenario to this problem may arise if you plan to set up your Redmine container behind a reverse proxy. To deploy your Redmine container using a certain sub-URI you just need to follow these steps:
-
-#### Create a configmap containing an altered version of post-init.sh
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redmine-init-configmap
-  namespace: <same-namespace-as-the-chart>
-  labels:
-  ...
-data:
-
-  post-init.sh: |-
-    #!/bin/bash
-
-    # REPLACE WITH YOUR OWN SUB-URI
-    SUB_URI_PATH='/redmine'
-
-    #Config files where to apply changes
-    config1=/opt/bitnami/redmine/config.ru
-    config2=/opt/bitnami/redmine/config/environment.rb
-
-    sed -i '$ d' ${config1}
-    echo 'map ActionController::Base.config.try(:relative_url_root) || "/" do' >> ${config1}
-    echo 'run Rails.application' >> ${config1}
-    echo 'end' >> ${config1}
-    echo 'Redmine::Utils::relative_url_root = "'${SUB_URI_PATH}'"' >> ${config2}
-
-    SUB_URI_PATH=$(echo ${SUB_URI_PATH} | sed -e 's|/|\\/|g')
-    sed -i -e "s/\(relative_url_root\ \=\ \"\).*\(\"\)/\1${SUB_URI_PATH}\2/" ${config2}
-```
-
-#### Add this confimap as a volume/volume mount in the chart values
-
-```yaml
-## Extra volumes to add to the deployment
-##
-extraVolumes:
-  - name: redmine-init-volume
-    configMap:
-      name: redmine-init-configmap
-
-## Extra volume mounts to add to the container
-##
-extraVolumeMounts:
-  - name: "redmine-init-volume"
-    mountPath: "/post-init.sh"
-    subPath: post-init.sh
-```
-
-#### Change the probes URI
-
-```yaml
-## Configure extra options for liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
-##
-livenessProbe:
-  enabled: true
-  path: /redmine/
----
-readinessProbe:
-  enabled: true
-  path: /redmine/
-```
-
-## Persistence
-
-The [Bitnami Redmine](https://github.com/bitnami/containers/tree/main/bitnami/redmine) image stores the Redmine data and configurations at the `/bitnami/redmine` path of the container.
-
-Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. The volume is created using dynamic volume provisioning. Clusters configured with NFS mounts require manually managed volumes and claims.
-
-See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
-
-### Existing PersistentVolumeClaims
-
-The following example includes two PVCs, one for Redmine and another for MariaDB.
-
-1. Create the PersistentVolume
-2. Create the PersistentVolumeClaim
-3. Create the directory, on a worker
-4. Install the chart
-
-```console
-helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistence.existingClaim=PVC_MARIADB oci://REGISTRY_NAME/REPOSITORY_NAME/redmine
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-## Certificates
-
-### CA Certificates
-
-Custom CA certificates not included in the base docker image can be added with
-the following configuration. The secret must exist in the same namespace as the
-deployment. Will load all certificates files it finds in the secret.
-
-```yaml
-certificates:
-  customCAs:
-    - secret: my-ca-1
-    - secret: my-ca-2
-```
-
-#### CA Certificates Secret
-
-Secret can be created with:
-
-```console
-kubectl create secret generic my-ca-1 --from-file my-ca-1.crt
-```
-
-### TLS Certificate
-
-A web server TLS Certificate can be injected into the container with the
-following configuration. The certificate will be stored at the location
-specified in the certificateLocation value.
-
-```yaml
-certificates:
-  customCertificate:
-    certificateSecret: my-secret
-    certificateLocation: /ssl/server.pem
-    keyLocation: /ssl/key.pem
-    chainSecret:
-      name: my-cert-chain
-      key: chain.pem
-```
-
-#### TLS Certificate Secret
-
-The certificate tls secret can be created with:
-
-```console
-kubectl create secret tls my-secret --cert tls.crt --key tls.key
-```
-
-The certificate chain is created with:
-
-```console
-kubectl create secret generic my-cert-chain --from-file chain.pem
-```
-
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 28.0.0
+
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
+Also, this major release bumps the MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
 
 ### To 27.0.0
 
