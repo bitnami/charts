@@ -83,9 +83,44 @@ Returns the hostname of the configured storage backend
 Returns the port of the configured storage backend
 */}}
 {{- define "janusgraph.storage.port" -}}
-{{- if .Values.storage.external.port -}}
+{{- if .Values.storage.cassandra.enabled }}
+{{- printf "%d" (int .Values.cassandra.service.ports.cql) -}}
+{{- else if .Values.storage.external.port -}}
 {{- printf "%d" (int .Values.storage.external.port) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create the storage password secret name
+*/}}
+{{- define "janusgraph.storage.username" -}}
+    {{- if .Values.storage.cassandra.enabled -}}
+        {{- printf "%s" (default "cassandra" .Values.cassandra.dbUser.user) -}}
+    {{- else if .Values.storage.external.username -}}
+        {{- .Values.storage.external.username -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the storage password secret name
+*/}}
+{{- define "janusgraph.storage.password.secretName" -}}
+    {{- if .Values.storage.cassandra.enabled -}}
+        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+    {{- else if .Values.storage.external.existingSecret -}}
+        {{- .Values.storage.external.existingSecret -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Create the storage password secret key
+*/}}
+{{- define "janusgraph.storage.password.secretKey" -}}
+    {{- if .Values.storage.cassandra.enabled -}}
+        cassandra-password
+    {{- else if .Values.storage.external.existingSecretPasswordKey -}}
+        {{- .Values.storage.external.existingSecretPasswordKey -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*

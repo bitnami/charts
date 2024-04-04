@@ -102,6 +102,19 @@ spec:
               value: {{ ternary "true" "false" .Values.metrics.enabled | quote }}
             - name: GREMLIN_AUTOCONFIGURE_POOL
               value: "true"
+            {{- if (include "janusgraph.storage.username" .)}}
+            - name: JANUSGRAPH_CFG_STORAGE_USERNAME
+              value: {{ include "janusgraph.storage.username" . | quote }}
+            - name: JANUSGRAPH_CFG_STORAGE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "janusgraph.storage.password.secretName" . }}
+                  key: {{ include "janusgraph.storage.password.secretKey" . }}
+            {{- end }}
+            {{- if .Values.storage.cassandra.enabled }}
+            - name: JANUSGRAPH_CFG_STORAGE_CQL_KEYSPACE
+              value: {{ .Values.cassandra.keyspace | quote }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -164,7 +177,7 @@ spec:
             - name: janusgraph-conf
               mountPath: /opt/bitnami/janusgraph/conf
             - name: janusgraph-properties
-              mountPath: /opt/bitnami/janusgraph/conf/janusgraph.properties
+              mountPath: /bitnami/janusgraph/conf/janusgraph.properties
               subPath: janusgraph.properties
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}

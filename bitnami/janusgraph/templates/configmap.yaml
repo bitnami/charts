@@ -24,7 +24,7 @@ data:
     storage.directory={{ .Values.storage.berkeleyje.directory }}
     {{- else }}
     storage.hostname={{ include "janusgraph.storage.hostname" . }}
-    {{ if (include "janusgraph.storage.port" .)}}
+    {{- if (include "janusgraph.storage.port" .)}}
     storage.port={{ include "janusgraph.storage.port" . }}
     {{- end }}
     {{- end }}

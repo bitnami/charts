@@ -63,12 +63,6 @@ diagnosticMode:
   args:
     - infinity
 
-## @section Janusgraph Parameters
-##
-cassandra:
-  image:
-    debug: true
-  resourcesPreset: "none"
 ## Settings for the the storage backend
 ##
 storage:
@@ -89,6 +83,7 @@ storage:
     backend: ""
     hostname: ""
     port: ""
+    existingSecret: ""
 
 ## Settings for index management
 ##
@@ -652,7 +647,7 @@ persistence:
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
-  enabled: true
+  enabled: false
   ## Bitnami JMX exporter image
   ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] JMX exporter image registry
@@ -962,3 +957,23 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+
+## @section Cassandra storage sub-chart
+## Controlled by value storage.cassandra.enabled
+##
+cassandra:
+  ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
+  ##
+  keyspace: "bitnami_janusgraph"
+  ## Database credentials
+  ## @param cassandra.dbUser.user Cassandra admin user
+  ## @param cassandra.dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ##
+  dbUser:
+    user: bn_janusgraph
+    password: ""
+  ## Cassandra service port
+  ## @param cassandra.service.ports.cql Cassandra cql port
+  service:
+    ports:
+      cql: 9043
