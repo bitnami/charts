@@ -198,7 +198,7 @@ It is possible to configure a memory high watermark on RabbitMQ to define [memor
 ```text
 memoryHighWatermark.enabled="true"
 memoryHighWatermark.type="absolute"
-memoryHighWatermark.value="512MB"
+memoryHighWatermark.value="512Mi"
 ```
 
 - Set a relative limit of RAM to be used on each RabbitMQ node. To enable this feature,  define the memory limits at pod level too. An example configuration is shown below:
