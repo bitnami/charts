@@ -205,12 +205,12 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -268,19 +268,21 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                | `{}`                   |
 | `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                             | `{}`                   |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                             | `[]`                   |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`                 |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`                |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                   |
 | `containerPorts.http`                               | Port to expose at ASP.NET Core container level                                                                                                                                                             | `8080`                 |
-| `podSecurityContext.enabled`                        | Enabled ASP.NET Core pods' Security Context                                                                                                                                                                | `false`                |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for WordPress container(s)                                                                                                                               | `[]`                   |
+| `podSecurityContext.enabled`                        | Enabled ASP.NET Core pods' Security Context                                                                                                                                                                | `true`                 |
 | `podSecurityContext.sysctls`                        | Set namespaced sysctls for the ASP.NET Core pods                                                                                                                                                           | `[]`                   |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`               |
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                | `[]`                   |
 | `podSecurityContext.fsGroup`                        | Set Security Context fsGroup                                                                                                                                                                               | `0`                    |
 | `containerSecurityContext.enabled`                  | Enable Container Security Context                                                                                                                                                                          | `true`                 |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`                  |
-| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `0`                    |
-| `containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                                                                                                                              | `false`                |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context readOnlyRootFilesystem                                                                                                                                                    | `false`                |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `{}`                   |
+| `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                 | `1001`                 |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                | `1001`                 |
+| `containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                                                                                                                              | `true`                 |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context readOnlyRootFilesystem                                                                                                                                                    | `true`                 |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                                                       | `false`                |
 | `containerSecurityContext.capabilities.add`         | Set container's Security Context allowed kernel capabilities                                                                                                                                               | `["NET_BIND_SERVICE"]` |
 | `containerSecurityContext.capabilities.drop`        | Set container's Security Context dropped kernel capabilities                                                                                                                                               | `["ALL"]`              |
@@ -327,6 +329,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                 |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                                                  | `https://github.com/dotnet/AspNetCore.Docs.git`      |
 | `appFromExternalRepo.clone.revision`            | Git revision to checkout                                                                                 | `main`                                               |
+| `appFromExternalRepo.clone.depth`               | Depth of the repo to checkout (full clone if empty)                                                      | `1`                                                  |
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `REGISTRY_NAME`                                      |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `REPOSITORY_NAME/dotnet-sdk`                         |
@@ -341,44 +344,51 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | ASP.NET Core service type                                                                                                        | `ClusterIP`              |
-| `service.ports.http`               | ASP.NET Core service HTTP port                                                                                                   | `80`                     |
-| `service.nodePorts.http`           | Node ports to expose                                                                                                             | `""`                     |
-| `service.clusterIP`                | ASP.NET Core service Cluster IP                                                                                                  | `""`                     |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
-| `service.loadBalancerIP`           | ASP.NET Core service Load Balancer IP                                                                                            | `""`                     |
-| `service.loadBalancerSourceRanges` | ASP.NET Core service Load Balancer sources                                                                                       | `[]`                     |
-| `service.externalTrafficPolicy`    | ASP.NET Core service external traffic policy                                                                                     | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for ASP.NET Core service                                                                           | `{}`                     |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for ASP.NET Core                                                                                | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress resource, a host pointing to this will be created                                                   | `aspnet-core.local`      |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.extraPaths`               | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-| `healthIngress.enabled`            | Enable healthIngress record generation for ASP.NET Core                                                                          | `false`                  |
-| `healthIngress.pathType`           | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `healthIngress.path`               | Default path for the ingress record                                                                                              | `/`                      |
-| `healthIngress.hostname`           | When the health ingress is enabled, a host pointing to this will be created                                                      | `aspnet-core.local`      |
-| `healthIngress.annotations`        | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `healthIngress.tls`                | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `healthIngress.ingressClassName`   | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `healthIngress.extraHosts`         | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
-| `healthIngress.extraTls`           | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `healthIngress.secrets`            | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `healthIngress.extraRules`         | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                    | Description                                                                                                                      | Value                    |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                          | ASP.NET Core service type                                                                                                        | `ClusterIP`              |
+| `service.ports.http`                    | ASP.NET Core service HTTP port                                                                                                   | `80`                     |
+| `service.nodePorts.http`                | Node ports to expose                                                                                                             | `""`                     |
+| `service.clusterIP`                     | ASP.NET Core service Cluster IP                                                                                                  | `""`                     |
+| `service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
+| `service.loadBalancerIP`                | ASP.NET Core service Load Balancer IP                                                                                            | `""`                     |
+| `service.loadBalancerSourceRanges`      | ASP.NET Core service Load Balancer sources                                                                                       | `[]`                     |
+| `service.externalTrafficPolicy`         | ASP.NET Core service external traffic policy                                                                                     | `Cluster`                |
+| `service.annotations`                   | Additional custom annotations for ASP.NET Core service                                                                           | `{}`                     |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `ingress.enabled`                       | Enable ingress record generation for ASP.NET Core                                                                                | `false`                  |
+| `ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `ingress.hostname`                      | Default host for the ingress resource, a host pointing to this will be created                                                   | `aspnet-core.local`      |
+| `ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.annotations`                   | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`                           | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `ingress.extraPaths`                    | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.selfSigned`                    | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `healthIngress.enabled`                 | Enable healthIngress record generation for ASP.NET Core                                                                          | `false`                  |
+| `healthIngress.pathType`                | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `healthIngress.path`                    | Default path for the ingress record                                                                                              | `/`                      |
+| `healthIngress.hostname`                | When the health ingress is enabled, a host pointing to this will be created                                                      | `aspnet-core.local`      |
+| `healthIngress.annotations`             | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `healthIngress.tls`                     | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
+| `healthIngress.ingressClassName`        | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `healthIngress.extraHosts`              | n array with additional hostname(s) to be covered with the ingress record                                                        | `[]`                     |
+| `healthIngress.extraTls`                | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `healthIngress.secrets`                 | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `healthIngress.extraRules`              | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 
 ### RBAC parameters
 
@@ -412,6 +422,19 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/aspne
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 6.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsUser` is changed from `0` to `1001`
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. It is added and enabled by default in all charts. This can be disabled by setting `networkPolicy.enabled=false`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 3.0.0
 
