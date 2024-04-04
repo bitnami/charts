@@ -96,7 +96,7 @@ spec:
               #!/bin/bash
               . /opt/bitnami/scripts/libfs.sh
               # We copy the logs folder because it has symlinks to stdout and stderr
-               if ! is_dir_empty /opt/bitnami/nginx/logs; then
+              if ! is_dir_empty /opt/bitnami/nginx/logs; then
                 cp -r /opt/bitnami/nginx/logs /emptydir/app-logs-dir
               fi
           volumeMounts:
