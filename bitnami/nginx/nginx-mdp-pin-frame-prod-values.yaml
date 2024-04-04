@@ -501,7 +501,7 @@ serverBlock: |-
      proxy_ssl_verify off;
   
      location / {
-           proxy_pass https://10.10.116.105;
+           proxy_pass https://10.10.31.106;
      }
       
    }
