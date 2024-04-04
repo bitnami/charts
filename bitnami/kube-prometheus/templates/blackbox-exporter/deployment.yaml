@@ -60,7 +60,7 @@ spec:
       schedulerName: {{ .Values.blackboxExporter.schedulerName }}
       {{- end }}
       {{- if .Values.blackboxExporter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.blackboxExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.blackboxExporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.blackboxExporter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.blackboxExporter.terminationGracePeriodSeconds }}
@@ -74,7 +74,7 @@ spec:
           image: {{ template "kube-prometheus.blackboxExporter.image" . }}
           imagePullPolicy: {{ .Values.blackboxExporter.image.pullPolicy }}
           {{- if .Values.blackboxExporter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.blackboxExporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.blackboxExporter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.blackboxExporter.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.command "context" $) | nindent 12 }}
@@ -133,6 +133,9 @@ spec:
           volumeMounts:
             - name: blackbox-exporter-config
               mountPath: /bitnami/blackbox-exporter/conf
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.blackboxExporter.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -140,6 +143,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.blackboxExporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: blackbox-exporter-config
           configMap:
             name: {{ template "kube-prometheus.blackboxExporter.configmapName" . }}

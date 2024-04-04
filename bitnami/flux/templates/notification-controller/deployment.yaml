@@ -34,6 +34,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: notification-controller
     spec:
       serviceAccountName: {{ template "flux.notification-controller.serviceAccountName" . }}
@@ -66,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.notificationController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.notificationController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notificationController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.notificationController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.notificationController.terminationGracePeriodSeconds }}
@@ -80,7 +81,7 @@ spec:
           image: {{ template "flux.notification-controller.image" . }}
           imagePullPolicy: {{ .Values.notificationController.image.pullPolicy }}
           {{- if .Values.notificationController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.notificationController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.notificationController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -161,8 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.notificationController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -170,7 +172,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.notificationController.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.notificationController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.extraVolumes "context" $) | nindent 8 }}

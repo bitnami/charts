@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -63,7 +72,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.13-debian-12-r2
+  tag: 3.12.13-debian-12-r5
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -84,7 +93,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.4-debian-12-r14
+  tag: 1.0.4-debian-12-r15
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -107,7 +116,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 2.7.0-debian-12-r7
+    tag: 2.8.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -122,6 +131,9 @@ clusterOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param clusterOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
   ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -198,10 +210,10 @@ clusterOperator:
   customStartupProbe: {}
   ## RabbitMQ Cluster Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
+  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param clusterOperator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -232,6 +244,7 @@ clusterOperator:
   ## @param clusterOperator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param clusterOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param clusterOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param clusterOperator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param clusterOperator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -243,6 +256,7 @@ clusterOperator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -635,7 +649,7 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.13.0-debian-12-r6
+    tag: 1.13.0-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -650,6 +664,9 @@ msgTopologyOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param msgTopologyOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
   ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -738,10 +755,10 @@ msgTopologyOperator:
   existingWebhookCertCABundle: ""
   ## RabbitMQ Messaging Topology Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
+  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param msgTopologyOperator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -772,6 +789,7 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param msgTopologyOperator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param msgTopologyOperator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param msgTopologyOperator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param msgTopologyOperator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param msgTopologyOperator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param msgTopologyOperator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -783,6 +801,7 @@ msgTopologyOperator:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true

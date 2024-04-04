@@ -70,7 +70,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.auth.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.auth.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.auth.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.auth.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.auth.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.auth.terminationGracePeriodSeconds }}
@@ -87,7 +87,7 @@ spec:
           image: {{ template "supabase.auth.image" . }}
           imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
           {{- if .Values.auth.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.auth.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.auth.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -182,6 +182,10 @@ spec:
           {{- if .Values.auth.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.auth.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.auth.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.auth.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -189,6 +193,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.auth.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.auth.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.auth.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

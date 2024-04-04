@@ -56,7 +56,7 @@ spec:
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.tolerations "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.influxdb.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.influxdb.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
       initContainers:
@@ -96,7 +96,7 @@ spec:
           image: {{ include "influxdb.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.influxdb.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.influxdb.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.influxdb.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -301,12 +301,13 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/influxdb/etc
-              mountPath: app-conf-dir
             {{- if or .Values.influxdb.configuration .Values.influxdb.existingConfiguration  }}
             - name: influxdb-config
               mountPath: /opt/bitnami/influxdb/etc
+            {{- else }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/influxdb/etc
+              subPath: app-conf-dir
             {{- end }}
             {{- if or .Values.influxdb.initdbScripts .Values.influxdb.initdbScriptsCM }}
             - name: custom-init-scripts

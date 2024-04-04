@@ -36,6 +36,9 @@ spec:
   {{- end }}
   jobTemplate:
     spec:
+      {{- if .Values.backup.cronjob.backoffLimit }}
+      backoffLimit: {{ .Values.backup.cronjob.backoffLimit }}
+      {{- end }}
       {{- if .Values.backup.cronjob.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ .Values.backup.cronjob.ttlSecondsAfterFinished }}
       {{- end }}
@@ -61,7 +64,7 @@ spec:
         spec:
           {{- include "mongodb.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           enableServiceLinks: {{ .Values.enableServiceLinks }}
           {{- if .Values.tls.enabled }}

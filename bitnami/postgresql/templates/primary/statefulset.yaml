@@ -80,7 +80,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.primary.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.primary.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.primary.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       hostNetwork: {{ .Values.primary.hostNetwork }}
       hostIPC: {{ .Values.primary.hostIPC }}
@@ -97,7 +97,7 @@ spec:
           {{- end }}
           # We don't require a privileged container in this case
           {{- if .Values.primary.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.primary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/sh
@@ -162,7 +162,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - name: data
+            - name: {{ .Values.primary.persistence.volumeName }}
               mountPath: {{ .Values.primary.persistence.mountPath }}
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
@@ -187,7 +187,7 @@ spec:
           image: {{ include "postgresql.v1.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.primary.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.primary.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -494,13 +494,11 @@ spec:
             - name: dshm
               mountPath: /dev/shm
             {{- end }}
-            {{- if .Values.primary.persistence.enabled }}
-            - name: data
+            - name: {{ .Values.primary.persistence.volumeName }}
               mountPath: {{ .Values.primary.persistence.mountPath }}
               {{- if .Values.primary.persistence.subPath }}
               subPath: {{ .Values.primary.persistence.subPath }}
               {{- end }}
-            {{- end }}
             {{- if or .Values.primary.configuration .Values.primary.pgHbaConfiguration .Values.primary.existingConfigmap }}
             - name: postgresql-config
               mountPath: {{ .Values.primary.persistence.mountPath }}/conf
@@ -513,7 +511,7 @@ spec:
           image: {{ include "postgresql.v1.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -650,11 +648,11 @@ spec:
             {{- end }}
         {{- end }}
   {{- if and .Values.primary.persistence.enabled .Values.primary.persistence.existingClaim }}
-        - name: data
+        - name: {{ .Values.primary.persistence.volumeName }}
           persistentVolumeClaim:
             claimName: {{ tpl .Values.primary.persistence.existingClaim $ }}
   {{- else if not .Values.primary.persistence.enabled }}
-        - name: data
+        - name: {{ .Values.primary.persistence.volumeName }}
           emptyDir: {}
   {{- else }}
   {{- if .Values.primary.persistentVolumeClaimRetentionPolicy.enabled }}
@@ -666,7 +664,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: data
+        name: {{ .Values.primary.persistence.volumeName }}
         {{- if .Values.primary.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

@@ -707,7 +707,12 @@ Init container definition for waiting for the database to be ready
   image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.waitContainer.resources }}
+  resources: {{- toYaml .Values.waitContainer.resources | nindent 4 }}
+  {{- else if ne .Values.waitContainer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.waitContainer.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -783,7 +788,12 @@ Init container definition for waiting for the database to be ready
   image: {{ template "milvus.wait-container.image" . }}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.waitContainer.resources }}
+  resources: {{- toYaml .Values.waitContainer.resources | nindent 4 }}
+  {{- else if ne .Values.waitContainer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.waitContainer.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -835,7 +845,12 @@ Init container definition for waiting for the database to be ready
   image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.waitContainer.resources }}
+  resources: {{- toYaml .Values.waitContainer.resources | nindent 4 }}
+  {{- else if ne .Values.waitContainer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.waitContainer.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -897,7 +912,12 @@ Init container definition for waiting for the database to be ready
   image: {{ template "milvus.image" . }} {{/* Bitnami shell does not have wait-for-port */}}
   imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
   {{- if .Values.waitContainer.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.waitContainer.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.waitContainer.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.waitContainer.resources }}
+  resources: {{- toYaml .Values.waitContainer.resources | nindent 4 }}
+  {{- else if ne .Values.waitContainer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.waitContainer.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -953,7 +973,12 @@ Init container definition for waiting for the database to be ready
   imagePullPolicy: {{ .context.Values.milvus.image.pullPolicy }}
   {{- $block := index .context.Values .component }}
   {{- if $block.containerSecurityContext.enabled }}
-  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $block.containerSecurityContext "context" .context) | nindent 4 }}
+  {{- end }}
+  {{- if $block.resources }}
+  resources: {{- toYaml $block.resources | nindent 4 }}
+  {{- else if ne $block.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" $block.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -1030,10 +1055,12 @@ Init container definition for waiting for the database to be ready
     - name: component-extra-config
       mountPath: /bitnami/milvus/conf/03_extra
     {{- end }}
-    - name: tmp
+    - name: empty-dir
       mountPath: /tmp
-    - name: rendered-config
+      subPath: tmp-dir
+    - name: empty-dir
       mountPath: /bitnami/milvus/rendered-conf/
+      subPath: app-rendered-conf-dir
 {{- end -}}
 
 {{/*

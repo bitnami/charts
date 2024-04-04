@@ -27,6 +27,15 @@ global:
       ports:
         restAPI: 9200
   kibanaEnabled: false
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -185,7 +194,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.12.2-debian-12-r0
+  tag: 8.13.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -493,10 +502,10 @@ master:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+  ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -531,17 +540,28 @@ master:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
+  ## @param master.containerSecurityContext.enabled Elasticseacrh master-eligible container securityContext
   ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param master.containerSecurityContext.runAsUser Set master-elegible containers' Security Context runAsUser
-  ## @param master.containerSecurityContext.runAsNonRoot Set master-elegible containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.runAsUser User ID for the Elasticseacrh master-eligible container
+  ## @param master.containerSecurityContext.runAsGroup Group ID for the Elasticseacrh master-eligible container
+  ## @param master.containerSecurityContext.runAsNonRoot Set Elasticsearch master-eligible container's Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.privileged Set Elasticsearch master-eligible container's Security Context privileged
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Set Elasticsearch master-eligible container's Security Context allowPrivilegeEscalation
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param master.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param master.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## Network Policies
@@ -875,10 +895,10 @@ data:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param data.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production).
+  ## @param data.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "medium"
   ## @param data.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -913,17 +933,28 @@ data:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
+  ## @param data.containerSecurityContext.enabled Elasticseacrh data container securityContext
   ## @param data.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param data.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
-  ## @param data.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ## @param data.containerSecurityContext.runAsUser User ID for the Elasticseacrh data container
+  ## @param data.containerSecurityContext.runAsGroup Group ID for the Elasticseacrh data container
+  ## @param data.containerSecurityContext.runAsNonRoot Set Elasticsearch data container's Security Context runAsNonRoot
+  ## @param data.containerSecurityContext.privileged Set Elasticsearch data container's Security Context privileged
+  ## @param data.containerSecurityContext.allowPrivilegeEscalation Set Elasticsearch data container's Security Context allowPrivilegeEscalation
+  ## @param data.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param data.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param data.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## Network Policies
@@ -1258,10 +1289,10 @@ coordinating:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param coordinating.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production).
+  ## @param coordinating.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param coordinating.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1296,17 +1327,28 @@ coordinating:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
+  ## @param coordinating.containerSecurityContext.enabled Elasticseacrh coordinating container securityContext
   ## @param coordinating.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param coordinating.containerSecurityContext.runAsUser Set coordinating-only containers' Security Context runAsUser
-  ## @param coordinating.containerSecurityContext.runAsNonRoot Set coordinating-only containers' Security Context runAsNonRoot
+  ## @param coordinating.containerSecurityContext.runAsUser User ID for the Elasticseacrh coordinating container
+  ## @param coordinating.containerSecurityContext.runAsGroup Group ID for the Elasticseacrh coordinating container
+  ## @param coordinating.containerSecurityContext.runAsNonRoot Set Elasticsearch coordinating container's Security Context runAsNonRoot
+  ## @param coordinating.containerSecurityContext.privileged Set Elasticsearch coordinating container's Security Context privileged
+  ## @param coordinating.containerSecurityContext.allowPrivilegeEscalation Set Elasticsearch coordinating container's Security Context allowPrivilegeEscalation
+  ## @param coordinating.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param coordinating.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param coordinating.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## Network Policies
@@ -1610,10 +1652,10 @@ ingest:
     type: RollingUpdate
   ## Elasticsearch resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ingest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production).
+  ## @param ingest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param ingest.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1648,17 +1690,28 @@ ingest:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
+  ## @param ingest.containerSecurityContext.enabled Elasticseacrh ingest container securityContext
   ## @param ingest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param ingest.containerSecurityContext.runAsUser Set ingest-only containers' Security Context runAsUser
-  ## @param ingest.containerSecurityContext.runAsNonRoot Set ingest-only containers' Security Context runAsNonRoot
+  ## @param ingest.containerSecurityContext.runAsUser User ID for the Elasticseacrh ingest container
+  ## @param ingest.containerSecurityContext.runAsGroup Group ID for the Elasticseacrh ingest container
+  ## @param ingest.containerSecurityContext.runAsNonRoot Set Elasticsearch ingest container's Security Context runAsNonRoot
+  ## @param ingest.containerSecurityContext.privileged Set Elasticsearch ingest container's Security Context privileged
+  ## @param ingest.containerSecurityContext.allowPrivilegeEscalation Set Elasticsearch ingest container's Security Context allowPrivilegeEscalation
+  ## @param ingest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param ingest.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param ingest.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## Network Policies
@@ -2107,7 +2160,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.7.0-debian-12-r11
+    tag: 1.7.0-debian-12-r13
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2271,10 +2324,10 @@ metrics:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2368,17 +2421,28 @@ metrics:
     fsGroup: 1001
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param metrics.containerSecurityContext.enabled Enabled Elasticsearch metrics exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.enabled Elasticseacrh exporter container securityContext
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param metrics.containerSecurityContext.runAsUser Set Elasticsearch metrics exporter containers' Security Context runAsUser
-  ## @param metrics.containerSecurityContext.runAsNonRoot Set Elasticsearch metrics exporter container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the Elasticseacrh exporter container
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the Elasticseacrh exporter container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Elasticsearch exporter container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set Elasticsearch exporter container's Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Elasticsearch exporter container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param metrics.command Override default container command (useful when using custom images)
@@ -2526,7 +2590,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r18
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2543,10 +2607,10 @@ volumePermissions:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2573,7 +2637,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r16
+  tag: 12-debian-12-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2594,10 +2658,10 @@ sysctlImage:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param sysctlImage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).
+  ## @param sysctlImage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctlImage.resources is set (sysctlImage.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param sysctlImage.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:

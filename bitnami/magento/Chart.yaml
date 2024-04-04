@@ -10,7 +10,7 @@ annotations:
     - name: elasticsearch
       image: docker.io/bitnami/elasticsearch:7.17.18-debian-12-r6
     - name: magento
-      image: docker.io/bitnami/magento:2.4.6-debian-12-r19
+      image: docker.io/bitnami/magento:2.4.6-debian-12-r21
     - name: mariadb
       image: docker.io/bitnami/mariadb:10.6.17-debian-12-r6
     - name: os-shell
@@ -48,4 +48,4 @@ maintainers:
 name: magento
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 25.4.2
+version: 25.5.0

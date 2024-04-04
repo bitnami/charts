@@ -72,7 +72,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.grafana.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.grafana.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.grafana.terminationGracePeriodSeconds }}
@@ -96,6 +96,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/grafana
         {{- end }}
@@ -107,7 +110,7 @@ spec:
           image: {{ include "grafana.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.grafana.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.grafana.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -170,6 +173,18 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/grafana/conf
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/grafana/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /bitnami/grafana
+              subPath: app-volume-dir
             {{- if .Values.config.useGrafanaIniFile }}
             - name: grafana-ini
               mountPath: /opt/bitnami/grafana/conf/grafana.ini
@@ -179,7 +194,7 @@ spec:
               mountPath: /opt/bitnami/grafana/data
             {{- if .Values.dashboardsProvider.enabled }}
             - name: dashboards-provider
-              mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/dashboards
             {{- end }}
             {{- range .Values.dashboardsConfigMaps }}
             - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
@@ -192,19 +207,19 @@ spec:
             {{- end }}
             {{- if or (.Values.datasources.secretName) (.Values.datasources.secretDefinition) }}
             - name: datasources
-              mountPath: /opt/bitnami/grafana/conf/provisioning/datasources
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/datasources
             {{- end }}
             {{- if .Values.notifiers.configMapName }}
             - name: notifiers
-              mountPath: /opt/bitnami/grafana/conf/provisioning/notifiers
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/notifiers
             {{- end }}
             {{- if .Values.alerting.configMapName }}
             - name: alerting
-              mountPath: /opt/bitnami/grafana/conf/provisioning/alerting
+              mountPath: /opt/bitnami/grafana/conf.default/provisioning/alerting
             {{- end }}
             {{- if .Values.ldap.enabled }}
             - name: ldap
-              mountPath: /opt/bitnami/grafana/conf/ldap.toml
+              mountPath: /opt/bitnami/grafana/conf.default/ldap.toml
               subPath: ldap.toml
             {{- end }}
             {{- if and .Values.ldap.tls.enabled .Values.ldap.tls.certificatesSecret }}
@@ -281,6 +296,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.grafana.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

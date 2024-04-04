@@ -78,7 +78,7 @@ spec:
       priorityClassName: {{ .Values.master.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.master.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.master.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.master.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
@@ -107,9 +107,13 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: /bitnami/opensearch/data
         {{- end }}
+        {{- include "opensearch.copy-default-plugins.initContainer" (dict "component" "master" "context" $) | nindent 8 }} 
         {{- if .Values.master.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.master.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -122,7 +126,7 @@ spec:
           image: {{ include "opensearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.master.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.master.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.master.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -158,9 +162,8 @@ spec:
                   fieldPath: metadata.name
             - name: OPENSEARCH_IS_DEDICATED_NODE
               value: {{ ternary "yes" "no" .Values.master.masterOnly | quote }}
-            {{- $roles := ternary "master" (list "master" .Values.master.extraRoles) (empty .Values.master.extraRoles) }}
             - name: OPENSEARCH_NODE_ROLES
-              value: {{ join "," $roles | quote }}
+              value: {{ prepend .Values.master.extraRoles "master" | join "," | quote }}
             - name: OPENSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: OPENSEARCH_HTTP_PORT_NUMBER
@@ -254,6 +257,21 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.master.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/config
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/opensearch/plugins
+              subPath: app-plugins-dir
             - name: data
               mountPath: /bitnami/opensearch/data
             {{- if .Values.config }}
@@ -296,6 +314,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:

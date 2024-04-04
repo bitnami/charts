@@ -34,6 +34,15 @@ global:
     ## @param global.jwt.existingSecretServiceKey The key in the existing secret containing the JWT service key
     ##
     existingSecretServiceKey: "service-key"
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: disabled
 ## @section Common parameters
 ##
 
@@ -170,6 +179,7 @@ jwt:
     ## @param jwt.autoGenerate.containerSecurityContext.enabled Enabled jwt init job containers' Security Context
     ## @param jwt.autoGenerate.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param jwt.autoGenerate.containerSecurityContext.runAsUser Set jwt init job containers' Security Context runAsUser
+    ## @param jwt.autoGenerate.containerSecurityContext.runAsGroup Set jwt init job containers' Security Context runAsUser
     ## @param jwt.autoGenerate.containerSecurityContext.runAsNonRoot Set jwt init job container's Security Context runAsNonRoot
     ## @param jwt.autoGenerate.containerSecurityContext.privileged Set jwt init job container's Security Context privileged
     ## @param jwt.autoGenerate.containerSecurityContext.readOnlyRootFilesystem Set jwt init job container's Security Context readOnlyRootFilesystem
@@ -181,6 +191,7 @@ jwt:
       enabled: true
       seLinuxOptions: null
       runAsUser: 1001
+      runAsGroup: 0
       runAsNonRoot: true
       privileged: false
       readOnlyRootFilesystem: false
@@ -221,7 +232,7 @@ jwt:
     extraVolumeMounts: []
     ## Container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param jwt.autoGenerate.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jwt.autoGenerate.resources is set (jwt.autoGenerate.resources is recommended for production).
+    ## @param jwt.autoGenerate.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if jwt.autoGenerate.resources is set (jwt.autoGenerate.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "none"
@@ -395,7 +406,7 @@ auth:
   customStartupProbe: {}
   ## Supabase auth resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param auth.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if auth.resources is set (auth.resources is recommended for production).
+  ## @param auth.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if auth.resources is set (auth.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -429,6 +440,7 @@ auth:
   ## @param auth.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param auth.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param auth.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param auth.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param auth.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param auth.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param auth.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -440,6 +452,7 @@ auth:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -795,7 +808,7 @@ meta:
   customStartupProbe: {}
   ## Supabase Postgres Meta resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param meta.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if meta.resources is set (meta.resources is recommended for production).
+  ## @param meta.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if meta.resources is set (meta.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -829,6 +842,7 @@ meta:
   ## @param meta.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param meta.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param meta.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param meta.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param meta.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param meta.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param meta.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -840,6 +854,7 @@ meta:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1137,7 +1152,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.25.65-debian-12-r0
+    tag: 2.25.66-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1211,7 +1226,7 @@ realtime:
   customStartupProbe: {}
   ## Supabase realtime resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param realtime.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if realtime.resources is set (realtime.resources is recommended for production).
+  ## @param realtime.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if realtime.resources is set (realtime.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1245,6 +1260,7 @@ realtime:
   ## @param realtime.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param realtime.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param realtime.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param realtime.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param realtime.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param realtime.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param realtime.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1256,6 +1272,7 @@ realtime:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -1609,7 +1626,7 @@ rest:
   customStartupProbe: {}
   ## Supabase rest resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param rest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rest.resources is set (rest.resources is recommended for production).
+  ## @param rest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if rest.resources is set (rest.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -1643,6 +1660,7 @@ rest:
   ## @param rest.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param rest.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rest.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param rest.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param rest.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rest.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param rest.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1654,6 +1672,7 @@ rest:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2013,7 +2032,7 @@ storage:
   customStartupProbe: {}
   ## Supabase storage resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storage.resources is set (storage.resources is recommended for production).
+  ## @param storage.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if storage.resources is set (storage.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2047,6 +2066,7 @@ storage:
   ## @param storage.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param storage.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param storage.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param storage.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param storage.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param storage.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param storage.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2058,6 +2078,7 @@ storage:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2336,7 +2357,7 @@ storage:
     ## @param storage.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
-    ## @param storage.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## @param storage.persistence.selector Selector to match an existing Persistent Volume for Supabase data PVC
     ## If set, the PVC can't have a PV dynamically provisioned for it
     ## E.g.
     ## selector:
@@ -2462,7 +2483,7 @@ studio:
   customStartupProbe: {}
   ## Supabase studio resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param studio.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if studio.resources is set (studio.resources is recommended for production).
+  ## @param studio.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if studio.resources is set (studio.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"
@@ -2496,6 +2517,7 @@ studio:
   ## @param studio.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param studio.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param studio.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param studio.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param studio.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param studio.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param studio.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2507,6 +2529,7 @@ studio:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: false
@@ -2882,7 +2905,7 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "none"

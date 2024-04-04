@@ -70,7 +70,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.podSecurityContext.enabled }}
-      securityContext: {{- omit $.Values.shardsvr.dataNode.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.shardsvr.dataNode.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ $.Values.shardsvr.dataNode.terminationGracePeriodSeconds }}
@@ -117,7 +117,7 @@ spec:
           image: {{ include "mongodb-sharded.image" $ }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           {{- if $.Values.shardsvr.dataNode.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.shardsvr.dataNode.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.shardsvr.dataNode.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: {{ $.Values.common.containerPorts.mongodb }}
@@ -274,6 +274,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mongodb/logs
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             - name: replicaset-entrypoint-configmap
               mountPath: /entrypoint
             - name: datadir
@@ -313,7 +316,7 @@ spec:
           image: {{ include "mongodb-sharded.metrics.image" $ }}
           imagePullPolicy: {{ $.Values.metrics.image.pullPolicy | quote }}
           {{- if $.Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $.Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
           {{- if $.Values.auth.enabled }}
@@ -456,8 +459,8 @@ spec:
             storage: {{ $.Values.shardsvr.persistence.size | quote }}
         {{- include "common.storage.class" (dict "persistence" $.Values.shardsvr.persistence "global" $.Values.global) | nindent 8 }}
   {{- else }}
-        - name: datadir
-          emptyDir: {}
+    - name: datadir
+      emptyDir: {}
   {{- end }}
 {{- if lt $i (sub $replicas 1) }}
 ---

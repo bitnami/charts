@@ -71,7 +71,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.mongos.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.mongos.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mongos.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.mongos.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.mongos.terminationGracePeriodSeconds }}
@@ -91,7 +91,7 @@ spec:
           image: {{ include "mongodb-sharded.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.mongos.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.mongos.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.mongos.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
             - name: MONGODB_ENABLE_NUMACTL
@@ -245,6 +245,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mongodb/logs
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: app-mongosh-dir
             {{- if .Values.auth.usePasswordFile }}
             - name: secrets
               mountPath: /bitnami/mongodb/secrets/
@@ -269,7 +272,7 @@ spec:
           image: {{ include "mongodb-sharded.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
           {{- if .Values.metrics.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           env:
           {{- if $.Values.auth.enabled }}

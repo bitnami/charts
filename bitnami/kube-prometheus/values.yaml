@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -64,7 +73,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.71.2-debian-12-r7
+    tag: 0.72.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -190,6 +199,7 @@ operator:
   ## @param operator.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param operator.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param operator.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param operator.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param operator.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param operator.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param operator.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -199,11 +209,12 @@ operator:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -370,10 +381,10 @@ operator:
     ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
-  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
+  ## @param operator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if operator.resources is set (operator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param operator.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -533,6 +544,7 @@ operator:
     ## @param operator.prometheusConfigReloader.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param operator.prometheusConfigReloader.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param operator.prometheusConfigReloader.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param operator.prometheusConfigReloader.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param operator.prometheusConfigReloader.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -542,11 +554,12 @@ operator:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
@@ -609,7 +622,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.49.1-debian-12-r9
+    tag: 2.50.1-debian-12-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -657,6 +670,7 @@ prometheus:
   ## @param prometheus.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param prometheus.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param prometheus.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param prometheus.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param prometheus.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param prometheus.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param prometheus.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -666,11 +680,12 @@ prometheus:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -933,10 +948,10 @@ prometheus:
   ## externalUrl: https://prometheus.example.com
   ##
   externalUrl: ""
-  ## @param prometheus.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.resources is set (prometheus.resources is recommended for production).
+  ## @param prometheus.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.resources is set (prometheus.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param prometheus.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1384,6 +1399,7 @@ prometheus:
     ## @param prometheus.thanos.containerSecurityContext.enabled Enabled containers' Security Context
     ## @param prometheus.thanos.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
     ## @param prometheus.thanos.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param prometheus.thanos.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param prometheus.thanos.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
     ## @param prometheus.thanos.containerSecurityContext.privileged Set container's Security Context privileged
     ## @param prometheus.thanos.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1393,11 +1409,12 @@ prometheus:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       privileged: false
-      readOnlyRootFilesystem: false
+      readOnlyRootFilesystem: true
       allowPrivilegeEscalation: false
       capabilities:
         drop: ["ALL"]
@@ -1441,10 +1458,10 @@ prometheus:
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
     ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param prometheus.thanos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production).
+    ## @param prometheus.thanos.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param prometheus.thanos.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1776,7 +1793,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-12-r26
+    tag: 0.27.0-debian-12-r1
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1822,6 +1839,7 @@ alertmanager:
   ## @param alertmanager.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param alertmanager.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param alertmanager.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param alertmanager.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param alertmanager.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1831,11 +1849,12 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2122,10 +2141,10 @@ alertmanager:
   ## externalUrl: https://alertmanager.example.com
   ##
   externalUrl: ""
-  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
+  ## @param alertmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if alertmanager.resources is set (alertmanager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param alertmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2370,8 +2389,8 @@ node-exporter:
     enabled: true
     jobLabel: jobLabel
   extraArgs:
-    collector.filesystem.ignored-mount-points: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
-    collector.filesystem.ignored-fs-types: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
+    collector.filesystem.mount-points-exclude: "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+    collector.filesystem.fs-types-exclude: "^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$"
 ## @param kube-state-metrics [object] Kube State Metrics deployment configuration
 ##
 kube-state-metrics:
@@ -2459,7 +2478,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-12-r24
+    tag: 0.24.0-debian-12-r25
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2595,7 +2614,7 @@ blackboxExporter:
   containerPorts:
     http: 19115
   serviceAccount:
-    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+    ## @param blackboxExporter.serviceAccount.create Enable creation of ServiceAccount for Prometheus Operator pod
     ##
     create: true
     ## @param blackboxExporter.serviceAccount.name The name of the ServiceAccount to use.
@@ -2611,10 +2630,10 @@ blackboxExporter:
     annotations: {}
   ## Blackbox Exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param blackboxExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if blackboxExporter.resources is set (blackboxExporter.resources is recommended for production).
+  ## @param blackboxExporter.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if blackboxExporter.resources is set (blackboxExporter.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param blackboxExporter.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2645,6 +2664,7 @@ blackboxExporter:
   ## @param blackboxExporter.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param blackboxExporter.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param blackboxExporter.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param blackboxExporter.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param blackboxExporter.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param blackboxExporter.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param blackboxExporter.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2654,11 +2674,12 @@ blackboxExporter:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]

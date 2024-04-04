@@ -74,7 +74,7 @@ spec:
       schedulerName: {{ .Values.attu.schedulerName }}
       {{- end }}
       {{- if .Values.attu.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.attu.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.attu.enableDefaultInitContainers }}
@@ -88,7 +88,7 @@ spec:
           image: {{ template "milvus.attu.image" . }}
           imagePullPolicy: {{ .Values.attu.image.pullPolicy }}
           {{- if .Values.attu.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.attu.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.attu.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -152,14 +152,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.attu.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
-            - name: tmp-npm
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /.npm
-            - name: tmp-yarn
+              subPath: npm-tmp-dir
+            - name: empty-dir
               mountPath: /.yarn
-            - name: tmp-yarn-cache
+              subPath: yarn-dir
+            - name: empty-dir
               mountPath: /.cache/yarn
+              subPath: yarn-cache-dir
           {{- if .Values.attu.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -167,13 +171,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.attu.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-yarn
-          emptyDir: {}
-        - name: tmp-yarn-cache
-          emptyDir: {}
-        - name: tmp-npm
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.attu.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumes "context" $) | nindent 8 }}

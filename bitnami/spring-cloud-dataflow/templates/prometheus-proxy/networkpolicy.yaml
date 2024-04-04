@@ -23,6 +23,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.metrics.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     - ports:
         # Allow dns resolution
@@ -33,10 +37,11 @@ spec:
     {{- if .Values.metrics.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
-        - port: {{ .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
+        - port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}
+        - port: {{ coalesce .Values.metrics.service.ports.rsocket .Values.metrics.service.rsocketPort }}
         - port: {{ .Values.metrics.containerPorts.http }}
         - port: {{ .Values.metrics.containerPorts.rsocket }}
       {{- if not .Values.metrics.networkPolicy.allowExternal }}

@@ -18,6 +18,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -119,7 +128,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -184,7 +193,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.8.1-debian-12-r11
+    tag: 2.8.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -288,10 +297,10 @@ web:
   customStartupProbe: {}
   ## Airflow web resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param web.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
+  ## @param web.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if web.resources is set (web.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "medium"
   ## @param web.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -322,19 +331,23 @@ web:
   ## @param web.containerSecurityContext.enabled Enabled Airflow web containers' Security Context
   ## @param web.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param web.containerSecurityContext.runAsUser Set Airflow web containers' Security Context runAsUser
+  ## @param web.containerSecurityContext.runAsGroup Set Airflow web containers' Security Context runAsGroup
   ## @param web.containerSecurityContext.runAsNonRoot Set Airflow web containers' Security Context runAsNonRoot
   ## @param web.containerSecurityContext.privileged Set web container's Security Context privileged
   ## @param web.containerSecurityContext.allowPrivilegeEscalation Set web container's Security Context allowPrivilegeEscalation
+  ## @param web.containerSecurityContext.readOnlyRootFilesystem Set web container's Security Context readOnlyRootFilesystem
   ## @param web.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param web.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -525,7 +538,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.8.1-debian-12-r10
+    tag: 2.8.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -577,7 +590,7 @@ scheduler:
     enabled: true
     initialDelaySeconds: 180
     periodSeconds: 20
-    timeoutSeconds: 5
+    timeoutSeconds: 15
     failureThreshold: 6
     successThreshold: 1
   ## @param scheduler.readinessProbe.enabled Enable readinessProbe on Airflow scheduler containers
@@ -591,7 +604,7 @@ scheduler:
     enabled: true
     initialDelaySeconds: 30
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 15
     failureThreshold: 6
     successThreshold: 1
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
@@ -605,10 +618,10 @@ scheduler:
   customStartupProbe: {}
   ## Airflow scheduler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param scheduler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if scheduler.resources is set (scheduler.resources is recommended for production).
+  ## @param scheduler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if scheduler.resources is set (scheduler.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param scheduler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -639,19 +652,23 @@ scheduler:
   ## @param scheduler.containerSecurityContext.enabled Enabled Airflow scheduler containers' Security Context
   ## @param scheduler.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param scheduler.containerSecurityContext.runAsUser Set Airflow scheduler containers' Security Context runAsUser
+  ## @param scheduler.containerSecurityContext.runAsGroup Set Airflow scheduler containers' Security Context runAsGroup
   ## @param scheduler.containerSecurityContext.runAsNonRoot Set Airflow scheduler containers' Security Context runAsNonRoot
   ## @param scheduler.containerSecurityContext.privileged Set scheduler container's Security Context privileged
   ## @param scheduler.containerSecurityContext.allowPrivilegeEscalation Set scheduler container's Security Context allowPrivilegeEscalation
+  ## @param scheduler.containerSecurityContext.readOnlyRootFilesystem Set scheduler container's Security Context readOnlyRootFilesystem
   ## @param scheduler.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param scheduler.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -842,7 +859,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.8.1-debian-12-r10
+    tag: 2.8.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -940,10 +957,10 @@ worker:
   customStartupProbe: {}
   ## Airflow worker resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
+  ## @param worker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if worker.resources is set (worker.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "large"
   ## @param worker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -974,19 +991,23 @@ worker:
   ## @param worker.containerSecurityContext.enabled Enabled Airflow worker containers' Security Context
   ## @param worker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param worker.containerSecurityContext.runAsUser Set Airflow worker containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsGroup Set Airflow worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Airflow worker containers' Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.privileged Set worker container's Security Context privileged
   ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set worker container's Security Context allowPrivilegeEscalation
+  ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set worker container's Security Context readOnlyRootFilesystem
   ## @param worker.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param worker.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -1199,7 +1220,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.43.2-debian-12-r1
+    tag: 2.44.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1285,10 +1306,10 @@ git:
     ##     memory: 1024Mi
     ##
     resources: {}
-    ## @param git.clone.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if git.clone.resources is set (git.clone.resources is recommended for production).
+    ## @param git.clone.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if git.clone.resources is set (git.clone.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
   ## Properties for the Sync sidecar container
   ## @param git.sync.interval Interval in seconds to pull the git repository containing the plugins and/or DAG files
   ## @param git.sync.command Override cmd
@@ -1306,10 +1327,10 @@ git:
     extraEnvVars: []
     extraEnvVarsCM: ""
     extraEnvVarsSecret: ""
-    ## @param git.sync.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if git.sync.resources is set (git.sync.resources is recommended for production).
+    ## @param git.sync.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if git.sync.resources is set (git.sync.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param git.sync.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1579,7 +1600,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r24
+    tag: 0.20220314.0-debian-12-r27
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1605,10 +1626,10 @@ metrics:
     http: 9112
   ## Airflow exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1639,9 +1660,11 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enable Airflow exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set Airflow exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Airflow exporter containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set Airflow exporter containers' Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set metrics container's Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## e.g:
@@ -1653,11 +1676,13 @@ metrics:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
@@ -1857,6 +1882,24 @@ postgresql:
     database: bitnami_airflow
     existingSecret: ""
   architecture: standalone
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
@@ -1894,6 +1937,25 @@ redis:
     password: ""
     existingSecret: ""
   architecture: standalone
+  master:
+    ## Redis&reg; master resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param redis.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
 ## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host

@@ -34,6 +34,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: flux
         app.kubernetes.io/component: kustomize-controller
     spec:
       serviceAccountName: {{ template "flux.kustomize-controller.serviceAccountName" . }}
@@ -66,7 +67,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.kustomizeController.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.kustomizeController.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kustomizeController.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.kustomizeController.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.kustomizeController.terminationGracePeriodSeconds }}
@@ -80,7 +81,7 @@ spec:
           image: {{ template "flux.kustomize-controller.image" . }}
           imagePullPolicy: {{ .Values.kustomizeController.image.pullPolicy }}
           {{- if .Values.kustomizeController.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.kustomizeController.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kustomizeController.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -161,8 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
+              subPath: tmp-dir
           {{- if .Values.kustomizeController.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -170,7 +172,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.kustomizeController.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.kustomizeController.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.kustomizeController.extraVolumes "context" $) | nindent 8 }}

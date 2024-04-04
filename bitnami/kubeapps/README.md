@@ -57,15 +57,96 @@ The command deploys Kubeapps on the Kubernetes cluster in the `kubeapps` namespa
 
 Once you have installed Kubeapps follow the [Getting Started Guide](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) for additional information on how to access and use Kubeapps.
 
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Configuring Initial Repositories
+
+By default, Kubeapps will track the [Bitnami Application Catalog](https://github.com/bitnami/charts). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kubeapps/values.yaml) file.
+
+### Enabling Operators
+
+Since v1.9.0 (and by default since v2.0), Kubeapps supports deploying and managing Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/operators.md).
+
+### Exposing Externally
+
+> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
+
+#### LoadBalancer Service
+
+The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer type to the Kubeapps frontend Service. For example, you can use the following parameter: `frontend.service.type=LoadBalancer`
+
+Wait for your cluster to assign a LoadBalancer IP or Hostname to the `kubeapps` Service and access it on that address:
+
+```console
+kubectl get services --namespace kubeapps --watch
+```
+
+#### Ingress
+
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+
+To enable ingress integration, please set `ingress.enabled` to `true`
+
+##### Hosts
+
+Most likely you will only want to have one hostname that maps to this Kubeapps installation (use the `ingress.hostname` parameter to set the hostname), however, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object is an array.
+
+##### Annotations
+
+For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
+
+##### TLS
+
+This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
+
+- Helm generates/manages certificate secrets based on the parameters.
+- The user generates/manages certificates separately.
+- Helm creates self-signed certificates and generates/manages certificate secrets.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+
+In the first two cases, it is needed a certificate and a key. We would expect them to look like this:
+
+- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
+
+  ```console
+  -----BEGIN CERTIFICATE-----
+  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
+  ...
+  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
+  -----END CERTIFICATE-----
+  ```
+
+- keys should look like:
+
+  ```console
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
+  ...
+  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
+  -----END RSA PRIVATE KEY-----
+  ```
+
+- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
+- In case you are going to manage TLS secrets separately, please know that you must use a TLS secret with name _INGRESS_HOSTNAME-tls_ (where _INGRESS_HOSTNAME_ is a placeholder to be replaced with the hostname you set using the `ingress.hostname` parameter).
+- To use self-signed certificates created by Helm, set both `ingress.tls` and `ingress.selfSigned` to `true`.
+- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
+
 ## Parameters
 
 ### Global parameters
 
-| Name                      | Description                                     | Value |
-| ------------------------- | ----------------------------------------------- | ----- |
-| `global.imageRegistry`    | Global Docker image registry                    | `""`  |
-| `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
 
@@ -141,6 +222,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `frontend.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                         | `true`                  |
 | `frontend.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                             | `nil`                   |
 | `frontend.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                   | `1001`                  |
+| `frontend.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                  | `0`                     |
 | `frontend.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                | `true`                  |
 | `frontend.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                  | `false`                 |
 | `frontend.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                      | `false`                 |
@@ -240,6 +322,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                           | `true`                               |
 | `dashboard.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `nil`                                |
 | `dashboard.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                     | `1001`                               |
+| `dashboard.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                    | `0`                                  |
 | `dashboard.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                  | `true`                               |
 | `dashboard.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                    | `false`                              |
 | `dashboard.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                        | `false`                              |
@@ -332,6 +415,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `apprepository.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                   | `true`                                              |
 | `apprepository.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                       | `nil`                                               |
 | `apprepository.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                             | `1001`                                              |
+| `apprepository.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                            | `0`                                                 |
 | `apprepository.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                          | `true`                                              |
 | `apprepository.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                            | `false`                                             |
 | `apprepository.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                | `false`                                             |
@@ -402,6 +486,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                           | `true`                         |
 | `authProxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                               | `nil`                          |
 | `authProxy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                     | `1001`                         |
+| `authProxy.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                    | `0`                            |
 | `authProxy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                  | `true`                         |
 | `authProxy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                    | `false`                        |
 | `authProxy.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                        | `false`                        |
@@ -441,6 +526,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                   | `true`                                    |
 | `pinnipedProxy.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                       | `nil`                                     |
 | `pinnipedProxy.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                             | `1001`                                    |
+| `pinnipedProxy.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                            | `0`                                       |
 | `pinnipedProxy.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                          | `true`                                    |
 | `pinnipedProxy.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                            | `false`                                   |
 | `pinnipedProxy.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                | `false`                                   |
@@ -534,6 +620,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.containerSecurityContext.enabled`                                                 | Enabled containers' Security Context                                                                                                                                                                                                 | `true`                             |
 | `kubeappsapis.containerSecurityContext.seLinuxOptions`                                          | Set SELinux options in container                                                                                                                                                                                                     | `nil`                              |
 | `kubeappsapis.containerSecurityContext.runAsUser`                                               | Set containers' Security Context runAsUser                                                                                                                                                                                           | `1001`                             |
+| `kubeappsapis.containerSecurityContext.runAsGroup`                                              | Set containers' Security Context runAsGroup                                                                                                                                                                                          | `0`                                |
 | `kubeappsapis.containerSecurityContext.runAsNonRoot`                                            | Set container's Security Context runAsNonRoot                                                                                                                                                                                        | `true`                             |
 | `kubeappsapis.containerSecurityContext.privileged`                                              | Set container's Security Context privileged                                                                                                                                                                                          | `false`                            |
 | `kubeappsapis.containerSecurityContext.readOnlyRootFilesystem`                                  | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                              | `false`                            |
@@ -614,6 +701,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `ociCatalog.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                             | `true`                                 |
 | `ociCatalog.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                 | `nil`                                  |
 | `ociCatalog.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                       | `1001`                                 |
+| `ociCatalog.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                      | `0`                                    |
 | `ociCatalog.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                    | `true`                                 |
 | `ociCatalog.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                      | `false`                                |
 | `ociCatalog.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                          | `false`                                |
@@ -681,122 +769,22 @@ helm install kubeapps --namespace kubeapps -f custom-values.yaml oci://REGISTRY_
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-## Configuration and installation details
+## Troubleshooting
 
-### Resource requests and limits
+### How to install Kubeapps for demo purposes?
 
-Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+Install Kubeapps for exclusively **demo purposes** by simply following the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) docs.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+### How to install Kubeapps in production scenarios?
 
-### Configuring Initial Repositories
+For any user-facing installation, you should [configure an OAuth2/OIDC provider](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md) to enable secure user authentication with Kubeapps and the cluster.
+Please also refer to the [Access Control](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/howto/access-control.md) documentation to configure fine-grained access control for users.
 
-By default, Kubeapps will track the [Bitnami Application Catalog](https://github.com/bitnami/charts). To change these defaults, override with your desired parameters the `apprepository.initialRepos` object present in the [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/kubeapps/values.yaml) file.
+### How to use Kubeapps?
 
-### Enabling Operators
+Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/howto/dashboard.md) for knowing how to use the Kubeapps dashboard: deploying applications, listing and removing the applications running in your cluster and adding new repositories.
 
-Since v1.9.0 (and by default since v2.0), Kubeapps supports deploying and managing Operators within its dashboard. More information about how to enable and use this feature can be found in [this guide](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/operators.md).
-
-### Exposing Externally
-
-> **Note**: The Kubeapps frontend sets up a proxy to the Kubernetes API service which means that when exposing the Kubeapps service to a network external to the Kubernetes cluster (perhaps on an internal or public network), the Kubernetes API will also be exposed for authenticated requests from that network. It is highly recommended that you [use an OAuth2/OIDC provider with Kubeapps](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md) to ensure that your authentication proxy is exposed rather than the Kubeapps frontend. This ensures that only the configured users trusted by your Identity Provider will be able to reach the Kubeapps frontend and therefore the Kubernetes API. Kubernetes service token authentication should only be used for users for demonstration purposes only, not production environments.
-
-#### LoadBalancer Service
-
-The simplest way to expose the Kubeapps Dashboard is to assign a LoadBalancer type to the Kubeapps frontend Service. For example, you can use the following parameter: `frontend.service.type=LoadBalancer`
-
-Wait for your cluster to assign a LoadBalancer IP or Hostname to the `kubeapps` Service and access it on that address:
-
-```console
-kubectl get services --namespace kubeapps --watch
-```
-
-#### Ingress
-
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
-
-To enable ingress integration, please set `ingress.enabled` to `true`
-
-##### Hosts
-
-Most likely you will only want to have one hostname that maps to this Kubeapps installation (use the `ingress.hostname` parameter to set the hostname), however, it is possible to have more than one host. To facilitate this, the `ingress.extraHosts` object is an array.
-
-##### Annotations
-
-For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers. Annotations can be set using `ingress.annotations`.
-
-##### TLS
-
-This chart will facilitate the creation of TLS secrets for use with the ingress controller, however, this is not required. There are four common use cases:
-
-- Helm generates/manages certificate secrets based on the parameters.
-- The user generates/manages certificates separately.
-- Helm creates self-signed certificates and generates/manages certificate secrets.
-- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
-
-In the first two cases, it is needed a certificate and a key. We would expect them to look like this:
-
-- certificate files should look like (and there can be more than one certificate if there is a certificate chain)
-
-  ```console
-  -----BEGIN CERTIFICATE-----
-  MIID6TCCAtGgAwIBAgIJAIaCwivkeB5EMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
-  ...
-  jScrvkiBO65F46KioCL9h5tDvomdU1aqpI/CBzhvZn1c0ZTf87tGQR8NK7v7
-  -----END CERTIFICATE-----
-  ```
-
-- keys should look like:
-
-  ```console
-  -----BEGIN RSA PRIVATE KEY-----
-  MIIEogIBAAKCAQEAvLYcyu8f3skuRyUgeeNpeDvYBCDcgq+LsWap6zbX5f8oLqp4
-  ...
-  wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
-  -----END RSA PRIVATE KEY-----
-  ```
-
-- If you are going to use Helm to manage the certificates based on the parameters, please copy these values into the `certificate` and `key` values for a given `ingress.secrets` entry.
-- In case you are going to manage TLS secrets separately, please know that you must use a TLS secret with name _INGRESS_HOSTNAME-tls_ (where _INGRESS_HOSTNAME_ is a placeholder to be replaced with the hostname you set using the `ingress.hostname` parameter).
-- To use self-signed certificates created by Helm, set both `ingress.tls` and `ingress.selfSigned` to `true`.
-- If your cluster has a [cert-manager](https://github.com/jetstack/cert-manager) add-on to automate the management and issuance of TLS certificates, set `ingress.certManager` boolean to true to enable the corresponding annotations for cert-manager.
-
-## Upgrading Kubeapps
-
-You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
-
-You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
-
-```console
-helm repo update
-```
-
-Now upgrade Kubeapps:
-
-```console
-export RELEASE_NAME=kubeapps
-helm upgrade $RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/kubeapps
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
-
-### To 14.0.0
-
-This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
-
-### To 13.0.0
-
-This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
-
-NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
-
-### To 12.0.0
-
-This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
-
-## Uninstalling the Chart
+### How to uninstall Kubeapps
 
 To uninstall/delete the `kubeapps` deployment:
 
@@ -816,35 +804,6 @@ If you have dedicated a namespace only for Kubeapps you can completely clean the
 ```console
 kubectl delete namespace kubeapps
 ```
-
-## FAQ
-
-- [How to install Kubeapps for demo purposes?](#how-to-install-kubeapps-for-demo-purposes)
-- [How to install Kubeapps in production scenarios?](#how-to-install-kubeapps-in-production-scenarios)
-- [How to use Kubeapps?](#how-to-use-kubeapps)
-- [How to configure Kubeapps with Ingress](#how-to-configure-kubeapps-with-ingress)
-  - [Serving Kubeapps in a subpath](#serving-kubeapps-in-a-subpath)
-- [Can Kubeapps install apps into more than one cluster?](#can-kubeapps-install-apps-into-more-than-one-cluster)
-- [Can Kubeapps be installed without Internet connection?](#can-kubeapps-be-installed-without-internet-connection)
-- [Does Kubeapps support private repositories?](#does-kubeapps-support-private-repositories)
-- [Is there any API documentation?](#is-there-any-api-documentation)
-- [Why can't I configure global private repositories?](#why-cant-i-configure-global-private-repositories)
-- [Does Kubeapps support Operators?](#does-kubeapps-support-operators)
-- [Slow response when listing namespaces?](#slow-response-when-listing-namespaces)
-- [More questions?](#more-questions)
-
-### How to install Kubeapps for demo purposes?
-
-Install Kubeapps for exclusively **demo purposes** by simply following the [getting started](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/getting-started.md) docs.
-
-### How to install Kubeapps in production scenarios?
-
-For any user-facing installation, you should [configure an OAuth2/OIDC provider](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/tutorials/using-an-OIDC-provider.md) to enable secure user authentication with Kubeapps and the cluster.
-Please also refer to the [Access Control](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/howto/access-control.md) documentation to configure fine-grained access control for users.
-
-### How to use Kubeapps?
-
-Have a look at the [dashboard documentation](https://github.com/vmware-tanzu/kubeapps/blob/main/site/content/docs/latest/howto/dashboard.md) for knowing how to use the Kubeapps dashboard: deploying applications, listing and removing the applications running in your cluster and adding new repositories.
 
 ### How to configure Kubeapps with Ingress
 
@@ -935,45 +894,6 @@ This can lead to a slow response if the number of namespaces on the cluster is l
 
 To reduce this response time, you can increase the number of checks that Kubeapps will perform in parallel (per connection) setting the value: `kubeappsapis.burst=<desired_number>` and `kubeappsapis.QPS=<desired_number>`.
 
-### More questions?
-
-Feel free to [open an issue](https://github.com/vmware-tanzu/kubeapps/issues/new) if you have any questions!
-
-## Troubleshooting
-
-### Upgrading to chart version 8.0.0
-
-This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
-
-Additionally, it updates both the [PostgreSQL](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and the [Redis](https://github.com/bitnami/charts/tree/main/bitnami/redis) subcharts to their latest major versions, 11.0.0 and 16.0.0 respectively, where similar changes have been also performed.
-Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1600) for more information.
-
-The following values have been renamed:
-
-- `frontend.service.port` renamed as `frontend.service.ports.http`.
-- `frontend.service.nodePort` renamed as `frontend.service.nodePorts.http`.
-- `frontend.containerPort` renamed as `frontend.containerPorts.http`.
-- `dashboard.service.port` renamed as `dashboard.service.ports.http`.
-- `dashboard.containerPort` renamed as `dashboard.containerPorts.http`.
-- `apprepository.service.port` renamed as `apprepository.service.ports.http`.
-- `apprepository.containerPort` renamed as `apprepository.containerPorts.http`.
-- `kubeops.service.port` renamed as `kubeops.service.ports.http`.
-- `kubeops.containerPort` renamed as `kubeops.containerPorts.http`.
-- `assetsvc.service.port` renamed as `assetsvc.service.ports.http`.
-- `assetsvc.containerPort` renamed as `assetsvc.containerPorts.http`.
-- `authProxy.containerPort` renamed as `authProxy.containerPorts.proxy`.
-- `authProxy.additionalFlags` renamed as `authProxy.extraFlags`,
-- Pinniped Proxy service no longer uses `pinnipedProxy.containerPort`. Use `pinnipedProxy.service.ports.pinnipedProxy` to change the service port.
-- `pinnipedProxy.containerPort` renamed as `pinnipedProxy.containerPorts.pinnipedProxy`.
-- `postgresql.replication.enabled` has been removed. Use `postgresql.architecture` instead.
-- `postgresql.postgresqlDatabase` renamed as `postgresql.auth.database`.
-- `postgresql.postgresqlPassword` renamed as `postgresql.auth.password`.
-- `postgresql.existingSecret` renamed as `postgresql.auth.existingSecret`.
-- `redis.redisPassword` renamed as `redis.auth.password`.
-- `redis.existingSecret` renamed as `redis.auth.existingSecret`.
-
-Note also that if you have an existing Postgresql secret that is used for Kubeapps, you will need to update the key from `postgresql-password` to `postgres-password`.
-
 ### Nginx Ipv6 error
 
 When starting the application with the `--set enableIPv6=true` option, the Nginx server present in the services `kubeapps` and `kubeapps-internal-dashboard` may fail with the following:
@@ -1017,8 +937,8 @@ helm install --name kubeapps --namespace kubeapps oci://REGISTRY_NAME/REPOSITORY
 It is possible that when upgrading Kubeapps an error appears. That can be caused by a breaking change in the new chart or because the current chart installation is in an inconsistent state. If you find issues upgrading Kubeapps you can follow these steps:
 
 > Note: These steps assume that you have installed Kubeapps in the namespace `kubeapps` using the name `kubeapps`. If that is not the case replace the command with your namespace and/or name.
-> Note: If you are upgrading from 2.3.1 see the [following section](#upgrading-to-231).
-> Note: If you are upgrading from 1.X to 2.X see the [following section](#upgrading-to-20).
+> Note: If you are upgrading from 2.3.1 see the [following section](#to-600).
+> Note: If you are upgrading from 1.X to 2.X see the [following section](#to-400).
 
 1. (Optional) Backup your personal repositories (if you have any):
 
@@ -1065,7 +985,79 @@ It is possible that when upgrading Kubeapps an error appears. That can be caused
 
 After that you should be able to access the new version of Kubeapps. If the above doesn't work for you or you run into any other issues please open an [issue](https://github.com/vmware-tanzu/kubeapps/issues/new).
 
-### Upgrading to chart version 7.0.0
+### More questions?
+
+Feel free to [open an issue](https://github.com/vmware-tanzu/kubeapps/issues/new) if you have any questions!
+
+## Upgrading Kubeapps
+
+You can upgrade Kubeapps from the Kubeapps web interface. Select the namespace in which Kubeapps is installed (`kubeapps` if you followed the instructions in this guide) and click on the "Upgrade" button. Select the new version and confirm.
+
+You can also use the Helm CLI to upgrade Kubeapps, first ensure you have updated your local chart repository cache:
+
+```console
+helm repo update
+```
+
+Now upgrade Kubeapps:
+
+```console
+export RELEASE_NAME=kubeapps
+helm upgrade $RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/kubeapps
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
+
+### To 14.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
+
+### To 13.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
+
+### To 12.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To 8.0.0
+
+This major release renames several values in this chart and adds missing features, in order to get aligned with the rest of the assets in the Bitnami charts repository.
+
+Additionally, it updates both the [PostgreSQL](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and the [Redis](https://github.com/bitnami/charts/tree/main/bitnami/redis) subcharts to their latest major versions, 11.0.0 and 16.0.0 respectively, where similar changes have been also performed.
+Check [PostgreSQL Upgrading Notes](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1100) and [Redis Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1600) for more information.
+
+The following values have been renamed:
+
+- `frontend.service.port` renamed as `frontend.service.ports.http`.
+- `frontend.service.nodePort` renamed as `frontend.service.nodePorts.http`.
+- `frontend.containerPort` renamed as `frontend.containerPorts.http`.
+- `dashboard.service.port` renamed as `dashboard.service.ports.http`.
+- `dashboard.containerPort` renamed as `dashboard.containerPorts.http`.
+- `apprepository.service.port` renamed as `apprepository.service.ports.http`.
+- `apprepository.containerPort` renamed as `apprepository.containerPorts.http`.
+- `kubeops.service.port` renamed as `kubeops.service.ports.http`.
+- `kubeops.containerPort` renamed as `kubeops.containerPorts.http`.
+- `assetsvc.service.port` renamed as `assetsvc.service.ports.http`.
+- `assetsvc.containerPort` renamed as `assetsvc.containerPorts.http`.
+- `authProxy.containerPort` renamed as `authProxy.containerPorts.proxy`.
+- `authProxy.additionalFlags` renamed as `authProxy.extraFlags`,
+- Pinniped Proxy service no longer uses `pinnipedProxy.containerPort`. Use `pinnipedProxy.service.ports.pinnipedProxy` to change the service port.
+- `pinnipedProxy.containerPort` renamed as `pinnipedProxy.containerPorts.pinnipedProxy`.
+- `postgresql.replication.enabled` has been removed. Use `postgresql.architecture` instead.
+- `postgresql.postgresqlDatabase` renamed as `postgresql.auth.database`.
+- `postgresql.postgresqlPassword` renamed as `postgresql.auth.password`.
+- `postgresql.existingSecret` renamed as `postgresql.auth.existingSecret`.
+- `redis.redisPassword` renamed as `redis.auth.password`.
+- `redis.existingSecret` renamed as `redis.auth.existingSecret`.
+
+Note also that if you have an existing Postgresql secret that is used for Kubeapps, you will need to update the key from `postgresql-password` to `postgres-password`.
+
+### To 7.0.0
 
 In this release, no breaking changes were included in Kubeapps (version 2.3.2). However, the chart adopted the standardizations included in the rest of the charts in the Bitnami catalog.
 
@@ -1074,7 +1066,7 @@ Most of these standardizations simply add new parameters that allow to add more 
 - Chart labels were adapted to follow the [Helm charts standard labels](https://helm.sh/docs/chart_best_practices/labels/#standard-labels).
 - `securityContext.*` parameters are deprecated in favor of `XXX.podSecurityContext.*` and `XXX.containerSecurityContext.*`, where _XXX_ is placeholder you need to replace with the actual component(s). For instance, to modify the container security context for "kubeops" use `kubeops.podSecurityContext` and `kubeops.containerSecurityContext` parameters.
 
-### Upgrading to 2.3.1
+### To 6.0.0
 
 Kubeapps 2.3.1 (Chart version 6.0.0) introduces some breaking changes. Helm-specific functionality has been removed in order to support other installation methods (like using YAML manifests, [`kapp`](https://carvel.dev/kapp) or [`kustomize`](https://kustomize.io/)). Because of that, there are some steps required before upgrading from a previous version:
 
@@ -1120,7 +1112,7 @@ helm upgrade kubeapps oci://REGISTRY_NAME/REPOSITORY_NAME/kubeapps -n kubeapps -
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-### Upgrading to 2.0.1 (Chart 5.0.0)
+### To 5.0.0
 
 [On November 13, 2020, Helm 2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm 3 and to be consistent with the Helm project itself regarding the Helm 2 EOL.
 
@@ -1150,7 +1142,7 @@ kubectl delete statefulset -n kubeapps kubeapps-postgresql-master kubeapps-postg
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
-### Upgrading to 2.0
+### To 4.0.0
 
 Kubeapps 2.0 (Chart version 4.0.0) introduces some breaking changes:
 

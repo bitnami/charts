@@ -28,8 +28,10 @@ spec:
           {{- end }}
         spec:
           {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
-          securityContext: {{- omit .Values.backup.cronjob.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.podSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- include "influxdb.imagePullSecrets" . | nindent 10 }}
+          serviceAccountName: {{ include "influxdb.serviceAccountName" . }}
           restartPolicy: OnFailure
           volumes:
             - name: empty-dir
@@ -84,6 +86,11 @@ spec:
                       key: admin-user-token
               command:
                 - "/tmp/backup.sh"
+              {{- if .Values.backup.cronjob.resources }}
+              resources: {{- toYaml .Values.backup.cronjob.resources | nindent 16 }}
+              {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 16 }}
+              {{- end }}
               volumeMounts:
                 - name: empty-dir
                   mountPath: /tmp
@@ -94,7 +101,7 @@ spec:
                   mountPath: /tmp/backup.sh
                   subPath: backup.sh
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
           containers:
             - name: influxdb-backup-dummy-container
@@ -106,8 +113,13 @@ spec:
               command:
                 - "/bin/true"
               {{- end }}
+              {{- if .Values.backup.cronjob.resources }}
+              resources: {{- toYaml .Values.backup.cronjob.resources | nindent 16 }}
+              {{- else if ne .Values.backup.cronjob.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.cronjob.resourcesPreset) | nindent 16 }}
+              {{- end }}
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: gsutil-cp
@@ -118,6 +130,11 @@ spec:
               {{- else }}
               command:
                 - "/tmp/upload-google.sh"
+              {{- end }}
+              {{- if .Values.backup.uploadProviders.google.resources }}
+              resources: {{- toYaml .Values.backup.uploadProviders.google.resources | nindent 16 }}
+              {{- else if ne .Values.backup.uploadProviders.google.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.google.resourcesPreset) | nindent 16 }}
               {{- end }}
               volumeMounts:
                 - name: empty-dir
@@ -131,7 +148,7 @@ spec:
                 - name: google-cloud-key
                   mountPath: /var/secrets/google/
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- end }}
             {{- if .Values.backup.uploadProviders.azure.enabled }}
@@ -143,6 +160,11 @@ spec:
               {{- else }}
               command:
               - "/tmp/upload-azure.sh"
+              {{- end }}
+              {{- if .Values.backup.uploadProviders.azure.resources }}
+              resources: {{- toYaml .Values.backup.uploadProviders.azure.resources | nindent 16 }}
+              {{- else if ne .Values.backup.uploadProviders.azure.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.azure.resourcesPreset) | nindent 16 }}
               {{- end }}
               env:
                 - name: AZURE_STORAGE_CONNECTION_STRING
@@ -164,7 +186,7 @@ spec:
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- end }}
             {{- if .Values.backup.uploadProviders.aws.enabled }}
@@ -176,6 +198,11 @@ spec:
               {{- else }}
               command:
               - "/tmp/upload-aws.sh"
+              {{- end }}
+              {{- if .Values.backup.uploadProviders.aws.resources }}
+              resources: {{- toYaml .Values.backup.uploadProviders.aws.resources | nindent 16 }}
+              {{- else if ne .Values.backup.uploadProviders.aws.resourcesPreset "none" }}
+              resources: {{- include "common.resources.preset" (dict "type" .Values.backup.uploadProviders.aws.resourcesPreset) | nindent 16 }}
               {{- end }}
               env:
                 - name: AWS_ACCESS_KEY_ID
@@ -218,13 +245,16 @@ spec:
                 - name: empty-dir
                   mountPath: /tmp
                   subPath: tmp-dir
+                - name: empty-dir
+                  mountPath: /.aws
+                  subPath: aws-dir
                 - name: {{ include "common.names.fullname" . }}-backups
                   mountPath: {{ .Values.backup.directory | quote }}
                 - name: backup-scripts
                   mountPath: /tmp/upload-aws.sh
                   subPath: upload-aws.sh
               {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 16 }}
               {{- end }}
             {{- end }}
 {{- end }}

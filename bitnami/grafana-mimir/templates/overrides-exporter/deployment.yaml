@@ -64,7 +64,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.overridesExporter.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.overridesExporter.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.overridesExporter.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.overridesExporter.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.overridesExporter.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.overridesExporter.terminationGracePeriodSeconds }}
@@ -78,7 +78,7 @@ spec:
           image: {{ template "grafana-mimir.image" . }}
           imagePullPolicy: {{ .Values.mimir.image.pullPolicy }}
           {{- if .Values.overridesExporter.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.overridesExporter.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.overridesExporter.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -162,6 +162,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.overridesExporter.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: mimir-config
               mountPath: {{ .Values.mimir.dataDir }}/conf
             - name: data
@@ -173,6 +176,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.overridesExporter.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: data
           emptyDir: {}
         - name: mimir-config

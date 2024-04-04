@@ -489,7 +489,7 @@ Return the PostgreSQL User
   image: {{ template "supabase.psql.image" . }}
   imagePullPolicy: {{ .Values.psqlImage.pullPolicy }}
   {{- if .Values.auth.containerSecurityContext.enabled }}
-  securityContext: {{- omit .Values.auth.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.auth.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -534,6 +534,10 @@ Return the PostgreSQL User
       value: {{ include "supabase.database.user" . | quote }}
     - name: DATABASE_NAME
       value: {{ include "supabase.database.name" . | quote }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 {{- end -}}
 
 {{/*
