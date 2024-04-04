@@ -56,9 +56,6 @@ spec:
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
-        {{- if .Values.frontend.networkPolicy.extraFromClauses }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.frontend.networkPolicy.extraFromClauses "context" $ )| nindent 8 }}
-        {{- end }}
         {{- if .Values.frontend.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
