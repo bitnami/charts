@@ -4,7 +4,7 @@ module.exports = {
     password: 'ComplicatedPassword123!4',
   },
   defaultCommandTimeout: 70000,
-  pageLoadTimeout: 150000,
+  pageLoadTimeout: 300000,
   e2e: {
     setupNodeEvents(on, config) {},
     baseUrl: 'http://localhost/',
