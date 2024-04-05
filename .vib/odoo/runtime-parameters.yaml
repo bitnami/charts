@@ -1,6 +1,5 @@
 odooEmail: user@example.com
 odooPassword: ComplicatedPassword123!4
-resourcesPreset: none
 postgresql:
   auth:
     username: bn_odoo
