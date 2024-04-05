@@ -14,7 +14,6 @@ it('allows installing/uninstalling an application and inviting new users', () =>
     cy.get('button[name="button_immediate_install"]').click();
   });
 
-  cy.get('Loading');
   cy.reload({timeout: 300000});
 
   // Perform the second login only if the #login selector is visible
@@ -43,7 +42,6 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   });
   cy.contains('Uninstall').click({ force: true });
   cy.get('[name*="uninstall"]').click();
-  cy.get('Loading');
   cy.reload({timeout: 300000});
   cy.get('[title="Home Menu"]').click();
   cy.contains('a', 'Invoicing').should('not.exist');
