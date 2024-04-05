@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.12-debian-12-r0
+  tag: 2.10.12-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -532,7 +532,7 @@ sidecars: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for NATS pod
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
@@ -785,7 +785,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.14.0-debian-12-r7
+    tag: 0.14.0-debian-12-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

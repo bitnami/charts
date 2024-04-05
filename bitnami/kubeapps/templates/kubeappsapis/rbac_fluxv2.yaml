@@ -53,6 +53,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.kubeappsapis.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
 {{- end }}
