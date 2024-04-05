@@ -252,21 +252,21 @@ spec:
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: {{ ternary "http" "https" (not .Values.containerPorts.https) }}
+              port: {{ ternary "http" "https" .Values.tls.enabled }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: {{ ternary "http" "https" (not .Values.containerPorts.https) }}
+              port: {{ ternary "http" "https" .Values.tls.enabled }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: {{ ternary "http" "https" (not .Values.containerPorts.https) }}
+              port: {{ ternary "http" "https" .Values.tls.enabled }}
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}
@@ -294,6 +294,14 @@ spec:
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
               mountPath: /app
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: certificate
+              mountPath: /certs
+            {{- else }}
+            - name: empty-dir
+              mountPath: /certs
+              subPath: app-tls-dir
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
@@ -342,6 +350,20 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.tls.enabled }}
+        - name: certificate
+          secret:
+            {{- if .Values.tls.existingSecret }}
+            secretName: {{ .Values.tls.existingSecret }}
+            {{- else }}
+            secretName: {{ printf "%s-tls" (include "common.names.fullname" .) }}
+            items:
+              - key: tls.crt
+                path: server.crt
+              - key: tls.key
+                path: server.key
+            {{- end }}
+        {{- end }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:
