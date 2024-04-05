@@ -1,0 +1,62 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-headless" (include "seaweedfs.volume.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: volume
+  {{- if or .Values.volume.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.volume.service.headless.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: {{ .Values.volume.service.ports.http }}
+      {{- if not (eq .Values.volume.service.ports.http .Values.volume.containerPorts.http) }}
+      targetPort: {{ .Values.volume.containerPorts.http }}
+      {{- end }}
+      protocol: TCP
+      {{- if and (or (eq .Values.volume.service.type "NodePort") (eq .Values.volume.service.type "LoadBalancer")) (not (empty .Values.volume.service.nodePorts.http)) }}
+      nodePort: {{ .Values.volume.service.nodePorts.http }}
+      {{- else if eq .Values.volume.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.volume.service.ports.grpc }}
+      {{- if not (eq .Values.volume.service.ports.grpc .Values.volume.containerPorts.grpc) }}
+      targetPort: {{ .Values.volume.containerPorts.grpc }}
+      {{- end }}
+      protocol: TCP
+      {{- if and (or (eq .Values.volume.service.type "NodePort") (eq .Values.volume.service.type "LoadBalancer")) (not (empty .Values.volume.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.volume.service.nodePorts.grpc }}
+      {{- else if eq .Values.volume.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.volume.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.volume.service.ports.metrics }}
+      {{- if not (eq .Values.volume.service.ports.metrics .Values.volume.containerPorts.metrics) }}
+      targetPort: {{ .Values.volume.containerPorts.metrics }}
+      {{- end }}
+      protocol: TCP
+      {{- if and (or (eq .Values.volume.service.type "NodePort") (eq .Values.volume.service.type "LoadBalancer")) (not (empty .Values.volume.service.nodePorts.metrics)) }}
+      nodePort: {{ .Values.volume.service.nodePorts.metrics }}
+      {{- else if eq .Values.volume.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if .Values.volume.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.volume.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.volume.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: volume
