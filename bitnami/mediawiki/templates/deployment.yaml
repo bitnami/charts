@@ -193,7 +193,6 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-          ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
