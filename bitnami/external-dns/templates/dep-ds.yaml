@@ -282,7 +282,7 @@ spec:
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}
               {{- end }}
             {{- end }}
-            {{- if eq .Values.provider "oci" }}
+            {{- if and (eq .Values.provider "oci") .Values.useInstancePrincipal }}
             # OCI Arguments
               {{- if .Values.oci.enableInstancePrincipal }}
             - --oci-auth-instance-principal
