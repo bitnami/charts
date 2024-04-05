@@ -761,7 +761,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -806,7 +806,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1017,11 +1017,11 @@ cronjobs:
 
     ## Persistence using Persistent Volume Claims for the taskScheduler CronJob
     ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-    ## @param cronjobs.taskScheduler.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.taskScheduler.persistence.enabled Enable persistence using Persistent Volume Claims
     ## @param cronjobs.taskScheduler.persistence.existingClaim A manually managed Persistent Volume Claim
     ##
     persistence:
-      enable: true
+      enabled: true
       existingClaim: ""
 
     ## Configure Pods Security Context for the taskScheduler CronJob
@@ -1111,11 +1111,11 @@ cronjobs:
 
     ## Persistence using Persistent Volume Claims for the archive CronJob
     ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-    ## @param cronjobs.archive.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.archive.persistence.enabled Enable persistence using Persistent Volume Claims
     ## @param cronjobs.archive.persistence.existingClaim A manually managed Persistent Volume Claim
     ##
     persistence:
-      enable: true
+      enabled: true
       existingClaim: ""
 
     ## Configure Pods Security Context for the archive CronJob
