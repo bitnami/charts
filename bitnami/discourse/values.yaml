@@ -406,7 +406,7 @@ discourse:
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
-      add: ["CHOWN", "CHMOD", "SYS_CHROOT", "FOWNER", "SETGID", "SETUID", "DAC_OVERRIDE"]
+      add: ["CHOWN", "SYS_CHROOT", "FOWNER", "SETGID", "SETUID", "DAC_OVERRIDE"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param discourse.lifecycleHooks for the Discourse container(s) to automate configuration before or after startup
