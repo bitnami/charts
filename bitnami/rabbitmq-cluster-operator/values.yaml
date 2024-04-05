@@ -72,7 +72,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.13-debian-12-r2
+  tag: 3.12.13-debian-12-r5
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -93,7 +93,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.4-debian-12-r14
+  tag: 1.0.4-debian-12-r16
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -116,7 +116,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 2.7.0-debian-12-r8
+    tag: 2.8.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -131,6 +131,9 @@ clusterOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param clusterOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
   ## @param clusterOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -207,7 +210,7 @@ clusterOperator:
   customStartupProbe: {}
   ## RabbitMQ Cluster Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
+  ## @param clusterOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if clusterOperator.resources is set (clusterOperator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -661,6 +664,9 @@ msgTopologyOperator:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param msgTopologyOperator.revisionHistoryLimit sets number of replicaset to keep in k8s
+  ##
+  revisionHistoryLimit: 10
   ## @param msgTopologyOperator.watchAllNamespaces Watch for resources in all namespaces
   ##
   watchAllNamespaces: true
@@ -749,7 +755,7 @@ msgTopologyOperator:
   existingWebhookCertCABundle: ""
   ## RabbitMQ Messaging Topology Operator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
+  ## @param msgTopologyOperator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if msgTopologyOperator.resources is set (msgTopologyOperator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"

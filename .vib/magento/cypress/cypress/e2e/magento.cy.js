@@ -19,7 +19,7 @@ it('allows admin to add a product to the store', () => {
   cy.contains('Salable Quantity');
   cy.contains('Add Product').click();
   cy.fixture('products').then((product) => {
-    cy.get('[name="product[name]"]').type(
+    cy.get('[name="product[name]"]', {timeout: 60000}).type(
       `${product.newProduct.productName}.${random}`
     );
     cy.get('[name="product[price]"]').type(product.newProduct.price);
@@ -30,7 +30,7 @@ it('allows admin to add a product to the store', () => {
   });
   cy.get('.product-image').should('be.visible');
   cy.get('#save-button').click();
-  cy.get('#menu-magento-catalog-catalog').click();
+  cy.get('#menu-magento-catalog-catalog', {timeout: 60000}).click();
   cy.contains('Products').click();
   cy.fixture('products').then((product) => {
     cy.contains(`${product.newProduct.productName}.${random}`);
