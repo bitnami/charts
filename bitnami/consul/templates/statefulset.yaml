@@ -275,6 +275,10 @@ spec:
             {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /bitnami/consul
+            {{- else }}
+            - name: empty-dir
+              mountPath: /bitnami/consul
+              subPath: app-data-dir
             {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: consul-config
