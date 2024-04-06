@@ -31,11 +31,11 @@ dependencies:
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
+  version: 15.x.x
 - condition: kong.enabled
   name: kong
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.x.x
+  version: 12.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 2.11.1
+version: 3.0.1

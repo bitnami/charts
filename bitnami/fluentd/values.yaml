@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.4-debian-12-r0
+  tag: 1.16.5-debian-12-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -530,7 +530,7 @@ forwarder:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param forwarder.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if forwarder.resources is set (forwarder.resources is recommended for production).
+  ## @param forwarder.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if forwarder.resources is set (forwarder.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -1191,7 +1191,7 @@ aggregator:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param aggregator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
+  ## @param aggregator.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -1289,6 +1289,7 @@ aggregator:
   ## @param aggregator.autoscaling.minReplicas Minimum number of replicas for the HPA
   ## @param aggregator.autoscaling.maxReplicas Maximum number of replicas for the HPA
   ## @param aggregator.autoscaling.metrics [array] Metrics for the HPA to manage the scaling
+  ## @param aggregator.autoscaling.behavior HPA Behavior
   ##
   autoscaling:
     enabled: false
@@ -1307,6 +1308,7 @@ aggregator:
           target:
             type: Utilization
             averageUtilization: 60
+    behavior: {}
   ## Persist data to a persistent volume
   ##
   persistence:

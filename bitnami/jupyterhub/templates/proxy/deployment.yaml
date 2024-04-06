@@ -98,8 +98,8 @@ spec:
             - "--ip=::"
             - "--api-ip=::"
             - --api-port={{ .Values.proxy.containerPort.api }}
-            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}
-            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ coalesce .Values.hub.service.ports.http .Values.hub.service.port }}/hub/error
+            - --default-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.ports.http }}
+            - --error-target=http://{{ template "common.names.fullname" . }}-hub:{{ .Values.hub.service.ports.http }}/hub/error
             - --port={{ .Values.proxy.containerPort.http }}
             {{- if .Values.proxy.metrics.serviceMonitor.enabled }}
             - "--metrics-ip=::"

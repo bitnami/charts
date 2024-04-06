@@ -24,7 +24,7 @@ web:
     runAsUser: 1002
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
 worker:
   enabled: true
   replicaCount: 2
@@ -43,7 +43,7 @@ worker:
     runAsUser: 0
   serviceAccount:
     create: true
-    automountServiceAccountToken: true
+  automountServiceAccountToken: true
 service:
   web:
     type: LoadBalancer
