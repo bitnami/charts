@@ -21,7 +21,7 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/');
-    cy.contains('Log in');
+    cy.contains('Log in', {timeout: 60000});
     cy.get('#input_username').type(username);
     cy.get('#input_password').type(password);
     cy.contains('input', 'Log in').click();

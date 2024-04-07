@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -322,6 +322,7 @@ initJob:
   ## @param initJob.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param initJob.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param initJob.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param initJob.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param initJob.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param initJob.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param initJob.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -331,8 +332,9 @@ initJob:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -373,10 +375,10 @@ initJob:
   extraVolumeMounts: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param initJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
+  ## @param initJob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param initJob.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -388,6 +390,59 @@ initJob:
   ##     memory: 1024Mi
   ##
   resources: {}
+  ## Configure extra options for Data Coordinator containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param initJob.livenessProbe.enabled Enable livenessProbe on init job
+  ## @param initJob.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param initJob.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param initJob.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param initJob.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param initJob.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param initJob.readinessProbe.enabled Enable readinessProbe on init job
+  ## @param initJob.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param initJob.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param initJob.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param initJob.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param initJob.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param initJob.startupProbe.enabled Enable startupProbe on Data Coordinator containers
+  ## @param initJob.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param initJob.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param initJob.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param initJob.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param initJob.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param initJob.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param initJob.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param initJob.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
   ## @param initJob.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: false
@@ -563,10 +618,10 @@ dataCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dataCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dataCoord.resources is set (dataCoord.resources is recommended for production).
+  ## @param dataCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dataCoord.resources is set (dataCoord.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param dataCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -597,6 +652,7 @@ dataCoord:
   ## @param dataCoord.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param dataCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dataCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dataCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataCoord.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dataCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -606,8 +662,9 @@ dataCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1066,10 +1123,10 @@ rootCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param rootCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if rootCoord.resources is set (rootCoord.resources is recommended for production).
+  ## @param rootCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if rootCoord.resources is set (rootCoord.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param rootCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1100,6 +1157,7 @@ rootCoord:
   ## @param rootCoord.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param rootCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param rootCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param rootCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param rootCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param rootCoord.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param rootCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1109,8 +1167,9 @@ rootCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -1569,10 +1628,10 @@ queryCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryCoord.resources is set (queryCoord.resources is recommended for production).
+  ## @param queryCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryCoord.resources is set (queryCoord.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param queryCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1603,6 +1662,7 @@ queryCoord:
   ## @param queryCoord.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param queryCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param queryCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryCoord.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param queryCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1612,8 +1672,9 @@ queryCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -2072,10 +2133,10 @@ indexCoord:
   customStartupProbe: {}
   ## data coordinator resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexCoord.resources is set (indexCoord.resources is recommended for production).
+  ## @param indexCoord.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexCoord.resources is set (indexCoord.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param indexCoord.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2106,6 +2167,7 @@ indexCoord:
   ## @param indexCoord.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param indexCoord.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexCoord.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param indexCoord.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param indexCoord.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexCoord.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param indexCoord.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2115,8 +2177,9 @@ indexCoord:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -2575,10 +2638,10 @@ dataNode:
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param dataNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if dataNode.resources is set (dataNode.resources is recommended for production).
+  ## @param dataNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dataNode.resources is set (dataNode.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param dataNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2609,6 +2672,7 @@ dataNode:
   ## @param dataNode.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param dataNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param dataNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param dataNode.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param dataNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param dataNode.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param dataNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -2618,8 +2682,9 @@ dataNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -3078,10 +3143,10 @@ queryNode:
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryNode.resources is set (queryNode.resources is recommended for production).
+  ## @param queryNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryNode.resources is set (queryNode.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param queryNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3112,6 +3177,7 @@ queryNode:
   ## @param queryNode.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param queryNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param queryNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param queryNode.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param queryNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param queryNode.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param queryNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -3121,8 +3187,9 @@ queryNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -3581,10 +3648,10 @@ indexNode:
   customStartupProbe: {}
   ## data node resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexNode.resources is set (indexNode.resources is recommended for production).
+  ## @param indexNode.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexNode.resources is set (indexNode.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param indexNode.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3615,6 +3682,7 @@ indexNode:
   ## @param indexNode.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param indexNode.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param indexNode.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param indexNode.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param indexNode.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param indexNode.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param indexNode.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -3624,8 +3692,9 @@ indexNode:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -4112,10 +4181,10 @@ proxy:
   customStartupProbe: {}
   ## proxy resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param proxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).
+  ## @param proxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if proxy.resources is set (proxy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param proxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -4146,6 +4215,7 @@ proxy:
   ## @param proxy.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param proxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param proxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param proxy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param proxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param proxy.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param proxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -4155,8 +4225,9 @@ proxy:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -4628,10 +4699,10 @@ attu:
   customStartupProbe: {}
   ## attu resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param attu.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if attu.resources is set (attu.resources is recommended for production).
+  ## @param attu.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if attu.resources is set (attu.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param attu.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -4662,6 +4733,7 @@ attu:
   ## @param attu.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param attu.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param attu.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param attu.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param attu.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param attu.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param attu.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -4671,8 +4743,9 @@ attu:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -5106,6 +5179,7 @@ waitContainer:
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param waitContainer.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param waitContainer.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -5115,8 +5189,9 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     readOnlyRootFilesystem: true
@@ -5125,6 +5200,23 @@ waitContainer:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
+  ## Container resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param waitContainer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if initJob.resources is set (initJob.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param waitContainer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
 ## @section External etcd settings
 ##
 externalEtcd:

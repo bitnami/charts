@@ -152,14 +152,18 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.attu.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: tmp
+            - name: empty-dir
               mountPath: /tmp
-            - name: tmp-npm
+              subPath: tmp-dir
+            - name: empty-dir
               mountPath: /.npm
-            - name: tmp-yarn
+              subPath: npm-tmp-dir
+            - name: empty-dir
               mountPath: /.yarn
-            - name: tmp-yarn-cache
+              subPath: yarn-dir
+            - name: empty-dir
               mountPath: /.cache/yarn
+              subPath: yarn-cache-dir
           {{- if .Values.attu.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -167,13 +171,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.attu.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: tmp-yarn
-          emptyDir: {}
-        - name: tmp-yarn-cache
-          emptyDir: {}
-        - name: tmp-npm
-          emptyDir: {}
-        - name: tmp
+        - name: empty-dir
           emptyDir: {}
         {{- if .Values.attu.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.attu.extraVolumes "context" $) | nindent 8 }}

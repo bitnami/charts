@@ -82,6 +82,9 @@ data:
         {{- if .Values.persistence.imageChartStorage.s3.storageClass }}
         storageclass: {{ .Values.persistence.imageChartStorage.s3.storageClass }}
         {{- end }}
+        {{- if .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
+        multipartcopythresholdsize: {{ .Values.persistence.imageChartStorage.s3.multipartcopythresholdsize }}
+        {{- end }}
       {{- else if eq .Values.persistence.imageChartStorage.type "swift" }}
       swift:
         authurl: {{ .Values.persistence.imageChartStorage.swift.authurl }}
