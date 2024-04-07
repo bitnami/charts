@@ -286,6 +286,7 @@ spec:
             # OCI Arguments
               {{- if .Values.oci.enableInstancePrincipal }}
             - --oci-auth-instance-principal
+            - --oci-compartment-ocid={{ .Values.oci.compartmentOCID }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "ns1" }}
