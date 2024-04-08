@@ -1,0 +1,19 @@
+security:
+  enabled: true
+master:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+s3:
+  enabled: true
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+  auth:
+    enabled: true
+    adminAccessKeyId: rwZGFODFFghAhnmo
+    adminSecretKey: 6jPWzB8P4XQ77p6l9YfLhMlo5PpplOHt
+    readAccessKeyId: JSDeCzedf1ugh5qE
+    readSecretKey: wmhEWqORvsTe7If4riLxGq8u4wmdWeqC
