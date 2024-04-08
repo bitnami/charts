@@ -108,9 +108,11 @@ client:
   ##
   replicaCount: 1
   ## @param client.containerPorts.http Appsmith client HTTP container port
+  ## @param client.containerPorts.https Appsmith client HTTPS container port
   ##
   containerPorts:
     http: 8080
+    https: 8443
   ## Configure extra options for Appsmith client containers' liveness and readiness probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param client.livenessProbe.enabled Enable livenessProbe on Appsmith client containers

@@ -105,6 +105,8 @@ spec:
               value: {{ .Values.rts.service.ports.http | quote }}
             - name: APPSMITH_UI_HTTP_PORT
               value: {{ .Values.client.containerPorts.http | quote }}
+            - name: APPSMITH_UI_HTTPS_PORT
+              value: {{ .Values.client.containerPorts.https | quote }}
             {{- if .Values.client.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.client.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -125,6 +127,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.client.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.client.containerPorts.https }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.client.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customLivenessProbe "context" $) | nindent 12 }}
