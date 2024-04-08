@@ -119,6 +119,19 @@ Return the Master Server peers
 {{- end -}}
 
 {{/*
+Return true if persistence is enabled for any of the data volumes for Volume Server
+*/}}
+{{- define "seaweedfs.volume.persistence.enabled" -}}
+{{- $persistenceEnabled := false -}}
+{{- range .Values.volume.dataVolumes -}}
+{{- if .persistence.enabled -}}
+    {{- $persistenceEnabled = true -}}
+{{- end -}}
+{{- end -}}
+{{- $persistenceEnabled -}}
+{{- end -}}
+
+{{/*
 Return the user defined LoadBalancerIP for Volume Server service
 Note: returns 127.0.0.1 if using ClusterIP
 */}}

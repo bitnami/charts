@@ -83,7 +83,7 @@ spec:
       {{- if .Values.master.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) .Values.master.initContainers -}}
+      {{- if or (and .Values.volumePermissions.enabled .Values.master.persistence.enabled) .Values.master.initContainers }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.master.persistence.enabled }}
         - name: volume-permissions

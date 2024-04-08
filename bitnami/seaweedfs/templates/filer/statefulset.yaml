@@ -86,7 +86,7 @@ spec:
       {{- end }}
       initContainers:
         {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
-        {{- if .Values.filer.initContainers -}}
+        {{- if .Values.filer.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.filer.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:

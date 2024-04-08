@@ -86,7 +86,7 @@ spec:
         {{- if and .Values.s3.auth.enabled (not .Values.s3.auth.existingSecret) }}
         {{- include "seaweedfs.s3.authConfigInitContainer" . | nindent 8 }}
         {{- end }}
-        {{- if .Values.s3.initContainers -}}
+        {{- if .Values.s3.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.s3.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
