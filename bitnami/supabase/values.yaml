@@ -139,7 +139,7 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.29.2-debian-12-r2
+      tag: 1.29.3-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -442,7 +442,7 @@ auth:
   image:
     registry: docker.io
     repository: bitnami/gotrue
-    tag: 1.0.1-debian-12-r21
+    tag: 1.0.1-debian-12-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -844,7 +844,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.79.0-debian-12-r0
+    tag: 0.79.6-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1262,7 +1262,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.25.66-debian-12-r1
+    tag: 2.26.6-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2068,7 +2068,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.47.0-debian-12-r3
+    tag: 0.48.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2519,7 +2519,7 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 0.23.11-debian-12-r8
+    tag: 0.23.11-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3054,7 +3054,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.1-debian-12-r13
+  tag: 15.1.1-debian-12-r15
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3229,7 +3229,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.1-debian-12-r13
+    tag: 15.1.1-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
