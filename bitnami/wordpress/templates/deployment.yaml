@@ -144,6 +144,10 @@ spec:
               info "Custom htaccess mounted, creating folder in volume"
               mkdir -p /emptydir/apache-conf-dir/vhosts/htaccess
               {{- end }}
+
+              info "Copying default PHP config"
+              cp -r --preserve=mode /opt/bitnami/php/etc /emptydir/php-conf-dir
+
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir
