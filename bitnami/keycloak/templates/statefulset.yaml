@@ -284,6 +284,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/keycloak/lib/quarkus
               subPath: app-quarkus-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/keycloak/data
+              subPath: app-data-dir
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: keycloak-config
               mountPath: /bitnami/keycloak/conf/keycloak.conf
