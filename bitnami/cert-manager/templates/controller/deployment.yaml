@@ -129,7 +129,7 @@ spec:
             - name: http
               protocol: TCP
               containerPort: {{ coalesce .Values.controller.containerPort .Values.controller.containerPorts.http }}
-            - name: http-health
+            - name: health
               protocol: TCP
               containerPort: {{ .Values.controller.containerPorts.health }}
           {{- if .Values.controller.customLivenessProbe }}
