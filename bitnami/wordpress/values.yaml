@@ -1093,6 +1093,7 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1104,9 +1105,10 @@ metrics:
     enabled: true
     seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
