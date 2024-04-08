@@ -2136,6 +2136,9 @@ alertmanager:
     ##             name: http
     ##
     extraRules: []
+  ## @param alertmanager.enableFeatures Enable access to Alertmanager disabled features.
+  ##
+  enableFeatures: []
   ## @param alertmanager.externalUrl External URL used to access Alertmanager
   ## e.g:
   ## externalUrl: https://alertmanager.example.com
