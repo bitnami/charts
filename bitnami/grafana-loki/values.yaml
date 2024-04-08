@@ -1428,6 +1428,45 @@ indexGateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @section index-gateway Persistence Parameters
+  ##
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param indexGateway.persistence.enabled Enable persistence in index-gateway instances
+    ##
+    enabled: false
+    ## @param indexGateway.persistence.storageClass PVC Storage Class for index-gateway's data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param indexGateway.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
+    ## @param indexGateway.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param indexGateway.persistence.size PVC Storage Request for index-gateway's data volume
+    ##
+    size: 8Gi
+    ## @param indexGateway.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param indexGateway.persistence.selector Selector to match an existing Persistent Volume for index-gateway's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
   ## @section index-gateway Traffic Exposure Parameters
   ##
 
