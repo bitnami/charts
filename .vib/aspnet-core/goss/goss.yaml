@@ -5,13 +5,7 @@ file:
   /app:
     exists: true
     filetype: directory
-    {{- if ne .Vars.target_platform_kind "OPENSHIFT" }}
-    mode: "0777"
-    owner: root
-    group: root
-    {{- else }}
     mode: "2777"
-    {{- end }}
 command:
   {{- if and .Vars.serviceAccount.create .Vars.automountServiceAccountToken }}
   check-sa:

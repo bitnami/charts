@@ -25,7 +25,8 @@
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
-            "name": "M4"
+            "name": "S4",
+            "worker_nodes_instance_count": 3
           }
         }
       },
