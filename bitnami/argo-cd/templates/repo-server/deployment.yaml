@@ -164,6 +164,8 @@ spec:
             - {{ .Values.repoServer.logLevel | quote }}
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
+            - --port={{ .Values.repoServer.containerPorts.repoServer }}
+            - --metrics-port={{ .Values.repoServer.containerPorts.metrics }}
             {{- if .Values.repoServer.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -172,11 +174,9 @@ spec:
             - name: repo-server
               containerPort: {{ .Values.repoServer.containerPorts.repoServer }}
               protocol: TCP
-            {{- if .Values.repoServer.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.repoServer.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
           env:
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD

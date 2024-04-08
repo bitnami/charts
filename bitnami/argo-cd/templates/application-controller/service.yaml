@@ -35,8 +35,8 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: tcp-controller
-      port: {{ .Values.controller.service.port }}
+    - name: http-metrics
+      port: {{ coalesce .Values.controller.service.port .Values.controller.service.ports.metrics }}
       targetPort: controller
       protocol: TCP
       {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePort))) }}

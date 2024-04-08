@@ -234,10 +234,8 @@ controller:
   ##
   logLevel: info
   ## Argo CD application controller ports
-  ## @param controller.containerPorts.controller Argo CD application controller port number
   ## @param controller.containerPorts.metrics Argo CD application controller metrics port number
   containerPorts:
-    controller: 8082
     metrics: 8082
   ## Argo CD application controller service parameters
   ##
@@ -245,9 +243,10 @@ controller:
     ## @param controller.service.type Argo CD service type
     ##
     type: ClusterIP
-    ## @param controller.service.port Argo CD application controller service port
+    ## @param controller.service.ports.metrics Argo CD application controller service port
     ##
-    port: 8082
+    ports:
+      metrics: 8082
     ## Node ports to expose
     ## @param controller.service.nodePort Node port for Argo CD application controller service
     ## NOTE: choose port between <30000-32767>

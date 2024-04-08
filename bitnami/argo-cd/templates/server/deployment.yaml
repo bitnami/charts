@@ -155,6 +155,8 @@ spec:
             {{- if .Values.server.insecure }}
             - --insecure
             {{- end }}
+            - --port={{ .Values.server.containerPorts.http }}
+            - --metrics-port={{ .Values.server.containerPorts.metrics }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -163,11 +165,9 @@ spec:
             - name: http
               containerPort: {{ .Values.server.containerPorts.http }}
               protocol: TCP
-            {{- if .Values.server.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.server.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
           env:
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
