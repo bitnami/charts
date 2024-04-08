@@ -20,9 +20,8 @@ spec:
   ingressClassName: {{ .Values.master.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if .Values.master.ingress.hostname }}
-    - host: {{ .Values.master.ingress.hostname }}
-      http:
+    {{- if or .Values.master.ingress.hostname .Values.master.ingress.path }}
+    - http:
         paths:
           {{- if .Values.master.ingress.extraPaths }}
           {{- toYaml .Values.master.ingress.extraPaths | nindent 10 }}
@@ -31,7 +30,10 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.master.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.master.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+      {{- if not (empty .Values.master.ingress.hostname )}}
+      host: {{ .Values.master.ingress.hostname }}
+      {{- end }}
     {{- end }}
     {{- range .Values.master.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -41,7 +43,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.master.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.master.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.master.ingress.extraRules "context" $) | nindent 4 }}
