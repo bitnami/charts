@@ -423,6 +423,7 @@ spec:
               {{- else if .Values.hostPorts.intra }}
               hostPort: {{ .Values.hostPorts.intra }}
               {{- end }}
+            {{- if (ne (include "cassandra.internode.tlsEncryption" .) "none") }}
             - name: tls
               containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
@@ -430,6 +431,7 @@ spec:
               {{- else if .Values.hostPorts.tls }}
               hostPort: {{ .Values.hostPorts.tls }}
               {{- end }}
+            {{- end }}
             - name: jmx
               containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}
