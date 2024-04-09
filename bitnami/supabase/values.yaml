@@ -401,6 +401,7 @@ auth:
   defaultConfig: |
     GOTRUE_API_HOST: "0.0.0.0"
     GOTRUE_API_PORT: {{ .Values.auth.containerPorts.http | quote }}
+    API_EXTERNAL_URL: "http:/{{ include "supabase.auth.fullname" . }}:{{ .Values.auth.service.ports.http }}"
     GOTRUE_SITE_URL: {{ include "supabase.studio.publicURL" . | quote }}
     GOTRUE_URI_ALLOW_LIST: "*"
     GOTRUE_DISABLE_SIGNUP: "false"
