@@ -37,7 +37,9 @@ it('allows to use the API to retrieve analytics', () => {
   cy.login();
   // Navitage using the UI as Matomo will randomly fail with
   // "token mismatch" if accessed directly
+  cy.contains('Forms', {timeout: 60000});
   cy.get('#topmenu-coreadminhome').click();
+  cy.contains('System Summary', {timeout: 60000});
   cy.contains('Personal').click();
   cy.contains('Security').click();
   cy.contains('Create new token').click();

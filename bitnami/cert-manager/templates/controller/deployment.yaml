@@ -87,6 +87,8 @@ spec:
           {{- else }}
           args:
             - --v={{ .Values.logLevel }}
+            - --metrics-listen-address=0.0.0.0:{{ .Values.controller.containerPorts.http }}
+            - --internal-healthz-listen-address=0.0.0.0:{{ .Values.controller.containerPorts.health }}
             {{- if .Values.controller.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -126,7 +128,10 @@ spec:
           ports:
             - name: http
               protocol: TCP
-              containerPort: {{ .Values.controller.containerPort }}
+              containerPort: {{ coalesce .Values.controller.containerPort .Values.controller.containerPorts.http }}
+            - name: health
+              protocol: TCP
+              containerPort: {{ .Values.controller.containerPorts.health }}
           {{- if .Values.controller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.controller.livenessProbe.enabled }}
