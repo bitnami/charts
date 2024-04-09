@@ -171,6 +171,9 @@ extraEnvVarsSecret: ""
 ## @param replicaCount Number of solr replicas
 ##
 replicaCount: 3
+## @param revisionHistoryLimit The number of old history to retain to allow rollback
+## NOTE: Explicitly setting this field to 0, will result in cleaning up all the history of your Deployment, thus that Deployment will not be able to roll back.
+revisionHistoryLimit: 10
 ## @param containerPorts.http Solr HTTP container port
 ##
 containerPorts:
