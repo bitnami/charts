@@ -270,14 +270,93 @@ spec:
               subPath: {{ .Values.backend.persistence.subPath }}
               {{- end }}
           {{- if .Values.backend.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        - name: rts-redirect
+          image: {{ template "appsmith.redirect.image" . }}
+          imagePullPolicy: {{ .Values.backend.redirectSidecar.image.pullPolicy }}
+          {{- if .Values.backend.redirectSidecar.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.redirectSidecar.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectSidecar.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectSidecar.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.backend.redirectSidecar.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.backend.redirectSidecar.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.backend.redirectSidecar.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.backend.redirectSidecar.resources }}
+          resources: {{- toYaml .Values.backend.redirectSidecar.resources | nindent 12 }}
+          {{- else if ne .Values.backend.redirectSidecar.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.backend.redirectSidecar.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            # This port needs to be hardcoded because of Appsmith code
+            # https://github.com/appsmithorg/appsmith/blob/021b4177eac01a445cacf8bfb4688de449366701/app/server/appsmith-server/src/main/java/com/appsmith/server/configurations/CommonConfig.java#L136
+            - name: http-redirect
+              containerPort: 8080
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.backend.redirectSidecar.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectSidecar.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectSidecar.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-redirect
+          {{- end }}
+          {{- if .Values.backend.redirectSidecar.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectSidecar.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectSidecar.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /rts-api/v1/health-check
+              port: http-redirect
+          {{- end }}
+          {{- if .Values.backend.redirectSidecar.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectSidecar.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectSidecar.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /rts-api/v1/health-check
+              port: http-redirect
+          {{- end }}
+          {{- end }}
+          {{- if .Values.backend.redirectSidecar.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: haproxy-conf
+              mountPath: /bitnami/haproxy/conf
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.backend.redirectSidecar.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectSidecar.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.backend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.backend.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: haproxy-conf
+          configMap:
+            name: {{ include "appsmith.redirect.fullname" . }}
         - name: data
         {{- if .Values.backend.persistence.enabled }}
           persistentVolumeClaim:

@@ -11,12 +11,26 @@ Return the proper Appsmith image name
 {{- end -}}
 
 {{/*
+Return the proper Appsmith image name
+*/}}
+{{- define "appsmith.redirect.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.backend.redirectSidecar.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Appsmith backend fullname
 */}}
 {{- define "appsmith.backend.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "backend" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+
+{{/*
+Return the proper Appsmith backend fullname
+*/}}
+{{- define "appsmith.redirect.fullname" -}}
+{{- printf "%s-%s" (include "appsmith.backend.fullname" .) "redirect" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{/*
 Return the proper Appsmith rts fullname
 */}}

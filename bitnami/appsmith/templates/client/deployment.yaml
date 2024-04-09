@@ -96,8 +96,8 @@ spec:
             - name: empty-dir
               mountPath: /emptydir
         {{- if not .Values.diagnosticMode.enabled }}
-        {{- include "appsmith.waitForBackendInitContainer" . | nindent 8 }}
         {{- include "appsmith.waitForRTSInitContainer" . | nindent 8 }}
+        {{- include "appsmith.waitForBackendInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.client.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.client.initContainers "context" $) | nindent 8 }}
