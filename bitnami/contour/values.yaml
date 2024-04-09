@@ -717,16 +717,17 @@ envoy:
   args: []
   ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
   ## @param envoy.shutdownManager.extraArgs [array] Extra arguments passed to shutdown container
-  ## @param envoy.shutdownManager.port Specify Port for shutdown container
   ## @param envoy.shutdownManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.shutdownManager.resources is set (envoy.shutdownManager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ## @param envoy.shutdownManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## @param envoy.shutdownManager.containerPorts.http Specify Port for shutdown container
   ##
   shutdownManager:
     extraArgs: []
-    port: "8090"
     enabled: true
     resourcesPreset: "nano"
+    containerPorts:
+      http: 8090
     ## Example:
     ## resources:
     ##   requests:
