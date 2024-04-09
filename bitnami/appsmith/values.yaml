@@ -832,6 +832,11 @@ backend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ##
+  ## Appsmith Backend sidecar redirect
+  ## This is because the appsmith backend needs to contact the rts server but the address is hardcoded
+  ## in code: https://github.com/appsmithorg/appsmith/blob/021b4177eac01a445cacf8bfb4688de449366701/app/server/appsmith-server/src/main/java/com/appsmith/server/configurations/CommonConfig.java#L136
+  ## Therefore we added a lightweight HAProxy redirect sidecar
   redirectSidecar:
     ## @section HAProxy Parameters
     ##
