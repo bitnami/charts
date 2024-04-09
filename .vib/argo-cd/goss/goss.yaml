@@ -8,7 +8,7 @@ http:
   http://argo-cd-app-controller:{{ .Vars.controller.service.port }}/healthz:
     status: 200
 addr:
-  tcp://argo-cd-repo-server:{{ .Vars.repoServer.service.port }}:
+  tcp://argo-cd-repo-server:{{ .Vars.repoServer.service.ports.repoServer }}:
     reachable: true
 file:
   /app/config/ssh:

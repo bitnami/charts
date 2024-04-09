@@ -146,7 +146,7 @@ spec:
             - --self-heal-timeout-seconds
             - {{ .Values.controller.defaultArgs.selfHealTimeout | quote }}
             - --repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             - --logformat
             - {{ .Values.controller.logFormat | quote }}
             - --loglevel

@@ -39,8 +39,8 @@ spec:
       port: {{ coalesce .Values.controller.service.port .Values.controller.service.ports.metrics }}
       targetPort: controller
       protocol: TCP
-      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePort))) }}
-      nodePort: {{ .Values.controller.service.nodePort }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty (coalesce .Values.controller.service.nodePort .Values.controller.service.nodePorts.metrics)))) }}
+      nodePort: {{ coalesce .Values.controller.service.nodePort .Values.controller.service.nodePorts.metrics }}
       {{- else if eq .Values.controller.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
