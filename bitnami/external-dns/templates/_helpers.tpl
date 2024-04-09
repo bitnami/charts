@@ -257,7 +257,7 @@ region = {{ .Values.aws.region }}
 }
 {{ end }}
 {{- define "external-dns.oci-credentials" -}}
-{{- if .Values.useWorkloadIdentity }}
+{{- if .Values.oci.useWorkloadIdentity }}
 auth:
   region: {{ .Values.oci.region }}
   useWorkloadIdentity: true

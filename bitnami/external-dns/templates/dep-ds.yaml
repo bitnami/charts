@@ -282,10 +282,10 @@ spec:
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}
               {{- end }}
             {{- end }}
-            {{- if and (eq .Values.provider "oci") .Values.useInstancePrincipal }}
+            {{- if and (eq .Values.provider "oci") .Values.oci.useInstancePrincipal }}
             # OCI Arguments
-              {{- if .Values.oci.enableInstancePrincipal }}
             - --oci-auth-instance-principal
+              {{- if .Values.oci.compartmentOCID }}
             - --oci-compartment-ocid={{ .Values.oci.compartmentOCID }}
               {{- end }}
             {{- end }}
@@ -789,7 +789,7 @@ spec:
             - name: google-service-account
               mountPath: /etc/secrets/service-account/
             {{- end }}
-            {{- if and (eq .Values.provider "oci") (not .Values.useInstancePrincipal) }}
+            {{- if and (eq .Values.provider "oci") (not .Values.oci.useInstancePrincipal) }}
             - name: oci-config-file
               mountPath: /etc/kubernetes/
             {{- end }}
@@ -858,7 +858,7 @@ spec:
             type: File
           {{- end }}
         {{- end }}
-        {{- if and (eq .Values.provider "oci") (not .Values.useInstancePrincipal) }}
+        {{- if and (eq .Values.provider "oci") (not .Values.oci.useInstancePrincipal) }}
         - name: oci-config-file
           secret:
             secretName: {{ template "external-dns.secretName" . }}
