@@ -1760,11 +1760,15 @@ notificationController:
   ##
   replicaCount: 1
   ## @param notificationController.containerPorts.metrics Notification Controller metrics container port
+  ## @param notificationController.containerPorts.receiver Notification Controller receiver container port
   ## @param notificationController.containerPorts.health Notification Controller health container port
+  ## @param notificationController.containerPorts.webhook Notification Controller receiver container port
   ##
   containerPorts:
     metrics: 8080
+    receiver: 9090
     health: 9440
+    webhook: 9292
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -2082,6 +2086,114 @@ notificationController:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @section Notification Controller Traffic Exposure Parameters
+  service:
+    ## Notification Controller Receiver service parameters
+    ##
+    receiver:
+      ## @param notificationController.service.receiver.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.service.receiver.ports.http Notification Controller service metrics port
+      ##
+      ports:
+        http: 80
+      ## Node ports to expose
+      ## @param notificationController.service.receiver.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param notificationController.service.receiver.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.service.receiver.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.service.receiver.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.service.receiver.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.service.receiver.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations: {}
+      ## @param notificationController.service.receiver.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.service.receiver.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.service.receiver.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Notification Controller webhook service parameters
+    ##
+    webhook:
+      ## @param notificationController.service.webhook.type Notification Controller service type
+      ##
+      type: ClusterIP
+      ## @param notificationController.service.webhook.ports.http Notification Controller service metrics port
+      ##
+      ports:
+        http: 80
+      ## Node ports to expose
+      ## @param notificationController.service.webhook.nodePorts.http Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+      ## @param notificationController.service.webhook.clusterIP Notification Controller service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param notificationController.service.webhook.loadBalancerIP Notification Controller service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param notificationController.service.webhook.loadBalancerSourceRanges Notification Controller service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param notificationController.service.webhook.externalTrafficPolicy Notification Controller service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param notificationController.service.webhook.annotations [object] Additional custom annotations for Notification Controller service
+      ##
+      annotations: {}
+      ## @param notificationController.service.webhook.extraPorts Extra ports to expose in Notification Controller service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param notificationController.service.webhook.sessionAffinity Control where client requests go, to the same pod or round-robin
+      ## Values: ClientIP or None
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+      ##
+      sessionAffinity: None
+      ## @param notificationController.service.webhook.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
   ## @section Notification Controller RBAC Parameters
   ##
 
