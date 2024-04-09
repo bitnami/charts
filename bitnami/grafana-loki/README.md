@@ -510,6 +510,18 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `indexGateway.sidecars`                                          | Add additional sidecar containers to the index-gateway pod(s)                                                                                                                                                                               | `[]`             |
 | `indexGateway.initContainers`                                    | Add additional init containers to the index-gateway pod(s)                                                                                                                                                                                  | `[]`             |
 
+### index-gateway Persistence Parameters
+
+| Name                                    | Description                                                                  | Value               |
+| --------------------------------------- | ---------------------------------------------------------------------------- | ------------------- |
+| `indexGateway.persistence.enabled`      | Enable persistence in index-gateway instances                                | `false`             |
+| `indexGateway.persistence.storageClass` | PVC Storage Class for index-gateway's data volume                            | `""`                |
+| `indexGateway.persistence.subPath`      | The subdirectory of the volume to mount to                                   | `""`                |
+| `indexGateway.persistence.accessModes`  | PVC Access modes                                                             | `["ReadWriteOnce"]` |
+| `indexGateway.persistence.size`         | PVC Storage Request for index-gateway's data volume                          | `8Gi`               |
+| `indexGateway.persistence.annotations`  | Additional PVC annotations                                                   | `{}`                |
+| `indexGateway.persistence.selector`     | Selector to match an existing Persistent Volume for index-gateway's data PVC | `{}`                |
+
 ### index-gateway Traffic Exposure Parameters
 
 | Name                                                 | Description                                                      | Value       |
