@@ -140,8 +140,10 @@ spec:
               containerPort: {{ .Values.dataPlane.containerPorts.https }}
             - name: http-control
               containerPort: {{ .Values.dataPlane.containerPorts.control }}
+            {{- if .Values.dataPlane.metrics.enabled }}
             - name: http-metrics
               containerPort: {{ .Values.dataPlane.containerPorts.metrics }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.dataPlane.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customLivenessProbe "context" $) | nindent 12 }}
