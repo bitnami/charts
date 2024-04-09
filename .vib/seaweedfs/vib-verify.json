@@ -49,6 +49,20 @@
               "s3PortGrpc": "18333"
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/seaweedfs/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "masterName": "seaweedfs-master",
+              "volumeName": "seaweedfs-volume"
+            }
+          }
         }
       ]
     }
