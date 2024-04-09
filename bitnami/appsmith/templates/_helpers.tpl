@@ -14,7 +14,7 @@ Return the proper Appsmith image name
 Return the proper Appsmith image name
 */}}
 {{- define "appsmith.redirect.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.backend.redirectSidecar.image "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.backend.redirectAmbassador.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
