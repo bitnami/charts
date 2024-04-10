@@ -1,19 +1,10 @@
-image:
-  repository: fmulero906/seaweedfs
-  tag: latest
 security:
   enabled: false
-# master:
-#   service:
-#     type: LoadBalancer
-#     ports:
-#       http: 80
+master:
+  service:
+    type: LoadBalancer
 s3:
   enabled: true
-#  service:
-#    type: LoadBalancer
-#    ports:
-#      http: 80
   auth:
     enabled: true
     adminAccessKeyId: rwZGFODFFghAhnmo
