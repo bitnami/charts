@@ -34,7 +34,7 @@ To access the Master Server replica from outside the cluster follow the steps be
 1. Get the Master Server API URL and associate Master Server hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Master Server API URL: http{{ if .Values.master.ingress.tls }}s{{ end }}://{{ .Values.master.ingress.hostname }}/"
+   echo "Master Server API URL: http{{ if .Values.master.ingress.tls }}s{{ end }}://{{ .Values.master.ingress.hostname }}{{ .Values.master.ingress.path }}"
    echo "$CLUSTER_IP  {{ .Values.master.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
@@ -75,7 +75,7 @@ The chart was deployed enabling the Amazon S3 API, to access it from outside the
 1. Get the Amazon S3 API URL and associate Master Server hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
-   echo "Amazon S3 API URL: http{{ if .Values.s3.ingress.tls }}s{{ end }}://{{ .Values.s3.ingress.hostname }}/"
+   echo "Amazon S3 API URL: http{{ if .Values.s3.ingress.tls }}s{{ end }}://{{ .Values.s3.ingress.hostname }}{{ .Values.s3.ingress.path }}"
    echo "$CLUSTER_IP  {{ .Values.s3.ingress.hostname }}" | sudo tee -a /etc/hosts
 
 {{- else }}
@@ -95,7 +95,7 @@ The chart was deployed enabling the Amazon S3 API, to access it from outside the
         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "seaweedfs.s3.fullname" . }}'
 
    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "seaweedfs.s3.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-   echo "Amazon S3 API URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.s3.service.ports.http }}{{ end }}/"
+   echo "Amazon S3 API URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.s3.service.ports.http }}{{ end }}"
 
 {{- else if contains "ClusterIP"  .Values.s3.service.type }}
 
@@ -115,8 +115,8 @@ The chart was deployed enabling the Amazon S3 API, to access it from outside the
 {{- end }}
 4. Example using "aws" CLI to create a new bucket "foo" and upload a "sample.txt" file:
 
-   aws --endpoint-url [AMAZON_S3_API_URL] s3 mb s3://foo
-   aws --endpoint-url [AMAZON_S3_API_URL] s3 cp sample.txt s3://foo
+   aws s3 --endpoint-url [AMAZON_S3_API_URL] mb s3://foo
+   aws s3 --endpoint-url [AMAZON_S3_API_URL] cp sample.txt s3://foo
 
 {{- end }}
 {{- end }}

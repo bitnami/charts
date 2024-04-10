@@ -40,6 +40,9 @@ spec:
     - ports:
         - port: {{ .Values.volume.containerPorts.http }}
         - port: {{ .Values.volume.containerPorts.grpc }}
+        {{- if .Values.volume.metrics.enabled }}
+        - port: {{ .Values.volume.containerPorts.metrics }}
+        {{- end }}
         {{- range .Values.volume.extraContainerPorts }}
         - port: {{ .containerPort }}
         {{- end }}

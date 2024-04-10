@@ -40,6 +40,9 @@ spec:
     - ports:
         - port: {{ .Values.s3.containerPorts.http }}
         - port: {{ .Values.s3.containerPorts.grpc }}
+        {{- if .Values.s3.metrics.enabled }}
+        - port: {{ .Values.s3.containerPorts.metrics }}
+        {{- end }}
         {{- range .Values.s3.extraContainerPorts }}
         - port: {{ .containerPort }}
         {{- end }}

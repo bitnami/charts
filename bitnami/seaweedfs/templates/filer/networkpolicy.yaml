@@ -40,6 +40,9 @@ spec:
     - ports:
         - port: {{ .Values.filer.containerPorts.http }}
         - port: {{ .Values.filer.containerPorts.grpc }}
+        {{- if .Values.filer.metrics.enabled }}
+        - port: {{ .Values.filer.containerPorts.metrics }}
+        {{- end }}
         {{- range .Values.filer.extraContainerPorts }}
         - port: {{ .containerPort }}
         {{- end }}
