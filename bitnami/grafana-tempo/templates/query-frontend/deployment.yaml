@@ -200,6 +200,8 @@ spec:
               name: jaeger-ui
             - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
               name: jaeger-metrics
+            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerGRPC }}
+              name: jaeger-grpc
           {{- if .Values.queryFrontend.query.resources }}
           resources: {{- toYaml .Values.queryFrontend.query.resources | nindent 12 }}
           {{- else if ne .Values.queryFrontend.query.resourcesPreset "none" }}
