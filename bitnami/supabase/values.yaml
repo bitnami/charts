@@ -406,6 +406,7 @@ auth:
     GOTRUE_URI_ALLOW_LIST: "*"
     GOTRUE_DISABLE_SIGNUP: "false"
     GOTRUE_DB_DRIVER: "postgres"
+    GOTRUE_DB_MIGRATIONS_PATH: "/opt/bitnami/gotrue/"
     GOTRUE_JWT_DEFAULT_GROUP_NAME: "authenticated"
     GOTRUE_JWT_ADMIN_ROLES: "service_role"
     GOTRUE_JWT_AUD: "authenticated"
