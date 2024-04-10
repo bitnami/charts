@@ -37,7 +37,7 @@ spec:
   ports:
     - name: http-metrics
       port: {{ coalesce .Values.controller.service.port .Values.controller.service.ports.metrics }}
-      targetPort: controller
+      targetPort: metrics
       protocol: TCP
       {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty (coalesce .Values.controller.service.nodePort .Values.controller.service.nodePorts.metrics)))) }}
       nodePort: {{ coalesce .Values.controller.service.nodePort .Values.controller.service.nodePorts.metrics }}
