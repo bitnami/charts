@@ -227,6 +227,14 @@ spec:
             - name: JMX_PORT
               value: {{ .Values.metrics.jmx.kafkaJmxPort | quote }}
             {{- end }}
+            {{- if not .Values.metrics.jmx.unsetDefaultKafkaJMXOpts }}
+            {{- /* Taken from upstream kafka bin/kafka-run-class.sh */}}
+            {{- $kafka_jmx_opts := "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false" }}
+            {{- /* To avoid random port allocation, we set it via KAFKA_JMX_OPTS */}}
+            {{- $kafka_jmx_opts = printf "%s -Dcom.sun.management.jmxremote.local.port=%v" $kafka_jmx_opts .Values.metrics.jmx.kafkaJmxLocalPort }}
+            - name: KAFKA_JMX_OPTS
+              value: {{ $kafka_jmx_opts | quote }}
+            {{- end }}
             {{- if .Values.broker.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.broker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -261,6 +269,13 @@ spec:
             - name: external
               containerPort: {{ .Values.listeners.external.containerPort }}
             {{- end }}
+            {{- if .Values.metrics.jmx.enabled }}
+            - name: jmx
+              containerPort: {{ .Values.metrics.jmx.kafkaJmxPort }}
+            {{- end }}
+            {{- /* jmx-local port is always open */}}
+            - name: jmx-local
+              containerPort: {{ .Values.metrics.jmx.kafkaJmxLocalPort }}
             {{- if .Values.listeners.extraListeners }}
             {{- include "kafka.extraListeners.containerPorts" . | nindent 12 }}
             {{- end }}

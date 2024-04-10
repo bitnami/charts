@@ -2109,6 +2109,12 @@ metrics:
     ## @param metrics.jmx.kafkaJmxPort JMX port where the exporter will collect metrics, exposed in the Kafka container.
     ##
     kafkaJmxPort: 5555
+    ## @param metrics.jmx.kafkaJmxLocalPort JMX local port (for internal use via jconsole).
+    ##
+    kafkaJmxLocalPort: 36455
+    ## @param metrics.jmx.unsetDefaultKafkaJMXOpts Do not render the default chart value for KAFKA_JMX_OPTS.
+    ##
+    unsetDefaultKafkaJMXOpts: false
     ## Bitnami JMX exporter image
     ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
     ## @param metrics.jmx.image.registry [default: REGISTRY_NAME] JMX exporter image registry
