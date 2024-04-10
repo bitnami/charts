@@ -259,6 +259,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `containerPorts.rpc`            | Port to open for RPC in Consul                                                                                   | `8400`                   |
 | `containerPorts.rpcServer`      | Port to open for RPC Server in Consul                                                                            | `8300`                   |
 | `containerPorts.serfLAN`        | Port to open for Serf LAN in Consul                                                                              | `8301`                   |
+| `containerPorts.serfWAN`        | Port to open for Serf WAN in Consul                                                                              | `8302`                   |
 | `lifecycleHooks`                | Add lifecycle hooks to the deployment                                                                            | `{}`                     |
 
 ### Statefulset parameters
