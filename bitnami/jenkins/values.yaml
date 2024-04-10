@@ -40,7 +40,7 @@ nameOverride: ""
 fullnameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
-replicaCount: 1
+replicaCount: {}
 ## @param replicas Defining number of container replicas
 ##
 commonLabels: {}
