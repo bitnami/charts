@@ -269,9 +269,9 @@ spec:
               {{- if .Values.backend.persistence.subPath }}
               subPath: {{ .Values.backend.persistence.subPath }}
               {{- end }}
-          {{- if .Values.backend.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- if .Values.backend.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         - name: rts-redirect
           image: {{ template "appsmith.redirect.image" . }}
           imagePullPolicy: {{ .Values.backend.redirectAmbassador.image.pullPolicy }}
