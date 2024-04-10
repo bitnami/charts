@@ -592,7 +592,7 @@ spec:
         {{- if .Values.postgresql.tls.enabled }}
         - name: raw-certificates
           secret:
-            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" .Values.postgresql.tls.certificatesSecret }}
+            secretName: {{ required "A secret containing TLS certificates is required when TLS is enabled" (tpl .Values.postgresql.tls.certificatesSecret .) }}
         - name: postgresql-certificates
           emptyDir: {}
         {{- end }}
