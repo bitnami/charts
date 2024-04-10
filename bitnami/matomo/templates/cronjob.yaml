@@ -64,6 +64,7 @@ spec:
                 - . /opt/bitnami/scripts/matomo-env.sh &&
                   . /opt/bitnami/scripts/libbitnami.sh &&
                   . /opt/bitnami/scripts/liblog.sh &&
+                  /opt/bitnami/scripts/apache/setup.sh &&
                   /opt/bitnami/scripts/php/setup.sh &&
                   /opt/bitnami/scripts/mysql-client/setup.sh &&
                   /opt/bitnami/scripts/matomo/setup.sh &&
@@ -229,6 +230,7 @@ spec:
                 - . /opt/bitnami/scripts/matomo-env.sh &&
                   . /opt/bitnami/scripts/libbitnami.sh &&
                   . /opt/bitnami/scripts/liblog.sh &&
+                  /opt/bitnami/scripts/apache/setup.sh &&
                   /opt/bitnami/scripts/php/setup.sh &&
                   /opt/bitnami/scripts/mysql-client/setup.sh &&
                   /opt/bitnami/scripts/matomo/setup.sh &&

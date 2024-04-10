@@ -75,7 +75,7 @@ spec:
             - --probe-addr
             - ":{{ .Values.applicationSet.containerPorts.probe }}"
             - --argocd-repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             - --policy
             - {{ .Values.applicationSet.defaultArgs.policy | quote }}
             {{- if or (gt ( .Values.applicationSet.replicaCount | int64) 1) .Values.applicationSet.defaultArgs.enableLeaderElection }}
