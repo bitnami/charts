@@ -1,10 +1,12 @@
-security:
-  enabled: false
 master:
   service:
     type: LoadBalancer
+    ports:
+      http: 80
 s3:
   enabled: true
+  service:
+    type: LoadBalancer
   auth:
     enabled: true
     adminAccessKeyId: rwZGFODFFghAhnmo

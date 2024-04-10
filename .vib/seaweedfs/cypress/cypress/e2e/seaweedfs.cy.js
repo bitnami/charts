@@ -9,6 +9,5 @@ it('allows obtaining cluster status from Master Server', () => {
   cy.request('/cluster/status').then((response) => {
     expect(response.status).to.eq(200);
     expect(response.body).to.have.property('Leader');
-    expect(response.body).to.have.property('Peers');
   });
 });

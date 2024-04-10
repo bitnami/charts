@@ -118,7 +118,7 @@ Return the Master Server peers
 {{- $masterFullname := include "seaweedfs.master.fullname" . -}}
 {{- $masterHeadlessSvcName := printf "%s-headless" (include "seaweedfs.master.fullname" .) -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
-{{- $masterPort := int .Values.master.service.ports.http -}}
+{{- $masterPort := int .Values.master.containerPorts.http -}}
 {{- range $i := until (int .Values.master.replicaCount) }}
     {{- $peers = append $peers (printf "%s-%d.%s.$(NAMESPACE).svc.%s:%d" $masterFullname $i $masterHeadlessSvcName $clusterDomain $masterPort) -}}
 {{- end -}}

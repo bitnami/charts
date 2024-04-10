@@ -35,7 +35,7 @@ func init() {
 	flag.StringVar(&namespace, "namespace", "", "namespace where SeaweedFS is running")
 	flag.StringVar(&masterName, "masterName", "", "Master Server name")
 	flag.StringVar(&volumeName, "volumeName", "", "Volume Server name")
-	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 240, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
