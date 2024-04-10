@@ -2035,7 +2035,6 @@ filer:
       ##
       selector: {}
 
-
 ## @section Amazon S3 API Parameters
 ##
 s3:
@@ -2628,6 +2627,518 @@ s3:
       ##   prometheus: my-prometheus
       ##
       selector: {}
+
+## @section WebDAV Parameters
+##
+webdav:
+  ## @param webdav.enabled Enable WebDAV deployment
+  ##
+  enabled: false
+  ## @param webdav.replicaCount Number of WebDAV replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param webdav.containerPorts.http WebDAV HTTP container port
+  ##
+  containerPorts:
+    http: 7333
+  ## @param webdav.extraContainerPorts Optionally specify extra list of additional ports for WebDAV containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for WebDAV containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param webdav.livenessProbe.enabled Enable livenessProbe on WebDAV containers
+  ## @param webdav.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param webdav.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param webdav.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param webdav.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param webdav.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param webdav.readinessProbe.enabled Enable readinessProbe on WebDAV containers
+  ## @param webdav.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param webdav.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param webdav.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param webdav.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param webdav.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param webdav.startupProbe.enabled Enable startupProbe on WebDAV containers
+  ## @param webdav.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param webdav.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param webdav.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param webdav.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param webdav.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param webdav.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param webdav.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param webdav.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## WebDAV resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param webdav.resourcesPreset Set WebDAV container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if webdav.resources is set (webdav.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param webdav.resources Set WebDAV container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param webdav.podSecurityContext.enabled Enable WebDAV pods' Security Context
+  ## @param webdav.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for WebDAV pods
+  ## @param webdav.podSecurityContext.sysctls Set kernel settings using the sysctl interface for WebDAV pods
+  ## @param webdav.podSecurityContext.supplementalGroups Set filesystem extra groups for WebDAV pods
+  ## @param webdav.podSecurityContext.fsGroup Set fsGroup in WebDAV pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param webdav.containerSecurityContext.enabled Enabled WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in WebDAV container
+  ## @param webdav.containerSecurityContext.runAsUser Set runAsUser in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.runAsGroup Set runAsGroup in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.runAsNonRoot Set runAsNonRoot in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.privileged Set privileged in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.capabilities.drop List of capabilities to be dropped in WebDAV container
+  ## @param webdav.containerSecurityContext.seccompProfile.type Set seccomp profile in WebDAV container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param webdav.logLevel WebDAV log level [0|1|2|3|4]
+  ##
+  logLevel: 1
+  ## @param webdav.command Override default WebDAV container command (useful when using custom images)
+  ##
+  command: []
+  ## @param webdav.args Override default WebDAV container args (useful when using custom images)
+  ##
+  args: []
+  ## @param webdav.automountServiceAccountToken Mount Service Account token in WebDAV pods
+  ##
+  automountServiceAccountToken: false
+  ## @param webdav.hostAliases WebDAV pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param webdav.statefulsetAnnotations Annotations for WebDAV statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param webdav.podLabels Extra labels for WebDAV pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param webdav.podAnnotations Annotations for WebDAV pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param webdav.podAffinityPreset Pod affinity preset. Ignored if `webdav.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param webdav.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `webdav.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node webdav.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param webdav.nodeAffinityPreset.type Node affinity preset type. Ignored if `webdav.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param webdav.nodeAffinityPreset.key Node label key to match. Ignored if `webdav.affinity` is set
+    ##
+    key: ""
+    ## @param webdav.nodeAffinityPreset.values Node label values to match. Ignored if `webdav.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param webdav.affinity Affinity for WebDAV pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `webdav.podAffinityPreset`, `webdav.podAntiAffinityPreset`, and `webdav.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param webdav.nodeSelector Node labels for WebDAV pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param webdav.tolerations Tolerations for WebDAV pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param webdav.updateStrategy.type WebDAV deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param webdav.priorityClassName WebDAV pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param webdav.topologySpreadConstraints Topology Spread Constraints for WebDAV pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param webdav.schedulerName Name of the k8s scheduler (other than default) for WebDAV pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param webdav.terminationGracePeriodSeconds Seconds WebDAV pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param webdav.lifecycleHooks for WebDAV containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param webdav.extraEnvVars Array with extra environment variables to add to WebDAV containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param webdav.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for WebDAV containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param webdav.extraEnvVarsSecret Name of existing Secret containing extra env vars for WebDAV containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param webdav.extraVolumes Optionally specify extra list of additional volumes for the WebDAV pods
+  ##
+  extraVolumes: []
+  ## @param webdav.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the WebDAV containers
+  ##
+  extraVolumeMounts: []
+  ## @param webdav.sidecars Add additional sidecar containers to the WebDAV pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param webdav.initContainers Add additional init containers to the WebDAV pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param webdav.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param webdav.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param webdav.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param webdav.autoscaling.enabled Enable autoscaling for webdav
+  ## @param webdav.autoscaling.minReplicas Minimum number of webdav replicas
+  ## @param webdav.autoscaling.maxReplicas Maximum number of webdav replicas
+  ## @param webdav.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param webdav.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+
+  ## @section WebDAV Traffic Exposure Parameters
+  ##
+
+  ## WebDAV service parameters
+  ##
+  service:
+    ## @param webdav.service.type WebDAV service type
+    ##
+    type: ClusterIP
+    ## @param webdav.service.ports.http WebDAV service HTTP port
+    ##
+    ports:
+      http: 7333
+    ## Node ports to expose
+    ## @param webdav.service.nodePorts.http Node port for HTTP
+    ## @param webdav.service.nodePorts.grpc Node port for GRPC
+    ## @param webdav.service.nodePorts.metrics Node port for metrics
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+      metrics: ""
+    ## @param webdav.service.clusterIP WebDAV service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param webdav.service.loadBalancerIP WebDAV service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param webdav.service.loadBalancerSourceRanges WebDAV service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param webdav.service.externalTrafficPolicy WebDAV service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param webdav.service.annotations Additional custom annotations for WebDAV service
+    ##
+    annotations: {}
+    ## @param webdav.service.extraPorts Extra ports to expose in WebDAV service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param webdav.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param webdav.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param webdav.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies for WebDAV
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param webdav.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for WebDAV
+    ##
+    enabled: true
+    ## @param webdav.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param webdav.networkPolicy.allowExternalEgress Allow the WebDAV pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param webdav.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param webdav.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param webdav.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param webdav.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## WebDAV ingress parameters
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param webdav.ingress.enabled Enable ingress record generation for WebDAV
+    ##
+    enabled: false
+    ## @param webdav.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param webdav.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param webdav.ingress.hostname Default host for the ingress record
+    ##
+    hostname: webdav.seaweedfs.local
+    ## @param webdav.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param webdav.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param webdav.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param webdav.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param webdav.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param webdav.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: webdav.seaweedfs.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param webdav.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param webdav.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - webdav.seaweedfs.local
+    ##   secretName: webdav.seaweedfs.local-tls
+    ##
+    extraTls: []
+    ## @param webdav.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: webdav.seaweedfs.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param webdav.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
 
 ## @section Init Container Parameters
 ##

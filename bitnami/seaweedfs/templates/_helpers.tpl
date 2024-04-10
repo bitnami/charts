@@ -32,6 +32,13 @@ Return the proper SeaweedFS Amazon S3 API fullname
 {{- end -}}
 
 {{/*
+Return the proper SeaweedFS WebDAV fullname
+*/}}
+{{- define "seaweedfs.webdav.fullname" -}}
+{{- printf "%s-webdav" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper SeaweedFS MariaDB database fullname
 */}}
 {{- define "seaweedfs.mariadb.fullname" -}}
@@ -434,6 +441,7 @@ Compile all warnings into a single message.
 {{- $messages := append $messages (include "seaweedfs.validateValues.volume.dataVolumes" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.filer.database" .) -}}
 {{- $messages := append $messages (include "seaweedfs.validateValues.s3" .) -}}
+{{- $messages := append $messages (include "seaweedfs.validateValues.webdav" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -544,5 +552,17 @@ s3.enabled
     The Filer Server is disabled, but the Amazon S3 API is enabled.
     Please enable the Filer Server (--set filer.enabled=true) or
     disable the Amazon S3 API (--set s3.enabled=false).
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of SeaweedFS - WebDAV
+*/}}
+{{- define "seaweedfs.validateValues.webdav" -}}
+{{- if and (not .Values.filer.enabled) .Values.webdav.enabled -}}
+s3.enabled
+    The Filer Server is disabled, but WebDAV is enabled.
+    Please enable the Filer Server (--set filer.enabled=true) or
+    disable WebDAV (--set webdav.enabled=false).
 {{- end -}}
 {{- end -}}
