@@ -6,25 +6,25 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: gotrue
-      image: docker.io/bitnami/gotrue:1.0.1-debian-12-r22
+      image: docker.io/bitnami/gotrue:2.147.1-debian-12-r0
     - name: jwt-cli
-      image: docker.io/bitnami/jwt-cli:6.0.0-debian-12-r17
+      image: docker.io/bitnami/jwt-cli:6.0.0-debian-12-r19
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.29.3-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.29.3-debian-12-r3
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r16
+      image: docker.io/bitnami/os-shell:12-debian-12-r18
     - name: postgrest
-      image: docker.io/bitnami/postgrest:11.2.2-debian-12-r12
+      image: docker.io/bitnami/postgrest:11.2.2-debian-12-r14
     - name: supabase-postgres
-      image: docker.io/bitnami/supabase-postgres:15.1.1-debian-12-r15
+      image: docker.io/bitnami/supabase-postgres:15.1.1-debian-12-r22
     - name: supabase-postgres-meta
-      image: docker.io/bitnami/supabase-postgres-meta:0.79.6-debian-12-r0
+      image: docker.io/bitnami/supabase-postgres-meta:0.80.0-debian-12-r1
     - name: supabase-realtime
-      image: docker.io/bitnami/supabase-realtime:2.26.6-debian-12-r0
+      image: docker.io/bitnami/supabase-realtime:2.28.14-debian-12-r0
     - name: supabase-storage
-      image: docker.io/bitnami/supabase-storage:0.48.2-debian-12-r0
+      image: docker.io/bitnami/supabase-storage:0.48.4-debian-12-r0
     - name: supabase-studio
-      image: docker.io/bitnami/supabase-studio:0.23.11-debian-12-r9
+      image: docker.io/bitnami/supabase-studio:0.23.11-debian-12-r11
 apiVersion: v2
 appVersion: 0.23.11
 dependencies:
@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 3.0.1
+version: 4.0.0
