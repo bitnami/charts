@@ -1762,7 +1762,7 @@ notificationController:
   ## @param notificationController.containerPorts.metrics Notification Controller metrics container port
   ## @param notificationController.containerPorts.receiver Notification Controller receiver container port
   ## @param notificationController.containerPorts.health Notification Controller health container port
-  ## @param notificationController.containerPorts.webhook Notification Controller receiver container port
+  ## @param notificationController.containerPorts.webhook Notification Controller webhook container port
   ##
   containerPorts:
     metrics: 8080
@@ -2094,7 +2094,7 @@ notificationController:
       ## @param notificationController.service.receiver.type Notification Controller service type
       ##
       type: ClusterIP
-      ## @param notificationController.service.receiver.ports.http Notification Controller service metrics port
+      ## @param notificationController.service.receiver.ports.http Notification Controller service receiver port
       ##
       ports:
         http: 80
@@ -2147,7 +2147,7 @@ notificationController:
       ## @param notificationController.service.webhook.type Notification Controller service type
       ##
       type: ClusterIP
-      ## @param notificationController.service.webhook.ports.http Notification Controller service metrics port
+      ## @param notificationController.service.webhook.ports.http Notification Controller service webhook port
       ##
       ports:
         http: 80
