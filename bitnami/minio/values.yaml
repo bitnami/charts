@@ -117,7 +117,7 @@ auth:
   ## @param auth.rootUserSecretKey Key where the MINIO_ROOT_USER username is being stored inside the existing secret `auth.existingSecret`
   ##
   rootUserSecretKey: ""
-  ## @param auth.rootPasswordSecretKey Key where the MINIO_ROOT_USER username is being stored inside the existing secret `auth.existingSecret`
+  ## @param auth.rootPasswordSecretKey Key where the MINIO_ROOT_USER password is being stored inside the existing secret `auth.existingSecret`
   ##
   rootPasswordSecretKey: ""
   ## @param auth.forcePassword Force users to specify required passwords
