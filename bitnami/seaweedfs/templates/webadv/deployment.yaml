@@ -106,6 +106,10 @@ spec:
             - webdav
             - -cacheDir=/cache
             - -port={{ .Values.webdav.containerPorts.http }}
+            {{- if .Values.webdav.tls.enabled }}
+            - -cert.file=/certs/tls/tls.crt
+            - -key.file=/certs/tls/tls.key
+            {{- end }}
             - -filer={{ printf "%s:%d" (include "seaweedfs.filer.fullname" .) (int .Values.filer.service.ports.http) }}
           {{- end }}
           env:
@@ -133,7 +137,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.webdav.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
-            - name: http
+            - name: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
               containerPort: {{ .Values.webdav.containerPorts.http }}
             {{- if .Values.webdav.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.webdav.extraContainerPorts "context" $) | nindent 12 }}
@@ -144,21 +148,21 @@ spec:
           {{- else if .Values.webdav.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
           {{- end }}
           {{- if .Values.webdav.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.webdav.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
           {{- end }}
           {{- if .Values.webdav.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.webdav.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: http
+              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
           {{- end }}
           {{- end }}
           {{- if .Values.webdav.lifecycleHooks }}
@@ -171,6 +175,11 @@ spec:
             - name: empty-dir
               mountPath: /cache
               subPath: cache-dir
+            {{- if .Values.webdav.tls.enabled }}
+            - name: tls-cert
+              mountPath: /certs/tls
+              readOnly: true
+            {{- end }}
             {{- if .Values.security.enabled }}
             - name: security-config
               mountPath: /etc/seaweedfs/security.toml
@@ -203,6 +212,11 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if .Values.webdav.tls.enabled }}
+        - name: tls-cert
+          secret:
+            secretName: {{ template "seaweedfs.webdav.tls.secretName" . }}
+        {{- end }}
         {{- if .Values.security.enabled }}
         - name: security-config
           configMap:

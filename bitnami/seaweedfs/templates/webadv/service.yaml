@@ -36,7 +36,7 @@ spec:
   loadBalancerIP: {{ .Values.webdav.service.loadBalancerIP }}
   {{- end }}
   ports:
-    - name: http
+    - name: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
       port: {{ .Values.webdav.service.ports.http }}
       {{- if not (eq .Values.webdav.service.ports.http .Values.webdav.containerPorts.http) }}
       targetPort: {{ .Values.webdav.containerPorts.http }}
