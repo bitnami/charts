@@ -185,6 +185,10 @@ server:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   masterKey: ""
+  ## @param server.masterKeyIps Parse server Master setting an allowed IP address
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
+  ##
+  masterKeyIps: "0.0.0.0/0"
   ## @param server.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
