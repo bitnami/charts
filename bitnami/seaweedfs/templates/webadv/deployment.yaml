@@ -143,24 +143,21 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.webdav.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.webdav.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.webdav.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.webdav.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.webdav.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.startupProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- end }}
