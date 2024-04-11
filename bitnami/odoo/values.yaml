@@ -114,6 +114,9 @@ odooPassword: ""
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false
+## @param odooSkipModulesUpdate Skip Odoo update wizard
+##
+odooSkipModulesUpdate: true
 ## @param odooDatabaseFilter Filter odoo database by using a regex
 ##
 odooDatabaseFilter: .*
@@ -811,3 +814,17 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+## @section Odoo Upgrade Job parameters
+##
+
+## @param upgradeJob.enabled Enable Odoo upgrade job
+## @param upgradeJob.odooSkipModulesUpdate Skip Odoo update wizard
+## @param upgradeJob.debug Enable debug mode
+## @param upgradeJob.command Override default container command (useful when using custom images)
+## @param upgradeJob.args Override default container args (useful when using custom images)
+upgradeJob:
+  enabled: false
+  odooSkipModulesUpdate: false
+  debug: true
+  command: []
+  args: []

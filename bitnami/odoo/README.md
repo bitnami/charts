@@ -145,6 +145,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `odooEmail`             | Odoo user email                                                      | `user@example.com` |
 | `odooPassword`          | Odoo user password                                                   | `""`               |
 | `odooSkipInstall`       | Skip Odoo installation wizard                                        | `false`            |
+| `odooSkipModulesUpdate` | Skip Odoo update wizard                                              | `true`             |
 | `odooDatabaseFilter`    | Filter odoo database by using a regex                                | `.*`               |
 | `loadDemoData`          | Whether to load demo data for all modules during initialization      | `false`            |
 | `customPostInitScripts` | Custom post-init.d user scripts                                      | `{}`               |
@@ -342,6 +343,16 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
+
+### Odoo Upgrade Job parameters
+
+| Name                               | Description                                                          | Value   |
+| ---------------------------------- | -------------------------------------------------------------------- | ------- |
+| `upgradeJob.enabled`               | Enable Odoo upgrade job                                              | `true`  |
+| `upgradeJob.odooSkipModulesUpdate` | Skip Odoo update wizard                                              | `false` |
+| `upgradeJob.debug`                 | Enable debug mode                                                    | `true`  |
+| `upgradeJob.command`               | Override default container command (useful when using custom images) | `[]`    |
+| `upgradeJob.args`                  | Override default container args (useful when using custom images)    | `[]`    |
 
 The above parameters map to the env variables defined in [bitnami/odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo). For more information please refer to the [bitnami/odoo](https://github.com/bitnami/containers/tree/main/bitnami/odoo) image documentation.
 

@@ -164,6 +164,8 @@ spec:
                   key: odoo-password
             - name: ODOO_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.odooSkipInstall | quote }}
+            - name: ODOO_SKIP_MODULES_UPDATE
+              value: {{ ternary "yes" "no" .Values.odooSkipModulesUpdate | quote }}
             - name: ODOO_LOAD_DEMO_DATA
               value: {{ ternary "yes" "no" .Values.loadDemoData | quote }}
             {{- if .Values.withoutDemo }}
