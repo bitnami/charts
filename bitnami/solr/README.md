@@ -209,6 +209,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | Name                                                | Description                                                                                                                                                                                                       | Value            |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `replicaCount`                                      | Number of solr replicas                                                                                                                                                                                           | `3`              |
+| `revisionHistoryLimit`                              | The number of old history to retain to allow rollback                                                                                                                                                             | `10`             |
 | `containerPorts.http`                               | Solr HTTP container port                                                                                                                                                                                          | `8983`           |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Solr containers                                                                                                                                                                           | `true`           |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `40`             |
@@ -498,6 +499,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/solr
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.3
+
+This version uses solr container image version `9.5.0-debian-12-r7` which removes `HDFS` module due to CVEs found in it.
 
 ### To 9.0.0
 

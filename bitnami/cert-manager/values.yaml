@@ -218,9 +218,12 @@ controller:
   ##
   nodeSelector: {}
   ## Controller Container port
-  ## @param controller.containerPort Controller container port
+  ## @param controller.containerPorts.http Controller HTTP container port
+  ## @param controller.containerPorts.health Controller Health container port
   ##
-  containerPort: 9402
+  containerPorts:
+    http: 9402
+    health: 9403
   ## @param controller.command Override Controller default command
   ##
   command: []
@@ -589,13 +592,18 @@ webhook:
   ##
   nodeSelector: {}
   ## Webhook Container port
-  ## @param webhook.containerPort Webhook container port
+  ## @param webhook.containerPorts.https Webhook HTTPS container port
+  ## @param webhook.containerPorts.health Webhook health container port
   ##
-  containerPort: 10250
+  containerPorts:
+    https: 10250
+    health: 6080
   ## Webhook https port
-  ## @param webhook.httpsPort Webhook container port
+  ## @param webhook.service.ports.https Webhook HTTPS service port
   ##
-  httpsPort: 443
+  service:
+    ports:
+      https: 443
   ## @param webhook.command Override Webhook default command
   ##
   command: []
@@ -1166,7 +1174,7 @@ metrics:
   podAnnotations:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.controller.containerPort }}"
+    prometheus.io/port: "{{ .Values.controller.containerPorts.http }}"
   ## Prometheus Operator ServiceMonitor resource
   ##
   serviceMonitor:
