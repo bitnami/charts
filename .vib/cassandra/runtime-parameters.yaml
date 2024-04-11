@@ -2,6 +2,10 @@ dbUser:
   user: test_cassandra
   password: ComplicatedPassword123!4
 replicaCount: 2
+jvm:
+##  Values to be used for a VIB instance of size S4
+  maxHeapSize: "1987M"
+  newHeapSize: "200M"
 cluster:
   seedCount: 2
   numTokens: 256
