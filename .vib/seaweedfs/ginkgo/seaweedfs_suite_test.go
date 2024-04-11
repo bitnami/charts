@@ -34,7 +34,7 @@ func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.StringVar(&namespace, "namespace", "", "namespace where SeaweedFS is running")
 	flag.StringVar(&releaseName, "releaseName", "", "SeaweedFS chart release name")
-	flag.IntVar(&timeoutSeconds, "timeout", 240, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
