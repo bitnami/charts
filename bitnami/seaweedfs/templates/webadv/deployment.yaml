@@ -225,6 +225,9 @@ spec:
         - name: ca-cert
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.caSecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
         - name: master-cert
           secret:
             secretName: {{ template "seaweedfs.security.mTLS.master.secretName" . }}
