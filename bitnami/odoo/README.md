@@ -348,7 +348,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 | Name                               | Description                                                          | Value   |
 | ---------------------------------- | -------------------------------------------------------------------- | ------- |
-| `upgradeJob.enabled`               | Enable Odoo upgrade job                                              | `true`  |
+| `upgradeJob.enabled`               | Enable Odoo upgrade job                                              | `false` |
 | `upgradeJob.odooSkipModulesUpdate` | Skip Odoo update wizard                                              | `false` |
 | `upgradeJob.debug`                 | Enable debug mode                                                    | `true`  |
 | `upgradeJob.command`               | Override default container command (useful when using custom images) | `[]`    |
