@@ -59,8 +59,7 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "masterName": "seaweedfs-master",
-              "volumeName": "seaweedfs-volume"
+              "releaseName": "seaweedfs",
             }
           }
         }

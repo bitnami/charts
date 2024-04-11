@@ -38,9 +38,11 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 			getOpts := metav1.GetOptions{}
 
 			By("checking all the replicas are available")
-			masterSts, err := c.AppsV1().StatefulSets(namespace).Get(ctx, masterName, getOpts)
+			masterStsName := fmt.Sprintf("%s-master", releaseName)
+			masterSts, err := c.AppsV1().StatefulSets(namespace).Get(ctx, masterStsName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
-			volumeSts, err := c.AppsV1().StatefulSets(namespace).Get(ctx, volumeName, getOpts)
+			volumeStsName := fmt.Sprintf("%s-volume", releaseName)
+			volumeSts, err := c.AppsV1().StatefulSets(namespace).Get(ctx, volumeStsName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(masterSts.Status.Replicas).NotTo(BeZero())
 			Expect(volumeSts.Status.Replicas).NotTo(BeZero())
@@ -48,13 +50,14 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 			volumeOrigReplicas := *volumeSts.Spec.Replicas
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterStsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(masterOrigReplicas)))
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeStsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(volumeOrigReplicas)))
 
-			svc, err := c.CoreV1().Services(namespace).Get(ctx, masterName, getOpts)
+			masterHeadlessSvcName := fmt.Sprintf("%s-master-headless", releaseName)
+			svc, err := c.CoreV1().Services(namespace).Get(ctx, masterHeadlessSvcName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
 			port, err := utils.SvcGetPortByName(svc, "http")
@@ -85,10 +88,10 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterStsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeStsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
 
 			By("scaling up to the original replicas")
@@ -98,10 +101,10 @@ var _ = Describe("SeaweedFS", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, masterStsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(masterOrigReplicas)))
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeName, getOpts)
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, volumeStsName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(volumeOrigReplicas)))
 
 			By("creating a job to download the file")

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"flag"
+	"fmt"
 	"testing"
 	"time"
 
@@ -23,8 +24,7 @@ const (
 
 var (
 	kubeconfig     string
-	masterName     string
-	volumeName     string
+	releaseName    string
 	namespace      string
 	timeoutSeconds int
 	timeout        time.Duration
@@ -33,8 +33,7 @@ var (
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.StringVar(&namespace, "namespace", "", "namespace where SeaweedFS is running")
-	flag.StringVar(&masterName, "masterName", "", "Master Server name")
-	flag.StringVar(&volumeName, "volumeName", "", "Volume Server name")
+	flag.StringVar(&releaseName, "releaseName", "", "SeaweedFS chart release name")
 	flag.IntVar(&timeoutSeconds, "timeout", 240, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
@@ -70,9 +69,14 @@ func createPVC(ctx context.Context, c kubernetes.Interface, name, size string) e
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, pvcName, kind string) error {
-	securityContext := &v1.SecurityContext{
+	podSecurityContext := &v1.PodSecurityContext{
+		FSGroup:             &[]int64{1001}[0],
+		FSGroupChangePolicy: &[]v1.PodFSGroupChangePolicy{v1.FSGroupChangeAlways}[0],
+	}
+	containerSecurityContext := &v1.SecurityContext{
 		Privileged:               &[]bool{false}[0],
 		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsUser:                &[]int64{1001}[0],
 		RunAsNonRoot:             &[]bool{true}[0],
 		Capabilities: &v1.Capabilities{
 			Drop: []v1.Capability{"ALL"},
@@ -107,7 +111,8 @@ cat /data/fid | xargs weed download -server ${MASTER_HOST}:${MASTER_PORT}
 		Spec: batchv1.JobSpec{
 			Template: v1.PodTemplateSpec{
 				Spec: v1.PodSpec{
-					RestartPolicy: "Never",
+					RestartPolicy:   "Never",
+					SecurityContext: podSecurityContext,
 					Containers: []v1.Container{
 						{
 							Name:    "seaweedfs",
@@ -117,18 +122,43 @@ cat /data/fid | xargs weed download -server ${MASTER_HOST}:${MASTER_PORT}
 							Env: []v1.EnvVar{
 								{
 									Name:  "MASTER_HOST",
-									Value: masterName,
+									Value: fmt.Sprintf("%s-master", releaseName),
 								},
 								{
 									Name:  "MASTER_PORT",
 									Value: port,
 								},
 							},
-							SecurityContext: securityContext,
+							SecurityContext: containerSecurityContext,
 							VolumeMounts: []v1.VolumeMount{
 								{
 									Name:      "data",
 									MountPath: "/data",
+								},
+								{
+									Name:      "security-config",
+									MountPath: "/etc/seaweedfs/security.toml",
+									SubPath:   "security.toml",
+								},
+								{
+									Name:      "ca-cert",
+									MountPath: "/certs/ca",
+								},
+								{
+									Name:      "master-cert",
+									MountPath: "/certs/master",
+								},
+								{
+									Name:      "filer-cert",
+									MountPath: "/certs/filer",
+								},
+								{
+									Name:      "volume-cert",
+									MountPath: "/certs/volume",
+								},
+								{
+									Name:      "client-cert",
+									MountPath: "/certs/client",
 								},
 							},
 						},
@@ -139,6 +169,56 @@ cat /data/fid | xargs weed download -server ${MASTER_HOST}:${MASTER_PORT}
 							VolumeSource: v1.VolumeSource{
 								PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
 									ClaimName: pvcName,
+								},
+							},
+						},
+						{
+							Name: "security-config",
+							VolumeSource: v1.VolumeSource{
+								ConfigMap: &v1.ConfigMapVolumeSource{
+									LocalObjectReference: v1.LocalObjectReference{
+										Name: fmt.Sprintf("%s-security", releaseName),
+									},
+								},
+							},
+						},
+						{
+							Name: "ca-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-ca-crt", releaseName),
+								},
+							},
+						},
+						{
+							Name: "master-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-master-crt", releaseName),
+								},
+							},
+						},
+						{
+							Name: "filer-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-filer-crt", releaseName),
+								},
+							},
+						},
+						{
+							Name: "volume-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-volume-crt", releaseName),
+								},
+							},
+						},
+						{
+							Name: "client-cert",
+							VolumeSource: v1.VolumeSource{
+								Secret: &v1.SecretVolumeSource{
+									SecretName: fmt.Sprintf("%s-client-crt", releaseName),
 								},
 							},
 						},
