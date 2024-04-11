@@ -59,7 +59,7 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "releaseName": "seaweedfs",
+              "releaseName": "seaweedfs"
             }
           }
         }
