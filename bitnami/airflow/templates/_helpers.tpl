@@ -204,7 +204,7 @@ Load DAGs init-container
   image: {{ include "airflow.dags.image" .context }}
   imagePullPolicy: {{ .context.Values.dags.image.pullPolicy }}
   {{- if $compDefinition.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $compDefinition.containerSecurityContext "context" $) | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $compDefinition.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - /bin/bash
