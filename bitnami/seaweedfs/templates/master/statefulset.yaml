@@ -133,7 +133,7 @@ spec:
           {{- else }}
           args:
             - -logtostderr=true
-            - -v={{ .Values.filer.logLevel }}
+            - -v={{ .Values.master.logLevel }}
             {{- if or .Values.security.enabled .Values.master.config .Values.master.existingConfigmap }}
             - -config_dir=/etc/seaweedfs
             {{- end }}
