@@ -1,10 +1,10 @@
 <!--- app-name: SeaweedFS -->
 
-# SeaweedFS
+# Bitnami package for SeaweedFS
 
 SeaweedFS is a simple and highly scalable distributed file system.
 
-[Overview of SeaweedFS](https://github.com/seaweedfs/seaweedfs)
+[Overview of SeaweedFS](https://seaweedfs.github.io)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
