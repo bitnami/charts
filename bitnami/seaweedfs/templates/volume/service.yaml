@@ -37,9 +37,7 @@ spec:
   ports:
     - name: http
       port: {{ .Values.volume.service.ports.http }}
-      {{- if not (eq .Values.volume.service.ports.http .Values.volume.containerPorts.http) }}
-      targetPort: {{ .Values.volume.containerPorts.http }}
-      {{- end }}
+      targetPort: http
       protocol: TCP
       {{- if and (or (eq .Values.volume.service.type "NodePort") (eq .Values.volume.service.type "LoadBalancer")) (not (empty .Values.volume.service.nodePorts.http)) }}
       nodePort: {{ .Values.volume.service.nodePorts.http }}
@@ -48,9 +46,7 @@ spec:
       {{- end }}
     - name: grpc
       port: {{ .Values.volume.service.ports.grpc }}
-      {{- if not (eq .Values.volume.service.ports.grpc .Values.volume.containerPorts.grpc) }}
-      targetPort: {{ .Values.volume.containerPorts.grpc }}
-      {{- end }}
+      targetPort: grpc
       protocol: TCP
       {{- if and (or (eq .Values.volume.service.type "NodePort") (eq .Values.volume.service.type "LoadBalancer")) (not (empty .Values.volume.service.nodePorts.grpc)) }}
       nodePort: {{ .Values.volume.service.nodePorts.grpc }}
