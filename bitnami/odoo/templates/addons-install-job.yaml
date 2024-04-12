@@ -93,7 +93,7 @@ spec:
         volumeMounts:
           - name: odoo-data
             mountPath: /bitnami/odoo
-      restartPolicy: OnFailure
+      restartPolicy: Never
       volumes:
         - name: odoo-data
           {{- if .Values.persistence.enabled }}
