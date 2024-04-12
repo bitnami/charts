@@ -57,19 +57,6 @@ spec:
       {{- else if eq .Values.volume.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.volume.metrics.enabled }}
-    - name: tcp-metrics
-      port: {{ .Values.volume.service.ports.metrics }}
-      {{- if not (eq .Values.volume.service.ports.metrics .Values.volume.containerPorts.metrics) }}
-      targetPort: {{ .Values.volume.containerPorts.metrics }}
-      {{- end }}
-      protocol: TCP
-      {{- if and (or (eq .Values.volume.service.type "NodePort") (eq .Values.volume.service.type "LoadBalancer")) (not (empty .Values.volume.service.nodePorts.metrics)) }}
-      nodePort: {{ .Values.volume.service.nodePorts.metrics }}
-      {{- else if eq .Values.volume.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
     {{- if .Values.volume.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.volume.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

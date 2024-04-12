@@ -21,6 +21,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: filer
+      app.kubernetes.io/part-of: metrics
       {{- if .Values.filer.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.filer.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}

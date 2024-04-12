@@ -58,19 +58,6 @@ spec:
       {{- else if eq .Values.s3.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    {{- if .Values.s3.metrics.enabled }}
-    - name: tcp-metrics
-      port: {{ .Values.s3.service.ports.metrics }}
-      {{- if not (eq .Values.s3.service.ports.metrics .Values.s3.containerPorts.metrics) }}
-      targetPort: {{ .Values.s3.containerPorts.metrics }}
-      {{- end }}
-      protocol: TCP
-      {{- if and (or (eq .Values.s3.service.type "NodePort") (eq .Values.s3.service.type "LoadBalancer")) (not (empty .Values.s3.service.nodePorts.metrics)) }}
-      nodePort: {{ .Values.s3.service.nodePorts.metrics }}
-      {{- else if eq .Values.s3.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
     {{- if .Values.s3.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.s3.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
