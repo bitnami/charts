@@ -12,16 +12,16 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: filer
     app.kubernetes.io/part-of: metrics
-  {{- if or .Values.filer.service.metrics.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.filer.service.metrics.annotations .Values.commonAnnotations) "context" .) }}
+  {{- if or .Values.filer.metrics.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.filer.metrics.service.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   ports:
     - name: tcp-metrics
-      port: {{ .Values.filer.service.ports.metrics }}
-      {{- if not (eq .Values.filer.service.ports.metrics .Values.filer.containerPorts.metrics) }}
+      port: {{ .Values.filer.metrics.service.port }}
+      {{- if not (eq .Values.filer.metrics.service.port .Values.filer.containerPorts.metrics) }}
       targetPort: {{ .Values.filer.containerPorts.metrics }}
       {{- end }}
       protocol: TCP

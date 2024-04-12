@@ -330,10 +330,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `master.service.type`                          | Master Server service type                                                                                                       | `ClusterIP`              |
 | `master.service.ports.http`                    | Master Server service HTTP port                                                                                                  | `9333`                   |
 | `master.service.ports.grpc`                    | Master Server service GRPC port                                                                                                  | `19333`                  |
-| `master.service.ports.metrics`                 | Master Server service metrics port                                                                                               | `9327`                   |
 | `master.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
 | `master.service.nodePorts.grpc`                | Node port for GRPC                                                                                                               | `""`                     |
-| `master.service.nodePorts.metrics`             | Node port for metrics                                                                                                            | `""`                     |
 | `master.service.clusterIP`                     | Master Server service Cluster IP                                                                                                 | `""`                     |
 | `master.service.loadBalancerIP`                | Master Server service Load Balancer IP                                                                                           | `""`                     |
 | `master.service.loadBalancerSourceRanges`      | Master Server service Load Balancer sources                                                                                      | `[]`                     |
@@ -343,7 +341,6 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `master.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `master.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `master.service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
-| `master.service.metrics.annotations`           | Annotations for the metrics service.                                                                                             | `{}`                     |
 | `master.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Master Server                                                            | `true`                   |
 | `master.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `master.networkPolicy.allowExternalEgress`     | Allow the Master Server pods to access any range of port and all destinations.                                                   | `true`                   |
@@ -386,6 +383,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | Name                                              | Description                                                                                            | Value   |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
 | `master.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
+| `master.metrics.service.port`                     | Metrics service port                                                                                   | `9327`  |
+| `master.metrics.service.annotations`              | Annotations for the metrics service.                                                                   | `{}`    |
 | `master.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
 | `master.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
 | `master.metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
@@ -495,10 +494,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `volume.service.type`                          | Volume Server service type                                                                                                       | `ClusterIP`              |
 | `volume.service.ports.http`                    | Volume Server service HTTP port                                                                                                  | `8080`                   |
 | `volume.service.ports.grpc`                    | Volume Server service GRPC port                                                                                                  | `18080`                  |
-| `volume.service.ports.metrics`                 | Volume Server service metrics port                                                                                               | `9327`                   |
 | `volume.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
 | `volume.service.nodePorts.grpc`                | Node port for GRPC                                                                                                               | `""`                     |
-| `volume.service.nodePorts.metrics`             | Node port for metrics                                                                                                            | `""`                     |
 | `volume.service.clusterIP`                     | Volume Server service Cluster IP                                                                                                 | `""`                     |
 | `volume.service.loadBalancerIP`                | Volume Server service Load Balancer IP                                                                                           | `""`                     |
 | `volume.service.loadBalancerSourceRanges`      | Volume Server service Load Balancer sources                                                                                      | `[]`                     |
@@ -508,7 +505,6 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `volume.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `volume.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `volume.service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
-| `volume.service.metrics.annotations`           | Annotations for the metrics service.                                                                                             | `{}`                     |
 | `volume.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Volume Server                                                            | `true`                   |
 | `volume.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `volume.networkPolicy.allowExternalEgress`     | Allow the Volume Server pods to access any range of port and all destinations.                                                   | `true`                   |
@@ -552,6 +548,8 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | Name                                              | Description                                                                                            | Value   |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
 | `volume.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
+| `volume.metrics.service.port`                     | Metrics service port                                                                                   | `9327`  |
+| `volume.metrics.service.annotations`              | Annotations for the metrics service.                                                                   | `{}`    |
 | `volume.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
 | `volume.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
 | `volume.metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
@@ -663,10 +661,8 @@ enabled = false
 | `filer.service.type`                          | Filer Server service type                                                                                                        | `ClusterIP`              |
 | `filer.service.ports.http`                    | Filer Server service HTTP port                                                                                                   | `8888`                   |
 | `filer.service.ports.grpc`                    | Filer Server service GRPC port                                                                                                   | `18888`                  |
-| `filer.service.ports.metrics`                 | Filer Server service metrics port                                                                                                | `9327`                   |
 | `filer.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
 | `filer.service.nodePorts.grpc`                | Node port for GRPC                                                                                                               | `""`                     |
-| `filer.service.nodePorts.metrics`             | Node port for metrics                                                                                                            | `""`                     |
 | `filer.service.clusterIP`                     | Filer Server service Cluster IP                                                                                                  | `""`                     |
 | `filer.service.loadBalancerIP`                | Filer Server service Load Balancer IP                                                                                            | `""`                     |
 | `filer.service.loadBalancerSourceRanges`      | Filer Server service Load Balancer sources                                                                                       | `[]`                     |
@@ -676,7 +672,6 @@ enabled = false
 | `filer.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `filer.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `filer.service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
-| `filer.service.metrics.annotations`           | Annotations for the metrics service.                                                                                             | `{}`                     |
 | `filer.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Filer Server                                                             | `true`                   |
 | `filer.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `filer.networkPolicy.allowExternalEgress`     | Allow the Filer Server pods to access any range of port and all destinations.                                                    | `true`                   |
@@ -704,6 +699,8 @@ enabled = false
 | Name                                             | Description                                                                                            | Value   |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
 | `filer.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
+| `filer.metrics.service.port`                     | Metrics service port                                                                                   | `9327`  |
+| `filer.metrics.service.annotations`              | Annotations for the metrics service.                                                                   | `{}`    |
 | `filer.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
 | `filer.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
 | `filer.metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
@@ -817,10 +814,8 @@ enabled = false
 | `s3.service.type`                          | Amazon S3 API service type                                                                                                       | `ClusterIP`              |
 | `s3.service.ports.http`                    | Amazon S3 API service HTTP port                                                                                                  | `8333`                   |
 | `s3.service.ports.grpc`                    | Amazon S3 API service GRPC port                                                                                                  | `18333`                  |
-| `s3.service.ports.metrics`                 | Amazon S3 API service metrics port                                                                                               | `9327`                   |
 | `s3.service.nodePorts.http`                | Node port for HTTP                                                                                                               | `""`                     |
 | `s3.service.nodePorts.grpc`                | Node port for GRPC                                                                                                               | `""`                     |
-| `s3.service.nodePorts.metrics`             | Node port for metrics                                                                                                            | `""`                     |
 | `s3.service.clusterIP`                     | Amazon S3 API service Cluster IP                                                                                                 | `""`                     |
 | `s3.service.loadBalancerIP`                | Amazon S3 API service Load Balancer IP                                                                                           | `""`                     |
 | `s3.service.loadBalancerSourceRanges`      | Amazon S3 API service Load Balancer sources                                                                                      | `[]`                     |
@@ -830,7 +825,6 @@ enabled = false
 | `s3.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `s3.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `s3.service.headless.annotations`          | Annotations for the headless service.                                                                                            | `{}`                     |
-| `s3.service.metrics.annotations`           | Annotations for the metrics service.                                                                                             | `{}`                     |
 | `s3.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Amazon S3 API                                                            | `true`                   |
 | `s3.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `s3.networkPolicy.allowExternalEgress`     | Allow the Amazon S3 API pods to access any range of port and all destinations.                                                   | `true`                   |
@@ -858,6 +852,8 @@ enabled = false
 | Name                                          | Description                                                                                            | Value   |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
 | `s3.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
+| `s3.metrics.service.port`                     | Metrics service port                                                                                   | `9327`  |
+| `s3.metrics.service.annotations`              | Annotations for the metrics service.                                                                   | `{}`    |
 | `s3.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
 | `s3.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
 | `s3.metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |

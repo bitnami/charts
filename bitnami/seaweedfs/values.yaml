@@ -491,22 +491,18 @@ master:
     type: ClusterIP
     ## @param master.service.ports.http Master Server service HTTP port
     ## @param master.service.ports.grpc Master Server service GRPC port
-    ## @param master.service.ports.metrics Master Server service metrics port
     ##
     ports:
       http: 9333
       grpc: 19333
-      metrics: 9327
     ## Node ports to expose
     ## @param master.service.nodePorts.http Node port for HTTP
     ## @param master.service.nodePorts.grpc Node port for GRPC
-    ## @param master.service.nodePorts.metrics Node port for metrics
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
       grpc: ""
-      metrics: ""
     ## @param master.service.clusterIP Master Server service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -548,12 +544,6 @@ master:
     ##
     headless:
       ## @param master.service.headless.annotations Annotations for the headless service.
-      ##
-      annotations: {}
-    ## Metrics service properties
-    ##
-    metrics:
-      ## @param master.service.metrics.annotations Annotations for the metrics service.
       ##
       annotations: {}
   ## Network Policies for Master Server
@@ -771,6 +761,15 @@ master:
     ## @param master.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param master.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param master.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1132,22 +1131,18 @@ volume:
     type: ClusterIP
     ## @param volume.service.ports.http Volume Server service HTTP port
     ## @param volume.service.ports.grpc Volume Server service GRPC port
-    ## @param volume.service.ports.metrics Volume Server service metrics port
     ##
     ports:
       http: 8080
       grpc: 18080
-      metrics: 9327
     ## Node ports to expose
     ## @param volume.service.nodePorts.http Node port for HTTP
     ## @param volume.service.nodePorts.grpc Node port for GRPC
-    ## @param volume.service.nodePorts.metrics Node port for metrics
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
       grpc: ""
-      metrics: ""
     ## @param volume.service.clusterIP Volume Server service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1189,12 +1184,6 @@ volume:
     ##
     headless:
       ## @param volume.service.headless.annotations Annotations for the headless service.
-      ##
-      annotations: {}
-    ## Metrics service properties
-    ##
-    metrics:
-      ## @param volume.service.metrics.annotations Annotations for the metrics service.
       ##
       annotations: {}
   ## Network Policies for Volume Server
@@ -1417,6 +1406,15 @@ volume:
     ## @param volume.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param volume.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param volume.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -1780,22 +1778,18 @@ filer:
     type: ClusterIP
     ## @param filer.service.ports.http Filer Server service HTTP port
     ## @param filer.service.ports.grpc Filer Server service GRPC port
-    ## @param filer.service.ports.metrics Filer Server service metrics port
     ##
     ports:
       http: 8888
       grpc: 18888
-      metrics: 9327
     ## Node ports to expose
     ## @param filer.service.nodePorts.http Node port for HTTP
     ## @param filer.service.nodePorts.grpc Node port for GRPC
-    ## @param filer.service.nodePorts.metrics Node port for metrics
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
       grpc: ""
-      metrics: ""
     ## @param filer.service.clusterIP Filer Server service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1837,12 +1831,6 @@ filer:
     ##
     headless:
       ## @param filer.service.headless.annotations Annotations for the headless service.
-      ##
-      annotations: {}
-    ## Metrics service properties
-    ##
-    metrics:
-      ## @param filer.service.metrics.annotations Annotations for the metrics service.
       ##
       annotations: {}
   ## Network Policies for Filer Server
@@ -2011,6 +1999,15 @@ filer:
     ## @param filer.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param filer.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param filer.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -2379,22 +2376,18 @@ s3:
     type: ClusterIP
     ## @param s3.service.ports.http Amazon S3 API service HTTP port
     ## @param s3.service.ports.grpc Amazon S3 API service GRPC port
-    ## @param s3.service.ports.metrics Amazon S3 API service metrics port
     ##
     ports:
       http: 8333
       grpc: 18333
-      metrics: 9327
     ## Node ports to expose
     ## @param s3.service.nodePorts.http Node port for HTTP
     ## @param s3.service.nodePorts.grpc Node port for GRPC
-    ## @param s3.service.nodePorts.metrics Node port for metrics
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
       grpc: ""
-      metrics: ""
     ## @param s3.service.clusterIP Amazon S3 API service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -2436,12 +2429,6 @@ s3:
     ##
     headless:
       ## @param s3.service.headless.annotations Annotations for the headless service.
-      ##
-      annotations: {}
-    ## Metrics service properties
-    ##
-    metrics:
-      ## @param s3.service.metrics.annotations Annotations for the metrics service.
       ##
       annotations: {}
   ## Network Policies for Amazon S3 API
@@ -2610,6 +2597,15 @@ s3:
     ## @param s3.metrics.enabled Enable the export of Prometheus metrics
     ##
     enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param s3.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param s3.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
