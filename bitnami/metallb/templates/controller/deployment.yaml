@@ -116,6 +116,10 @@ spec:
             - name: METALLB_DEPLOYMENT
               value: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             {{- end }}
+            {{- if .Values.speaker.frr.enabled }}
+            - name: METALLB_BGP_TYPE
+              value: frr
+            {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -67,8 +67,40 @@ spec:
       {{- if .Values.speaker.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.speaker.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.speaker.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
+      {{- if or .Values.speaker.initContainers .Values.speaker.frr.enabled }}
+      initContainers:
+        {{- if .Values.speaker.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.speaker.frr.enabled }}
+          # Copies the initial config files with the right permissions to the shared volume.
+          - name: cp-frr-files
+            image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+            securityContext:
+              runAsUser: 100
+              runAsGroup: 101
+            command: ["/bin/sh", "-c", "cp -rLf /tmp/frr/* /etc/frr/"]
+            volumeMounts:
+              - name: frr-startup
+                mountPath: /tmp/frr
+              - name: frr-conf
+                mountPath: /etc/frr
+          # Copies the reloader to the shared volume between the speaker and reloader.
+          - name: cp-reloader
+            image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+            command: ["/bin/sh", "-c", "cp -f /frr-reloader.sh /etc/frr_reloader/"]
+            volumeMounts:
+              - name: reloader
+                mountPath: /etc/frr_reloader
+          # Copies the metrics exporter
+          - name: cp-metrics
+            image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+            command: ["/bin/sh", "-c", "cp -f /frr-metrics /etc/frr_metrics/"]
+            volumeMounts:
+              - name: metrics
+                mountPath: /etc/frr_metrics
+      shareProcessNamespace: true
+        {{- end }}
       {{- end }}
       containers:
         - name: metallb-speaker
@@ -167,6 +199,73 @@ spec:
             {{- if .Values.speaker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.speaker.frr.enabled }}
+        - name: frr
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+              - NET_RAW
+              - SYS_ADMIN
+              - NET_BIND_SERVICE
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.image "global" .Values.global) }}
+          {{- if .Values.speaker.frr.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- end }}
+          volumeMounts:
+            - name: frr-sockets
+              mountPath: /var/run/frr
+            - name: frr-conf
+              mountPath: /etc/frr
+          # The command is FRR's default entrypoint & waiting for the log file to appear and tailing it.
+          # If the log file isn't created in 60 seconds the tail fails and the container is restarted.
+          # This workaround is needed to have the frr logs as part of kubectl logs -c frr < speaker_pod_name >.
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "--> 1"
+              . /usr/lib/frr/frrcommon.sh
+
+              echo "--> 2"
+              /usr/lib/frr/watchfrr $(daemon_list) &
+              echo "--> asdfas"
+              attempts=0
+              until [[ -f /etc/frr/frr.log || $attempts -eq 60 ]]; do
+                echo "Attempt:" $attempts
+                sleep 1
+                attempts=$(( $attempts + 1 ))
+              done
+              echo "--> 5"
+              tail -f /etc/frr/frr.log        {{- with .Values.speaker.frr.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.speaker.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: livez
+              port: {{ .Values.speaker.frr.metricsPort }}
+            initialDelaySeconds: {{ .Values.speaker.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.speaker.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.speaker.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.speaker.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.speaker.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.speaker.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              {{- if .Values.prometheus.secureMetricsPort }}
+              host: localhost
+              {{- end }}
+              path: /livez
+              port: {{ .Values.speaker.frr.metricsPort }}
+            failureThreshold: {{ .Values.speaker.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.speaker.startupProbe.periodSeconds }}
+          {{- end }}
+
+        - patata: asd
+        {{- end }} # from frr init containers
         {{- if .Values.speaker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -178,6 +277,19 @@ spec:
             items:
               - key: {{ include "metallb.speaker.secretKey" . }}
                 path: secretkey
+        {{- if .Values.speaker.frr.enabled }}
+        - name: frr-sockets
+          emptyDir: {}
+        - name: frr-startup
+          configMap:
+            name: {{ printf "%s-speaker-frr-startup" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+        - name: frr-conf
+          emptyDir: {}
+        - name: reloader
+          emptyDir: {}
+        - name: metrics
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.speaker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

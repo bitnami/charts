@@ -915,6 +915,24 @@ speaker:
   ## @param speaker.logLevel Sets the speaker log level. Does not work if the args are overridden
   ##
   logLevel: "info"
+  ## @section FRR Speaker
+  frr:
+    enabled: true
+    image:
+      repository: quay.io/frrouting/frr
+      tag: 9.0.2
+      pullPolicy:
+    metricsPort: 7473
+    resources: {}
+    # if set, enables a rbac proxy sidecar container on the speaker to
+    # expose the frr metrics via tls.
+    # secureMetricsPort: 9121
+  reloader:
+    resources: {}
+
+  frrMetrics:
+    resources: {}
+
   ## @section Speaker Prometheus metrics export
   metrics:
     ## @param speaker.metrics.enabled Enable the export of Prometheus metrics
