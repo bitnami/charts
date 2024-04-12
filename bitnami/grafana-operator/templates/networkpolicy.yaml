@@ -21,7 +21,7 @@ spec:
     - Ingress
     - Egress
   egress:
-    {{- if .Values.networkPolicy.allowExternalEgress }}
+    {{- if .Values.operator.networkPolicy.allowExternalEgress }}
     - {}
     {{- else }}
     - ports:
