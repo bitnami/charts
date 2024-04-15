@@ -80,12 +80,22 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param containerPorts [object] Controller container ports to open
+## @param containerPorts.http Nginx Ingress Controller HTTP port
+## @param containerPorts.https Nginx Ingress Controller HTTPS port
+## @param containerPorts.defaultServer Nginx Ingress Controller default server port
+## @param containerPorts.metrics Nginx Ingress Controller metrics port
+## @param containerPorts.profiler Nginx Ingress Controller profiler port
+## @param containerPorts.status Nginx Ingress Controller status port
+## @param containerPorts.stream Nginx Ingress Controller stream port
 ##
 containerPorts:
   http: 8080
   https: 8443
+  defaultServer: 8181
   metrics: 10254
+  profiler: 10245
+  status: 10246
+  stream: 10247
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true

@@ -133,7 +133,7 @@ spec:
               #!/bin/bash
 
               cd /opt/bitnami/supabase-storage
-              pm2-runtime start ecosystem.config.js
+              node dist/server.js
           {{- end }}
           env:
             - name: DB_USER
