@@ -381,7 +381,7 @@ spec:
               containerPort: {{ .Values.containerPorts.tls }}
             {{- end }}
             {{- if gt (int .Values.replicaCount) 1 }}
-            {{- /* These ports are only open when there are more than replicas */}}
+            {{- /* These ports are only open when there are more than 1 replica */}}
             - name: follower
               containerPort: {{ .Values.containerPorts.follower }}
             - name: election
