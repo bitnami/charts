@@ -356,6 +356,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `https.cert`                  | TLS Certificate for Thanos HTTPS - ignored if existingSecret is provided                                          | `""`                     |
 | `https.ca`                    | (Optional, used for client) CA Certificate for Thanos HTTPS - ignored if existingSecret is provided               | `""`                     |
 | `https.clientAuthType`        | Server policy for client authentication using certificates. Maps to ClientAuth Policies.                          | `""`                     |
+| `https.extraTlsServerConfig`  | Extra tls_server_config options                                                                                   | `{}`                     |
 | `auth.basicAuthUsers`         | Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication | `{}`                     |
 
 ### Thanos Query parameters
