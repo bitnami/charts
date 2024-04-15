@@ -40,7 +40,6 @@ spec:
     # Allow outbound connections to other cluster pods
     - ports:
         - port: {{ .Values.webhook.containerPort }}
-        - port: {{ .Values.webhook.httpsPort }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -51,7 +50,6 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.webhook.containerPort }}
-        - port: {{ .Values.webhook.httpsPort }}
       {{- if not .Values.webhook.networkPolicy.allowExternal }}
       from:
         - podSelector:

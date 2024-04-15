@@ -65,7 +65,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.10.0-debian-12-r5
+  tag: 1.10.0-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -80,12 +80,22 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param containerPorts [object] Controller container ports to open
+## @param containerPorts.http Nginx Ingress Controller HTTP port
+## @param containerPorts.https Nginx Ingress Controller HTTPS port
+## @param containerPorts.defaultServer Nginx Ingress Controller default server port
+## @param containerPorts.metrics Nginx Ingress Controller metrics port
+## @param containerPorts.profiler Nginx Ingress Controller profiler port
+## @param containerPorts.status Nginx Ingress Controller status port
+## @param containerPorts.stream Nginx Ingress Controller stream port
 ##
 containerPorts:
   http: 8080
   https: 8443
+  defaultServer: 8181
   metrics: 10254
+  profiler: 10245
+  status: 10246
+  stream: 10247
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -519,7 +529,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r6
+    tag: 1.25.4-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

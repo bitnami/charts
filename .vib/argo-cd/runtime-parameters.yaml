@@ -7,7 +7,8 @@ config:
 controller:
   clusterAdminAccess: true
   service:
-    port: 8083
+    ports:
+      metrics: 8083
 server:
   podSecurityContext:
     enabled: true
@@ -34,7 +35,8 @@ server:
     automountServiceAccountToken: true
 repoServer:
   service:
-    port: 8080
+    ports:
+      repoServer: 8080
 rbac:
   create: true
 redis:
