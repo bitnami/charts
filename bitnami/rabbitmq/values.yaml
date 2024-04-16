@@ -42,7 +42,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.12.13-debian-12-r5
+  tag: 3.13.1-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -242,7 +242,7 @@ memoryHighWatermark:
   ## @param memoryHighWatermark.value Memory high watermark value
   ## The default value of 0.4 stands for 40% of available RAM
   ## Note: the memory relative limit is applied to the resource.limits.memory to calculate the memory threshold
-  ## You can also use an absolute value, e.g.: 256MB
+  ## You can also use an absolute value, e.g.: 256Mi
   ##
   value: 0.4
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
@@ -482,11 +482,9 @@ configuration: |-
   {{- end }}
   {{- end }}
   {{- end }}
-  {{- if .Values.metrics.enabled }}
   ## Prometheus metrics
   ##
   prometheus.tcp.port = {{ .Values.containerPorts.metrics }}
-  {{- end }}
   {{- if .Values.memoryHighWatermark.enabled }}
   ## Memory Threshold
   ##

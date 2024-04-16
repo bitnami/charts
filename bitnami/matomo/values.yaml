@@ -68,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.0.3-debian-12-r3
+  tag: 5.0.3-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -792,7 +792,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r1
+    tag: 1.0.7-debian-12-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1017,11 +1017,11 @@ cronjobs:
 
     ## Persistence using Persistent Volume Claims for the taskScheduler CronJob
     ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-    ## @param cronjobs.taskScheduler.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.taskScheduler.persistence.enabled Enable persistence using Persistent Volume Claims
     ## @param cronjobs.taskScheduler.persistence.existingClaim A manually managed Persistent Volume Claim
     ##
     persistence:
-      enable: true
+      enabled: true
       existingClaim: ""
 
     ## Configure Pods Security Context for the taskScheduler CronJob
@@ -1111,11 +1111,11 @@ cronjobs:
 
     ## Persistence using Persistent Volume Claims for the archive CronJob
     ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-    ## @param cronjobs.archive.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.archive.persistence.enabled Enable persistence using Persistent Volume Claims
     ## @param cronjobs.archive.persistence.existingClaim A manually managed Persistent Volume Claim
     ##
     persistence:
-      enable: true
+      enabled: true
       existingClaim: ""
 
     ## Configure Pods Security Context for the archive CronJob
