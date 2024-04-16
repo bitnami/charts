@@ -24,6 +24,7 @@ rules:
       - get
       - list
       - update
+      - watch
   - apiGroups:
       - ""
     resources:
@@ -93,6 +94,7 @@ rules:
       - udproutes
       - referencepolicies
       - referencegrants
+      - backendtlspolicies
     verbs:
       - get
       - list
