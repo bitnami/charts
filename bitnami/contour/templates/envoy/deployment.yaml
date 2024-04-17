@@ -151,9 +151,6 @@ spec:
                   - contour
                   - envoy
                   - shutdown
-          {{- if .Values.envoy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
           name: shutdown-manager
           {{- if .Values.envoy.shutdownManager.resources }}
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
@@ -249,7 +246,9 @@ spec:
               {{- end }}
               name: metrics
               protocol: TCP
-          {{- if .Values.envoy.readinessProbe.enabled }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /ready

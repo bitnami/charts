@@ -206,7 +206,11 @@ spec:
             {{- end }}
           ports:
             - name: mysql
-              containerPort: 3306
+              containerPort: {{ .Values.secondary.containerPorts.mysql }}
+            {{- if .Values.secondary.enableMySQLX }}
+            - name: mysqlx
+              containerPort: {{ .Values.secondary.containerPorts.mysqlx }}
+            {{- end }}
             {{- if .Values.secondary.extraPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraPorts "context" $) | nindent 12 }}
             {{- end }}
