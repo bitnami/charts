@@ -13,8 +13,14 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: postgresql
     role: witness
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.witness.annotations }}
+  annotations: 
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.witness.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.witness.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   replicas: {{ .Values.witness.replicaCount }}

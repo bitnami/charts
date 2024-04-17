@@ -12,10 +12,16 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.labels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pgpool
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.pgpool.annotations }}
+  annotations: 
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if and (not .Values.pgpool.customUsersSecret) .Values.pgpool.customUsers.usernames }}
     checksum/custom-users-secrets: {{ include (print $.Template.BasePath "/pgpool/custom-users-secrets.yaml") . | sha256sum }}
+    {{- end }}
+    {{- if .Values.pgpool.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.pgpool.annotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:

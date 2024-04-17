@@ -128,6 +128,9 @@ postgresql:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
+  ## @param postgresql.annotations Annotations to add to the StatefulSet. Evaluated as template
+  ##
+  annotations: {}   
   ## @param postgresql.labels Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
@@ -697,6 +700,9 @@ witness:
   ## @param witness.create Create PostgreSQL witness nodes
   ##
   create: false
+  ## @param witness.annotations Annotations to add to the StatefulSet. Evaluated as template
+  ##
+  annotations: {}     
   ## @param witness.labels Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
@@ -1172,6 +1178,9 @@ pgpool:
   ## @param pgpool.srCheckDatabase Name of the database to perform streaming replication checks
   ##
   srCheckDatabase: postgres
+  ## @param pgpool.annotations Annotations to add to the Deployment. Evaluated as template
+  ##
+  annotations: {} 
   ## @param pgpool.labels Labels to add to the Deployment. Evaluated as template
   ##
   labels: {}
