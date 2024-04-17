@@ -250,7 +250,7 @@ Return the Redis&reg; port
 */}}
 {{- define "argocd.redisPort" -}}
 {{- if .Values.redis.enabled }}
-    {{- .Values.redis.service.port -}}
+    {{- coalesce .Values.redis.service.port .Values.redis.service.ports.redis -}}
 {{- else -}}
     {{- .Values.externalRedis.port -}}
 {{- end -}}
