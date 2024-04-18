@@ -13,7 +13,6 @@ metadata:
   namespace: {{ default .Release.Namespace .Values.speaker.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: speaker
-
 data:
   daemons: |
     # This file tells the frr package which daemons to start.

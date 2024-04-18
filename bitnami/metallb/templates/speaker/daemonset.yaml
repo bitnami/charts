@@ -72,21 +72,14 @@ spec:
         {{- if .Values.speaker.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.speaker.frr.enabled }}
           # Copies the initial config files with the right permissions to the shared volume.
           - name: cp-frr-files
             image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
             {{- if .Values.speaker.frr.image.pullPolicy }}
             imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
             {{- end }}
-            securityContext:
-              runAsGroup: 101
-              runAsUser: 100
             command: ["/bin/sh", "-c", "cp -rLf /tmp/frr/* /etc/frr/"]
-            {{- if .Values.speaker.frr.resources }}
-            resources: {{- toYaml .Values.speaker.frr.resources | nindent 14 }}
-            {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
-            resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 14 }}
-            {{- end }}
             volumeMounts:
               - name: frr-startup
                 mountPath: /tmp/frr
@@ -113,6 +106,7 @@ spec:
               - name: metrics
                 mountPath: /etc/frr_metrics
       shareProcessNamespace: true
+        {{- end }}
       {{- end }}
       containers:
         - name: metallb-speaker
@@ -241,36 +235,10 @@ spec:
                 attempts=$(( $attempts + 1 ))
               done
               tail -f /etc/frr/frr.log
-            {{- with .Values.speaker.frr.resources }}
-          resources:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.speaker.frr.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.speaker.frr.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /livez
-              #REVIEW: check this port
-              port: {{ .Values.speaker.frr.metricsPort }}
-          {{- end }}
-          {{- if .Values.speaker.frr.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.speaker.frr.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /livez
-              port: {{ .Values.speaker.frr.metricsPort }}
-          {{- end }}
-          {{- if .Values.speaker.frr.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customStartupProbe "context" $) | nindent 12 }}
-          {{- else if .Values.speaker.frr.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.startupProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /livez
-              port: {{ .Values.speaker.frr.metricsPort }}
-          {{- end }}
+          {{- if .Values.speaker.frr.resources }}
+          resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.speaker.frr.resources }}
           resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
@@ -298,9 +266,9 @@ spec:
           imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
           command: ["/etc/frr_metrics/frr-metrics"]
           args:
-            - --metrics-port={{ .Values.speaker.frr.metricsPort }}
+            - --metrics-port={{ .Values.speaker.frr.containerPorts.metrics }}
           ports:
-            - containerPort: {{ .Values.speaker.frr.metricsPort }}
+            - containerPort: {{ .Values.speaker.frr.containerPorts.metrics }}
               name: monitoring
           volumeMounts:
             - name: frr-sockets
@@ -309,6 +277,33 @@ spec:
               mountPath: /etc/frr
             - name: metrics
               mountPath: /etc/frr_metrics
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.speaker.frr.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.frr.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /livez
+              port: {{ .Values.speaker.frr.containerPorts.metrics }}
+          {{- end }}
+          {{- if .Values.speaker.frr.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.frr.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /livez
+              port: {{ .Values.speaker.frr.containerPorts.metrics }}
+          {{- end }}
+          {{- if .Values.speaker.frr.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.frr.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /livez
+              port: {{ .Values.speaker.frr.containerPorts.metrics }}
+          {{- end }}
+          {{- end }}
+
           {{- if .Values.speaker.frr.resources }}
           resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
           {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}

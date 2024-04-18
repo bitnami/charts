@@ -411,7 +411,7 @@ controller:
   ## @param controller.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -427,7 +427,7 @@ controller:
   ## @param controller.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -762,11 +762,11 @@ speaker:
   ##
   containerSecurityContext:
     enabled: true
-#    seLinuxOptions: null
+    seLinuxOptions: null
     runAsUser: 0
     runAsGroup: 0
-#    allowPrivilegeEscalation: false
-#    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       # In order to use `tcpdump` you would need to comment out the `drop` block
       drop:
@@ -775,8 +775,8 @@ speaker:
         - NET_ADMIN
         - NET_RAW
         - SYS_ADMIN
-#    seccompProfile:
-#      type: "RuntimeDefault"
+    seccompProfile:
+      type: "RuntimeDefault"
   ## @param speaker.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -917,22 +917,36 @@ speaker:
   logLevel: "info"
   ## @section FRR Speaker
   frr:
+    ## @param speaker.frr.enabled Whether to enable FRR mode
+    ## ref: https://metallb.universe.tf/concepts/bgp/#frr-mode
+    ##
     enabled: true
     image:
+      ## @param speaker.frr.image.registry [default: REGISTRY_NAME] MetalLB Speaker image registry
+      ## @param speaker.frr.image.repository [default: REPOSITORY_NAME/metallb-speaker] MetalLB Speaker image repository
+      ## @skip speaker.frr.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
+      ## @param speaker.frr.image.digest MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+      ## @param speaker.frr.image.pullPolicy MetalLB Speaker image pull policy
+      ## @param speaker.frr.image.pullSecrets Specify docker-registry secret names as an array
+      ##
+      #FIXME: tag
       registry: docker.io
-      repository: metallb-frr
-      tag: test13_install_from_repo
+      repository: metallb-frr-debian
+      tag: test1
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
-    metricsPort: 7473
-    ## Init container's resource requests and limits
-    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+    ## Speaker container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param speaker.frr.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "micro"
-    ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param volumePermissions.frr.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -943,25 +957,24 @@ speaker:
     ##     memory: 1024Mi
     ##
     resources: {}
-    ## Init container Container Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
-    ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
-    ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
-    ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
-    ##
-
-    # FIXME: Init container uses user:100 group:101
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param speaker.frr.containerSecurityContext.enabled Enabled Speaker containers' Security Context
+    ## @param speaker.frr.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
     containerSecurityContext:
       enabled: true
+      runAsUser: 0
+      runAsGroup: 0
       capabilities:
         add:
           - NET_ADMIN
           - NET_RAW
           - SYS_ADMIN
           - NET_BIND_SERVICE
-
+    ## @param speaker.frr.containerPorts.metrics HTTP FRR Metrics Endpoint
+    ##
+    containerPorts:
+      metrics: 7473
     ## Liveness probe values
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
     ## @param speaker.frr.livenessProbe.enabled Enable livenessProbe
@@ -972,7 +985,7 @@ speaker:
     ## @param speaker.frr.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
-      enabled: false
+      enabled: true
       failureThreshold: 3
       initialDelaySeconds: 10
       periodSeconds: 10
@@ -988,7 +1001,7 @@ speaker:
     ## @param speaker.frr.readinessProbe.successThreshold Success threshold for readinessProbe
     ##
     readinessProbe:
-      enabled: false
+      enabled: true
       failureThreshold: 3
       initialDelaySeconds: 10
       periodSeconds: 10
@@ -1004,56 +1017,21 @@ speaker:
     ## @param speaker.frr.startupProbe.successThreshold Success threshold for startupProbe
     ##
     startupProbe:
-      enabled: false
+      enabled: true
       failureThreshold: 3
       initialDelaySeconds: 10
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 1
-    ## @param speaker.customStartupProbe Custom liveness probe for the Web component
+    ## @param speaker.frr.customStartupProbe Custom liveness probe for the Web component
     ##
     customStartupProbe: {}
-    ## @param speaker.customLivenessProbe Custom liveness probe for the Web component
+    ## @param speaker.frr.customLivenessProbe Custom liveness probe for the Web component
     ##
     customLivenessProbe: {}
-    ## @param speaker.customReadinessProbe Custom readiness probe for the Web component
+    ## @param speaker.frr.customReadinessProbe Custom readiness probe for the Web component
     ##
     customReadinessProbe: {}
-    ## @param speaker.logLevel Sets the speaker log level. Does not work if the args are overridden
-    ##
-    ## Speaker container resource requests and limits
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## We usually recommend not to specify default resources and to leave this as a conscious
-    ## choice for the user. This also increases chances charts run on environments with little
-    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    ## @param speaker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production).
-    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-    ##
-    resourcesPreset: "nano"
-    ## @param speaker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-    ## Example:
-    ## resources:
-    ##   requests:
-    ##     cpu: 2
-    ##     memory: 512Mi
-    ##   limits:
-    ##     cpu: 3
-    ##     memory: 1024Mi
-    ##
-    resources: {}
-
-
-
-    # if set, enables a rbac proxy sidecar container on the speaker to
-    # expose the frr metrics via tls.
-    # secureMetricsPort: 9121
-  reloader:
-    resources: {}
-
-  frrMetrics:
-    resources: {}
-
   ## @section Speaker Prometheus metrics export
   metrics:
     ## @param speaker.metrics.enabled Enable the export of Prometheus metrics
