@@ -944,6 +944,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/elast
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+### To 21.0.0
+
+This version bumps in a major the version of the Kibana Helm Chart bundled as dependecy, [here](https://github.com/bitnami/charts/tree/main/bitnami/kibana#to-1100) you can see the changes implemented in this Kibana major version.
+
 ## To 20.0.0
 
 This major bump changes the following security defaults:
