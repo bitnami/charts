@@ -178,6 +178,9 @@ Usage:
 {{- end }}
   volumeMounts:
     - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    - name: empty-dir
       mountPath: /etc/ssh
       subPath: etc-ssh-dir
     - name: empty-dir
