@@ -411,7 +411,7 @@ controller:
   ## @param controller.livenessProbe.successThreshold Success threshold for livenessProbe
   ##
   livenessProbe:
-    enabled: true
+    enabled: false
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -427,7 +427,7 @@ controller:
   ## @param controller.readinessProbe.successThreshold Success threshold for readinessProbe
   ##
   readinessProbe:
-    enabled: true
+    enabled: false
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -762,11 +762,11 @@ speaker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+#    seLinuxOptions: null
     runAsUser: 0
     runAsGroup: 0
-    allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: true
+#    allowPrivilegeEscalation: false
+#    readOnlyRootFilesystem: true
     capabilities:
       # In order to use `tcpdump` you would need to comment out the `drop` block
       drop:
@@ -775,8 +775,8 @@ speaker:
         - NET_ADMIN
         - NET_RAW
         - SYS_ADMIN
-    seccompProfile:
-      type: "RuntimeDefault"
+#    seccompProfile:
+#      type: "RuntimeDefault"
   ## @param speaker.command Override default container command (useful when using custom images)
   ##
   command: []
@@ -920,8 +920,8 @@ speaker:
     enabled: true
     image:
       registry: docker.io
-      repository: metallb-frr                               
-      tag: test7_minimum                          
+      repository: metallb-frr
+      tag: test13_install_from_repo
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
@@ -955,21 +955,12 @@ speaker:
     # FIXME: Init container uses user:100 group:101
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
-      runAsUser: 0
-      runAsGroup: 0
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
       capabilities:
-        drop:
-          - ALL
         add:
           - NET_ADMIN
           - NET_RAW
           - SYS_ADMIN
           - NET_BIND_SERVICE
-      seccompProfile:
-        type: "RuntimeDefault"
 
     ## Liveness probe values
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -981,7 +972,7 @@ speaker:
     ## @param speaker.frr.livenessProbe.successThreshold Success threshold for livenessProbe
     ##
     livenessProbe:
-      enabled: true
+      enabled: false
       failureThreshold: 3
       initialDelaySeconds: 10
       periodSeconds: 10
@@ -997,7 +988,7 @@ speaker:
     ## @param speaker.frr.readinessProbe.successThreshold Success threshold for readinessProbe
     ##
     readinessProbe:
-      enabled: true
+      enabled: false
       failureThreshold: 3
       initialDelaySeconds: 10
       periodSeconds: 10
