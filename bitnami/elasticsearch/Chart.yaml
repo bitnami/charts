@@ -17,7 +17,7 @@ dependencies:
 - condition: global.kibanaEnabled
   name: kibana
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.x.x
+  version: 11.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -34,4 +34,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 20.0.4
+version: 21.0.0
