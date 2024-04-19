@@ -265,6 +265,9 @@ spec:
           image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
           command: ["/etc/frr_metrics/frr-metrics"]
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           args:
             - --metrics-port={{ .Values.speaker.frr.containerPorts.metrics }}
           ports:

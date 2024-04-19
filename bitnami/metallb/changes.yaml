@@ -1,6 +1,0 @@
-speaker:
-  frr:
-    enabled: true
-    image:
-      repository: metallb-frr
-      tag: test7_minimum
