@@ -100,7 +100,7 @@ Get the root user key.
 Get the root password key.
 */}}
 {{- define "minio.rootPasswordKey" -}}
-{{- if (.Values.auth.existingSecret) (.Values.auth.rootPasswordSecretKey) -}}
+{{- if and (.Values.auth.existingSecret) (.Values.auth.rootPasswordSecretKey) -}}
     {{- printf "%s" (tpl .Values.auth.rootPasswordSecretKey $) -}}
 {{- else -}}
     {{- "root-password" -}}
