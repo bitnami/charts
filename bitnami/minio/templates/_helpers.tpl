@@ -89,12 +89,8 @@ Get the credentials secret.
 Get the root user key.
 */}}
 {{- define "minio.rootUserKey" -}}
-{{- if .Values.auth.existingSecret -}}
-    {{- if .Values.auth.rootUserSecretKey -}}
-        {{- printf "%s" (tpl .Values.auth.rootUserSecretKey $) -}}
-    {{- else -}}
-        {{- "root-user" -}}
-    {{- end -}}
+{{- if and (.Values.auth.existingSecret) (.Values.auth.rootUserSecretKey) -}}
+    {{- printf "%s" (tpl .Values.auth.rootUserSecretKey $) -}}
 {{- else -}}
     {{- "root-user" -}}
 {{- end -}}
@@ -104,12 +100,8 @@ Get the root user key.
 Get the root password key.
 */}}
 {{- define "minio.rootPasswordKey" -}}
-{{- if .Values.auth.existingSecret -}}
-    {{- if .Values.auth.rootPasswordSecretKey -}}
-        {{- printf "%s" (tpl .Values.auth.rootPasswordSecretKey $) -}}
-    {{- else -}}
-        {{- "root-password" -}}
-    {{- end -}}
+{{- if (.Values.auth.existingSecret) (.Values.auth.rootPasswordSecretKey) -}}
+    {{- printf "%s" (tpl .Values.auth.rootPasswordSecretKey $) -}}
 {{- else -}}
     {{- "root-password" -}}
 {{- end -}}
