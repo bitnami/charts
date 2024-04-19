@@ -267,10 +267,8 @@ spec:
               containerPort: {{ .Values.containerPorts.manager }}
             - name: epmd
               containerPort: {{ .Values.containerPorts.epmd }}
-            {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
-            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-tls
               containerPort: {{ .Values.containerPorts.amqpTls }}
