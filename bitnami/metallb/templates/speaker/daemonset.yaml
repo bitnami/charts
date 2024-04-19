@@ -91,7 +91,7 @@ spec:
             {{- if .Values.speaker.frr.image.pullPolicy }}
             imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
             {{- end }}
-            command: ["/bin/sh", "-c", "cp -f /frr-reloader.sh /etc/frr_reloader/"]
+            command: ["/bin/sh", "-c", "cp -f /opt/bitnami/metallb-speaker/bin/frr-reloader.sh /etc/frr_reloader/"]
             volumeMounts:
               - name: reloader
                 mountPath: /etc/frr_reloader
@@ -101,7 +101,7 @@ spec:
             {{- if .Values.speaker.frr.image.pullPolicy }}
             imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
             {{- end }}
-            command: ["/bin/sh", "-c", "cp -f /frr-metrics /etc/frr_metrics/"]
+            command: ["/bin/sh", "-c", "cp -f /opt/bitnami/metallb-speaker/bin/frr-metrics /etc/frr_metrics/"]
             volumeMounts:
               - name: metrics
                 mountPath: /etc/frr_metrics

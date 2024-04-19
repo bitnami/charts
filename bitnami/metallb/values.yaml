@@ -931,8 +931,8 @@ speaker:
       ##
       #FIXME: tag
       registry: docker.io
-      repository: metallb-frr-debian
-      tag: test1
+      repository: metallb-frr
+      tag: test15_pipeline
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
