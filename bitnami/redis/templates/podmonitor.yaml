@@ -45,7 +45,7 @@ spec:
       {{- if .honorLabels }}
       honorLabels: {{ .honorLabels }}
       {{- end }}
-      {{- with concat .relabelings .relabellings }}
+      {{- with concat .Values.metrics.podMonitor.relabelings .Values.metrics.podMonitor.relabellings }}
       relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .metricRelabelings }}
