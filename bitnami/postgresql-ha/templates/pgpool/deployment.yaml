@@ -423,7 +423,7 @@ spec:
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
             items:
-              - key: postgresql-password
+              - key: password
                 path: pgpool-password
               - key: repmgr-password
                 path: pgpool-sr-check-password
