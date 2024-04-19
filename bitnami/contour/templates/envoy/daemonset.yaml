@@ -284,7 +284,7 @@ spec:
               {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
-                port: {{ coalesce .Values.envoy.shutdownManager.port }}
+                port: {{ coalesce .Values.envoy.shutdownManager.port .Values.envoy.shutdownManager.containerPorts.http }}
                 scheme: HTTP
               {{- else }}
               exec:
