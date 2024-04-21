@@ -1406,7 +1406,7 @@ minio:
   ## @param minio.enabled Enable/disable MinIO&reg; chart installation
   ## to be used as an objstore for Mlflow
   ##
-  enabled: false
+  enabled: true
   ## MinIO&reg; authentication parameters
   ##
   auth:
