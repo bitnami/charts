@@ -205,8 +205,8 @@ Init container definition for waiting for the database to be ready
         secretKeyRef:
           name: {{ include "mlflow.v0.tracking.secretName" . }}
           key: {{ include "mlflow.v0.tracking.passwordKey" . | quote }}
-    {{- if .Values.tracking.extraEnvVars }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 4 }}
+    {{- if .Values.waitContainer.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.waitContainer.extraEnvVars "context" $) | nindent 4 }}
     {{- end }}
   envFrom:
     {{- if .Values.tracking.extraEnvVarsCM }}
