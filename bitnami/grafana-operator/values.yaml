@@ -279,9 +279,11 @@ operator:
   ##
   resources: {}
   ## @param operator.containerPorts.metrics Grafana Operator container port (used for metrics)
+  ## @param operator.containerPorts.health Grafana Operator container port (used for health probes)
   ##
   containerPorts:
     metrics: 8080
+    health: 8081
   ## @param operator.automountServiceAccountToken Mount Service Account token in pod
   ##
   automountServiceAccountToken: true

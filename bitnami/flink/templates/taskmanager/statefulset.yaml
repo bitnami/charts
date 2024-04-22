@@ -106,6 +106,8 @@ spec:
               value: {{ .Values.jobmanager.service.ports.rpc | quote }}
             - name: FLINK_CFG_JOBMANAGER_BIND__HOST
               value: 0.0.0.0
+            - name: FLINK_CFG_TASKMANAGER_DATA_PORT
+              value: {{ .Values.taskmanager.containerPorts.data | quote }}
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
             {{- $releaseNamespace := include "common.names.namespace" . }}
