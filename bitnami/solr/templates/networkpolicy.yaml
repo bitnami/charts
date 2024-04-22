@@ -55,6 +55,10 @@ spec:
     - ports:
         - port: {{ .Values.containerPorts.http }}
         - port: {{ .Values.service.ports.http }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.metrics.containerPorts.http }}
+        - port: {{ .Values.metrics.service.ports.http }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
