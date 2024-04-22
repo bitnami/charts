@@ -1074,6 +1074,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the Auth container to use the [supabase/auth package](https://github.com/supabase/auth). You can find more information about the changes [here](https://github.com/bitnami/charts/pull/25070).
+
 ### To 3.0.0
 
 This major bump changes the following security defaults:

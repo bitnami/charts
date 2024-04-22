@@ -298,6 +298,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `compactor.service.type`                          | Compactor service type                                           | `ClusterIP` |
 | `compactor.service.ports.http`                    | Compactor HTTP service port                                      | `3100`      |
+| `compactor.service.ports.grpc`                    | Compactor gRPC service port                                      | `9095`      |
 | `compactor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
 | `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
 | `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
@@ -1286,6 +1287,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `promtail.args`                                              | Override default container args (useful when using custom images)                                                                                                                                                                   | `[]`                       |
 | `promtail.extraArgs`                                         | Additional container args (will be concatenated to args, unless diagnosticMode is enabled)                                                                                                                                          | `[]`                       |
 | `promtail.containerPorts.http`                               | Promtail HTTP port                                                                                                                                                                                                                  | `8080`                     |
+| `promtail.containerPorts.grpc`                               | Promtail HTTP port                                                                                                                                                                                                                  | `9095`                     |
 | `promtail.livenessProbe.enabled`                             | Enable livenessProbe on Promtail nodes                                                                                                                                                                                              | `true`                     |
 | `promtail.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                             | `10`                       |
 | `promtail.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                                    | `10`                       |
@@ -1356,6 +1358,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ----------- |
 | `promtail.service.type`                                | Promtail service type                                                                              | `ClusterIP` |
 | `promtail.service.ports.http`                          | Promtail HTTP service port                                                                         | `3100`      |
+| `promtail.service.ports.grpc`                          | Promtail gRPC service port                                                                         | `9095`      |
 | `promtail.service.nodePorts.http`                      | Node port for HTTP                                                                                 | `""`        |
 | `promtail.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                        | `{}`        |
 | `promtail.service.sessionAffinity`                     | Control where client requests go, to the same pod or round-robin                                   | `None`      |

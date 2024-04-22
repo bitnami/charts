@@ -710,6 +710,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq --set auth.
 
 | Note: you need to substitute the placeholders [PASSWORD] and [RABBITMQ_ERLANG_COOKIE] with the values obtained in the installation notes.
 
+### To 14.0.0
+
+This major version changes the default RabbitMQ image from 3.12.x to 3.13.x. Follow the [official instructions](https://www.rabbitmq.com/upgrade.html) to upgrade from 3.12 to 3.13.
+
 ### To 13.0.0
 
 This major bump changes the following security defaults:

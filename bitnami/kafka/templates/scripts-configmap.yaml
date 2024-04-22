@@ -306,7 +306,7 @@ data:
       {{- if (include "kafka.client.saslEnabled" .)}}
       read -r -a passwords <<<"$(tr ',;' ' ' <<<"${KAFKA_CLIENT_PASSWORDS:-}")"
       for ((i = 0; i < ${#passwords[@]}; i++)); do
-          replace_placeholder "password-placeholder-${i}" "${passwords[i]}"
+          replace_placeholder "password-placeholder-${i}\"" "${passwords[i]}\""
       done
       {{- end }}
       {{- if .Values.sasl.zookeeper.user }}

@@ -176,6 +176,11 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- /* Currently hardcoded in EJBCA logic: https://github.com/bitnami/containers/blob/main/bitnami/ejbca/8/debian-12/rootfs/opt/bitnami/scripts/libejbca.sh#L212 */}}
+            - name: https-pub
+              containerPort: 8442
+            - name: ajp
+              containerPort: 8009
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
