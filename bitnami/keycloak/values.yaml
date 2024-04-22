@@ -278,12 +278,10 @@ replicaCount: 1
 revisionHistoryLimitCount: 10
 ## @param containerPorts.http Keycloak HTTP container port
 ## @param containerPorts.https Keycloak HTTPS container port
-## @param containerPorts.infinispan Keycloak infinispan container port
 ##
 containerPorts:
   http: 8080
   https: 8443
-  infinispan: 7800
 ## @param extraContainerPorts Optionally specify extra list of additional port-mappings for Keycloak container
 ##
 extraContainerPorts: []
