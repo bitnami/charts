@@ -190,7 +190,7 @@ spec:
               value: {{ .Values.containerPorts.api | quote }}
             {{- end }}
             - name: MINIO_DATA_DIR
-              value: {{ $mountPath | quote }}
+              value: {{ ternary (printf "%s-0" $mountPath) $mountPath (gt $drivesPerNode 1) | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
