@@ -38,6 +38,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Return Elasticsearch port
+*/}}
+{{- define "magento.elasticsearch.port" -}}
+{{- if .Values.elasticsearch.enabled -}}
+    {{- print .Values.elasticsearch.service.ports.restAPI -}}
+{{- else -}}
+    {{- print .Values.externalElasticsearch.port -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the user defined LoadBalancerIP for this release.
 Note, returns 127.0.0.1 if using ClusterIP.
 */}}

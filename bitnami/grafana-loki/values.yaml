@@ -81,7 +81,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.9.6-debian-12-r0
+    tag: 2.9.7-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -103,7 +103,7 @@ loki:
 
     server:
       http_listen_port: {{ .Values.loki.containerPorts.http }}
-
+      grpc_listen_port: {{ .Values.loki.containerPorts.grpc }}
     common:
       compactor_address: http://{{ include "grafana-loki.compactor.fullname" . }}:{{ .Values.compactor.service.ports.http }}
 
@@ -384,7 +384,7 @@ compactor:
   customStartupProbe: {}
   ## compactor resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
+  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -589,9 +589,11 @@ compactor:
     ##
     type: ClusterIP
     ## @param compactor.service.ports.http Compactor HTTP service port
+    ## @param compactor.service.ports.grpc Compactor gRPC service port
     ##
     ports:
       http: 3100
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param compactor.service.nodePorts.http Node port for HTTP
@@ -709,7 +711,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r3
+    tag: 1.25.4-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -822,7 +824,7 @@ gateway:
     http: 8080
   ## gateway resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param gateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if gateway.resources is set (gateway.resources is recommended for production).
+  ## @param gateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if gateway.resources is set (gateway.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -1272,7 +1274,7 @@ indexGateway:
   customStartupProbe: {}
   ## indexGateway resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param indexGateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if indexGateway.resources is set (indexGateway.resources is recommended for production).
+  ## @param indexGateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if indexGateway.resources is set (indexGateway.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -1428,6 +1430,45 @@ indexGateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @section index-gateway Persistence Parameters
+  ##
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param indexGateway.persistence.enabled Enable persistence in index-gateway instances
+    ##
+    enabled: false
+    ## @param indexGateway.persistence.storageClass PVC Storage Class for index-gateway's data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param indexGateway.persistence.subPath The subdirectory of the volume to mount to
+    ##
+    subPath: ""
+    ## @param indexGateway.persistence.accessModes PVC Access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param indexGateway.persistence.size PVC Storage Request for index-gateway's data volume
+    ##
+    size: 8Gi
+    ## @param indexGateway.persistence.annotations Additional PVC annotations
+    ##
+    annotations: {}
+    ## @param indexGateway.persistence.selector Selector to match an existing Persistent Volume for index-gateway's data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
   ## @section index-gateway Traffic Exposure Parameters
   ##
 
@@ -1626,7 +1667,7 @@ distributor:
   customStartupProbe: {}
   ## distributor resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param distributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production).
+  ## @param distributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if distributor.resources is set (distributor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -1983,7 +2024,7 @@ ingester:
   lifecycleHooks: {}
   ## ingester resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
+  ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -2381,7 +2422,7 @@ querier:
   customStartupProbe: {}
   ## querier resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param querier.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production).
+  ## @param querier.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if querier.resources is set (querier.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -2774,7 +2815,7 @@ queryFrontend:
   customStartupProbe: {}
   ## queryFrontend resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
+  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -3137,7 +3178,7 @@ queryScheduler:
   customStartupProbe: {}
   ## queryScheduler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryScheduler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryScheduler.resources is set (queryScheduler.resources is recommended for production).
+  ## @param queryScheduler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryScheduler.resources is set (queryScheduler.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -3501,7 +3542,7 @@ ruler:
   lifecycleHooks: {}
   ## ruler resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
+  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -3894,7 +3935,7 @@ tableManager:
   customStartupProbe: {}
   ## tableManager resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param tableManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if tableManager.resources is set (tableManager.resources is recommended for production).
+  ## @param tableManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if tableManager.resources is set (tableManager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -4183,7 +4224,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.9.5-debian-12-r1
+    tag: 2.9.7-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4221,9 +4262,11 @@ promtail:
   ##
   extraArgs: []
   ## @param promtail.containerPorts.http Promtail HTTP port
+  ## @param promtail.containerPorts.grpc Promtail HTTP port
   ##
   containerPorts:
     http: 8080
+    grpc: 9095
   ## Configure extra options for Promtail containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param promtail.livenessProbe.enabled Enable livenessProbe on Promtail nodes
@@ -4282,7 +4325,7 @@ promtail:
   lifecycleHooks: {}
   ## promtail resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param promtail.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if promtail.resources is set (promtail.resources is recommended for production).
+  ## @param promtail.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if promtail.resources is set (promtail.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -4441,6 +4484,7 @@ promtail:
     server:
       log_level: {{ .Values.promtail.logLevel }}
       http_listen_port: {{ .Values.promtail.containerPorts.http }}
+      grpc_listen_port: {{ .Values.promtail.containerPorts.grpc }}
 
     clients:
       - url: http://{{ include "grafana-loki.gateway.fullname" . }}:{{ .Values.gateway.service.ports.http }}/loki/api/v1/push
@@ -4535,9 +4579,11 @@ promtail:
     ##
     type: ClusterIP
     ## @param promtail.service.ports.http Promtail HTTP service port
+    ## @param promtail.service.ports.grpc Promtail gRPC service port
     ##
     ports:
       http: 3100
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param promtail.service.nodePorts.http Node port for HTTP
@@ -4685,7 +4731,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r18
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4698,7 +4744,7 @@ volumePermissions:
     pullSecrets: []
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -4817,7 +4863,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.25-debian-12-r0
+    tag: 1.6.26-debian-12-r1
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4873,7 +4919,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.25-debian-12-r0
+    tag: 1.6.26-debian-12-r1
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4918,7 +4964,7 @@ externalMemcachedIndexQueries:
 memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
-  enabled: true
+  enabled: false
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
   ## @param memcachedindexqueries.image.registry [default: REGISTRY_NAME] Memcached image registry
@@ -4929,7 +4975,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.25-debian-12-r0
+    tag: 1.6.26-debian-12-r1
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -4985,7 +5031,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.25-debian-12-r0
+    tag: 1.6.26-debian-12-r1
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

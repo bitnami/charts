@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/ejbca
-  tag: 8.2.0-1-debian-12-r10
+  tag: 8.2.0-1-debian-12-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -319,7 +319,7 @@ args: []
 lifecycleHooks: {}
 ## EJBCA containers' resource requests and limits
 ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "xlarge"
@@ -421,7 +421,7 @@ customReadinessProbe: {}
 containerPorts:
   http: 8080
   https: 8443
-## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## @param extraContainerPorts Optionally specify extra list of additional ports for EJBCA container(s)
 ## e.g:
 ## extraContainerPorts:
 ##   - name: myservice
@@ -432,7 +432,7 @@ extraContainerPorts: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for EJBCA pod
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
