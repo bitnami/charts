@@ -920,7 +920,7 @@ speaker:
     ## @param speaker.frr.enabled Whether to enable FRR mode
     ## ref: https://metallb.universe.tf/concepts/bgp/#frr-mode
     ##
-    enabled: true
+    enabled: false
     image:
       ## @param speaker.frr.image.registry [default: REGISTRY_NAME] MetalLB Speaker image registry
       ## @param speaker.frr.image.repository [default: REPOSITORY_NAME/metallb-speaker] MetalLB Speaker image repository
@@ -929,10 +929,9 @@ speaker:
       ## @param speaker.frr.image.pullPolicy MetalLB Speaker image pull policy
       ## @param speaker.frr.image.pullSecrets Specify docker-registry secret names as an array
       ##
-      #FIXME: tag
       registry: docker.io
       repository: metallb-frr
-      tag: test15_pipeline
+      tag: 0.14.5-debian-12-r0
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
