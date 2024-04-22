@@ -178,7 +178,7 @@ spec:
         - name: cert
           secret:
             defaultMode: 420
-            secretName: webhook-server-cert
+            secretName: metallb-webhook-cert
         {{- if .Values.controller.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

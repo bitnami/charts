@@ -138,14 +138,6 @@ rules:
   - apiGroups:
       - metallb.io
     resources:
-      - addresspools
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - metallb.io
-    resources:
       - ipaddresspools
     verbs:
       - get
