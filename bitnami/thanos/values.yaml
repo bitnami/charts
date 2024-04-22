@@ -450,6 +450,7 @@ query:
       ## @param query.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
+      ## @param query.grpc.server.tls.clientAuthEnabled Enable TLS client verification against provided CA
       ## @param query.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
       ## e.g:
       ## existingSecret:
@@ -465,6 +466,7 @@ query:
         cert: ""
         key: ""
         ca: ""
+        clientAuthEnabled: true
         existingSecret: {}
     ## GRPC client side
     ##
@@ -2537,6 +2539,7 @@ storegateway:
       ## @param storegateway.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param storegateway.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param storegateway.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
+      ## @param storegateway.grpc.server.tls.clientAuthEnabled Enable TLS client verification against provided CA
       ## @param storegateway.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
       ## e.g:
       ## existingSecret:
@@ -2552,6 +2555,7 @@ storegateway:
         cert: ""
         key: ""
         ca: ""
+        clientAuthEnabled: true
         existingSecret: {}
   ## @param storegateway.extraEnvVars Extra environment variables for Thanos Store Gateway container
   ## e.g:
@@ -3857,6 +3861,7 @@ receive:
       ## @param receive.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param receive.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param receive.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
+      ## @param receive.grpc.server.tls.clientAuthEnabled Enable TLS client verification against provided CA
       ## @param receive.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
       ## e.g:
       ## existingSecret:
@@ -3872,6 +3877,7 @@ receive:
         cert: ""
         key: ""
         ca: ""
+        clientAuthEnabled: true
         existingSecret: {}
   ## @param receive.extraEnvVars Extra environment variables for Thanos Receive container
   ## e.g:

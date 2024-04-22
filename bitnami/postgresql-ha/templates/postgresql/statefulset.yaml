@@ -448,9 +448,6 @@ spec:
               mountPath: /opt/bitnami/postgresql/tmp
               subPath: app-tmp-dir
             - name: empty-dir
-              mountPath: /opt/bitnami/postgresql/logs
-              subPath: app-logs-dir
-            - name: empty-dir
               mountPath: /opt/bitnami/repmgr/conf
               subPath: repmgr-conf-dir
             - name: empty-dir
