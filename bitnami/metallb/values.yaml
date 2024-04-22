@@ -972,10 +972,65 @@ speaker:
           - NET_RAW
           - SYS_ADMIN
           - NET_BIND_SERVICE
-    ## @param speaker.frr.containerPorts.metrics HTTP FRR Metrics Endpoint
+    ## @param speaker.frr.containerPorts.metrics HTTP Metrics Endpoint
     ##
     containerPorts:
       metrics: 7473
+    ## @section FRR Speaker Prometheus metrics export
+    metrics:
+      ## Prometheus Exporter service parameters
+      ##
+      service:
+        ## @param speaker.frr.metrics.service.port Prometheus metrics service port
+        ##
+        port: 7473
+        ## @param speaker.frr.metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+        ##
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "7473"
+          prometheus.io/path: "/metrics"
+      ## Prometheus Operator service monitors
+      ##
+      serviceMonitor:
+        ## @param speaker.frr.metrics.serviceMonitor.enabled Enable support for Prometheus Operator
+        ##
+        enabled: false
+        ## @param speaker.frr.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+        ## e.g:
+        ## namespace: monitoring
+        ##
+        namespace: ""
+        ## @param speaker.frr.metrics.serviceMonitor.jobLabel Job label for scrape target
+        ##
+        jobLabel: "app.kubernetes.io/name"
+        ## @param speaker.frr.metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
+        ##
+        interval: ""
+        ## @param speaker.frr.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+        ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+        ##
+        scrapeTimeout: ""
+        ## @param speaker.frr.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+        ##
+        metricRelabelings: []
+        ## @param speaker.frr.metrics.serviceMonitor.relabelings Specify general relabeling
+        ##
+        relabelings: []
+        ## @param speaker.frr.metrics.serviceMonitor.selector ServiceMonitor selector labels
+        ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+        ##
+        ## selector:
+        ##   prometheus: my-prometheus
+        ##
+        selector: {}
+        ## @param speaker.frr.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+        ##
+        labels: {}
+        ## @param speaker.frr.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+        ##
+        honorLabels: false
+
     ## Liveness probe values
     ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
     ## @param speaker.frr.livenessProbe.enabled Enable livenessProbe
