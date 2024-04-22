@@ -242,9 +242,6 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
             {{- end }}
-            - name: infinispan
-              containerPort: {{ .Values.containerPorts.infinispan }}
-              protocol: TCP
             {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
             - name: discovery
               containerPort: 7800
