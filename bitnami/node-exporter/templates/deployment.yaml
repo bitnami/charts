@@ -3,9 +3,9 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if eq .Values.resourceType "daemonset" }}
-apiVersion: apps/v1
-kind: DaemonSet
+{{- if eq .Values.resourceType "deployment" }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
@@ -17,7 +17,8 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-  updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
+  replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}
   template:
     metadata:
@@ -76,8 +77,10 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
+            {{- if not .Values.isolatedDeployment }}
             - --path.procfs=/host/proc
             - --path.sysfs=/host/sys
+            {{- end }}
             - --web.listen-address=0.0.0.0:{{ .Values.containerPorts.metrics }}
             {{- range $key, $value := .Values.extraArgs }}
             {{- if $value }}
@@ -140,29 +143,38 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if not .Values.isolatedDeployment }}
             - name: proc
               mountPath: /host/proc
               readOnly: true
             - name: sys
               mountPath: /host/sys
               readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      {{- if not .Values.isolatedDeployment }}
       hostNetwork: {{ .Values.hostNetwork }}
       hostPID: {{ .Values.hostPID }}
+      {{- else }}
+      hostNetwork: false
+      hostPID: false
+      {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if not .Values.isolatedDeployment }}
         - name: proc
           hostPath:
             path: /proc
         - name: sys
           hostPath:
             path: /sys
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
