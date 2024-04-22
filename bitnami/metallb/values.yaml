@@ -946,7 +946,7 @@ speaker:
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
     resourcesPreset: "micro"
-    ## @param volumePermissions.frr.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## @param speaker.frr.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
     ##   requests:
@@ -961,6 +961,8 @@ speaker:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
     ## @param speaker.frr.containerSecurityContext.enabled Enabled Speaker containers' Security Context
     ## @param speaker.frr.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+    ## @param speaker.frr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param speaker.frr.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     containerSecurityContext:
       enabled: true
       runAsUser: 0
