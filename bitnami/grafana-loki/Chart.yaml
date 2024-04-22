@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-loki
-      image: docker.io/bitnami/grafana-loki:2.9.7-debian-12-r0
+      image: docker.io/bitnami/grafana-loki:3.0.0-debian-12-r0
     - name: memcached
       image: docker.io/bitnami/memcached:1.6.26-debian-12-r1
     - name: nginx
@@ -16,7 +16,7 @@ annotations:
     - name: promtail
       image: docker.io/bitnami/promtail:3.0.0-debian-12-r0
 apiVersion: v2
-appVersion: 2.9.7
+appVersion: 3.0.0
 dependencies:
 - alias: memcachedchunks
   condition: memcachedchunks.enabled
@@ -57,4 +57,4 @@ maintainers:
 name: grafana-loki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
-version: 3.2.1
+version: 4.0.0
