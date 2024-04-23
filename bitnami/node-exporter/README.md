@@ -59,6 +59,12 @@ This chart allows you to set custom Pod affinity using the `affinity` parameter(
 
 As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Resource Type
+
+This chart, by default, installs Node Exporter as a `DaemonSet`. There are some cases where you may need to run Node Exporter as a `Deployment` (e.g., when using its textfile collector exclusively). In these instances, you can install the helm chart by setting the `resourceType` parameter to `Deployment`.
+
+Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetwork` and `hostPid` to `false` and will not mount `/proc` and `/sys` from the host to the container. You can control this behavior by setting the `isolatedDeployment` parameter.
+
 ## Parameters
 
 ### Global parameters
@@ -90,6 +96,9 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 | Name                                                | Description                                                                                                                                                                                                       | Value                           |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `resourceType`                                      | Specify how to deploy Node Exporter (allowed values: `daemonset` and `deployment`)                                                                                                                                | `daemonset`                     |
+| `replicaCount`                                      | Number of replicas to deploy (when `resourceType` is `deployment`)                                                                                                                                                | `1`                             |
+| `isolatedDeployment`                                | Specify whether to deploy the Node Exporter in an isolated deployment without access to host network, host PID and /proc and /sys of the host. (when `resourceType` is `deployment`)                              | `true`                          |
 | `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                | `false`                         |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                       | `[]`                            |
 | `rbac.create`                                       | Whether to create and use RBAC resources or not                                                                                                                                                                   | `true`                          |
