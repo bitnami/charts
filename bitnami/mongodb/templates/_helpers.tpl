@@ -294,6 +294,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := append $messages (include "mongodb.validateValues.loadBalancerIPsListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.nodePortListLength" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
+{{- $messages := append $messages (include "mongodb.validateValues.externalAccessAutoDiscoverySA" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.replicaset.existingSecrets" .) -}}
 {{- $messages := append $messages (include "mongodb.validateValues.hidden.existingSecrets" .) -}}
 {{- $messages := without $messages "" -}}
@@ -364,9 +365,14 @@ Validate values of MongoDB&reg; - number of replicas must be the same than LoadB
 {{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled ) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerListLength )) -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "LoadBalancer") -}}
+{{- if and (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerListLength 0) -}}
 mongodb: .Values.externalAccess.service.loadBalancerIPs
-    Number of replicas and loadBalancerIPs array length must be the same.
+    externalAccess.service.loadBalancerIPs or externalAccess.autoDiscovery.enabled are required when externalAccess is enabled.
+{{- else if and (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerListLength )) -}} 
+mongodb: .Values.externalAccess.service.loadBalancerIPs
+    Number of replicas ({{ $replicaCount }}) and loadBalancerIPs ({{ $loadBalancerListLength }}) array length must be the same.
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -376,9 +382,14 @@ Validate values of MongoDB&reg; - number of replicas must be the same than NodeP
 {{- define "mongodb.validateValues.nodePortListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") (not (eq $replicaCount $nodePortListLength )) -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") -}}
+{{- if and (not .Values.externalAccess.autoDiscovery.enabled) (eq $nodePortListLength 0) -}}
+mongodb: .Values.externalAccess.service.loadBalancerIPs
+    externalAccess.service.loadBalancerIPs or externalAccess.autoDiscovery.enabled are required when externalAccess is enabled.
+{{- else if and (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $nodePortListLength )) -}} 
 mongodb: .Values.externalAccess.service.nodePorts
-    Number of replicas and nodePorts array length must be the same.
+    Number of replicas ({{ $replicaCount }}) and nodePorts ({{ $nodePortListLength }}) array length must be the same.
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
@@ -392,6 +403,19 @@ mongodb: rbac.create
     an initContainer will be used to autodetect the external IPs/ports by querying the
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of MongoDB&reg; - automountServiceAccountToken should be enabled when autoDiscovery is enabled
+*/}}
+{{- define "mongodb.validateValues.externalAccessAutoDiscoverySA" -}}
+{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (not .Values.automountServiceAccountToken ) }}
+mongodb: automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to autodetect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires a service account to access K8S API.
+    You can attach it to the pod by specifying "--set automountServiceAccountToken=true".
 {{- end -}}
 {{- end -}}
 
