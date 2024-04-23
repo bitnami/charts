@@ -1427,11 +1427,13 @@ sentinel:
   ## Redis&reg; master service parameters
   ##
   masterService:
-    ownConfig: false
     ## @param sentinel.masterService.createMaster Enable master service pointing to the current master (experimental)
     ## NOTE: rbac.create need to be set to true
     ##
     createMaster: false
+    ## @param sentinel.masterService.ownConfig If set to true, this section's values will be used for the master service;
+    #  otherwise, the regular sentinel service values will be used.
+    ownConfig: false
     ## @param sentinel.masterService.type Redis&reg; Sentinel master service type
     ##
     type: ClusterIP
