@@ -158,7 +158,6 @@ vault: Missing controllers. At least one controller should be enabled.
 {{- end -}}
 {{- end -}}
 
-
 {{/*
 Set's the injector webhook namespaceSelector
 */}}
