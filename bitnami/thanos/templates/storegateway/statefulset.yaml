@@ -131,10 +131,10 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if .Values.indexCacheConfig }}
-            - --index-cache.config-file=/conf/index-cache.yml
+            - --index-cache.config-file=/conf/cache/index-cache.yml
             {{- end }}
             {{- if .Values.bucketCacheConfig }}
-            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
+            - --store.caching-bucket.config-file=/conf/cache/bucket-cache.yml
             {{- end }}
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
@@ -234,7 +234,7 @@ spec:
               mountPath: /conf
             - name: data
               mountPath: /data
-            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+            {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
@@ -255,7 +255,7 @@ spec:
         {{- if .Values.storegateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+        {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
