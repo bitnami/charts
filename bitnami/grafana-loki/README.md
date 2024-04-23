@@ -678,7 +678,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ingester.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                | `{}`             |
 | `ingester.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                  | `{}`             |
 | `ingester.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                                                                                                                                                     | `{}`             |
-| `ingester.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production). | `nano`           |
+| `ingester.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production). | `micro`          |
 | `ingester.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                   | `{}`             |
 | `ingester.podSecurityContext.enabled`                        | Enabled Ingester pods' Security Context                                                                                                                                                                                             | `true`           |
 | `ingester.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                  | `Always`         |
@@ -1537,6 +1537,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major bumps the Grafana Loki version to its newest major, 3.x.x. This version includes a new storage schema, among other features like structured metadata support. These changes could potentially break your deployments. Please refer to the official [release notes](https://grafana.com/docs/loki/latest/release-notes/v3-0/) and documentation website for further details.
 
 ### To 3.0.0
 
