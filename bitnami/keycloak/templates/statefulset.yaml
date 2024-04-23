@@ -86,8 +86,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.enableDefaultInitContainers }}
+      {{- if or .Values.enableDefaultInitContainers .Values.initContainers }}
       initContainers:
+        {{- if .Values.enableDefaultInitContainers }}
         - name: init-quarkus-directory
           image: {{ template "keycloak.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -113,11 +114,7 @@ spec:
             - name: empty-dir
               mountPath: /quarkus
               subPath: app-quarkus-dir
-        {{- if .Values.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- else if and (eq .Values.enableDefaultInitContainers false) (.Values.initContainers) }}
-      initContainers:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
