@@ -41,6 +41,21 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+    {{- if (and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled) }}
+    {{- $kubernetesEndpoints := lookup "v1" "Endpoints" (include "common.names.namespace" .) "kubernetes" }}
+    {{- range $kubernetesEndpoints.subsets }}
+    # Allow connection to API server, required by auto-discovery containers
+    - ports:
+      {{- range .ports }}
+        - port: {{ .port }}
+      {{- end }}
+      to:
+        {{- range .addresses }}
+        - ipBlock:
+            cidr: {{ printf "%s/32" .ip }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
