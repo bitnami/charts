@@ -133,15 +133,17 @@ objstore.yml: |-
 Return the storegateway config
 */}}
 {{- define "thanos.storegatewayConfigMap" -}}
+{{- if .Values.storegateway.config }}
 config.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 2 }}
+{{- end }}
 {{- if .Values.indexCacheConfig }}
 index-cache.yml: |-
-  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | b64enc | nindent 2 }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | nindent 2 }}
 {{- end }}
 {{- if .Values.bucketCacheConfig }}
 bucket-cache.yml: |-
-  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | b64enc | nindent 2 }}
+  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | nindent 2 }}
 {{- end }}
 {{- end -}}
 
@@ -311,7 +313,7 @@ Return true if a configmap object should be created
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.storegateway.createConfigmap" -}}
-{{- if and .Values.storegateway.config (not .Values.storegateway.existingConfigmap) }}
+{{- if and (or .Values.storegateway.config .Values.indexCacheConfig .Values.bucketCacheConfig) (not .Values.storegateway.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

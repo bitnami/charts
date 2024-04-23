@@ -291,7 +291,7 @@ containerSecurityContext:
 ##
 containerPorts:
   http: 8080
-  https: ""
+  https: 8443
 ## @param extraContainerPorts Array of additional container ports for the Nginx container
 ## e.g:
 ## extraContainerPorts:
