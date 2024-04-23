@@ -19,6 +19,6 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       run: |
         # Configure AWS account
-        export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn ${AWS_ASSUME_ROLE_ARN} --role-session-name GitHubCharts --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+        export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn ${AWS_ASSUME_ROLE_ARN} --role-session-name GitHubIndex --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
         aws s3 cp --follow-symlinks bitnami/index.yaml s3://${{ secrets.AWS_S3_BUCKET }}/bitnami/
         aws s3 cp --follow-symlinks bitnami/index.html s3://${{ secrets.AWS_S3_BUCKET }}/
