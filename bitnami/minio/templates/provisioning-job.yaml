@@ -217,7 +217,7 @@ spec:
               {{- range $name, $value := $bucket.tags }}
               {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
               {{- end }}
-              {{- $tags := join "&" $tags | quote }}
+              {{- $tags = join "&" $tags | quote }}
               mc tag set {{ $target }} {{ $tags }};
               {{- end }}
               {{- end }}
