@@ -110,9 +110,11 @@ jobs:
         env: 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
-          AWS_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
+          # Configure AWS account
+          export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn ${AWS_ASSUME_ROLE_ARN} --role-session-name GitHubCharts --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
           # Extract chart release metadata from the publish report file
           vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
           chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_report_file)
