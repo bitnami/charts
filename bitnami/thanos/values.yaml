@@ -3844,6 +3844,10 @@ receive:
   ##     - "127.0.0.1:10901"
   ##
   config: []
+  ## @param receive.tsdbPath path to the time series database
+  ##
+  ## e.g.: /var/thanos/receive
+  tsdbPath: ""
   ## @param receive.existingConfigmap Name of existing ConfigMap with Thanos Receive Hashring configuration
   ## NOTE: This will override receive.config
   ##
