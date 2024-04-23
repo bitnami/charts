@@ -212,6 +212,9 @@ query:
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   containerPorts:
+    ## @param query.containerPorts.grpc Port for GRPC
+    ##
+    grpc: 16685
     ## @param query.containerPorts.api Port for API
     ##
     api: 16686

@@ -253,12 +253,16 @@ revisionHistoryLimit: 10
 ## @param containerPorts.tls ZooKeeper TLS container port
 ## @param containerPorts.follower ZooKeeper follower container port
 ## @param containerPorts.election ZooKeeper election container port
+## @param containerPorts.adminServer ZooKeeper admin server container port
+## @param containerPorts.metrics ZooKeeper Prometheus Exporter container port
 ##
 containerPorts:
   client: 2181
   tls: 3181
   follower: 2888
   election: 3888
+  adminServer: 8080
+  metrics: 9141
 ## Configure extra options for ZooKeeper containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on ZooKeeper containers
@@ -811,9 +815,6 @@ metrics:
   ## @param metrics.enabled Enable Prometheus to access ZooKeeper metrics endpoint
   ##
   enabled: false
-  ## @param metrics.containerPort ZooKeeper Prometheus Exporter container port
-  ##
-  containerPort: 9141
   ## Service configuration
   ##
   service:

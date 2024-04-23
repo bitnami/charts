@@ -603,6 +603,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Notable changes
 
+### To 27.0.0
+
+This major updates the Elasticsearch subchart to its newest major, 21.0.0, which removes support for elasticsearch-curator. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-2100) for more information.
+
 ### To 26.0.0
 
 This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.

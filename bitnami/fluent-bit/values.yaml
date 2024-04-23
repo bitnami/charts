@@ -511,7 +511,7 @@ config:
     [SERVICE]
         Flush        {{ .Values.config.flush }}
         Daemon       Off
-        LogLevel     {{ .Values.config.logLevel }}
+        Log_Level    {{ .Values.config.logLevel }}
         Config_Watch On
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
