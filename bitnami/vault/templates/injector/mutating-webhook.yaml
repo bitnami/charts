@@ -40,5 +40,6 @@ webhooks:
           operator: NotIn
           values:
             - injector
-{{- template "injector.namespaceSelector" . -}}
+    namespaceSelector:
+{{ tpl (toYaml (((.Values.injector.webhook)).namespaceSelector | default .Values.injector.namespaceSelector)) . | indent 6}}
 {{- end }}

@@ -1391,7 +1391,7 @@ injector:
   ## @param injector.webhook Enabling specify which namespace you want to work with webhook
   ## Example:
   ## webhook:
-  ##   namespaceSelector: |
+  ##   namespaceSelector:
   ##     matchExpressions:
   ##     - key: kubernetes.io/metadata.name
   ##       operator: In
