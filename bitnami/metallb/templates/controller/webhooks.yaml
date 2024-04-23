@@ -166,6 +166,6 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: webhook-server-cert
+  name: metallb-webhook-cert
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
