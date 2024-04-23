@@ -82,6 +82,9 @@ spec:
       {{- if .Values.receive.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.receive.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.receive.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.receive.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.receive.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
