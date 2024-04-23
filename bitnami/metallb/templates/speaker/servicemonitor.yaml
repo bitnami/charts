@@ -44,8 +44,4 @@ spec:
       {{- if .Values.speaker.metrics.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
-    {{- if .Values.speaker.frr.enabled }}
-    - port: {{ template "metrics.exposedfrrportname" . }}
-      honorLabels: true
-    {{- end }}
 {{- end -}}

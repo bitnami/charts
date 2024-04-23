@@ -202,6 +202,10 @@ spec:
             - name: memberlist-secret
               mountPath: /etc/memberlist
               readOnly: true
+            {{- if .Values.speaker.frr.enabled }}
+            - name: reloader
+              mountPath: /etc/frr_reloader
+            {{- end }}
             {{- if .Values.speaker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -224,7 +228,7 @@ spec:
           # If the log file isn't created in 60 seconds the tail fails and the container is restarted.
           # This workaround is needed to have the frr logs as part of kubectl logs -c frr < speaker_pod_name >.
           command:
-            - /bin/sh
+            - /bin/bash
             - -c
             - |
               . /usr/lib/frr/frrcommon.sh
