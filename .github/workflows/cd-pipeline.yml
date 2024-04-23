@@ -82,9 +82,8 @@ jobs:
           config: charts/.vib/
         env:
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
-          VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
-          VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
-          VIB_ENV_S3_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   update-index:
     runs-on: ubuntu-latest
     needs:
@@ -108,9 +107,8 @@ jobs:
       - id: update-index
         name: Fetch chart and update index
         env: 
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
-          AWS_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
           # Extract chart release metadata from the publish report file
