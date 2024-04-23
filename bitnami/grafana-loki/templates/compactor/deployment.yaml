@@ -95,7 +95,7 @@ spec:
           args:
             - -target=compactor
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
-            - -boltdb.shipper.compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
+            - -compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
           {{- if .Values.compactor.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraArgs "context" $) | nindent 12 }}
           {{- end }}

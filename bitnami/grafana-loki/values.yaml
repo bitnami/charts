@@ -126,17 +126,16 @@ loki:
       chunk_block_size: 262144
       chunk_encoding: snappy
       chunk_retain_period: 1m
-      max_transfer_retries: 0
       wal:
         dir: {{ .Values.loki.dataDir }}/wal
 
     limits_config:
       retention_period: 336h
-      enforce_metric_name: false
       reject_old_samples: true
       reject_old_samples_max_age: 168h
       max_cache_freshness_per_query: 10m
       split_queries_by_interval: 15m
+      allow_structured_metadata: true
 
     schema_config:
       configs:
@@ -148,16 +147,22 @@ loki:
           prefix: index_
           period: 24h
       - from: 2024-03-12
+        store: tsdb
+        object_store: filesystem
+        schema: v12
         index:
           period: 24h
           prefix: index_
+      - from: 2024-04-23
         object_store: filesystem
-        schema: v12
         store: tsdb
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
 
     storage_config:
       boltdb_shipper:
-        shared_store: filesystem
         active_index_directory: {{ .Values.loki.dataDir }}/loki/index
         cache_location: {{ .Values.loki.dataDir }}/loki/cache
         cache_ttl: 168h
@@ -184,7 +189,6 @@ loki:
         index_gateway_client:
           server_address: {{ (printf "dns:///%s:9095" (include "grafana-loki.index-gateway.fullname" .)) }}
         {{- end }}
-        shared_store: filesystem
 
     query_scheduler:
       max_outstanding_requests_per_tenant: 32768
@@ -193,7 +197,6 @@ loki:
       max_concurrent: 16
 
     chunk_store_config:
-      max_look_back_period: 0s
       {{- if .Values.memcachedchunks.enabled }}
       chunk_cache_config:
         memcached:
@@ -248,11 +251,11 @@ loki:
 
     compactor:
       working_directory: {{ .Values.loki.dataDir }}/loki/retention
-      shared_store: filesystem
       compaction_interval: 10m
       retention_enabled: true
       retention_delete_delay: 2h
       retention_delete_worker_count: 150
+      delete_request_store: filesystem
 
     ruler:
       storage:
@@ -2027,7 +2030,7 @@ ingester:
   ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "micro"
   ## @param ingester.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
