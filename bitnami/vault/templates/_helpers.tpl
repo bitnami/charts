@@ -157,3 +157,20 @@ Function to validate the controller deployment
 vault: Missing controllers. At least one controller should be enabled.
 {{- end -}}
 {{- end -}}
+
+
+{{/*
+Set's the injector webhook namespaceSelector
+*/}}
+{{- define "injector.namespaceSelector" -}}
+  {{- $v := or (((.Values.injector.webhook)).namespaceSelector) (.Values.injector.webhook.namespaceSelector) -}}
+  {{ if $v }}
+    namespaceSelector:
+    {{- $tp := typeOf $v -}}
+    {{ if eq $tp "string" }}
+      {{ tpl $v . | indent 6 | trim }}
+    {{ else }}
+      {{ toYaml $v | indent 6 | trim }}
+    {{ end }}
+  {{ end }}
+{{ end }}

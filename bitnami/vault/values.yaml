@@ -1387,6 +1387,18 @@ injector:
   ## @param injector.customStartupProbe Custom startupProbe that overrides the default one
   ##
   customStartupProbe: {}
+
+  ## @param injector.webhook Enabling specify which namespace you want to work with webhook
+  ## Example:
+  ## webhook:
+  ##   namespaceSelector: |
+  ##     matchExpressions:
+  ##     - key: kubernetes.io/metadata.name
+  ##       operator: In
+  ##       values:
+  ##         - {{ .Release.Namespace }}
+  webhook: {}
+       
   ## Vault Kubernetes Injector resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param injector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if injector.resources is set (injector.resources is recommended for production).

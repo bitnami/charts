@@ -40,4 +40,5 @@ webhooks:
           operator: NotIn
           values:
             - injector
+{{- template "injector.namespaceSelector" . -}}
 {{- end }}
