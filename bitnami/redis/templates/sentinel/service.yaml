@@ -102,9 +102,9 @@ spec:
     app.kubernetes.io/component: node
 
 
-{{- $createMaster := coalesce .Values.sentinel.masterService.createMaster .Values.sentinel.service.createMaster -}}
-{{- $serviceType := coalesce .Values.sentinel.masterService.type .Values.sentinel.service.type -}}
-{{- if and .Values.sentinel.enabled $createMaster }}
+{{- $ownConfig := .Values.sentinel.masterService.ownConfig | default false -}}
+{{- $masterServiceConfig := ternary .Values.sentinel.masterService .Values.sentinel.service $ownConfig -}}
+{{- if and .Values.sentinel.enabled $masterServiceConfig.createMaster }}
 
 ---
 apiVersion: v1
@@ -114,46 +114,46 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
-  {{- if or (coalesce .Values.sentinel.masterService.annotations .Values.sentinel.service.annotations) .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list (coalesce .Values.sentinel.masterService.annotations .Values.sentinel.service.annotations) .Values.commonAnnotations ) "context" . ) }}
+  {{- if or $masterServiceConfig.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list ($masterServiceConfig.annotations) .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ coalesce .Values.sentinel.masterService.type .Values.sentinel.service.type }}
-  {{- if or (eq $serviceType "LoadBalancer") (eq $serviceType "NodePort") }}
-  externalTrafficPolicy: {{ coalesce .Values.sentinel.masterService.externalTrafficPolicy .Values.sentinel.service.externalTrafficPolicy | quote }}
+  type: {{ $masterServiceConfig.type }}
+  {{- if or (eq $masterServiceConfig.type "LoadBalancer") (eq $masterServiceConfig.type "NodePort") }}
+  externalTrafficPolicy: {{ $masterServiceConfig.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq $serviceType "LoadBalancer") (not (empty (coalesce .Values.sentinel.masterService.loadBalancerIP .Values.sentinel.service.loadBalancerIP))) }}
-  loadBalancerIP: {{ coalesce .Values.sentinel.masterService.loadBalancerIP .Values.sentinel.service.loadBalancerIP }}
+  {{- if and (eq $masterServiceConfig.type "LoadBalancer") (not (empty ($masterServiceConfig.loadBalancerIP))) }}
+  loadBalancerIP: {{ $masterServiceConfig.loadBalancerIP }}
   {{- end }}
-  {{- if and (eq $serviceType "LoadBalancer")  (not (empty (coalesce .Values.sentinel.masterService.loadBalancerClass .Values.sentinel.service.loadBalancerClass))) }}
-  loadBalancerClass: {{ coalesce .Values.sentinel.masterService.loadBalancerClass .Values.sentinel.service.loadBalancerClass }}
+  {{- if and (eq $masterServiceConfig.type "LoadBalancer")  (not (empty ($masterServiceConfig.loadBalancerClass))) }}
+  loadBalancerClass: {{ $masterServiceConfig.loadBalancerClass }}
   {{- end }}
-  {{- if and (eq $serviceType "LoadBalancer") (not (empty (coalesce .Values.sentinel.masterService.loadBalancerSourceRanges .Values.sentinel.service.loadBalancerSourceRanges))) }}
-  loadBalancerSourceRanges: {{ toYaml coalesce (.Values.sentinel.masterService.loadBalancerSourceRanges .Values.sentinel.service.loadBalancerSourceRanges) | nindent 4 }}
+  {{- if and (eq $masterServiceConfig.type "LoadBalancer") (not (empty ($masterServiceConfig.loadBalancerSourceRanges))) }}
+  loadBalancerSourceRanges: {{ toYaml ($masterServiceConfig.loadBalancerSourceRanges) | nindent 4 }}
   {{- end }}
-  {{- if and (not (empty (coalesce .Values.sentinel.masterService.clusterIP .Values.sentinel.service.clusterIP))) (eq $serviceType "ClusterIP") }}
-  clusterIP: {{ coalesce .Values.sentinel.masterService.clusterIP .Values.sentinel.service.clusterIP }}
+  {{- if and (eq $masterServiceConfig.type "ClusterIP") (not (empty ($masterServiceConfig.clusterIP))) }}
+  clusterIP: {{ $masterServiceConfig.clusterIP }}
   {{- end }}
-  sessionAffinity: {{ coalesce .Values.sentinel.masterService.sessionAffinity .Values.sentinel.service.sessionAffinity }}
-  {{- if coalesce .Values.sentinel.masterService.sessionAffinityConfig .Values.sentinel.service.sessionAffinityConfig }}
-  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" (coalesce .Values.sentinel.masterService.sessionAffinityConfig .Values.sentinel.service.sessionAffinityConfig) "context" $) | nindent 4 }}
+  sessionAffinity: {{ $masterServiceConfig.sessionAffinity }}
+  {{- if $masterServiceConfig.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" ($masterServiceConfig.sessionAffinityConfig) "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: tcp-redis
-      {{- if and (or (eq $serviceType "NodePort") (eq $serviceType "LoadBalancer")) (coalesce .Values.sentinel.masterService.nodePorts.redis .Values.sentinel.service.nodePorts.redis) }}
-      port: {{ coalesce .Values.sentinel.masterService.nodePorts.redis .Values.sentinel.service.nodePorts.redis }}
-      {{- else if eq $serviceType "NodePort" }}
+      {{- if and (or (eq $masterServiceConfig.type "NodePort") (eq $masterServiceConfig.type "LoadBalancer")) ($masterServiceConfig.nodePorts.redis) }}
+      port: {{ $masterServiceConfig.nodePorts.redis }}
+      {{- else if eq $masterServiceConfig.type "NodePort" }}
       port: {{ $redisport }}
       {{- else }}
-      port: {{ coalesce .Values.sentinel.masterService.ports.redis .Values.sentinel.service.ports.redis }}
+      port: {{ $masterServiceConfig.ports.redis }}
       {{- end }}
       targetPort: {{ .Values.replica.containerPorts.redis }}
-      {{- if and (or (eq $serviceType "NodePort") (eq $serviceType "LoadBalancer")) (coalesce .Values.sentinel.masterService.nodePorts.redis .Values.sentinel.service.nodePorts.redis) }}
-      nodePort: {{ coalesce .Values.sentinel.masterService.nodePorts.redis .Values.sentinel.service.nodePorts.redis }}
-      {{- else if eq $serviceType "ClusterIP" }}
+      {{- if and (or (eq $masterServiceConfig.type "NodePort") (eq $masterServiceConfig.type "LoadBalancer")) ($masterServiceConfig.nodePorts.redis) }}
+      nodePort: {{ $masterServiceConfig.nodePorts.redis }}
+      {{- else if eq $masterServiceConfig.type "ClusterIP" }}
       nodePort: null
-      {{- else if eq $serviceType "NodePort" }}
+      {{- else if eq $masterServiceConfig.type "NodePort" }}
       nodePort:  {{ $redisport }}
       {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}

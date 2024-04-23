@@ -1427,17 +1427,18 @@ sentinel:
   ## Redis&reg; master service parameters
   ##
   masterService:
+    ownConfig: false
     ## @param sentinel.masterService.createMaster Enable master service pointing to the current master (experimental)
     ## NOTE: rbac.create need to be set to true
     ##
     createMaster: false
     ## @param sentinel.masterService.type Redis&reg; Sentinel master service type
     ##
-    type: ""
+    type: ClusterIP
     ## @param sentinel.masterService.ports.redis Redis&reg; service port for Redis&reg;
     ##
     ports:
-      redis: ""
+      redis: 6379
     ## @param sentinel.masterService.nodePorts.redis Node port for Redis&reg;
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## NOTE: choose port between <30000-32767>
@@ -1478,7 +1479,7 @@ sentinel:
     ## If "ClientIP", consecutive client requests will be directed to the same Pod
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
     ##
-    sessionAffinity: ""
+    sessionAffinity: None
     ## @param sentinel.masterService.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
