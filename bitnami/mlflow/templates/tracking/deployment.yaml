@@ -186,6 +186,10 @@ spec:
                   key: {{ include "mlflow.v0.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
             {{- end }}
+            {{- if .Values.minio.enabled }}
+            - name: MLFLOW_S3_ENDPOINT_URL
+              value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
+            {{- end }}
             {{- if .Values.tracking.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
