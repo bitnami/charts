@@ -135,6 +135,9 @@ https:
   ## @param https.clientAuthType Server policy for client authentication using certificates. Maps to ClientAuth Policies.
   ## For more detail on clientAuth options: https://golang.org/pkg/crypto/tls/#ClientAuthType
   clientAuthType: ""
+  ## @param https.extraTlsServerConfig Extra tls_server_config options
+  ## For more detail on possible options: https://thanos.io/tip/operating/https.md
+  extraTlsServerConfig: {}
 ## Thanos Basic authentication (Experimental)
 ##
 auth:
