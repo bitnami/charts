@@ -581,7 +581,7 @@ dataPlane:
     ## @param dataPlane.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param dataPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dataPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1363,7 +1363,7 @@ controlPlane:
     ## @param controlPlane.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param controlPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param controlPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2180,7 +2180,7 @@ dashboard:
     ## @param dashboard.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2819,7 +2819,7 @@ ingressController:
     ## @param ingressController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param ingressController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ingressController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
