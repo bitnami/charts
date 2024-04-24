@@ -61,7 +61,6 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.controller.containerPorts.controller }}
         - port: {{ .Values.controller.containerPorts.metrics }}
       {{- if not .Values.controller.networkPolicy.allowExternal }}
       from:
