@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "scdf.skipper.createConfigmap" .) }}
+{{- if and (include "scdf.skipper.createConfigmap" .) (.Values.skipper.enabled) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -103,7 +103,7 @@ data:
                     volumes: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.volumes "context" $) | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.podSecurityContext.enabled }}
-                    podSecurityContext: {{- omit .Values.deployer.podSecurityContext "enabled" | toYaml | nindent 22 }}
+                    podSecurityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.deployer.podSecurityContext "context" $) | nindent 22 }}
                     {{- end }}
                     {{- if .Values.deployer.imagePullSecrets }}
                     imagePullSecrets: {{- include "common.tplvalues.render" (dict "value" .Values.deployer.imagePullSecrets "context" $) | nindent 22 }}

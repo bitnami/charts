@@ -69,6 +69,15 @@ diagnosticMode:
     - infinity
 ## @section Node Exporter parameters
 
+## @param resourceType Specify how to deploy Node Exporter (allowed values: `daemonset` and `deployment`)
+##
+resourceType: daemonset
+## @param replicaCount Number of replicas to deploy (when `resourceType` is `deployment`)
+##
+replicaCount: 1
+## @param isolatedDeployment Specify whether to deploy the Node Exporter in an isolated deployment without access to host network, host PID and /proc and /sys of the host. (when `resourceType` is `deployment`)
+##
+isolatedDeployment: true
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
@@ -110,7 +119,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.7.0-debian-12-r13
+  tag: 1.7.0-debian-12-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -371,7 +380,7 @@ terminationGracePeriodSeconds: ""
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "nano"

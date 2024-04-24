@@ -110,6 +110,7 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.promtail.containerPorts.http }}
+        - port: {{ .Values.promtail.containerPorts.grpc }}
       {{- if not .Values.promtail.networkPolicy.allowExternal }}
       from:
         - podSelector:

@@ -17,6 +17,13 @@ metadata:
   {{- end }}
 rules:
   - apiGroups:
+      - "metallb.io"
+    resources:
+      - "servicel2statuses"
+      - "servicel2statuses/status"
+    verbs:
+      - "*"
+    apiGroups:
       - ''
     resources:
       - services

@@ -133,10 +133,10 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if .Values.indexCacheConfig }}
-            - --index-cache.config-file=/conf/index-cache.yml
+            - --index-cache.config-file=/conf/cache/index-cache.yml
             {{- end }}
             {{- if .Values.bucketCacheConfig }}
-            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
+            - --store.caching-bucket.config-file=/conf/cache/bucket-cache.yml
             {{- end }}
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
@@ -144,7 +144,9 @@ spec:
             {{- if .Values.storegateway.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if .Values.storegateway.grpc.server.tls.clientAuthEnabled }}
             - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.storegateway.extraFlags }}
             {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraFlags "context" $) | nindent 12 }}
@@ -234,7 +236,7 @@ spec:
               mountPath: /conf
             - name: data
               mountPath: /data
-            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+            {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
@@ -255,7 +257,7 @@ spec:
         {{- if .Values.storegateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+        {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}
