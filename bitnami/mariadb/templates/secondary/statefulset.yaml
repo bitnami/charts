@@ -393,7 +393,7 @@ spec:
     - metadata:
         name: data
         {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.persistence.labels .Values.commonLabels ) "context" . ) }}
-        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
+        labels: {{- include "common.tplvalues.render" ( dict "customLabels" $claimLabels "context" $) | nindent 10 }}
           app.kubernetes.io/component: secondary
         {{- if .Values.secondary.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.persistence.annotations "context" $ ) | nindent 10 }}
