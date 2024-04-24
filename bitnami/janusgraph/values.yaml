@@ -962,6 +962,7 @@ networkPolicy:
 ## Controlled by value storage.cassandra.enabled
 ##
 cassandra:
+  resourcesPreset: "xlarge"
   ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
   ##
   keyspace: "bitnami_janusgraph"
