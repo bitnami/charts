@@ -127,6 +127,12 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssh
+              subPath: etc-ssh-dir
+            - name: empty-dir
+              mountPath: /.ssh
+              subPath: ssh-dir
             - name: staticsite
               mountPath: /app
             {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}
@@ -178,6 +184,12 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /etc/ssh
+              subPath: etc-ssh-dir
+            - name: empty-dir
+              mountPath: /.ssh
+              subPath: ssh-dir
             - name: staticsite
               mountPath: /app
             {{- if .Values.cloneStaticSiteFromGit.extraVolumeMounts }}

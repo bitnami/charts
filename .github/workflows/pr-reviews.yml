@@ -23,7 +23,7 @@ jobs:
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
           echo "${{ github.event.pull_request.number }}" > pull_request_number
       - name: Upload the PR number
-        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
         with:
           name: pull_request_number
           path: ./pull_request_number

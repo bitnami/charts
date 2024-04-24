@@ -4140,6 +4140,9 @@ receive:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param receive.terminationGracePeriodSeconds for the Thanos Receive containers(s) to extend the grace period
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param receive.lifecycleHooks for the Thanos Receive container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -4332,6 +4335,9 @@ receive:
     ## @param receive.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param receive.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param receive.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
