@@ -112,7 +112,7 @@ spec:
               value: {{ .Values.taskmanager.containerPorts.data | quote }}
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
-            - name: FLINK_CFG_METRICS_INTERNAL_QUERY-SERVICE_PORT
+            - name: FLINK_CFG_METRICS_INTERNAL_QUERY__SERVICE_PORT
               value: {{ .Values.taskmanager.containerPorts.internalMetrics | quote }}
             {{- $releaseNamespace := include "common.names.namespace" . }}
             {{- $headlessServiceName := printf "%s-headless" (include "flink.taskmanager.fullname" .) | trunc 63 | trimSuffix "-" }}

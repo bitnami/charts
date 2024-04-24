@@ -606,7 +606,7 @@ taskmanager:
   containerPorts:
     data: 6121
     rpc: 6122
-    internalMetrics: 6123
+    internalMetrics: 6126
   ## Apache Flink taskmanager.service parameters
   ##
   service:
@@ -621,7 +621,7 @@ taskmanager:
     ports:
       data: 6121
       rpc: 6122
-      internalMetrics: 6123
+      internalMetrics: 6126
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ## @param taskmanager.service.nodePorts.data data exchange port

@@ -63,6 +63,7 @@ spec:
     - ports:
         - port: {{ .Values.taskmanager.containerPorts.data }}
         - port: {{ .Values.taskmanager.containerPorts.rpc }}
+        - port: {{ .Values.taskmanager.containerPorts.internalMetrics }}
       {{- if not .Values.taskmanager.networkPolicy.allowExternal }}
       from:
         - podSelector:
