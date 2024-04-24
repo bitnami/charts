@@ -269,8 +269,8 @@ dataPlane:
         enable: true
         listen:
           - port: {{ .Values.dataPlane.containerPorts.https }}
-            enable_http2: true
         ssl_trusted_certificate: /bitnami/certs/{{ .Values.dataPlane.tls.certCAFilename }}
+      enable_http2: true
       {{- end }}
       control:
         ip: 0.0.0.0
