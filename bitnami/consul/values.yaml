@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.18.0-debian-12-r0
+  tag: 1.18.1-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -211,6 +211,7 @@ extraEnvVarsSecret: ""
 ## @param containerPorts.rpc Port to open for RPC in Consul
 ## @param containerPorts.rpcServer Port to open for RPC Server in Consul
 ## @param containerPorts.serfLAN Port to open for Serf LAN in Consul
+## @param containerPorts.serfWAN Port to open for Serf WAN in Consul
 ##
 containerPorts:
   http: 8500
@@ -218,6 +219,7 @@ containerPorts:
   rpc: 8400
   rpcServer: 8300
   serfLAN: 8301
+  serfWAN: 8302
 ## @param lifecycleHooks Add lifecycle hooks to the deployment
 ##
 lifecycleHooks: {}
@@ -325,7 +327,7 @@ containerSecurityContext:
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
 resourcesPreset: "nano"
@@ -424,7 +426,7 @@ pdb:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
 serviceAccount:
-  ## @param serviceAccount.create Enable creation of ServiceAccount for WordPress pod
+  ## @param serviceAccount.create Enable creation of ServiceAccount for HashiCorp Consul pod
   ##
   create: true
   ## @param serviceAccount.name The name of the ServiceAccount to use.
@@ -718,7 +720,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r18
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -731,7 +733,7 @@ volumePermissions:
     pullSecrets: []
   ## Init container' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"
@@ -767,7 +769,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.11.0-debian-12-r11
+    tag: 0.11.0-debian-12-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -795,7 +797,7 @@ metrics:
     enabled: true
     seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -803,7 +805,7 @@ metrics:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Consul Prometheus exporter service type
   ##
   service:
@@ -829,7 +831,7 @@ metrics:
     prometheus.io/port: "9107"
   ## HashiCorp Consul Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
   resourcesPreset: "nano"

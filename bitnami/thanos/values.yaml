@@ -26,7 +26,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -64,7 +64,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.34.1-debian-12-r1
+  tag: 0.34.1-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -242,7 +242,7 @@ query:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -255,10 +255,10 @@ query:
       type: "RuntimeDefault"
   ## Thanos Query containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if query.resources is set (query.resources is recommended for production).
+  ## @param query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if query.resources is set (query.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param query.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -450,6 +450,7 @@ query:
       ## @param query.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param query.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
+      ## @param query.grpc.server.tls.clientAuthEnabled Enable TLS client verification against provided CA
       ## @param query.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
       ## e.g:
       ## existingSecret:
@@ -465,6 +466,7 @@ query:
         cert: ""
         key: ""
         ca: ""
+        clientAuthEnabled: true
         existingSecret: {}
     ## GRPC client side
     ##
@@ -1003,7 +1005,7 @@ queryFrontend:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1016,10 +1018,10 @@ queryFrontend:
       type: "RuntimeDefault"
   ## Thanos Query Frontend containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
+  ## @param queryFrontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if queryFrontend.resources is set (queryFrontend.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param queryFrontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1535,7 +1537,7 @@ bucketweb:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1548,10 +1550,10 @@ bucketweb:
       type: "RuntimeDefault"
   ## Thanos Bucket Web containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param bucketweb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if bucketweb.resources is set (bucketweb.resources is recommended for production).
+  ## @param bucketweb.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if bucketweb.resources is set (bucketweb.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param bucketweb.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2069,7 +2071,7 @@ compactor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -2082,10 +2084,10 @@ compactor:
       type: "RuntimeDefault"
   ## Thanos Compactor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
+  ## @param compactor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if compactor.resources is set (compactor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param compactor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2537,6 +2539,7 @@ storegateway:
       ## @param storegateway.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param storegateway.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param storegateway.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
+      ## @param storegateway.grpc.server.tls.clientAuthEnabled Enable TLS client verification against provided CA
       ## @param storegateway.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
       ## e.g:
       ## existingSecret:
@@ -2552,6 +2555,7 @@ storegateway:
         cert: ""
         key: ""
         ca: ""
+        clientAuthEnabled: true
         existingSecret: {}
   ## @param storegateway.extraEnvVars Extra environment variables for Thanos Store Gateway container
   ## e.g:
@@ -2624,7 +2628,7 @@ storegateway:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -2637,10 +2641,10 @@ storegateway:
       type: "RuntimeDefault"
   ## Thanos Store Gateway containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param storegateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if storegateway.resources is set (storegateway.resources is recommended for production).
+  ## @param storegateway.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if storegateway.resources is set (storegateway.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param storegateway.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3354,7 +3358,7 @@ ruler:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -3367,10 +3371,10 @@ ruler:
       type: "RuntimeDefault"
   ## Thanos Ruler containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
+  ## @param ruler.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ruler.resources is set (ruler.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param ruler.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -3857,6 +3861,7 @@ receive:
       ## @param receive.grpc.server.tls.cert TLS Certificate for GRPC server - ignored if existingSecret is provided
       ## @param receive.grpc.server.tls.key TLS Key for GRPC server - ignored if existingSecret is provided
       ## @param receive.grpc.server.tls.ca TLS CA to verify clients against - ignored if existingSecret is provided
+      ## @param receive.grpc.server.tls.clientAuthEnabled Enable TLS client verification against provided CA
       ## @param receive.grpc.server.tls.existingSecret Existing secret containing your own TLS certificates
       ## e.g:
       ## existingSecret:
@@ -3872,6 +3877,7 @@ receive:
         cert: ""
         key: ""
         ca: ""
+        clientAuthEnabled: true
         existingSecret: {}
   ## @param receive.extraEnvVars Extra environment variables for Thanos Receive container
   ## e.g:
@@ -3950,7 +3956,7 @@ receive:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -3963,10 +3969,10 @@ receive:
       type: "RuntimeDefault"
   ## Thanos Receive containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param receive.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if receive.resources is set (receive.resources is recommended for production).
+  ## @param receive.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if receive.resources is set (receive.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param receive.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -4131,6 +4137,9 @@ receive:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param receive.terminationGracePeriodSeconds for the Thanos Receive containers(s) to extend the grace period
+  ##
+  terminationGracePeriodSeconds: ""
   ## @param receive.lifecycleHooks for the Thanos Receive container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -4323,6 +4332,9 @@ receive:
     ## @param receive.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param receive.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param receive.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
@@ -4501,7 +4513,7 @@ receiveDistributor:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -4514,10 +4526,10 @@ receiveDistributor:
       type: "RuntimeDefault"
   ## Thanos Receive Distributor containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param receiveDistributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if receiveDistributor.resources is set (receiveDistributor.resources is recommended for production).
+  ## @param receiveDistributor.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if receiveDistributor.resources is set (receiveDistributor.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param receiveDistributor.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -4895,7 +4907,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r18
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -4928,3 +4940,24 @@ minio:
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
   defaultBuckets: "thanos"
+  ## MinIO&reg; containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param minio.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param minio.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

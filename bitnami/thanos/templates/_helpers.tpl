@@ -123,15 +123,9 @@ Return true if a secret object should be created
 Return the object store config
 */}}
 {{- define "thanos.objstoreConfig" -}}
+{{- if and .Values.objstoreConfig (not .Values.existingObjstoreSecret) }}
 objstore.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.objstoreConfig "context" $) | b64enc | nindent 2 }}
-{{- if .Values.indexCacheConfig }}
-index-cache.yml: |-
-  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | b64enc | nindent 2 }}
-{{- end }}
-{{- if .Values.bucketCacheConfig }}
-bucket-cache.yml: |-
-  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | b64enc | nindent 2 }}
 {{- end }}
 {{- end -}}
 
@@ -139,8 +133,18 @@ bucket-cache.yml: |-
 Return the storegateway config
 */}}
 {{- define "thanos.storegatewayConfigMap" -}}
+{{- if .Values.storegateway.config }}
 config.yml: |-
   {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.config "context" $) | nindent 2 }}
+{{- end }}
+{{- if .Values.indexCacheConfig }}
+index-cache.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.indexCacheConfig "context" $) | nindent 2 }}
+{{- end }}
+{{- if .Values.bucketCacheConfig }}
+bucket-cache.yml: |-
+  {{- include "common.tplvalues.render" (dict "value" .Values.bucketCacheConfig "context" $) | nindent 2 }}
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -253,7 +257,7 @@ Return the queryURL used by Thanos Ruler.
 */}}
 {{- define "thanos.ruler.queryURL" -}}
 {{- if and .Values.queryFrontend.enabled .Values.queryFrontend.ingress.enabled .Values.queryFrontend.ingress.hostname .Values.queryFrontend.ingress.overrideAlertQueryURL -}}
-{{- printf "http://%s" (tpl .Values.queryFrontend.ingress.hostname .) -}}
+    {{- printf "%s://%s" (ternary "https" "http" .Values.queryFrontend.ingress.tls) (tpl .Values.queryFrontend.ingress.hostname .) -}}
 {{- else -}}
 {{- if .Values.ruler.queryURL -}}
     {{- printf "%s" (tpl .Values.ruler.queryURL $) -}}
@@ -309,7 +313,7 @@ Return true if a configmap object should be created
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.storegateway.createConfigmap" -}}
-{{- if and .Values.storegateway.config (not .Values.storegateway.existingConfigmap) }}
+{{- if and (or .Values.storegateway.config .Values.indexCacheConfig .Values.bucketCacheConfig) (not .Values.storegateway.existingConfigmap) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}

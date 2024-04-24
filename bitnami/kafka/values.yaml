@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.7.0-debian-12-r0
+  tag: 3.7.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -596,10 +596,10 @@ controller:
     requests: {}
   ## Kafka resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
+  ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -632,7 +632,9 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param controller.containerSecurityContext.enabled Enable Kafka containers' Security Context
   ## @param controller.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param controller.containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param controller.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param controller.containerSecurityContext.runAsGroup Set Kafka containers' Security Context runAsGroup
   ## @param controller.containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
   ## @param controller.containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as non-privileged
   ## @param controller.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly only
@@ -646,8 +648,9 @@ controller:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -1004,10 +1007,10 @@ broker:
     requests: {}
   ## Kafka resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param broker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if broker.resources is set (broker.resources is recommended for production).
+  ## @param broker.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if broker.resources is set (broker.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param broker.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1040,7 +1043,8 @@ broker:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param broker.containerSecurityContext.enabled Enable Kafka containers' Security Context
   ## @param broker.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param broker.containerSecurityContext.runAsUser Set Kafka containers' Security Context runAsUser
+  ## @param broker.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param broker.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param broker.containerSecurityContext.runAsNonRoot Set Kafka containers' Security Context runAsNonRoot
   ## @param broker.containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as non-privileged
   ## @param broker.containerSecurityContext.readOnlyRootFilesystem Allows the pod to mount the RootFS as ReadOnly only
@@ -1054,8 +1058,9 @@ broker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -1394,7 +1399,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.29.2-debian-12-r2
+      tag: 1.29.3-debian-12-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1410,10 +1415,10 @@ externalAccess:
       pullSecrets: []
     ## Init Container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param externalAccess.autoDiscovery.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production).
+    ## @param externalAccess.autoDiscovery.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "nano"
     ## @param externalAccess.autoDiscovery.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1429,7 +1434,8 @@ externalAccess:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param externalAccess.autoDiscovery.containerSecurityContext.enabled Enable Kafka auto-discovery containers' Security Context
     ## @param externalAccess.autoDiscovery.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsUser Set Kafka auto-discovery containers' Security Context runAsUser
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param externalAccess.autoDiscovery.containerSecurityContext.runAsNonRoot Set Kafka auto-discovery containers' Security Context runAsNonRoot
     ## @param externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation
     ## @param externalAccess.autoDiscovery.containerSecurityContext.readOnlyRootFilesystem Set Kafka auto-discovery containers' Security Context readOnlyRootFilesystem
@@ -1444,8 +1450,9 @@ externalAccess:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -1627,47 +1634,53 @@ externalAccess:
 networkPolicy:
   ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
+  enabled: true
   ## @param networkPolicy.allowExternal Don't require client label for connections
-  ## When set to false, only pods with the correct client label will have network access to the port Kafka is
+  ## When set to false, only pods with the correct client label will have network access to the port Redis&reg; is
   ## listening on. When true, zookeeper accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
-  ## @param networkPolicy.explicitNamespacesSelector A Kubernetes LabelSelector to explicitly select namespaces from which traffic could be allowed
-  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
-  ## and that match other criteria, the ones that have the good label, can reach the kafka.
-  ## But sometimes, we want the kafka to be accessible to clients from other namespaces, in this case, we can use this
-  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
   ## e.g:
-  ## explicitNamespacesSelector:
-  ##   matchLabels:
-  ##     role: frontend
-  ##   matchExpressions:
-  ##    - {key: role, operator: In, values: [frontend]}
-  ##
-  explicitNamespacesSelector: {}
-  ## @param networkPolicy.externalAccess.from customize the from section for External Access on tcp-external port
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
-  ## - ipBlock:
-  ##    cidr: 172.9.0.0/16
-  ##    except:
-  ##    - 172.9.1.0/24
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  externalAccess:
-    from: []
-  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
   ##
-  egressRules:
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: []
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section Volume Permissions parameters
 ##
 
@@ -1688,7 +1701,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r18
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1701,10 +1714,10 @@ volumePermissions:
     pullSecrets: []
   ## Init container resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1723,7 +1736,7 @@ volumePermissions:
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
   ##
   containerSecurityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
 ## @section Other Parameters
 ##
@@ -1779,7 +1792,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.7.0-debian-12-r19
+      tag: 1.7.0-debian-12-r22
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1882,10 +1895,10 @@ metrics:
     customReadinessProbe: {}
     ## Kafka exporter resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param metrics.kafka.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.kafka.resources is set (metrics.kafka.resources is recommended for production).
+    ## @param metrics.kafka.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.kafka.resources is set (metrics.kafka.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "micro"
     ## @param metrics.kafka.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -1918,7 +1931,8 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param metrics.kafka.containerSecurityContext.enabled Enable Kafka exporter containers' Security Context
     ## @param metrics.kafka.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param metrics.kafka.containerSecurityContext.runAsUser Set Kafka exporter containers' Security Context runAsUser
+    ## @param metrics.kafka.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param metrics.kafka.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param metrics.kafka.containerSecurityContext.runAsNonRoot Set Kafka exporter containers' Security Context runAsNonRoot
     ## @param metrics.kafka.containerSecurityContext.allowPrivilegeEscalation Set Kafka exporter containers' Security Context allowPrivilegeEscalation
     ## @param metrics.kafka.containerSecurityContext.readOnlyRootFilesystem Set Kafka exporter containers' Security Context readOnlyRootFilesystem
@@ -1932,8 +1946,9 @@ metrics:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -2106,7 +2121,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-12-r11
+      tag: 0.20.0-debian-12-r13
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2124,7 +2139,8 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param metrics.jmx.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
     ## @param metrics.jmx.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param metrics.jmx.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param metrics.jmx.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
     ## @param metrics.jmx.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
     ## @param metrics.jmx.containerSecurityContext.allowPrivilegeEscalation Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation
     ## @param metrics.jmx.containerSecurityContext.readOnlyRootFilesystem Set Prometheus JMX exporter containers' Security Context readOnlyRootFilesystem
@@ -2138,8 +2154,9 @@ metrics:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -2151,10 +2168,10 @@ metrics:
       metrics: 5556
     ## Prometheus JMX exporter resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param metrics.jmx.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.jmx.resources is set (metrics.jmx.resources is recommended for production).
+    ## @param metrics.jmx.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.jmx.resources is set (metrics.jmx.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "none"
+    resourcesPreset: "micro"
     ## @param metrics.jmx.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:
@@ -2436,10 +2453,10 @@ provisioning:
     automountServiceAccountToken: false
   ## Kafka provisioning resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param provisioning.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if provisioning.resources is set (provisioning.resources is recommended for production).
+  ## @param provisioning.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if provisioning.resources is set (provisioning.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "micro"
   ## @param provisioning.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2472,7 +2489,8 @@ provisioning:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param provisioning.containerSecurityContext.enabled Enable Kafka provisioning containers' Security Context
   ## @param provisioning.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param provisioning.containerSecurityContext.runAsUser Set Kafka provisioning containers' Security Context runAsUser
+  ## @param provisioning.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param provisioning.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param provisioning.containerSecurityContext.runAsNonRoot Set Kafka provisioning containers' Security Context runAsNonRoot
   ## @param provisioning.containerSecurityContext.allowPrivilegeEscalation Set Kafka provisioning containers' Security Context allowPrivilegeEscalation
   ## @param provisioning.containerSecurityContext.readOnlyRootFilesystem Set Kafka provisioning containers' Security Context readOnlyRootFilesystem
@@ -2486,8 +2504,9 @@ provisioning:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true

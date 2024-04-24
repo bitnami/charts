@@ -125,6 +125,7 @@ spec:
               #!/bin/bash
 
               . /opt/bitnami/scripts/liblog.sh
+              . /opt/bitnami/scripts/libfs.sh
 
               info "Copying base dir to empty dir"
               # In order to not break the application functionality (such as upgrades or plugins) we need
@@ -136,6 +137,17 @@ spec:
               if ! is_dir_empty /opt/bitnami/apache/logs; then
                 cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
               fi
+              {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
+              # HACK: To avoid issues with ConfigMap mount permissions, we need to create the
+              # conf/vhosts/htaccess folder when mounting a custom htaccess. Otherwise, the vhosts
+              # folder will have read-only permissions, causing the initialization logic to fail
+              info "Custom htaccess mounted, creating folder in volume"
+              mkdir -p /emptydir/apache-conf-dir/vhosts/htaccess
+              {{- end }}
+
+              info "Copying default PHP config"
+              cp -r --preserve=mode /opt/bitnami/php/etc /emptydir/php-conf-dir
+
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir

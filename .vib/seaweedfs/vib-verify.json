@@ -1,0 +1,69 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/seaweedfs"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/seaweedfs"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/seaweedfs/cypress"
+            },
+            "endpoint": "lb-seaweedfs-master-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "masterPortHttp": "9333",
+              "masterPortGrpc": "19333",
+              "volumePortHttp": "8080",
+              "volumePortGrpc": "18080",
+              "filerPortHttp": "8888",
+              "filerPortGrpc": "18888",
+              "s3PortHttp": "8333",
+              "s3PortGrpc": "18333"
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/seaweedfs/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "releaseName": "seaweedfs"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

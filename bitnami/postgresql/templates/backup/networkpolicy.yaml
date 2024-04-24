@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.backup.cronjob.networkPolicy.enabled }}
+{{- if and .Values.backup.enabled .Values.backup.cronjob.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:

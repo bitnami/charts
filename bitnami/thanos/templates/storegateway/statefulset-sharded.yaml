@@ -50,7 +50,9 @@ spec:
         app.kubernetes.io/component: storegateway
         shard: {{ $index | quote }}
       annotations:
+        {{- if (include "thanos.objstoreConfig" $) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+        {{- end }}
         {{- if (include "thanos.storegateway.createConfigmap" $) }}
         checksum/storegateway-configuration: {{ include "thanos.storegatewayConfigMap" . | sha256sum }}
         {{- end }}
@@ -154,7 +156,9 @@ spec:
             {{- if $.Values.storegateway.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" $.Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" $.Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if $.Values.storegateway.grpc.server.tls.clientAuthEnabled }}
             - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" $.Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if $hashPartitioning }}
             - |
