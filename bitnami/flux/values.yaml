@@ -141,7 +141,7 @@ kustomizeController:
     ## @param kustomizeController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param kustomizeController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param kustomizeController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -656,7 +656,7 @@ helmController:
     ## @param helmController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param helmController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param helmController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1173,7 +1173,7 @@ sourceController:
     ## @param sourceController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param sourceController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1789,7 +1789,7 @@ notificationController:
     ## @param notificationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param notificationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param notificationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2412,7 +2412,7 @@ imageAutomationController:
     ## @param imageAutomationController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param imageAutomationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param imageAutomationController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2927,7 +2927,7 @@ imageReflectorController:
     ## @param imageReflectorController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param imageReflectorController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param imageReflectorController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
