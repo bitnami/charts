@@ -107,6 +107,8 @@ spec:
           ports:
             - containerPort: {{ .Values.tempo.containerPorts.web }}
               name: http
+            - containerPort: {{ .Values.tempo.containerPorts.grpc }}
+              name: grpc
             - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
               name: http-memberlist
           {{- if .Values.compactor.resources }}

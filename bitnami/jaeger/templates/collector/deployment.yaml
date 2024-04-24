@@ -96,6 +96,10 @@ spec:
               containerPort: {{ .Values.collector.containerPorts.grpc }}
             - name: admin
               containerPort: {{ .Values.collector.containerPorts.admin }}
+            - name: grpc-otlp
+              containerPort: {{ .Values.collector.containerPorts.otlp.grpc }}
+            - name: http-otlp
+              containerPort: {{ .Values.collector.containerPorts.otlp.http }}
           env:
             - name: CASSANDRA_SERVERS
               value: {{ include "jaeger.cassandra.host" . }}

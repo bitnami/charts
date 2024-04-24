@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 3.0.1-debian-12-r0
+  tag: 3.0.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -511,7 +511,7 @@ config:
     [SERVICE]
         Flush        {{ .Values.config.flush }}
         Daemon       Off
-        LogLevel     {{ .Values.config.logLevel }}
+        Log_Level    {{ .Values.config.logLevel }}
         Config_Watch On
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
