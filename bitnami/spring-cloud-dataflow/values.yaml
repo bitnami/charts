@@ -393,7 +393,7 @@ server:
     ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -985,7 +985,7 @@ skipper:
     ## @param skipper.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param skipper.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param skipper.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1559,7 +1559,7 @@ metrics:
     ## @param metrics.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

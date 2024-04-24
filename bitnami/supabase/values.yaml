@@ -768,7 +768,7 @@ auth:
     ## @param auth.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param auth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param auth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1170,7 +1170,7 @@ meta:
     ## @param meta.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param meta.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param meta.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1588,7 +1588,7 @@ realtime:
     ## @param realtime.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param realtime.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param realtime.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1988,7 +1988,7 @@ rest:
     ## @param rest.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param rest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param rest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2394,7 +2394,7 @@ storage:
     ## @param storage.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param storage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param storage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2845,7 +2845,7 @@ studio:
     ## @param studio.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param studio.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param studio.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
