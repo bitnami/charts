@@ -1315,13 +1315,6 @@ waitContainer:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param waitContainer.extraEnvVars Array with extra environment variables to add to render-auth-conf container
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param waitContainer.containerSecurityContext.enabled Enabled containers' Security Context
