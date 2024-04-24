@@ -30,10 +30,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query
-      {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap .Values.query.podAnnotations }}
+      {{- if or .Values.query.podAnnotations (include "thanos.query.createSDConfigmap" .) }}
       annotations:
-        {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap }}
-        checksum/ruler-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
+        {{- if (include "thanos.query.createSDConfigmap" .) }}
+        checksum/query-sd-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.query.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
