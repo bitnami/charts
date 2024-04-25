@@ -2521,6 +2521,10 @@ storegateway:
   ## @param storegateway.logFormat Thanos Store Gateway log format
   ##
   logFormat: logfmt
+  ## @param storegateway.useEndpointGroup Specify whether to use `endpoint-group` when querying the Store API of HA Store Gateway replicas
+  ## NOTE: This will take effect in the querier configuration
+  ##
+  useEndpointGroup: false
   ## @param storegateway.config Thanos Store Gateway configuration
   ## Specify content for config.yml
   ##
