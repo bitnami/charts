@@ -1,4 +1,4 @@
-# Copyright Broadcom, Inc. All Rights Reserved.
+# Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
 # This workflow is built to manage the triage support by using GH issues.
