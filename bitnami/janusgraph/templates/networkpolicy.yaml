@@ -12,7 +12,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: janusgraph
-  {{- if or .Values.annotations .Values.commonAnnotation }}
+  {{- if or .Values.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -46,7 +46,7 @@ spec:
         - port: {{ include "janusgraph.index.port" . }}
     {{- end }}
     {{- if .Values.networkPolicy.extraEgress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.rts.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
   ingress:
@@ -60,25 +60,22 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: janusgraph
-        {{- $ingressNSMatchLabels := coalesce .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.namespaceSelector }}
-        {{- if $ingressNSMatchLabels }}
+        {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
             matchLabels:
-              {{- range $key, $value := $ingressNSMatchLabels }}
+              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
-          {{- $ingressNSPodMatchLabels := coalesce .Values.networkPolicy.ingressNSPodMatchLabels .Values.networkPolicy.podSelector }}
-          {{- if $ingressNSPodMatchLabels }}
+          {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
             matchLabels:
-              {{- range $key, $value := $ingressNSPodMatchLabels }}
+              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
               {{ $key | quote }}: {{ $value | quote }}
               {{- end }}
           {{- end }}
         {{- end }}
       {{- end }}
-    {{- $extraIngress := coalesce .Values.networkPolicy.extraIngress .Values.networkPolicy.customRules }}
-    {{- if $extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" $extraIngress "context" $ ) | nindent 4 }}
+    {{- if .Values.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
 {{- end }}

@@ -37,6 +37,7 @@ spec:
       {{- if .Values.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
@@ -80,7 +81,7 @@ spec:
             - |
               #!/bin/bash
               # HACK: Gremlin console won't run unless it's history file is writable at /opt/bitnami/janusgraph
-              # To be able to run with readOnlyRootFilesystem, we create the file pre
+              # To be able to run with readOnlyRootFilesystem, we create the file and mount it as a volume
               touch /base-dir/.gremlin_groovy_history
               # Additionally copy the default content of the ext directory for console plugins installation
               cp /opt/bitnami/janusgraph/ext/* /ext-dir
@@ -92,10 +93,10 @@ spec:
           volumeMounts:
             - name: empty-dir
               mountPath: /ext-dir
-              subPath: ext-dir
+              subPath: app-ext-dir
             - name: empty-dir
               mountPath: /base-dir
-              subPath: base-dir-extra
+              subPath: app-base-dir
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         # Adjust volume permissions
         {{- include "janusgraph.volumePermissionsInitContainer" . | nindent 8 }}
@@ -205,10 +206,10 @@ spec:
               subPath: tmp-dir
             - name: empty-dir
               mountPath: /opt/bitnami/janusgraph/.gremlin_groovy_history
-              subPath: base-dir-extra/.gremlin_groovy_history
+              subPath: app-base-dir/.gremlin_groovy_history
             - name: empty-dir
               mountPath: /opt/bitnami/janusgraph/ext
-              subPath: ext-dir
+              subPath: app-ext-dir
             - name: janusgraph-conf
               mountPath: /opt/bitnami/janusgraph/conf
             - name: janusgraph-properties

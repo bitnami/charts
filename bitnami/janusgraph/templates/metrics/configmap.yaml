@@ -17,6 +17,4 @@ metadata:
 data:
   jmx-prometheus.yml: |-
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.config "context" $ ) | nindent 4 }}
-    rules:
-      - pattern: ".*"
 {{- end -}}

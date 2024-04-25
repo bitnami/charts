@@ -2,8 +2,6 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 command:
-  {{- $svc := print "janusgraph" }}
-  {{- $port := .Vars.service.ports.gremlin }}
   {{- $vertex_name := printf "test_%s" (randAlpha 5) }}
   janusgraph-graph-creation:
     exec: /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e ./janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}

@@ -19,6 +19,15 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
 
 ## @section Common parameters
 ##
@@ -66,43 +75,67 @@ diagnosticMode:
 ## Settings for the the storage backend
 ##
 storage:
-  ## Use Apache HBase subchart as storage backend
+  ## Cassandra storage backend
   ##
   cassandra:
-    ## @param storage.cassandra.enabled
+    ## @param storage.cassandra.enabled Use Apache Casandra subchart as storage backend
     ##
     enabled: true
-  ## Use BerkeleyDB (local) as storage backend
+  ## BerkeleyDB storage backend
   ##
   berkeleyje:
+    ## @param storage.berkeleyje.enabled Use BerkeleyDB (local) as storage backend
+    ##
     enabled: false
+    ## @param storage.berkeleyje.directory Path for the BerkeleyDB data
+    ##
     directory: "/bitnami/janusgraph/data/storage"
-  ## Use an external storage backend
+  ## External storage backend
   ##
   external:
+    ## @param storage.external.backend Type of the external storage backend to be used
+    ##
     backend: ""
+    ## @param storage.external.hostname Hostname of the external storage backend
+    ##
     hostname: ""
+    ## @param storage.external.backend Port of the external storage backend
+    ##
     port: ""
+    ## @param storage.external.backend Existing secret containing the password of the external storage backend, in case its needed
+    ##
     existingSecret: ""
 
 ## Settings for index management
 ##
 index:
-  ## Use Lucene (local) as index management backend
+  ## Lucene index backend
   ##
   lucene:
+    ## @param index.lucene.enabled Use Lucene (local) as index management backend
+    ##
     enabled: false
+    ## @param index.lucene.directory Path for the BerkeleyDB data
+    ##
     directory: "/bitnami/janusgraph/data/index"
-  ## Use external index management backend
+  ## External index backend
+  ##
   external:
+    ## @param index.external.backend Type of the external index backend to be used
+    ##
     backend: ""
+    ## @param index.external.hostname Hostname of the external index backend
+    ##
     hostname: ""
+    ## @param index.external.backend Port of the external index backend
+    ##
     port: ""
 
 ## Settings for JanusGraph caching.
 ##
 cache:
-  ## @param cache.enabled
+  ## @param cache.enabled Enable Janusgraph cache feature
+  ## Ref. https://docs.janusgraph.org/operations/cache/
   ##
   enabled: true
 
@@ -110,7 +143,7 @@ cache:
 ## NOTE: By providing a ConfigMap, other settings provided using values may be ignored.
 ##
 existingConfigmap: ""
-## @param existingConfigmap Additional JanusGraph to be appended at the end of the janusgraph.properties configmap
+## @param extraJanusgraphProperties Additional JanusGraph to be appended at the end of the janusgraph.properties configmap
 ##
 extraJanusgraphProperties: ""
 ## @param janusgraphProperties Override the content of the janusgraph.properties file.
@@ -133,8 +166,8 @@ javaOptions: ""
 ##
 image:
   registry: docker.io
-  repository: miruiz145/janusgraph
-  tag: latest
+  repository: bitnami/janusgraph
+  tag: 1.0.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -319,9 +352,9 @@ pdb:
   maxUnavailable: ""
 ## Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable autoscaling for %%MAIN_OBJECT_BLOCK%%
-## @param autoscaling.minReplicas Minimum number of %%MAIN_OBJECT_BLOCK%% replicas
-## @param autoscaling.maxReplicas Maximum number of %%MAIN_OBJECT_BLOCK%% replicas
+## @param autoscaling.enabled Enable autoscaling for janusgraph
+## @param autoscaling.minReplicas Minimum number of janusgraph replicas
+## @param autoscaling.maxReplicas Maximum number of janusgraph replicas
 ## @param autoscaling.targetCPU Target CPU utilization percentage
 ## @param autoscaling.targetMemory Target Memory utilization percentage
 ##
@@ -353,6 +386,9 @@ nodeAffinityPreset:
 ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
 ##
 affinity: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
 ## @param nodeSelector Node labels for JanusGraph pods assignment
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
@@ -679,10 +715,13 @@ metrics:
   ## @param metrics.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
   ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param metrics.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the Prometheus JMX exporter container
   ## @param metrics.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set Prometheus JMX exporter container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation
   ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set Prometheus JMX exporter containers' Security Context readOnlyRootFilesystem
   ## @param metrics.containerSecurityContext.capabilities.drop Set Prometheus JMX exporter containers' Security Context capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Prometheus JMX exporter container's Security Context seccomp profile
   ## e.g:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -786,6 +825,8 @@ metrics:
     lowercaseOutputName: true
     lowercaseOutputLabelNames: true
     ssl: false
+    rules:
+      - pattern: ".*"
   ## @param metrics.existingConfigmap Name of existing ConfigMap with JMX exporter configuration
   ## NOTE: This will override metrics.config
   ##
@@ -962,7 +1003,6 @@ networkPolicy:
 ## Controlled by value storage.cassandra.enabled
 ##
 cassandra:
-  resourcesPreset: "xlarge"
   ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
   ##
   keyspace: "bitnami_janusgraph"
