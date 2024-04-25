@@ -1,10 +1,9 @@
-import org.apache.tinkerpop.gremlin.structure.io.binary.TypeSerializerRegistry
+conf = new File('conf/remote.yaml');
+cluster = Cluster.build(conf).create();
+client = cluster.connect();
 
-TypeSerializerRegistry typeSerializerRegistry = TypeSerializerRegistry.build().addRegistry(JanusGraphIoRegistry.instance()).create();
-
-cluster = Cluster.build().addContactPoint(args[0]).port(args[1].toInteger()).serializer(new GraphBinaryMessageSerializerV1(typeSerializerRegistry)).create()
-client = cluster.connect()
-
-client.submit("graph.addVertex('name', '${args[2]}')")
-r = client.submit('g.V().values("name")')
-println "Result:" + r.toList()
+// Add a vertex
+client.submit("graph.addVertex('name', '${args[0]}')").all().get();
+// Read all vertex
+r = client.submit('g.V().values("name")');
+println "Result:" + r.toList();

@@ -6,7 +6,7 @@ command:
   {{- $port := .Vars.service.ports.gremlin }}
   {{- $vertex_name := printf "test_%s" (randAlpha 5) }}
   janusgraph-graph-creation:
-    exec: /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e ./janusgraph/goss/testfiles/test.groovy {{ $svc }} {{ $port }} {{ $vertex_name }}
+    exec: /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e ./janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
     exit-status: 0
     timeout: 30000
     stdout:
