@@ -20,11 +20,29 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup scripts execute this command:
 
-    %%ENTRYPOINT and CMD from main container%%
+    /opt/bitnami/scripts/janusgraph/entrypoint.sh /opt/bitnami/scripts/janusgraph/run.sh
 
 {{- else }}
 
-%%Instructions to access the application depending on the serviceType and other considerations%%
+Janusgraph can be accessed through the following URLs from within the cluster:
+
+  - {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.gremlin }}
+
+To connect to your Janusgraph cluster using Gremlin/Tinkerpop:
+
+1. Run a Janusgraph pod that you can use as a client:
+
+   kubectl run --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+   --env GREMLIN_REMOTE_PORT={{ .Values.service.ports.gremlin }} \
+   --env GREMLIN_REMOTE_HOSTS={{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} \
+   {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.name" . }}-client=true"{{ end }} \
+   --image {{ include "janusgraph.image" . }} -- bash
+
+2. Connect using the gremlin.sh tool:
+
+   $ gremlin.sh
+   gremlin> :remote connect tinkerpop.server conf/remote.yaml
+   gremlin> :remote console
 
 {{- end }}
 
