@@ -963,6 +963,14 @@ cronjobs:
     ## @param cronjobs.taskScheduler.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param tolerations Tolerations for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
     ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1054,6 +1062,14 @@ cronjobs:
     ## @param cronjobs.archive.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    tolerations: []
+    ## @param tolerations Tolerations for pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    nodeSelector: {}
     ## @param cronjobs.archive.command Override default container command (useful when using custom images)
     ##
     command: []
