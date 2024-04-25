@@ -556,7 +556,7 @@ frontend:
     ## @param frontend.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param frontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param frontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -952,7 +952,7 @@ dashboard:
     ## @param dashboard.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1325,7 +1325,7 @@ apprepository:
     ## @param apprepository.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param apprepository.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param apprepository.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2164,7 +2164,7 @@ kubeappsapis:
     ## @param kubeappsapis.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param kubeappsapis.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param kubeappsapis.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

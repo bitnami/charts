@@ -573,7 +573,7 @@ compactor:
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -923,7 +923,7 @@ distributor:
     ## @param distributor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1269,7 +1269,7 @@ metricsGenerator:
     ## @param metricsGenerator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param metricsGenerator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param metricsGenerator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1661,7 +1661,7 @@ ingester:
     ## @param ingester.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2011,7 +2011,7 @@ querier:
     ## @param querier.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2535,7 +2535,7 @@ queryFrontend:
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2915,7 +2915,7 @@ vulture:
     ## @param vulture.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param vulture.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param vulture.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
