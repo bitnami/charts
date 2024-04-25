@@ -324,6 +324,62 @@ spec:
 | `speaker.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                                                                                                      | `{}`                              |
 | `speaker.logLevel`                                          | Sets the speaker log level. Does not work if the args are overridden                                                                                                                                                              | `info`                            |
 
+### FRR Speaker
+
+| Name                                                    | Description                                                                                                                                                                                                                       | Value                             |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `speaker.frr.enabled`                                   | Whether to enable FRR mode                                                                                                                                                                                                        | `false`                           |
+| `speaker.frr.image.registry`                            | MetalLB Speaker image registry                                                                                                                                                                                                    | `REGISTRY_NAME`                   |
+| `speaker.frr.image.repository`                          | MetalLB Speaker image repository                                                                                                                                                                                                  | `REPOSITORY_NAME/metallb-speaker` |
+| `speaker.frr.image.digest`                              | MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                   | `""`                              |
+| `speaker.frr.image.pullPolicy`                          | MetalLB Speaker image pull policy                                                                                                                                                                                                 | `IfNotPresent`                    |
+| `speaker.frr.image.pullSecrets`                         | Specify docker-registry secret names as an array                                                                                                                                                                                  | `[]`                              |
+| `speaker.frr.resourcesPreset`                           | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production). | `micro`                           |
+| `speaker.frr.resources`                                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                              |
+| `speaker.frr.containerSecurityContext.enabled`          | Enabled Speaker containers' Security Context                                                                                                                                                                                      | `true`                            |
+| `speaker.frr.containerSecurityContext.capabilities.add` | Add capabilities for the securityContext                                                                                                                                                                                          | `[]`                              |
+| `speaker.frr.containerSecurityContext.runAsUser`        | Set containers' Security Context runAsUser                                                                                                                                                                                        | `0`                               |
+| `speaker.frr.containerSecurityContext.runAsGroup`       | Set containers' Security Context runAsGroup                                                                                                                                                                                       | `0`                               |
+| `speaker.frr.containerPorts.metrics`                    | HTTP Metrics Endpoint                                                                                                                                                                                                             | `7473`                            |
+
+### FRR Speaker Prometheus metrics export
+
+| Name                                                   | Description                                                                 | Value                    |
+| ------------------------------------------------------ | --------------------------------------------------------------------------- | ------------------------ |
+| `speaker.frr.metrics.service.port`                     | Prometheus metrics service port                                             | `7473`                   |
+| `speaker.frr.metrics.service.annotations`              | Annotations for the Prometheus Exporter service service                     | `{}`                     |
+| `speaker.frr.metrics.serviceMonitor.enabled`           | Enable support for Prometheus Operator                                      | `false`                  |
+| `speaker.frr.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                    | `""`                     |
+| `speaker.frr.metrics.serviceMonitor.jobLabel`          | Job label for scrape target                                                 | `app.kubernetes.io/name` |
+| `speaker.frr.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
+| `speaker.frr.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
+| `speaker.frr.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
+| `speaker.frr.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
+| `speaker.frr.metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                              | `{}`                     |
+| `speaker.frr.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
+| `speaker.frr.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels    | `false`                  |
+| `speaker.frr.livenessProbe.enabled`                    | Enable livenessProbe                                                        | `true`                   |
+| `speaker.frr.livenessProbe.initialDelaySeconds`        | Initial delay seconds for livenessProbe                                     | `10`                     |
+| `speaker.frr.livenessProbe.periodSeconds`              | Period seconds for livenessProbe                                            | `10`                     |
+| `speaker.frr.livenessProbe.timeoutSeconds`             | Timeout seconds for livenessProbe                                           | `1`                      |
+| `speaker.frr.livenessProbe.failureThreshold`           | Failure threshold for livenessProbe                                         | `3`                      |
+| `speaker.frr.livenessProbe.successThreshold`           | Success threshold for livenessProbe                                         | `1`                      |
+| `speaker.frr.readinessProbe.enabled`                   | Enable readinessProbe                                                       | `true`                   |
+| `speaker.frr.readinessProbe.initialDelaySeconds`       | Initial delay seconds for readinessProbe                                    | `10`                     |
+| `speaker.frr.readinessProbe.periodSeconds`             | Period seconds for readinessProbe                                           | `10`                     |
+| `speaker.frr.readinessProbe.timeoutSeconds`            | Timeout seconds for readinessProbe                                          | `1`                      |
+| `speaker.frr.readinessProbe.failureThreshold`          | Failure threshold for readinessProbe                                        | `3`                      |
+| `speaker.frr.readinessProbe.successThreshold`          | Success threshold for readinessProbe                                        | `1`                      |
+| `speaker.frr.startupProbe.enabled`                     | Enable startupProbe                                                         | `true`                   |
+| `speaker.frr.startupProbe.initialDelaySeconds`         | Initial delay seconds for startupProbe                                      | `10`                     |
+| `speaker.frr.startupProbe.periodSeconds`               | Period seconds for startupProbe                                             | `10`                     |
+| `speaker.frr.startupProbe.timeoutSeconds`              | Timeout seconds for startupProbe                                            | `1`                      |
+| `speaker.frr.startupProbe.failureThreshold`            | Failure threshold for startupProbe                                          | `3`                      |
+| `speaker.frr.startupProbe.successThreshold`            | Success threshold for startupProbe                                          | `1`                      |
+| `speaker.frr.customStartupProbe`                       | Custom liveness probe for the Web component                                 | `{}`                     |
+| `speaker.frr.customLivenessProbe`                      | Custom liveness probe for the Web component                                 | `{}`                     |
+| `speaker.frr.customReadinessProbe`                     | Custom readiness probe for the Web component                                | `{}`                     |
+
 ### Speaker Prometheus metrics export
 
 | Name                                               | Description                                                                 | Value                    |

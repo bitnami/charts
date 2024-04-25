@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -115,6 +115,10 @@ spec:
               value: {{ include "metallb.speaker.secretName" . }}
             - name: METALLB_DEPLOYMENT
               value: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+            {{- end }}
+            {{- if .Values.speaker.frr.enabled }}
+            - name: METALLB_BGP_TYPE
+              value: frr
             {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}

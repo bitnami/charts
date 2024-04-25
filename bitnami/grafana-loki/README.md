@@ -311,7 +311,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -419,7 +419,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `gateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `gateway.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `gateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
-| `gateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `gateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `gateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `gateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
 | `gateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
@@ -543,7 +543,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `indexGateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `indexGateway.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `indexGateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `indexGateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `indexGateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexGateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `indexGateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `indexGateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -640,7 +640,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -678,7 +678,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ingester.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                | `{}`             |
 | `ingester.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                  | `{}`             |
 | `ingester.lifecycleHooks`                                    | for the ingester container(s) to automate configuration before or after startup                                                                                                                                                     | `{}`             |
-| `ingester.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production). | `nano`           |
+| `ingester.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production). | `micro`          |
 | `ingester.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                   | `{}`             |
 | `ingester.podSecurityContext.enabled`                        | Enabled Ingester pods' Security Context                                                                                                                                                                                             | `true`           |
 | `ingester.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                  | `Always`         |
@@ -750,7 +750,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -860,7 +860,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `querier.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -958,7 +958,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1056,7 +1056,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `queryScheduler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `queryScheduler.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `queryScheduler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryScheduler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `queryScheduler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryScheduler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryScheduler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `queryScheduler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1167,7 +1167,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ruler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `ruler.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `ruler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `ruler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `ruler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `ruler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `ruler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `ruler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1265,7 +1265,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `tableManager.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `tableManager.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `tableManager.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `tableManager.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `tableManager.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `tableManager.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `tableManager.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `tableManager.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1372,7 +1372,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `promtail.networkPolicy.allowExternal`                 | Don't require server label for connections                                                         | `true`      |
 | `promtail.networkPolicy.allowExternalEgress`           | Allow the pod to access any range of port and all destinations.                                    | `true`      |
 | `promtail.networkPolicy.kubeAPIServerPorts`            | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
-| `promtail.networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
+| `promtail.networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `promtail.networkPolicy.extraEgress`                   | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `promtail.networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                             | `{}`        |
 | `promtail.networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
@@ -1537,6 +1537,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major bumps the Grafana Loki version to its newest major, 3.x.x. This version includes a new storage schema, among other features like structured metadata support. These changes could potentially break your deployments. Please refer to the official [release notes](https://grafana.com/docs/loki/latest/release-notes/v3-0/) and documentation website for further details.
 
 ### To 3.0.0
 

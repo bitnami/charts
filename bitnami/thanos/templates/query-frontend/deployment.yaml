@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -102,7 +102,7 @@ spec:
             - --log.level={{ .Values.queryFrontend.logLevel }}
             - --log.format={{ .Values.queryFrontend.logFormat }}
             - --http-address=0.0.0.0:{{ .Values.queryFrontend.containerPorts.http }}
-            - --query-frontend.downstream-url=http://{{ include "thanos.query.fullname" . }}:{{ .Values.query.service.ports.http }}
+            - --query-frontend.downstream-url={{ ternary "https" "http" .Values.https.enabled }}://{{ include "thanos.query.fullname" . }}:{{ .Values.query.service.ports.http }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
