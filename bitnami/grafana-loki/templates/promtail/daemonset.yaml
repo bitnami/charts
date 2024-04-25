@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -116,6 +116,8 @@ spec:
           ports:
             - containerPort: {{ .Values.promtail.containerPorts.http }}
               name: http
+            - containerPort: {{ .Values.promtail.containerPorts.grpc }}
+              name: grpc
           {{- if .Values.promtail.resources }}
           resources: {{- toYaml .Values.promtail.resources | nindent 12 }}
           {{- else if ne .Values.promtail.resourcesPreset "none" }}

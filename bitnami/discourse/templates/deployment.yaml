@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -119,6 +119,12 @@ spec:
               {{- range $plugin := .Values.discourse.plugins }}
               RAILS_ENV=production bundle exec rake plugin:install repo={{ $plugin }}
               {{- end }}
+              {{- if .Values.discourse.persistPlugins }}
+              RAILS_ENV=production bundle exec rake plugin:update_all
+              {{- end }}
+              {{- if .Values.discourse.compatiblePlugins }}
+              RAILS_ENV=production LOAD_PLUGINS=0 bundle exec rake plugin:pull_compatible_all
+              {{- end }}
               popd >/dev/null || exit 1
               {{- end }}
               /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
@@ -188,6 +194,9 @@ spec:
             - name: http
               containerPort: {{ .Values.discourse.containerPorts.http }}
               protocol: TCP
+            {{- if .Values.discourse.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.discourse.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.discourse.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}

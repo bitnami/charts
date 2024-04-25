@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -40,6 +40,9 @@ spec:
           {{- end }}
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
+          {{- if .Values.cronjobs.archive.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.cronjobs.archive.podSecurityContext "enabled" | toYaml | nindent 16 }}
+          {{- end }}
           containers:
             - name: {{ include "common.names.fullname" . }}-archive
               image: {{ template "matomo.image" . }}
@@ -61,6 +64,7 @@ spec:
                 - . /opt/bitnami/scripts/matomo-env.sh &&
                   . /opt/bitnami/scripts/libbitnami.sh &&
                   . /opt/bitnami/scripts/liblog.sh &&
+                  /opt/bitnami/scripts/apache/setup.sh &&
                   /opt/bitnami/scripts/php/setup.sh &&
                   /opt/bitnami/scripts/mysql-client/setup.sh &&
                   /opt/bitnami/scripts/matomo/setup.sh &&
@@ -83,6 +87,9 @@ spec:
                     secretKeyRef:
                       name: {{ include "matomo.databaseSecretName" . }}
                       key: {{ include "matomo.databasePasswordKey" . | quote }}
+                {{- if gt (len .Values.cronjobs.archive.extraEnvVars) 0  }}
+                {{- toYaml .Values.cronjobs.archive.extraEnvVars | nindent 16 }}
+                {{- end }}
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
@@ -109,8 +116,14 @@ spec:
                 {{- if .Values.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
+              {{- if not (empty .Values.cronjobs.archive.resources) }}
+              resources: {{- toYaml .Values.cronjobs.archive.resources | nindent 16 }}
+              {{- else }}
+              # Fallback to the main resources request/limit to preserve backwards compatibility. This behaviour might be DEPRECATED
+              # in upcoming versions of the chart
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
+              {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
@@ -139,9 +152,9 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-              {{- if .Values.persistence.enabled }}
+              {{- if .Values.cronjobs.archive.persistence.enabled }}
               persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+                claimName: {{ .Values.cronjobs.archive.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
               {{- else }}
               emptyDir: {}
               {{- end }}
@@ -193,6 +206,9 @@ spec:
           restartPolicy: OnFailure
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
+          {{- if .Values.cronjobs.taskScheduler.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.cronjobs.taskScheduler.podSecurityContext "enabled" | toYaml | nindent 16 }}
+          {{- end }}
           containers:
             - name: {{ include "common.names.fullname" . }}-scheduled-tasks
               image: {{ template "matomo.image" . }}
@@ -214,6 +230,7 @@ spec:
                 - . /opt/bitnami/scripts/matomo-env.sh &&
                   . /opt/bitnami/scripts/libbitnami.sh &&
                   . /opt/bitnami/scripts/liblog.sh &&
+                  /opt/bitnami/scripts/apache/setup.sh &&
                   /opt/bitnami/scripts/php/setup.sh &&
                   /opt/bitnami/scripts/mysql-client/setup.sh &&
                   /opt/bitnami/scripts/matomo/setup.sh &&
@@ -236,6 +253,9 @@ spec:
                     secretKeyRef:
                       name: {{ include "matomo.databaseSecretName" . }}
                       key: {{ include "matomo.databasePasswordKey" . | quote }}
+                {{- if gt (len .Values.cronjobs.taskScheduler.extraEnvVars) 0  }}
+                {{- toYaml .Values.cronjobs.taskScheduler.extraEnvVars | nindent 16 }}
+                {{- end }}
               volumeMounts:
                 - name: matomo-data
                   mountPath: /bitnami/matomo
@@ -262,6 +282,9 @@ spec:
                 {{- if .Values.extraVolumeMounts }}
                 {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 16 }}
                 {{- end }}
+              {{- if not (empty .Values.cronjobs.taskScheduler.resources) }}
+              resources: {{- toYaml .Values.cronjobs.taskScheduler.resources | nindent 16 }}
+              {{- end }}
           volumes:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
@@ -290,9 +313,9 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-              {{- if .Values.persistence.enabled }}
+              {{- if .Values.cronjobs.taskScheduler.persistence.enabled }}
               persistentVolumeClaim:
-                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+                claimName: {{ .Values.cronjobs.taskScheduler.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
               {{- else }}
               emptyDir: {}
               {{- end }}

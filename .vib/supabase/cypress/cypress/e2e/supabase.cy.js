@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -39,10 +39,9 @@ it('can create a user and generate a token to it (auth)', () => {
       headers: { apikey: Cypress.env('serviceKey') },
       // This one works with URL parameters, not with a body
       url: '/auth/v1/token',
+      body: userPayload,
       qs: {
         grant_type: 'password',
-        username: userPayload.email,
-        password: userPayload.password,
       },
     }).then((response) => {
       expect(response.status).to.eq(200);

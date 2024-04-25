@@ -1,12 +1,12 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
 const COMMAND_DELAY = 2000;
 export const BASE_URL = 'http://bitnami-matomo.my';
 
-for (const command of ['click']) {
+for (const command of ['click', 'type']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
     const origVal = originalFn(...args);
 

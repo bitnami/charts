@@ -1,0 +1,62 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.webdav.enabled .Values.webdav.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "seaweedfs.webdav.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master
+  {{- if or .Values.webdav.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.webdav.ingress.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.webdav.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.webdav.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if or .Values.webdav.ingress.hostname .Values.webdav.ingress.path }}
+    - http:
+        paths:
+          {{- if .Values.webdav.ingress.extraPaths }}
+          {{- toYaml .Values.webdav.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.webdav.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.webdav.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.webdav.fullname" .) "servicePort" (ternary "https" "http" .Values.webdav.tls.enabled) "context" $)  | nindent 14 }}
+      {{- if not (empty .Values.webdav.ingress.hostname )}}
+      host: {{ .Values.webdav.ingress.hostname }}
+      {{- end }}
+    {{- end }}
+    {{- range .Values.webdav.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.webdav.fullname" $) "servicePort" ("https" "http" .Values.webdav.tls.enabled) "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.webdav.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.webdav.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.webdav.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.webdav.ingress.annotations )) .Values.webdav.ingress.selfSigned)) .Values.webdav.ingress.extraTls }}
+  tls:
+    {{- if and .Values.webdav.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.webdav.ingress.annotations )) .Values.webdav.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.webdav.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.webdav.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.webdav.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.webdav.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

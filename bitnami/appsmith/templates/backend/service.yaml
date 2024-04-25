@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -34,6 +34,8 @@ spec:
   {{- if and (eq .Values.backend.service.type "LoadBalancer") (not (empty .Values.backend.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.backend.service.loadBalancerIP }}
   {{- end }}
+  # We need this service to be published to avoid a deadlock backend <-> rts (there is a mutual dependency)
+  publishNotReadyAddresses: true
   ports:
     - name: http
       port: {{ .Values.backend.service.ports.http }}

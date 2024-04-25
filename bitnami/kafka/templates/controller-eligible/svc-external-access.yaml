@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,6 +9,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $replicaCount := .Values.controller.replicaCount | int }}
 {{- range $i := until $replicaCount }}
 {{- $targetPod := printf "%s-controller-%d" $fullname $i }}
+{{- $_ := set $ "targetPod" $targetPod }}
 apiVersion: v1
 kind: Service
 metadata:

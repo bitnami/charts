@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -108,9 +108,9 @@ spec:
           volumeMounts:
             - name: cassandra-schema
               mountPath: "/cassandra-schema"
-          {{- if .Values.migration.extraVolumeMounts }}
+            {{- if .Values.migration.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.migration.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+            {{- end }}
           {{- if .Values.migration.resources }}
           resources: {{- toYaml .Values.migration.resources | nindent 12 }}
           {{- else if ne .Values.migration.resourcesPreset "none" }}

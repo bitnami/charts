@@ -44,236 +44,6 @@ The command deploys EJBCA on the Kubernetes cluster in the default configuration
 
 > **Tip**: List all releases using `helm list`
 
-## Uninstalling the Chart
-
-To uninstall/delete the `my-release` deployment:
-
-```console
-helm delete my-release
-```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release.
-
-## Parameters
-
-### Global parameters
-
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
-
-### Common parameters
-
-| Name                     | Description                                                                             | Value          |
-| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
-| `nameOverride`           | String to partially override ebjca.fullname template (will maintain the release name)   | `""`           |
-| `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`           |
-| `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`           |
-| `commonLabels`           | Add labels to all the deployed resources                                                | `{}`           |
-| `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`           |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
-### EJBCA parameters
-
-| Name                                                | Description                                                                                                                                                                                                | Value                   |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`                                    | EJBCA image registry                                                                                                                                                                                       | `REGISTRY_NAME`         |
-| `image.repository`                                  | EJBCA image name                                                                                                                                                                                           | `REPOSITORY_NAME/ejbca` |
-| `image.digest`                                      | EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                | `""`                    |
-| `image.pullPolicy`                                  | EJBCA image pull policy                                                                                                                                                                                    | `IfNotPresent`          |
-| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                           | `[]`                    |
-| `image.debug`                                       | Enable image debug mode                                                                                                                                                                                    | `false`                 |
-| `replicaCount`                                      | Number of EJBCA replicas to deploy                                                                                                                                                                         | `1`                     |
-| `extraVolumeMounts`                                 | Additional volume mounts (used along with `extraVolumes`)                                                                                                                                                  | `[]`                    |
-| `extraVolumes`                                      | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`                                                                                                                        | `[]`                    |
-| `podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                 | `{}`                    |
-| `podLabels`                                         | Additional pod labels                                                                                                                                                                                      | `{}`                    |
-| `podSecurityContext.enabled`                        | Enable security context for EJBCA container                                                                                                                                                                | `true`                  |
-| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                         | `Always`                |
-| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                             | `[]`                    |
-| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                | `[]`                    |
-| `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                                                                                                                        | `1001`                  |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                        | `""`                    |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                   | `soft`                  |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                  | `""`                    |
-| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                                                                                                      | `""`                    |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                  | `[]`                    |
-| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                | `{}`                    |
-| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                             | `{}`                    |
-| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                             | `[]`                    |
-| `updateStrategy.type`                               | EJBCA deployment strategy type.                                                                                                                                                                            | `RollingUpdate`         |
-| `persistence.enabled`                               | Whether to enable persistence based on Persistent Volume Claims                                                                                                                                            | `true`                  |
-| `persistence.accessModes`                           | Persistent Volume access modes                                                                                                                                                                             | `[]`                    |
-| `persistence.size`                                  | Size of the PVC to request                                                                                                                                                                                 | `2Gi`                   |
-| `persistence.storageClass`                          | PVC Storage Class                                                                                                                                                                                          | `""`                    |
-| `persistence.existingClaim`                         | Name of an existing PVC to reuse                                                                                                                                                                           | `""`                    |
-| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                                                                                                                        | `{}`                    |
-| `sidecars`                                          | Attach additional sidecar containers to the pod                                                                                                                                                            | `[]`                    |
-| `initContainers`                                    | Additional init containers to add to the pods                                                                                                                                                              | `[]`                    |
-| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                         | `false`                 |
-| `hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                | `[]`                    |
-| `priorityClassName`                                 | EJBCA pods' priorityClassName                                                                                                                                                                              | `""`                    |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                                                                                             | `""`                    |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                             | `[]`                    |
-| `ejbcaAdminUsername`                                | EJBCA administrator username                                                                                                                                                                               | `bitnami`               |
-| `ejbcaAdminPassword`                                | Password for the administrator account                                                                                                                                                                     | `""`                    |
-| `existingSecret`                                    | Alternatively, you can provide the name of an existing secret containing                                                                                                                                   | `""`                    |
-| `ejbcaJavaOpts`                                     | Options used to launch the WildFly server                                                                                                                                                                  | `""`                    |
-| `ejbcaCA.name`                                      | Name of the CA EJBCA will instantiate by default                                                                                                                                                           | `ManagementCA`          |
-| `ejbcaCA.baseDN`                                    | Base DomainName of the CA EJBCA will instantiate by default                                                                                                                                                | `""`                    |
-| `ejbcaKeystoreExistingSecret`                       | Name of an existing Secret containing a Keystore object                                                                                                                                                    | `""`                    |
-| `extraEnvVars`                                      | Array with extra environment variables to add to EJBCA nodes                                                                                                                                               | `[]`                    |
-| `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for EJBCA nodes                                                                                                                                       | `""`                    |
-| `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for EJBCA nodes                                                                                                                                          | `""`                    |
-| `command`                                           | Custom command to override image cmd                                                                                                                                                                       | `[]`                    |
-| `args`                                              | Custom args for the custom command                                                                                                                                                                         | `[]`                    |
-| `lifecycleHooks`                                    | for the EJBCA container(s) to automate configuration before or after startup                                                                                                                               | `{}`                    |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`                  |
-| `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                          | `{}`                    |
-| `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                                                                                                                 | `true`                  |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                           | `nil`                   |
-| `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                                                                                                                           | `1001`                  |
-| `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                                                                                                   | `true`                  |
-| `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                                                                                                        | `false`                 |
-| `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                                                                                                          | `false`                 |
-| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                         | `["ALL"]`               |
-| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                           | `RuntimeDefault`        |
-| `startupProbe.enabled`                              | Enable/disable startupProbe                                                                                                                                                                                | `false`                 |
-| `startupProbe.initialDelaySeconds`                  | Delay before startup probe is initiated                                                                                                                                                                    | `500`                   |
-| `startupProbe.periodSeconds`                        | How often to perform the probe                                                                                                                                                                             | `10`                    |
-| `startupProbe.timeoutSeconds`                       | When the probe times out                                                                                                                                                                                   | `5`                     |
-| `startupProbe.failureThreshold`                     | Minimum consecutive failures for the probe                                                                                                                                                                 | `6`                     |
-| `startupProbe.successThreshold`                     | Minimum consecutive successes for the probe                                                                                                                                                                | `1`                     |
-| `livenessProbe.enabled`                             | Enable/disable livenessProbe                                                                                                                                                                               | `true`                  |
-| `livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated                                                                                                                                                                   | `500`                   |
-| `livenessProbe.periodSeconds`                       | How often to perform the probe                                                                                                                                                                             | `10`                    |
-| `livenessProbe.timeoutSeconds`                      | When the probe times out                                                                                                                                                                                   | `5`                     |
-| `livenessProbe.failureThreshold`                    | Minimum consecutive failures for the probe                                                                                                                                                                 | `6`                     |
-| `livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe                                                                                                                                                                | `1`                     |
-| `readinessProbe.enabled`                            | Enable/disable readinessProbe                                                                                                                                                                              | `true`                  |
-| `readinessProbe.initialDelaySeconds`                | Delay before readiness probe is initiated                                                                                                                                                                  | `500`                   |
-| `readinessProbe.periodSeconds`                      | How often to perform the probe                                                                                                                                                                             | `10`                    |
-| `readinessProbe.timeoutSeconds`                     | When the probe times out                                                                                                                                                                                   | `5`                     |
-| `readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                                                                                                                 | `6`                     |
-| `readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                                                                                                                | `1`                     |
-| `customStartupProbe`                                | Custom startup probe to execute (when the main one is disabled)                                                                                                                                            | `{}`                    |
-| `customLivenessProbe`                               | Custom liveness probe to execute (when the main one is disabled)                                                                                                                                           | `{}`                    |
-| `customReadinessProbe`                              | Custom readiness probe to execute (when the main one is disabled)                                                                                                                                          | `{}`                    |
-| `containerPorts`                                    | EJBCA Container ports to open                                                                                                                                                                              | `{}`                    |
-| `serviceAccount.create`                             | Enable creation of ServiceAccount for WordPress pod                                                                                                                                                        | `true`                  |
-| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                     | `""`                    |
-| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                     | `false`                 |
-| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                       | `{}`                    |
-
-### Service parameters
-
-| Name                               | Description                                                                   | Value          |
-| ---------------------------------- | ----------------------------------------------------------------------------- | -------------- |
-| `service.type`                     | Kubernetes Service type                                                       | `LoadBalancer` |
-| `service.ports.http`               | Service HTTP port                                                             | `8080`         |
-| `service.ports.https`              | Service HTTPS port                                                            | `8443`         |
-| `service.advertisedHttpsPort`      | Port number used in the rendered URLs for the admistrator login.              | `443`          |
-| `service.httpsTargetPort`          | Service Target HTTPS port                                                     | `https`        |
-| `service.nodePorts`                | Node Ports to expose                                                          | `{}`           |
-| `service.clusterIP`                | EJBCA service Cluster IP                                                      | `""`           |
-| `service.loadBalancerIP`           | EJBCA service Load Balancer IP                                                | `""`           |
-| `service.externalTrafficPolicy`    | Enable client source IP preservation                                          | `Cluster`      |
-| `service.annotations`              | Service annotations                                                           | `{}`           |
-| `service.loadBalancerSourceRanges` | Limits which cidr blocks can connect to service's load balancer               | `[]`           |
-| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `[]`           |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`         |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`           |
-
-### Ingress parameters
-
-| Name                       | Description                                                                                                                      | Value                    |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `ingress.enabled`          | Enable ingress controller resource                                                                                               | `false`                  |
-| `ingress.pathType`         | Ingress Path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`       | Override API Version (automatically detected if not set)                                                                         | `""`                     |
-| `ingress.hostname`         | Default host for the ingress resource                                                                                            | `ejbca.local`            |
-| `ingress.path`             | The Path to EJBCA. You may need to set this to '/*' in order to use this                                                         | `/`                      |
-| `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`              | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
-| `ingress.extraHosts`       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
-| `ingress.extraPaths`       | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
-| `ingress.extraTls`         | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
-| `ingress.secrets`          | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
-| `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
-
-### Database parameters
-
-| Name                                        | Description                                                                                | Value           |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.      | `true`          |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                       | `standalone`    |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                       | `""`            |
-| `mariadb.auth.database`                     | Database name to create                                                                    | `bitnami_ejbca` |
-| `mariadb.auth.username`                     | Database user to create                                                                    | `bn_ejbca`      |
-| `mariadb.auth.password`                     | Password for the database                                                                  | `""`            |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                      | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                            | `""`            |
-| `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                              | `ReadWriteOnce` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                            | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)   | `""`            |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                   | `""`            |
-| `externalDatabase.host`                     | Host of the external database                                                              | `localhost`     |
-| `externalDatabase.user`                     | non-root Username for EJBCA Database                                                       | `bn_ejbca`      |
-| `externalDatabase.password`                 | Password for the above username                                                            | `""`            |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key | `""`            |
-| `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca` |
-| `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
-
-### NetworkPolicy parameters
-
-| Name                                                          | Description                                                                                                               | Value   |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                   | `false` |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                 | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.             | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                         | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by EJBCA's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                          | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes EJBCA only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access EJBCA. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access EJBCA. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                        | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                            | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                | `{}`    |
-
-The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca) image documentation.
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```console
-helm install my-release \
-  --set ejbcaAdminUsername=admin,ejbcaAdminPassword=password,mariadb.auth.password=secretpassword \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-The above command sets the EJBCA administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `bn_ejbca` user password to `secretpassword`.
-
-> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
-
-Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
-
-```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ejbca
-```
-
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/ejbca/values.yaml)
-
 ## Configuration and installation details
 
 ### Resource requests and limits
@@ -369,11 +139,247 @@ The [Bitnami EJBCA](https://github.com/bitnami/containers/tree/main/bitnami/disc
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube. See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
+## Parameters
+
+### Global parameters
+
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+
+### Common parameters
+
+| Name                     | Description                                                                             | Value          |
+| ------------------------ | --------------------------------------------------------------------------------------- | -------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
+| `nameOverride`           | String to partially override ebjca.fullname template (will maintain the release name)   | `""`           |
+| `fullnameOverride`       | String to fully override ebjca.fullname template                                        | `""`           |
+| `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`           |
+| `commonLabels`           | Add labels to all the deployed resources                                                | `{}`           |
+| `commonAnnotations`      | Annotations to be added to all deployed resources                                       | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
+
+### EJBCA parameters
+
+| Name                                                | Description                                                                                                                                                                                                       | Value                   |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                                    | EJBCA image registry                                                                                                                                                                                              | `REGISTRY_NAME`         |
+| `image.repository`                                  | EJBCA image name                                                                                                                                                                                                  | `REPOSITORY_NAME/ejbca` |
+| `image.digest`                                      | EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                       | `""`                    |
+| `image.pullPolicy`                                  | EJBCA image pull policy                                                                                                                                                                                           | `IfNotPresent`          |
+| `image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                  | `[]`                    |
+| `image.debug`                                       | Enable image debug mode                                                                                                                                                                                           | `false`                 |
+| `replicaCount`                                      | Number of EJBCA replicas to deploy                                                                                                                                                                                | `1`                     |
+| `extraVolumeMounts`                                 | Additional volume mounts (used along with `extraVolumes`)                                                                                                                                                         | `[]`                    |
+| `extraVolumes`                                      | Array of extra volumes to be added deployment. Requires setting `extraVolumeMounts`                                                                                                                               | `[]`                    |
+| `podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                        | `{}`                    |
+| `podLabels`                                         | Additional pod labels                                                                                                                                                                                             | `{}`                    |
+| `podSecurityContext.enabled`                        | Enable security context for EJBCA container                                                                                                                                                                       | `true`                  |
+| `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                | `Always`                |
+| `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`                    |
+| `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                       | `[]`                    |
+| `podSecurityContext.fsGroup`                        | Group ID for the volumes of the pod                                                                                                                                                                               | `1001`                  |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                               | `""`                    |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                          | `soft`                  |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                         | `""`                    |
+| `nodeAffinityPreset.key`                            | Node label key to match Ignored if `affinity` is set.                                                                                                                                                             | `""`                    |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                         | `[]`                    |
+| `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                       | `{}`                    |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                                    | `{}`                    |
+| `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                    |
+| `updateStrategy.type`                               | EJBCA deployment strategy type.                                                                                                                                                                                   | `RollingUpdate`         |
+| `persistence.enabled`                               | Whether to enable persistence based on Persistent Volume Claims                                                                                                                                                   | `true`                  |
+| `persistence.accessModes`                           | Persistent Volume access modes                                                                                                                                                                                    | `[]`                    |
+| `persistence.size`                                  | Size of the PVC to request                                                                                                                                                                                        | `2Gi`                   |
+| `persistence.storageClass`                          | PVC Storage Class                                                                                                                                                                                                 | `""`                    |
+| `persistence.existingClaim`                         | Name of an existing PVC to reuse                                                                                                                                                                                  | `""`                    |
+| `persistence.annotations`                           | Persistent Volume Claim annotations                                                                                                                                                                               | `{}`                    |
+| `sidecars`                                          | Attach additional sidecar containers to the pod                                                                                                                                                                   | `[]`                    |
+| `initContainers`                                    | Additional init containers to add to the pods                                                                                                                                                                     | `[]`                    |
+| `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                | `false`                 |
+| `hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                       | `[]`                    |
+| `priorityClassName`                                 | EJBCA pods' priorityClassName                                                                                                                                                                                     | `""`                    |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                                                                                                                                    | `""`                    |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                                                                                                    | `[]`                    |
+| `ejbcaAdminUsername`                                | EJBCA administrator username                                                                                                                                                                                      | `bitnami`               |
+| `ejbcaAdminPassword`                                | Password for the administrator account                                                                                                                                                                            | `""`                    |
+| `existingSecret`                                    | Alternatively, you can provide the name of an existing secret containing                                                                                                                                          | `""`                    |
+| `ejbcaJavaOpts`                                     | Options used to launch the WildFly server                                                                                                                                                                         | `""`                    |
+| `ejbcaCA.name`                                      | Name of the CA EJBCA will instantiate by default                                                                                                                                                                  | `ManagementCA`          |
+| `ejbcaCA.baseDN`                                    | Base DomainName of the CA EJBCA will instantiate by default                                                                                                                                                       | `""`                    |
+| `ejbcaKeystoreExistingSecret`                       | Name of an existing Secret containing a Keystore object                                                                                                                                                           | `""`                    |
+| `extraEnvVars`                                      | Array with extra environment variables to add to EJBCA nodes                                                                                                                                                      | `[]`                    |
+| `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for EJBCA nodes                                                                                                                                              | `""`                    |
+| `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for EJBCA nodes                                                                                                                                                 | `""`                    |
+| `command`                                           | Custom command to override image cmd                                                                                                                                                                              | `[]`                    |
+| `args`                                              | Custom args for the custom command                                                                                                                                                                                | `[]`                    |
+| `lifecycleHooks`                                    | for the EJBCA container(s) to automate configuration before or after startup                                                                                                                                      | `{}`                    |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `xlarge`                |
+| `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                    |
+| `containerSecurityContext.enabled`                  | Enabled EJBCA containers' Security Context                                                                                                                                                                        | `true`                  |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`                   |
+| `containerSecurityContext.runAsUser`                | Set EJBCA containers' Security Context runAsUser                                                                                                                                                                  | `1001`                  |
+| `containerSecurityContext.runAsGroup`               | Set EJBCA containers' Security Context runAsGroup                                                                                                                                                                 | `1001`                  |
+| `containerSecurityContext.runAsNonRoot`             | Set Controller container's Security Context runAsNonRoot                                                                                                                                                          | `true`                  |
+| `containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                                                                                                                               | `false`                 |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set primary container's Security Context readOnlyRootFilesystem                                                                                                                                                   | `true`                  |
+| `containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                                                                                                                 | `false`                 |
+| `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                | `["ALL"]`               |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`        |
+| `startupProbe.enabled`                              | Enable/disable startupProbe                                                                                                                                                                                       | `false`                 |
+| `startupProbe.initialDelaySeconds`                  | Delay before startup probe is initiated                                                                                                                                                                           | `500`                   |
+| `startupProbe.periodSeconds`                        | How often to perform the probe                                                                                                                                                                                    | `10`                    |
+| `startupProbe.timeoutSeconds`                       | When the probe times out                                                                                                                                                                                          | `5`                     |
+| `startupProbe.failureThreshold`                     | Minimum consecutive failures for the probe                                                                                                                                                                        | `6`                     |
+| `startupProbe.successThreshold`                     | Minimum consecutive successes for the probe                                                                                                                                                                       | `1`                     |
+| `livenessProbe.enabled`                             | Enable/disable livenessProbe                                                                                                                                                                                      | `true`                  |
+| `livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated                                                                                                                                                                          | `500`                   |
+| `livenessProbe.periodSeconds`                       | How often to perform the probe                                                                                                                                                                                    | `10`                    |
+| `livenessProbe.timeoutSeconds`                      | When the probe times out                                                                                                                                                                                          | `5`                     |
+| `livenessProbe.failureThreshold`                    | Minimum consecutive failures for the probe                                                                                                                                                                        | `6`                     |
+| `livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe                                                                                                                                                                       | `1`                     |
+| `readinessProbe.enabled`                            | Enable/disable readinessProbe                                                                                                                                                                                     | `true`                  |
+| `readinessProbe.initialDelaySeconds`                | Delay before readiness probe is initiated                                                                                                                                                                         | `500`                   |
+| `readinessProbe.periodSeconds`                      | How often to perform the probe                                                                                                                                                                                    | `10`                    |
+| `readinessProbe.timeoutSeconds`                     | When the probe times out                                                                                                                                                                                          | `5`                     |
+| `readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                                                                                                                        | `6`                     |
+| `readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                                                                                                                       | `1`                     |
+| `customStartupProbe`                                | Custom startup probe to execute (when the main one is disabled)                                                                                                                                                   | `{}`                    |
+| `customLivenessProbe`                               | Custom liveness probe to execute (when the main one is disabled)                                                                                                                                                  | `{}`                    |
+| `customReadinessProbe`                              | Custom readiness probe to execute (when the main one is disabled)                                                                                                                                                 | `{}`                    |
+| `containerPorts`                                    | EJBCA Container ports to open                                                                                                                                                                                     | `{}`                    |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for EJBCA container(s)                                                                                                                                          | `[]`                    |
+| `serviceAccount.create`                             | Enable creation of ServiceAccount for EJBCA pod                                                                                                                                                                   | `true`                  |
+| `serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                            | `""`                    |
+| `serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                                                                                            | `false`                 |
+| `serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                              | `{}`                    |
+
+### Service parameters
+
+| Name                               | Description                                                                   | Value          |
+| ---------------------------------- | ----------------------------------------------------------------------------- | -------------- |
+| `service.type`                     | Kubernetes Service type                                                       | `LoadBalancer` |
+| `service.ports.http`               | Service HTTP port                                                             | `8080`         |
+| `service.ports.https`              | Service HTTPS port                                                            | `8443`         |
+| `service.advertisedHttpsPort`      | Port number used in the rendered URLs for the admistrator login.              | `443`          |
+| `service.httpsTargetPort`          | Service Target HTTPS port                                                     | `https`        |
+| `service.nodePorts`                | Node Ports to expose                                                          | `{}`           |
+| `service.clusterIP`                | EJBCA service Cluster IP                                                      | `""`           |
+| `service.loadBalancerIP`           | EJBCA service Load Balancer IP                                                | `""`           |
+| `service.externalTrafficPolicy`    | Enable client source IP preservation                                          | `Cluster`      |
+| `service.annotations`              | Service annotations                                                           | `{}`           |
+| `service.loadBalancerSourceRanges` | Limits which cidr blocks can connect to service's load balancer               | `[]`           |
+| `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value) | `[]`           |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`         |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`           |
+
+### Ingress parameters
+
+| Name                       | Description                                                                                                                      | Value                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `ingress.enabled`          | Enable ingress controller resource                                                                                               | `false`                  |
+| `ingress.pathType`         | Ingress Path type                                                                                                                | `ImplementationSpecific` |
+| `ingress.apiVersion`       | Override API Version (automatically detected if not set)                                                                         | `""`                     |
+| `ingress.hostname`         | Default host for the ingress resource                                                                                            | `ejbca.local`            |
+| `ingress.path`             | The Path to EJBCA. You may need to set this to '/*' in order to use this                                                         | `/`                      |
+| `ingress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `ingress.tls`              | Enable TLS configuration for the hostname defined at ingress.hostname parameter                                                  | `false`                  |
+| `ingress.extraHosts`       | The list of additional hostnames to be covered with this ingress record.                                                         | `[]`                     |
+| `ingress.extraPaths`       | Any additional arbitrary paths that may need to be added to the ingress under the main host.                                     | `[]`                     |
+| `ingress.extraTls`         | The tls configuration for additional hostnames to be covered with this ingress record.                                           | `[]`                     |
+| `ingress.secrets`          | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
+| `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `ingress.extraRules`       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+
+### Database parameters
+
+| Name                                        | Description                                                                                                                                                                                                                | Value           |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                                                                                                                                      | `true`          |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                                                                                                                                                       | `standalone`    |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                                                                                                                       | `""`            |
+| `mariadb.auth.database`                     | Database name to create                                                                                                                                                                                                    | `bitnami_ejbca` |
+| `mariadb.auth.username`                     | Database user to create                                                                                                                                                                                                    | `bn_ejbca`      |
+| `mariadb.auth.password`                     | Password for the database                                                                                                                                                                                                  | `""`            |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                                                                                                                      | `true`          |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                                                                                                                            | `""`            |
+| `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                                                                                                                                                              | `ReadWriteOnce` |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                                                                                                                            | `8Gi`           |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                                                                                                   | `""`            |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                                                                                                                                   | `""`            |
+| `mariadb.primary.resourcesPreset`           | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`         |
+| `mariadb.primary.resources`                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`            |
+| `externalDatabase.host`                     | Host of the external database                                                                                                                                                                                              | `localhost`     |
+| `externalDatabase.user`                     | non-root Username for EJBCA Database                                                                                                                                                                                       | `bn_ejbca`      |
+| `externalDatabase.password`                 | Password for the above username                                                                                                                                                                                            | `""`            |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key                                                                                                                                 | `""`            |
+| `externalDatabase.database`                 | Name of the existing database                                                                                                                                                                                              | `bitnami_ejbca` |
+| `externalDatabase.port`                     | Database port number                                                                                                                                                                                                       | `3306`          |
+
+### NetworkPolicy parameters
+
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
+
+The above parameters map to the env variables defined in [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca). For more information please refer to the [bitnami/ejbca](https://github.com/bitnami/containers/tree/main/bitnami/ejbca) image documentation.
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
+```console
+helm install my-release \
+  --set ejbcaAdminUsername=admin,ejbcaAdminPassword=password,mariadb.auth.password=secretpassword \
+    oci://REGISTRY_NAME/REPOSITORY_NAME/discourse
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+The above command sets the EJBCA administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `bn_ejbca` user password to `secretpassword`.
+
+> NOTE: Once this chart is deployed, it is not possible to change the application's access credentials, such as usernames or passwords, using Helm. To change these application credentials after deployment, delete any persistent volumes (PVs) used by the chart and re-deploy it, or use the application's built-in administrative tools if available.
+
+Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
+
+```console
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ejbca
+```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/ejbca/values.yaml)
+
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 14.0.0
+
+This major release bumps the MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
+### To 13.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 12.0.0
 

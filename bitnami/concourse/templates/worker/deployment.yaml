@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -214,8 +214,16 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-            - name: concourse-work-dir
+            # In this kind of deployment, the state is ephemeral
+            - name: empty-dir
               mountPath: /bitnami/concourse/workdir
+              subPath: app-work-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /var/run/containerd
+              subPath: containerd-dir
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
               readOnly: true
@@ -226,8 +234,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        # In this kind of deployment, the state is ephemeral
-        - name: concourse-work-dir
+        - name: empty-dir
           emptyDir: {}
         - name: concourse-keys
           secret:

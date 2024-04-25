@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,6 +32,7 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: supervisor
+        app.kubernetes.io/part-of: pinniped
     spec:
       serviceAccountName: {{ template "pinniped.supervisor.serviceAccountName" . }}
       {{- include "pinniped.imagePullSecrets" . | nindent 6 }}
@@ -113,6 +114,8 @@ spec:
           ports:
             - name: https
               containerPort: {{ .Values.supervisor.containerPorts.https }}
+            - name: https-api
+              containerPort: {{ .Values.supervisor.containerPorts.api }}
           {{- if .Values.supervisor.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.supervisor.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.supervisor.livenessProbe.enabled }}

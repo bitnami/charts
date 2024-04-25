@@ -1,0 +1,63 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.s3.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "seaweedfs.s3.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: s3
+  {{- if or .Values.s3.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.s3.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.s3.service.type }}
+  {{- if and .Values.s3.service.clusterIP (eq .Values.s3.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.s3.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.s3.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.s3.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.s3.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.s3.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.s3.service.type "LoadBalancer") (eq .Values.s3.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.s3.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.s3.service.type "LoadBalancer") (not (empty .Values.s3.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.s3.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.s3.service.type "LoadBalancer") (not (empty .Values.s3.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.s3.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.s3.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.s3.service.type "NodePort") (eq .Values.s3.service.type "LoadBalancer")) (not (empty .Values.s3.service.nodePorts.http)) }}
+      nodePort: {{ .Values.s3.service.nodePorts.http }}
+      {{- else if eq .Values.s3.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.s3.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.s3.service.type "NodePort") (eq .Values.s3.service.type "LoadBalancer")) (not (empty .Values.s3.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.s3.service.nodePorts.grpc }}
+      {{- else if eq .Values.s3.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.s3.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.s3.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.s3.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: s3
+{{- end }}

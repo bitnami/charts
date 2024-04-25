@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -30,14 +30,18 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive-distributor
+      {{- if or .Values.receiveDistributor.podAnnotations (include "thanos.receive.createConfigmap" .) (include "thanos.createObjstoreSecret" .) }}
       annotations:
-        checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
+        checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
+        {{- end }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
-        checksum/receive-configuration: {{ include (print $.Template.BasePath "/receive/configmap.yaml") . | sha256sum }}
+        checksum/receive-configuration: {{ include "thanos.receiveConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.receiveDistributor.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "thanos.receive-distributor.serviceAccountName" . }}

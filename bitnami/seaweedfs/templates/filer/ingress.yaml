@@ -1,0 +1,62 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.filer.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "seaweedfs.filer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master
+  {{- if or .Values.filer.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.filer.ingress.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.filer.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.filer.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if or .Values.filer.ingress.hostname .Values.filer.ingress.path }}
+    - http:
+        paths:
+          {{- if .Values.filer.ingress.extraPaths }}
+          {{- toYaml .Values.filer.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.filer.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.filer.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.filer.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+      {{- if not (empty .Values.filer.ingress.hostname )}}
+      host: {{ .Values.filer.ingress.hostname }}
+      {{- end }}
+    {{- end }}
+    {{- range .Values.filer.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.filer.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.filer.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.filer.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.filer.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.filer.ingress.annotations )) .Values.filer.ingress.selfSigned)) .Values.filer.ingress.extraTls }}
+  tls:
+    {{- if and .Values.filer.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.filer.ingress.annotations )) .Values.filer.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.filer.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.filer.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.filer.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.filer.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

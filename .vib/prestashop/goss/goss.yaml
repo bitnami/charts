@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
@@ -12,6 +12,7 @@ http:
 command:
   prestashop-cli-list-commands:
     exec: /opt/bitnami/php/bin/php /opt/bitnami/prestashop/bin/console prestashop:config get PS_COOKIE_CHECKIP
+    timeout: 20000
     exit-status: 0
     stdout:
       - /PS_COOKIE_CHECKIP={{ (eq .Vars.prestashopCookieCheckIP "yes") | int }}/

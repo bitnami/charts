@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -23,6 +23,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
+  {{- if .Values.metrics.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     - ports:
         # Allow dns resolution
@@ -33,6 +37,7 @@ spec:
     {{- if .Values.metrics.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
   ingress:
     - ports:
         - port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.httpPort }}

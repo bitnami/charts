@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,6 +32,12 @@ spec:
   logFormat: {{ .Values.alertmanager.logFormat }}
   logLevel: {{ .Values.alertmanager.logLevel }}
   retention: {{ .Values.alertmanager.retention }}
+  {{- if .Values.alertmanager.enableFeatures }}
+  enableFeatures:
+    {{- range .Values.alertmanager.enableFeatures }}
+    - {{ . | quote }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.alertmanager.secrets }}
   secrets: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.secrets "context" $) | nindent 4 }}
   {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -21,6 +21,9 @@ spec:
     - Ingress
     - Egress
   egress:
+    {{- if .Values.operator.networkPolicy.allowExternalEgress }}
+    - {}
+    {{- else }}
     - ports:
         # Allow dns resolution
         - port: 53
@@ -36,9 +39,12 @@ spec:
     {{- if .Values.operator.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.operator.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- end }}
   ingress:
     - ports:
         - port: {{ .Values.operator.containerPorts.metrics }}
+        # Allow access to Grafana. As it does not have a label to identify its created grafana instances, we will use the standard grafana port (currently hardcoded in the operator)
+        - port: 3000
       {{- if not .Values.operator.networkPolicy.allowExternal }}
       from:
         - podSelector:

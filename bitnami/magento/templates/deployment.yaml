@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -148,13 +148,7 @@ spec:
               value: ""
               {{- end }}
             - name: ELASTICSEARCH_PORT_NUMBER
-              {{- if .Values.elasticsearch.enabled }}
-              value: "9200"
-              {{- else if .Values.externalElasticsearch.port }}
-              value: {{ .Values.externalElasticsearch.port | quote }}
-              {{- else }}
-              value: ""
-              {{- end }}
+              value: {{ include "magento.elasticsearch.port" . | quote }}
             - name: MAGENTO_SKIP_BOOTSTRAP
               value: {{ ternary "yes" "no" .Values.magentoSkipInstall | quote }}
             {{- $port:=.Values.service.ports.http | toString }}
@@ -224,12 +218,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /index.php
+            tcpSocket:
               port: http
-              httpHeaders:
-                - name: Host
-                  value: {{ include "magento.host" . | quote }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}

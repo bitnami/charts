@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,6 +39,7 @@ spec:
     - name: compact
       port: {{ .Values.agent.service.ports.compact }}
       targetPort: {{ .Values.agent.containerPorts.compact }}
+      protocol: UDP
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.compact)) }}
       nodePort: {{ .Values.agent.service.nodePorts.compact }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
@@ -47,6 +48,7 @@ spec:
     - name: binary
       port: {{ .Values.agent.service.ports.binary }}
       targetPort: {{ .Values.agent.containerPorts.binary }}
+      protocol: UDP
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.binary)) }}
       nodePort: {{ .Values.agent.service.nodePorts.binary }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}
@@ -63,6 +65,7 @@ spec:
     - name: zipkin
       port: {{ .Values.agent.service.ports.zipkin }}
       targetPort: {{ .Values.agent.containerPorts.zipkin }}
+      protocol: UDP
       {{- if and (or (eq .Values.agent.service.type "NodePort") (eq .Values.agent.service.type "LoadBalancer")) (not (empty .Values.agent.service.nodePorts.zipkin)) }}
       nodePort: {{ .Values.agent.service.nodePorts.zipkin }}
       {{- else if eq .Values.agent.service.type "ClusterIP" }}

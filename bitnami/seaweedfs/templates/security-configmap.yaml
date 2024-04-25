@@ -1,0 +1,89 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.security.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-security" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  security.toml: |-
+    # Security configuration
+    # Shared between master, volume and filer servers
+
+    # comma separated origins allowed to make requests to the filer and s3 gateway. 
+    # enter in this format: https://domain.com, or http://localhost:port
+    [cors.allowed_origins]
+    values = {{ .Values.security.corsAllowedOrigins | quote }}
+
+    {{- if .Values.security.jwtSigning.volumeWrite }}
+    # this jwt signing key is read by master and volume server, and it is used for write operations:
+    # - the Master server generates the JWT, which can be used to write a certain file on a volume server
+    # - the Volume server validates the JWT on writing
+    # the jwt defaults to expire after 10 seconds.
+    [jwt.signing]
+    key = {{ randAlphaNum 10 | b64enc | quote }}
+    {{- end }}
+
+    {{- if .Values.security.jwtSigning.volumeRead }}
+    # this jwt signing key is read by master and volume server, and it is used for read operations:
+    # - the Master server generates the JWT, which can be used to read a certain file on a volume server
+    # - the Volume server validates the JWT on reading
+    # NOTE: jwt for read is only supported with master+volume setup. Filer does not support this mode.
+    [jwt.signing.read]
+    key = {{ randAlphaNum 10 | b64enc | quote }}
+    {{- end }}
+
+    {{- if and .Values.filer.enabled .Values.security.jwtSigning.filerWrite }}
+    # If this JWT key is configured, Filer only accepts writes over HTTP if they are signed with this JWT:
+    # - f.e. the S3 API Shim generates the JWT
+    # - the Filer server validates the JWT on writing
+    # the jwt defaults to expire after 10 seconds.
+    [jwt.filer_signing]
+    key = {{ randAlphaNum 10 | b64enc | quote }}
+    {{- end }}
+
+    {{- if and .Values.filer.enabled .Values.security.jwtSigning.filerRead }}
+    # If this JWT key is configured, Filer only accepts reads over HTTP if they are signed with this JWT:
+    # - f.e. the S3 API Shim generates the JWT
+    # - the Filer server validates the JWT on writing
+    # the jwt defaults to expire after 10 seconds.
+    [jwt.filer_signing.read]
+    key = {{ randAlphaNum 10 | b64enc | quote }}
+    {{- end }}
+
+    {{- if .Values.security.mTLS.enabled }}
+    # all grpc tls authentications are mutual
+    # the values for the following ca, cert, and key are paths to the PERM files.
+    # the host name is not checked, so the PERM files can be shared.
+    [grpc]
+    ca = "/certs/ca/tls.crt"
+
+    [grpc.volume]
+    cert = "/certs/volume/tls.crt"
+    key  = "/certs/volume/tls.key"
+
+    [grpc.master]
+    cert = "/certs/master/tls.crt"
+    key  = "/certs/master/tls.key"
+
+    {{- if .Values.filer.enabled }}
+    [grpc.filer]
+    cert = "/certs/filer/tls.crt"
+    key  = "/certs/filer/tls.key"
+    {{- end }}
+
+    # use this for any place needs a grpc client
+    # i.e., "weed backup|benchmark|filer.copy|filer.replicate|mount|s3|upload"
+    [grpc.client]
+    cert = "/certs/client/tls.crt"
+    key  = "/certs/client/tls.key"
+    {{- end }}
+{{- end }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluent-bit
-  tag: 2.2.2-debian-12-r7
+  tag: 3.0.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -105,9 +105,6 @@ daemonset:
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param daemonset.podSecurityContext.enabled Enable security context for daemonset pods
-  ## @param daemonset.podSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param daemonset.podSecurityContext.runAsUser User ID for daemonset containers
-  ## @param daemonset.podSecurityContext.runAsGroup Group ID for daemonset containers
   ## @param daemonset.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
   ## @param daemonset.podSecurityContext.sysctls Set kernel settings using the sysctl interface
   ## @param daemonset.podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -115,9 +112,6 @@ daemonset:
   ##
   podSecurityContext:
     enabled: true
-    seLinuxOptions: null
-    runAsUser: 0
-    runAsGroup: 0
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
@@ -233,10 +227,10 @@ customReadinessProbe: {}
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "nano"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -334,7 +328,7 @@ networkPolicy:
   ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
   ##
   kubeAPIServerPorts: [443, 6443, 8443]
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -416,13 +410,13 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
-  runAsGroup: 0
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
   seccompProfile:
@@ -517,7 +511,7 @@ config:
     [SERVICE]
         Flush        {{ .Values.config.flush }}
         Daemon       Off
-        LogLevel     {{ .Values.config.logLevel }}
+        Log_Level    {{ .Values.config.logLevel }}
         Config_Watch On
         HTTP_Server  On
         HTTP_Listen  0.0.0.0

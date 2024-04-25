@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -140,8 +140,10 @@ spec:
               containerPort: {{ .Values.dataPlane.containerPorts.https }}
             - name: http-control
               containerPort: {{ .Values.dataPlane.containerPorts.control }}
+            {{- if .Values.dataPlane.metrics.enabled }}
             - name: http-metrics
               containerPort: {{ .Values.dataPlane.containerPorts.metrics }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.dataPlane.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customLivenessProbe "context" $) | nindent 12 }}
@@ -178,9 +180,11 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+           {{- if .Values.dataPlane.tls.enabled }}
             - name: certs
               mountPath: /bitnami/certs
-           {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
+           {{- end }}
+           {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled}}
             - name: control-plane-certs
               mountPath: /etc/ssl/certs/{{ .Values.controlPlane.tls.certCAFilename }}
               subPath: {{ .Values.controlPlane.tls.certCAFilename }}
@@ -207,7 +211,7 @@ spec:
         {{- end }}
         - name: empty-dir
           emptyDir: {}
-        {{- if or .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
+        {{- if and .Values.controlPlane.enabled .Values.controlPlane.tls.enabled }}
         - name: control-plane-certs
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}

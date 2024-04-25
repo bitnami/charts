@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,14 +18,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  policyTypes:
+    - Ingress
+    - Egress
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: flux
       app.kubernetes.io/component: notification-controller
-  {{- if .Values.notificationController.networkPolicy.extraEgress }}
-  egress: {{- include "common.tplvalues.render" ( dict "value" .Values.notificationController.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
-  {{- end }}
   {{- if .Values.notificationController.networkPolicy.allowExternalEgress }}
   egress:
     - {}
@@ -59,6 +59,8 @@ spec:
     # Allow inbound connections
     - ports:
         - port: {{ .Values.notificationController.containerPorts.health }}
+        - port: {{ .Values.notificationController.containerPorts.receiver }}
+        - port: {{ .Values.notificationController.containerPorts.webhook }}
         {{- if .Values.notificationController.metrics.enabled }}
         - port: {{ .Values.notificationController.containerPorts.metrics }}
         {{- end }}

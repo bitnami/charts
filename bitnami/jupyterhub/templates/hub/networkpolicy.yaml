@@ -1,9 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.hub.networkPolicy.enabled -}}
+{{- if .Values.hub.networkPolicy.enabled }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
@@ -22,32 +22,10 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-  ingress:
-    {{- if .Values.hub.networkPolicy.extraIngress }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.hub.metrics.serviceMonitor.enabled }}
-    # Prometheus pods with label "app.kubernetes.io/component: prometheus" --> Hub
-    - from:
-      - namespaceSelector: {}
-        podSelector:
-          matchLabels:
-            app.kubernetes.io/component: prometheus
-    {{- end }}
-    # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
-    - ports:
-        - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
-      from:
-        - podSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-hub: "true"
-        {{- if .Values.hub.networkPolicy.allowInterspaceAccess }}
-          namespaceSelector:
-            matchLabels: {}
-        - namespaceSelector:
-            matchLabels:
-              hub.jupyter.org/network-access-hub: "true"
-        {{- end }}
+  {{- if .Values.hub.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
   egress:
     # Hub --> Proxy API
     - ports:
@@ -59,7 +37,7 @@ spec:
               app.kubernetes.io/component: proxy
     # Hub --> Single User
     - ports:
-        - port: {{ .Values.singleuser.containerPort }}
+        - port: {{ .Values.singleuser.containerPorts.http }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -79,4 +57,48 @@ spec:
     {{- if .Values.hub.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
+  ingress:
+    # Pods with label "hub.jupyter.org/network-access-hub" --> Hub
+    - ports:
+        - port: {{ .Values.hub.containerPorts.http }}
+      {{- if not .Values.hub.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+        {{- if .Values.hub.networkPolicy.allowInterspaceAccess }}
+          namespaceSelector:
+            matchLabels: {}
+        - namespaceSelector:
+            matchLabels:
+              hub.jupyter.org/network-access-hub: "true"
+        {{- end }}
+        {{- if .Values.proxy.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.proxy.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.proxy.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.proxy.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.hub.metrics.serviceMonitor.enabled }}
+    # Prometheus pods with label "app.kubernetes.io/component: prometheus" --> Hub
+    - from:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            app.kubernetes.io/component: prometheus
+    {{- end }}
+    {{- if .Values.hub.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.hub.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+
 {{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -85,7 +85,8 @@ spec:
           {{- else }}
           args:
             - --v={{ .Values.logLevel }}
-            - --secure-port={{ .Values.webhook.containerPort }}
+            - --secure-port={{ coalesce .Values.webhook.containerPort .Values.webhook.containerPorts.https }}
+            - --healthz-port={{ .Values.webhook.containerPorts.health }}
             - --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
             - --dynamic-serving-ca-secret-name={{ template "certmanager.webhook.fullname" . }}-ca
             - --dynamic-serving-dns-names={{ template "certmanager.webhook.fullname" . }},{{ template "certmanager.webhook.fullname" . }}.{{ .Release.Namespace }},{{ template "certmanager.webhook.fullname" . }}.{{ .Release.Namespace }}.svc
@@ -120,7 +121,9 @@ spec:
           {{- end }}
           ports:
             - name: https
-              containerPort: {{ .Values.webhook.containerPort }}
+              containerPort: {{ coalesce .Values.webhook.containerPort .Values.webhook.containerPorts.https }}
+            - name: health
+              containerPort: {{ .Values.webhook.containerPorts.health }}
           {{- if .Values.webhook.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webhook.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -130,8 +133,8 @@ spec:
           livenessProbe:
              httpGet:
                path: {{ .Values.webhook.livenessProbe.path }}
+               port: {{ .Values.webhook.containerPorts.health }}
                scheme: HTTP
-               port: 6080
              initialDelaySeconds: {{ .Values.webhook.livenessProbe.initialDelaySeconds }}
              periodSeconds: {{ .Values.webhook.livenessProbe.periodSeconds }}
              timeoutSeconds: {{ .Values.webhook.livenessProbe.timeoutSeconds }}
@@ -144,7 +147,7 @@ spec:
           readinessProbe:
              httpGet:
                path: {{ .Values.webhook.readinessProbe.path }}
-               port: 6080
+               port: {{ .Values.webhook.containerPorts.health }}
                scheme: HTTP
              initialDelaySeconds: {{ .Values.webhook.readinessProbe.initialDelaySeconds }}
              periodSeconds: {{ .Values.webhook.readinessProbe.periodSeconds }}

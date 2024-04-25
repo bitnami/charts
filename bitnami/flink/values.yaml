@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/flink
-  tag: 1.18.1-debian-12-r11
+  tag: 1.19.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -197,10 +197,10 @@ jobmanager:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param jobmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if jobmanager.resources is set (jobmanager.resources is recommended for production).
+  ## @param jobmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if jobmanager.resources is set (jobmanager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param jobmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -314,7 +314,7 @@ jobmanager:
     ## @param jobmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param jobmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param jobmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -396,12 +396,12 @@ jobmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     privileged: false
     capabilities:
       drop: ["ALL"]
@@ -579,10 +579,10 @@ taskmanager:
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
   ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  ## @param taskmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if taskmanager.resources is set (taskmanager.resources is recommended for production).
+  ## @param taskmanager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if taskmanager.resources is set (taskmanager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param taskmanager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -599,13 +599,14 @@ taskmanager:
   extraVolumeMounts: []
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param taskmanager.containerPorts.data data exchange port
+  ## @param taskmanager.containerPorts.rpc Port for RPC
+  ## @param taskmanager.containerPorts.internalMetrics Port for internal metrics query service
+  ##
   containerPorts:
-    ## @param taskmanager.containerPorts.data data exchange port
-    ##
     data: 6121
-    ## @param taskmanager.containerPorts.rpc Port for RPC
-    ##
     rpc: 6122
+    internalMetrics: 6126
   ## Apache Flink taskmanager.service parameters
   ##
   service:
@@ -613,23 +614,24 @@ taskmanager:
     ##
     type: ClusterIP
     ## Ports to expose
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param taskmanager.service.ports.data data exchange port
+    ## @param taskmanager.service.ports.rpc Port for RPC
+    ## @param taskmanager.service.ports.internalMetrics Port for internal metrics query service
+    ##
     ports:
-      ## @param taskmanager.service.ports.data data exchange port
-      ##
       data: 6121
-      ## @param taskmanager.service.ports.rpc Port for RPC
-      ##
       rpc: 6122
+      internalMetrics: 6126
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param taskmanager.service.nodePorts.data data exchange port
+    ## @param taskmanager.service.nodePorts.rpc Port for RPC
+    ## @param taskmanager.service.nodePorts.internalMetrics Port for internal metrics query service
+    ##
     nodePorts:
-      ## @param taskmanager.service.nodePorts.data data exchange port
-      ##
       data: ""
-      ## @param taskmanager.service.nodePorts.rpc Port for RPC
-      ##
       rpc: ""
+      internalMetrics: ""
     ## @param taskmanager.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -686,7 +688,7 @@ taskmanager:
     ## @param taskmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param taskmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param taskmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -768,13 +770,13 @@ taskmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop: ["ALL"]
     seccompProfile:
