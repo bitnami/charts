@@ -49,6 +49,7 @@ spec:
     - ports:
         - port: {{ .Values.taskmanager.containerPorts.data }}
         - port: {{ .Values.taskmanager.containerPorts.rpc }}
+        - port: {{ .Values.taskmanager.containerPorts.internalMetrics }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
