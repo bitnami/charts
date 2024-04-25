@@ -129,7 +129,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 7.0.8-debian-12-r2
+  tag: 7.0.8-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -823,6 +823,9 @@ externalAccess:
   ## @param externalAccess.enabled Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)
   ##
   enabled: false
+  ## @param externalAccess.publicNames Array of public names. The size should be equal to the number of replicas.
+  ## 
+  publicNames: []
   ## External IPs auto-discovery configuration
   ## An init container is used to auto-detect LB IPs or node ports by querying the K8s API
   ## Note: RBAC might be required
@@ -918,7 +921,7 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param externalAccess.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+    ## @param externalAccess.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
     ##
     allocateLoadBalancerNodePorts: true
@@ -942,9 +945,16 @@ externalAccess:
     ## @param externalAccess.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param externalAccess.service.annotations Service annotations for external access
+    ## @param externalAccess.service.annotations Service annotations for external access. These annotations are common for all services created.
     ##
     annotations: {}
+    ## @param externalAccess.service.annotationsList Service annotations for eache external service. This value contains a list allowing different annotations per each external service.
+    ## Eg:
+    ##   annotationsList:
+    ##     - external-dns.alpha.kubernetes.io/hostname: mongodb-0.example.com
+    ##     - external-dns.alpha.kubernetes.io/hostname: mongodb-1.example.com
+    ##
+    annotationsList: []
     ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/

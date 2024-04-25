@@ -158,8 +158,8 @@ spec:
             {{- if .Values.externalAccess.hidden.service.loadBalancerIPs }}
             - -i {{ join "," .Values.externalAccess.hidden.service.loadBalancerIPs }}
             {{- end }}
-            {{- if .Values.tls.extraDnsNames }}
-            - -n {{ join "," .Values.tls.extraDnsNames }}
+            {{- if or .Values.tls.extraDnsNames .Values.externalAccess.publicNames }}
+            - -n {{ join "," ( concat  .Values.tls.extraDnsNames .Values.externalAccess.publicNames ) }}
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
