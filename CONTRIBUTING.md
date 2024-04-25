@@ -22,7 +22,7 @@ When submitting a PR make sure that it:
 
 ```yaml
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 ```
@@ -87,7 +87,7 @@ There are five major technical requirements to add a new Helm chart to our catal
 
 ```yaml
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 ```
@@ -95,7 +95,7 @@ SPDX-License-Identifier: APACHE-2.0
 - The exception to the license header rule above are `Chart.yaml` and `values.yaml` files, that use the following format instead:
 
 ```yaml
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 ```
 
