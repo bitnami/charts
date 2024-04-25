@@ -512,7 +512,7 @@ concierge:
     ## @param concierge.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param concierge.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param concierge.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -967,7 +967,7 @@ supervisor:
     ## @param supervisor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param supervisor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param supervisor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

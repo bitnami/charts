@@ -309,7 +309,7 @@ controller:
     ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -846,7 +846,7 @@ applicationSet:
     ## @param applicationSet.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1268,7 +1268,7 @@ notifications:
     ## @param notifications.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1646,7 +1646,7 @@ notifications:
         ## @param notifications.bots.slack.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
         ##
         kubeAPIServerPorts: [443, 6443, 8443]
-        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
         ## e.g:
         ## extraIngress:
         ##   - ports:
@@ -2490,7 +2490,7 @@ server:
     ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2871,7 +2871,7 @@ repoServer:
     ## @param repoServer.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3413,7 +3413,7 @@ dex:
     ## @param dex.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

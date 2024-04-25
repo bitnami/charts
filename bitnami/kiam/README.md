@@ -300,7 +300,7 @@ If managing TLS secrets outside of Helm, it is possible to create a TLS secret (
 | `server.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
 | `server.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                    | `true`      |
 | `server.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
-| `server.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
+| `server.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `server.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `server.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
 | `server.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
@@ -442,7 +442,7 @@ If managing TLS secrets outside of Helm, it is possible to create a TLS secret (
 | `agent.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                          | `true`      |
 | `agent.networkPolicy.allowExternal`           | Don't require server label for connections                                   | `true`      |
 | `agent.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.              | `true`      |
-| `agent.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                 | `[]`        |
+| `agent.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                 | `[]`        |
 | `agent.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                 | `[]`        |
 | `agent.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                       | `{}`        |
 | `agent.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                   | `{}`        |

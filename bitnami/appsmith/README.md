@@ -314,7 +314,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
 | `client.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
 | `client.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
-| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
@@ -604,7 +604,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
 | `rts.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
 | `rts.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
-| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
