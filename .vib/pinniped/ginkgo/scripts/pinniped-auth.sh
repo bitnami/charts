@@ -1,5 +1,5 @@
 #/bin/bash
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 # Run pinniped cli to obtain custom kubeconfig and auth into the cluster
