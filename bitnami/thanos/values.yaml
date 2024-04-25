@@ -3844,7 +3844,7 @@ receive:
   ##     - "127.0.0.1:10901"
   ##
   config: []
-  ## @param receive.tsdbPath path to the time series database
+  ## @param receive.tsdbPath Thanos Receive path to the time series database
   ##
   ## e.g.: /var/thanos/receive
   tsdbPath: ""
