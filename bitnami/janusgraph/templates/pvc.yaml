@@ -11,6 +11,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: janusgraph
+    app.kubernetes.io/part-of: janusgraph
   annotations:
     {{- if .Values.persistence.resourcePolicy }}
     helm.sh/resource-policy: {{ .Values.persistence.resourcePolicy | quote }}

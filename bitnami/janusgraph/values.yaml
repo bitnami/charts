@@ -74,60 +74,66 @@ diagnosticMode:
 
 ## Settings for the the storage backend
 ##
-storage:
+storageBackend:
   ## Cassandra storage backend
   ##
   cassandra:
-    ## @param storage.cassandra.enabled Use Apache Casandra subchart as storage backend
+    ## @param storageBackend.cassandra.enabled Use Apache Casandra subchart as storage backend
     ##
     enabled: true
   ## BerkeleyDB storage backend
   ##
   berkeleyje:
-    ## @param storage.berkeleyje.enabled Use BerkeleyDB (local) as storage backend
+    ## @param storageBackend.berkeleyje.enabled Use BerkeleyDB (local) as storage backend
     ##
     enabled: false
-    ## @param storage.berkeleyje.directory Path for the BerkeleyDB data
+    ## @param storageBackend.berkeleyje.directory Path for the BerkeleyDB data
     ##
     directory: "/bitnami/janusgraph/data/storage"
   ## External storage backend
   ##
   external:
-    ## @param storage.external.backend Type of the external storage backend to be used
+    ## @param storageBackend.external.backend Type of the external storage backend to be used
     ##
     backend: ""
-    ## @param storage.external.hostname Hostname of the external storage backend
+    ## @param storageBackend.external.hostname Hostname of the external storage backend
     ##
     hostname: ""
-    ## @param storage.external.backend Port of the external storage backend
+    ## @param storageBackend.external.port Port of the external storage backend
     ##
     port: ""
-    ## @param storage.external.backend Existing secret containing the password of the external storage backend, in case its needed
+    ## @param storageBackend.external.username Username used to authenticate to the storage backend, in case it requires authentication
+    ##
+    username: ""
+    ## @param storageBackend.external.existingSecret Existing secret containing the password of the external storage backend, in case its needed
     ##
     existingSecret: ""
+    ## @param storageBackend.external.existingSecretPasswordKey Name of an existing secret key containing the storage backend password
+    ##
+    existingSecretPasswordKey: ""
 
 ## Settings for index management
 ##
-index:
+indexBackend:
   ## Lucene index backend
   ##
   lucene:
-    ## @param index.lucene.enabled Use Lucene (local) as index management backend
+    ## @param indexBackend.lucene.enabled Use Lucene (local) as index management backend
     ##
     enabled: false
-    ## @param index.lucene.directory Path for the BerkeleyDB data
+    ## @param indexBackend.lucene.directory Path for the BerkeleyDB data
     ##
     directory: "/bitnami/janusgraph/data/index"
   ## External index backend
   ##
   external:
-    ## @param index.external.backend Type of the external index backend to be used
+    ## @param indexBackend.external.backend Type of the external index backend to be used
     ##
     backend: ""
-    ## @param index.external.hostname Hostname of the external index backend
+    ## @param indexBackend.external.hostname Hostname of the external index backend
     ##
     hostname: ""
-    ## @param index.external.backend Port of the external index backend
+    ## @param indexBackend.external.port Port of the external index backend
     ##
     port: ""
 
@@ -184,7 +190,7 @@ image:
   pullSecrets: []
   ## Enable debug mode
   ##
-  debug: true
+  debug: false
 
 ## @param replicaCount Number of JanusGraph replicas to deploy
 ##
@@ -350,20 +356,6 @@ pdb:
   create: false
   minAvailable: 1
   maxUnavailable: ""
-## Autoscaling configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable autoscaling for janusgraph
-## @param autoscaling.minReplicas Minimum number of janusgraph replicas
-## @param autoscaling.maxReplicas Maximum number of janusgraph replicas
-## @param autoscaling.targetCPU Target CPU utilization percentage
-## @param autoscaling.targetMemory Target Memory utilization percentage
-##
-autoscaling:
-  enabled: false
-  minReplicas: ""
-  maxReplicas: ""
-  targetCPU: ""
-  targetMemory: ""
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
 ##
@@ -465,6 +457,51 @@ sidecars: []
 ##
 initContainers: []
 
+## @section Autoscaling
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    ## @section VPA update policy
+    ##
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+  hpa:
+    ## @param autoscaling.hpa.enabled Enable HPA
+    ##
+    enabled: false
+    ## @param autoscaling.hpa.minReplicas Minimum number of replicas
+    ##
+    minReplicas: ""
+    ## @param autoscaling.hpa.maxReplicas Maximum number of replicas
+    ##
+    maxReplicas: ""
+    ## @param autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ##
+    targetCPU: ""
+    ## @param autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    targetMemory: ""
 ## @section Traffic Exposure Parameters
 ##
 

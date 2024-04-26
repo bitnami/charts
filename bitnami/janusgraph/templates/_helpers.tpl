@@ -43,14 +43,45 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return the volume-permissions init container
+*/}}
+{{- define "janusgraph.volumePermissionsInitContainer" -}}
+- name: volume-permissions
+  image: {{ include "janusgraph.volumePermissions.image"  }}
+  imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      #!/bin/bash
+      mkdir -p {{ .Values.persistence.mountPath }}
+      chown {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+      find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.volumePermissions.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+  {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.volumePermissions.resources }}
+  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  volumeMounts:
+    - name: data
+      mountPath: {{ .Values.persistence.mountPath }}
+    - name: tmp-dir
+      mountPath: /tmp
+{{- end -}}
+
+{{/*
 Returns true if a storage backend has been configured
 */}}
 {{- define "janusgraph.storage.enabled" -}}
-{{- if .Values.storage.cassandra.enabled -}}
+{{- if .Values.storageBackend.cassandra.enabled -}}
 {{- true -}}
-{{- else if .Values.storage.berkeleyje.enabled -}}
+{{- else if .Values.storageBackend.berkeleyje.enabled -}}
 {{- true -}}
-{{- else if .Values.storage.external.backend -}}
+{{- else if .Values.storageBackend.external.backend -}}
 {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -59,12 +90,12 @@ Returns true if a storage backend has been configured
 Returns the configured storage backend
 */}}
 {{- define "janusgraph.storage.backend" -}}
-{{- if .Values.storage.cassandra.enabled -}}
+{{- if .Values.storageBackend.cassandra.enabled -}}
 {{- print "cql" -}}
-{{- else if .Values.storage.berkeleyje.enabled -}}
+{{- else if .Values.storageBackend.berkeleyje.enabled -}}
 {{- print "berkeleyje" -}}
-{{- else if .Values.storage.external.backend -}}
-{{- printf "%s" .Values.storage.external.backend -}}
+{{- else if .Values.storageBackend.external.backend -}}
+{{- printf "%s" .Values.storageBackend.external.backend -}}
 {{- end -}}
 {{- end -}}
 
@@ -72,10 +103,10 @@ Returns the configured storage backend
 Returns the hostname of the configured storage backend
 */}}
 {{- define "janusgraph.storage.hostname" -}}
-{{- if .Values.storage.cassandra.enabled -}}
-{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.storage.cassandra "context" $) -}}
-{{- else if .Values.storage.external.hostname -}}
-{{- printf "%s" .Values.storage.external.hostname -}}
+{{- if .Values.storageBackend.cassandra.enabled -}}
+{{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.storageBackend.cassandra "context" $) -}}
+{{- else if .Values.storageBackend.external.hostname -}}
+{{- printf "%s" .Values.storageBackend.external.hostname -}}
 {{- end -}}
 {{- end -}}
 
@@ -83,10 +114,10 @@ Returns the hostname of the configured storage backend
 Returns the port of the configured storage backend
 */}}
 {{- define "janusgraph.storage.port" -}}
-{{- if .Values.storage.cassandra.enabled }}
+{{- if .Values.storageBackend.cassandra.enabled }}
 {{- printf "%d" (int .Values.cassandra.service.ports.cql) -}}
-{{- else if .Values.storage.external.port -}}
-{{- printf "%d" (int .Values.storage.external.port) -}}
+{{- else if .Values.storageBackend.external.port -}}
+{{- printf "%d" (int .Values.storageBackend.external.port) -}}
 {{- end -}}
 {{- end -}}
 
@@ -94,10 +125,10 @@ Returns the port of the configured storage backend
 Create the storage password secret name
 */}}
 {{- define "janusgraph.storage.username" -}}
-    {{- if .Values.storage.cassandra.enabled -}}
+    {{- if .Values.storageBackend.cassandra.enabled -}}
         {{- printf "%s" (default "cassandra" .Values.cassandra.dbUser.user) -}}
-    {{- else if .Values.storage.external.username -}}
-        {{- .Values.storage.external.username -}}
+    {{- else if .Values.storageBackend.external.username -}}
+        {{- .Values.storageBackend.external.username -}}
     {{- end -}}
 {{- end -}}
 
@@ -105,10 +136,10 @@ Create the storage password secret name
 Create the storage password secret name
 */}}
 {{- define "janusgraph.storage.password.secretName" -}}
-    {{- if .Values.storage.cassandra.enabled -}}
+    {{- if .Values.storageBackend.cassandra.enabled -}}
         {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
-    {{- else if .Values.storage.external.existingSecret -}}
-        {{- .Values.storage.external.existingSecret -}}
+    {{- else if .Values.storageBackend.external.existingSecret -}}
+        {{- .Values.storageBackend.external.existingSecret -}}
     {{- end -}}
 {{- end -}}
 
@@ -116,10 +147,10 @@ Create the storage password secret name
 Create the storage password secret key
 */}}
 {{- define "janusgraph.storage.password.secretKey" -}}
-    {{- if .Values.storage.cassandra.enabled -}}
+    {{- if .Values.storageBackend.cassandra.enabled -}}
         cassandra-password
-    {{- else if .Values.storage.external.existingSecretPasswordKey -}}
-        {{- .Values.storage.external.existingSecretPasswordKey -}}
+    {{- else if .Values.storageBackend.external.existingSecretPasswordKey -}}
+        {{- .Values.storageBackend.external.existingSecretPasswordKey -}}
     {{- end -}}
 {{- end -}}
 
@@ -127,9 +158,9 @@ Create the storage password secret key
 Returns true if a index management backend has been configured
 */}}
 {{- define "janusgraph.index.enabled" -}}
-{{- if .Values.index.lucene.enabled -}}
+{{- if .Values.indexBackend.lucene.enabled -}}
 {{- true -}}
-{{- else if .Values.index.external.backend -}}
+{{- else if .Values.indexBackend.external.backend -}}
 {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -138,10 +169,10 @@ Returns true if a index management backend has been configured
 Returns the configured index management backend
 */}}
 {{- define "janusgraph.index.backend" -}}
-{{- if .Values.index.lucene.enabled -}}
+{{- if .Values.indexBackend.lucene.enabled -}}
 {{- print "lucene" -}}
-{{- else if .Values.index.external.backend -}}
-{{- printf "%s" .Values.index.external.backend -}}
+{{- else if .Values.indexBackend.external.backend -}}
+{{- printf "%s" .Values.indexBackend.external.backend -}}
 {{- end -}}
 {{- end -}}
 
@@ -149,8 +180,8 @@ Returns the configured index management backend
 Returns the hostname of the configured index management backend
 */}}
 {{- define "janusgraph.index.hostname" -}}
-{{- if .Values.index.external.hostname -}}
-{{- printf "%s" .Values.index.external.hostname -}}
+{{- if .Values.indexBackend.external.hostname -}}
+{{- printf "%s" .Values.indexBackend.external.hostname -}}
 {{- end -}}
 {{- end -}}
 
@@ -158,8 +189,8 @@ Returns the hostname of the configured index management backend
 Returns the port of the configured index management backend
 */}}
 {{- define "janusgraph.index.port" -}}
-{{- if .Values.index.external.port -}}
-{{- printf "%s" .Values.index.external.port -}}
+{{- if .Values.indexBackend.external.port -}}
+{{- printf "%s" .Values.indexBackend.external.port -}}
 {{- end -}}
 {{- end -}}
 

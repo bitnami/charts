@@ -10,6 +10,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: janusgraph
+    app.kubernetes.io/part-of: janusgraph
   {{- if or .Values.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
@@ -24,6 +25,7 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: janusgraph
+      app.kubernetes.io/part-of: janusgraph
   template:
     metadata:
       {{- if .Values.podAnnotations }}
@@ -31,6 +33,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: janusgraph
+        app.kubernetes.io/part-of: janusgraph
     spec:
       serviceAccountName: {{ template "janusgraph.serviceAccountName" . }}
       {{- include "janusgraph.imagePullSecrets" . | nindent 6 }}
@@ -141,7 +144,7 @@ spec:
                   name: {{ include "janusgraph.storage.password.secretName" . }}
                   key: {{ include "janusgraph.storage.password.secretKey" . }}
             {{- end }}
-            {{- if .Values.storage.cassandra.enabled }}
+            {{- if .Values.storageBackend.cassandra.enabled }}
             - name: JANUSGRAPH_CFG_STORAGE_CQL_KEYSPACE
               value: {{ .Values.cassandra.keyspace | quote }}
             {{- end }}
