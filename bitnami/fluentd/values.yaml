@@ -662,14 +662,14 @@ forwarder:
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
   ##
   lifecycleHooks: {}
-  ## @param forwarder.initContainers Additional init containers to add to the pods
+  ## @param forwarder.customInitContainers Additional init containers to add to the pods
   ## For example:
-  ## initContainers:
+  ## customInitContainers:
   ##   - name: your-image-name
   ##     image: your-image
   ##     imagePullPolicy: Always
   ##
-  initContainers: []
+  customInitContainers: []
   ## @param forwarder.sidecars Add sidecars to forwarder pods
   ##
   ## For example:
@@ -1355,15 +1355,15 @@ aggregator:
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
   ##
   lifecycleHooks: {}
-  ## @param aggregator.initContainers Add init containers to aggregator pods
+  ## @param aggregator.customInitContainers Add init containers to aggregator pods
   ## Example
   ##
-  ## initContainers:
+  ## customInitContainers:
   ##   - name: do-something
   ##     image: busybox
   ##     command: ['do', 'something']
   ##
-  initContainers: []
+  customInitContainers: []
   ## @param aggregator.sidecars Add sidecars to aggregator pods
   ##
   ## For example:
@@ -1409,6 +1409,52 @@ aggregator:
   initScriptsSecret: ""
 ## Prometheus Exporter / Metrics
 ##
+initContainers:
+  installExtraGems:
+    ## install-extra-gems containers' resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param initContainers.installExtraGems.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param initContainers.installExtraGems.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+  tmpDirPermissions:
+    ## tmp-dir-permissions containers' resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param initContainers.tmpDirPermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param initContainers.tmpDirPermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
 metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
