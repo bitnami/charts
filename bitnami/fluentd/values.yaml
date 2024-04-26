@@ -1384,6 +1384,7 @@ aggregator:
   ##     image: busybox
   ##     command: ['do', 'something']
   ##
+  initContainers: []
   ## install-extra-gems and tmp-dir-permissions containers resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious

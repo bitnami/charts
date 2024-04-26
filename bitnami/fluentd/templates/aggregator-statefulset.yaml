@@ -141,8 +141,8 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-        {{- if .Values.aggregator.customInitContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.customInitContainers "context" $ ) | nindent 8 }}
+        {{- if .Values.aggregator.initContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:
