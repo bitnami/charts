@@ -40,7 +40,7 @@
             "vars_file": "janusgraph/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "sts-janusgraph-ptest"
+                "workload": "deploy-janusgraph"
               }
             }
           }

@@ -3,6 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if not .Values.existingConfigmap }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -45,3 +46,4 @@ data:
     {{- end }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraJanusgraphProperties "context" $ ) | nindent 4 }}
   {{- end }}
+{{- end }}

@@ -4,7 +4,7 @@
 command:
   {{- $vertex_name := printf "test_%s" (randAlpha 5) }}
   janusgraph-graph-creation:
-    exec: /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e ./janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
+    exec: JAVA_OPTIONS="" /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e /tmp/vib/janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
     exit-status: 0
     timeout: 30000
     stdout:
@@ -28,3 +28,11 @@ file:
     mode: "0644"
     contents:
       - /storage.backend/
+http:
+  http://janusgraph-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    body:
+      - /metrics_org_janusgraph_.*/
+addr:
+  tcp://janusgraph:{{ .Vars.service.ports.gremlin }}:
+    reachable: true

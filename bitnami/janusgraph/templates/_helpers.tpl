@@ -69,19 +69,13 @@ Return the volume-permissions init container
   volumeMounts:
     - name: data
       mountPath: {{ .Values.persistence.mountPath }}
-    - name: tmp-dir
-      mountPath: /tmp
 {{- end -}}
 
 {{/*
 Returns true if a storage backend has been configured
 */}}
 {{- define "janusgraph.storage.enabled" -}}
-{{- if .Values.storageBackend.cassandra.enabled -}}
-{{- true -}}
-{{- else if .Values.storageBackend.berkeleyje.enabled -}}
-{{- true -}}
-{{- else if .Values.storageBackend.external.backend -}}
+{{- if or .Values.storageBackend.cassandra.enabled .Values.storageBackend.berkeleyje.enabled .Values.storageBackend.external.backend -}}
 {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -95,7 +89,7 @@ Returns the configured storage backend
 {{- else if .Values.storageBackend.berkeleyje.enabled -}}
 {{- print "berkeleyje" -}}
 {{- else if .Values.storageBackend.external.backend -}}
-{{- printf "%s" .Values.storageBackend.external.backend -}}
+{{- print .Values.storageBackend.external.backend -}}
 {{- end -}}
 {{- end -}}
 
@@ -106,7 +100,7 @@ Returns the hostname of the configured storage backend
 {{- if .Values.storageBackend.cassandra.enabled -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "cassandra" "chartValues" .Values.storageBackend.cassandra "context" $) -}}
 {{- else if .Values.storageBackend.external.hostname -}}
-{{- printf "%s" .Values.storageBackend.external.hostname -}}
+{{- print .Values.storageBackend.external.hostname -}}
 {{- end -}}
 {{- end -}}
 
@@ -125,42 +119,40 @@ Returns the port of the configured storage backend
 Create the storage password secret name
 */}}
 {{- define "janusgraph.storage.username" -}}
-    {{- if .Values.storageBackend.cassandra.enabled -}}
-        {{- printf "%s" (default "cassandra" .Values.cassandra.dbUser.user) -}}
-    {{- else if .Values.storageBackend.external.username -}}
-        {{- .Values.storageBackend.external.username -}}
-    {{- end -}}
+{{- if .Values.storageBackend.cassandra.enabled -}}
+{{- print (default "cassandra" .Values.cassandra.dbUser.user) -}}
+{{- else if .Values.storageBackend.external.username -}}
+{{- .Values.storageBackend.external.username -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Create the storage password secret name
 */}}
 {{- define "janusgraph.storage.password.secretName" -}}
-    {{- if .Values.storageBackend.cassandra.enabled -}}
-        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
-    {{- else if .Values.storageBackend.external.existingSecret -}}
-        {{- .Values.storageBackend.external.existingSecret -}}
-    {{- end -}}
+{{- if .Values.storageBackend.cassandra.enabled -}}
+{{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+{{- else if .Values.storageBackend.external.existingSecret -}}
+{{- .Values.storageBackend.external.existingSecret -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Create the storage password secret key
 */}}
 {{- define "janusgraph.storage.password.secretKey" -}}
-    {{- if .Values.storageBackend.cassandra.enabled -}}
-        cassandra-password
-    {{- else if .Values.storageBackend.external.existingSecretPasswordKey -}}
-        {{- .Values.storageBackend.external.existingSecretPasswordKey -}}
-    {{- end -}}
+{{- if .Values.storageBackend.cassandra.enabled -}}
+cassandra-password
+{{- else if .Values.storageBackend.external.existingSecretPasswordKey -}}
+{{- .Values.storageBackend.external.existingSecretPasswordKey -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
 Returns true if a index management backend has been configured
 */}}
 {{- define "janusgraph.index.enabled" -}}
-{{- if .Values.indexBackend.lucene.enabled -}}
-{{- true -}}
-{{- else if .Values.indexBackend.external.backend -}}
+{{- if or .Values.indexBackend.lucene.enabled .Values.indexBackend.external.backend -}}
 {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -172,7 +164,7 @@ Returns the configured index management backend
 {{- if .Values.indexBackend.lucene.enabled -}}
 {{- print "lucene" -}}
 {{- else if .Values.indexBackend.external.backend -}}
-{{- printf "%s" .Values.indexBackend.external.backend -}}
+{{- print .Values.indexBackend.external.backend -}}
 {{- end -}}
 {{- end -}}
 
@@ -181,7 +173,7 @@ Returns the hostname of the configured index management backend
 */}}
 {{- define "janusgraph.index.hostname" -}}
 {{- if .Values.indexBackend.external.hostname -}}
-{{- printf "%s" .Values.indexBackend.external.hostname -}}
+{{- print .Values.indexBackend.external.hostname -}}
 {{- end -}}
 {{- end -}}
 
@@ -190,7 +182,7 @@ Returns the port of the configured index management backend
 */}}
 {{- define "janusgraph.index.port" -}}
 {{- if .Values.indexBackend.external.port -}}
-{{- printf "%s" .Values.indexBackend.external.port -}}
+{{- printf "%d" ( int .Values.indexBackend.external.port) -}}
 {{- end -}}
 {{- end -}}
 
@@ -201,7 +193,7 @@ Returns the Janusgraph JVM Java options for the conteiner
 {{- if .Values.metrics.enabled -}}
 {{ printf "%s -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=%d" .Values.javaOptions (int .Values.containerPorts.jmx) }}
 {{- else -}}
-{{ printf "%s" .Values.javaOptions }}
+{{ print .Values.javaOptions }}
 {{- end -}}
 {{- end -}}
 
@@ -210,9 +202,9 @@ Return the JanusGraph configuration configmap
 */}}
 {{- define "janusgraph.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmap "context" $) -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmap "context" $) -}}
 {{- else -}}
-    {{ printf "%s" (include "common.names.fullname" .) -}}
+{{- print (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -221,19 +213,9 @@ Return the JanusGraph metrics configuration configmap
 */}}
 {{- define "janusgraph.metrics.configmapName" -}}
 {{- if .Values.metrics.existingConfigmap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.existingConfigmap "context" $) -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.metrics.existingConfigmap "context" $) -}}
 {{- else -}}
-    {{ printf "%s-jmx-configuration" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "janusgraph.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
+{{ printf "%s-jmx-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -242,14 +224,54 @@ Compile all warnings into a single message.
 */}}
 {{- define "janusgraph.validateValues" -}}
 {{- $messages := list -}}
-{{/*
-{{- $messages := append $messages (include "janusgraph.validateValues.foo" .) -}}
-{{- $messages := append $messages (include "janusgraph.validateValues.bar" .) -}}
-*/}}
+{{- $messages := append $messages (include "janusgraph.validateValues.storageBackend.enabled" .) -}}
+{{- $messages := append $messages (include "janusgraph.validateValues.storageBackend.individual" .) -}}
+{{- $messages := append $messages (include "janusgraph.validateValues.indexBackend.individual" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Janusgraph - At least one storage backend is enabled
+*/}}
+{{- define "janusgraph.validateValues.storageBackend.enabled" -}}
+{{- if not (include "janusgraph.storage.enabled" .) -}}
+janusgraph: storageBackend
+    At least one storage backend has to be configured.
+    Currently supported storage backends are:
+     - Cassandra (using Cassandra subchart) - storageBackend.cassandra.enabled
+     - BerkeleyDB (local) - storageBackend.berkeleyje.enabled
+     - External storage - storageBackend.external.backend
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Janusgraph - Only one storage backend can be configured
+*/}}
+{{- define "janusgraph.validateValues.storageBackend.individual" -}}
+{{- $backends := 0 -}}
+{{- if .Values.storageBackend.cassandra.enabled }}{{ $backends = $backends + 1 }}{{ end }}
+{{- if .Values.storageBackend.berkeleyje.enabled }}{{ $backends = $backends + 1 }}{{ end }}
+{{- if .Values.storageBackend.external.backend }}{{ $backends = $backends + 1 }}{{ end }}
+{{- if gt $backends 1 -}}
+janusgraph: storageBackend
+    Only one storage backend can be configured at the same time
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Janusgraph - Only one storage backend can be configured
+*/}}
+{{- define "janusgraph.validateValues.indexBackend.individual" -}}
+{{- $backends := 0 -}}
+{{- if .Values.indexBackend.lucene.enabled }}{{ $backends = $backends + 1 }}{{ end }}
+{{- if .Values.indexBackend.external.backend }}{{ $backends = $backends + 1 }}{{ end }}
+{{- if gt $backends 1 -}}
+janusgraph: indexBackend
+    Only one index backend can be configured at the same time
 {{- end -}}
 {{- end -}}
