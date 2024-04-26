@@ -96,6 +96,11 @@ spec:
               cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          {{- if .Values.initContainers.installExtraGems.resources }}
+          resources: {{- toYaml .Values.initContainers.installExtraGems.resources | nindent 12 }}
+          {{- else if ne .Values.initContainers.installExtraGems.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.installExtraGems.resourcesPreset) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
@@ -124,6 +129,11 @@ spec:
             - |-
               #!/bin/sh
               chmod o-rwx /tmp
+          {{- if .Values.initContainers.tmpDirPermissions.resources }}
+          resources: {{- toYaml .Values.initContainers.tmpDirPermissions.resources | nindent 12 }}
+          {{- else if ne .Values.initContainers.tmpDirPermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.tmpDirPermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
@@ -131,8 +141,8 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-        {{- if .Values.aggregator.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.initContainers "context" $ ) | nindent 8 }}
+        {{- if .Values.aggregator.customInitContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.aggregator.customInitContainers "context" $ ) | nindent 8 }}
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.aggregator.terminationGracePeriodSeconds }}
       containers:

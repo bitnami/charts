@@ -91,6 +91,11 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
+          {{- if .Values.initContainers.installExtraGems.resources }}
+          resources: {{- toYaml .Values.initContainers.installExtraGems.resources | nindent 12 }}
+          {{- else if ne .Values.initContainers.installExtraGems.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.installExtraGems.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /gems
@@ -116,12 +121,17 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
+          {{- if .Values.initContainers.tmpDirPermissions.resources }}
+          resources: {{- toYaml .Values.initContainers.tmpDirPermissions.resources | nindent 12 }}
+          {{- else if ne .Values.initContainers.tmpDirPermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.tmpDirPermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-        {{- if .Values.forwarder.initContainers }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.initContainers "context" $ ) | nindent 8 }}
+        {{- if .Values.forwarder.customInitContainers }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.forwarder.customInitContainers "context" $ ) | nindent 8 }}
         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.forwarder.terminationGracePeriodSeconds }}
       hostNetwork: {{ .Values.forwarder.hostNetwork }}
