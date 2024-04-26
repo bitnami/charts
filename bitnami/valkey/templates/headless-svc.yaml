@@ -1,0 +1,35 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations (include "valkey.externalDNS.annotations" .) }}
+  annotations:
+    {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- include "valkey.externalDNS.annotations" . | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  {{- if .Values.sentinel.enabled }}
+  publishNotReadyAddresses: true
+  {{- end }}
+  ports:
+    - name: tcp-valkey
+      port: {{ if .Values.sentinel.enabled }}{{ .Values.sentinel.service.ports.valkey }}{{ else }}{{ .Values.master.service.ports.valkey }}{{ end }}
+      targetPort: valkey
+    {{- if .Values.sentinel.enabled }}
+    - name: tcp-sentinel
+      port: {{ .Values.sentinel.service.ports.sentinel }}
+      targetPort: valkey-sentinel
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
