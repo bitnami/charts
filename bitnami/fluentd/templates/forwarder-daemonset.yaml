@@ -91,10 +91,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
-          {{- if .Values.initContainers.installExtraGems.resources }}
-          resources: {{- toYaml .Values.initContainers.installExtraGems.resources | nindent 12 }}
-          {{- else if ne .Values.initContainers.installExtraGems.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.installExtraGems.resourcesPreset) | nindent 12 }}
+          {{- if .Values.forwarder.initResources }}
+          resources: {{- toYaml .Values.forwarder.initResources | nindent 12 }}
+          {{- else if ne .Values.forwarder.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.initResourcePresets) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -121,10 +121,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
-          {{- if .Values.initContainers.tmpDirPermissions.resources }}
-          resources: {{- toYaml .Values.initContainers.tmpDirPermissions.resources | nindent 12 }}
-          {{- else if ne .Values.initContainers.tmpDirPermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.tmpDirPermissions.resourcesPreset) | nindent 12 }}
+          {{- if .Values.forwarder.initResources }}
+          resources: {{- toYaml .Values.forwarder.initResources | nindent 12 }}
+          {{- else if ne .Values.forwarder.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.initResourcePresets) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: empty-dir

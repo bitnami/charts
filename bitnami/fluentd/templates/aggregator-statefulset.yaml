@@ -96,10 +96,10 @@ spec:
               cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
-          {{- if .Values.initContainers.installExtraGems.resources }}
-          resources: {{- toYaml .Values.initContainers.installExtraGems.resources | nindent 12 }}
-          {{- else if ne .Values.initContainers.installExtraGems.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.installExtraGems.resourcesPreset) | nindent 12 }}
+          {{- if .Values.aggregator.initResources }}
+          resources: {{- toYaml .Values.aggregator.initResources | nindent 12 }}
+          {{- else if ne .Values.aggregator.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.initResourcePresets) | nindent 12 }}
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
@@ -129,10 +129,10 @@ spec:
             - |-
               #!/bin/sh
               chmod o-rwx /tmp
-          {{- if .Values.initContainers.tmpDirPermissions.resources }}
-          resources: {{- toYaml .Values.initContainers.tmpDirPermissions.resources | nindent 12 }}
-          {{- else if ne .Values.initContainers.tmpDirPermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.initContainers.tmpDirPermissions.resourcesPreset) | nindent 12 }}
+          {{- if .Values.aggregator.initResources }}
+          resources: {{- toYaml .Values.aggregator.initResources | nindent 12 }}
+          {{- else if ne .Values.aggregator.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.initResourcePresets) | nindent 12 }}
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
