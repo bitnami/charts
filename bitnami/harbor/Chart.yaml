@@ -55,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 21.2.1
+version: 21.3.0
