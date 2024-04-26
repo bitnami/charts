@@ -138,11 +138,16 @@ spec:
             {{- if (include "janusgraph.storage.username" .)}}
             - name: JANUSGRAPH_CFG_STORAGE_USERNAME
               value: {{ include "janusgraph.storage.username" . | quote }}
+            {{- if .Values.storage.usePasswordFiles }}
+            - name: JANUSGRAPH_CFG_STORAGE_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/janusgraph/secrets/%s" (include "janusgraph.storage.password.secretKey" .) }}
+            {{- else }}
             - name: JANUSGRAPH_CFG_STORAGE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "janusgraph.storage.password.secretName" . }}
                   key: {{ include "janusgraph.storage.password.secretKey" . }}
+            {{- end }}
             {{- end }}
             {{- if .Values.storageBackend.cassandra.enabled }}
             - name: JANUSGRAPH_CFG_STORAGE_CQL_KEYSPACE
@@ -218,6 +223,10 @@ spec:
             - name: janusgraph-properties
               mountPath: /bitnami/janusgraph/conf/janusgraph.properties
               subPath: janusgraph.properties
+            {{- if .Values.storage.usePasswordFiles }}
+            - name: storage-backend-credentials
+              mountPath: /opt/bitnami/janusgraph/secrets/
+            {{- end }}
           {{- if .Values.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -282,6 +291,14 @@ spec:
         - name: janusgraph-properties
           configMap:
             name: {{ include "janusgraph.configmapName" . }}
+        {{- if .Values.storage.usePasswordFiles }}
+        - name: storage-backend-credentials
+          secret:
+            secretName: {{ include "janusgraph.storage.password.secretName" . }}
+            items:
+              - key: {{ include "janusgraph.storage.password.secretKey" . }}
+                path: {{ include "janusgraph.storage.password.secretKey" . }}
+        {{- end }}
         {{- if .Values.metrics.enabled }}
         - name: jmx-config
           configMap:

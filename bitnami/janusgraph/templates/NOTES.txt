@@ -24,7 +24,7 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-Janusgraph can be accessed through the following URLs from within the cluster:
+Access Janusgraph from within the cluster using the following URL:
 
   - {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.gremlin }}
 
@@ -43,6 +43,22 @@ To connect to your Janusgraph cluster using Gremlin/Tinkerpop:
    $ gremlin.sh
    gremlin> :remote connect tinkerpop.server conf/remote.yaml
    gremlin> :remote console
+
+Access Janusgraph from outside your cluster:
+
+{{- if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "Janusgraph server available at $NODE_IP:$NODE_PORT"
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "Janusgraph server available at $SERVICE_IP:{{ .Values.service.ports.gremlin }}"
+{{- else if contains "ClusterIP" .Values.service.type }}
+    echo "Janusgraph server available at 127.0.0.1:8182"
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 8182:{{ .Values.service.ports.gremlin }} &
+{{- end }}
 
 {{- end }}
 

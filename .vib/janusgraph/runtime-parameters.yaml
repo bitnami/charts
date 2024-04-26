@@ -10,9 +10,6 @@ service:
   type: LoadBalancer
   ports:
     gremlin: 8184
-persistence:
-  enabled: true
-  mountPath: /bitnami/janusgraph/data
 metrics:
   enabled: true
   service:
