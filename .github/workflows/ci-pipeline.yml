@@ -105,12 +105,17 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          # We need to perform a full clone to re-generate the changelog
-          fetch-depth: 0
       - name: Setup git configuration
         run: |
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
+      # In order to avoid doing a full clone (which would fetch the index branch), we
+      # unshallow the clone only using the main branch. We need to get the tags to
+      # regenerate the changelog too
+      - name: Unshallow main branch and get tags
+        run: |
+          git fetch origin main --unshallow
+          git fetch --tags
       - name: Install conventional-changelog-cli
         run: npm install -g conventional-changelog-cli
       - id: generate-changelog
