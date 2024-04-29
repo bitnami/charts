@@ -62,13 +62,124 @@ Return the volume-permissions init container
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.volumePermissions.resources }}
-  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  resources: {{- toYaml .Values.volumePermissions.resources | nindent 4 }}
   {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: data
       mountPath: {{ .Values.persistence.mountPath }}
+{{- end -}}
+
+{{/*
+Return the wait-for-storage init container
+*/}}
+{{- define "janusgraph.waitForStorage" -}}
+- name: wait-for-storage
+  image: {{ include "janusgraph.image" . }}
+  imagePullPolicy: {{ .Values.image.pullPolicy }}
+  {{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      #!/bin/bash
+
+      # Load env variables
+      [[ -f /opt/bitnami/scripts/janusgraph-env.sh ]] && . /opt/bitnami/scripts/janusgraph-env.sh
+
+      # Copy Janusgraph configmap
+      cp "/bitnami/janusgraph/conf/janusgraph.properties" "${JANUSGRAPH_PROPERTIES}"
+
+      # Configure libnss_wrapper
+      if [[ -f /opt/bitnami/scripts/libos.sh ]]; then
+        . /opt/bitnami/scripts/libos.sh
+        if ! am_i_root; then
+            export LNAME="janusgraph"
+            export LD_PRELOAD="/opt/bitnami/common/lib/libnss_wrapper.so"
+            if ! user_exists "$(id -u)" && [[ -f "$LD_PRELOAD" ]]; then
+                info "Configuring libnss_wrapper"
+                NSS_WRAPPER_PASSWD="$(mktemp)"
+                export NSS_WRAPPER_PASSWD
+                NSS_WRAPPER_GROUP="$(mktemp)"
+                export NSS_WRAPPER_GROUP
+                echo "janusgraph:x:$(id -u):$(id -g):JanusGraph:${JANUSGRAPH_BASE_DIR}:/bin/false" > "$NSS_WRAPPER_PASSWD"
+                echo "janusgraph:x:$(id -g):" > "$NSS_WRAPPER_GROUP"
+                chmod 400 "$NSS_WRAPPER_PASSWD" "$NSS_WRAPPER_GROUP"
+            fi
+        fi
+      fi
+
+      # Configure from environment variables
+      if [[ -f "/opt/bitnami/scripts/libjanusgraph.sh" ]]; then
+        . /opt/bitnami/scripts/libjanusgraph.sh
+        janusgraph_properties_configure_from_environment_variables
+      fi
+
+      # Check storage
+      echo "graph = JanusGraphFactory.open('${JANUSGRAPH_PROPERTIES}')" > "/tmp/check-storage.groovy"
+      info "Waiting for Storage backend to be ready..."
+
+      if ! retry_while "${JANUSGRAPH_BIN_DIR}/gremlin.sh -e /tmp/check-storage.groovy"; then
+          error "Storage backend is not ready yet."
+          exit 1
+      fi
+
+      # Cleanup
+      rm "/tmp/check-storage.groovy" "${JANUSGRAPH_PROPERTIES}"
+      info "Storage is ready"
+  env:
+    - name: JANUSGRAPH_PROPERTIES
+      value: /tmp/janusgraph.properties
+    {{- if (include "janusgraph.storage.username" .)}}
+    - name: JANUSGRAPH_CFG_STORAGE_USERNAME
+      value: {{ include "janusgraph.storage.username" . | quote }}
+    {{- if .Values.storageBackend.usePasswordFiles }}
+    - name: JANUSGRAPH_CFG_STORAGE_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/janusgraph/secrets/%s" (include "janusgraph.storage.password.secretKey" .) }}
+    {{- else }}
+    - name: JANUSGRAPH_CFG_STORAGE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "janusgraph.storage.password.secretName" . }}
+          key: {{ include "janusgraph.storage.password.secretKey" . }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.storageBackend.cassandra.enabled }}
+    - name: JANUSGRAPH_CFG_STORAGE_CQL_KEYSPACE
+      value: {{ .Values.cassandra.keyspace | quote }}
+    {{- end }}
+    {{- if .Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
+  envFrom:
+    {{- if .Values.extraEnvVarsCM }}
+    - configMapRef:
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+    {{- end }}
+    {{- if .Values.extraEnvVarsSecret }}
+    - secretRef:
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+    {{- end }}
+  {{- if .Values.resources }}
+  resources: {{ toYaml .Values.resources | nindent 4 }}
+  {{- else if ne .Values.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    - name: janusgraph-properties
+      mountPath: /bitnami/janusgraph/conf/janusgraph.properties
+      subPath: janusgraph.properties
+    {{- if .Values.storageBackend.usePasswordFiles }}
+    - name: storage-backend-credentials
+      mountPath: /opt/bitnami/janusgraph/secrets/
+    {{- end }}
 {{- end -}}
 
 {{/*
