@@ -358,6 +358,10 @@ cloudflare:
   ## @param cloudflare.proxied When using the Cloudflare provider, enable the proxy feature (DDOS protection, CDN...) (optional)
   ##
   proxied: true
+  ## @param cloudflare.dnsRecordsPerPage Number of DNS records to fetch per page. (optional)
+  ## When using the Cloudflare provider, specify how many DNS records listed per page, max possible 5,000 (default: 100)
+  ##
+  dnsRecordsPerPage: 100
 ## CoreDNS configuration to be set via arguments/env variables
 ##
 coredns:
