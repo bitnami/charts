@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - '**.md'
+      - '!**/CHANGELOG.md'
 # Remove all permissions by default
 permissions: {}
 jobs:
