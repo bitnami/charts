@@ -4,7 +4,7 @@
 command:
   {{- $vertex_name := printf "test_%s" (randAlpha 5) }}
   janusgraph-graph-creation:
-    exec: JAVA_OPTIONS="" /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e /tmp/vib/janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
+    exec: JAVA_OPTIONS="" /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e ./janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
     exit-status: 0
     timeout: 180000
     stdout:
