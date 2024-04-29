@@ -44,7 +44,10 @@ To connect to your Janusgraph cluster using Gremlin/Tinkerpop:
    gremlin> :remote connect tinkerpop.server conf/remote.yaml
    gremlin> :remote console
 
-Access Janusgraph from outside your cluster:
+To access Janusgraph from outside the cluster follow the steps below:
+
+1. Get the Janusgraph server URL by running these commands:
+
 
 {{- if contains "NodePort" .Values.service.type }}
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
