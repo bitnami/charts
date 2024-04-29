@@ -85,7 +85,7 @@ spec:
             - -ec
             - |
               #!/bin/bash
-              # HACK: Gremlin console won't run unless it's history file is writable at /opt/bitnami/janusgraph
+              # HACK: Gremlin console won't run unless its history file is writable at /opt/bitnami/janusgraph
               # To be able to run with readOnlyRootFilesystem, we create the file and mount it as a volume
               touch /base-dir/.gremlin_groovy_history
               # Additionally copy the default content of the ext directory for console plugins installation
