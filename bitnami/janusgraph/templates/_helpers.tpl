@@ -254,9 +254,9 @@ Validate values of Janusgraph - Only one storage backend can be configured
 */}}
 {{- define "janusgraph.validateValues.storageBackend.individual" -}}
 {{- $backends := 0 -}}
-{{- if .Values.storageBackend.cassandra.enabled }}{{ add $backends 1 }}{{ end }}
-{{- if .Values.storageBackend.berkeleyje.enabled }}{{ add $backends 1 }}{{ end }}
-{{- if .Values.storageBackend.external.backend }}{{ add $backends 1 }}{{ end }}
+{{- if .Values.storageBackend.cassandra.enabled }}{{ $backends = add $backends 1 }}{{ end }}
+{{- if .Values.storageBackend.berkeleyje.enabled }}{{ $backends = add $backends 1 }}{{ end }}
+{{- if .Values.storageBackend.external.backend }}{{ $backends = add $backends 1 }}{{ end }}
 {{- if gt $backends 1 -}}
 janusgraph: storageBackend
     Only one storage backend can be configured at the same time
@@ -268,8 +268,8 @@ Validate values of Janusgraph - Only one storage backend can be configured
 */}}
 {{- define "janusgraph.validateValues.indexBackend.individual" -}}
 {{- $backends := 0 -}}
-{{- if .Values.indexBackend.lucene.enabled }}{{ add $backends 1 }}{{ end }}
-{{- if .Values.indexBackend.external.backend }}{{ add $backends 1 }}{{ end }}
+{{- if .Values.indexBackend.lucene.enabled }}{{ $backends = add $backends 1 }}{{ end }}
+{{- if .Values.indexBackend.external.backend }}{{ $backends = add $backends 1 }}{{ end }}
 {{- if gt $backends 1 -}}
 janusgraph: indexBackend
     Only one index backend can be configured at the same time
