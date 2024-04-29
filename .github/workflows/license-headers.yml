@@ -58,10 +58,10 @@ jobs:
           done <<< "$(echo "$files_changed" | grep -oE "^bitnami/.*\.ya?ml$" | sort | uniq || true)"
           if [[ ${#templates[@]} -gt 0 ]] || [[ ${#regular_files[@]} -gt 0 ]]; then
             if [[ ${#templates[@]} -gt 0 ]]; then
-              # There are modifications over yaml tamplates
-              export tamplates_json=$(printf "%s\n" "${templates[@]}" | jq -R . | jq -cs .)
+              # There are modifications over yaml templates
+              export templates_json=$(printf "%s\n" "${templates[@]}" | jq -R . | jq -cs .)
               # Overwrite configuration file to analyze only changed templates
-              yq -i '. | .header[0].paths=env(tamplates_json)' .licenserc.yaml
+              yq -i '. | .header[0].paths=env(templates_json)' .licenserc.yaml
             fi
             if [[ ${#regular_files[@]} -gt 0 ]]; then
               # There are modifications over yaml files

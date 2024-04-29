@@ -1,7 +1,8 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
+
 {{- $replicaCount := int .Values.controller.replicaCount }}
 {{- if and .Values.kraft.enabled (gt $replicaCount 0) (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.controller.autoscaling.vpa.enabled }}
 apiVersion: {{ include "common.capabilities.vpa.apiVersion" . }}
