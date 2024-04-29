@@ -76,35 +76,6 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        - name: configure-console-requirements
-          image: {{ include "janusgraph.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-          {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
-          {{- end }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              #!/bin/bash
-              # HACK: Gremlin console won't run unless its history file is writable at /opt/bitnami/janusgraph
-              # To be able to run with readOnlyRootFilesystem, we create the file and mount it as a volume
-              touch /base-dir/.gremlin_groovy_history
-              # Additionally copy the default content of the ext directory for console plugins installation
-              cp /opt/bitnami/janusgraph/ext/* /ext-dir
-          {{- if .Values.resources }}
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-          {{- else if ne .Values.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /ext-dir
-              subPath: app-ext-dir
-            - name: empty-dir
-              mountPath: /base-dir
-              subPath: app-base-dir
         {{- include "janusgraph.waitForStorage" . | nindent 8 }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         # Adjust volume permissions
