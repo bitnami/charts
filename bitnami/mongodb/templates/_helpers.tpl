@@ -365,13 +365,17 @@ Validate values of MongoDB&reg; - number of replicas must be the same than LoadB
 {{- define "mongodb.validateValues.loadBalancerIPsListLength" -}}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerListLength := len .Values.externalAccess.service.loadBalancerIPs }}
+{{- $publicNamesListLength := len .Values.externalAccess.service.publicNames }}
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "LoadBalancer") -}}
-{{- if and (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerListLength 0) -}}
+{{- if and (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerListLength 0) (eq $publicNamesListLength 0) -}}
+mongodb: .Values.externalAccess.service.loadBalancerIPs, .Values.externalAccess.service.publicNames
+    externalAccess.service.loadBalancerIPs, externalAccess.service.publicNames or externalAccess.autoDiscovery.enabled are required when externalAccess is enabled.
+{{- else if and (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerListLength )) (not (eq $loadBalancerListLength 0)) -}}
 mongodb: .Values.externalAccess.service.loadBalancerIPs
-    externalAccess.service.loadBalancerIPs or externalAccess.autoDiscovery.enabled are required when externalAccess is enabled.
-{{- else if and (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerListLength )) -}} 
-mongodb: .Values.externalAccess.service.loadBalancerIPs
-    Number of replicas ({{ $replicaCount }}) and loadBalancerIPs ({{ $loadBalancerListLength }}) array length must be the same.
+    Number of replicas ({{ $replicaCount }}) and loadBalancerIPs array length ({{ $loadBalancerListLength }}) must be the same.
+{{- else if and (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $publicNamesListLength )) (not (eq $publicNamesListLength 0)) -}}
+mongodb: .Values.externalAccess.service.publicNames
+    Number of replicas ({{ $replicaCount }}) and publicNames array length ({{ $publicNamesListLength }}) must be the same.
 {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -384,8 +388,8 @@ Validate values of MongoDB&reg; - number of replicas must be the same than NodeP
 {{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (eq .Values.externalAccess.service.type "NodePort") -}}
 {{- if and (not .Values.externalAccess.autoDiscovery.enabled) (eq $nodePortListLength 0) -}}
-mongodb: .Values.externalAccess.service.loadBalancerIPs
-    externalAccess.service.loadBalancerIPs or externalAccess.autoDiscovery.enabled are required when externalAccess is enabled.
+mongodb: .Values.externalAccess.service.nodePorts
+    externalAccess.service.nodePorts or externalAccess.autoDiscovery.enabled are required when externalAccess is enabled.
 {{- else if and (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $nodePortListLength )) -}} 
 mongodb: .Values.externalAccess.service.nodePorts
     Number of replicas ({{ $replicaCount }}) and nodePorts ({{ $nodePortListLength }}) array length must be the same.

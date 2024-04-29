@@ -6,7 +6,8 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if eq .Values.architecture "replicaset" }}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
+{{- $publicNamesLength := len .Values.externalAccess.service.publicNames }}
+{{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerIPListLength)) (not (eq $replicaCount $publicNamesLength))) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -158,8 +159,8 @@ spec:
             {{- if .Values.externalAccess.service.loadBalancerIPs }}
             - -i {{ join "," .Values.externalAccess.service.loadBalancerIPs }}
             {{- end }}
-            {{- if or .Values.tls.extraDnsNames .Values.externalAccess.publicNames }}
-            - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.publicNames ) }}
+            {{- if or .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames }}
+            - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
@@ -243,7 +244,7 @@ spec:
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              value: {{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.publicNames ) ( empty .Values.externalAccess.publicNames ) }}
+              value: {{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.enabled) }}

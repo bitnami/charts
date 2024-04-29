@@ -73,7 +73,7 @@ data:
     export MONGODB_ADVERTISED_HOSTNAME="$(<${SHARED_FILE})"
     {{- else }}
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-    export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ coalesce .Values.externalAccess.publicNames .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ coalesce .Values.externalAccess.service.publicNames .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
@@ -158,7 +158,7 @@ data:
         export MONGODB_EXTRA_DATABASES_FILE=""
         export MONGODB_EXTRA_PASSWORDS_FILE=""
     fi
-
+    hostname $MONGODB_ADVERTISED_HOSTNAME
     exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
   setup-hidden.sh: |-
     #!/bin/bash

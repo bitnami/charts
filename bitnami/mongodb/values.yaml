@@ -823,9 +823,6 @@ externalAccess:
   ## @param externalAccess.enabled Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)
   ##
   enabled: false
-  ## @param externalAccess.publicNames Array of public names. The size should be equal to the number of replicas.
-  ## 
-  publicNames: []
   ## External IPs auto-discovery configuration
   ## An init container is used to auto-detect LB IPs or node ports by querying the K8s API
   ## Note: RBAC might be required
@@ -911,6 +908,9 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
+    ## @param externalAccess.service.publicNames Array of public names. The size should be equal to the number of replicas.
+    ## 
+    publicNames: []
     ## @param externalAccess.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
     # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
     loadBalancerClass: ""
