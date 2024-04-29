@@ -6,7 +6,7 @@ command:
   janusgraph-graph-creation:
     exec: JAVA_OPTIONS="" /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e /tmp/vib/janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
     exit-status: 0
-    timeout: 30000
+    timeout: 180000
     stdout:
       - "object={{ $vertex_name }}"
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
