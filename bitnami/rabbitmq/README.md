@@ -544,6 +544,7 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `false` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`    |
 | `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true`  |
+| `rbac.rules`                                  | Custom RBAC rules                                                                          | `[]`    |
 
 ### Persistence parameters
 

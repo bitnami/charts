@@ -913,6 +913,18 @@ rbac:
   ## that allows RabbitMQ pods querying the K8s API
   ##
   create: true
+  ## @param rbac.rules Custom RBAC rules
+  ## Example:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
 ## @section Persistence parameters
 ##
 persistence:
