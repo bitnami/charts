@@ -100,7 +100,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/valkey
-  tag: 7.2.4-debian-12-r12
+  tag: test1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1107,7 +1107,7 @@ sentinel:
   ##
   image:
     registry: docker.io
-    repository: bitnami/valkey-sentinel
+    repository: bitnami/redis-sentinel
     tag: 7.2.4-debian-12-r9
     digest: ""
     ## Specify a imagePullPolicy
@@ -1605,7 +1605,7 @@ metrics:
   ##
   image:
     registry: docker.io
-    repository: bitnami/valkey-exporter
+    repository: bitnami/redis-exporter
     tag: 1.58.0-debian-12-r7
     digest: ""
     pullPolicy: IfNotPresent
