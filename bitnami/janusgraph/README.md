@@ -77,6 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled`                            | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                                                                                              | `false`                            |
 | `diagnosticMode.command`                            | Command to override all containers in the deployment                                                                                                                                                                 | `["sleep"]`                        |
 | `diagnosticMode.args`                               | Args to override all containers in the deployment                                                                                                                                                                    | `["infinity"]`                     |
+| `storageBackend.usePasswordFiles`                   | Mount credentials as a files instead of using an environment variable                                                                                                                                                | `false`                            |
 | `storageBackend.cassandra.enabled`                  | Use Apache Casandra subchart as storage backend                                                                                                                                                                      | `true`                             |
 | `storageBackend.berkeleyje.enabled`                 | Use BerkeleyDB (local) as storage backend                                                                                                                                                                            | `false`                            |
 | `storageBackend.berkeleyje.directory`               | Path for the BerkeleyDB data                                                                                                                                                                                         | `/bitnami/janusgraph/data/storage` |
@@ -198,33 +199,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | JanusGraph service type                                                                                                          | `LoadBalancer`           |
-| `service.ports.gremlin`            | JanusGraph service Gremlin port                                                                                                  | `8182`                   |
-| `service.nodePorts.gremlin`        | Node port for Gremlin                                                                                                            | `""`                     |
-| `service.clusterIP`                | JanusGraph service Cluster IP                                                                                                    | `""`                     |
-| `service.loadBalancerIP`           | JanusGraph service Load Balancer IP                                                                                              | `""`                     |
-| `service.loadBalancerSourceRanges` | JanusGraph service Load Balancer sources                                                                                         | `[]`                     |
-| `service.externalTrafficPolicy`    | JanusGraph service external traffic policy                                                                                       | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for JanusGraph service                                                                             | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in JanusGraph service (normally used with the `sidecars` value)                                            | `[]`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for JanusGraph                                                                                  | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `janusgraph.local`       |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                               | Description                                                                           | Value          |
+| ---------------------------------- | ------------------------------------------------------------------------------------- | -------------- |
+| `service.type`                     | JanusGraph service type                                                               | `LoadBalancer` |
+| `service.ports.gremlin`            | JanusGraph service Gremlin port                                                       | `8182`         |
+| `service.nodePorts.gremlin`        | Node port for Gremlin                                                                 | `""`           |
+| `service.clusterIP`                | JanusGraph service Cluster IP                                                         | `""`           |
+| `service.loadBalancerIP`           | JanusGraph service Load Balancer IP                                                   | `""`           |
+| `service.loadBalancerSourceRanges` | JanusGraph service Load Balancer sources                                              | `[]`           |
+| `service.externalTrafficPolicy`    | JanusGraph service external traffic policy                                            | `Cluster`      |
+| `service.annotations`              | Additional custom annotations for JanusGraph service                                  | `{}`           |
+| `service.extraPorts`               | Extra ports to expose in JanusGraph service (normally used with the `sidecars` value) | `[]`           |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                      | `None`         |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                           | `{}`           |
 
 ### Persistence Parameters
 
