@@ -133,7 +133,7 @@ Create the storage password secret name
 {{- if .Values.storageBackend.cassandra.enabled -}}
 {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
 {{- else if .Values.storageBackend.external.existingSecret -}}
-{{- .Values.storageBackend.external.existingSecret -}}
+{{- print .Values.storageBackend.external.existingSecret -}}
 {{- end -}}
 {{- end -}}
 

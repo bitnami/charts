@@ -322,8 +322,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 See <https://github.com/bitnami/readme-generator-for-helm> to create the table
 
-The above parameters map to the env variables defined in [bitnami/janusgraph](https://github.com/bitnami/containers/tree/main/bitnami/janusgraph). For more information please refer to the [bitnami/janusgraph](https://github.com/bitnami/containers/tree/main/bitnami/janusgraph) image documentation.
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
