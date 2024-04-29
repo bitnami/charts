@@ -29,4 +29,5 @@ spec:
       targetPort: metrics
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: janusgraph
+    app.kubernetes.io/part-of: janusgraph
 {{- end }}
