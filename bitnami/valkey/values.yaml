@@ -1107,8 +1107,8 @@ sentinel:
   ##
   image:
     registry: docker.io
-    repository: bitnami/redis-sentinel
-    tag: 7.2.4-debian-12-r9
+    repository: bitnami/valkey-sentinel
+    tag: test1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

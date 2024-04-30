@@ -1,0 +1,25 @@
+image:
+  debug: true
+
+auth:
+  password: patata
+
+diagnosticMode:
+  enabled: false
+
+master:
+  readinessProbe:
+    enabled: false
+  livenessProbe:
+    enabled: false
+  startupProbe:
+    enabled: false
+
+replica:
+  readinessProbe:
+    enabled: false
+  livenessProbe:
+    enabled: false
+  startupProbe:
+    enabled: false
+
