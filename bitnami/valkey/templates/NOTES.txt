@@ -128,14 +128,14 @@ To connect to your Valkey&reg; server:
 
 {{- if eq .Values.architecture "replication" }}
    {{- if .Values.sentinel.enabled }}
-   {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.ports.valkey }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Read only operations
-   {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.ports.sentinel }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Sentinel access
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.ports.valkey }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Read only operations
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }} -p {{ .Values.sentinel.service.ports.sentinel }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }} # Sentinel access
    {{- else }}
-   {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-master" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
-   {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-replicas" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-master" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ printf "%s-replicas" (include "common.names.fullname" .) }}{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
    {{- end }}
 {{- else }}
-   {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }}-master{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+   {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h {{ template "common.names.fullname" . }}-master{{ if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 {{- end }}
 
 {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
@@ -151,7 +151,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "common.names.fullname" . }})
-    {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "LoadBalancer" .Values.sentinel.service.type }}
 
@@ -159,12 +159,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $SERVICE_IP -p {{ .Values.sentinel.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.sentinel.service.type }}
 
     kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "common.names.fullname" . }} {{ .Values.sentinel.service.ports.valkey }}:{{ .Values.sentinel.service.ports.valkey }} &
-    {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h 127.0.0.1 -p {{ .Values.sentinel.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- else }}
@@ -172,7 +172,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ printf "%s-master" (include "common.names.fullname" .) }})
-    {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $NODE_IP -p $NODE_PORT {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "LoadBalancer" .Values.master.service.type }}
 
@@ -180,12 +180,12 @@ To connect to your database from outside the cluster execute the following comma
         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "common.names.fullname" . }}'
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ printf "%s-master" (include "common.names.fullname" .) }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-    {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $SERVICE_IP -p {{ .Values.master.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h $SERVICE_IP -p {{ .Values.master.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- else if contains "ClusterIP" .Values.master.service.type }}
 
     kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ printf "%s-master" (include "common.names.fullname" .) }} {{ .Values.master.service.ports.valkey }}:{{ .Values.master.service.ports.valkey }} &
-    {{ if .Values.auth.enabled }}VALKEYCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h 127.0.0.1 -p {{ .Values.master.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
+    {{ if .Values.auth.enabled }}REDISCLI_AUTH="$VALKEY_PASSWORD" {{ end }}valkey-cli -h 127.0.0.1 -p {{ .Values.master.service.ports.valkey }} {{- if .Values.tls.enabled }} --tls --cert /tmp/client.cert --key /tmp/client.key --cacert /tmp/CA.cert{{ end }}
 
 {{- end }}
 {{- end }}

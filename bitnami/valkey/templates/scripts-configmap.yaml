@@ -82,9 +82,9 @@ data:
     SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
     validate_quorum() {
         if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
         else
-            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
         fi
         info "about to run the command: $quorum_info_command"
         eval $quorum_info_command | grep -Fq "s_down"
@@ -92,9 +92,9 @@ data:
 
     trigger_manual_failover() {
         if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
-            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
         else
-            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $failover_command"
@@ -103,9 +103,9 @@ data:
 
     get_sentinel_master_info() {
         if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
 
         info "about to run the command: $sentinel_info_command"
@@ -323,9 +323,9 @@ data:
     }
     get_sentinel_master_info() {
         if is_boolean_yes "$VALKEY_SENTINEL_TLS_ENABLED"; then
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_SENTINEL_TLS_CERT_FILE} --key ${VALKEY_SENTINEL_TLS_KEY_FILE} --cacert ${VALKEY_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_SENTINEL_TLS_CERT_FILE} --key ${VALKEY_SENTINEL_TLS_KEY_FILE} --cacert ${VALKEY_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         else
-            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}VALKEYCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
         info "about to run the command: $sentinel_info_command"
         retry_while "eval $sentinel_info_command" 2 5
@@ -495,9 +495,9 @@ data:
     VALKEY_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
     {{ if .Values.auth.sentinel -}}
-    # valkey-cli automatically consumes credentials from the VALKEYCLI_AUTH variable
-    [[ -n "$VALKEY_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_PASSWORD"
-    [[ -f "$VALKEY_PASSWORD_FILE" ]] && export VALKEYCLI_AUTH="$(< "${VALKEY_PASSWORD_FILE}")"
+    # valkey-cli automatically consumes credentials from the REDISCLI_AUTH variable
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -f "$VALKEY_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${VALKEY_PASSWORD_FILE}")"
     {{- end }}
 
     if ! sentinel_failover_finished; then
@@ -561,9 +561,9 @@ data:
 
     run_sentinel_command() {
         if is_boolean_yes "$VALKEY_SENTINEL_TLS_ENABLED"; then
-            {{ .Values.auth.sentinel | ternary "" "env -u VALKEYCLI_AUTH " -}} valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$VALKEY_SENTINEL_TLS_CERT_FILE" --key "$VALKEY_SENTINEL_TLS_KEY_FILE" --cacert "$VALKEY_SENTINEL_TLS_CA_FILE" sentinel "$@"
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$VALKEY_SENTINEL_TLS_CERT_FILE" --key "$VALKEY_SENTINEL_TLS_KEY_FILE" --cacert "$VALKEY_SENTINEL_TLS_CA_FILE" sentinel "$@"
         else
-            {{ .Values.auth.sentinel | ternary "" "env -u VALKEYCLI_AUTH " -}} valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_PORT" sentinel "$@"
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_PORT" sentinel "$@"
         fi
     }
     sentinel_failover_finished() {
@@ -574,9 +574,9 @@ data:
 
     VALKEY_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
 
-    # valkey-cli automatically consumes credentials from the VALKEYCLI_AUTH variable
-    [[ -n "$VALKEY_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_PASSWORD"
-    [[ -f "$VALKEY_PASSWORD_FILE" ]] && export VALKEYCLI_AUTH="$(< "${VALKEY_PASSWORD_FILE}")"
+    # valkey-cli automatically consumes credentials from the REDISCLI_AUTH variable
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -f "$VALKEY_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${VALKEY_PASSWORD_FILE}")"
 
 
     if is_master && ! sentinel_failover_finished; then

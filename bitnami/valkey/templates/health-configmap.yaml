@@ -17,7 +17,7 @@ data:
     #!/bin/bash
 
     [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
@@ -47,7 +47,7 @@ data:
     #!/bin/bash
 
     [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
@@ -80,7 +80,7 @@ data:
 
 {{- if .Values.auth.sentinel }}
     [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
 {{- end }}
     response=$(
       timeout -s 15 $1 \
@@ -127,7 +127,7 @@ data:
     #!/bin/bash
 
     [[ -f $VALKEY_MASTER_PASSWORD_FILE ]] && export VALKEY_MASTER_PASSWORD="$(< "${VALKEY_MASTER_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_MASTER_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_MASTER_PASSWORD"
+    [[ -n "$VALKEY_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_MASTER_PASSWORD"
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
@@ -155,7 +155,7 @@ data:
     #!/bin/bash
 
     [[ -f $VALKEY_MASTER_PASSWORD_FILE ]] && export VALKEY_MASTER_PASSWORD="$(< "${VALKEY_MASTER_PASSWORD_FILE}")"
-    [[ -n "$VALKEY_MASTER_PASSWORD" ]] && export VALKEYCLI_AUTH="$VALKEY_MASTER_PASSWORD"
+    [[ -n "$VALKEY_MASTER_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_MASTER_PASSWORD"
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
