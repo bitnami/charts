@@ -2,7 +2,7 @@
 
 # Bitnami package for JanusGraph
 
-JanusGraph is a highly scalable graph database optimized for storing and querying large graphs with billions of vertices and edges distributed across a multi-machine cluster.
+JanusGraph is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
 
 [Overview of JanusGraph](https://janusgraph.org/)
 
