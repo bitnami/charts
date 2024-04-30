@@ -88,6 +88,12 @@ Return the wait-for-storage init container
     - |
       #!/bin/bash
 
+      # HACK: Gremlin console interactive mode won't work unless its history file is writable at /opt/bitnami/janusgraph
+      # To be able to run with readOnlyRootFilesystem, we create the file and mount it as a volume
+      # Additionally copy the default content of the ext directory for console plugins installation
+      touch /base-dir/.gremlin_groovy_history
+      cp /opt/bitnami/janusgraph/ext/* /ext-dir
+
       # Load env variables
       [[ -f /opt/bitnami/scripts/janusgraph-env.sh ]] && . /opt/bitnami/scripts/janusgraph-env.sh
 
@@ -131,12 +137,6 @@ Return the wait-for-storage init container
       # Cleanup
       rm "/tmp/check-storage.groovy" "${JANUSGRAPH_PROPERTIES}"
       info "Storage is ready"
-
-      # HACK: Gremlin console won't run unless its history file is writable at /opt/bitnami/janusgraph
-      # To be able to run with readOnlyRootFilesystem, we create the file and mount it as a volume
-      # Additionally copy the default content of the ext directory for console plugins installation
-      touch /base-dir/.gremlin_groovy_history
-      cp /opt/bitnami/janusgraph/ext/* /ext-dir
   env:
     - name: JANUSGRAPH_PROPERTIES
       value: /tmp/janusgraph.properties
