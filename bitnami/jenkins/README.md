@@ -405,7 +405,7 @@ s
 | `networkPolicy.allowExternal`                   | Don't require server label for connections                                                                                       | `true`                   |
 | `networkPolicy.allowExternalEgress`             | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
 | `networkPolicy.kubeAPIServerPorts`              | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
-| `networkPolicy.extraIngress`                    | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `networkPolicy.extraIngress`                    | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.extraEgress`                     | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `networkPolicy.ingressNSMatchLabels`            | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
 | `networkPolicy.ingressNSPodMatchLabels`         | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |

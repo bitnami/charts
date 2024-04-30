@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -127,11 +127,19 @@ spec:
             {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
             {{- end }}
             {{- range $index, $_ := until $shards }}
+            {{- if $.Values.storegateway.useEndpointGroup }}
+            - --endpoint-group={{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}:{{ $.Values.storegateway.service.ports.grpc }}
+            {{- else }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}
             {{- end }}
             {{- end }}
+            {{- end }}
             {{- if and .Values.storegateway.enabled .Values.query.dnsDiscovery.enabled (not .Values.storegateway.sharded.enabled ) }}
+            {{- if .Values.storegateway.useEndpointGroup }}
+            - --endpoint-group={{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.storegateway.service.ports.grpc }}
+            {{- else }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
             {{- end }}
             {{- if and .Values.ruler.enabled .Values.query.dnsDiscovery.enabled }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.ruler.fullname" . }}{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}

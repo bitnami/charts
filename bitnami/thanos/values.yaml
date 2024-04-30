@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -516,7 +516,7 @@ query:
     ## @param query.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1216,7 +1216,7 @@ queryFrontend:
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1748,7 +1748,7 @@ bucketweb:
     ## @param bucketweb.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param bucketweb.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param bucketweb.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2282,7 +2282,7 @@ compactor:
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2521,6 +2521,10 @@ storegateway:
   ## @param storegateway.logFormat Thanos Store Gateway log format
   ##
   logFormat: logfmt
+  ## @param storegateway.useEndpointGroup Specify whether to use `endpoint-group` when querying the Store API of HA Store Gateway replicas
+  ## NOTE: This will take effect in the querier configuration
+  ##
+  useEndpointGroup: false
   ## @param storegateway.config Thanos Store Gateway configuration
   ## Specify content for config.yml
   ##
@@ -2839,7 +2843,7 @@ storegateway:
     ## @param storegateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param storegateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param storegateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3569,7 +3573,7 @@ ruler:
     ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3844,6 +3848,10 @@ receive:
   ##     - "127.0.0.1:10901"
   ##
   config: []
+  ## @param receive.tsdbPath Thanos Receive path to the time series database
+  ##
+  ## e.g.: /var/thanos/receive
+  tsdbPath: ""
   ## @param receive.existingConfigmap Name of existing ConfigMap with Thanos Receive Hashring configuration
   ## NOTE: This will override receive.config
   ##
@@ -4175,7 +4183,7 @@ receive:
     ## @param receive.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param receive.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param receive.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

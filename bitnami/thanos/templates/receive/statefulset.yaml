@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -141,7 +141,11 @@ spec:
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
+            {{- if .Values.receive.tsdbPath }}
+            - --tsdb.path={{ .Values.receive.tsdbPath }}
+            {{- else }}
             - --tsdb.path=/var/thanos/receive
+            {{- end }}
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention={{ .Values.receive.tsdbRetention }}

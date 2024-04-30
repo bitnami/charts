@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -37,4 +37,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.0.8
+version: 6.0.9
