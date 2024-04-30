@@ -303,6 +303,10 @@ provisioning:
   ##           - "s3:GetObject"
   ##           - "s3:ListMultipartUploadParts"
   ##           - "s3:PutObject"
+  ##         condition:
+  ##           StringLike:
+  ##               "s3:prefix":
+  ##                 - "${aws:username}/*"
   policies: []
   ## @param provisioning.users MinIO&reg; users provisioning. Can be used in addition to provisioning.usersExistingSecrets.
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
