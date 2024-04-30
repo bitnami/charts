@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -35,4 +35,4 @@ name: janusgraph
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
 - https://github.com/janusgraph/janusgraph
-version: 0.1.2
+version: 0.1.3
