@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -160,16 +160,16 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
+              containerPort: {{ .Values.hub.containerPorts.http }}
           env:
             - name: PYTHONUNBUFFERED
               value: "1"
             - name: HELM_RELEASE_NAME
               value: {{ .Release.Name | quote }}
             - name: PROXY_API_SERVICE_PORT
-              value: {{ coalesce .Values.proxy.service.api.ports.http .Values.proxy.service.api.port | quote }}
+              value: {{ .Values.proxy.service.api.ports.http | quote }}
             - name: HUB_SERVICE_PORT
-              value: {{  coalesce .Values.hub.service.ports.http .Values.hub.service.port  | quote }}
+              value: {{ .Values.hub.service.ports.http | quote }}
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:

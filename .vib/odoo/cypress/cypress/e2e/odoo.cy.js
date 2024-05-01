@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -13,7 +13,8 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   cy.get('[title="Sales"]').within(() => {
     cy.get('button[name="button_immediate_install"]').click();
   });
-  cy.reload();
+
+  cy.reload({timeout: 300000});
 
   // Perform the second login only if the #login selector is visible
   cy.get("body").then(($body) => {
@@ -41,8 +42,7 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   });
   cy.contains('Uninstall').click({ force: true });
   cy.get('[name*="uninstall"]').click();
-  cy.reload();
-
+  cy.reload({timeout: 300000});
   cy.get('[title="Home Menu"]').click();
   cy.contains('a', 'Invoicing').should('not.exist');
 });

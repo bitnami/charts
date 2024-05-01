@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,6 +35,17 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 */}}
 {{- define "magento.elasticsearch.fullname" -}}
 {{- printf "%s-%s" .Release.Name "elasticsearch" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return Elasticsearch port
+*/}}
+{{- define "magento.elasticsearch.port" -}}
+{{- if .Values.elasticsearch.enabled -}}
+    {{- print .Values.elasticsearch.service.ports.restAPI -}}
+{{- else -}}
+    {{- print .Values.externalElasticsearch.port -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

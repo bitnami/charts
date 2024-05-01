@@ -116,4 +116,4 @@ Check the upstream Milvus documentation: https://milvus.io/docs
 {{- include "milvus.validateValues" . }}
 
 {{- end }}
-{{- include "common.warnings.resources" (dict "sections" (list "attu" "dataCoord" "dataNode" "indexCoord" "indexNode" "initJob" "proxy" "queryCoord" "queryNode" "rootCoord") "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "attu" "dataCoord" "dataNode" "indexCoord" "indexNode" "initJob" "proxy" "queryCoord" "queryNode" "rootCoord" "waitContainer") "context" $) }}

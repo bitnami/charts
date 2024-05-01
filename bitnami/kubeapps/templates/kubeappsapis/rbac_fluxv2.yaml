@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -53,6 +53,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.kubeappsapis.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
 {{- end }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ---
@@ -11,7 +11,7 @@ header:
 
       content: |
         {{- /*
-        Copyright VMware, Inc.
+        Copyright Broadcom, Inc. All Rights Reserved.
         SPDX-License-Identifier: APACHE-2.0
         */}}
 
@@ -29,7 +29,7 @@ header:
       copyright-owner: VMware, Inc.
 
       content: |
-        # Copyright VMware, Inc.
+        # Copyright Broadcom, Inc. All Rights Reserved.
         # SPDX-License-Identifier: APACHE-2.0
 
     paths:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -207,7 +207,7 @@ spec:
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ coalesce .Values.containerPorts.http .Values.containerPort }}
+              containerPort: {{ .Values.containerPorts.http }}
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}

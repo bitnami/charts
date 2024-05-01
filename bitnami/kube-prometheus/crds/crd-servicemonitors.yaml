@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-# Version: 0.72.0
+# Version: 0.73.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-    operator.prometheus.io/version: 0.72.0
+    operator.prometheus.io/version: 0.73.2
   name: servicemonitors.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -51,6 +51,12 @@ spec:
                       permission on the `Nodes` objects.
                     type: boolean
                 type: object
+              bodySizeLimit:
+                description: "When defined, bodySizeLimit specifies a job level limit
+                  on the size of uncompressed response body that will be accepted
+                  by Prometheus. \n It requires Prometheus >= v2.28.0."
+                pattern: (^0|([0-9]*[.])?[0-9]+((K|M|G|T|E|P)i?)?B)$
+                type: string
               endpoints:
                 description: List of endpoints part of this ServiceMonitor.
                 items:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -423,7 +423,7 @@ spec:
           secret:
             secretName: {{ include "postgresql-ha.postgresqlSecretName" . }}
             items:
-              - key: postgresql-password
+              - key: password
                 path: pgpool-password
               - key: repmgr-password
                 path: pgpool-sr-check-password

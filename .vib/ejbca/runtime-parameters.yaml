@@ -18,6 +18,10 @@ service:
     http: 80
     https: 443
   advertisedHttpsPort: 443
+extraVolumeMounts:
+  - name: empty-dir
+    mountPath: /opt/bitnami/ejbca/p12
+    subPath: test-dir
 mariadb:
   enabled: true
   auth:

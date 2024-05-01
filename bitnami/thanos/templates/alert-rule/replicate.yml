@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -34,9 +34,9 @@ spec:
         summary: Thanos Replicate is failing to run.
       expr: |
         (
-          sum by (job) (rate(thanos_replicate_replication_runs_total{result="error", job=~".*thanos-bucket-replicate.*"}[5m]))
+          sum by (job) (rate(thanos_replicate_replication_runs_total{result="error", job=~".*{{ template "common.names.fullname" . }}-bucket-replicate.*"}[5m]))
         / on (job) group_left
-          sum by (job) (rate(thanos_replicate_replication_runs_total{job=~".*thanos-bucket-replicate.*"}[5m]))
+          sum by (job) (rate(thanos_replicate_replication_runs_total{job=~".*{{ template "common.names.fullname" . }}-bucket-replicate.*"}[5m]))
         ) * 100 >= 10
       for: 5m
       labels:
@@ -56,9 +56,9 @@ spec:
         summary: Thanos Replicate has a high latency for replicate operations.
       expr: |
         (
-          histogram_quantile(0.99, sum by (job) (rate(thanos_replicate_replication_run_duration_seconds_bucket{job=~".*thanos-bucket-replicate.*"}[5m]))) > 20
+          histogram_quantile(0.99, sum by (job) (rate(thanos_replicate_replication_run_duration_seconds_bucket{job=~".*{{ template "common.names.fullname" . }}-bucket-replicate.*"}[5m]))) > 20
         and
-          sum by (job) (rate(thanos_replicate_replication_run_duration_seconds_bucket{job=~".*thanos-bucket-replicate.*"}[5m])) > 0
+          sum by (job) (rate(thanos_replicate_replication_run_duration_seconds_bucket{job=~".*{{ template "common.names.fullname" . }}-bucket-replicate.*"}[5m])) > 0
         )
       for: 5m
       labels:

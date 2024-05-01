@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -110,6 +110,8 @@ spec:
             {{- if .Values.operator.zapTimeEncoding }}
             - --zap-time-encoding={{ .Values.operator.zapTimeEncoding }}
             {{- end }}
+            - --health-probe-bind-address=:{{ .Values.operator.containerPorts.health }}
+            - --metrics-bind-address=0.0.0.0:{{ .Values.operator.containerPorts.metrics }}
             {{- if .Values.operator.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.operator.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -152,6 +154,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.operator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
+            - containerPort: {{ .Values.operator.containerPorts.health }}
+              name: health
+              protocol: TCP
             - containerPort: {{ .Values.operator.containerPorts.metrics }}
               name: metrics
               protocol: TCP
@@ -161,23 +166,23 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /healthz
-              port: 8081
+              port: health
           {{- end }}
           {{- if .Values.operator.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.operator.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /readyz
+              port: health
           {{- end }}
           {{- if .Values.operator.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.operator.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.operator.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.operator.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
-              port: metrics
+              path: /healthz
+              port: health
           {{- end }}
           volumeMounts:
             - name: empty-dir

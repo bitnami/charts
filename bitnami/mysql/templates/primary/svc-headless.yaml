@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -20,8 +20,13 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: mysql
-      port: {{ .Values.primary.service.ports.mysql }}
+      port: {{ .Values.primary.containerPorts.mysql }}
       targetPort: mysql
+    {{- if .Values.primary.service.exposeMySQLX }}
+    - name: mysqlx
+      port: {{ .Values.primary.containerPorts.mysqlx }}
+      targetPort: mysqlx
+    {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary

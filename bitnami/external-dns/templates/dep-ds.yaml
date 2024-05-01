@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -18,6 +18,7 @@ metadata:
   {{- end }}
 spec:
   {{- if not .Values.useDaemonset }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: {{ coalesce .Values.replicas .Values.replicaCount }}
   {{- end }}
   {{- if .Values.updateStrategy }}
@@ -243,6 +244,9 @@ spec:
               {{- if .Values.cloudflare.proxied }}
             - --cloudflare-proxied
               {{- end }}
+              {{- if .Values.cloudflare.dnsRecordsPerPage }}
+            - --cloudflare-dns-records-per-page={{ .Values.cloudflare.dnsRecordsPerPage }}
+              {{- end }}
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
@@ -281,6 +285,13 @@ spec:
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}
               {{- end }}
             {{- end }}
+            {{- if and (eq .Values.provider "oci") .Values.oci.useInstancePrincipal }}
+            # OCI Arguments
+            - --oci-auth-instance-principal
+              {{- if .Values.oci.compartmentOCID }}
+            - --oci-compartment-ocid={{ .Values.oci.compartmentOCID }}
+              {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "ns1" }}
             # ns1 arguments
             - --ns1-min-ttl={{ .Values.ns1.minTTL }}
@@ -290,7 +301,7 @@ spec:
             - --pihole-server={{ .Values.pihole.server }}
               {{- end }}
               {{- if .Values.pihole.tlsSkipVerify }}
-            - --pihole-tls-skip-verify={{ .Values.pihole.tlsSkipVerify }}
+            - --pihole-tls-skip-verify
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "rfc2136" }}
@@ -664,7 +675,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: pihole_password
-            {{- end }}  
+            {{- end }}
             {{- if eq .Values.provider "ns1" }}
             # NS1 environment variables
             {{- if or (.Values.ns1.apiKey) (.Values.ns1.secretName) }}
@@ -781,7 +792,7 @@ spec:
             - name: google-service-account
               mountPath: /etc/secrets/service-account/
             {{- end }}
-            {{- if eq .Values.provider "oci" }}
+            {{- if and (eq .Values.provider "oci") (not .Values.oci.useInstancePrincipal) }}
             - name: oci-config-file
               mountPath: /etc/kubernetes/
             {{- end }}
@@ -850,7 +861,7 @@ spec:
             type: File
           {{- end }}
         {{- end }}
-        {{- if (eq .Values.provider "oci")}}
+        {{- if and (eq .Values.provider "oci") (not .Values.oci.useInstancePrincipal) }}
         - name: oci-config-file
           secret:
             secretName: {{ template "external-dns.secretName" . }}

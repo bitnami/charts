@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -306,13 +306,13 @@ spec:
             {{- end }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
-            {{- if .Values.jvm.maxHeapSize }}
+            {{- if or .Values.jvm.maxHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: MAX_HEAP_SIZE
-              value: {{ .Values.jvm.maxHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateMaxHeapSize" . | quote }}
             {{- end }}
-            {{- if .Values.jvm.newHeapSize }}
+            {{- if or .Values.jvm.newHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: HEAP_NEWSIZE
-              value: {{ .Values.jvm.newHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateNewHeapSize" . | quote }}
             {{- end }}
             {{- if .Values.jvm.extraOpts }}
             - name: JVM_EXTRA_OPTS
@@ -423,6 +423,7 @@ spec:
               {{- else if .Values.hostPorts.intra }}
               hostPort: {{ .Values.hostPorts.intra }}
               {{- end }}
+            {{- if (ne (include "cassandra.internode.tlsEncryption" .) "none") }}
             - name: tls
               containerPort: {{ .Values.containerPorts.tls | default "7001" }}
               {{- if .Values.hostNetwork }}
@@ -430,6 +431,7 @@ spec:
               {{- else if .Values.hostPorts.tls }}
               hostPort: {{ .Values.hostPorts.tls }}
               {{- end }}
+            {{- end }}
             - name: jmx
               containerPort: {{ .Values.containerPorts.jmx | default "7199" }}
               {{- if .Values.hostNetwork }}

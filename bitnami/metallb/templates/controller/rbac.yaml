@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -134,14 +134,6 @@ rules:
       - list
       - patch
       - update
-      - watch
-  - apiGroups:
-      - metallb.io
-    resources:
-      - addresspools
-    verbs:
-      - get
-      - list
       - watch
   - apiGroups:
       - metallb.io

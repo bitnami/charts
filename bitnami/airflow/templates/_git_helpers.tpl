@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -104,6 +104,12 @@ Usage:
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    - name: empty-dir
+      mountPath: /etc/ssh
+      subPath: etc-ssh-dir
+    - name: empty-dir
+      mountPath: /.ssh
+      subPath: ssh-dir
     {{- include "airflow.git.volumeMounts" .context | trim | nindent 4 }}
   {{- if .context.Values.git.clone.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .context.Values.git.clone.extraVolumeMounts "context" .context) | nindent 4 }}
@@ -171,6 +177,15 @@ Usage:
       done
 {{- end }}
   volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    - name: empty-dir
+      mountPath: /etc/ssh
+      subPath: etc-ssh-dir
+    - name: empty-dir
+      mountPath: /.ssh
+      subPath: ssh-dir
     {{- include "airflow.git.volumeMounts" .context | trim | nindent 4 }}
   {{- if .context.Values.git.sync.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .context.Values.git.sync.extraVolumeMounts "context" .context) | nindent 4 }}

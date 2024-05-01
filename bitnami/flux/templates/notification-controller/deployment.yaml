@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -102,6 +102,8 @@ spec:
             {{- end }}
             - --metrics-addr=:{{ .Values.notificationController.containerPorts.metrics }}
             - --health-addr=:{{ .Values.notificationController.containerPorts.health }}
+            - --events-addr=:{{ .Values.notificationController.containerPorts.webhook }}
+            - --receiverAddr=:{{ .Values.notificationController.containerPorts.receiver }}
             - --log-encoding=json
             - --enable-leader-election
           {{- end }}
@@ -132,6 +134,10 @@ spec:
               containerPort: {{ .Values.notificationController.containerPorts.metrics }}
             - name: http-health
               containerPort: {{ .Values.notificationController.containerPorts.health }}
+            - name: http-webhook
+              containerPort: {{ .Values.notificationController.containerPorts.webhook }}
+            - name: http-receiver
+              containerPort: {{ .Values.notificationController.containerPorts.receiver }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.notificationController.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.customLivenessProbe "context" $) | nindent 12 }}

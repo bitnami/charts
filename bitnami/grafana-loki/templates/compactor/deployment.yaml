@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -95,7 +95,7 @@ spec:
           args:
             - -target=compactor
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
-            - -boltdb.shipper.compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
+            - -compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
           {{- if .Values.compactor.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraArgs "context" $) | nindent 12 }}
           {{- end }}
@@ -117,6 +117,8 @@ spec:
               name: http
             - containerPort: {{ .Values.loki.containerPorts.gossipRing }}
               name: http-memberlist
+            - containerPort: {{ .Values.loki.containerPorts.grpc }}
+              name: grpc
           {{- if .Values.compactor.resources }}
           resources: {{- toYaml .Values.compactor.resources | nindent 12 }}
           {{- else if ne .Values.compactor.resourcesPreset "none" }}

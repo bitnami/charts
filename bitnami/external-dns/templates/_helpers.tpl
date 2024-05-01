@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -259,6 +259,12 @@ region = {{ .Values.aws.region }}
 }
 {{ end }}
 {{- define "external-dns.oci-credentials" -}}
+{{- if .Values.oci.useWorkloadIdentity }}
+auth:
+  region: {{ .Values.oci.region }}
+  useWorkloadIdentity: true
+compartment: {{ .Values.oci.compartmentOCID }}
+{{- else }}
 auth:
   region: {{ .Values.oci.region }}
   tenancy: {{ .Values.oci.tenancyOCID }}
@@ -270,7 +276,8 @@ auth:
   passphrase: {{ .Values.oci.privateKeyPassphrase }}
   {{- end }}
 compartment: {{ .Values.oci.compartmentOCID }}
-{{ end }}
+{{- end }}
+{{- end }}
 
 {{/*
 Compile all warnings into a single message, and call fail if the validation is enabled

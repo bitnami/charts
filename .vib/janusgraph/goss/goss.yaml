@@ -1,0 +1,33 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  {{- $vertex_name := printf "test_%s" (randAlpha 5) }}
+  janusgraph-graph-creation:
+    exec: JAVA_OPTIONS="" /opt/bitnami/scripts/janusgraph/entrypoint.sh gremlin.sh -e ./janusgraph/goss/testfiles/test.groovy {{ $vertex_name }}
+    exit-status: 0
+    timeout: 180000
+    stdout:
+      - "object={{ $vertex_name }}"
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+file:
+  /bitnami/janusgraph/conf/janusgraph.properties:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - /storage.backend/
+http:
+  http://janusgraph-metrics:{{ .Vars.metrics.service.ports.metrics }}/metrics:
+    status: 200
+    body:
+      - /metrics_org_janusgraph_.*/
+addr:
+  tcp://janusgraph:{{ .Vars.service.ports.gremlin }}:
+    reachable: true

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -127,6 +127,33 @@ spec:
               subPath: {{ .Values.persistence.subPath }}
               {{- end }}
         {{- end }}
+        - name: prepare-plugins-dir
+          image: {{ template "rabbitmq.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying plugins dir to empty dir"
+              # In order to not break the possibility of installing custom plugins, we need
+              # to make the plugins directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/rabbitmq/plugins/ /emptydir/app-plugins-dir
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -267,10 +294,8 @@ spec:
               containerPort: {{ .Values.containerPorts.manager }}
             - name: epmd
               containerPort: {{ .Values.containerPorts.epmd }}
-            {{- if .Values.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
-            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - name: amqp-tls
               containerPort: {{ .Values.containerPorts.amqpTls }}
@@ -338,6 +363,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/rabbitmq/var/log/rabbitmq
               subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/rabbitmq/plugins
+              subPath: app-plugins-dir
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               {{- if .Values.persistence.subPath }}

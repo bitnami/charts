@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -26,6 +26,12 @@ spec:
       protocol: TCP
       port: {{ .Values.containerPorts.serfLAN }}
     - name: serflan-udp
+      protocol: UDP
+      port: {{ .Values.containerPorts.serfWAN }}
+    - name: serfwan-tcp
+      protocol: TCP
+      port: {{ .Values.containerPorts.serfWAN }}
+    - name: serfwan-udp
       protocol: UDP
       port: {{ .Values.containerPorts.serfLAN }}
     - name: rpc-server

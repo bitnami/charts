@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -121,7 +121,11 @@ spec:
           {{- end }}
             - --http-port={{ .Values.containerPorts.http }}
             - --https-port={{ .Values.containerPorts.https }}
+            - --default-server-port={{ .Values.containerPorts.defaultServer }}
             - --healthz-port={{ .Values.containerPorts.metrics }}
+            - --profiler-port={{ .Values.containerPorts.profiler }}
+            - --status-port={{ .Values.containerPorts.status }}
+            - --stream-port={{ .Values.containerPorts.stream }}
             - --election-id={{ .Values.electionID }}
             - --controller-class={{ .Values.ingressClassResource.controllerClass }}
             - --configmap={{ default "$(POD_NAMESPACE)" .Values.configMapNamespace }}/{{ include "common.names.fullname" . }}
@@ -204,8 +208,20 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
+            - name: default-server
+              containerPort: {{ .Values.containerPorts.defaultServer }}
+              protocol: TCP
             - name: metrics
               containerPort: {{ .Values.containerPorts.metrics }}
+              protocol: TCP
+            - name: profiler
+              containerPort: {{ .Values.containerPorts.profiler }}
+              protocol: TCP
+            - name: status
+              containerPort: {{ .Values.containerPorts.status }}
+              protocol: TCP
+            - name: stream
+              containerPort: {{ .Values.containerPorts.stream }}
               protocol: TCP
             {{- range $key, $value := .Values.tcp }}
             - name: "{{ $key }}-tcp"

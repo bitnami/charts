@@ -1,0 +1,59 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.notificationController.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "flux.notification-controller.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: notification-controller
+  {{- if or .Values.notificationController.service.receiver.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if or .Values.notificationController.service.receiver.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.service.receiver.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.notificationController.service.receiver.type }}
+  {{- if and .Values.notificationController.service.receiver.clusterIP (eq .Values.notificationController.service.receiver.type "ClusterIP") }}
+  clusterIP: {{ .Values.notificationController.service.receiver.clusterIP }}
+  {{- end }}
+  {{- if .Values.notificationController.service.receiver.sessionAffinity }}
+  sessionAffinity: {{ .Values.notificationController.service.receiver.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.notificationController.service.receiver.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.service.receiver.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.notificationController.service.receiver.type "LoadBalancer") (eq .Values.notificationController.service.receiver.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.notificationController.service.receiver.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.notificationController.service.receiver.type "LoadBalancer") (not (empty .Values.notificationController.service.receiver.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.notificationController.service.receiver.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.notificationController.service.receiver.type "LoadBalancer") (not (empty .Values.notificationController.service.receiver.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.notificationController.service.receiver.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.notificationController.service.receiver.ports.http }}
+      protocol: TCP
+      {{- if and (or (eq .Values.notificationController.service.receiver.type "NodePort") (eq .Values.notificationController.service.receiver.type "LoadBalancer")) (not (empty .Values.notificationController.service.receiver.nodePorts.http)) }}
+      nodePort: {{ .Values.notificationController.service.receiver.nodePorts.http }}
+      {{- else if eq .Values.notificationController.service.receiver.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+      targetPort: http-receiver
+    {{- if .Values.notificationController.service.receiver.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.notificationController.service.receiver.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+    app.kubernetes.io/component: notification-controller
+{{- end }}

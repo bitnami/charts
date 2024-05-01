@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,10 +37,10 @@ spec:
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.notifications.bots.slack.service.port }}
+      port: {{ coalesce .Values.notifications.bots.slack.service.port .Values.notifications.bots.slack.service.ports.http }}
       targetPort: http
-      {{- if (and (or (eq .Values.notifications.bots.slack.service.type "NodePort") (eq .Values.notifications.bots.slack.service.type "LoadBalancer")) (not (empty .Values.notifications.bots.slack.service.nodePort))) }}
-      nodePort: {{ .Values.notifications.bots.slack.service.nodePort }}
+      {{- if (and (or (eq .Values.notifications.bots.slack.service.type "NodePort") (eq .Values.notifications.bots.slack.service.type "LoadBalancer")) (not (empty (coalesce .Values.notifications.bots.slack.service.nodePort .Values.notifications.bots.slack.service.nodePorts.http)))) }}
+      nodePort: {{ coalesce .Values.notifications.bots.slack.service.nodePort .Values.notifications.bots.slack.service.nodePorts.http }}
       {{- else if eq .Values.notifications.bots.slack.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

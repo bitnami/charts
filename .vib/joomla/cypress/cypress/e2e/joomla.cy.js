@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -25,7 +25,7 @@ it('allows creating an article and accessing it publicly', () => {
   });
 });
 
-it('allows updating an image', () => {
+it('allows uploading an image', () => {
   cy.login();
   cy.visit('/administrator/index.php?option=com_media');
   cy.contains('Upload').click();

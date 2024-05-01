@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -24,7 +24,7 @@ Cypress.Commands.add(
     cy.get('select.select').select('userpass');
     cy.get('#username').should('be.enabled').type(username);
     cy.get('#password').should('be.enabled').type(password);
-    cy.contains('button', 'Sign In').click();
+    cy.contains('button', 'Sign in').click();
     cy.contains('Secrets engines').should('be.visible');
   }
 );

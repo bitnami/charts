@@ -1,0 +1,29 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- $replicaCount := int .Values.filer.replicaCount }}
+{{- if and .Values.filer.enabled .Values.filer.pdb.create (or (gt $replicaCount 1) .Values.filer.autoscaling.enabled) }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "seaweedfs.filer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: filer
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.filer.pdb.minAvailable }}
+  minAvailable: {{ .Values.filer.pdb.minAvailable }}
+  {{- end  }}
+  {{- if .Values.filer.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.filer.pdb.maxUnavailable }}
+  {{- end  }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.filer.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: filer
+{{- end }}

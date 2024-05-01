@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -21,45 +21,45 @@ spec:
   ports:
     - name: http
       targetPort: http
-      port: {{ .Values.service.ports.http }}
+      port: {{ .Values.containerPorts.http }}
       protocol: TCP
     - name: tcp
       targetPort: tcp
-      port: {{ .Values.service.ports.tcp }}
+      port: {{ .Values.containerPorts.tcp }}
       protocol: TCP
     {{- if .Values.tls.enabled }}
     - name: tcp-secure
       targetPort: tcp-secure
-      port: {{ .Values.service.ports.tcpSecure }}
+      port: {{ .Values.containerPorts.tcpSecure }}
       protocol: TCP
     {{- end }}
     {{- if .Values.keeper.enabled }}
     - name: tcp-keeper
       targetPort: tcp-keeper
-      port: {{ .Values.service.ports.keeper }}
+      port: {{ .Values.containerPorts.keeper }}
       protocol: TCP
     - name: tcp-keeperinter
       targetPort: tcp-keeperinter
-      port: {{ .Values.service.ports.keeperInter }}
+      port: {{ .Values.containerPorts.keeperInter }}
       protocol: TCP
     {{- if .Values.tls.enabled }}
     - name: tcp-keepertls
       targetPort: tcp-keepertls
-      port: {{ .Values.service.ports.keeperSecure }}
+      port: {{ .Values.containerPorts.keeperSecure }}
       protocol: TCP
     {{- end }}
     {{- end }}
     - name: tcp-mysql
       targetPort: tcp-mysql
-      port: {{ .Values.service.ports.mysql }}
+      port: {{ .Values.containerPorts.mysql }}
       protocol: TCP
     - name: tcp-postgresql
       targetPort: tcp-postgresql
-      port: {{ .Values.service.ports.postgresql }}
+      port: {{ .Values.containerPorts.postgresql }}
       protocol: TCP
     - name: http-intersrv
       targetPort: http-intersrv
-      port: {{ .Values.service.ports.interserver }}
+      port: {{ .Values.containerPorts.interserver }}
       protocol: TCP
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}

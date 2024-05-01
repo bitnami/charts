@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -9,15 +9,7 @@ SPDX-License-Identifier: APACHE-2.0
 Return the target Kubernetes version
 */}}
 {{- define "common.capabilities.kubeVersion" -}}
-{{- if .Values.global }}
-    {{- if .Values.global.kubeVersion }}
-    {{- .Values.global.kubeVersion -}}
-    {{- else }}
-    {{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-    {{- end -}}
-{{- else }}
-{{- default .Capabilities.KubeVersion.Version .Values.kubeVersion -}}
-{{- end -}}
+{{- default (default .Capabilities.KubeVersion.Version .Values.kubeVersion) ((.Values.global).kubeVersion) -}}
 {{- end -}}
 
 {{/*

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -126,6 +126,9 @@ spec:
           args:
             - migrate
             - --migrate-to-latest-version
+          {{- if .Values.web.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           env:
             - name: CONCOURSE_POSTGRES_PASSWORD
               valueFrom:
@@ -383,6 +386,9 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
               readOnly: true
@@ -403,6 +409,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.web.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: concourse-configuration
           configMap:
             name: {{ include "concourse.web.configmapName" . }}

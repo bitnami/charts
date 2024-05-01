@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -37,6 +37,7 @@ it('can login and access the experiment run', () => {
     // This ensures that the script in the job was run
     cy.contains(script.script.title);
     // This ensures that the communication with MinIO succeeded
+    cy.contains('Artifacts').click();
     cy.contains(script.script.modelFile);
   });
 });

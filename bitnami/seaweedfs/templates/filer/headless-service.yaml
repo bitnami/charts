@@ -1,0 +1,37 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.filer.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-headless" (include "seaweedfs.filer.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: filer
+  {{- if or .Values.filer.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.filer.service.headless.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: {{ .Values.filer.containerPorts.http }}
+      protocol: TCP
+    - name: grpc
+      port: {{ .Values.filer.containerPorts.grpc }}
+      protocol: TCP
+    {{- if .Values.filer.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.filer.containerPorts.metrics }}
+      protocol: TCP
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.filer.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: filer
+{{- end }}

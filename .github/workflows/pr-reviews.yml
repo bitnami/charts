@@ -6,6 +6,10 @@ on:
   pull_request_review_comment:
     types:
       - created
+  pull_request_review:
+    types:
+      - submitted
+      - dismissed
 permissions: {}
 # Avoid concurrency over the same issue
 concurrency:
@@ -19,7 +23,7 @@ jobs:
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
           echo "${{ github.event.pull_request.number }}" > pull_request_number
       - name: Upload the PR number
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
         with:
           name: pull_request_number
           path: ./pull_request_number

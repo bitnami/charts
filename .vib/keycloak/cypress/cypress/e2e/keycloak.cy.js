@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -11,9 +11,9 @@ it('allows creating a new user', () => {
   cy.get('[href*="/users"]').click();
   cy.get('[data-testid="add-user"]').click();
   cy.fixture('users').then((user) => {
-    cy.get('#kc-username').type(`${user.newUser.username}.${random}`);
-    cy.get('[data-testid="firstName-input"]').type(`${user.newUser.firstName}.${random}`);
-    cy.get('[data-testid="lastName-input"]').type(`${user.newUser.lastName}.${random}`);
+    cy.get('#username').type(`${user.newUser.username}.${random}`);
+    cy.get('#firstName').type(`${user.newUser.firstName}.${random}`);
+    cy.get('#lastName').type(`${user.newUser.lastName}.${random}`);
   });
   cy.get('[data-testid="create-user"]').click({ force: true });
   cy.contains('The user has been created');

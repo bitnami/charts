@@ -1,14 +1,14 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
   http://argo-cd-server:{{ .Vars.server.service.ports.http }}:
     status: 307
     no-follow-redirects: true
-  http://argo-cd-app-controller:{{ .Vars.controller.service.port }}/healthz:
+  http://argo-cd-app-controller:{{ .Vars.controller.service.ports.metrics }}/healthz:
     status: 200
 addr:
-  tcp://argo-cd-repo-server:{{ .Vars.repoServer.service.port }}:
+  tcp://argo-cd-repo-server:{{ .Vars.repoServer.service.ports.repoServer }}:
     reachable: true
 file:
   /app/config/ssh:

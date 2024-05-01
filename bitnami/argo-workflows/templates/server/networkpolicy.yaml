@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -23,9 +23,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: argo-workflows
       app.kubernetes.io/component: server
-  {{- if .Values.server.networkPolicy.extraEgress }}
-  egress: {{- include "common.tplvalues.render" ( dict "value" .Values.server.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
-  {{- end }}
+  policyTypes:
+    - Ingress
+    - Egress
   {{- if .Values.server.networkPolicy.allowExternalEgress }}
   egress:
     - {}
@@ -49,7 +49,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: postgresql
               app.kubernetes.io/instance: {{ .Release.Name }}
-      {{- else if .Values.mysql.enabled }}              
+      {{- else if .Values.mysql.enabled }}
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: mysql

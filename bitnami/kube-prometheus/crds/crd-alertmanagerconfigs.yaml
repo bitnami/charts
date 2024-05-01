@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
-# Version: 0.72.0
+# Version: 0.73.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-    operator.prometheus.io/version: 0.72.0
+    operator.prometheus.io/version: 0.73.2
   name: alertmanagerconfigs.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
@@ -167,7 +167,7 @@ spec:
                                 by name (e.g 'January') by numerical month (e.g '1')
                                 or as an inclusive range (e.g 'January:March', '1:3',
                                 '1:March')
-                              pattern: ^((?i)january|february|march|april|may|june|july|august|september|october|november|december|[1-12])(?:((:((?i)january|february|march|april|may|june|july|august|september|october|november|december|[1-12]))$)|$)
+                              pattern: ^((?i)january|february|march|april|may|june|july|august|september|october|november|december|1[0-2]|[1-9])(?:((:((?i)january|february|march|april|may|june|july|august|september|october|november|december|1[0-2]|[1-9]))$)|$)
                               type: string
                             type: array
                           times:
@@ -1197,6 +1197,10 @@ spec:
                           sendResolved:
                             description: Whether to notify about resolved alerts.
                             type: boolean
+                          summary:
+                            description: Message summary template. It requires Alertmanager
+                              >= 0.27.0.
+                            type: string
                           text:
                             description: Message body template.
                             type: string

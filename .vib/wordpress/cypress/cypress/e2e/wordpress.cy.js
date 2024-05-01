@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -10,7 +10,7 @@ import { random, getIframeBody } from '../support/utils';
 it('allows creating a post with image', () => {
   cy.login();
   cy.visit('/wp-admin/post-new.php');
-  // cy.get('[aria-label="Close"]').click();
+  cy.get('[aria-label="Close"]').click();
   // Wait for DOM content to load
   cy.wait(5000);
   cy.fixture('posts').then((post) => {

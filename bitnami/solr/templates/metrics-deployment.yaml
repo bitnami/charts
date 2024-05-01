@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -93,8 +93,9 @@ spec:
                   name: {{ include "solr.secretName" . }}
                   key: {{ include "solr.secretPasswordKey" . }}
           volumeMounts:
-            - name: basicauth-properties
+            - name: empty-dir
               mountPath: /basicauth-properties/
+              subPath: app-basicauth-properties-dir
               readOnly: false
         {{- end }}
       containers:
@@ -182,9 +183,13 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             {{- if .Values.auth.enabled }}
-            - name: basicauth-properties
+            - name: empty-dir
               mountPath: /basicauth-properties/
+              subPath: app-basicauth-properties-dir
               readOnly: true
             {{- end }}
             {{- if .Values.metrics.extraVolumeMounts }}
@@ -194,10 +199,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if .Values.auth.enabled }}
-        - name: basicauth-properties
+        - name: empty-dir
           emptyDir: {}
-        {{- end }}
         {{- if .Values.metrics.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

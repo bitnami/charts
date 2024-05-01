@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,10 +39,10 @@ spec:
   ports:
     - name:  http-metrics
       targetPort: metrics
-      port: {{ .Values.applicationSet.metrics.service.port }}
+      port: {{ coalesce .Values.applicationSet.metrics.service.port .Values.applicationSet.metrics.service.ports.metrics }}
       protocol: TCP
-      {{- if (and (or (eq .Values.applicationSet.service.type "NodePort") (eq .Values.applicationSet.service.type "LoadBalancer")) (not (empty .Values.applicationSet.metrics.service.nodePort))) }}
-      nodePort: {{ .Values.applicationSet.metrics.service.nodePort }}
+      {{- if (and (or (eq .Values.applicationSet.service.type "NodePort") (eq .Values.applicationSet.service.type "LoadBalancer")) (not (empty (coalesce .Values.applicationSet.metrics.service.nodePort .Values.applicationSet.metrics.service.nodePorts.metrics)))) }}
+      nodePort: {{ coalesce .Values.applicationSet.metrics.service.nodePort .Values.applicationSet.metrics.service.nodePorts.metrics }}
       {{- else if eq .Values.applicationSet.metrics.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
