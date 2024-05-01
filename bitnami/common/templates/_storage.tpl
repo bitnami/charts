@@ -10,13 +10,7 @@ Return  the proper Storage Class
 */}}
 {{- define "common.storage.class" -}}
 
-{{- $storageClass := .persistence.storageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.storageClass -}}
-    {{- end -}}
-{{- end -}}
-
+{{- $storageClass := default .persistence.storageClass ((.global).storageClass) -}}
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
       {{- printf "storageClassName: \"\"" -}}
