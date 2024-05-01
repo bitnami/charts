@@ -40,6 +40,7 @@ webhooks:
           operator: NotIn
           values:
             - injector
-    namespaceSelector:
-{{ tpl (toYaml (((.Values.injector.webhook)).namespaceSelector | default .Values.injector.namespaceSelector)) . | indent 6}}
+    {{- if .Values.injector.webhook.namespaceSelector -}}
+    namespaceSelector: {{- include "common.tplvalues.render" (dict "value" (default .Values.injector.webhook.namespaceSelector ((.Values.injector.webhook)).namespaceSelector) "context" $) | nindent 6 }}
+    {{- end -}}
 {{- end }}
