@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -25,7 +25,8 @@ it('allows admin to add a product to the store', () => {
     cy.get('[name="product[price]"]').type(product.newProduct.price);
   });
   cy.contains('Images And Videos').click();
-  cy.get('#fileupload').selectFile('cypress/fixtures/images/image.png', {
+  cy.get('div[class*="fileinput"]').selectFile('cypress/fixtures/images/image.png', {
+    action: 'drag-drop',
     force: true,
   });
   cy.get('.product-image').should('be.visible');

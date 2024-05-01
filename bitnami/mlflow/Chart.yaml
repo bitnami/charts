@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -43,4 +43,4 @@ name: mlflow
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/mlflow
 - https://github.com/mlflow/mlflow
-version: 1.0.2
+version: 1.0.3

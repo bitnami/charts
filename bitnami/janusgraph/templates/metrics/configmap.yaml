@@ -1,0 +1,21 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.metrics.enabled (not .Values.metrics.existingConfigmap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-jmx-configuration" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: janusgraph
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  jmx-prometheus.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.config "context" $ ) | nindent 4 }}
+{{- end -}}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -402,7 +402,7 @@ clusterOperator:
     ## @param clusterOperator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param clusterOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param clusterOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1003,7 +1003,7 @@ msgTopologyOperator:
     ## @param msgTopologyOperator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param msgTopologyOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param msgTopologyOperator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

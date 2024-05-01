@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -304,7 +304,7 @@ operator:
     ## @param operator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -718,7 +718,7 @@ prometheus:
     ## @param prometheus.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param prometheus.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param prometheus.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1951,7 +1951,7 @@ alertmanager:
     ## @param alertmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2868,7 +2868,7 @@ blackboxExporter:
     ## @param blackboxExporter.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param blackboxExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param blackboxExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
