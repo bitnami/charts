@@ -1388,16 +1388,16 @@ injector:
   ##
   customStartupProbe: {}
 
-  ## @param injector.webhook Enabling specify which namespace you want to work with webhook
-  ## Example:
-  ## webhook:
-  ##   namespaceSelector:
-  ##     matchExpressions:
-  ##     - key: kubernetes.io/metadata.name
-  ##       operator: In
-  ##       values:
-  ##         - "{{ .Release.Namespace }}"
-  webhook: {}
+  webhook: 
+    ## @param injector.webhook Enabling specify which namespace you want to work with webhook
+    ## Example:
+    ##   namespaceSelector:
+    ##     matchExpressions:
+    ##     - key: kubernetes.io/metadata.name
+    ##       operator: In
+    ##       values:
+    ##         - "{{ .Release.Namespace }}"
+    namespaceSelector: {}
        
   ## Vault Kubernetes Injector resource requests and limits
   ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
