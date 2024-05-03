@@ -40,7 +40,5 @@ webhooks:
           operator: NotIn
           values:
             - injector
-    {{- if .Values.injector.webhook.namespaceSelector -}}
     namespaceSelector: {{- include "common.tplvalues.render" (dict "value" (default .Values.injector.webhook.namespaceSelector ((.Values.injector.webhook)).namespaceSelector) "context" $) | nindent 6 }}
-    {{- end -}}
 {{- end }}
