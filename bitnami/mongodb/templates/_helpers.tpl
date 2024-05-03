@@ -75,6 +75,13 @@ Return the proper image name (for the init container auto-discovery image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container dns-check image)
+*/}}
+{{- define "mongodb.externalAccess.dnsCheck.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.externalAccess.dnsCheck.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the TLS Certs image)
 */}}
 {{- define "mongodb.tls.image" -}}
@@ -85,7 +92,7 @@ Return the proper image name (for the TLS Certs image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mongodb.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.tls.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image .Values.tls.image .Values.externalAccess.dnsCheck.image .Values.externalAccess.autoDiscovery.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -219,6 +226,103 @@ Get the initialization scripts ConfigMap name.
 {{- else -}}
 {{- printf "%s-init-scripts" (include "mongodb.fullname" .) -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Get initial primary host to configure MongoDB cluster.
+*/}}
+{{- define "mongodb.initialPrimaryHost" -}}
+{{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
+{{- end -}}
+
+{{/*
+Init container definition to change/establish volume permissions.
+*/}}
+{{- define "mongodb.initContainer.volumePermissions" -}}
+- name: volume-permissions
+  image: {{ include "mongodb.volumePermissions.image" . }}
+  imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      mkdir -p {{ printf "%s/%s" .Values.persistence.mountPath (default "" .Values.persistence.subPath) }}
+      chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ printf "%s/%s" .Values.persistence.mountPath (default "" .Values.persistence.subPath) }}
+      find  {{ printf "%s/%s" .Values.persistence.mountPath (default "" .Values.persistence.subPath) }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+  {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+  securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+  {{- else }}
+  securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+  {{- end }}
+  {{- if .Values.volumePermissions.resources }}
+  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+    - name: {{ .Values.persistence.name | default "datadir" }}
+      mountPath: {{ .Values.persistence.mountPath }}
+{{- end -}}
+
+{{/*
+Init container definition to get external IP addresses.
+*/}}
+{{- define "mongodb.initContainers.autoDiscovery" -}}
+- name: auto-discovery
+  image: {{ include "mongodb.externalAccess.autoDiscovery.image" . }}
+  imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
+  # We need the service account token for contacting the k8s API
+  automountServiceAccountToken: true
+  command:
+    - /scripts/auto-discovery.sh
+  env:
+    - name: MY_POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: SHARED_FILE
+      value: "/shared/info.txt"
+  {{- if .Values.externalAccess.autoDiscovery.resources }}
+  resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  {{- else if ne .Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
+  {{- end }}
+  volumeMounts:
+    - name: shared
+      mountPath: /shared
+    - name: scripts
+      mountPath: /scripts/auto-discovery.sh
+      subPath: auto-discovery.sh
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
+{{- end -}}
+
+{{/*
+Init container definition to wait external DNS names.
+*/}}
+{{- define "mongodb.initContainers.dnsCheck" -}}
+- name: dns-check
+  image: {{ include "mongodb.externalAccess.dnsCheck.image" . }}
+  imagePullPolicy: {{ .Values.externalAccess.dnsCheck.image.pullPolicy | quote }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      # MONGODB_INITIAL_PRIMARY_HOST should be resolvable
+      while ! (getent ahosts "{{ include "mongodb.initialPrimaryHost" . }}" | grep STREAM); do
+        sleep 10
+      done
+  {{- if .Values.externalAccess.dnsCheck.resources }}
+  resources: {{- toYaml .Values.externalAccess.dnsCheck.resources | nindent 12 }}
+  {{- else if ne .Values.externalAccess.dnsCheck.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.dnsCheck.resourcesPreset) | nindent 12 }}
+  {{- end }}
 {{- end -}}
 
 {{/*
