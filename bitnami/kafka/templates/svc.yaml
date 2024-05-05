@@ -24,6 +24,9 @@ spec:
   {{- end }}
   {{- if (eq .Values.service.type "LoadBalancer") }}
   allocateLoadBalancerNodePorts: {{ .Values.service.allocateLoadBalancerNodePorts }}
+  {{- if (not (empty .Values.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass }}
+  {{- end }}
   {{- if (not (empty .Values.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.service.loadBalancerSourceRanges }}
   {{- end }}
