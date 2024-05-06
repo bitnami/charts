@@ -100,6 +100,10 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          ports:
+            - containerPort: {{ coalesce .Values.envoy.shutdownManager.containerPorts.http .Values.envoy.shutdownManager.port }}
+              name: http-shutdown
+              protocol: TCP
           {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.shutdownManager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}

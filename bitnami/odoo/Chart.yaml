@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: odoo
-      image: docker.io/bitnami/odoo:17.0.20240305-debian-12-r0
+      image: docker.io/bitnami/odoo:17.0.20240505-debian-12-r0
 apiVersion: v2
-appVersion: 17.0.20240305
+appVersion: 17.0.20240505
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
@@ -29,9 +29,9 @@ keywords:
 - http
 - web
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: odoo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/odoo
-version: 26.0.0
+version: 26.0.2
