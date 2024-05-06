@@ -25,7 +25,7 @@ icon: https://bitnami.com/assets/stacks/opensearch/img/opensearch-stack-220x234.
 keywords:
 - opensearch
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: opensearch
 sources:

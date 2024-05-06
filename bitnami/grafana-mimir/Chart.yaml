@@ -54,8 +54,8 @@ keywords:
   - metrics
   - infrastructure
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: grafana-mimir
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir

@@ -28,8 +28,8 @@ keywords:
   - keycloak
   - access-management
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: keycloak
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
