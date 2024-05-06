@@ -101,7 +101,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - containerPort: {{ coalesce .Values.envoy.shutdownManager.port .Values.envoy.shutdownManager.containerPorts.http }}
+            - containerPort: {{ coalesce .Values.envoy.shutdownManager.containerPorts.http .Values.envoy.shutdownManager.port }}
               name: http-shutdown
               protocol: TCP
           {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
