@@ -4022,6 +4022,15 @@ externalRedis:
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
+  ## Specify a label to use with the label selector
+  ## @param externalRedis.selector External Redis selector lables
+  ##
+  selector: {}
+  #
+  # selector:
+    # app.kubernetes.io/component: master
+    # app.kubernetes.io/instance: redis
+    # app.kubernetes.io/name: redis
 ## Wait-for-redis init container configuration
 ##
 redisWait:
