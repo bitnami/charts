@@ -145,10 +145,10 @@ jobs:
               echo "error=Please ensure all *.tag params are skipped (@skip) in the bitnami/${CHART}/values.yaml file"
               exit "$exit_code"
             fi
-            # Ensuring no Unicode characters are present in values.yaml
+            # Ensuring no unprintable characters are present in values.yaml
             ! grep -q "[^[:print:]]" "bitnami/${CHART}/values.yaml" || exit_code=$?
             if [[ $exit_code -ne 0 ]]; then
-              echo "error=Please ensure there are no Unicode characters in the bitnami/${CHART}/values.yaml file"
+              echo "error=Please ensure there are no unprintable characters in the bitnami/${CHART}/values.yaml file"
               exit "$exit_code"
             fi
             echo "Updating README.md for bitnami/${CHART}"
