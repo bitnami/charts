@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -36,8 +36,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive
+      {{- if or .Values.receive.podAnnotations (include "thanos.receive.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
-        {{- if (include "thanos.objstoreConfig" $) }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
@@ -46,6 +47,7 @@ spec:
         {{- if .Values.receive.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "thanos.receive.serviceAccountName" . }}
@@ -139,7 +141,11 @@ spec:
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
+            {{- if .Values.receive.tsdbPath }}
+            - --tsdb.path={{ .Values.receive.tsdbPath }}
+            {{- else }}
             - --tsdb.path=/var/thanos/receive
+            {{- end }}
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention={{ .Values.receive.tsdbRetention }}

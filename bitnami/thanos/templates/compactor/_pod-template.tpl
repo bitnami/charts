@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -13,13 +13,15 @@ metadata:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
+  {{- if or .Values.compactor.podAnnotations (include "thanos.createObjstoreSecret" .) }}
   annotations:
-    {{- if (include "thanos.objstoreConfig" $) }}
+    {{- if (include "thanos.createObjstoreSecret" .) }}
     checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
     {{- end }}
     {{- if .Values.compactor.podAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 4 }}
     {{- end }}
+  {{- end }}
 spec:
   {{- include "thanos.imagePullSecrets" . | nindent 2 }}
   serviceAccountName: {{ include "thanos.compactor.serviceAccountName" . }}
