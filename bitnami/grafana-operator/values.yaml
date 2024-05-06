@@ -531,6 +531,10 @@ grafana:
   ##     iam.gke.io/gcp-service-account: "grafana@preprodz.iam.gserviceaccount.com"
   ##
   serviceAccount: {}
+  ## @param grafana.podLabels Additional pod labels to pods in the grafana deployment
+  ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
   ## Pod securityContext
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param grafana.podSecurityContext.enabled Enable pods security context
