@@ -316,7 +316,7 @@ mimir:
       ##
       annotations: {}
   ## BlockStorage config for mimir pods
-  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
+  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
   ## @param mimir.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
   ## @param mimir.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
@@ -751,7 +751,7 @@ alertmanager:
     minAvailable: 1
     maxUnavailable: ""
   ## BlockStorage config for alertmanager pods
-  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
+  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
   ## @param alertmanager.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
   ## @param alertmanager.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
@@ -4810,7 +4810,7 @@ ruler:
     minAvailable: 1
     maxUnavailable: ""
   ## BlockStorage config for ruler pods
-  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
+  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
   ## @param ruler.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
   ## @param ruler.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
