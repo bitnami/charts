@@ -1141,6 +1141,9 @@ notifications:
   ## @param notifications.extraArgs Add extra arguments to the default arguments for the Argo CD notifications controller
   ##
   extraArgs: []
+  ## @param notifications.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## Argo CD notifications controller log format: text|json
   ## @param notifications.logFormat Format for the Argo CD notifications controller logs. Options: [text, json]
   ##
