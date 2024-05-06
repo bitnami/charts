@@ -29,7 +29,7 @@ icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-22
 keywords:
 - elasticsearch
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved..
   url: https://github.com/bitnami/charts
 name: elasticsearch
 sources:
