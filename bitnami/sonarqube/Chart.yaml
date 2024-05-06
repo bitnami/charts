@@ -37,4 +37,4 @@ maintainers:
 name: sonarqube
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
-version: 5.0.3
+version: 5.0.4
