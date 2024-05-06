@@ -1185,7 +1185,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `externalRedis.password`                                      | External Redis password                                                                               | `""`                    |
 | `externalRedis.existingSecret`                                | Existing secret for the external redis                                                                | `""`                    |
 | `externalRedis.existingSecretPasswordKey`                     | Password key for the existing secret containing the external redis password                           | `redis-password`        |
-| `externalRedis.selector`                                      | External Redis selector lables                                                                        | `{}`                    |
+| `externalRedis.selector`                                      | External Redis selector labels                                                                        | `{}`                    |
 | `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
 | `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
 | `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |

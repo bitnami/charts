@@ -4023,7 +4023,7 @@ externalRedis:
   ##
   existingSecretPasswordKey: 'redis-password'
   ## Specify a label to use with the label selector
-  ## @param externalRedis.selector External Redis selector lables
+  ## @param externalRedis.selector External Redis selector labels
   ##
   selector: {}
   #
