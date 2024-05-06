@@ -105,7 +105,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.2.0-debian-12-r17
+  tag: 16.2.0-debian-12-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -222,7 +222,7 @@ audit:
 ## @param ldap.searchAttribute Attribute to match against the user name in the search
 ## @param ldap.searchFilter The search filter to use when doing search+bind authentication
 ## @param ldap.scheme Set to `ldaps` to use LDAPS
-## DEPRECATED ldap.tls as string is deprecated，please use 'ldap.tls.enabled' instead
+## DEPRECATED ldap.tls as string is deprecated, please use 'ldap.tls.enabled' instead
 ## @param ldap.tls.enabled Se to true to enable TLS encryption
 ##
 ldap:

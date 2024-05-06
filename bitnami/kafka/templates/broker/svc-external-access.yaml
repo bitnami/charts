@@ -32,6 +32,9 @@ spec:
   type: {{ $.Values.externalAccess.broker.service.type }}
   {{- if eq $.Values.externalAccess.broker.service.type "LoadBalancer" }}
   allocateLoadBalancerNodePorts: {{  $.Values.externalAccess.broker.service.allocateLoadBalancerNodePorts }}
+  {{- if (not (empty $.Values.externalAccess.broker.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ $.Values.externalAccess.broker.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (not (empty $.Values.externalAccess.broker.service.loadBalancerIPs)) (eq (len $.Values.externalAccess.broker.service.loadBalancerIPs) $replicaCount) }}
   loadBalancerIP: {{ index $.Values.externalAccess.broker.service.loadBalancerIPs $i }}
   {{- end }}

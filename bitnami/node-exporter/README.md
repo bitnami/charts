@@ -212,6 +212,7 @@ Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetw
 | `serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                          | `false`                         |
 | `serviceMonitor.attachMetadata`                     | Attaches node metadata to discovered targets                                                                                                                                                                      | `{}`                            |
 | `serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted.                                                                                                                                              | `""`                            |
+| `podSecurityPolicy.annotations`                     | Annotations for Pod Security Policy. Evaluated as a template.                                                                                                                                                     | `{}`                            |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 
