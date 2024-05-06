@@ -35,17 +35,19 @@ it('allows to use the API to retrieve analytics', () => {
   });
 
   cy.login();
-  // Navitage using the UI as Matomo will randomly fail with
+  // Navigate using the UI as Matomo will randomly fail with
   // "token mismatch" if accessed directly
   cy.contains('Forms', {timeout: 60000});
   cy.get('#topmenu-coreadminhome').click();
   cy.contains('System Summary', {timeout: 60000});
   cy.contains('Personal').click();
   cy.contains('Security').click();
-  cy.contains('Create new token').click();
+  cy.contains('Create new token', {timeout: 60000}).click();
   cy.get('#login_form_password').type(Cypress.env('password'));
   cy.get('[type="submit"]').click();
-  cy.get('#description').type(random);
+  // Wait some seconds to ensure every script is loaded
+  cy.wait(5000);
+  cy.get('#description', {timeout: 60000}).type(random);
   cy.get('input[id="secure_only"]').click({ force: true });
   cy.get('[type="submit"]').click();
   cy.contains('Token successfully generated');
