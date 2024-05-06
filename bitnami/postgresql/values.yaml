@@ -696,6 +696,10 @@ primary:
     ## @param primary.service.annotations Annotations for PostgreSQL primary service
     ##
     annotations: {}
+    ## @param primary.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param primary.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1136,6 +1140,10 @@ readReplicas:
     ## @param readReplicas.service.annotations Annotations for PostgreSQL read only service
     ##
     annotations: {}
+    ## @param readReplicas.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param readReplicas.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
