@@ -208,8 +208,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `service.clusterIP`                     | haproxy service Cluster IP                                                                                                       | `""`                     |
 | `service.loadBalancerIP`                | haproxy service Load Balancer IP                                                                                                 | `""`                     |
 | `service.loadBalancerSourceRanges`      | haproxy service Load Balancer sources                                                                                            | `[]`                     |
-| `service.externalIPs`                   | External IPs                                                                                                                     | `[]`                     |
 | `service.externalTrafficPolicy`         | haproxy service external traffic policy                                                                                          | `Cluster`                |
+| `service.externalIPs`                   | External IPs                                                                                                                     | `[]`                     |
 | `service.annotations`                   | Additional custom annotations for haproxy service                                                                                | `{}`                     |
 | `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
