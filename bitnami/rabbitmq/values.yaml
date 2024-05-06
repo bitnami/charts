@@ -576,7 +576,7 @@ ldap:
   ##
   basedn: ""
   ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). It matches with 'dn_lookup_attribute' in RabbitMQ configuration
-  ##��ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
+  ## ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
   ##
   ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). It matches with 'dn_lookup_attribute' in RabbitMQ configuration
   ##
