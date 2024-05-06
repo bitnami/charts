@@ -27,7 +27,7 @@ keywords:
 - machine-learning
 - kuberay
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved..
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: kuberay
 sources:

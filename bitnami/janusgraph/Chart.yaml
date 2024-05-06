@@ -31,7 +31,7 @@ keywords:
 - graph
 - database
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved..
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: janusgraph
 sources:

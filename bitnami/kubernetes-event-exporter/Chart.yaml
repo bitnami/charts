@@ -26,7 +26,7 @@ keywords:
 - monitoring
 - observability
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved..
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: kubernetes-event-exporter
 sources:
