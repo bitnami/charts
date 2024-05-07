@@ -84,7 +84,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) (and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.tls.enabled }}
+      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) (and .Values.externalAccess.enabled (or .Values.externalAccess.autoDiscovery.enabled .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain)) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
