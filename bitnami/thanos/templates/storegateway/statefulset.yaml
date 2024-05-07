@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -142,10 +142,10 @@ spec:
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
             {{- if .Values.storegateway.grpc.server.tls.enabled }}
-            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
-            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
+            - --grpc-server-tls-cert=/certs/grpc/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/grpc/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
             {{- if .Values.storegateway.grpc.server.tls.clientAuthEnabled }}
-            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            - --grpc-server-tls-client-ca=/certs/grpc/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
             {{- end }}
             {{- if .Values.storegateway.extraFlags }}
@@ -242,7 +242,7 @@ spec:
             {{- end }}
             {{- if .Values.storegateway.grpc.server.tls.enabled }}
             - name: grpc-server-tls
-              mountPath: /certs
+              mountPath: /certs/grpc
             {{- end }}
             {{- if .Values.storegateway.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumeMounts "context" $) | nindent 12 }}
