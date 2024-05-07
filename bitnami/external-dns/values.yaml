@@ -295,6 +295,9 @@ aws:
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/0483ffde22e60436f16be154b9fe1a388a1400d0/docs/registry/dynamodb.md
   ##
   dynamodbRegion: ""
+  ## @param aws.zoneMatchParent When using the AWS provider, lets a domain filter match subdomains within the same zone by using their parent domain
+  ##
+  zoneMatchParent: false
 ## Azure configuration to be set via arguments/env. variables
 ##
 azure:
