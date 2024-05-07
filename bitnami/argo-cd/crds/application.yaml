@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/argoproj/argo-cd/v{version}/manifests/crds/application-crd.yaml
-# Version: 2.10.9
+# Version: 2.11.0
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -344,6 +344,10 @@ spec:
                                 definition in the format [old_image_name=]<image_name>:<image_tag>
                               type: string
                             type: array
+                          labelWithoutSelector:
+                            description: LabelWithoutSelector specifies whether to
+                              apply common labels to resource selectors or not
+                            type: boolean
                           namePrefix:
                             description: NamePrefix is a prefix appended to resources
                               for Kustomize apps
@@ -679,6 +683,10 @@ spec:
                                   image definition in the format [old_image_name=]<image_name>:<image_tag>
                                 type: string
                               type: array
+                            labelWithoutSelector:
+                              description: LabelWithoutSelector specifies whether
+                                to apply common labels to resource selectors or not
+                              type: boolean
                             namePrefix:
                               description: NamePrefix is a prefix appended to resources
                                 for Kustomize apps
@@ -1128,6 +1136,10 @@ spec:
                             definition in the format [old_image_name=]<image_name>:<image_tag>
                           type: string
                         type: array
+                      labelWithoutSelector:
+                        description: LabelWithoutSelector specifies whether to apply
+                          common labels to resource selectors or not
+                        type: boolean
                       namePrefix:
                         description: NamePrefix is a prefix appended to resources
                           for Kustomize apps
@@ -1453,6 +1465,10 @@ spec:
                               definition in the format [old_image_name=]<image_name>:<image_tag>
                             type: string
                           type: array
+                        labelWithoutSelector:
+                          description: LabelWithoutSelector specifies whether to apply
+                            common labels to resource selectors or not
+                          type: boolean
                         namePrefix:
                           description: NamePrefix is a prefix appended to resources
                             for Kustomize apps
@@ -1727,6 +1743,19 @@ spec:
                       description: ID is an auto incrementing identifier of the RevisionHistory
                       format: int64
                       type: integer
+                    initiatedBy:
+                      description: InitiatedBy contains information about who initiated
+                        the operations
+                      properties:
+                        automated:
+                          description: Automated is set to true if operation was initiated
+                            automatically by the application controller.
+                          type: boolean
+                        username:
+                          description: Username contains the name of a user who started
+                            operation
+                          type: string
+                      type: object
                     revision:
                       description: Revision holds the revision the sync was performed
                         against
@@ -1931,6 +1960,10 @@ spec:
                                   image definition in the format [old_image_name=]<image_name>:<image_tag>
                                 type: string
                               type: array
+                            labelWithoutSelector:
+                              description: LabelWithoutSelector specifies whether
+                                to apply common labels to resource selectors or not
+                              type: boolean
                             namePrefix:
                               description: NamePrefix is a prefix appended to resources
                                 for Kustomize apps
@@ -2269,6 +2302,11 @@ spec:
                                     image definition in the format [old_image_name=]<image_name>:<image_tag>
                                   type: string
                                 type: array
+                              labelWithoutSelector:
+                                description: LabelWithoutSelector specifies whether
+                                  to apply common labels to resource selectors or
+                                  not
+                                type: boolean
                               namePrefix:
                                 description: NamePrefix is a prefix appended to resources
                                   for Kustomize apps
@@ -2752,6 +2790,11 @@ spec:
                                         image definition in the format [old_image_name=]<image_name>:<image_tag>
                                       type: string
                                     type: array
+                                  labelWithoutSelector:
+                                    description: LabelWithoutSelector specifies whether
+                                      to apply common labels to resource selectors
+                                      or not
+                                    type: boolean
                                   namePrefix:
                                     description: NamePrefix is a prefix appended to
                                       resources for Kustomize apps
@@ -3108,6 +3151,11 @@ spec:
                                           image definition in the format [old_image_name=]<image_name>:<image_tag>
                                         type: string
                                       type: array
+                                    labelWithoutSelector:
+                                      description: LabelWithoutSelector specifies
+                                        whether to apply common labels to resource
+                                        selectors or not
+                                      type: boolean
                                     namePrefix:
                                       description: NamePrefix is a prefix appended
                                         to resources for Kustomize apps
@@ -3578,6 +3626,11 @@ spec:
                                     image definition in the format [old_image_name=]<image_name>:<image_tag>
                                   type: string
                                 type: array
+                              labelWithoutSelector:
+                                description: LabelWithoutSelector specifies whether
+                                  to apply common labels to resource selectors or
+                                  not
+                                type: boolean
                               namePrefix:
                                 description: NamePrefix is a prefix appended to resources
                                   for Kustomize apps
@@ -3927,6 +3980,11 @@ spec:
                                       image definition in the format [old_image_name=]<image_name>:<image_tag>
                                     type: string
                                   type: array
+                                labelWithoutSelector:
+                                  description: LabelWithoutSelector specifies whether
+                                    to apply common labels to resource selectors or
+                                    not
+                                  type: boolean
                                 namePrefix:
                                   description: NamePrefix is a prefix appended to
                                     resources for Kustomize apps
@@ -4419,6 +4477,11 @@ spec:
                                     image definition in the format [old_image_name=]<image_name>:<image_tag>
                                   type: string
                                 type: array
+                              labelWithoutSelector:
+                                description: LabelWithoutSelector specifies whether
+                                  to apply common labels to resource selectors or
+                                  not
+                                type: boolean
                               namePrefix:
                                 description: NamePrefix is a prefix appended to resources
                                   for Kustomize apps
@@ -4768,6 +4831,11 @@ spec:
                                       image definition in the format [old_image_name=]<image_name>:<image_tag>
                                     type: string
                                   type: array
+                                labelWithoutSelector:
+                                  description: LabelWithoutSelector specifies whether
+                                    to apply common labels to resource selectors or
+                                    not
+                                  type: boolean
                                 namePrefix:
                                   description: NamePrefix is a prefix appended to
                                     resources for Kustomize apps
