@@ -43,16 +43,12 @@ it('allows to use the API to retrieve analytics', () => {
   cy.contains('Personal').click();
   cy.contains('Security').click();
   cy.contains('Create new token', {timeout: 60000}).click();
-  // Wait some seconds to ensure every script is loaded
-  cy.wait(2000);
-  cy.get('#login_form_password').type(Cypress.env('password'));
+  cy.get('#login_form_password', {timeout: 60000}).type(Cypress.env('password'));
   cy.get('[type="submit"]').click();
-  // Wait some seconds to ensure every script is loaded
-  cy.wait(2000);
   cy.get('#description', {timeout: 60000}).type(random);
   cy.get('input[id="secure_only"]').click({ force: true });
   cy.get('[type="submit"]').click();
-  cy.contains('Token successfully generated');
+  cy.contains('Token successfully generated', {timeout: 60000});
   cy.get('code')
     .invoke('text')
     .then((apiToken) => {

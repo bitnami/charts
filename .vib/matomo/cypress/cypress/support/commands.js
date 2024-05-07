@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: APACHE-2.0
  */
 
-const COMMAND_DELAY = 2000;
+const COMMAND_DELAY = 3000;
 export const baseURL = () => {
   const baseURL = 'http://bitnami-matomo.my';
   const port = Cypress.env('port');
