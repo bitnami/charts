@@ -47,7 +47,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: redis
               app.kubernetes.io/instance: {{ .Release.Name }}              
-      {{- else }}
+      {{- else if .Values.externalRedis.enabled }}
         - port: {{ .Values.externalRedis.port }}
       to:
         - podSelector:

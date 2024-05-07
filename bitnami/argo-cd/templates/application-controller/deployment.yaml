@@ -170,7 +170,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
-            {{- else }}
+            {{- else if .Values.externalRedis.enabled }}
             - name: REDIS_PASSWORD
               {{- if not ( eq "" .Values.externalRedis.password ) }}
               value: {{ .Values.externalRedis.password }}
