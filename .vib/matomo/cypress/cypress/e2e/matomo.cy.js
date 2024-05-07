@@ -5,7 +5,7 @@
 
 /// <reference types="cypress" />
 import { random } from '../support/utils';
-import { BASE_URL } from "../support/commands";
+import { baseURL } from '../support/commands';
 
 it('allows to create a new website', () => {
   cy.login();
@@ -30,7 +30,7 @@ it('allows to create a new website', () => {
 // Source: https://matomo.org/guide/apis/analytics-api/
 it('allows to use the API to retrieve analytics', () => {
   // Record a new visit in order to generate analytics beforehand
-  cy.request(`${BASE_URL}/matomo.php?idsite=1&rec=1`).then((response) => {
+  cy.request(`${baseURL()}/matomo.php?idsite=1&rec=1`).then((response) => {
     expect(response.status).to.eq(200);
   });
 
@@ -43,10 +43,12 @@ it('allows to use the API to retrieve analytics', () => {
   cy.contains('Personal').click();
   cy.contains('Security').click();
   cy.contains('Create new token', {timeout: 60000}).click();
+  // Wait some seconds to ensure every script is loaded
+  cy.wait(2000);
   cy.get('#login_form_password').type(Cypress.env('password'));
   cy.get('[type="submit"]').click();
   // Wait some seconds to ensure every script is loaded
-  cy.wait(5000);
+  cy.wait(2000);
   cy.get('#description', {timeout: 60000}).type(random);
   cy.get('input[id="secure_only"]').click({ force: true });
   cy.get('[type="submit"]').click();
@@ -55,7 +57,7 @@ it('allows to use the API to retrieve analytics', () => {
     .invoke('text')
     .then((apiToken) => {
       cy.request({
-        url: `${BASE_URL}/index.php`,
+        url: `${baseURL()}/index.php`,
         method: 'GET',
         qs: {
           module: 'API',
