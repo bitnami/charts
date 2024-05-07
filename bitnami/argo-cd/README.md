@@ -1181,6 +1181,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `redis.auth.existingSecret`                                   | Existing secret to load redis dependency password                                                     | `""`                    |
 | `redis.auth.existingSecretPasswordKey`                        | Pasword key name inside the existing secret                                                           | `redis-password`        |
 | `redis.architecture`                                          | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`            |
+| `externalRedis.enabled`                                       | Enables External Redis                                                                                | `false`                 |
 | `externalRedis.host`                                          | External Redis host                                                                                   | `""`                    |
 | `externalRedis.port`                                          | External Redis port                                                                                   | `6379`                  |
 | `externalRedis.password`                                      | External Redis password                                                                               | `""`                    |
