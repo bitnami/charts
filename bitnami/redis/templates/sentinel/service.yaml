@@ -101,11 +101,8 @@ spec:
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
 
-
-{{- $ownConfig := .Values.sentinel.masterService.ownConfig | default false -}}
-{{- $masterServiceConfig := ternary .Values.sentinel.masterService .Values.sentinel.service $ownConfig -}}
-{{- if and .Values.sentinel.enabled $masterServiceConfig.createMaster }}
-
+{{- $masterServiceConfig := ternary .Values.sentinel.masterService .Values.sentinel.service .Values.sentinel.masterService.enabled -}}
+{{- if and .Values.sentinel.enabled (or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster) }}
 ---
 apiVersion: v1
 kind: Service
