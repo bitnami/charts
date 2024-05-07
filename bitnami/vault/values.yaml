@@ -368,6 +368,10 @@ server:
   ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
   ##
   extraVolumeMounts: []
+  ## e.g.
+  ##- name: plugin
+  ##  mountPath: /tmp
+
   ## @param server.sidecars Add additional sidecar containers to the Vault Server pod(s)
   ## e.g:
   ## sidecars:
@@ -726,6 +730,21 @@ server:
     ## @param server.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
+    ## @param server.persistence.extraVolumeClaimTemplates  Add additional VolumeClaimTemplates for enabling any plugins or any other purpose to the Vault Server pod(s)
+    ##
+    extraVolumeClaimTemplates: []
+    ## e.g:
+    ##- metadata:
+    ##    name: plugin
+    ##    annotations:
+    ##  spec:
+    ##    accessModes:
+    ##      - "ReadWriteOnce"
+    ##    resources:
+    ##      requests:
+    ##        storage: "10Gi"
+    ##    storageClassName: nfs-client
+
   ## @section Vault Server Metrics Parameters
   ##
 

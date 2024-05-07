@@ -244,6 +244,9 @@ spec:
               {{- if .Values.cloudflare.proxied }}
             - --cloudflare-proxied
               {{- end }}
+              {{- if .Values.cloudflare.dnsRecordsPerPage }}
+            - --cloudflare-dns-records-per-page={{ .Values.cloudflare.dnsRecordsPerPage }}
+              {{- end }}
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments

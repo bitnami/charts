@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -30,9 +30,9 @@ keywords:
 - injection
 - vault
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: vault
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 1.0.4
+version: 1.1.0
