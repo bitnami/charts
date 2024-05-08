@@ -1084,10 +1084,12 @@ networkPolicy:
   ##                   - frontend
   ##
   extraEgress: []
-  ## @param networkPolicy.ingressPodMatchLabels Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
-  ##
-  ingressPodMatchLabels: |
-    {{ template "common.names.fullname" . }}-client: "true"
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. 'default' is a key word to add '{{ template "common.names.fullname" . }}-client: "true"' label. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: default
   ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
   ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
   ##
