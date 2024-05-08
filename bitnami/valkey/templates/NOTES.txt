@@ -41,7 +41,7 @@ For Valkey Sentinel:
  WARNING
 
     By specifying "master.service.type=LoadBalancer" and "auth.enabled=false" you have
-    most likely exposed the Valkey&reg; service externally without any authentication
+    most likely exposed the Valkey service externally without any authentication
     mechanism.
 
     For security reasons, we strongly suggest that you switch to "ClusterIP" or
@@ -72,15 +72,15 @@ For Valkey Sentinel:
 {{- if eq .Values.architecture "replication" }}
 {{- if .Values.sentinel.enabled }}
 
-Valkey&reg; can be accessed via port {{ .Values.sentinel.service.ports.valkey }} on the following DNS name from within your cluster:
+Valkey can be accessed via port {{ .Values.sentinel.service.ports.valkey }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} for read only operations
 
-For read/write operations, first access the Valkey&reg; Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
+For read/write operations, first access the Valkey Sentinel cluster, which is available in port {{ .Values.sentinel.service.ports.sentinel }} using the same domain name above.
 
 {{- else }}
 
-Valkey&reg; can be accessed on the following DNS names from within your cluster:
+Valkey can be accessed on the following DNS names from within your cluster:
 
     {{ printf "%s-master.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read/write operations (port {{ .Values.master.service.ports.valkey }})
     {{ printf "%s-replicas.%s.svc.%s" (include "common.names.fullname" .) (include "common.names.namespace" . ) .Values.clusterDomain }} for read-only operations (port {{ .Values.replica.service.ports.valkey }})
@@ -88,7 +88,7 @@ Valkey&reg; can be accessed on the following DNS names from within your cluster:
 {{- end }}
 {{- else }}
 
-Valkey&reg; can be accessed via port {{ .Values.master.service.ports.valkey }} on the following DNS name from within your cluster:
+Valkey can be accessed via port {{ .Values.master.service.ports.valkey }} on the following DNS name from within your cluster:
 
     {{ template "common.names.fullname" . }}-master.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
 
@@ -102,9 +102,9 @@ To get your password run:
 
 {{- end }}
 
-To connect to your Valkey&reg; server:
+To connect to your Valkey server:
 
-1. Run a Valkey&reg; pod that you can use as a client:
+1. Run a Valkey pod that you can use as a client:
 
    kubectl run --namespace {{ include "common.names.namespace" . }} valkey-client --restart='Never' {{ if .Values.auth.enabled }} --env VALKEY_PASSWORD=$VALKEY_PASSWORD {{ end }} --image {{ template "valkey.image" . }} --command -- sleep infinity
 
@@ -124,7 +124,7 @@ To connect to your Valkey&reg; server:
    {{- if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ template "common.names.fullname" . }}-client=true" \{{- end }}
    --namespace {{ include "common.names.namespace" . }} -- bash
 
-2. Connect using the Valkey&reg; CLI:
+2. Connect using the Valkey CLI:
 
 {{- if eq .Values.architecture "replication" }}
    {{- if .Values.sentinel.enabled }}
