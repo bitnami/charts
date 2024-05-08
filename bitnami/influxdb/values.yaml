@@ -170,13 +170,11 @@ auth:
 ##
 influxdb:
   ## @param influxdb.configuration Specify content for influxdb.conf
-  ## Alternatively, you can put your influxdb.conf under the files/conf/ directory
+  ## Alternatively, you can put your config.yaml under the files/conf/ directory
   ##
   ## configuration: |-
-  ##   reporting-disabled = false
-  ##   bind-address = "127.0.0.1:8088"
-  ##   [meta]
-  ##   dir = "/bitnami/influxdb/meta"
+  ##   reporting-disabled: true
+  ##   http-bind-address: "127.0.0.1:8086"
   ##   ...
   ##
   configuration: ""
