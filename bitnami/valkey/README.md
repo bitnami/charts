@@ -22,21 +22,6 @@ This chart bootstraps a [Valkey](https://github.com/bitnami/containers/tree/main
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-### Choose between Valkey Helm Chart and Valkey Cluster Helm Chart
-
-You can choose any of the two Valkey Helm charts for deploying a Valkey cluster.
-
-1. [Valkey Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/valkey) will deploy a master-replica cluster, with the [option](https://github.com/bitnami/charts/tree/main/bitnami/valkey#valkey-sentinel-configuration-parameters) of enabling using Valkey Sentinel.
-2. [Valkey Cluster Helm Chart](https://github.com/bitnami/charts/tree/main/bitnami/valkey-cluster) will deploy a Valkey Cluster topology with sharding.
-
-The main features of each chart are the following:
-
-| Valkey                                     | Valkey Cluster                                             |
-|--------------------------------------------------------|------------------------------------------------------------------------|
-| Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
-| Single write point (single master)                     | Multiple write points (multiple masters)                               |
-| ![Valkey Topology](img/valkey-topology.png) | ![Valkey Cluster Topology](img/valkey-cluster-topology.png) |
-
 ## Prerequisites
 
 - Kubernetes 1.23+
