@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/notification-controller/releases/download/v{version}/notification-controller.crds.yaml
-# Version: 1.2.4
+# Version: 1.3.0
 # VersionOf: fluxcd-notification-controller
 # Conditional: .Values.notificationController.installCRDs
 {{- if .Values.notificationController.installCRDs }}
@@ -7,7 +7,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: alerts.notification.toolkit.fluxcd.io
 spec:
   group: notification.toolkit.fluxcd.io
@@ -36,14 +36,19 @@ spec:
         description: Alert is the Schema for the alerts API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -53,7 +58,8 @@ spec:
             properties:
               eventSeverity:
                 default: info
-                description: Filter events based on severity, defaults to ('info').
+                description: |-
+                  Filter events based on severity, defaults to ('info').
                   If set to 'info' no events will be filtered.
                 enum:
                 - info
@@ -62,8 +68,9 @@ spec:
               eventSources:
                 description: Filter events based on the involved objects.
                 items:
-                  description: CrossNamespaceObjectReference contains enough information
-                    to let you locate the typed referenced object at cluster level
+                  description: |-
+                    CrossNamespaceObjectReference contains enough information to let you locate the
+                    typed referenced object at cluster level
                   properties:
                     apiVersion:
                       description: API version of the referent
@@ -85,11 +92,10 @@ spec:
                     matchLabels:
                       additionalProperties:
                         type: string
-                      description: MatchLabels is a map of {key,value} pairs. A single
-                        {key,value} in the matchLabels map is equivalent to an element
-                        of matchExpressions, whose key field is "key", the operator
-                        is "In", and the values array contains only "value". The requirements
-                        are ANDed.
+                      description: |-
+                        MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                        operator is "In", and the values array contains only "value". The requirements are ANDed.
                       type: object
                     name:
                       description: Name of the referent
@@ -124,8 +130,9 @@ spec:
                 description: Short description of the impact and affected cluster.
                 type: string
               suspend:
-                description: This flag tells the controller to suspend subsequent
-                  events dispatching. Defaults to false.
+                description: |-
+                  This flag tells the controller to suspend subsequent events dispatching.
+                  Defaults to false.
                 type: boolean
             required:
             - eventSources
@@ -139,42 +146,42 @@ spec:
               conditions:
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -188,11 +195,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -232,14 +240,19 @@ spec:
         description: Alert is the Schema for the alerts API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -250,27 +263,30 @@ spec:
               eventMetadata:
                 additionalProperties:
                   type: string
-                description: EventMetadata is an optional field for adding metadata
-                  to events dispatched by the controller. This can be used for enhancing
-                  the context of the event. If a field would override one already
-                  present on the original event as generated by the emitter, then
-                  the override doesn't happen, i.e. the original value is preserved,
-                  and an info log is printed.
+                description: |-
+                  EventMetadata is an optional field for adding metadata to events dispatched by the
+                  controller. This can be used for enhancing the context of the event. If a field
+                  would override one already present on the original event as generated by the emitter,
+                  then the override doesn't happen, i.e. the original value is preserved, and an info
+                  log is printed.
                 type: object
               eventSeverity:
                 default: info
-                description: EventSeverity specifies how to filter events based on
-                  severity. If set to 'info' no events will be filtered.
+                description: |-
+                  EventSeverity specifies how to filter events based on severity.
+                  If set to 'info' no events will be filtered.
                 enum:
                 - info
                 - error
                 type: string
               eventSources:
-                description: EventSources specifies how to filter events based on
-                  the involved object kind, name and namespace.
+                description: |-
+                  EventSources specifies how to filter events based
+                  on the involved object kind, name and namespace.
                 items:
-                  description: CrossNamespaceObjectReference contains enough information
-                    to let you locate the typed referenced object at cluster level
+                  description: |-
+                    CrossNamespaceObjectReference contains enough information to let you locate the
+                    typed referenced object at cluster level
                   properties:
                     apiVersion:
                       description: API version of the referent
@@ -292,15 +308,16 @@ spec:
                     matchLabels:
                       additionalProperties:
                         type: string
-                      description: MatchLabels is a map of {key,value} pairs. A single
-                        {key,value} in the matchLabels map is equivalent to an element
-                        of matchExpressions, whose key field is "key", the operator
-                        is "In", and the values array contains only "value". The requirements
-                        are ANDed. MatchLabels requires the name to be set to `*`.
+                      description: |-
+                        MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                        operator is "In", and the values array contains only "value". The requirements are ANDed.
+                        MatchLabels requires the name to be set to `*`.
                       type: object
                     name:
-                      description: Name of the referent If multiple resources are
-                        targeted `*` may be set.
+                      description: |-
+                        Name of the referent
+                        If multiple resources are targeted `*` may be set.
                       maxLength: 53
                       minLength: 1
                       type: string
@@ -315,13 +332,15 @@ spec:
                   type: object
                 type: array
               exclusionList:
-                description: ExclusionList specifies a list of Golang regular expressions
+                description: |-
+                  ExclusionList specifies a list of Golang regular expressions
                   to be used for excluding messages.
                 items:
                   type: string
                 type: array
               inclusionList:
-                description: InclusionList specifies a list of Golang regular expressions
+                description: |-
+                  InclusionList specifies a list of Golang regular expressions
                   to be used for including messages.
                 items:
                   type: string
@@ -342,8 +361,9 @@ spec:
                 maxLength: 255
                 type: string
               suspend:
-                description: Suspend tells the controller to suspend subsequent events
-                  handling for this Alert.
+                description: |-
+                  Suspend tells the controller to suspend subsequent
+                  events handling for this Alert.
                 type: boolean
             required:
             - eventSources
@@ -358,42 +378,42 @@ spec:
                 description: Conditions holds the conditions for the Alert.
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -407,11 +427,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -424,9 +445,10 @@ spec:
                   type: object
                 type: array
               lastHandledReconcileAt:
-                description: LastHandledReconcileAt holds the value of the most recent
-                  reconcile request value, so a change of the annotation value can
-                  be detected.
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile request value, so a change of the annotation value
+                  can be detected.
                 type: string
               observedGeneration:
                 description: ObservedGeneration is the last observed generation.
@@ -448,14 +470,19 @@ spec:
         description: Alert is the Schema for the alerts API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -466,27 +493,30 @@ spec:
               eventMetadata:
                 additionalProperties:
                   type: string
-                description: EventMetadata is an optional field for adding metadata
-                  to events dispatched by the controller. This can be used for enhancing
-                  the context of the event. If a field would override one already
-                  present on the original event as generated by the emitter, then
-                  the override doesn't happen, i.e. the original value is preserved,
-                  and an info log is printed.
+                description: |-
+                  EventMetadata is an optional field for adding metadata to events dispatched by the
+                  controller. This can be used for enhancing the context of the event. If a field
+                  would override one already present on the original event as generated by the emitter,
+                  then the override doesn't happen, i.e. the original value is preserved, and an info
+                  log is printed.
                 type: object
               eventSeverity:
                 default: info
-                description: EventSeverity specifies how to filter events based on
-                  severity. If set to 'info' no events will be filtered.
+                description: |-
+                  EventSeverity specifies how to filter events based on severity.
+                  If set to 'info' no events will be filtered.
                 enum:
                 - info
                 - error
                 type: string
               eventSources:
-                description: EventSources specifies how to filter events based on
-                  the involved object kind, name and namespace.
+                description: |-
+                  EventSources specifies how to filter events based
+                  on the involved object kind, name and namespace.
                 items:
-                  description: CrossNamespaceObjectReference contains enough information
-                    to let you locate the typed referenced object at cluster level
+                  description: |-
+                    CrossNamespaceObjectReference contains enough information to let you locate the
+                    typed referenced object at cluster level
                   properties:
                     apiVersion:
                       description: API version of the referent
@@ -508,15 +538,16 @@ spec:
                     matchLabels:
                       additionalProperties:
                         type: string
-                      description: MatchLabels is a map of {key,value} pairs. A single
-                        {key,value} in the matchLabels map is equivalent to an element
-                        of matchExpressions, whose key field is "key", the operator
-                        is "In", and the values array contains only "value". The requirements
-                        are ANDed. MatchLabels requires the name to be set to `*`.
+                      description: |-
+                        MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                        operator is "In", and the values array contains only "value". The requirements are ANDed.
+                        MatchLabels requires the name to be set to `*`.
                       type: object
                     name:
-                      description: Name of the referent If multiple resources are
-                        targeted `*` may be set.
+                      description: |-
+                        Name of the referent
+                        If multiple resources are targeted `*` may be set.
                       maxLength: 53
                       minLength: 1
                       type: string
@@ -531,13 +562,15 @@ spec:
                   type: object
                 type: array
               exclusionList:
-                description: ExclusionList specifies a list of Golang regular expressions
+                description: |-
+                  ExclusionList specifies a list of Golang regular expressions
                   to be used for excluding messages.
                 items:
                   type: string
                 type: array
               inclusionList:
-                description: InclusionList specifies a list of Golang regular expressions
+                description: |-
+                  InclusionList specifies a list of Golang regular expressions
                   to be used for including messages.
                 items:
                   type: string
@@ -558,8 +591,9 @@ spec:
                 maxLength: 255
                 type: string
               suspend:
-                description: Suspend tells the controller to suspend subsequent events
-                  handling for this Alert.
+                description: |-
+                  Suspend tells the controller to suspend subsequent
+                  events handling for this Alert.
                 type: boolean
             required:
             - eventSources
@@ -574,7 +608,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: providers.notification.toolkit.fluxcd.io
 spec:
   group: notification.toolkit.fluxcd.io
@@ -603,14 +637,19 @@ spec:
         description: Provider is the Schema for the providers API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -622,7 +661,8 @@ spec:
                 pattern: ^(http|https)://
                 type: string
               certSecretRef:
-                description: CertSecretRef can be given the name of a secret containing
+                description: |-
+                  CertSecretRef can be given the name of a secret containing
                   a PEM-encoded CA certificate (`caFile`)
                 properties:
                   name:
@@ -639,7 +679,8 @@ spec:
                 pattern: ^(http|https)://
                 type: string
               secretRef:
-                description: Secret reference containing the provider webhook URL
+                description: |-
+                  Secret reference containing the provider webhook URL
                   using "address" as data key
                 properties:
                   name:
@@ -649,8 +690,9 @@ spec:
                 - name
                 type: object
               suspend:
-                description: This flag tells the controller to suspend subsequent
-                  events handling. Defaults to false.
+                description: |-
+                  This flag tells the controller to suspend subsequent events handling.
+                  Defaults to false.
                 type: boolean
               timeout:
                 description: Timeout for sending alerts to the provider.
@@ -695,42 +737,42 @@ spec:
               conditions:
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -744,11 +786,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -788,14 +831,19 @@ spec:
         description: Provider is the Schema for the providers API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -803,17 +851,21 @@ spec:
             description: ProviderSpec defines the desired state of the Provider.
             properties:
               address:
-                description: Address specifies the endpoint, in a generic sense, to
-                  where alerts are sent. What kind of endpoint depends on the specific
-                  Provider type being used. For the generic Provider, for example,
-                  this is an HTTP/S address. For other Provider types this could be
-                  a project ID or a namespace.
+                description: |-
+                  Address specifies the endpoint, in a generic sense, to where alerts are sent.
+                  What kind of endpoint depends on the specific Provider type being used.
+                  For the generic Provider, for example, this is an HTTP/S address.
+                  For other Provider types this could be a project ID or a namespace.
                 maxLength: 2048
                 type: string
               certSecretRef:
-                description: "CertSecretRef specifies the Secret containing a PEM-encoded
-                  CA certificate (in the `ca.crt` key). \n Note: Support for the `caFile`
-                  key has been deprecated."
+                description: |-
+                  CertSecretRef specifies the Secret containing
+                  a PEM-encoded CA certificate (in the `ca.crt` key).
+
+
+                  Note: Support for the `caFile` key has
+                  been deprecated.
                 properties:
                   name:
                     description: Name of the referent.
@@ -837,7 +889,8 @@ spec:
                 pattern: ^(http|https)://.*$
                 type: string
               secretRef:
-                description: SecretRef specifies the Secret containing the authentication
+                description: |-
+                  SecretRef specifies the Secret containing the authentication
                   credentials for this Provider.
                 properties:
                   name:
@@ -847,8 +900,9 @@ spec:
                 - name
                 type: object
               suspend:
-                description: Suspend tells the controller to suspend subsequent events
-                  handling for this Provider.
+                description: |-
+                  Suspend tells the controller to suspend subsequent
+                  events handling for this Provider.
                 type: boolean
               timeout:
                 description: Timeout for sending alerts to the Provider.
@@ -900,42 +954,42 @@ spec:
                 description: Conditions holds the conditions for the Provider.
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -949,11 +1003,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -966,9 +1021,10 @@ spec:
                   type: object
                 type: array
               lastHandledReconcileAt:
-                description: LastHandledReconcileAt holds the value of the most recent
-                  reconcile request value, so a change of the annotation value can
-                  be detected.
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile request value, so a change of the annotation value
+                  can be detected.
                 type: string
               observedGeneration:
                 description: ObservedGeneration is the last reconciled generation.
@@ -990,14 +1046,19 @@ spec:
         description: Provider is the Schema for the providers API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1005,17 +1066,21 @@ spec:
             description: ProviderSpec defines the desired state of the Provider.
             properties:
               address:
-                description: Address specifies the endpoint, in a generic sense, to
-                  where alerts are sent. What kind of endpoint depends on the specific
-                  Provider type being used. For the generic Provider, for example,
-                  this is an HTTP/S address. For other Provider types this could be
-                  a project ID or a namespace.
+                description: |-
+                  Address specifies the endpoint, in a generic sense, to where alerts are sent.
+                  What kind of endpoint depends on the specific Provider type being used.
+                  For the generic Provider, for example, this is an HTTP/S address.
+                  For other Provider types this could be a project ID or a namespace.
                 maxLength: 2048
                 type: string
               certSecretRef:
-                description: "CertSecretRef specifies the Secret containing a PEM-encoded
-                  CA certificate (in the `ca.crt` key). \n Note: Support for the `caFile`
-                  key has been deprecated."
+                description: |-
+                  CertSecretRef specifies the Secret containing
+                  a PEM-encoded CA certificate (in the `ca.crt` key).
+
+
+                  Note: Support for the `caFile` key has
+                  been deprecated.
                 properties:
                   name:
                     description: Name of the referent.
@@ -1029,8 +1094,9 @@ spec:
                 maxLength: 2048
                 type: string
               interval:
-                description: Interval at which to reconcile the Provider with its
-                  Secret references. Deprecated and not used in v1beta3.
+                description: |-
+                  Interval at which to reconcile the Provider with its Secret references.
+                  Deprecated and not used in v1beta3.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               proxy:
@@ -1039,7 +1105,8 @@ spec:
                 pattern: ^(http|https)://.*$
                 type: string
               secretRef:
-                description: SecretRef specifies the Secret containing the authentication
+                description: |-
+                  SecretRef specifies the Secret containing the authentication
                   credentials for this Provider.
                 properties:
                   name:
@@ -1049,8 +1116,9 @@ spec:
                 - name
                 type: object
               suspend:
-                description: Suspend tells the controller to suspend subsequent events
-                  handling for this Provider.
+                description: |-
+                  Suspend tells the controller to suspend subsequent
+                  events handling for this Provider.
                 type: boolean
               timeout:
                 description: Timeout for sending alerts to the Provider.
@@ -1103,7 +1171,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: receivers.notification.toolkit.fluxcd.io
 spec:
   group: notification.toolkit.fluxcd.io
@@ -1130,14 +1198,19 @@ spec:
         description: Receiver is the Schema for the receivers API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1145,8 +1218,9 @@ spec:
             description: ReceiverSpec defines the desired state of the Receiver.
             properties:
               events:
-                description: Events specifies the list of event types to handle, e.g.
-                  'push' for GitHub or 'Push Hook' for GitLab.
+                description: |-
+                  Events specifies the list of event types to handle,
+                  e.g. 'push' for GitHub or 'Push Hook' for GitLab.
                 items:
                   type: string
                 type: array
@@ -1159,8 +1233,9 @@ spec:
               resources:
                 description: A list of resources to be notified about changes.
                 items:
-                  description: CrossNamespaceObjectReference contains enough information
-                    to let you locate the typed referenced object at cluster level
+                  description: |-
+                    CrossNamespaceObjectReference contains enough information to let you locate the
+                    typed referenced object at cluster level
                   properties:
                     apiVersion:
                       description: API version of the referent
@@ -1182,15 +1257,16 @@ spec:
                     matchLabels:
                       additionalProperties:
                         type: string
-                      description: MatchLabels is a map of {key,value} pairs. A single
-                        {key,value} in the matchLabels map is equivalent to an element
-                        of matchExpressions, whose key field is "key", the operator
-                        is "In", and the values array contains only "value". The requirements
-                        are ANDed. MatchLabels requires the name to be set to `*`.
+                      description: |-
+                        MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                        operator is "In", and the values array contains only "value". The requirements are ANDed.
+                        MatchLabels requires the name to be set to `*`.
                       type: object
                     name:
-                      description: Name of the referent If multiple resources are
-                        targeted `*` may be set.
+                      description: |-
+                        Name of the referent
+                        If multiple resources are targeted `*` may be set.
                       maxLength: 53
                       minLength: 1
                       type: string
@@ -1205,7 +1281,8 @@ spec:
                   type: object
                 type: array
               secretRef:
-                description: SecretRef specifies the Secret containing the token used
+                description: |-
+                  SecretRef specifies the Secret containing the token used
                   to validate the payload authenticity.
                 properties:
                   name:
@@ -1215,12 +1292,14 @@ spec:
                 - name
                 type: object
               suspend:
-                description: Suspend tells the controller to suspend subsequent events
-                  handling for this receiver.
+                description: |-
+                  Suspend tells the controller to suspend subsequent
+                  events handling for this receiver.
                 type: boolean
               type:
-                description: Type of webhook sender, used to determine the validation
-                  procedure and payload deserialization.
+                description: |-
+                  Type of webhook sender, used to determine
+                  the validation procedure and payload deserialization.
                 enum:
                 - generic
                 - generic-hmac
@@ -1233,6 +1312,7 @@ spec:
                 - gcr
                 - nexus
                 - acr
+                - cdevents
                 type: string
             required:
             - resources
@@ -1248,42 +1328,42 @@ spec:
                 description: Conditions holds the conditions for the Receiver.
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -1297,11 +1377,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -1314,9 +1395,10 @@ spec:
                   type: object
                 type: array
               lastHandledReconcileAt:
-                description: LastHandledReconcileAt holds the value of the most recent
-                  reconcile request value, so a change of the annotation value can
-                  be detected.
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile request value, so a change of the annotation value
+                  can be detected.
                 type: string
               observedGeneration:
                 description: ObservedGeneration is the last observed generation of
@@ -1324,8 +1406,9 @@ spec:
                 format: int64
                 type: integer
               webhookPath:
-                description: WebhookPath is the generated incoming webhook address
-                  in the format of '/hook/sha256sum(token+name+namespace)'.
+                description: |-
+                  WebhookPath is the generated incoming webhook address in the format
+                  of '/hook/sha256sum(token+name+namespace)'.
                 type: string
             type: object
         type: object
@@ -1351,14 +1434,19 @@ spec:
         description: Receiver is the Schema for the receivers API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1366,16 +1454,18 @@ spec:
             description: ReceiverSpec defines the desired state of Receiver
             properties:
               events:
-                description: A list of events to handle, e.g. 'push' for GitHub or
-                  'Push Hook' for GitLab.
+                description: |-
+                  A list of events to handle,
+                  e.g. 'push' for GitHub or 'Push Hook' for GitLab.
                 items:
                   type: string
                 type: array
               resources:
                 description: A list of resources to be notified about changes.
                 items:
-                  description: CrossNamespaceObjectReference contains enough information
-                    to let you locate the typed referenced object at cluster level
+                  description: |-
+                    CrossNamespaceObjectReference contains enough information to let you locate the
+                    typed referenced object at cluster level
                   properties:
                     apiVersion:
                       description: API version of the referent
@@ -1397,11 +1487,10 @@ spec:
                     matchLabels:
                       additionalProperties:
                         type: string
-                      description: MatchLabels is a map of {key,value} pairs. A single
-                        {key,value} in the matchLabels map is equivalent to an element
-                        of matchExpressions, whose key field is "key", the operator
-                        is "In", and the values array contains only "value". The requirements
-                        are ANDed.
+                      description: |-
+                        MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                        operator is "In", and the values array contains only "value". The requirements are ANDed.
                       type: object
                     name:
                       description: Name of the referent
@@ -1418,8 +1507,9 @@ spec:
                   type: object
                 type: array
               secretRef:
-                description: Secret reference containing the token used to validate
-                  the payload authenticity
+                description: |-
+                  Secret reference containing the token used
+                  to validate the payload authenticity
                 properties:
                   name:
                     description: Name of the referent.
@@ -1428,12 +1518,14 @@ spec:
                 - name
                 type: object
               suspend:
-                description: This flag tells the controller to suspend subsequent
-                  events handling. Defaults to false.
+                description: |-
+                  This flag tells the controller to suspend subsequent events handling.
+                  Defaults to false.
                 type: boolean
               type:
-                description: Type of webhook sender, used to determine the validation
-                  procedure and payload deserialization.
+                description: |-
+                  Type of webhook sender, used to determine
+                  the validation procedure and payload deserialization.
                 enum:
                 - generic
                 - generic-hmac
@@ -1459,42 +1551,42 @@ spec:
               conditions:
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -1508,11 +1600,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -1529,7 +1622,9 @@ spec:
                 format: int64
                 type: integer
               url:
-                description: Generated webhook URL in the format of '/hook/sha256sum(token+name+namespace)'.
+                description: |-
+                  Generated webhook URL in the format
+                  of '/hook/sha256sum(token+name+namespace)'.
                 type: string
             type: object
         type: object
@@ -1555,14 +1650,19 @@ spec:
         description: Receiver is the Schema for the receivers API.
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -1570,8 +1670,9 @@ spec:
             description: ReceiverSpec defines the desired state of the Receiver.
             properties:
               events:
-                description: Events specifies the list of event types to handle, e.g.
-                  'push' for GitHub or 'Push Hook' for GitLab.
+                description: |-
+                  Events specifies the list of event types to handle,
+                  e.g. 'push' for GitHub or 'Push Hook' for GitLab.
                 items:
                   type: string
                 type: array
@@ -1583,8 +1684,9 @@ spec:
               resources:
                 description: A list of resources to be notified about changes.
                 items:
-                  description: CrossNamespaceObjectReference contains enough information
-                    to let you locate the typed referenced object at cluster level
+                  description: |-
+                    CrossNamespaceObjectReference contains enough information to let you locate the
+                    typed referenced object at cluster level
                   properties:
                     apiVersion:
                       description: API version of the referent
@@ -1606,15 +1708,16 @@ spec:
                     matchLabels:
                       additionalProperties:
                         type: string
-                      description: MatchLabels is a map of {key,value} pairs. A single
-                        {key,value} in the matchLabels map is equivalent to an element
-                        of matchExpressions, whose key field is "key", the operator
-                        is "In", and the values array contains only "value". The requirements
-                        are ANDed. MatchLabels requires the name to be set to `*`.
+                      description: |-
+                        MatchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                        map is equivalent to an element of matchExpressions, whose key field is "key", the
+                        operator is "In", and the values array contains only "value". The requirements are ANDed.
+                        MatchLabels requires the name to be set to `*`.
                       type: object
                     name:
-                      description: Name of the referent If multiple resources are
-                        targeted `*` may be set.
+                      description: |-
+                        Name of the referent
+                        If multiple resources are targeted `*` may be set.
                       maxLength: 53
                       minLength: 1
                       type: string
@@ -1629,7 +1732,8 @@ spec:
                   type: object
                 type: array
               secretRef:
-                description: SecretRef specifies the Secret containing the token used
+                description: |-
+                  SecretRef specifies the Secret containing the token used
                   to validate the payload authenticity.
                 properties:
                   name:
@@ -1639,12 +1743,14 @@ spec:
                 - name
                 type: object
               suspend:
-                description: Suspend tells the controller to suspend subsequent events
-                  handling for this receiver.
+                description: |-
+                  Suspend tells the controller to suspend subsequent
+                  events handling for this receiver.
                 type: boolean
               type:
-                description: Type of webhook sender, used to determine the validation
-                  procedure and payload deserialization.
+                description: |-
+                  Type of webhook sender, used to determine
+                  the validation procedure and payload deserialization.
                 enum:
                 - generic
                 - generic-hmac
@@ -1671,42 +1777,42 @@ spec:
                 description: Conditions holds the conditions for the Receiver.
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -1720,11 +1826,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -1737,9 +1844,10 @@ spec:
                   type: object
                 type: array
               lastHandledReconcileAt:
-                description: LastHandledReconcileAt holds the value of the most recent
-                  reconcile request value, so a change of the annotation value can
-                  be detected.
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile request value, so a change of the annotation value
+                  can be detected.
                 type: string
               observedGeneration:
                 description: ObservedGeneration is the last observed generation of
@@ -1747,13 +1855,15 @@ spec:
                 format: int64
                 type: integer
               url:
-                description: 'URL is the generated incoming webhook address in the
-                  format of ''/hook/sha256sum(token+name+namespace)''. Deprecated:
-                  Replaced by WebhookPath.'
+                description: |-
+                  URL is the generated incoming webhook address in the format
+                  of '/hook/sha256sum(token+name+namespace)'.
+                  Deprecated: Replaced by WebhookPath.
                 type: string
               webhookPath:
-                description: WebhookPath is the generated incoming webhook address
-                  in the format of '/hook/sha256sum(token+name+namespace)'.
+                description: |-
+                  WebhookPath is the generated incoming webhook address in the format
+                  of '/hook/sha256sum(token+name+namespace)'.
                 type: string
             type: object
         type: object
