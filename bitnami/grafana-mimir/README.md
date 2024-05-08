@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -265,7 +265,7 @@ externalMemcachedChunks.port=11211
 | `alertmanager.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                            | `true`      |
 | `alertmanager.networkPolicy.allowExternal`           | Don't require server label for connections                                                                     | `true`      |
 | `alertmanager.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                | `true`      |
-| `alertmanager.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                   | `[]`        |
+| `alertmanager.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `alertmanager.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `alertmanager.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                         | `{}`        |
 | `alertmanager.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                     | `{}`        |
@@ -376,7 +376,7 @@ externalMemcachedChunks.port=11211
 | `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -478,7 +478,7 @@ externalMemcachedChunks.port=11211
 | `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -588,7 +588,7 @@ externalMemcachedChunks.port=11211
 | `gateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                              | `true`                   |
 | `gateway.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `gateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
-| `gateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `gateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `gateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `gateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
 | `gateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
@@ -711,7 +711,7 @@ externalMemcachedChunks.port=11211
 | `ingester.networkPolicy.enabled`                                      | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                                   | `true`           |
 | `ingester.networkPolicy.allowExternal`                                | Don't require server label for connections                                                                                                                                                                                                            | `true`           |
 | `ingester.networkPolicy.allowExternalEgress`                          | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                       | `true`           |
-| `ingester.networkPolicy.extraIngress`                                 | Add extra ingress rules to the NetworkPolice                                                                                                                                                                                                          | `[]`             |
+| `ingester.networkPolicy.extraIngress`                                 | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                          | `[]`             |
 | `ingester.networkPolicy.extraEgress`                                  | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                          | `[]`             |
 | `ingester.networkPolicy.ingressNSMatchLabels`                         | Labels to match to allow traffic from other namespaces                                                                                                                                                                                                | `{}`             |
 | `ingester.networkPolicy.ingressNSPodMatchLabels`                      | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                            | `{}`             |
@@ -809,7 +809,7 @@ externalMemcachedChunks.port=11211
 | `overridesExporter.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `overridesExporter.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `overridesExporter.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `overridesExporter.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `overridesExporter.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `overridesExporter.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `overridesExporter.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `overridesExporter.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -911,7 +911,7 @@ externalMemcachedChunks.port=11211
 | `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `querier.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1013,7 +1013,7 @@ externalMemcachedChunks.port=11211
 | `queryFrontend.networkPolicy.enabled`                              | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                             | `true`           |
 | `queryFrontend.networkPolicy.allowExternal`                        | Don't require server label for connections                                                                                                                                                                                                      | `true`           |
 | `queryFrontend.networkPolicy.allowExternalEgress`                  | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                 | `true`           |
-| `queryFrontend.networkPolicy.extraIngress`                         | Add extra ingress rules to the NetworkPolice                                                                                                                                                                                                    | `[]`             |
+| `queryFrontend.networkPolicy.extraIngress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`             |
 | `queryFrontend.networkPolicy.extraEgress`                          | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`             |
 | `queryFrontend.networkPolicy.ingressNSMatchLabels`                 | Labels to match to allow traffic from other namespaces                                                                                                                                                                                          | `{}`             |
 | `queryFrontend.networkPolicy.ingressNSPodMatchLabels`              | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                      | `{}`             |
@@ -1111,7 +1111,7 @@ externalMemcachedChunks.port=11211
 | `queryScheduler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `queryScheduler.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `queryScheduler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryScheduler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `queryScheduler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryScheduler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryScheduler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `queryScheduler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1222,7 +1222,7 @@ externalMemcachedChunks.port=11211
 | `storeGateway.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `storeGateway.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `storeGateway.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `storeGateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `storeGateway.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `storeGateway.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `storeGateway.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `storeGateway.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -1336,7 +1336,7 @@ externalMemcachedChunks.port=11211
 | `ruler.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                            | `true`      |
 | `ruler.networkPolicy.allowExternal`           | Don't require server label for connections                                                                     | `true`      |
 | `ruler.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                | `true`      |
-| `ruler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                                   | `[]`        |
+| `ruler.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `ruler.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                   | `[]`        |
 | `ruler.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                         | `{}`        |
 | `ruler.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                     | `{}`        |

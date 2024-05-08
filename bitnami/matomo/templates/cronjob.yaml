@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,6 +37,12 @@ spec:
           restartPolicy: OnFailure
           {{- if .Values.cronjobs.archive.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.affinity "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cronjobs.archive.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cronjobs.archive.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.tolerations "context" $) | nindent 12 }}
           {{- end }}
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
@@ -202,6 +208,12 @@ spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.cronjobs.taskScheduler.affinity }}
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.affinity "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cronjobs.taskScheduler.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.nodeSelector "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cronjobs.taskScheduler.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.tolerations "context" $) | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
           initContainers:

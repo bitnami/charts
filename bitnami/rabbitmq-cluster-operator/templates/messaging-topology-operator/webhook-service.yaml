@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,9 +39,9 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: http
+    - name: https
       port: {{ .Values.msgTopologyOperator.service.ports.webhook }}
-      targetPort: http-webhook
+      targetPort: https-webhook
       protocol: TCP
       {{- if (and (or (eq .Values.msgTopologyOperator.service.type "NodePort") (eq .Values.msgTopologyOperator.service.type "LoadBalancer")) (not (empty .Values.msgTopologyOperator.service.nodePorts.http))) }}
       nodePort: {{ .Values.msgTopologyOperator.service.nodePorts.http }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -14,27 +14,27 @@ annotations:
 apiVersion: v2
 appVersion: 10.4.1
 dependencies:
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: SonarQube(TM) is an open source quality management platform that analyzes and measures code's technical quality. It enables developers to detect code issues, vulnerabilities, and bugs in early stages.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/sonarqube/img/sonarqube-stack-220x234.png
 keywords:
-- sonarqube
-- code-quality
-- code-review
-- static-analysis
+  - sonarqube
+  - code-quality
+  - code-review
+  - static-analysis
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: sonarqube
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
-version: 5.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/sonarqube
+version: 5.0.3

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -128,7 +128,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.msgTopologyOperator.resourcesPreset) | nindent 12 }}
           {{- end }}
           ports:
-            - name: http-webhook
+            - name: https-webhook
               containerPort: 9443
               protocol: TCP
             - name: http-metrics

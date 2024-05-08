@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -96,6 +96,11 @@ spec:
               cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          {{- if .Values.aggregator.initResources }}
+          resources: {{- toYaml .Values.aggregator.initResources | nindent 12 }}
+          {{- else if ne .Values.aggregator.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.initResourcePresets) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
@@ -124,6 +129,11 @@ spec:
             - |-
               #!/bin/sh
               chmod o-rwx /tmp
+          {{- if .Values.aggregator.initResources }}
+          resources: {{- toYaml .Values.aggregator.initResources | nindent 12 }}
+          {{- else if ne .Values.aggregator.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.aggregator.initResourcePresets) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0

@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -269,7 +269,7 @@ The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/p
 | `concierge.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security) | `[]`        |
 | `concierge.networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
 | `concierge.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                    | `true`      |
-| `concierge.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                       | `[]`        |
+| `concierge.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `concierge.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
 | `concierge.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
 | `concierge.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
@@ -394,7 +394,7 @@ The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/p
 | `supervisor.networkPolicy.kubeAPIServerPorts`        | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                        |
 | `supervisor.networkPolicy.allowExternal`             | Don't require server label for connections                                                                                       | `true`                      |
 | `supervisor.networkPolicy.allowExternalEgress`       | Allow the pod to access any range of port and all destinations.                                                                  | `true`                      |
-| `supervisor.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                        |
+| `supervisor.networkPolicy.extraIngress`              | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                        |
 | `supervisor.networkPolicy.extraEgress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                        |
 | `supervisor.networkPolicy.ingressNSMatchLabels`      | Labels to match to allow traffic from other namespaces                                                                           | `{}`                        |
 | `supervisor.networkPolicy.ingressNSPodMatchLabels`   | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                        |

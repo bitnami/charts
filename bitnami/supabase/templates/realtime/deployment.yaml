@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -134,6 +134,14 @@ spec:
               realtime eval Realtime.Release.migrate && realtime start
           {{- end }}
           env:
+            - name: DB_USER
+              value: {{ include "supabase.database.user" . | quote }}
+            - name: DB_HOST
+              value: {{ include "supabase.database.host" . | quote }}
+            - name: DB_PORT
+              value: {{ include "supabase.database.port" . | quote }}
+            - name: DB_NAME
+              value: {{ include "supabase.database.name" . | quote }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:

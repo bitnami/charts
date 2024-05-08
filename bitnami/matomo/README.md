@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -367,7 +367,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
@@ -380,6 +380,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.taskScheduler.nodeSelector`                                      | Node labels for CronJob pod assignment. Evaluated as a template.                                                  | `{}`             |
+| `cronjobs.taskScheduler.tolerations`                                       | Tolerations for CronJob pod assignment                                                                            | `[]`             |
 | `cronjobs.taskScheduler.command`                                           | Override default container command (useful when using custom images)                                              | `[]`             |
 | `cronjobs.taskScheduler.args`                                              | Override default container args (useful when using custom images)                                                 | `[]`             |
 | `cronjobs.taskScheduler.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                              | `true`           |
@@ -407,6 +409,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                                                               | `{}`             |
+| `cronjobs.archive.tolerations`                                             | Tolerations for CronJob pod assignment                                                                            | `[]`             |
+| `cronjobs.archive.nodeSelector`                                            | Node labels for CronJob pod assignment. Evaluated as a template.                                                  | `{}`             |
 | `cronjobs.archive.command`                                                 | Override default container command (useful when using custom images)                                              | `[]`             |
 | `cronjobs.archive.args`                                                    | Override default container args (useful when using custom images)                                                 | `[]`             |
 | `cronjobs.archive.containerSecurityContext.enabled`                        | Enabled containers' Security Context                                                                              | `true`           |

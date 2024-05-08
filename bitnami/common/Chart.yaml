@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
 apiVersion: v2
 # Please make sure that version and appVersion are always the same.
-appVersion: 2.19.1
+appVersion: 2.19.2
 description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
 home: https://bitnami.com
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png
@@ -17,10 +17,10 @@ keywords:
   - function
   - bitnami
 maintainers:
-  - name: VMware, Inc.
+  - name: Broadcom, Inc. All Rights Reserved.
     url: https://github.com/bitnami/charts
 name: common
 sources:
   - https://github.com/bitnami/charts
 type: library
-version: 2.19.1
+version: 2.19.2
