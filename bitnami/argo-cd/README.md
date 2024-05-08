@@ -1181,11 +1181,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `redis.auth.existingSecret`                                   | Existing secret to load redis dependency password                                                     | `""`                    |
 | `redis.auth.existingSecretPasswordKey`                        | Pasword key name inside the existing secret                                                           | `redis-password`        |
 | `redis.architecture`                                          | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`            |
+| `externalRedis.enabled`                                       | Enables External Redis                                                                                | `false`                 |
 | `externalRedis.host`                                          | External Redis host                                                                                   | `""`                    |
 | `externalRedis.port`                                          | External Redis port                                                                                   | `6379`                  |
 | `externalRedis.password`                                      | External Redis password                                                                               | `""`                    |
 | `externalRedis.existingSecret`                                | Existing secret for the external redis                                                                | `""`                    |
 | `externalRedis.existingSecretPasswordKey`                     | Password key for the existing secret containing the external redis password                           | `redis-password`        |
+| `externalRedis.selector`                                      | External Redis selector labels                                                                        | `{}`                    |
 | `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
 | `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
 | `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |

@@ -4004,6 +4004,10 @@ redis:
 ## External Redis&reg;
 ##
 externalRedis:
+  ## Can be enabled after redisWait.enabled and redis.enabled are set to false
+  ## @param externalRedis.enabled Enables External Redis
+  ##
+  enabled: false
   ## Redis&reg; host
   ## @param externalRedis.host External Redis host
   ##
@@ -4025,6 +4029,15 @@ externalRedis:
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
+  ## Specify a label to use with the label selector
+  ## @param externalRedis.selector External Redis selector labels
+  ##
+  selector: {}
+  #
+  # selector:
+    # app.kubernetes.io/component: master
+    # app.kubernetes.io/instance: redis
+    # app.kubernetes.io/name: redis
 ## Wait-for-redis init container configuration
 ##
 redisWait:
