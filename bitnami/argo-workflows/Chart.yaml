@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: argo-workflow-cli
-      image: docker.io/bitnami/argo-workflow-cli:3.5.6-debian-12-r0
+      image: docker.io/bitnami/argo-workflow-cli:3.5.6-debian-12-r2
     - name: argo-workflow-controller
-      image: docker.io/bitnami/argo-workflow-controller:3.5.6-debian-12-r0
+      image: docker.io/bitnami/argo-workflow-controller:3.5.6-debian-12-r1
     - name: argo-workflow-exec
-      image: docker.io/bitnami/argo-workflow-exec:3.5.6-debian-12-r0
+      image: docker.io/bitnami/argo-workflow-exec:3.5.6-debian-12-r2
 apiVersion: v2
 appVersion: 3.5.6
 dependencies:
@@ -37,9 +37,9 @@ keywords:
 - Continuous delivery
 - Continous deployment
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: argo-workflows
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
-version: 8.0.6
+version: 8.0.7

@@ -34,9 +34,9 @@ keywords:
 - application
 - php
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: matomo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/matomo
-version: 7.0.4
+version: 7.1.0

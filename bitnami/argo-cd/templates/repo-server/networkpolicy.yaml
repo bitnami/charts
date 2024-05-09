@@ -47,6 +47,12 @@ spec:
             matchLabels:
               app.kubernetes.io/name: redis
               app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else if .Values.externalRedis.enabled }}
+        - port: {{ .Values.externalRedis.port }}
+      to:
+        - podSelector:
+            matchLabels:
+              {{- toYaml .Values.externalRedis.selector | nindent 14 }}
       {{- end }}
     {{- if .Values.applicationSet.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.networkPolicy.extraEgress "context" $ ) | nindent 4 }}

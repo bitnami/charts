@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -347,7 +347,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `spi.truststorePassword`         | Password to access the truststore when it's password-protected                                                               | `""`                          |
 | `spi.truststoreFilename`         | Truststore filename inside the existing secret                                                                               | `keycloak-spi.truststore.jks` |
 | `spi.passwordsSecret`            | Secret containing the SPI Truststore passwords.                                                                              | `""`                          |
-| `spi.hostnameVerificationPolicy` | Verify the hostname of the server’s certificate. Allowed values: "ANY", "WILDCARD", "STRICT".                                | `""`                          |
+| `spi.hostnameVerificationPolicy` | Verify the hostname of the server's certificate. Allowed values: "ANY", "WILDCARD", "STRICT".                                | `""`                          |
 | `production`                     | Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.                                 | `false`                       |
 | `proxy`                          | reverse Proxy mode edge, reencrypt, passthrough or none                                                                      | `passthrough`                 |
 | `httpRelativePath`               | Set the path relative to '/' for serving resources. Useful if you are migrating from older version which were using '/auth/' | `/`                           |
@@ -657,7 +657,7 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/keycl
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/tree/main/bitnami/keycloak/values.yaml)
 
-Keycloak realms, users and clients can be created from the Keycloak administration panel. Refer to the [tutorial on adding user authentication to applications with Keycloak](https://docs.bitnami.com/tutorials/integrate-keycloak-authentication-kubernetes) for more details on these operations.
+Keycloak realms, users and clients can be created from the Keycloak administration panel.
 
 ## Troubleshooting
 
@@ -772,7 +772,7 @@ kubectl delete pod keycloak-postgresql-0
 
 #### Useful links
 
-- [Bitnami Tutorial](https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues)
+- [Bitnami Tutorial](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html)
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 

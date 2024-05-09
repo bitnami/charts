@@ -228,6 +228,9 @@ spec:
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
             {{- end }}
+            {{- if .Values.aws.zoneMatchParent }}
+            - --aws-zone-match-parent
+            {{- end }}
             {{- if or (and (eq .Values.provider "azure") (not .Values.azure.secretName)) (eq .Values.provider "azure-private-dns") }}
             # Azure Arguments
             {{- if .Values.azure.resourceGroup }}

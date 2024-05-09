@@ -145,6 +145,12 @@ jobs:
               echo "error=Please ensure all *.tag params are skipped (@skip) in the bitnami/${CHART}/values.yaml file"
               exit "$exit_code"
             fi
+            # Ensuring no unprintable characters are present in values.yaml
+            ! grep --quiet "[^[:print:]]" "bitnami/${CHART}/values.yaml" || exit_code=$?
+            if [[ $exit_code -ne 0 ]]; then
+              echo "error=Please ensure there are no unprintable characters in the bitnami/${CHART}/values.yaml file"
+              exit "$exit_code"
+            fi
             echo "Updating README.md for bitnami/${CHART}"
             readme-generator --values "bitnami/${CHART}/values.yaml" --readme "bitnami/${CHART}/README.md" --schema "/tmp/schema.json"
             # Commit all changes, if any

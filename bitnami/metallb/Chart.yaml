@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: metallb-controller
-      image: docker.io/bitnami/metallb-controller:0.14.5-debian-12-r2
+      image: docker.io/bitnami/metallb-controller:0.14.5-debian-12-r4
     - name: metallb-speaker
-      image: docker.io/bitnami/metallb-speaker:0.14.5-debian-12-r3
+      image: docker.io/bitnami/metallb-speaker:0.14.5-debian-12-r5
 apiVersion: v2
 appVersion: 0.14.5
 dependencies:
@@ -30,9 +30,9 @@ keywords:
 - vip
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: metallb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metallb
-version: 6.1.2
+version: 6.1.4
