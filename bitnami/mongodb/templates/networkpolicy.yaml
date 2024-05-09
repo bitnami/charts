@@ -71,15 +71,14 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: mongodb
-        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
-        {{- if and ( kindIs "string" .Values.networkPolicy.ingressPodMatchLabels ) ( eq .Values.networkPolicy.ingressPodMatchLabels "default" ) }}
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels: 
               {{ template "common.names.fullname" . }}-client: "true"
-        {{- else }}
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
         - podSelector:
             matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
-        {{- end }}
         {{- end }}
         {{- $ingressNSMatchLabels := coalesce .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.namespaceSelector }}
         {{- if $ingressNSMatchLabels }}
