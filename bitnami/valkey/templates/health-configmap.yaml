@@ -22,17 +22,17 @@ data:
       timeout -s 15 $1 \
       valkey-cli \
         -h localhost \
-{{- if .Values.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         -p $VALKEY_TLS_PORT \
         --tls \
         --cacert {{ template "valkey.tlsCACert" . }} \
-        {{- if .Values.tls.authClients }}
+          {{- if .Values.tls.authClients }}
           --cert {{ template "valkey.tlsCert" . }} \
           --key {{ template "valkey.tlsCertKey" . }} \
-        {{- end }}
-{{- else }}
+          {{- end }}
+        {{- else }}
         -p $VALKEY_PORT \
-{{- end }}
+        {{- end }}
         ping
     )
     if [ "$?" -eq "124" ]; then
@@ -52,17 +52,17 @@ data:
       timeout -s 15 $1 \
       valkey-cli \
         -h localhost \
-{{- if .Values.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         -p $VALKEY_TLS_PORT \
         --tls \
         --cacert {{ template "valkey.tlsCACert" . }} \
-        {{- if .Values.tls.authClients }}
+          {{- if .Values.tls.authClients }}
           --cert {{ template "valkey.tlsCert" . }} \
           --key {{ template "valkey.tlsCertKey" . }} \
-        {{- end }}
-{{- else }}
+          {{- end }}
+        {{- else }}
         -p $VALKEY_PORT \
-{{- end }}
+        {{- end }}
         ping
     )
     if [ "$?" -eq "124" ]; then
@@ -78,25 +78,25 @@ data:
   ping_sentinel.sh: |-
     #!/bin/bash
 
-{{- if .Values.auth.sentinel }}
+    {{- if .Values.auth.sentinel }}
     [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
     [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
-{{- end }}
+    {{- end }}
     response=$(
       timeout -s 15 $1 \
       valkey-cli \
         -h localhost \
-{{- if .Values.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         -p $VALKEY_SENTINEL_TLS_PORT_NUMBER \
         --tls \
         --cacert "$VALKEY_SENTINEL_TLS_CA_FILE" \
-        {{- if .Values.tls.authClients }}
+          {{- if .Values.tls.authClients }}
           --cert "$VALKEY_SENTINEL_TLS_CERT_FILE" \
           --key "$VALKEY_SENTINEL_TLS_KEY_FILE" \
-        {{- end }}
-{{- else }}
+          {{- end }}
+        {{- else }}
         -p $VALKEY_SENTINEL_PORT \
-{{- end }}
+        {{- end }}
         ping
     )
     if [ "$?" -eq "124" ]; then
@@ -133,14 +133,14 @@ data:
       valkey-cli \
         -h $VALKEY_MASTER_HOST \
         -p $VALKEY_MASTER_PORT_NUMBER \
-{{- if .Values.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         --tls \
         --cacert {{ template "valkey.tlsCACert" . }} \
-        {{- if .Values.tls.authClients }}
+          {{- if .Values.tls.authClients }}
           --cert {{ template "valkey.tlsCert" . }} \
           --key {{ template "valkey.tlsCertKey" . }} \
+          {{- end }}
         {{- end }}
-{{- end }}
         ping
     )
     if [ "$?" -eq "124" ]; then
@@ -161,14 +161,14 @@ data:
       valkey-cli \
         -h $VALKEY_MASTER_HOST \
         -p $VALKEY_MASTER_PORT_NUMBER \
-{{- if .Values.tls.enabled }}
+        {{- if .Values.tls.enabled }}
         --tls \
         --cacert {{ template "valkey.tlsCACert" . }} \
-        {{- if .Values.tls.authClients }}
+          {{- if .Values.tls.authClients }}
           --cert {{ template "valkey.tlsCert" . }} \
           --key {{ template "valkey.tlsCertKey" . }} \
+          {{- end }}
         {{- end }}
-{{- end }}
         ping
     )
     if [ "$?" -eq "124" ]; then

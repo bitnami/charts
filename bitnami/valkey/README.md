@@ -4,9 +4,7 @@
 
 Valkey is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
 
-[Overview of Valkey](http://valkey.io)
-
-Disclaimer: Valkey is a registered trademark of Valkey Ltd. Any rights therein are reserved to Valkey Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Valkey Ltd.
+[Overview of Valkey](https://valkey.io)
 
 ## TL;DR
 
@@ -142,11 +140,11 @@ This command will return the address of the current master, which can be accesse
 
 In case the current master crashes, the Sentinel containers will elect a new master node.
 
-`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
+`master.replicaCount` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
 ### Multiple masters (experimental)
 
-When `master.count` is greater than `1`, special care must be taken to create a consistent setup.
+When `master.replicaCount` is greater than `1`, special care must be taken to create a consistent setup.
 
 An example of use case is the creation of a redundant set of standalone masters or master-replicas per Kubernetes node where you must ensure:
 
@@ -155,8 +153,8 @@ An example of use case is the creation of a redundant set of standalone masters 
 
 One way of achieving this is by setting `master.service.internalTrafficPolicy=Local` in combination with a `master.affinity.podAntiAffinity` spec to never schedule more than one master per Kubernetes node.
 
-It's recommended to only change `master.count` if you know what you are doing.
-`master.count` greater than `1` is not designed for use when `sentinel.enabled=true`.
+It's recommended to only change `master.replicaCount` if you know what you are doing.
+`master.replicaCount` greater than `1` is not designed for use when `sentinel.enabled=true`.
 
 ### Using a password file
 
@@ -254,22 +252,7 @@ extraDeploy:
 
 ### Host Kernel Settings
 
-Valkey may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set up a privileged `initContainer` with the `sysctlImage` config values, for example:
-
-```yaml
-sysctlImage:
-  enabled: true
-  mountHostSys: true
-  command:
-    - /bin/sh
-    - -c
-    - |-
-      install_packages procps
-      sysctl -w net.core.somaxconn=10000
-      echo never > /host-sys/kernel/mm/transparent_hugepage/enabled
-```
-
-Alternatively, for Kubernetes 1.12+ you can set `securityContext.sysctls` which will configure `sysctls` for master and slave pods. Example:
+Valkey may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set `securityContext.sysctls` which will configure `sysctls` for master and replica pods. Example::
 
 ```yaml
 securityContext:
@@ -346,7 +329,7 @@ Follow the following steps:
                     "-f",
                     "/dev/null"
                ],
-               "image": "bitnami/minideb",
+               "image": "bitnami/os-shell",
                "name": "mycontainer",
                "volumeMounts": [{
                    "mountPath": "/mnt",
@@ -361,7 +344,7 @@ Follow the following steps:
                 }
             }]
         }
-    }' --image="bitnami/minideb"
+    }' --image="bitnami/os-shell"
 
     $ kubectl cp dump.rdb valkeyvolpod:/mnt/dump.rdb
     $ kubectl delete pod volpod
@@ -476,7 +459,7 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 
 | Name                                                       | Description                                                                                                                                                                                                                     | Value                    |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `master.count`                                             | Number of Valkey master instances to deploy (experimental, requires additional configuration)                                                                                                                                   | `1`                      |
+| `master.replicaCount`                                      | Number of Valkey master instances to deploy (experimental, requires additional configuration)                                                                                                                                   | `1`                      |
 | `master.configuration`                                     | Configuration for Valkey master nodes                                                                                                                                                                                           | `""`                     |
 | `master.disableCommands`                                   | Array with Valkey commands to disable on master nodes                                                                                                                                                                           | `["FLUSHDB","FLUSHALL"]` |
 | `master.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                            | `[]`                     |
@@ -702,15 +685,31 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `replica.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                                                                              | `None`                   |
 | `replica.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                                                                                                                                       | `{}`                     |
 | `replica.terminationGracePeriodSeconds`                     | Integer setting the termination grace period for the valkey-replicas pods                                                                                                                                                         | `30`                     |
-| `replica.autoscaling.enabled`                               | Enable replica autoscaling settings                                                                                                                                                                                               | `false`                  |
-| `replica.autoscaling.minReplicas`                           | Minimum replicas for the pod autoscaling                                                                                                                                                                                          | `1`                      |
-| `replica.autoscaling.maxReplicas`                           | Maximum replicas for the pod autoscaling                                                                                                                                                                                          | `11`                     |
-| `replica.autoscaling.targetCPU`                             | Percentage of CPU to consider when autoscaling                                                                                                                                                                                    | `""`                     |
-| `replica.autoscaling.targetMemory`                          | Percentage of Memory to consider when autoscaling                                                                                                                                                                                 | `""`                     |
-| `replica.serviceAccount.create`                             | Specifies whether a ServiceAccount should be created                                                                                                                                                                              | `true`                   |
-| `replica.serviceAccount.name`                               | The name of the ServiceAccount to use.                                                                                                                                                                                            | `""`                     |
-| `replica.serviceAccount.automountServiceAccountToken`       | Whether to auto mount the service account token                                                                                                                                                                                   | `false`                  |
-| `replica.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                                                                                                                                              | `{}`                     |
+
+### Autoscaling
+
+| Name                                          | Description                                                                                    | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
+| `replica.autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
+| `replica.autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
+| `replica.autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
+| `replica.autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
+| `replica.autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
+
+### VPA update policy
+
+| Name                                                  | Description                                                                                                                                                            | Value   |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `replica.autoscaling.vpa.updatePolicy.updateMode`     | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`  |
+| `replica.autoscaling.hpa.enabled`                     | Enable HPA                                                                                                                                                             | `false` |
+| `replica.autoscaling.hpa.minReplicas`                 | Minimum number of replicas                                                                                                                                             | `""`    |
+| `replica.autoscaling.hpa.maxReplicas`                 | Maximum number of replicas                                                                                                                                             | `""`    |
+| `replica.autoscaling.hpa.targetCPU`                   | Target CPU utilization percentage                                                                                                                                      | `""`    |
+| `replica.autoscaling.hpa.targetMemory`                | Target Memory utilization percentage                                                                                                                                   | `""`    |
+| `replica.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                                                   | `true`  |
+| `replica.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                                 | `""`    |
+| `replica.serviceAccount.automountServiceAccountToken` | Whether to auto mount the service account token                                                                                                                        | `false` |
+| `replica.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                                                   | `{}`    |
 
 ### Valkey Sentinel configuration parameters
 
@@ -840,7 +839,6 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `tls.authClients`                               | Require clients to authenticate                                                                                                             | `true`  |
 | `tls.autoGenerated`                             | Enable autogenerated certificates                                                                                                           | `false` |
 | `tls.existingSecret`                            | The name of the existing secret that contains the TLS certificates                                                                          | `""`    |
-| `tls.certificatesSecret`                        | DEPRECATED. Use existingSecret instead.                                                                                                     | `""`    |
 | `tls.certFilename`                              | Certificate filename                                                                                                                        | `""`    |
 | `tls.certKeyFilename`                           | Certificate Key filename                                                                                                                    | `""`    |
 | `tls.certCAFilename`                            | CA Certificate filename                                                                                                                     | `""`    |
@@ -969,16 +967,6 @@ helm install my-release --set master.persistence.existingClaim=PVC_NAME oci://RE
 | `kubectl.containerSecurityContext.capabilities.drop`        | Set kubectl containers' Security Context capabilities to drop                                                                                                                                                                                         | `["ALL"]`                                                         |
 | `kubectl.resources.limits`                                  | The resources limits for the kubectl containers                                                                                                                                                                                                       | `{}`                                                              |
 | `kubectl.resources.requests`                                | The requested resources for the kubectl containers                                                                                                                                                                                                    | `{}`                                                              |
-| `sysctl.enabled`                                            | Enable init container to modify Kernel settings                                                                                                                                                                                                       | `false`                                                           |
-| `sysctl.image.registry`                                     | OS Shell + Utility image registry                                                                                                                                                                                                                     | `REGISTRY_NAME`                                                   |
-| `sysctl.image.repository`                                   | OS Shell + Utility image repository                                                                                                                                                                                                                   | `REPOSITORY_NAME/os-shell`                                        |
-| `sysctl.image.digest`                                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                    | `""`                                                              |
-| `sysctl.image.pullPolicy`                                   | OS Shell + Utility image pull policy                                                                                                                                                                                                                  | `IfNotPresent`                                                    |
-| `sysctl.image.pullSecrets`                                  | OS Shell + Utility image pull secrets                                                                                                                                                                                                                 | `[]`                                                              |
-| `sysctl.command`                                            | Override default init-sysctl container command (useful when using custom images)                                                                                                                                                                      | `[]`                                                              |
-| `sysctl.mountHostSys`                                       | Mount the host `/sys` folder to `/host-sys`                                                                                                                                                                                                           | `false`                                                           |
-| `sysctl.resourcesPreset`                                    | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctl.resources is set (sysctl.resources is recommended for production).                       | `nano`                                                            |
-| `sysctl.resources`                                          | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                                                              |
 
 ### useExternalDNS Parameters
 

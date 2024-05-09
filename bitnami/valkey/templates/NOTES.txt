@@ -193,8 +193,6 @@ To connect to your database from outside the cluster execute the following comma
 {{- end }}
 {{- end }}
 {{- include "valkey.checkRollingTags" . }}
-{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
-{{- include "common.warnings.rollingTag" .Values.sysctl.image }}
 {{- include "valkey.validateValues" . }}
 
 {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled (eq .Values.sentinel.service.type "NodePort") (not .Release.IsUpgrade ) }}
@@ -205,7 +203,7 @@ No need to upgrade, ports and nodeports have been set from values
 YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- end }}
-{{- $resourceSections := list "metrics" "replica" "sentinel" "sysctl" "volumePermissions" }}
+{{- $resourceSections := list "metrics" "replica" "sentinel" "volumePermissions" }}
 {{- if not (and (eq .Values.architecture "replication") .Values.sentinel.enabled) }}
   {{- $resourceSections = append $resourceSections "master" -}}
 {{- end }}

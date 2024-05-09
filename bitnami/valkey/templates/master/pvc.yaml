@@ -12,6 +12,7 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
+    app.kubernetes.io/part-of: valkey
   {{- if .Values.master.persistence.annotations }}
   annotations: {{- toYaml .Values.master.persistence.annotations | nindent 4 }}
   {{- end }}

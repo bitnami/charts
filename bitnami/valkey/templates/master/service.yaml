@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (not .Values.sentinel.enabled) (gt (int64 .Values.master.count) 0) }}
+{{- if and (not .Values.sentinel.enabled) (gt (int64 .Values.master.replicaCount) 0) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -11,6 +11,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
+    app.kubernetes.io/part-of: valkey
   {{- if or .Values.master.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}

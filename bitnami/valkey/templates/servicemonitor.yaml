@@ -10,6 +10,7 @@ metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: valkey
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
@@ -28,7 +29,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.honorLabels }}
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
-      {{- with concat .Values.metrics.serviceMonitor.relabelings .Values.metrics.serviceMonitor.relabellings }}
+      {{- with .Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
@@ -45,7 +46,7 @@ spec:
       {{- if .honorLabels }}
       honorLabels: {{ .honorLabels }}
       {{- end }}
-      {{- with concat .Values.metrics.serviceMonitor.relabelings .Values.metrics.serviceMonitor.relabellings }}
+      {{- with .Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .metricRelabelings }}

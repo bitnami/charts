@@ -11,6 +11,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: valkey
   {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
@@ -34,7 +35,7 @@ spec:
   {{- end }}
   ports:
     - name: http-metrics
-      port: {{ coalesce .Values.metrics.service.ports.http .Values.metrics.service.port }}
+      port: {{ .Values.metrics.service.ports.http }}
       protocol: TCP
       targetPort: metrics
     {{- if .Values.metrics.service.extraPorts }}

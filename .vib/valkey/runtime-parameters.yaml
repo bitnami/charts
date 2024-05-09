@@ -3,7 +3,7 @@ auth:
   enabled: true
   password: ComplicatedPassword123!4
 master:
-  count: 1
+  replicaCount: 1
   disableCommands:
     - FLUSHALL
     - FLUSHDB

@@ -9,6 +9,7 @@ metadata:
   name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: valkey
   {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations (include "valkey.externalDNS.annotations" .) }}
   annotations:
     {{- if or .Values.sentinel.service.headless.annotations .Values.commonAnnotations }}
@@ -25,11 +26,11 @@ spec:
   {{- end }}
   ports:
     - name: tcp-valkey
-      port: {{ if .Values.sentinel.enabled }}{{ .Values.sentinel.service.ports.valkey }}{{ else }}{{ .Values.master.service.ports.valkey }}{{ end }}
+      port: {{ if .Values.sentinel.enabled }}{{ .Values.sentinel.containerPorts.sentinel }}{{ else }} {{ .Values.master.containerPorts.valkey }}{{ end }}
       targetPort: valkey
     {{- if .Values.sentinel.enabled }}
     - name: tcp-sentinel
-      port: {{ .Values.sentinel.service.ports.sentinel }}
+      port: {{ .Values.sentinel.containerPorts.sentinel }}
       targetPort: valkey-sentinel
     {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
