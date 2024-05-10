@@ -246,7 +246,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: valkey
+            - name: redis
               containerPort: {{ .Values.replica.containerPorts.valkey }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.customStartupProbe }}
@@ -254,7 +254,7 @@ spec:
           {{- else if .Values.replica.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: valkey
+              port: redis
           {{- end }}
           {{- if .Values.replica.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
@@ -343,7 +343,7 @@ spec:
               if [[ -f '/secrets/valkey-password' ]]; then
               export VALKEY_PASSWORD=$(cat /secrets/valkey-password)
               fi
-              valkey_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}

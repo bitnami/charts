@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if gt (int64 .Values.master.replicaCount) 0 -}}
+{{- if or (eq .Values.master.kind "DaemonSet") (gt (int64 .Values.master.replicaCount) 0) -}}
 {{- if or (not (eq .Values.architecture "replication")) (not .Values.sentinel.enabled) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: {{ .Values.master.kind }}
@@ -225,7 +225,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: valkey
+            - name: redis
               containerPort: {{ .Values.master.containerPorts.valkey }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.master.customStartupProbe }}
@@ -233,7 +233,7 @@ spec:
           {{- else if .Values.master.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.master.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: valkey
+              port: redis
           {{- end }}
           {{- if .Values.master.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customLivenessProbe "context" $) | nindent 12 }}
@@ -323,7 +323,7 @@ spec:
               if [[ -f '/secrets/valkey-password' ]]; then
               export VALKEY_PASSWORD=$(cat /secrets/valkey-password)
               fi
-              valkey_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}

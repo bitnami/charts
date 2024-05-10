@@ -252,7 +252,7 @@ extraDeploy:
 
 ### Host Kernel Settings
 
-Valkey may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set `securityContext.sysctls` which will configure `sysctls` for master and replica pods. Example::
+Valkey may require some changes in the kernel of the host machine to work as expected, in particular increasing the `somaxconn` value and disabling transparent huge pages. To do so, you can set `securityContext.sysctls` which will configure `sysctls` for master and replica pods. Example:
 
 ```yaml
 securityContext:

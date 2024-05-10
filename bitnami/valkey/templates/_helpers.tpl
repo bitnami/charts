@@ -203,35 +203,6 @@ Get the password key to be retrieved from Valkey secret.
 {{- end -}}
 {{- end -}}
 
-{{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
-*/}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
-{{/*
-Return Valkey password
-*/}}
-{{- define "valkey.password" -}}
-{{- if or .Values.auth.enabled .Values.global.valkey.password }}
-    {{- if not (empty .Values.global.valkey.password) }}
-        {{- .Values.global.valkey.password -}}
-    {{- else if not (empty .Values.auth.password) -}}
-        {{- .Values.auth.password -}}
-    {{- else -}}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "valkey.secretName" .) "Length" 10 "Key" (include "valkey.secretPasswordKey" .))  -}}
-    {{- end -}}
-{{- end -}}
-{{- end }}
-
 {{/* Check if there are rolling tags in the images */}}
 {{- define "valkey.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}

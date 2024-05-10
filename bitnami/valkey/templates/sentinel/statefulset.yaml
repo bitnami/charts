@@ -549,7 +549,7 @@ spec:
               if [[ -f '/secrets/valkey-password' ]]; then
                   export VALKEY_PASSWORD=$(cat /secrets/valkey-password)
               fi
-              valkey_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
