@@ -1,0 +1,47 @@
+architecture: replication
+auth:
+  enabled: true
+  password: ComplicatedPassword123!4
+master:
+  replicaCount: 1
+  disableCommands:
+    - FLUSHALL
+    - FLUSHDB
+  containerPorts:
+    valkey: 6380
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  kind: StatefulSet
+  persistence:
+    enabled: true
+    path: /data
+  service:
+    ports:
+      valkey: 80
+    type: LoadBalancer
+  serviceAccount:
+    create: true
+  automountServiceAccountToken: true
+replica:
+  replicaCount: 3
+  containerPorts:
+    valkey: 6380
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  persistence:
+    enabled: true
+    path: /data
+  service:
+    ports:
+      valkey: 6378
+    type: ClusterIP
+sentinel:
+  enabled: false
