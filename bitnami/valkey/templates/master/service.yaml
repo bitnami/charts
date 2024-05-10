@@ -46,9 +46,9 @@ spec:
   externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.master.service.externalIPs "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: tcp-valkey
+    - name: tcp-redis
       port: {{ .Values.master.service.ports.valkey }}
-      targetPort: valkey
+      targetPort: redis
       {{- if and (or (eq .Values.master.service.type "NodePort") (eq .Values.master.service.type "LoadBalancer")) .Values.master.service.nodePorts.valkey}}
       nodePort: {{ .Values.master.service.nodePorts.valkey}}
       {{- else if eq .Values.master.service.type "ClusterIP" }}

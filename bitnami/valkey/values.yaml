@@ -157,7 +157,7 @@ auth:
 ## ref: https://valkey.io/topics/config
 ##
 commonConfiguration: |-
-  # Enable AOF https://valkey.io/topics/persistence#append-only-file
+  # Enable AOF https://valkey.io/docs/topics/persistence.html
   appendonly yes
   # Disable RDB persistence, AOF persistence already enabled.
   save ""
