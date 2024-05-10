@@ -202,6 +202,8 @@ Three alternatives are available to use *LoadBalancer* services:
           - external-dns.alpha.kubernetes.io/hostname: mongodb-1.example.com
     ```
 
+    > NOTE: If register new DNS records for those names is not an option, the release can be upgraded setting `hostAliases` with the public IPs assigned to the external services.
+
 #### Use NodePort services
 
 Manually specify the node ports to use. An example deployment configuration is shown below, with the placeholder NODE-PORT-X used in place of the node ports:
