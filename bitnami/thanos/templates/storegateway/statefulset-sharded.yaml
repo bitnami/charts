@@ -330,6 +330,11 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and $.Values.storegateway.persistence.enabled (not $.Values.storegateway.persistence.existingClaim) }}
+  {{- if $.Values.storegateway.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ $.Values.storegateway.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ $.Values.storegateway.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data

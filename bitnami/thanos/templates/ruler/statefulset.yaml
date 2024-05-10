@@ -288,6 +288,11 @@ spec:
         - name: data
           emptyDir: {}
   {{- else if and .Values.ruler.persistence.enabled (not .Values.ruler.persistence.existingClaim) }}
+  {{- if .Values.ruler.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.ruler.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
