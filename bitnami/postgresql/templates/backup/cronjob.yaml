@@ -45,6 +45,9 @@ spec:
           {{- if .Values.backup.cronjob.nodeSelector }}
           nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.nodeSelector "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.backup.cronjob.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.tolerations "context" $) | nindent 12 }}
+          {{- end }}
           containers:
           - name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
             image: {{ include "postgresql.v1.image" . }}
