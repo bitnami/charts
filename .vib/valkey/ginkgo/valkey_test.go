@@ -50,7 +50,7 @@ var _ = Describe("Valkey", Ordered, func() {
 			svc, err := c.CoreV1().Services(namespace).Get(ctx, stsName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
-			port, err := utils.SvcGetPortByName(svc, "tcp-valkey")
+			port, err := utils.SvcGetPortByName(svc, "tcp-redis")
 			Expect(err).NotTo(HaveOccurred())
 
 			image, err := utils.StsGetContainerImageByName(ss, "valkey")
