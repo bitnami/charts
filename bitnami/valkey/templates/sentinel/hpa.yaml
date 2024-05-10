@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.replica.autoscaling.vpa.enabled .Values.sentinel.enabled }}
+{{- if and .Values.replica.autoscaling.hpa.enabled .Values.sentinel.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
@@ -20,31 +20,31 @@ spec:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: StatefulSet
     name: {{ printf "%s-node" (include "common.names.fullname" .) }}
-  minReplicas: {{ .Values.replica.autoscaling.vpa.minReplicas }}
-  maxReplicas: {{ .Values.replica.autoscaling.vpa.maxReplicas }}
+  minReplicas: {{ .Values.replica.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.replica.autoscaling.hpa.maxReplicas }}
   metrics:
-    {{- if .Values.replica.autoscaling.vpa.targetMemory }}
+    {{- if .Values.replica.autoscaling.hpa.targetMemory }}
     - type: Resource
       resource:
         name: memory
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.replica.autoscaling.vpa.targetMemory }}
+        targetAverageUtilization: {{ .Values.replica.autoscaling.hpa.targetMemory }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.replica.autoscaling.vpa.targetMemory }}
+          averageUtilization: {{ .Values.replica.autoscaling.hpa.targetMemory }}
         {{- end }}
     {{- end }}
-    {{- if .Values.replica.autoscaling.vpa.targetCPU }}
+    {{- if .Values.replica.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.replica.autoscaling.vpa.targetCPU }}
+        targetAverageUtilization: {{ .Values.replica.autoscaling.hpa.targetCPU }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.replica.autoscaling.vpa.targetCPU }}
+          averageUtilization: {{ .Values.replica.autoscaling.hpa.targetCPU }}
         {{- end }}
     {{- end }}
 {{- end }}
