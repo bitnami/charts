@@ -123,7 +123,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -292,7 +292,7 @@ This method involves the following steps:
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-mongodb-kubernetes/), which covers both these approaches, for more information.
+Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-mongodb-kubernetes-index.html), which covers both these approaches, for more information.
 
 ### Use custom Prometheus rules
 
@@ -602,10 +602,12 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `networkPolicy.enabled`                            | Specifies whether a NetworkPolicy should be created                                                                                   | `true`              |
 | `networkPolicy.allowExternal`                      | Don't require server label for connections                                                                                            | `true`              |
 | `networkPolicy.allowExternalEgress`                | Allow the pod to access any range of port and all destinations.                                                                       | `true`              |
+| `networkPolicy.addExternalClientAccess`            | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.                             | `true`              |
 | `networkPolicy.extraIngress`                       | Add extra ingress rules to the NetworkPolicy                                                                                          | `[]`                |
 | `networkPolicy.extraEgress`                        | Add extra ingress rules to the NetworkPolicy                                                                                          | `[]`                |
-| `networkPolicy.ingressNSMatchLabels`               | Labels to match to allow traffic from other namespaces                                                                                | `{}`                |
-| `networkPolicy.ingressNSPodMatchLabels`            | Pod labels to match to allow traffic from other namespaces                                                                            | `{}`                |
+| `networkPolicy.ingressPodMatchLabels`              | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.                                   | `{}`                |
+| `networkPolicy.ingressNSMatchLabels`               | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                             | `{}`                |
+| `networkPolicy.ingressNSPodMatchLabels`            | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.                         | `{}`                |
 | `persistence.enabled`                              | Enable MongoDB(&reg;) data persistence using PVC                                                                                      | `true`              |
 | `persistence.name`                                 | Name of the PVC and mounted volume                                                                                                    | `datadir`           |
 | `persistence.medium`                               | Provide a medium for `emptyDir` volumes.                                                                                              | `""`                |

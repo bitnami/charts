@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -1181,11 +1181,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `redis.auth.existingSecret`                                   | Existing secret to load redis dependency password                                                     | `""`                    |
 | `redis.auth.existingSecretPasswordKey`                        | Pasword key name inside the existing secret                                                           | `redis-password`        |
 | `redis.architecture`                                          | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`            |
+| `externalRedis.enabled`                                       | Enables External Redis                                                                                | `false`                 |
 | `externalRedis.host`                                          | External Redis host                                                                                   | `""`                    |
 | `externalRedis.port`                                          | External Redis port                                                                                   | `6379`                  |
 | `externalRedis.password`                                      | External Redis password                                                                               | `""`                    |
 | `externalRedis.existingSecret`                                | Existing secret for the external redis                                                                | `""`                    |
 | `externalRedis.existingSecretPasswordKey`                     | Password key for the existing secret containing the external redis password                           | `redis-password`        |
+| `externalRedis.selector`                                      | External Redis selector labels                                                                        | `{}`                    |
 | `redisWait.enabled`                                           | Enables waiting for redis                                                                             | `true`                  |
 | `redisWait.extraArgs`                                         | Additional arguments for the redis-cli call, such as TLS                                              | `""`                    |
 | `redisWait.containerSecurityContext.enabled`                  | Enabled Argo CD repo server containers' Security Context                                              | `true`                  |
