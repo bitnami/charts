@@ -2976,13 +2976,13 @@ storegateway:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
   persistentVolumeClaimRetentionPolicy:
-    ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Thanos Store Gateway Statefulset
+    ## @param storegateway.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Thanos Store Gateway Statefulset
     ##
     enabled: false
-    ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ## @param storegateway.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
     ##
     whenScaled: Retain
-    ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ## @param storegateway.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
     ##
     whenDeleted: Retain
   ## @param storegateway.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
@@ -3716,13 +3716,13 @@ ruler:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
   persistentVolumeClaimRetentionPolicy:
-    ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Thanos Ruler Statefulset
+    ## @param ruler.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Thanos Ruler Statefulset
     ##
     enabled: false
-    ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ## @param ruler.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
     ##
     whenScaled: Retain
-    ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ## @param ruler.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
     ##
     whenDeleted: Retain
   ## @param ruler.automountServiceAccountToken Enable/disable auto mounting of the service account token only for the sts
@@ -4383,13 +4383,13 @@ receive:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
   ##
   persistentVolumeClaimRetentionPolicy:
-    ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Thanos Receive Statefulset
+    ## @param receive.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Thanos Receive Statefulset
     ##
     enabled: false
-    ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ## @param receive.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
     ##
     whenScaled: Retain
-    ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ## @param receive.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
     ##
     whenDeleted: Retain
   ## Configure the ingress resource that allows you to access Thanos Receive
