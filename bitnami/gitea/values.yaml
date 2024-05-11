@@ -207,6 +207,12 @@ containerPorts:
 ##     containerPort: 9090
 ##
 extraContainerPorts: []
+## Enable OpenID Configurations
+## @param openid.enableSignIn Enable OpenID sign in
+## @param openid.enableSignUp Enable OpenID sign up
+openid:
+  enableSignIn: false
+  enableSignUp: false
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
