@@ -208,8 +208,8 @@ containerPorts:
 ##
 extraContainerPorts: []
 ## Enable OpenID Configurations
-## @param openid.enableSignIn Enable OpenID sign in
-## @param openid.enableSignUp Enable OpenID sign up
+## @param openid.enableSignIn Enable sign in with OpenID
+## @param openid.enableSignUp Enable sign up with OpenID
 openid:
   enableSignIn: false
   enableSignUp: false
