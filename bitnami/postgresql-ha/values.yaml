@@ -2209,6 +2209,10 @@ backup:
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
+    ## @param backup.cronjob.tolerations Tolerations for PostgreSQL backup CronJob pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
