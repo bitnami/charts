@@ -2209,7 +2209,7 @@ backup:
     ## ref: https://kubernetes.io/docs/user-guide/node-selection/
     ##
     nodeSelector: {}
-    ## @param backup.cronjob.tolerations Tolerations for PostgreSQL backup CronJob pods assignment
+    ## @param backup.cronjob.tolerations Tolerations for PostgreSQL backup CronJob pod assignment
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
