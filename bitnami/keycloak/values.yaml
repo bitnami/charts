@@ -101,7 +101,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 24.0.3-debian-12-r3
+  tag: 24.0.4-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -197,7 +197,7 @@ spi:
   ## @param spi.passwordsSecret Secret containing the SPI Truststore passwords.
   ##
   passwordsSecret: ""
-  ## @param spi.hostnameVerificationPolicy Verify the hostname of the server’s certificate. Allowed values: "ANY", "WILDCARD", "STRICT".
+  ## @param spi.hostnameVerificationPolicy Verify the hostname of the server's certificate. Allowed values: "ANY", "WILDCARD", "STRICT".
   ##
   hostnameVerificationPolicy: ""
 ## @param production Run Keycloak in production mode. TLS configuration is required except when using proxy=edge.
@@ -1043,7 +1043,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.12.0-debian-12-r2
+    tag: 5.12.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

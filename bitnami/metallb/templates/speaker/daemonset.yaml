@@ -153,6 +153,14 @@ spec:
                   fieldPath: metadata.namespace
             - name: METALLB_ML_SECRET_KEY_PATH
               value: /etc/memberlist
+            {{- if .Values.speaker.frr.enabled }}
+            - name: FRR_CONFIG_FILE
+              value: /etc/frr_reloader/frr.conf
+            - name: FRR_RELOADER_PID_FILE
+              value: /etc/frr_reloader/reloader.pid
+            - name: METALLB_BGP_TYPE
+              value: frr
+            {{- end }}
             {{- if .Values.speaker.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -252,6 +260,9 @@ spec:
         - name: reloader
           image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           command: ["/etc/frr_reloader/frr-reloader.sh"]
           volumeMounts:
             - name: frr-sockets
@@ -268,6 +279,9 @@ spec:
         - name: frr-metrics
           image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
           command: ["/etc/frr_metrics/frr-metrics"]
           {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}

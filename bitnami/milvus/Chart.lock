@@ -1,15 +1,15 @@
 dependencies:
 - name: etcd
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.0.0
+  version: 10.0.7
 - name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 28.0.0
+  version: 28.2.1
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.1.2
+  version: 14.3.4
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.19.0
-digest: sha256:4c24624f8d0e216926c3ce0534590d1eb6b9fcd753174b65c7b4149c4f2a7424
-generated: "2024-03-26T15:41:09.773928587+01:00"
+  version: 2.19.2
+digest: sha256:578defe5647e35a8a438bdb2edbc08f105f955be1f34bb68a0509e6f22fd8a60
+generated: "2024-05-08T05:51:21.907453078Z"

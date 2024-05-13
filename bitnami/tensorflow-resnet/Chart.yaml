@@ -28,7 +28,7 @@ keywords:
 - learning
 - library
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: tensorflow-resnet
 sources:

@@ -30,7 +30,7 @@ keywords:
 - application server
 - jsp
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: tomcat
 sources:

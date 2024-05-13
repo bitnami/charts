@@ -1421,9 +1421,13 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP Kafka service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
   ##
   loadBalancerIP: ""
+  ## @param service.loadBalancerClass Kafka service Load Balancer Class
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  ##
+  loadBalancerClass: ""
   ## @param service.loadBalancerSourceRanges Kafka service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
@@ -1562,6 +1566,10 @@ externalAccess:
       ##
       ports:
         external: 9094
+      ## @param externalAccess.controller.service.loadBalancerClass Kubernetes Service Load Balancer class for external access when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+      ##
+      loadBalancerClass: ""
       ## @param externalAccess.controller.service.loadBalancerIPs Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## loadBalancerIPs:
@@ -1644,6 +1652,10 @@ externalAccess:
       ##
       ports:
         external: 9094
+      ## @param externalAccess.broker.service.loadBalancerClass Kubernetes Service Load Balancer class for external access when service type is LoadBalancer
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+      ##
+      loadBalancerClass: ""
       ## @param externalAccess.broker.service.loadBalancerIPs Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount
       ## e.g:
       ## loadBalancerIPs:

@@ -147,10 +147,10 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if $.Values.indexCacheConfig }}
-            - --index-cache.config-file=/conf/index-cache.yml
+            - --index-cache.config-file=/conf/cache/index-cache.yml
             {{- end }}
             {{- if $.Values.bucketCacheConfig }}
-            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
+            - --store.caching-bucket.config-file=/conf/cache/bucket-cache.yml
             {{- end }}
             {{- if or $.Values.storegateway.config $.Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml

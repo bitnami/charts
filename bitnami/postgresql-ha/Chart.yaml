@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -12,7 +12,7 @@ annotations:
     - name: postgres-exporter
       image: docker.io/bitnami/postgres-exporter:0.15.0-debian-12-r17
     - name: postgresql-repmgr
-      image: docker.io/bitnami/postgresql-repmgr:16.2.0-debian-12-r14
+      image: docker.io/bitnami/postgresql-repmgr:16.2.0-debian-12-r16
 apiVersion: v2
 appVersion: 16.2.0
 dependencies:
@@ -35,9 +35,9 @@ keywords:
 - cluster
 - high availability
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: postgresql-ha
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
-version: 14.0.8
+version: 14.0.10

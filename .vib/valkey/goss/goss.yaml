@@ -1,0 +1,63 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+{{- $auth := printf "REDISCLI_AUTH='%s'" .Vars.auth.password }}
+{{- $master_endpoint := printf "-h valkey-master -p %d" .Vars.master.service.ports.valkey }}
+{{- $replicas_endpoint := printf "-h valkey-replicas -p %d" .Vars.replica.service.ports.valkey }}
+{{- $replicas := .Vars.replica.replicaCount }}
+command:
+  {{- $key := printf "key_%s" (randAlpha 5) }}
+  {{- $value := printf "value_%s" (randAlpha 5) }}
+  valkey-set-key-value-pairs:
+    exec: export {{ $auth }} && valkey-cli {{ $master_endpoint }} SET {{ $key }} {{ $value }} {{ range $e, $i := until $replicas }} && valkey-cli -h valkey-replicas-{{ $i }}.valkey-headless -p {{ $.Vars.replica.containerPorts.valkey }} GET {{ $key }} | grep -q {{ $value }}{{ end }}
+    exit-status: 0
+  {{ range $command := .Vars.master.disableCommands }}
+  valkey-disabled-{{ $command }}:
+    exec: {{ $auth }} valkey-cli {{ $master_endpoint }} {{ $command }}
+    exit-status: 0
+    stdout:
+      - "ERR unknown command"
+  {{ end }}
+  valkey-master-role:
+    exec: {{ $auth }} valkey-cli {{ $master_endpoint }} ROLE
+    exit-status: 0
+    stdout:
+      - "master"
+      {{ range $e, $i := until $replicas }}
+      - "valkey-replicas-{{ $i }}"
+      {{ end }}
+  valkey-replicas-role:
+    exec: {{ $auth }} valkey-cli {{ $replicas_endpoint }} ROLE
+    exit-status: 0
+    stdout:
+      - "slave"
+  {{- $uid := .Vars.master.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.master.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.master.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
+file:
+  {{ .Vars.master.persistence.path }}:
+    filetype: directory
+    exists: true
+    mode: "2775"
+    owner: root
+  /opt/bitnami/valkey/mounted-etc:
+    exists: true
+    mode: "2777"
+    filetype: directory
+    owner: root
+  /opt/bitnami/valkey/etc:
+    filetype: directory
+    exists: true
+    mode: "2777"
+    owner: root

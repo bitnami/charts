@@ -6,7 +6,8 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if eq .Values.architecture "replicaset" }}
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
-{{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer")) }}
+{{- $publicNamesLength := len .Values.externalAccess.service.publicNames }}
+{{- if not (and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (eq .Values.externalAccess.service.type "LoadBalancer") (not (eq $replicaCount $loadBalancerIPListLength)) (not (eq $replicaCount $publicNamesLength))) }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -83,39 +84,19 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
-      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) (and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled) .Values.tls.enabled }}
+      {{- if or .Values.initContainers (and .Values.volumePermissions.enabled .Values.persistence.enabled) (and .Values.externalAccess.enabled (or .Values.externalAccess.autoDiscovery.enabled .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain)) .Values.tls.enabled }}
       initContainers:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-        - name: volume-permissions
-          image: {{ include "mongodb.volumePermissions.image" . }}
-          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
-          command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              mkdir -p {{ printf "%s/%s" .Values.persistence.mountPath (default "" .Values.persistence.subPath) }}
-              chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ printf "%s/%s" .Values.persistence.mountPath (default "" .Values.persistence.subPath) }}
-              find  {{ printf "%s/%s" .Values.persistence.mountPath (default "" .Values.persistence.subPath) }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
-          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
-          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
-          {{- else }}
-          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
-          {{- end }}
-          {{- if .Values.volumePermissions.resources }}
-          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
-          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: datadir
-              mountPath: {{ .Values.persistence.mountPath }}
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
+        {{- include "mongodb.initContainer.volumePermissions" . | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
+        {{- include "mongodb.initContainers.autoDiscovery" . | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.externalAccess.enabled ( or .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain ) }}
+        {{- include "mongodb.initContainers.dnsCheck" . | nindent 8 }}
         {{- end }}
         {{- if .Values.tls.enabled }}
         - name: generate-tls-certs
@@ -158,44 +139,14 @@ spec:
             {{- if .Values.externalAccess.service.loadBalancerIPs }}
             - -i {{ join "," .Values.externalAccess.service.loadBalancerIPs }}
             {{- end }}
-            {{- if .Values.tls.extraDnsNames }}
-            - -n {{ join "," .Values.tls.extraDnsNames }}
+            {{- if or .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames }}
+            - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
             {{- end }}
           {{- if .Values.tls.resources }}
           resources: {{- toYaml .Values.tls.resources | nindent 12 }}
           {{- else if ne .Values.tls.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
           {{- end }}
-        {{- end }}
-        {{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.service.type "LoadBalancer") }}
-        - name: auto-discovery
-          image: {{ include "mongodb.externalAccess.autoDiscovery.image" . }}
-          imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
-          # We need the service account token for contacting the k8s API
-          automountServiceAccountToken: true
-          command:
-            - /scripts/auto-discovery.sh
-          env:
-            - name: MY_POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: SHARED_FILE
-              value: "/shared/info.txt"
-          {{- if .Values.externalAccess.autoDiscovery.resources }}
-          resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
-          {{- else if ne .Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          volumeMounts:
-            - name: shared
-              mountPath: /shared
-            - name: scripts
-              mountPath: /scripts/auto-discovery.sh
-              subPath: auto-discovery.sh
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
         {{- end }}
       {{- end }}
       containers:
@@ -243,7 +194,7 @@ spec:
             - name: K8S_SERVICE_NAME
               value: "{{ include "mongodb.service.nameOverride" . }}"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              value: {{ printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain }}
+              value: {{ include "mongodb.initialPrimaryHost" . | quote }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.enabled) }}
@@ -384,7 +335,10 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/mongodb/logs
               subPath: app-logs-dir
-            - name: datadir
+            - name: empty-dir
+              mountPath: /.mongodb
+              subPath: mongosh-home
+            - name: {{ .Values.persistence.name | default "datadir" }}
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
             - name: common-scripts

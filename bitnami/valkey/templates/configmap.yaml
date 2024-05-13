@@ -1,0 +1,65 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (include "valkey.createConfigmap" .) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-configuration" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: valkey
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  valkey.conf: |-
+    # User-supplied common configuration:
+    {{- if .Values.commonConfiguration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonConfiguration "context" $ ) | nindent 4 }}
+    {{- end }}
+    # End of common configuration
+  master.conf: |-
+    dir {{ .Values.master.persistence.path }}
+    # User-supplied master configuration:
+    {{- if .Values.master.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.master.configuration "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.master.disableCommands }}
+    {{- range .Values.master.disableCommands }}
+    rename-command {{ . }} ""
+    {{- end }}
+    {{- end }}
+    # End of master configuration
+  replica.conf: |-
+    dir {{ .Values.replica.persistence.path }}
+    # User-supplied replica configuration:
+    {{- if .Values.replica.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.replica.configuration "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.replica.disableCommands }}
+    {{- range .Values.replica.disableCommands }}
+    rename-command {{ . }} ""
+    {{- end }}
+    {{- end }}
+    # End of replica configuration
+  {{- if .Values.sentinel.enabled }}
+  sentinel.conf: |-
+    dir "/tmp"
+    port {{ .Values.sentinel.containerPorts.sentinel }}
+    sentinel monitor {{ .Values.sentinel.masterSet }} {{ template "common.names.fullname" . }}-node-0.{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} {{ .Values.sentinel.service.ports.valkey }} {{ .Values.sentinel.quorum }}
+    sentinel down-after-milliseconds {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.downAfterMilliseconds }}
+    sentinel failover-timeout {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.failoverTimeout }}
+    sentinel parallel-syncs {{ .Values.sentinel.masterSet }} {{ .Values.sentinel.parallelSyncs }}
+    {{- if .Values.sentinel.service.createMaster}}
+      sentinel client-reconfig-script {{ .Values.sentinel.masterSet }} /opt/bitnami/scripts/start-scripts/push-master-label.sh
+    {{- end }}
+    # User-supplied sentinel configuration:
+    {{- if .Values.sentinel.configuration }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.configuration "context" $ ) | nindent 4 }}
+    {{- end }}
+    # End of sentinel configuration
+  {{- end }}
+{{- end }}

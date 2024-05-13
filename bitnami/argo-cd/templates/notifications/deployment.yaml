@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.notifications.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.notifications.automountServiceAccountToken }}
       {{- if .Values.notifications.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.nodeSelector "context" $) | nindent 8 }}
       {{- end }}

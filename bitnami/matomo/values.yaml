@@ -949,7 +949,7 @@ networkPolicy:
 cronjobs:
   ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
   ##
-  # enabled: true
+  # enabled: true
   taskScheduler:
     ## @param cronjobs.taskScheduler.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -963,6 +963,14 @@ cronjobs:
     ## @param cronjobs.taskScheduler.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param cronjobs.taskScheduler.nodeSelector Node labels for CronJob pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param cronjobs.taskScheduler.tolerations Tolerations for CronJob pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
     ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1054,6 +1062,14 @@ cronjobs:
     ## @param cronjobs.archive.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param cronjobs.archive.tolerations Tolerations for CronJob pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param cronjobs.archive.nodeSelector Node labels for CronJob pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
     ## @param cronjobs.archive.command Override default container command (useful when using custom images)
     ##
     command: []

@@ -17,7 +17,7 @@ keywords:
   - function
   - bitnami
 maintainers:
-  - name: VMware, Inc.
+  - name: Broadcom, Inc. All Rights Reserved.
     url: https://github.com/bitnami/charts
 name: common
 sources:

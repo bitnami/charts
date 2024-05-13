@@ -3,6 +3,7 @@ module.exports = {
     username: 'user',
     password: 'ComplicatedPassword123!4',
     email: 'user@example.com',
+    port: '80',
   },
   hosts: {
     'bitnami-matomo.my': '{{ TARGET_IP }}',

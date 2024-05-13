@@ -54,6 +54,9 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.containerPorts.gremlin }}
+        {{- if .Values.metrics.enabled }}
+        - port: {{ .Values.metrics.containerPorts.metrics }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
