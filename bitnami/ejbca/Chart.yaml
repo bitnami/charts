@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: ejbca
-      image: docker.io/bitnami/ejbca:8.2.0-1-debian-12-r13
+      image: docker.io/bitnami/ejbca:8.2.0-1-debian-12-r14
 apiVersion: v2
 appVersion: 8.2.0-1
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: ejbca
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
-version: 14.0.2
+version: 14.0.3
