@@ -139,7 +139,7 @@ jobs:
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
             cp ../download/index.yaml bitnami/index.yaml
             # Push changes
-            git add bitnami/index.yaml && git commit --amend --no-edit
+            git add bitnami/index.yaml && git commit --signoff --amend --no-edit
             git push --force-with-lease && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
