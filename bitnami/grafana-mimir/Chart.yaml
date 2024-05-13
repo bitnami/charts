@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-mimir
-      image: docker.io/bitnami/grafana-mimir:2.12.0-debian-12-r6
+      image: docker.io/bitnami/grafana-mimir:2.12.0-debian-12-r7
     - name: memcached
       image: docker.io/bitnami/memcached:1.6.27-debian-12-r1
     - name: nginx
@@ -59,4 +59,4 @@ maintainers:
 name: grafana-mimir
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 1.0.5
+version: 1.0.6
