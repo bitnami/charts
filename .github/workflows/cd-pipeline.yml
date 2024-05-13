@@ -134,13 +134,14 @@ jobs:
             attempts=$((attempts + 1))
             git fetch origin index
             git reset --hard origin/index
+            git reset $(git commit-tree HEAD^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
             cp ../download/index.yaml bitnami/index.yaml
             # Push changes
-            git add bitnami/index.yaml && git commit -m "${chart_name}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+            git add bitnami/index.yaml && git commit --amend --no-edit
+            git push --force-with-lease && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then
