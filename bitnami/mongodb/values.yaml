@@ -878,6 +878,56 @@ externalAccess:
     ##     memory: 1024Mi
     ##
     resources: {}
+  ## Init container what mission is ensure public names can be resolved.
+  ##
+  dnsCheck:
+    ## Bitnami os-shell image
+    ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+    ## @param externalAccess.dnsCheck.image.registry [default: REGISTRY_NAME] Init container dns-check image registry
+    ## @param externalAccess.dnsCheck.image.repository [default: REPOSITORY_NAME/kubectl] Init container dns-check image repository
+    ## @skip externalAccess.dnsCheck.image.tag Init container dns-check image tag (immutable tags are recommended)
+    ## @param externalAccess.dnsCheck.image.digest Init container dns-check image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param externalAccess.dnsCheck.image.pullPolicy Init container dns-check image pull policy
+    ## @param externalAccess.dnsCheck.image.pullSecrets Init container dns-check image pull secrets
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 12-debian-12-r19
+      digest: ""
+      ## Specify a imagePullPolicy
+      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Init Container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param externalAccess.dnsCheck.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param externalAccess.dnsCheck.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## Parameters to configure a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes.
   ## @param externalAccess.externalMaster.enabled Use external master for bootstrapping
   ## @param externalAccess.externalMaster.host External master host to bootstrap from
@@ -908,6 +958,9 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
+    ## @param externalAccess.service.publicNames Array of public names. The size should be equal to the number of replicas.
+    ## 
+    publicNames: []
     ## @param externalAccess.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
     # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
     loadBalancerClass: ""
@@ -918,7 +971,7 @@ externalAccess:
     ## - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param externalAccess.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
+    ## @param externalAccess.service.allocateLoadBalancerNodePorts Whether to allocate node ports when service type is LoadBalancer
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
     ##
     allocateLoadBalancerNodePorts: true
@@ -942,9 +995,16 @@ externalAccess:
     ## @param externalAccess.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
     ##
     extraPorts: []
-    ## @param externalAccess.service.annotations Service annotations for external access
+    ## @param externalAccess.service.annotations Service annotations for external access. These annotations are common for all services created.
     ##
     annotations: {}
+    ## @param externalAccess.service.annotationsList Service annotations for eache external service. This value contains a list allowing different annotations per each external service.
+    ## Eg:
+    ##   annotationsList:
+    ##     - external-dns.alpha.kubernetes.io/hostname: mongodb-0.example.com
+    ##     - external-dns.alpha.kubernetes.io/hostname: mongodb-1.example.com
+    ##
+    annotationsList: []
     ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -1051,6 +1111,9 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -1084,8 +1147,14 @@ networkPolicy:
   ##                   - frontend
   ##
   extraEgress: []
-  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: {}
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}

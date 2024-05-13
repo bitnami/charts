@@ -141,7 +141,7 @@ spec:
           {{- else if .Values.metrics.kafka.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /healthz
               port: metrics
           {{- end }}
           {{- if .Values.metrics.kafka.customReadinessProbe }}
@@ -149,7 +149,7 @@ spec:
           {{- else if .Values.metrics.kafka.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /healthz
               port: metrics
           {{- end }}
           {{- if .Values.metrics.kafka.customStartupProbe }}
@@ -157,7 +157,7 @@ spec:
           {{- else if .Values.metrics.kafka.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /metrics
+              path: /healthz
               port: metrics
           {{- end }}
           {{- if .Values.metrics.kafka.resources }}
