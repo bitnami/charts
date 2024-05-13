@@ -34,4 +34,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: postgresql
 sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/postgresql
 version: 15.2.13
