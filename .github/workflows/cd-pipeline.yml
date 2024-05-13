@@ -133,8 +133,7 @@ jobs:
           while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
             git fetch origin index
-            git reset --hard origin/index
-            git reset $(git commit-tree HEAD^{tree} -m "Update index.yaml")
+            git reset --hard $(git commit-tree HEAD^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
