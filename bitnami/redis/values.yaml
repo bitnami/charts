@@ -533,6 +533,10 @@ master:
     ## @param master.service.type Redis&reg; master service type
     ##
     type: ClusterIP
+    ## @param master.service.portNames.redis Redis&reg; master service port name
+    ##
+    portNames:
+      redis: "tcp-redis"
     ## @param master.service.ports.redis Redis&reg; master service port
     ##
     ports:
