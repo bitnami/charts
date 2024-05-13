@@ -115,7 +115,14 @@ jobs:
       - id: update-index
         name: git-add-push
         run: |
+          git reset --hard $(git commit-tree HEAD^{tree} -m "Update index.yaml")
           cp index.yaml bitnami/index.yaml
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
-          git add bitnami/index.yaml && git commit -m "[bitnami/index]: Update the full index archive" -s && git push
+          is_index_updated=0
+          git add bitnami/index.yaml && git commit --signoff --amend --no-edit && git push --force-with-lease && is_index_updated=1
+
+          if [[ $is_index_updated -ne 1 ]]; then
+            echo "Could not update the index"
+            exit 1
+          fi
