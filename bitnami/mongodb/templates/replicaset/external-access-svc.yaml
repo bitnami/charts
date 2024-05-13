@@ -19,8 +19,9 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongodb
     pod: {{ $targetPod }}
-  {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations ) "context" $ ) }}
+  {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations $root.Values.externalAccess.service.annotationsList}}
+  {{- $exclusiveAnnotations := ternary ( dict ) (index $root.Values.externalAccess.service.annotationsList $i) ( lt (len $root.Values.externalAccess.service.annotationsList ) $i ) }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations $exclusiveAnnotations ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

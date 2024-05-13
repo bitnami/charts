@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cassandra
-      image: docker.io/bitnami/cassandra:4.1.4-debian-12-r11
+      image: docker.io/bitnami/cassandra:4.1.4-debian-12-r12
     - name: cassandra-exporter
       image: docker.io/bitnami/cassandra-exporter:2.3.8-debian-12-r21
     - name: os-shell
@@ -32,4 +32,4 @@ maintainers:
 name: cassandra
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cassandra
-version: 11.1.2
+version: 11.1.3
