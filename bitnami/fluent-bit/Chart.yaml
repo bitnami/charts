@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: fluent-bit
-      image: docker.io/bitnami/fluent-bit:3.0.3-debian-12-r0
+      image: docker.io/bitnami/fluent-bit:3.0.3-debian-12-r2
 apiVersion: v2
 appVersion: 3.0.3
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
-version: 2.1.1
+version: 2.1.2
