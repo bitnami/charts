@@ -29,10 +29,11 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         run: |
           actor="${{ github.event.workflow_run.actor.login }}"
-          download_url="$(gh api "${{ github.event.workflow_run.artifacts_url }}" | jq -cr '.artifacts[] | select(.name == "pull_request_number") | .archive_download_url')"
-          curl -sSL -o pull_request_number.zip -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $GITHUB_TOKEN" $download_url
-          unzip pull_request_number.zip
-          pull_request_number=$(cat pull_request_number)
+          download_url="$(gh api "${{ github.event.workflow_run.artifacts_url }}" | jq -cr '.artifacts[] | select(.name == "pull_request_info.json") | .archive_download_url')"
+          curl -sSL -o pull_request_info.zip -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" -H "Authorization: Bearer $GITHUB_TOKEN" $download_url
+          unzip pull_request_info.zip
+          pull_request_number=$(jq '.issue.number' pull_request_info.json)
+          issue_review_state="$(jq '.review.state' pull_request_info.json)"
           pull_request="$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${pull_request_number}")"
           author="$(echo $pull_request | jq -cr '.user.login')"
           author_association="$(echo $pull_request | jq -cr '.author_association')"
@@ -43,6 +44,7 @@ jobs:
           echo "actor=${actor}" >> $GITHUB_OUTPUT
           echo "author=${author}" >> $GITHUB_OUTPUT
           echo "author_association=${author_association}" >> $GITHUB_OUTPUT
+          echo "review_state=${issue_review_state}"
           echo "labels=${labels}" >> $GITHUB_OUTPUT
           echo "resource_url=${resource_url}" >> $GITHUB_OUTPUT
   call-pr-review-comment:
@@ -55,4 +57,5 @@ jobs:
       author: ${{ needs.pr-info.outputs.author }}
       actor: ${{ needs.pr-info.outputs.actor }}
       labels: ${{ needs.pr-info.outputs.labels }}
+      review_state: ${{ needs.pr-info.outputs.review_state }}
       resource_url: ${{ needs.pr-info.outputs.resource_url }}
