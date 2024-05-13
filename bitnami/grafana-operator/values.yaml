@@ -56,10 +56,10 @@ clusterDomain: cluster.local
 ## @section Grafana Operator parameters
 ##
 
-## This all configuration for the Grafana Operator.
-## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/README.md
+## This contains all configuration options for the Grafana Operator.
+## Ref: https://grafana.github.io/grafana-operator/docs/installation/helm/
 ## Constants it is using for creating instances:
-## Ref: https://github.com/integr8ly/grafana-operator/blob/master/pkg/controller/model/constants.go
+## Ref: https://github.com/grafana/grafana-operator/blob/master/controllers/config/operator_constants.go
 ##
 operator:
   ## @param operator.enabled Enable the deployment of the Grafana Operator
@@ -780,26 +780,27 @@ grafana:
       # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
       # admin_user:
       # admin_password:
-      #
-      # ## OIDC configuration
-      # ##
-      # auth:
-      #   disable_login_form: "false"
-      #   disable_signout_menu: "false"
-      # auth.generic_oauth:
-      #   enabled: "true"
-      #   client_id: grafana
-      #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
-      #   scopes: profile email
-      #   auth_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/auth
-      #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
-      #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
-      #   ## Automatic role handling with OIDC
-      #   ##
-      #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
-      #   # allowed_domains: example.com
-      #   allow_sign_up: "True"
       disable_gravatar: "false"
+
+    # ## OIDC configuration (all auth sections should be under config, not security)
+    # ##
+    # auth:
+    #   disable_login_form: "false"
+    #   disable_signout_menu: "false"
+    # auth.generic_oauth:
+    #   enabled: "true"
+    #   client_id: grafana
+    #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
+    #   scopes: profile email
+    #   auth_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/auth
+    #   token_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/token
+    #   api_url: https://keycloak.example.com/auth/realms/master/protocol/openid-connect/userinfo
+    #   ## Automatic role handling with OIDC
+    #   ##
+    #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
+    #   # allowed_domains: example.com
+    #   allow_sign_up: "True"
+
   ## @param grafana.jsonnetLibrarySelector [object] Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##
