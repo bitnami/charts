@@ -99,6 +99,10 @@ spec:
               if ! is_dir_empty /opt/bitnami/apache/logs; then
                 cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
               fi
+              info "Copying php var directory"
+              if ! is_dir_empty /opt/bitnami/php/var; then
+                cp -r /opt/bitnami/php/var /emptydir/php-var-dir
+              fi
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir
