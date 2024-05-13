@@ -158,7 +158,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 5.9.0-debian-12-r2
+    tag: 5.9.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -508,7 +508,7 @@ grafana:
   image:
     registry: docker.io
     repository: bitnami/grafana
-    tag: 10.4.2-debian-12-r5
+    tag: 10.4.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
