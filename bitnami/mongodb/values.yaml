@@ -1195,6 +1195,9 @@ persistence:
   ## @param persistence.annotations PVC annotations
   ##
   annotations: {}
+  ## @param persistence.labels PVC labels
+  ##
+  labels: {}
   ## @param persistence.mountPath Path to mount the volume at
   ## MongoDB(&reg;) images.
   ##
