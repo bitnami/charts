@@ -3,7 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.dashboard.pdb.create }}
+{{- $replicaCount := int .Values.dashboard.replicaCount }}
+{{- if and .Values.dashboard.pdb.create (or (gt $replicaCount 1) .Values.dashboard.autoscaling.hpa.enabled)}}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
