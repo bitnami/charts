@@ -6,24 +6,24 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.30.0-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.30.0-debian-12-r5
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r19
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
+    - name: redis-exporter
+      image: docker.io/bitnami/redis-exporter:1.59.0-debian-12-r6
     - name: valkey
-      image: docker.io/bitnami/valkey:7.2.5-debian-12-r1
-    - name: valkey-exporter
-      image: docker.io/bitnami/redis-exporter:1.59.0-debian-12-r1
+      image: docker.io/bitnami/valkey:7.2.5-debian-12-r3
     - name: valkey-sentinel
-      image: docker.io/bitnami/valkey-sentinel:7.2.5-debian-12-r1
+      image: docker.io/bitnami/valkey-sentinel:7.2.5-debian-12-r2
 apiVersion: v2
-appVersion: 7.2.4
+appVersion: 7.2.5
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - bitnami-common
   version: 2.x.x
-description: Valkey is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain strings, hashes, lists, sets and sorted sets.
+description: Valkey is an open source (BSD) high-performance key/value datastore that supports a variety workloads such as caching, message queues, and can act as a primary database.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/valkey/img/valkey-stack-220x234.png
 keywords:
@@ -36,4 +36,4 @@ maintainers:
 name: valkey
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/valkey
-version: 0.1.0
+version: 0.1.1
