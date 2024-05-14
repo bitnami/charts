@@ -1,0 +1,123 @@
+name: '[Index] Generate the full bitnami/charts index.yaml'
+on:
+  push:
+    branches:
+      - index
+jobs:
+  get:
+    runs-on: ubuntu-latest
+    name: Get
+    steps:
+      - id: checkout-repo-index
+        name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: index
+          path: index
+      - id: checkout-repo-full-index
+        name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: archive-full-index
+          path: full-index
+      - id: get-last-indexes
+        name: Get indexes
+        run: |
+          cp index/bitnami/index.yaml ./last_index.yaml
+          cp full-index/bitnami/index.yaml ./previous_index.yaml
+      - id: upload-artifact
+        name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: indexes
+          path: ./*index.yaml
+          retention-days: 2
+          if-no-files-found: error
+  merge:
+    runs-on: ubuntu-latest
+    needs: get
+    name: Merge
+    steps:
+      - id: download-artifact
+        name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: indexes
+      - id: merge
+        name: Merge
+        run: yq eval-all '. as $item ireduce ({}; . *+ $item )' previous_index.yaml last_index.yaml > duplicates_index.yaml
+      - id: remove
+        name: Remove duplicates
+        # Removes duplicates per entry using 'digest' as value.
+        run: yq eval '.entries[] |= unique_by(.digest)' duplicates_index.yaml > index.yaml
+      - id: upload-artifact
+        name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: archive-full-index
+          path: index.yaml
+          retention-days: 2
+          if-no-files-found: error
+  checks:
+    runs-on: ubuntu-latest
+    needs: merge
+    name: Checks
+    steps:
+      - id: download-artifacts
+        name: Download artifacts
+        uses: actions/download-artifact@v3
+      - id: index-lint
+        name: Lint archive full index
+        # Lint the resulting archive full index using ignoring identation and lin-length rules.
+        run: |
+          cat << EOF > config
+          extends: relaxed
+
+          rules:
+            indentation:
+              level: error
+            line-length: disable
+          EOF
+          yamllint -c config archive-full-index/index.yaml
+      - id: check-no-dups
+        name: Checks there are not any duplicates
+        # Try to find duplicate digest attributes which would mean there are duplicates.
+        run: |
+          yq eval '.entries[][].digest' index.yaml | sort | uniq -d | ( ! grep sha256 )
+      - id: check-missing-releases
+        name: Checks there are not missing releases
+        # Available URLs should be fine if everything went well during the merge & deduplication.
+        run: |
+          yq eval '.entries[][].urls[]' last_index.yaml |sort| uniq > last_index_urls
+          yq eval '.entries[][].urls[]' index.yaml | sort| uniq > index_urls
+          missing_urls="$(comm -13 index_urls last_index_urls)"
+          if [ -n "${missing_urls}" ]; then
+              echo "Found missing URLs:\n${missing_urls}"
+              exit 1
+          fi
+          echo "No missing releases detected"
+  update:
+    runs-on: ubuntu-latest
+    needs: checks
+    name: Update
+    steps:
+      - id: checkout-repo
+        name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: archive-full-index
+          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+      - id: download-artifact-archive-full-index
+        name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: archive-full-index
+      - id: update-index
+        name: git-add-push
+        run: |
+          git fetch origin archive-full-index
+          git reset --hard $(git commit-tree origin/archive-full-index^{tree} -m "Update index.yaml")
+          cp index.yaml bitnami/index.yaml
+          git config user.name "Bitnami Containers"
+          git config user.email "bitnami-bot@vmware.com"
+          git add bitnami/index.yaml && git commit --signoff --amend --no-edit && git push --force-with-lease
