@@ -3,7 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.worker.pdb.create (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) }}
+{{- $replicaCount := int .Values.worker.replicaCount }}
+{{- if and .Values.worker.pdb.create (or (eq .Values.executor "CeleryExecutor") (eq .Values.executor "CeleryKubernetesExecutor")) (or (gt $replicaCount 1) .Values.worker.autoscaling.enabled) }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
@@ -13,6 +14,9 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.worker.pdb.minAvailable }}
   minAvailable: {{ .Values.worker.pdb.minAvailable }}

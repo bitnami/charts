@@ -3,7 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.scheduler.pdb.create }}
+{{- $replicaCount := int .Values.scheduler.replicaCount }}
+{{- if and .Values.scheduler.pdb.create (gt $replicaCount 1) }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
@@ -13,6 +14,9 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.scheduler.pdb.minAvailable }}
   minAvailable: {{ .Values.scheduler.pdb.minAvailable }}

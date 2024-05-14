@@ -3,7 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.web.pdb.enabled }}
+{{- $replicaCount := int .Values.web.replicaCount }}
+{{- if and .Values.web.pdb.create (gt $replicaCount 1) }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
@@ -13,6 +14,9 @@ metadata:
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: web
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if .Values.web.pdb.minAvailable }}
   minAvailable: {{ .Values.web.pdb.minAvailable }}
