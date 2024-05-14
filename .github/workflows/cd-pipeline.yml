@@ -132,15 +132,19 @@ jobs:
           is_index_updated=0
           while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
+
+            # Pull changes from remote
             git fetch origin index
-            git reset --hard $(git commit-tree HEAD^{tree} -m "Update index.yaml")
+            current_commit_id=$(git rev-parse origin/index)
+            git reset --hard $(git commit-tree origin/index^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
             cp ../download/index.yaml bitnami/index.yaml
+
             # Push changes
             git add bitnami/index.yaml && git commit --signoff --amend --no-edit
-            git push --force-with-lease && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+            git push --force-with-lease=index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then
