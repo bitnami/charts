@@ -105,7 +105,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.3.0-debian-12-r4
+  tag: 16.3.0-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -696,6 +696,10 @@ primary:
     ## @param primary.service.annotations Annotations for PostgreSQL primary service
     ##
     annotations: {}
+    ## @param primary.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param primary.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1136,6 +1140,10 @@ readReplicas:
     ## @param readReplicas.service.annotations Annotations for PostgreSQL read only service
     ##
     annotations: {}
+    ## @param readReplicas.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param readReplicas.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1399,7 +1407,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1508,7 +1516,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r29
+    tag: 0.15.0-debian-12-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

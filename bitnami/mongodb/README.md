@@ -665,6 +665,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `persistence.accessModes`                          | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
 | `persistence.size`                                 | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
 | `persistence.annotations`                          | PVC annotations                                                                                                                       | `{}`                |
+| `persistence.labels`                               | PVC labels                                                                                                                            | `{}`                |
 | `persistence.mountPath`                            | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
 | `persistence.subPath`                              | Subdirectory of the volume to mount at                                                                                                | `""`                |
 | `persistence.volumeClaimTemplates.selector`        | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |

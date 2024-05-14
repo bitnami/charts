@@ -511,16 +511,22 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### Other parameters
 
-| Name                       | Description                                                    | Value   |
-| -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable/disable a Pod Disruption Budget creation                | `false` |
-| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`      | Enable autoscaling for Keycloak                                | `false` |
-| `autoscaling.minReplicas`  | Minimum number of Keycloak replicas                            | `1`     |
-| `autoscaling.maxReplicas`  | Maximum number of Keycloak replicas                            | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `""`    |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                           | `""`    |
+| Name                                                        | Description                                                                                  | Value   |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------- |
+| `pdb.create`                                                | Enable/disable a Pod Disruption Budget creation                                              | `false` |
+| `pdb.minAvailable`                                          | Minimum number/percentage of pods that should remain scheduled                               | `1`     |
+| `pdb.maxUnavailable`                                        | Maximum number/percentage of pods that may be made unavailable                               | `""`    |
+| `autoscaling.enabled`                                       | Enable autoscaling for Keycloak                                                              | `false` |
+| `autoscaling.minReplicas`                                   | Minimum number of Keycloak replicas                                                          | `1`     |
+| `autoscaling.maxReplicas`                                   | Maximum number of Keycloak replicas                                                          | `11`    |
+| `autoscaling.targetCPU`                                     | Target CPU utilization percentage                                                            | `""`    |
+| `autoscaling.targetMemory`                                  | Target Memory utilization percentage                                                         | `""`    |
+| `autoscaling.behavior.scaleUp.stabilizationWindowSeconds`   | The number of seconds for which past recommendations should be considered while scaling up   | `120`   |
+| `autoscaling.behavior.scaleUp.selectPolicy`                 | The priority of policies that the autoscaler will apply when scaling up                      | `Max`   |
+| `autoscaling.behavior.scaleUp.policies`                     | HPA scaling policies when scaling up                                                         | `[]`    |
+| `autoscaling.behavior.scaleDown.stabilizationWindowSeconds` | The number of seconds for which past recommendations should be considered while scaling down | `300`   |
+| `autoscaling.behavior.scaleDown.selectPolicy`               | The priority of policies that the autoscaler will apply when scaling down                    | `Max`   |
+| `autoscaling.behavior.scaleDown.policies`                   | HPA scaling policies when scaling down                                                       | `[]`    |
 
 ### Metrics parameters
 
