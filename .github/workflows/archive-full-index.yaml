@@ -83,13 +83,13 @@ jobs:
         name: Checks there are not any duplicates
         # Try to find duplicate digest attributes which would mean there are duplicates.
         run: |
-          yq eval '.entries[][].digest' index.yaml | sort | uniq -d | ( ! grep sha256 )
+          yq eval '.entries[][].digest' archive-full-index/index.yaml | sort | uniq -d | ( ! grep sha256 )
       - id: check-missing-releases
         name: Checks there are not missing releases
         # Available URLs should be fine if everything went well during the merge & deduplication.
         run: |
-          yq eval '.entries[][].urls[]' last_index.yaml |sort| uniq > last_index_urls
-          yq eval '.entries[][].urls[]' index.yaml | sort| uniq > index_urls
+          yq eval '.entries[][].urls[]' indexes/last_index.yaml |sort| uniq > last_index_urls
+          yq eval '.entries[][].urls[]' archive-full-index/index.yaml | sort| uniq > index_urls
           missing_urls="$(comm -13 index_urls last_index_urls)"
           if [ -n "${missing_urls}" ]; then
               echo "Found missing URLs:\n${missing_urls}"
