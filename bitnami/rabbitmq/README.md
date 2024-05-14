@@ -268,17 +268,17 @@ extraConfiguration: |
 RabbitMQ nodes assume their peers come back online within five minutes (by default). With the `OrderedReady` pod management policy is used
 with a readiness probe that implicitly requires a fully booted node, the deployment can deadlock:
 
- - Kubernetes will expect the first node to pass a readiness probe
- - The readiness probe may require a fully booted node
- - The node will fully boot after it detects that its peers have come online
- - Kubernetes will not start any more pods until the first one boots
+- Kubernetes will expect the first node to pass a readiness probe
+- The readiness probe may require a fully booted node
+- The node will fully boot after it detects that its peers have come online
+- Kubernetes will not start any more pods until the first one boots
 
-Using [RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview) is the easies solution. 
+Using [RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview) is the easies solution.
 
 Alternatively, the following combination of deployment settings avoids the problem:
 
- - Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
- - Use `rabbitmq-diagnostics ping` for readiness probe
+- Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
+- Use `rabbitmq-diagnostics ping` for readiness probe
 
 Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism
 in RabbitMQ that helps make remaining clusters nodes to recover and rejoin each other after a permanent loss of some of their former
