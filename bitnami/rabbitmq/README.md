@@ -286,16 +286,14 @@ peers. In other words, forced booting a node is en emergency event recovery proc
 
 To learn more, see
 
- - [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
- - [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
- - [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for [Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview)-less (DIY) deployments to Kubernetes
- - [DIY RabbitMQ deployments on Kubernetes](https://www.rabbitmq.com/blog/2020/08/10/deploying-rabbitmq-to-kubernetes-whats-involved): What's Involved?
-
+- [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
+- [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
+- [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for [Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview)-less (DIY) deployments to Kubernetes
+- [DIY RabbitMQ deployments on Kubernetes](https://www.rabbitmq.com/blog/2020/08/10/deploying-rabbitmq-to-kubernetes-whats-involved): What's Involved?
 
 ## Known issues
 
 - Changing the password through RabbitMQ's UI can make the pod fail due to the default liveness probes. If you do so, remember to make the chart aware of the new password. Updating the default secret with the password you set through RabbitMQ's UI will automatically recreate the pods. If you are using your own secret, you may have to manually recreate the pods.
-
 
 ## Persistence
 
