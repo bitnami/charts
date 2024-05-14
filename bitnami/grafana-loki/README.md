@@ -291,6 +291,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `compactor.persistence.annotations`                           | Additional PVC annotations                                                                                                                                                                                                            | `{}`                |
 | `compactor.persistence.selector`                              | Selector to match an existing Persistent Volume for Compactor's data PVC                                                                                                                                                              | `{}`                |
 | `compactor.persistence.dataSource`                            | PVC data source                                                                                                                                                                                                                       | `{}`                |
+| `compactor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                 | `true`              |
 
 ### Compactor Traffic Exposure Parameters
 
@@ -400,6 +401,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `gateway.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Gateway container(s)                                                                                                                                             | `[]`                    |
 | `gateway.sidecars`                                          | Add additional sidecar containers to the Gateway pod(s)                                                                                                                                                                           | `[]`                    |
 | `gateway.initContainers`                                    | Add additional init containers to the Gateway pod(s)                                                                                                                                                                              | `[]`                    |
+| `gateway.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`                  |
 
 ### Gateway Traffic Exposure Parameters
 
@@ -510,6 +512,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `indexGateway.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the index-gateway container(s)                                                                                                                                                 | `[]`             |
 | `indexGateway.sidecars`                                          | Add additional sidecar containers to the index-gateway pod(s)                                                                                                                                                                               | `[]`             |
 | `indexGateway.initContainers`                                    | Add additional init containers to the index-gateway pod(s)                                                                                                                                                                                  | `[]`             |
+| `indexGateway.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                       | `true`           |
 
 ### index-gateway Persistence Parameters
 
@@ -619,6 +622,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `distributor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Distributor container(s)                                                                                                                                                 | `[]`             |
 | `distributor.sidecars`                                          | Add additional sidecar containers to the Distributor pod(s)                                                                                                                                                                               | `[]`             |
 | `distributor.initContainers`                                    | Add additional init containers to the Distributor pod(s)                                                                                                                                                                                  | `[]`             |
+| `distributor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                     | `true`           |
 
 ### Distributor Traffic Exposure Parameters
 
@@ -717,6 +721,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ingester.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ingester container(s)                                                                                                                                              | `[]`             |
 | `ingester.sidecars`                                          | Add additional sidecar containers to the Ingester pod(s)                                                                                                                                                                            | `[]`             |
 | `ingester.initContainers`                                    | Add additional init containers to the Ingester pod(s)                                                                                                                                                                               | `[]`             |
+| `ingester.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`           |
 
 ### Ingester Persistence Parameters
 
@@ -827,6 +832,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `querier.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the querier container(s)                                                                                                                                             | `[]`             |
 | `querier.sidecars`                                          | Add additional sidecar containers to the Querier pod(s)                                                                                                                                                                           | `[]`             |
 | `querier.initContainers`                                    | Add additional init containers to the Querier pod(s)                                                                                                                                                                              | `[]`             |
+| `querier.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`           |
 
 ### Querier Persistence Parameters
 
@@ -936,6 +942,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `queryFrontend.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                                                                                                                                                   | `[]`             |
 | `queryFrontend.sidecars`                                          | Add additional sidecar containers to the queryFrontend pod(s)                                                                                                                                                                                 | `[]`             |
 | `queryFrontend.initContainers`                                    | Add additional init containers to the queryFrontend pod(s)                                                                                                                                                                                    | `[]`             |
+| `queryFrontend.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                         | `true`           |
 
 ### Query Frontend Traffic Exposure Parameters
 
@@ -1035,6 +1042,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `queryScheduler.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the queryScheduler container(s)                                                                                                                                                    | `[]`             |
 | `queryScheduler.sidecars`                                          | Add additional sidecar containers to the queryScheduler pod(s)                                                                                                                                                                                  | `[]`             |
 | `queryScheduler.initContainers`                                    | Add additional init containers to the queryScheduler pod(s)                                                                                                                                                                                     | `[]`             |
+| `queryScheduler.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                           | `true`           |
 
 ### Query Scheduler Traffic Exposure Parameters
 
@@ -1134,6 +1142,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `ruler.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ruler container(s)                                                                                                                                           | `[]`             |
 | `ruler.sidecars`                                          | Add additional sidecar containers to the Ruler pod(s)                                                                                                                                                                         | `[]`             |
 | `ruler.initContainers`                                    | Add additional init containers to the Ruler pod(s)                                                                                                                                                                            | `[]`             |
+| `ruler.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                         | `true`           |
 
 ### Ruler Persistence Parameters
 
@@ -1244,6 +1253,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `tableManager.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the table-manager container(s)                                                                                                                                                 | `[]`             |
 | `tableManager.sidecars`                                          | Add additional sidecar containers to the table-manager pod(s)                                                                                                                                                                               | `[]`             |
 | `tableManager.initContainers`                                    | Add additional init containers to the table-manager pod(s)                                                                                                                                                                                  | `[]`             |
+| `tableManager.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                       | `true`           |
 
 ### table-manager Traffic Exposure Parameters
 
@@ -1348,6 +1358,7 @@ The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitna
 | `promtail.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the promtail container(s)                                                                                                                                              | `[]`                       |
 | `promtail.sidecars`                                          | Add additional sidecar containers to the Promtail pod(s)                                                                                                                                                                            | `[]`                       |
 | `promtail.initContainers`                                    | Add additional init containers to the Promtail pod(s)                                                                                                                                                                               | `[]`                       |
+| `promtail.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`                     |
 | `promtail.configuration`                                     | Promtail configuration                                                                                                                                                                                                              | `""`                       |
 | `promtail.existingSecret`                                    | Name of a Secret that contains the Promtail configuration                                                                                                                                                                           | `""`                       |
 | `promtail.logLevel`                                          | Promtail logging level                                                                                                                                                                                                              | `info`                     |

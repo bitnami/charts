@@ -70,6 +70,7 @@ spec:
       {{- if .Values.queryFrontend.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.queryFrontend.enableServiceLinks }}
       initContainers:
         {{- if .Values.queryFrontend.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.initContainers "context" $) | nindent 8 }}
