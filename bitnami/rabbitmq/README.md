@@ -263,43 +263,35 @@ extraConfiguration: |
   log.console.formatter = json
 ```
 
-### Recover the cluster from complete shutdown
+## How to Avoid Deadlocked Deployments After a Cluster-Wide Restart
 
-> IMPORTANT: Some of these procedures can lead to data loss. Always make a backup beforehand.
+RabbitMQ nodes assume their peers come back online within five minutes (by default). When the `OrderedReady` pod management policy is used
+with a readiness probe that implicitly requires a fully booted node, the deployment can deadlock:
 
-The RabbitMQ cluster is able to support multiple node failures but, in a situation in which all the nodes are brought down at the same time, the cluster might not be able to self-recover.
+- Kubernetes will expect the first node to pass a readiness probe
+- The readiness probe may require a fully booted node
+- The node will fully boot after it detects that its peers have come online
+- Kubernetes will not start any more pods until the first one boots
 
-This happens if the pod management policy of the statefulset is not `Parallel` and the last pod to be running wasn't the first pod of the statefulset. If that happens, update the pod management policy to recover a healthy state:
+Using [RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview) is the easiest solution.
 
-```console
-$ kubectl delete statefulset STATEFULSET_NAME --cascade=false
-helm upgrade RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq \
-    --set podManagementPolicy=Parallel \
-    --set replicaCount=NUMBER_OF_REPLICAS \
-    --set auth.password=PASSWORD \
-    --set auth.erlangCookie=ERLANG_COOKIE
-```
+Alternatively, the following combination of deployment settings avoids the problem:
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+- Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
+- Use `rabbitmq-diagnostics ping` for readiness probe
 
-For a faster resyncronization of the nodes, you can temporarily disable the readiness probe by setting `readinessProbe.enabled=false`. Bear in mind that the pods will be exposed before they are actually ready to process requests.
+Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism
+in RabbitMQ that helps make remaining clusters nodes to recover and rejoin each other after a permanent loss of some of their former
+peers. In other words, forced booting a node is en emergency event recovery procedure.
 
-If the steps above don't bring the cluster to a healthy state, it could be possible that none of the RabbitMQ nodes think they were the last node to be up during the shutdown. In those cases, you can force the boot of the nodes by specifying the `clustering.forceBoot=true` parameter (which will execute [`rabbitmqctl force_boot`](https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot) in each pod):
+To learn more, see
 
-```console
-helm upgrade RELEASE_NAME oci://REGISTRY_NAME/REPOSITORY_NAME/rabbitmq \
-    --set podManagementPolicy=Parallel \
-    --set clustering.forceBoot=true \
-    --set replicaCount=NUMBER_OF_REPLICAS \
-    --set auth.password=PASSWORD \
-    --set auth.erlangCookie=ERLANG_COOKIE
-```
+- [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
+- [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
+- [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for [Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview)-less (DIY) deployments to Kubernetes
+- [DIY RabbitMQ deployments on Kubernetes](https://www.rabbitmq.com/blog/2020/08/10/deploying-rabbitmq-to-kubernetes-whats-involved): What's Involved?
 
-> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-
-More information: [Clustering Guide: Restarting](https://www.rabbitmq.com/clustering.html#restarting).
-
-### Known issues
+## Known issues
 
 - Changing the password through RabbitMQ's UI can make the pod fail due to the default liveness probes. If you do so, remember to make the chart aware of the new password. Updating the default secret with the password you set through RabbitMQ's UI will automatically recreate the pods. If you are using your own secret, you may have to manually recreate the pods.
 
