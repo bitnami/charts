@@ -3,12 +3,12 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.worker.replicaCount }}
-{{- if and .Values.worker.enabled .Values.worker.pdb.create (or (gt $replicaCount 1) .Values.worker.autoscaling.enabled) -}}
+{{- $replicaCount := int .Values.web.replicaCount }}
+{{- if and .Values.web.enabled (include "concourse.host" .) .Values.web.pdb.create (or (gt $replicaCount 1) .Values.web.autoscaling.enabled) -}}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ template "concourse.worker.fullname" . }}
+  name: {{ template "concourse.web.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
@@ -16,14 +16,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.worker.pdb.minAvailable }}
-  minAvailable: {{ .Values.worker.pdb.minAvailable }}
+  {{- if .Values.web.pdb.minAvailable }}
+  minAvailable: {{ .Values.web.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.worker.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.worker.pdb.maxUnavailable }}
+  {{- if .Values.web.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.web.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.web.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: worker
+      app.kubernetes.io/component: web
 {{- end }}
