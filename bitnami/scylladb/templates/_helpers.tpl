@@ -20,13 +20,6 @@ Return the proper Scylladb image name
 {{- end -}}
 
 {{/*
-Return the proper metrics image name
-*/}}
-{{- define "scylladb.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "scylladb.volumePermissions.image" -}}
@@ -37,7 +30,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "scylladb.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -297,11 +290,4 @@ WARNING: JVM Max Heap Size not set in value jvm.maxHeapSize. When not set, the c
 WARNING: JVM New Heap Size not set in value jvm.newHeapSize. When not set, the chart will calculate the following size:
      MAX(Memory Limit (if set) / 64, 256M)
 {{- end }}
-{{- end -}}
-
-{{/*
-Get the metrics config map name.
-*/}}
-{{- define "scylladb.metricsConfConfigMap" -}}
-    {{- printf "%s-metrics-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

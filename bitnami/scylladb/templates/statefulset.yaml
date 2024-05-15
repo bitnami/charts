@@ -272,6 +272,8 @@ spec:
               value: {{ .Values.containerPorts.api | quote }}
             - name: SCYLLADB_CQL_SHARD_PORT_NUMBER
               value: {{ .Values.containerPorts.cqlShard | quote }}
+            - name: SCYLLADB_PROMETHEUS_PORT_NUMBER
+              value: {{ ternary .Values.containerPorts.metrics "0" .Values.metrics.enabled | quote }}
             {{- if .Values.persistence.commitLogMountPath }}
             - name: SCYLLADB_COMMITLOG_DIR
               value: {{ .Values.persistence.commitLogMountPath | quote }}
@@ -413,6 +415,13 @@ spec:
               hostPort: {{ .Values.containerPorts.api }}
               {{- else if .Values.hostPorts.api }}
               hostPort: {{ .Values.hostPorts.api }}
+              {{- end }}
+            - name: metrics
+              containerPort: {{ .Values.containerPorts.metrics }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.metrics }}
+              {{- else if .Values.hostPorts.metrics }}
+              hostPort: {{ .Values.hostPorts.metrics }}
               {{- end }}
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
@@ -588,104 +597,10 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if .Values.metrics.enabled }}
-        - name: metrics
-          image: {{ include "scylladb.metrics.image" . }}
-          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
-          {{- if .Values.diagnosticMode.enabled }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.command }}
-          command: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.command "context" $) | nindent 12 }}
-          {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.args }}
-          args: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.args "context" $) | nindent 12 }}
-          {{- end }}
-          ports:
-            - name: metrics
-              containerPort: {{ .Values.metrics.containerPorts.http }}
-              {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.metrics.containerPorts.http }}
-              {{- else if .Values.metrics.hostPorts.http }}
-              hostPort: {{ .Values.metrics.hostPorts.http }}
-              {{- end }}
-              protocol: TCP
-            - name: jmx
-              containerPort: {{ .Values.metrics.containerPorts.jmx }}
-              {{- if .Values.hostNetwork }}
-              hostPort: {{ .Values.metrics.containerPorts.jmx }}
-              {{- else if .Values.metrics.hostPorts.jmx }}
-              hostPort: {{ .Values.metrics.hostPorts.jmx }}
-              {{- end }}
-            {{- if .Values.metrics.extraContainerPorts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraContainerPorts "context" $) | nindent 12 }}
-            {{- end }}
-          {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
-          {{- else if ne .Values.metrics.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
-          {{- end }}
-          {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.livenessProbe.enabled }}
-          livenessProbe:
-            tcpSocket:
-              port: metrics
-            initialDelaySeconds: {{ .Values.metrics.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.livenessProbe.successThreshold }}
-          {{- end }}
-          {{- if .Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.livenessProbe.enabled }}
-          readinessProbe:
-            httpGet:
-              path: /metrics
-              port: metrics
-            initialDelaySeconds: {{ .Values.metrics.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.readinessProbe.successThreshold }}
-          {{- end }}
-          {{- if .Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
-          {{- else if .Values.metrics.startupProbe.enabled }}
-          startupProbe:
-            tcpSocket:
-              port: metrics
-            initialDelaySeconds: {{ .Values.metrics.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.metrics.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.metrics.startupProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.metrics.startupProbe.failureThreshold }}
-            successThreshold: {{ .Values.metrics.startupProbe.successThreshold }}
-          {{- end }}
-          {{- if .Values.metrics.lifecycleHooks }}
-          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.lifecycleHooks "context" $) | nindent 12 }}
-          {{- end }}
-          {{- end }}
-          volumeMounts:
-            - name: metrics-conf
-              mountPath: /opt/bitnami/cassandra-exporter/config.yml
-              subPath: config.yml
-            - name: empty-dir
-              mountPath: /tmp
-              subPath: tmp-dir
-            {{- if .Values.metrics.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
-            {{- end }}
-        {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        - name: metrics-conf
-          configMap:
-            name: {{ include "scylladb.metricsConfConfigMap" . }}
         {{- if (include "scylladb.tlsEncryption" . ) }}
         - name: certs
           secret:

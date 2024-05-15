@@ -68,11 +68,7 @@ spec:
         {{- end }}
         {{- end }}
       {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPorts.http }}
-        - port: {{ .Values.metrics.containerPorts.jmx }}
-        {{- range .Values.metrics.extraContainerPorts }}
-        - port: {{ . }}
-        {{- end }}
+        - port: {{ .Values.containerPorts.metrics }}
       {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
