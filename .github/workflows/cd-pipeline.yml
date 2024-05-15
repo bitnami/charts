@@ -140,6 +140,11 @@ jobs:
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
+            # Compare sizes of files
+            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+              echo "New file is shorter than the current index.yaml file"
+              exit 1
+            fi
             cp ../download/index.yaml bitnami/index.yaml
 
             # Push changes
