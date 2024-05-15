@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -447,9 +447,6 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/postgresql/tmp
               subPath: app-tmp-dir
-            - name: empty-dir
-              mountPath: /opt/bitnami/postgresql/logs
-              subPath: app-logs-dir
             - name: empty-dir
               mountPath: /opt/bitnami/repmgr/conf
               subPath: repmgr-conf-dir

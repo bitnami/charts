@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -137,7 +137,8 @@ data:
     replace_placeholder() {
       local placeholder="${1:?missing placeholder value}"
       local password="${2:?missing password value}"
-      sed -i "s/$placeholder/$password/g" "$KAFKA_CONFIG_FILE"
+      local -r del=$'\001' # Use a non-printable character as a 'sed' delimiter to avoid issues with delimiter symbols in sed string
+      sed -i "s${del}$placeholder${del}$password${del}g" "$KAFKA_CONFIG_FILE"
     }
 
     append_file_to_kafka_conf() {
@@ -306,7 +307,7 @@ data:
       {{- if (include "kafka.client.saslEnabled" .)}}
       read -r -a passwords <<<"$(tr ',;' ' ' <<<"${KAFKA_CLIENT_PASSWORDS:-}")"
       for ((i = 0; i < ${#passwords[@]}; i++)); do
-          replace_placeholder "password-placeholder-${i}" "${passwords[i]}"
+          replace_placeholder "password-placeholder-${i}\"" "${passwords[i]}\""
       done
       {{- end }}
       {{- if .Values.sasl.zookeeper.user }}

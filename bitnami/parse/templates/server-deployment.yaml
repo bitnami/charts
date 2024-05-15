@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -138,6 +138,8 @@ spec:
               value: {{ ternary "true" "false" (or .Values.server.image.debug .Values.diagnosticMode.enabled) | quote }}
             - name: PARSE_HOST
               value: "0.0.0.0"
+            - name: PARSE_SERVER_MASTER_KEY_IPS
+              value: {{ .Values.server.masterKeyIps | quote }}
             - name: PARSE_PORT_NUMBER
               value: {{ .Values.server.containerPorts.http | quote }}
             - name: PARSE_MOUNT_PATH

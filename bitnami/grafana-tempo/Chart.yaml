@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-tempo
-      image: docker.io/bitnami/grafana-tempo:2.4.1-debian-12-r3
+      image: docker.io/bitnami/grafana-tempo:2.4.2-debian-12-r0
     - name: grafana-tempo-query
-      image: docker.io/bitnami/grafana-tempo-query:2.4.1-debian-12-r2
+      image: docker.io/bitnami/grafana-tempo-query:2.4.2-debian-12-r0
     - name: grafana-tempo-vulture
-      image: docker.io/bitnami/grafana-tempo-vulture:2.4.1-debian-12-r3
+      image: docker.io/bitnami/grafana-tempo-vulture:2.4.2-debian-12-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
-appVersion: 2.4.1
+appVersion: 2.4.2
 dependencies:
 - condition: memcached.enabled
   name: memcached
@@ -34,9 +34,9 @@ keywords:
 - metrics
 - infrastructure
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: grafana-tempo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-tempo
-version: 3.0.3
+version: 3.2.1

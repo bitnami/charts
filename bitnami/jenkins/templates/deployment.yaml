@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -477,6 +477,11 @@ spec:
             {{- if .Values.configAsCode.autoReload.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.configAsCode.autoReload.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if .Values.configAsCode.autoReload.resources }}
+          resources: {{- toYaml .Values.configAsCode.autoReload.resources | nindent 12 }}
+          {{- else if ne .Values.configAsCode.autoReload.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.configAsCode.autoReload.resourcesPreset) | nindent 12 }}
+          {{- end }}
           {{- if or .Values.configAsCode.autoReload.extraEnvVarsCM .Values.configAsCode.autoReload.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.configAsCode.autoReload.extraEnvVarsCM }}

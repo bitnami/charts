@@ -1,0 +1,62 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.s3.enabled .Values.s3.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "seaweedfs.s3.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master
+  {{- if or .Values.s3.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.s3.ingress.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.s3.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.s3.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if or .Values.s3.ingress.hostname .Values.s3.ingress.path }}
+    - http:
+        paths:
+          {{- if .Values.s3.ingress.extraPaths }}
+          {{- toYaml .Values.s3.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.s3.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.s3.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.s3.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+      {{- if not (empty .Values.s3.ingress.hostname )}}
+      host: {{ .Values.s3.ingress.hostname }}
+      {{- end }}
+    {{- end }}
+    {{- range .Values.s3.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "seaweedfs.s3.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.s3.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.s3.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.s3.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.s3.ingress.annotations )) .Values.s3.ingress.selfSigned)) .Values.s3.ingress.extraTls }}
+  tls:
+    {{- if and .Values.s3.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.s3.ingress.annotations )) .Values.s3.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.s3.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.s3.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.s3.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.s3.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

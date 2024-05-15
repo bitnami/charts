@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -101,7 +101,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.28.2-debian-12-r4
+    tag: 1.28.4-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -397,7 +397,7 @@ contour:
       ## @param contour.certgen.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
       ##
       kubeAPIServerPorts: [443, 6443, 8443]
-      ## @param contour.certgen.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+      ## @param contour.certgen.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
       ## e.g:
       ## extraIngress:
       ##   - ports:
@@ -519,7 +519,7 @@ contour:
     ## @param contour.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param contour.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param contour.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -631,6 +631,18 @@ contour:
   overloadManager:
     enabled: false
     maxHeapBytes: "2147483648"
+  ## PodDisruptionBudget for default backend
+  ## Contour Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param contour.pdb.create Enable Pod Disruption Budget configuration
+  ## @param contour.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param contour.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
 ## @section Envoy parameters
 ##
 envoy:
@@ -649,7 +661,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.28.2-debian-12-r0
+    tag: 1.29.4-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -717,16 +729,17 @@ envoy:
   args: []
   ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
   ## @param envoy.shutdownManager.extraArgs [array] Extra arguments passed to shutdown container
-  ## @param envoy.shutdownManager.port Specify Port for shutdown container
   ## @param envoy.shutdownManager.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.shutdownManager.resources is set (envoy.shutdownManager.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ## @param envoy.shutdownManager.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## @param envoy.shutdownManager.containerPorts.http Specify Port for shutdown container
   ##
   shutdownManager:
     extraArgs: []
-    port: "8090"
     enabled: true
     resourcesPreset: "nano"
+    containerPorts:
+      http: 8090
     ## Example:
     ## resources:
     ##   requests:
@@ -1172,7 +1185,7 @@ envoy:
     ## @param envoy.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param envoy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param envoy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1284,6 +1297,18 @@ envoy:
   ## @param envoy.extraEnvVarsSecret Secret containing extra env vars to be added to all Envoy containers
   ##
   extraEnvVarsSecret: ""
+  ## PodDisruptionBudget for default backend
+  ## Envoy Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+  ## @param envoy.pdb.create Enable Pod Disruption Budget configuration
+  ## @param envoy.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
+  ## @param envoy.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
 ## @section Default backend parameters
 ##
 
@@ -1305,7 +1330,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r7
+    tag: 1.26.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1593,7 +1618,7 @@ defaultBackend:
     ## @param defaultBackend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

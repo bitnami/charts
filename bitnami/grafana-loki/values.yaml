@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -81,7 +81,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.9.7-debian-12-r0
+    tag: 3.0.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -103,7 +103,7 @@ loki:
 
     server:
       http_listen_port: {{ .Values.loki.containerPorts.http }}
-
+      grpc_listen_port: {{ .Values.loki.containerPorts.grpc }}
     common:
       compactor_address: http://{{ include "grafana-loki.compactor.fullname" . }}:{{ .Values.compactor.service.ports.http }}
 
@@ -126,17 +126,16 @@ loki:
       chunk_block_size: 262144
       chunk_encoding: snappy
       chunk_retain_period: 1m
-      max_transfer_retries: 0
       wal:
         dir: {{ .Values.loki.dataDir }}/wal
 
     limits_config:
       retention_period: 336h
-      enforce_metric_name: false
       reject_old_samples: true
       reject_old_samples_max_age: 168h
       max_cache_freshness_per_query: 10m
       split_queries_by_interval: 15m
+      allow_structured_metadata: true
 
     schema_config:
       configs:
@@ -148,16 +147,22 @@ loki:
           prefix: index_
           period: 24h
       - from: 2024-03-12
+        store: tsdb
+        object_store: filesystem
+        schema: v12
         index:
           period: 24h
           prefix: index_
+      - from: 2024-04-23
         object_store: filesystem
-        schema: v12
         store: tsdb
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
 
     storage_config:
       boltdb_shipper:
-        shared_store: filesystem
         active_index_directory: {{ .Values.loki.dataDir }}/loki/index
         cache_location: {{ .Values.loki.dataDir }}/loki/cache
         cache_ttl: 168h
@@ -184,7 +189,6 @@ loki:
         index_gateway_client:
           server_address: {{ (printf "dns:///%s:9095" (include "grafana-loki.index-gateway.fullname" .)) }}
         {{- end }}
-        shared_store: filesystem
 
     query_scheduler:
       max_outstanding_requests_per_tenant: 32768
@@ -193,7 +197,6 @@ loki:
       max_concurrent: 16
 
     chunk_store_config:
-      max_look_back_period: 0s
       {{- if .Values.memcachedchunks.enabled }}
       chunk_cache_config:
         memcached:
@@ -248,11 +251,11 @@ loki:
 
     compactor:
       working_directory: {{ .Values.loki.dataDir }}/loki/retention
-      shared_store: filesystem
       compaction_interval: 10m
       retention_enabled: true
       retention_delete_delay: 2h
       retention_delete_worker_count: 150
+      delete_request_store: filesystem
 
     ruler:
       storage:
@@ -589,9 +592,11 @@ compactor:
     ##
     type: ClusterIP
     ## @param compactor.service.ports.http Compactor HTTP service port
+    ## @param compactor.service.ports.grpc Compactor gRPC service port
     ##
     ports:
       http: 3100
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param compactor.service.nodePorts.http Node port for HTTP
@@ -652,7 +657,7 @@ compactor:
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -709,7 +714,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r7
+    tag: 1.26.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1051,7 +1056,7 @@ gateway:
     ## @param gateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param gateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param gateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1544,7 +1549,7 @@ indexGateway:
     ## @param indexGateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param indexGateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param indexGateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1898,7 +1903,7 @@ distributor:
     ## @param distributor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2025,7 +2030,7 @@ ingester:
   ## @param ingester.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ingester.resources is set (ingester.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "micro"
   ## @param ingester.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -2295,7 +2300,7 @@ ingester:
     ## @param ingester.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2692,7 +2697,7 @@ querier:
     ## @param querier.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3052,7 +3057,7 @@ queryFrontend:
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3409,7 +3414,7 @@ queryScheduler:
     ## @param queryScheduler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryScheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryScheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3809,7 +3814,7 @@ ruler:
     ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -4166,7 +4171,7 @@ tableManager:
     ## @param tableManager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param tableManager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param tableManager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -4222,7 +4227,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 2.9.7-debian-12-r0
+    tag: 3.0.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4260,9 +4265,11 @@ promtail:
   ##
   extraArgs: []
   ## @param promtail.containerPorts.http Promtail HTTP port
+  ## @param promtail.containerPorts.grpc Promtail HTTP port
   ##
   containerPorts:
     http: 8080
+    grpc: 9095
   ## Configure extra options for Promtail containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param promtail.livenessProbe.enabled Enable livenessProbe on Promtail nodes
@@ -4480,6 +4487,7 @@ promtail:
     server:
       log_level: {{ .Values.promtail.logLevel }}
       http_listen_port: {{ .Values.promtail.containerPorts.http }}
+      grpc_listen_port: {{ .Values.promtail.containerPorts.grpc }}
 
     clients:
       - url: http://{{ include "grafana-loki.gateway.fullname" . }}:{{ .Values.gateway.service.ports.http }}/loki/api/v1/push
@@ -4574,9 +4582,11 @@ promtail:
     ##
     type: ClusterIP
     ## @param promtail.service.ports.http Promtail HTTP service port
+    ## @param promtail.service.ports.grpc Promtail gRPC service port
     ##
     ports:
       http: 3100
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param promtail.service.nodePorts.http Node port for HTTP
@@ -4640,7 +4650,7 @@ promtail:
     ## @param promtail.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param promtail.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param promtail.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -4724,7 +4734,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4856,7 +4866,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4912,7 +4922,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4968,7 +4978,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -5024,7 +5034,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

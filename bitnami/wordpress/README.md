@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -394,37 +394,52 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                                              | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | WordPress service type                                                                                                                                   | `LoadBalancer`           |
-| `service.ports.http`               | WordPress service HTTP port                                                                                                                              | `80`                     |
-| `service.ports.https`              | WordPress service HTTPS port                                                                                                                             | `443`                    |
-| `service.httpsTargetPort`          | Target port for HTTPS                                                                                                                                    | `https`                  |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                                                                       | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                                                                      | `""`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                                         | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                              | `{}`                     |
-| `service.clusterIP`                | WordPress service Cluster IP                                                                                                                             | `""`                     |
-| `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                                                       | `""`                     |
-| `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                                                  | `[]`                     |
-| `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                                                                                | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for WordPress service                                                                                                      | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on WordPress service                                                                                                                | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                                           | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                                        | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                                            | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                            | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record. The hostname is templated and thus can contain other variable references.                                           | `wordpress.local`        |
-| `ingress.path`                     | Default path for the ingress record                                                                                                                      | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                         | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                                            | `false`                  |
-| `ingress.tlsWwwPrefix`             | Adds www subdomain to default cert                                                                                                                       | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                             | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record. The host names are templated and thus can contain other variable references. | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                                    | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                      | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                                                       | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                                                  | `[]`                     |
+| Name                                | Description                                                                                                                                              | Value                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                      | WordPress service type                                                                                                                                   | `LoadBalancer`           |
+| `service.ports.http`                | WordPress service HTTP port                                                                                                                              | `80`                     |
+| `service.ports.https`               | WordPress service HTTPS port                                                                                                                             | `443`                    |
+| `service.httpsTargetPort`           | Target port for HTTPS                                                                                                                                    | `https`                  |
+| `service.nodePorts.http`            | Node port for HTTP                                                                                                                                       | `""`                     |
+| `service.nodePorts.https`           | Node port for HTTPS                                                                                                                                      | `""`                     |
+| `service.sessionAffinity`           | Control where client requests go, to the same pod or round-robin                                                                                         | `None`                   |
+| `service.sessionAffinityConfig`     | Additional settings for the sessionAffinity                                                                                                              | `{}`                     |
+| `service.clusterIP`                 | WordPress service Cluster IP                                                                                                                             | `""`                     |
+| `service.loadBalancerIP`            | WordPress service Load Balancer IP                                                                                                                       | `""`                     |
+| `service.loadBalancerSourceRanges`  | WordPress service Load Balancer sources                                                                                                                  | `[]`                     |
+| `service.externalTrafficPolicy`     | WordPress service external traffic policy                                                                                                                | `Cluster`                |
+| `service.annotations`               | Additional custom annotations for WordPress service                                                                                                      | `{}`                     |
+| `service.extraPorts`                | Extra port to expose on WordPress service                                                                                                                | `[]`                     |
+| `ingress.enabled`                   | Enable ingress record generation for WordPress                                                                                                           | `false`                  |
+| `ingress.pathType`                  | Ingress path type                                                                                                                                        | `ImplementationSpecific` |
+| `ingress.apiVersion`                | Force Ingress API version (automatically detected if not set)                                                                                            | `""`                     |
+| `ingress.ingressClassName`          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                            | `""`                     |
+| `ingress.hostname`                  | Default host for the ingress record. The hostname is templated and thus can contain other variable references.                                           | `wordpress.local`        |
+| `ingress.path`                      | Default path for the ingress record                                                                                                                      | `/`                      |
+| `ingress.annotations`               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                         | `{}`                     |
+| `ingress.tls`                       | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                                            | `false`                  |
+| `ingress.tlsWwwPrefix`              | Adds www subdomain to default cert                                                                                                                       | `false`                  |
+| `ingress.selfSigned`                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                             | `false`                  |
+| `ingress.extraHosts`                | An array with additional hostname(s) to be covered with the ingress record. The host names are templated and thus can contain other variable references. | `[]`                     |
+| `ingress.extraPaths`                | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                                    | `[]`                     |
+| `ingress.extraTls`                  | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                      | `[]`                     |
+| `ingress.secrets`                   | Custom TLS certificates as secrets                                                                                                                       | `[]`                     |
+| `ingress.extraRules`                | Additional rules to be covered with this ingress record                                                                                                  | `[]`                     |
+| `secondaryIngress.enabled`          | Enable ingress record generation for WordPress                                                                                                           | `false`                  |
+| `secondaryIngress.pathType`         | Ingress path type                                                                                                                                        | `ImplementationSpecific` |
+| `secondaryIngress.apiVersion`       | Force Ingress API version (automatically detected if not set)                                                                                            | `""`                     |
+| `secondaryIngress.ingressClassName` | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                            | `""`                     |
+| `secondaryIngress.hostname`         | Default host for the ingress record. The hostname is templated and thus can contain other variable references.                                           | `wordpress.local`        |
+| `secondaryIngress.path`             | Default path for the ingress record                                                                                                                      | `/`                      |
+| `secondaryIngress.annotations`      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                         | `{}`                     |
+| `secondaryIngress.tls`              | Enable TLS configuration for the host defined at `secondaryIngress.hostname` parameter                                                                   | `false`                  |
+| `secondaryIngress.tlsWwwPrefix`     | Adds www subdomain to default cert                                                                                                                       | `false`                  |
+| `secondaryIngress.selfSigned`       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                             | `false`                  |
+| `secondaryIngress.extraHosts`       | An array with additional hostname(s) to be covered with the ingress record. The host names are templated and thus can contain other variable references. | `[]`                     |
+| `secondaryIngress.extraPaths`       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                                    | `[]`                     |
+| `secondaryIngress.extraTls`         | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                      | `[]`                     |
+| `secondaryIngress.secrets`          | Custom TLS certificates as secrets                                                                                                                       | `[]`                     |
+| `secondaryIngress.extraRules`       | Additional rules to be covered with this ingress record                                                                                                  | `[]`                     |
 
 ### Persistence Parameters
 
@@ -531,7 +546,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
 | `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
 | `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |

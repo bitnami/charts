@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -55,12 +55,15 @@ spec:
       nodePort: null
       {{- end }}
     {{- end }}
+    {{- if gt (int .Values.replicaCount) 1 }}
+    {{- /* These ports are only open when there are more than 1 replica */}}
     - name: tcp-follower
       port: {{ .Values.service.ports.follower }}
       targetPort: follower
     - name: tcp-election
       port: {{ .Values.service.ports.election }}
       targetPort: election
+    {{- end }}
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

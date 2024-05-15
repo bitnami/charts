@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -43,6 +43,11 @@ spec:
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.metrics.serviceMonitor.enabled }}
+    - port: {{ .Values.metrics.serviceMonitor.port.number }}
+      name: {{ .Values.metrics.serviceMonitor.port.name }}
+      targetPort: 8081
+    {{- end }} 
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

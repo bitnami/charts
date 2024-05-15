@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 name: '[Support] PR review comment card movements'
@@ -21,9 +21,9 @@ jobs:
     steps:
       - run: |
           echo "::notice:: Comment on PR #${{ github.event.pull_request.number }}"
-          echo "${{ github.event.pull_request.number }}" > pull_request_number
-      - name: Upload the PR number
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
+          jq -n --arg issue '${{ github.event.pull_request.number }}' --arg state '${{ github.event.review != null && github.event.review.state || '' }}' '{"issue": {"number": $issue }, "review": { "state": $state }}' > pull_request_info.json
+      - name: Upload the PR info
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
         with:
-          name: pull_request_number
-          path: ./pull_request_number
+          name: pull_request_info.json
+          path: ./pull_request_info.json

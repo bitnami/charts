@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kube-state-metrics
-      image: docker.io/bitnami/kube-state-metrics:2.12.0-debian-12-r2
+      image: docker.io/bitnami/kube-state-metrics:2.12.0-debian-12-r6
 apiVersion: v2
 appVersion: 2.12.0
 dependencies:
@@ -23,9 +23,9 @@ keywords:
 - kube-state-metrics
 - monitoring
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: kube-state-metrics
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 4.0.3
+version: 4.0.6

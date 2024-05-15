@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,16 +32,18 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: storegateway
+      {{- if or .Values.storegateway.podAnnotations (include "thanos.storegateway.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
-        {{- if (include "thanos.objstoreConfig" $) }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
-        {{- if (include "thanos.storegateway.createConfigmap" $) }}
+        {{- if (include "thanos.storegateway.createConfigmap" .) }}
         checksum/storegateway-configuration: {{ include "thanos.storegatewayConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.storegateway.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "thanos.storegateway.serviceAccountName" . }}
@@ -131,18 +133,20 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if .Values.indexCacheConfig }}
-            - --index-cache.config-file=/conf/index-cache.yml
+            - --index-cache.config-file=/conf/cache/index-cache.yml
             {{- end }}
             {{- if .Values.bucketCacheConfig }}
-            - --store.caching-bucket.config-file=/conf/bucket-cache.yml
+            - --store.caching-bucket.config-file=/conf/cache/bucket-cache.yml
             {{- end }}
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
             {{- if .Values.storegateway.grpc.server.tls.enabled }}
-            - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
-            - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
-            - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            - --grpc-server-tls-cert=/certs/grpc/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-cert") }}
+            - --grpc-server-tls-key=/certs/grpc/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if .Values.storegateway.grpc.server.tls.clientAuthEnabled }}
+            - --grpc-server-tls-client-ca=/certs/grpc/{{ include "common.secrets.key" (dict "existingSecret" .Values.storegateway.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.storegateway.extraFlags }}
             {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraFlags "context" $) | nindent 12 }}
@@ -232,13 +236,13 @@ spec:
               mountPath: /conf
             - name: data
               mountPath: /data
-            {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+            {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
             - name: cache-config
               mountPath: /conf/cache
             {{- end }}
             {{- if .Values.storegateway.grpc.server.tls.enabled }}
             - name: grpc-server-tls
-              mountPath: /certs
+              mountPath: /certs/grpc
             {{- end }}
             {{- if .Values.storegateway.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumeMounts "context" $) | nindent 12 }}
@@ -253,7 +257,7 @@ spec:
         {{- if .Values.storegateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
+        {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
         - name: cache-config
           configMap:
             name: {{ include "thanos.storegateway.configmapName" . }}

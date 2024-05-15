@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -98,6 +98,10 @@ spec:
               # We copy the logs folder because it has symlinks to stdout and stderr
               if ! is_dir_empty /opt/bitnami/apache/logs; then
                 cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
+              fi
+              info "Copying php var directory"
+              if ! is_dir_empty /opt/bitnami/php/var; then
+                cp -r /opt/bitnami/php/var /emptydir/php-var-dir
               fi
               info "Copy operation completed"
           volumeMounts:

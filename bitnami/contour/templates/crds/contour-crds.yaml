@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/projectcontour/contour/v{version}/examples/contour/01-crds.yaml
-# Version: 1.28.2
+# Version: 1.28.4
 # Conditional: .Values.contour.manageCRDs
 {{- if .Values.contour.manageCRDs }}
 ---

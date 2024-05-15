@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 command:
@@ -10,11 +10,11 @@ command:
   {{- $port := .Vars.service.web.ports.http }}
   {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
   create-pipeline-trigger-job:
-    exec: export HOME=/tmp && fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ $example_pipeline }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 90 && fly -t {{ $target }} jobs -p {{ $pipeline }}
+    exec: export HOME=/tmp && fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ $example_pipeline }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 180 && fly -t {{ $target }} jobs -p {{ $pipeline }}
     exit-status: 0
     stdout:
       - "succeeded"
-    timeout: 120000
+    timeout: 210000
   {{ end }}
   check-db-config:
     exec: $(echo $CONCOURSE_POSTGRES_DATABASE | grep -q {{ .Vars.postgresql.auth.database }}) && $(echo $CONCOURSE_POSTGRES_USER | grep -q {{ .Vars.postgresql.auth.username }}) && $(echo $CONCOURSE_POSTGRES_PASSWORD | grep -q {{ .Vars.postgresql.auth.password }})

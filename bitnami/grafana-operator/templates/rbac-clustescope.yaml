@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -82,6 +82,32 @@ rules:
       - patch
       - update
       - watch
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanacontactpoints
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+     - grafana.integreatly.org
+    resources:
+      - grafanacontactpoints/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - grafana.integreatly.org
+    resources:
+      - grafanacontactpoints/status
+    verbs:
+      - get
+      - patch
+      - update
   - apiGroups:
       - grafana.integreatly.org
     resources:

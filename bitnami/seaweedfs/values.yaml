@@ -1,0 +1,3379 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## e.g:
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Diagnostic mode
+## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+## @param diagnosticMode.command Command to override all containers in the chart release
+## @param diagnosticMode.args Args to override all containers in the chart release
+##
+diagnosticMode:
+  enabled: false
+  command:
+    - sleep
+  args:
+    - infinity
+## Bitnami SeaweedFS image
+## ref: https://hub.docker.com/r/bitnami/seaweedfs/tags/
+## @param image.registry [default: REGISTRY_NAME] SeaweedFS image registry
+## @param image.repository [default: REPOSITORY_NAME/seaweedfs] SeaweedFS image repository
+## @skip image.tag SeaweedFS image tag (immutable tags are recommended)
+## @param image.digest SeaweedFS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy SeaweedFS image pull policy
+## @param image.pullSecrets SeaweedFS image pull secrets
+## @param image.debug Enable SeaweedFS image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/seaweedfs
+  tag: 3.67.0-debian-12-r2
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  debug: false
+## Security parameters
+##
+security:
+  ## @param security.enabled Enable Security settings
+  ##
+  enabled: false
+  ## @param security.corsAllowedOrigins CORS allowed origins
+  ##
+  corsAllowedOrigins: "*"
+  ## JWT authz parameters
+  ## ref: https://github.com/seaweedfs/seaweedfs/wiki/Security-Overview#securing-volume-servers
+  ## ref: https://github.com/seaweedfs/seaweedfs/wiki/Security-Overview#securing-filer-http-with-jwt
+  ## @param security.jwtSigning.volumeWrite Enable JWT signing for volume write operations
+  ## @param security.jwtSigning.volumeRead Enable JWT signing for volume read operations
+  ## @param security.jwtSigning.filerWrite Enable JWT signing for filer write operations
+  ## @param security.jwtSigning.filerRead Enable JWT signing for filer read operations
+  ##
+  jwtSigning:
+    volumeWrite: true
+    volumeRead: false
+    filerWrite: false
+    filerRead: false
+  ## Mutual TLS for gRPC communications
+  ## ref: https://github.com/seaweedfs/seaweedfs/wiki/Security-Overview#securing-grpc-operations
+  ##
+  mTLS:
+    ## @param security.mTLS.enabled Enable mTLS for gRPC communications
+    ##
+    enabled: false
+    ## @param security.mTLS.autoGenerated.enabled Enable automatic generation of certificates for mTLS
+    ## @param security.mTLS.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+    autoGenerated:
+      enabled: false
+      engine: helm
+      ## @param security.mTLS.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+      ## @param security.mTLS.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+      ## @param security.mTLS.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+      ## @param security.mTLS.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+      ## @param security.mTLS.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+      ## @param security.mTLS.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+      certManager:
+        existingIssuer: ""
+        existingIssuerKind: ""
+        keySize: 2048
+        keyAlgorithm: RSA
+        duration: 2160h
+        renewBefore: 360h
+    ## @param security.mTLS.ca CA certificate for mTLS. Ignored if `security.mTLS.existingCASecret` is set
+    ## @param security.mTLS.existingCASecret The name of an existing Secret containing the CA certificate for mTLS
+    ## @param security.mTLS.master.cert Master Server certificate for mTLS. Ignored if `security.mTLS.master.existingSecret` is set
+    ## @param security.mTLS.master.key Master Server key for mTLS. Ignored if `security.mTLS.master.existingSecret` is set
+    ## @param security.mTLS.master.existingSecret The name of an existing Secret containing the Master Server certificates for mTLS
+    ## @param security.mTLS.volume.cert Volume Server certificate for mTLS. Ignored if `security.mTLS.volume.existingSecret` is set
+    ## @param security.mTLS.volume.key Volume Server key for mTLS. Ignored if `security.mTLS.volume.existingSecret` is set
+    ## @param security.mTLS.volume.existingSecret The name of an existing Secret containing the Volume Server certificates for mTLS
+    ## @param security.mTLS.filer.cert Filer certificate for mTLS. Ignored if `security.mTLS.filer.existingSecret` is set
+    ## @param security.mTLS.filer.key Filer key for mTLS. Ignored if `security.mTLS.filer.existingSecret` is set
+    ## @param security.mTLS.filer.existingSecret The name of an existing Secret containing the Filer certificates for mTLS
+    ## @param security.mTLS.client.cert Client certificate for mTLS. Ignored if `security.mTLS.client.existingSecret` is set
+    ## @param security.mTLS.client.key Client key for mTLS. Ignored if `security.mTLS.client.existingSecret` is set
+    ## @param security.mTLS.client.existingSecret The name of an existing Secret containing the Client certificates for mTLS
+    ca: ""
+    existingCASecret: ""
+    master:
+      cert: ""
+      key: ""
+      existingSecret: ""
+    volume:
+      cert: ""
+      key: ""
+      existingSecret: ""
+    filer:
+      cert: ""
+      key: ""
+      existingSecret: ""
+    client:
+      cert: ""
+      key: ""
+      existingSecret: ""
+## @param clusterDefault Default SeaweedFS cluster name
+##
+clusterDefault: sw
+
+## @section Master Server Parameters
+##
+master:
+  ## @param master.replicaCount Number of Master Server replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param master.containerPorts.http Master Server HTTP container port
+  ## @param master.containerPorts.grpc Master Server GRPC container port
+  ## @param master.containerPorts.metrics Master Server metrics container port
+  ##
+  containerPorts:
+    http: 9333
+    grpc: 19333
+    metrics: 9327
+  ## @param master.extraContainerPorts Optionally specify extra list of additional ports for Master Server containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for Master Server containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.livenessProbe.enabled Enable livenessProbe on Master Server containers
+  ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param master.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param master.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param master.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param master.readinessProbe.enabled Enable readinessProbe on Master Server containers
+  ## @param master.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param master.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param master.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param master.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param master.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param master.startupProbe.enabled Enable startupProbe on Master Server containers
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Master Server resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param master.resourcesPreset Set Master Server container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param master.resources Set Master Server container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enable Master Server pods' Security Context
+  ## @param master.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Master Server pods
+  ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Master Server pods
+  ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups for Master Server pods
+  ## @param master.podSecurityContext.fsGroup Set fsGroup in Master Server pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param master.containerSecurityContext.enabled Enabled Master Server container' Security Context
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Master Server container
+  ## @param master.containerSecurityContext.runAsUser Set runAsUser in Master Server container' Security Context
+  ## @param master.containerSecurityContext.runAsGroup Set runAsGroup in Master Server container' Security Context
+  ## @param master.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Master Server container' Security Context
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Master Server container' Security Context
+  ## @param master.containerSecurityContext.privileged Set privileged in Master Server container' Security Context
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Master Server container' Security Context
+  ## @param master.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Master Server container
+  ## @param master.containerSecurityContext.seccompProfile.type Set seccomp profile in Master Server container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param master.logLevel Master Server log level [0|1|2|3|4]
+  ##
+  logLevel: 1
+  ## @param master.bindAddress Master Server bind address
+  ##
+  bindAddress: 0.0.0.0
+  ## @param master.config Master Server configuration
+  ## Specify content for master.yml
+  ##
+  config: ""
+  ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for Master Server
+  ##
+  existingConfigmap: ""
+  ## @param master.command Override default Master Server container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default Master Server container args (useful when using custom images)
+  ##
+  args: []
+  ## @param master.automountServiceAccountToken Mount Service Account token in Master Server pods
+  ##
+  automountServiceAccountToken: false
+  ## @param master.hostAliases Master Server pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param master.statefulsetAnnotations Annotations for Master Server statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param master.podLabels Extra labels for Master Server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param master.podAnnotations Annotations for Master Server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node master.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `master.affinity` is set
+    ##
+    key: ""
+    ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `master.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param master.affinity Affinity for Master Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `master.podAffinityPreset`, `master.podAntiAffinityPreset`, and `master.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param master.nodeSelector Node labels for Master Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param master.tolerations Tolerations for Master Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param master.updateStrategy.type Master Server statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param master.podManagementPolicy Pod management policy for Master Server statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param master.priorityClassName Master Server pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param master.topologySpreadConstraints Topology Spread Constraints for Master Server pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param master.schedulerName Name of the k8s scheduler (other than default) for Master Server pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.terminationGracePeriodSeconds Seconds Master Server pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param master.lifecycleHooks for Master Server containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraEnvVars Array with extra environment variables to add to Master Server containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Master Server containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Master Server containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the Master Server pods
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Master Server containers
+  ##
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the Master Server pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the Master Server pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param master.autoscaling.enabled Enable autoscaling for master
+  ## @param master.autoscaling.minReplicas Minimum number of master replicas
+  ## @param master.autoscaling.maxReplicas Maximum number of master replicas
+  ## @param master.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param master.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+
+  ## @section Master Server Traffic Exposure Parameters
+  ##
+
+  ## Master Server service parameters
+  ##
+  service:
+    ## @param master.service.type Master Server service type
+    ##
+    type: ClusterIP
+    ## @param master.service.ports.http Master Server service HTTP port
+    ## @param master.service.ports.grpc Master Server service GRPC port
+    ##
+    ports:
+      http: 9333
+      grpc: 19333
+    ## Node ports to expose
+    ## @param master.service.nodePorts.http Node port for HTTP
+    ## @param master.service.nodePorts.grpc Node port for GRPC
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param master.service.clusterIP Master Server service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param master.service.loadBalancerIP Master Server service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param master.service.loadBalancerSourceRanges Master Server service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param master.service.externalTrafficPolicy Master Server service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param master.service.annotations Additional custom annotations for Master Server service
+    ##
+    annotations: {}
+    ## @param master.service.extraPorts Extra ports to expose in Master Server service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param master.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param master.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param master.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies for Master Server
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param master.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Master Server
+    ##
+    enabled: true
+    ## @param master.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param master.networkPolicy.allowExternalEgress Allow the Master Server pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param master.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param master.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param master.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Master Server ingress parameters
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param master.ingress.enabled Enable ingress record generation for Master Server
+    ##
+    enabled: false
+    ## @param master.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param master.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param master.ingress.hostname Default host for the ingress record
+    ##
+    hostname: master.seaweedfs.local
+    ## @param master.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param master.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param master.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param master.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param master.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param master.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: master.seaweedfs.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param master.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param master.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - master.seaweedfs.local
+    ##   secretName: master.seaweedfs.local-tls
+    ##
+    extraTls: []
+    ## @param master.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: master.seaweedfs.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param master.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section Master Server Persistence Parameters
+  ##
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param master.persistence.enabled Enable persistence on Master Server using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param master.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /data
+    ## @param master.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param master.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param master.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param master.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param master.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param master.persistence.selector Selector to match an existing Persistent Volume for data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+
+  ## @section Master Server Metrics Parameters
+  ##
+  metrics:
+    ## @param master.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param master.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param master.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param master.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param master.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param master.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param master.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param master.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param master.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param master.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param master.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param master.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param master.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param master.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section Volume Server Parameters
+##
+volume:
+  ## @param volume.replicaCount Number of Volume Server replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param volume.containerPorts.http Volume Server HTTP container port
+  ## @param volume.containerPorts.grpc Volume Server GRPC container port
+  ## @param volume.containerPorts.metrics Volume Server metrics container port
+  ##
+  containerPorts:
+    http: 8080
+    grpc: 18080
+    metrics: 9327
+  ## @param volume.extraContainerPorts Optionally specify extra list of additional ports for Volume Server containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for Volume Server containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param volume.livenessProbe.enabled Enable livenessProbe on Volume Server containers
+  ## @param volume.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param volume.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param volume.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param volume.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param volume.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param volume.readinessProbe.enabled Enable readinessProbe on Volume Server containers
+  ## @param volume.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param volume.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param volume.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param volume.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param volume.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param volume.startupProbe.enabled Enable startupProbe on Volume Server containers
+  ## @param volume.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param volume.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param volume.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param volume.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param volume.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param volume.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param volume.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param volume.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Volume Server resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volume.resourcesPreset Set Volume Server container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volume.resources is set (volume.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volume.resources Set Volume Server container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param volume.podSecurityContext.enabled Enable Volume Server pods' Security Context
+  ## @param volume.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Volume Server pods
+  ## @param volume.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Volume Server pods
+  ## @param volume.podSecurityContext.supplementalGroups Set filesystem extra groups for Volume Server pods
+  ## @param volume.podSecurityContext.fsGroup Set fsGroup in Volume Server pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volume.containerSecurityContext.enabled Enabled Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Volume Server container
+  ## @param volume.containerSecurityContext.runAsUser Set runAsUser in Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.runAsGroup Set runAsGroup in Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.privileged Set privileged in Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Volume Server container' Security Context
+  ## @param volume.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Volume Server container
+  ## @param volume.containerSecurityContext.seccompProfile.type Set seccomp profile in Volume Server container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param volume.logLevel Volume Server log level [0|1|2|3|4]
+  ##
+  logLevel: 1
+  ## @param volume.bindAddress Volume Server bind address
+  ##
+  bindAddress: 0.0.0.0
+  ## @param volume.publicUrl Volume Server public URL
+  ##
+  publicUrl: ""
+  ## @param volume.config Volume Server configuration
+  ## Specify content for volume.yml
+  ##
+  config: ""
+  ## @param volume.existingConfigmap The name of an existing ConfigMap with your custom configuration for Volume Server
+  ##
+  existingConfigmap: ""
+  ## @param volume.command Override default Volume Server container command (useful when using custom images)
+  ##
+  command: []
+  ## @param volume.args Override default Volume Server container args (useful when using custom images)
+  ##
+  args: []
+  ## @param volume.automountServiceAccountToken Mount Service Account token in Volume Server pods
+  ##
+  automountServiceAccountToken: false
+  ## @param volume.hostAliases Volume Server pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param volume.statefulsetAnnotations Annotations for Volume Server statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param volume.podLabels Extra labels for Volume Server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param volume.podAnnotations Annotations for Volume Server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param volume.podAffinityPreset Pod affinity preset. Ignored if `volume.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param volume.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `volume.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node volume.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param volume.nodeAffinityPreset.type Node affinity preset type. Ignored if `volume.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param volume.nodeAffinityPreset.key Node label key to match. Ignored if `volume.affinity` is set
+    ##
+    key: ""
+    ## @param volume.nodeAffinityPreset.values Node label values to match. Ignored if `volume.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param volume.affinity Affinity for Volume Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `volume.podAffinityPreset`, `volume.podAntiAffinityPreset`, and `volume.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param volume.nodeSelector Node labels for Volume Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param volume.tolerations Tolerations for Volume Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param volume.updateStrategy.type Volume Server statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param volume.podManagementPolicy Pod management policy for Volume Server statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param volume.priorityClassName Volume Server pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param volume.topologySpreadConstraints Topology Spread Constraints for Volume Server pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param volume.schedulerName Name of the k8s scheduler (other than default) for Volume Server pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param volume.terminationGracePeriodSeconds Seconds Volume Server pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param volume.lifecycleHooks for Volume Server containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param volume.extraEnvVars Array with extra environment variables to add to Volume Server containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param volume.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Volume Server containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param volume.extraEnvVarsSecret Name of existing Secret containing extra env vars for Volume Server containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param volume.extraVolumes Optionally specify extra list of additional volumes for the Volume Server pods
+  ##
+  extraVolumes: []
+  ## @param volume.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Volume Server containers
+  ##
+  extraVolumeMounts: []
+  ## @param volume.sidecars Add additional sidecar containers to the Volume Server pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param volume.initContainers Add additional init containers to the Volume Server pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param volume.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param volume.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param volume.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param volume.autoscaling.enabled Enable autoscaling for volume
+  ## @param volume.autoscaling.minReplicas Minimum number of volume replicas
+  ## @param volume.autoscaling.maxReplicas Maximum number of volume replicas
+  ## @param volume.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param volume.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+
+  ## @section Volume Server Traffic Exposure Parameters
+  ##
+
+  ## Volume Server service parameters
+  ##
+  service:
+    ## @param volume.service.type Volume Server service type
+    ##
+    type: ClusterIP
+    ## @param volume.service.ports.http Volume Server service HTTP port
+    ## @param volume.service.ports.grpc Volume Server service GRPC port
+    ##
+    ports:
+      http: 8080
+      grpc: 18080
+    ## Node ports to expose
+    ## @param volume.service.nodePorts.http Node port for HTTP
+    ## @param volume.service.nodePorts.grpc Node port for GRPC
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param volume.service.clusterIP Volume Server service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param volume.service.loadBalancerIP Volume Server service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param volume.service.loadBalancerSourceRanges Volume Server service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param volume.service.externalTrafficPolicy Volume Server service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param volume.service.annotations Additional custom annotations for Volume Server service
+    ##
+    annotations: {}
+    ## @param volume.service.extraPorts Extra ports to expose in Volume Server service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param volume.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param volume.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param volume.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies for Volume Server
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param volume.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Volume Server
+    ##
+    enabled: true
+    ## @param volume.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param volume.networkPolicy.allowExternalEgress Allow the Volume Server pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param volume.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param volume.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param volume.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param volume.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Volume Server ingress parameters
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param volume.ingress.enabled Enable ingress record generation for Volume Server
+    ##
+    enabled: false
+    ## @param volume.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param volume.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param volume.ingress.hostname Default host for the ingress record
+    ##
+    hostname: volume.seaweedfs.local
+    ## @param volume.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param volume.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param volume.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param volume.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param volume.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param volume.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: volume.seaweedfs.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param volume.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param volume.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - volume.seaweedfs.local
+    ##   secretName: volume.seaweedfs.local-tls
+    ##
+    extraTls: []
+    ## @param volume.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: volume.seaweedfs.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param volume.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section Volume Server Persistence Parameters
+  ##
+
+  dataVolumes:
+    -
+      ## @param volume.dataVolumes[0].name Name of the data volume
+      ##
+      name: data-0
+      ## @param volume.dataVolumes[0].mountPath Path to mount the volume at.
+      ##
+      mountPath: /data-0
+      ## @param volume.dataVolumes[0].subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+      ##
+      subPath: ""
+      ## Enable persistence using Persistent Volume Claims
+      ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+      ##
+      persistence:
+        ## @param volume.dataVolumes[0].persistence.enabled Enable persistence on Volume Server using Persistent Volume Claims
+        ##
+        enabled: true
+        ## @param volume.dataVolumes[0].persistence.storageClass Storage class of backing PVC
+        ## If defined, storageClassName: <storageClass>
+        ## If set to "-", storageClassName: "", which disables dynamic provisioning
+        ## If undefined (the default) or set to null, no storageClassName spec is
+        ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+        ##   GKE, AWS & OpenStack)
+        ##
+        storageClass: ""
+        ## @param volume.dataVolumes[0].persistence.annotations Persistent Volume Claim annotations
+        ##
+        annotations: {}
+        ## @param volume.dataVolumes[0].persistence.accessModes Persistent Volume Access Modes
+        ##
+        accessModes:
+          - ReadWriteOnce
+        ## @param volume.dataVolumes[0].persistence.size Size of data volume
+        ##
+        size: 8Gi
+        ## @param volume.dataVolumes[0].persistence.existingClaim The name of an existing PVC to use for persistence
+        ##
+        existingClaim: ""
+        ## @param volume.dataVolumes[0].persistence.selector Selector to match an existing Persistent Volume for data PVC
+        ## If set, the PVC can't have a PV dynamically provisioned for it
+        ## E.g.
+        ## selector:
+        ##   matchLabels:
+        ##     app: my-app
+        ##
+        selector: {}
+        ## @param volume.dataVolumes[0].persistence.dataSource Custom PVC data source
+        ##
+        dataSource: {}
+
+  ## @section Volume Server Metrics Parameters
+  ##
+  metrics:
+    ## @param volume.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param volume.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param volume.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param volume.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param volume.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param volume.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param volume.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param volume.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param volume.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param volume.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param volume.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param volume.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param volume.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param volume.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section Filer Server Parameters
+##
+filer:
+  ## @param filer.enabled Enable Filer Server deployment
+  ##
+  enabled: true
+  ## @param filer.replicaCount Number of Filer Server replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param filer.containerPorts.http Filer Server HTTP container port
+  ## @param filer.containerPorts.grpc Filer Server GRPC container port
+  ## @param filer.containerPorts.metrics Filer Server metrics container port
+  ##
+  containerPorts:
+    http: 8888
+    grpc: 18888
+    metrics: 9327
+  ## @param filer.extraContainerPorts Optionally specify extra list of additional ports for Filer Server containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for Filer Server containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param filer.livenessProbe.enabled Enable livenessProbe on Filer Server containers
+  ## @param filer.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param filer.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param filer.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param filer.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param filer.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param filer.readinessProbe.enabled Enable readinessProbe on Filer Server containers
+  ## @param filer.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param filer.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param filer.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param filer.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param filer.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param filer.startupProbe.enabled Enable startupProbe on Filer Server containers
+  ## @param filer.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param filer.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param filer.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param filer.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param filer.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param filer.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param filer.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param filer.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Filer Server resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param filer.resourcesPreset Set Filer Server container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if filer.resources is set (filer.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param filer.resources Set Filer Server container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param filer.podSecurityContext.enabled Enable Filer Server pods' Security Context
+  ## @param filer.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Filer Server pods
+  ## @param filer.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Filer Server pods
+  ## @param filer.podSecurityContext.supplementalGroups Set filesystem extra groups for Filer Server pods
+  ## @param filer.podSecurityContext.fsGroup Set fsGroup in Filer Server pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param filer.containerSecurityContext.enabled Enabled Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Filer Server container
+  ## @param filer.containerSecurityContext.runAsUser Set runAsUser in Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.runAsGroup Set runAsGroup in Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.privileged Set privileged in Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Filer Server container' Security Context
+  ## @param filer.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Filer Server container
+  ## @param filer.containerSecurityContext.seccompProfile.type Set seccomp profile in Filer Server container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param filer.logLevel Filer Server log level [0|1|2|3|4]
+  ##
+  logLevel: 1
+  ## @param filer.bindAddress Filer Server bind address
+  ##
+  bindAddress: 0.0.0.0
+  ## @param filer.config Filer Server configuration
+  ## Specify content for filer.yml
+  ##
+  config: |
+    [leveldb2]
+    enabled = false
+  ## @param filer.existingConfigmap The name of an existing ConfigMap with your custom configuration for Filer Server
+  ##
+  existingConfigmap: ""
+  ## @param filer.command Override default Filer Server container command (useful when using custom images)
+  ##
+  command: []
+  ## @param filer.args Override default Filer Server container args (useful when using custom images)
+  ##
+  args: []
+  ## @param filer.automountServiceAccountToken Mount Service Account token in Filer Server pods
+  ##
+  automountServiceAccountToken: false
+  ## @param filer.hostAliases Filer Server pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param filer.statefulsetAnnotations Annotations for Filer Server statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param filer.podLabels Extra labels for Filer Server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param filer.podAnnotations Annotations for Filer Server pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param filer.podAffinityPreset Pod affinity preset. Ignored if `filer.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param filer.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `filer.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node filer.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param filer.nodeAffinityPreset.type Node affinity preset type. Ignored if `filer.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param filer.nodeAffinityPreset.key Node label key to match. Ignored if `filer.affinity` is set
+    ##
+    key: ""
+    ## @param filer.nodeAffinityPreset.values Node label values to match. Ignored if `filer.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param filer.affinity Affinity for Filer Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `filer.podAffinityPreset`, `filer.podAntiAffinityPreset`, and `filer.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param filer.nodeSelector Node labels for Filer Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param filer.tolerations Tolerations for Filer Server pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param filer.updateStrategy.type Filer Server statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+  ## @param filer.podManagementPolicy Pod management policy for Filer Server statefulset
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: Parallel
+  ## @param filer.priorityClassName Filer Server pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param filer.topologySpreadConstraints Topology Spread Constraints for Filer Server pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param filer.schedulerName Name of the k8s scheduler (other than default) for Filer Server pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param filer.terminationGracePeriodSeconds Seconds Filer Server pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param filer.lifecycleHooks for Filer Server containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param filer.extraEnvVars Array with extra environment variables to add to Filer Server containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param filer.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Filer Server containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param filer.extraEnvVarsSecret Name of existing Secret containing extra env vars for Filer Server containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param filer.extraVolumes Optionally specify extra list of additional volumes for the Filer Server pods
+  ##
+  extraVolumes: []
+  ## @param filer.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Filer Server containers
+  ##
+  extraVolumeMounts: []
+  ## @param filer.sidecars Add additional sidecar containers to the Filer Server pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param filer.initContainers Add additional init containers to the Filer Server pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param filer.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param filer.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param filer.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param filer.autoscaling.enabled Enable autoscaling for filer
+  ## @param filer.autoscaling.minReplicas Minimum number of filer replicas
+  ## @param filer.autoscaling.maxReplicas Maximum number of filer replicas
+  ## @param filer.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param filer.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+
+  ## @section Filer Server Traffic Exposure Parameters
+  ##
+
+  ## Filer Server service parameters
+  ##
+  service:
+    ## @param filer.service.type Filer Server service type
+    ##
+    type: ClusterIP
+    ## @param filer.service.ports.http Filer Server service HTTP port
+    ## @param filer.service.ports.grpc Filer Server service GRPC port
+    ##
+    ports:
+      http: 8888
+      grpc: 18888
+    ## Node ports to expose
+    ## @param filer.service.nodePorts.http Node port for HTTP
+    ## @param filer.service.nodePorts.grpc Node port for GRPC
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param filer.service.clusterIP Filer Server service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param filer.service.loadBalancerIP Filer Server service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param filer.service.loadBalancerSourceRanges Filer Server service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param filer.service.externalTrafficPolicy Filer Server service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param filer.service.annotations Additional custom annotations for Filer Server service
+    ##
+    annotations: {}
+    ## @param filer.service.extraPorts Extra ports to expose in Filer Server service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param filer.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param filer.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param filer.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies for Filer Server
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param filer.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Filer Server
+    ##
+    enabled: true
+    ## @param filer.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param filer.networkPolicy.allowExternalEgress Allow the Filer Server pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param filer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param filer.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param filer.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param filer.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Filer Server ingress parameters
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param filer.ingress.enabled Enable ingress record generation for Filer Server
+    ##
+    enabled: false
+    ## @param filer.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param filer.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param filer.ingress.hostname Default host for the ingress record
+    ##
+    hostname: filer.seaweedfs.local
+    ## @param filer.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param filer.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param filer.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param filer.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param filer.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param filer.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: filer.seaweedfs.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param filer.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param filer.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - filer.seaweedfs.local
+    ##   secretName: filer.seaweedfs.local-tls
+    ##
+    extraTls: []
+    ## @param filer.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: filer.seaweedfs.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param filer.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section Filer Server Metrics Parameters
+  ##
+  metrics:
+    ## @param filer.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param filer.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param filer.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param filer.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param filer.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param filer.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param filer.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param filer.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param filer.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param filer.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param filer.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param filer.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param filer.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param filer.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section Amazon S3 API Parameters
+##
+s3:
+  ## @param s3.enabled Enable Amazon S3 API deployment
+  ##
+  enabled: false
+  ## @param s3.replicaCount Number of Amazon S3 API replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param s3.containerPorts.http Amazon S3 API HTTP container port
+  ## @param s3.containerPorts.grpc Amazon S3 API GRPC container port
+  ## @param s3.containerPorts.metrics Amazon S3 API metrics container port
+  ##
+  containerPorts:
+    http: 8333
+    grpc: 18333
+    metrics: 9327
+  ## @param s3.extraContainerPorts Optionally specify extra list of additional ports for Amazon S3 API containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for Amazon S3 API containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param s3.livenessProbe.enabled Enable livenessProbe on Amazon S3 API containers
+  ## @param s3.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param s3.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param s3.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param s3.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param s3.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param s3.readinessProbe.enabled Enable readinessProbe on Amazon S3 API containers
+  ## @param s3.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param s3.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param s3.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param s3.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param s3.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param s3.startupProbe.enabled Enable startupProbe on Amazon S3 API containers
+  ## @param s3.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param s3.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param s3.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param s3.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param s3.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param s3.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param s3.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param s3.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Amazon S3 API resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param s3.resourcesPreset Set Amazon S3 API container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if s3.resources is set (s3.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param s3.resources Set Amazon S3 API container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param s3.podSecurityContext.enabled Enable Amazon S3 API pods' Security Context
+  ## @param s3.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Amazon S3 API pods
+  ## @param s3.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Amazon S3 API pods
+  ## @param s3.podSecurityContext.supplementalGroups Set filesystem extra groups for Amazon S3 API pods
+  ## @param s3.podSecurityContext.fsGroup Set fsGroup in Amazon S3 API pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param s3.containerSecurityContext.enabled Enabled Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Amazon S3 API container
+  ## @param s3.containerSecurityContext.runAsUser Set runAsUser in Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.runAsGroup Set runAsGroup in Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.privileged Set privileged in Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Amazon S3 API container' Security Context
+  ## @param s3.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Amazon S3 API container
+  ## @param s3.containerSecurityContext.seccompProfile.type Set seccomp profile in Amazon S3 API container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param s3.logLevel Amazon S3 API log level [0|1|2|3|4]
+  ##
+  logLevel: 1
+  ## @param s3.bindAddress Amazon S3 API bind address
+  ##
+  bindAddress: 0.0.0.0
+  ## S3 Authentication
+  ## ref: https://github.com/seaweedfs/seaweedfs/wiki/Amazon-S3-API#s3-authentication
+  ## @param s3.auth.enabled Enable Amazon S3 API authentication
+  ## @param s3.auth.existingSecret Existing secret with Amazon S3 API authentication configuration
+  ## @param s3.auth.existingSecretConfigKey Key of the above existing secret with S3 API authentication configuration, defaults to `config.json`
+  ## @param s3.auth.adminAccessKeyId Amazon S3 API access key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ## @param s3.auth.adminSecretAccessKey Amazon S3 API secret key with admin privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ## @param s3.auth.readAccessKeyId Amazon S3 API read access key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ## @param s3.auth.readSecretAccessKey Amazon S3 API read secret key with read-only privileges. Ignored if `security.mTLS.volume.existingSecret` is set
+  ##
+  auth:
+    enabled: false
+    existingSecret: ""
+    existingSecretConfigKey: ""
+    adminAccessKeyId: ""
+    adminSecretAccessKey: ""
+    readAccessKeyId: ""
+    readSecretAccessKey: ""
+  ## @param s3.command Override default Amazon S3 API container command (useful when using custom images)
+  ##
+  command: []
+  ## @param s3.args Override default Amazon S3 API container args (useful when using custom images)
+  ##
+  args: []
+  ## @param s3.automountServiceAccountToken Mount Service Account token in Amazon S3 API pods
+  ##
+  automountServiceAccountToken: false
+  ## @param s3.hostAliases Amazon S3 API pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param s3.statefulsetAnnotations Annotations for Amazon S3 API statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param s3.podLabels Extra labels for Amazon S3 API pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param s3.podAnnotations Annotations for Amazon S3 API pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param s3.podAffinityPreset Pod affinity preset. Ignored if `s3.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param s3.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `s3.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node s3.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param s3.nodeAffinityPreset.type Node affinity preset type. Ignored if `s3.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param s3.nodeAffinityPreset.key Node label key to match. Ignored if `s3.affinity` is set
+    ##
+    key: ""
+    ## @param s3.nodeAffinityPreset.values Node label values to match. Ignored if `s3.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param s3.affinity Affinity for Amazon S3 API pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `s3.podAffinityPreset`, `s3.podAntiAffinityPreset`, and `s3.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param s3.nodeSelector Node labels for Amazon S3 API pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param s3.tolerations Tolerations for Amazon S3 API pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param s3.updateStrategy.type Amazon S3 API deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param s3.priorityClassName Amazon S3 API pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param s3.topologySpreadConstraints Topology Spread Constraints for Amazon S3 API pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param s3.schedulerName Name of the k8s scheduler (other than default) for Amazon S3 API pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param s3.terminationGracePeriodSeconds Seconds Amazon S3 API pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param s3.lifecycleHooks for Amazon S3 API containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param s3.extraEnvVars Array with extra environment variables to add to Amazon S3 API containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param s3.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Amazon S3 API containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param s3.extraEnvVarsSecret Name of existing Secret containing extra env vars for Amazon S3 API containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param s3.extraVolumes Optionally specify extra list of additional volumes for the Amazon S3 API pods
+  ##
+  extraVolumes: []
+  ## @param s3.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Amazon S3 API containers
+  ##
+  extraVolumeMounts: []
+  ## @param s3.sidecars Add additional sidecar containers to the Amazon S3 API pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param s3.initContainers Add additional init containers to the Amazon S3 API pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param s3.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param s3.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param s3.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param s3.autoscaling.enabled Enable autoscaling for s3
+  ## @param s3.autoscaling.minReplicas Minimum number of s3 replicas
+  ## @param s3.autoscaling.maxReplicas Maximum number of s3 replicas
+  ## @param s3.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param s3.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+
+  ## @section Amazon S3 API Traffic Exposure Parameters
+  ##
+
+  ## Amazon S3 API service parameters
+  ##
+  service:
+    ## @param s3.service.type Amazon S3 API service type
+    ##
+    type: ClusterIP
+    ## @param s3.service.ports.http Amazon S3 API service HTTP port
+    ## @param s3.service.ports.grpc Amazon S3 API service GRPC port
+    ##
+    ports:
+      http: 8333
+      grpc: 18333
+    ## Node ports to expose
+    ## @param s3.service.nodePorts.http Node port for HTTP
+    ## @param s3.service.nodePorts.grpc Node port for GRPC
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      grpc: ""
+    ## @param s3.service.clusterIP Amazon S3 API service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param s3.service.loadBalancerIP Amazon S3 API service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param s3.service.loadBalancerSourceRanges Amazon S3 API service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param s3.service.externalTrafficPolicy Amazon S3 API service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param s3.service.annotations Additional custom annotations for Amazon S3 API service
+    ##
+    annotations: {}
+    ## @param s3.service.extraPorts Extra ports to expose in Amazon S3 API service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param s3.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param s3.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param s3.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies for Amazon S3 API
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param s3.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Amazon S3 API
+    ##
+    enabled: true
+    ## @param s3.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param s3.networkPolicy.allowExternalEgress Allow the Amazon S3 API pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param s3.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param s3.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param s3.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param s3.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## Amazon S3 API ingress parameters
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param s3.ingress.enabled Enable ingress record generation for Amazon S3 API
+    ##
+    enabled: false
+    ## @param s3.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param s3.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param s3.ingress.hostname Default host for the ingress record
+    ##
+    hostname: s3.seaweedfs.local
+    ## @param s3.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param s3.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param s3.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param s3.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param s3.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param s3.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: s3.seaweedfs.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param s3.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param s3.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - s3.seaweedfs.local
+    ##   secretName: s3.seaweedfs.local-tls
+    ##
+    extraTls: []
+    ## @param s3.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: s3.seaweedfs.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param s3.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section Amazon S3 API Metrics Parameters
+  ##
+  metrics:
+    ## @param s3.metrics.enabled Enable the export of Prometheus metrics
+    ##
+    enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param s3.metrics.service.port Metrics service port
+      ##
+      port: 9327
+      ## @param s3.metrics.service.annotations Annotations for the metrics service.
+      ##
+      annotations: {}
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param s3.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param s3.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param s3.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param s3.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param s3.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param s3.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param s3.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param s3.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param s3.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param s3.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param s3.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
+## @section WebDAV Parameters
+##
+webdav:
+  ## @param webdav.enabled Enable WebDAV deployment
+  ##
+  enabled: false
+  ## @param webdav.replicaCount Number of WebDAV replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param webdav.containerPorts.http WebDAV HTTP container port (HTTPS if `webdav.tls.enabled` is `true`)
+  ##
+  containerPorts:
+    http: 7333
+  ## @param webdav.extraContainerPorts Optionally specify extra list of additional ports for WebDAV containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for WebDAV containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param webdav.livenessProbe.enabled Enable livenessProbe on WebDAV containers
+  ## @param webdav.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param webdav.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param webdav.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param webdav.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param webdav.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param webdav.readinessProbe.enabled Enable readinessProbe on WebDAV containers
+  ## @param webdav.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param webdav.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param webdav.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param webdav.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param webdav.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param webdav.startupProbe.enabled Enable startupProbe on WebDAV containers
+  ## @param webdav.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param webdav.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param webdav.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param webdav.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param webdav.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 1
+    failureThreshold: 15
+    successThreshold: 1
+  ## @param webdav.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param webdav.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param webdav.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## WebDAV resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param webdav.resourcesPreset Set WebDAV container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if webdav.resources is set (webdav.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param webdav.resources Set WebDAV container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param webdav.podSecurityContext.enabled Enable WebDAV pods' Security Context
+  ## @param webdav.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for WebDAV pods
+  ## @param webdav.podSecurityContext.sysctls Set kernel settings using the sysctl interface for WebDAV pods
+  ## @param webdav.podSecurityContext.supplementalGroups Set filesystem extra groups for WebDAV pods
+  ## @param webdav.podSecurityContext.fsGroup Set fsGroup in WebDAV pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param webdav.containerSecurityContext.enabled Enabled WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in WebDAV container
+  ## @param webdav.containerSecurityContext.runAsUser Set runAsUser in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.runAsGroup Set runAsGroup in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.runAsNonRoot Set runAsNonRoot in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.privileged Set privileged in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in WebDAV container' Security Context
+  ## @param webdav.containerSecurityContext.capabilities.drop List of capabilities to be dropped in WebDAV container
+  ## @param webdav.containerSecurityContext.seccompProfile.type Set seccomp profile in WebDAV container
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param webdav.logLevel WebDAV log level [0|1|2|3|4]
+  ##
+  logLevel: 1
+  ## TLS configuration for WebDAV
+  ##
+  tls:
+    ## @param webdav.tls.enabled Enable TLS transport for WebDAV
+    ##
+    enabled: false
+    ## @param webdav.tls.autoGenerated.enabled Enable automatic generation of certificates for TLS
+    ## @param webdav.tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+    autoGenerated:
+      enabled: false
+      engine: helm
+      ## @param webdav.tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+      ## @param webdav.tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+      ## @param webdav.tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+      ## @param webdav.tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+      ## @param webdav.tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+      ## @param webdav.tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+      certManager:
+        existingIssuer: ""
+        existingIssuerKind: ""
+        keySize: 2048
+        keyAlgorithm: RSA
+        duration: 2160h
+        renewBefore: 360h
+    ## @param webdav.tls.existingSecret The name of an existing Secret containing the certificates for TLS
+    ## @param webdav.tls.cert Volume Server certificate for TLS. Ignored if `webdav.tls.existingSecret` is set
+    ## @param webdav.tls.key Volume Server key for TLS. Ignored if `webdav.tls.existingSecret` is set
+    ##
+    existingSecret: ""
+    cert: ""
+    key: ""
+  ## @param webdav.command Override default WebDAV container command (useful when using custom images)
+  ##
+  command: []
+  ## @param webdav.args Override default WebDAV container args (useful when using custom images)
+  ##
+  args: []
+  ## @param webdav.automountServiceAccountToken Mount Service Account token in WebDAV pods
+  ##
+  automountServiceAccountToken: false
+  ## @param webdav.hostAliases WebDAV pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param webdav.statefulsetAnnotations Annotations for WebDAV statefulset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  statefulsetAnnotations: {}
+  ## @param webdav.podLabels Extra labels for WebDAV pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param webdav.podAnnotations Annotations for WebDAV pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param webdav.podAffinityPreset Pod affinity preset. Ignored if `webdav.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param webdav.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `webdav.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node webdav.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param webdav.nodeAffinityPreset.type Node affinity preset type. Ignored if `webdav.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param webdav.nodeAffinityPreset.key Node label key to match. Ignored if `webdav.affinity` is set
+    ##
+    key: ""
+    ## @param webdav.nodeAffinityPreset.values Node label values to match. Ignored if `webdav.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param webdav.affinity Affinity for WebDAV pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `webdav.podAffinityPreset`, `webdav.podAntiAffinityPreset`, and `webdav.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param webdav.nodeSelector Node labels for WebDAV pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param webdav.tolerations Tolerations for WebDAV pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param webdav.updateStrategy.type WebDAV deployment strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## Can be set to RollingUpdate or Recreate
+    ##
+    type: RollingUpdate
+  ## @param webdav.priorityClassName WebDAV pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param webdav.topologySpreadConstraints Topology Spread Constraints for WebDAV pod assignment spread across your cluster among failure-domains
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param webdav.schedulerName Name of the k8s scheduler (other than default) for WebDAV pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param webdav.terminationGracePeriodSeconds Seconds WebDAV pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param webdav.lifecycleHooks for WebDAV containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param webdav.extraEnvVars Array with extra environment variables to add to WebDAV containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param webdav.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for WebDAV containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param webdav.extraEnvVarsSecret Name of existing Secret containing extra env vars for WebDAV containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param webdav.extraVolumes Optionally specify extra list of additional volumes for the WebDAV pods
+  ##
+  extraVolumes: []
+  ## @param webdav.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the WebDAV containers
+  ##
+  extraVolumeMounts: []
+  ## @param webdav.sidecars Add additional sidecar containers to the WebDAV pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param webdav.initContainers Add additional init containers to the WebDAV pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param webdav.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param webdav.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param webdav.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param webdav.autoscaling.enabled Enable autoscaling for webdav
+  ## @param webdav.autoscaling.minReplicas Minimum number of webdav replicas
+  ## @param webdav.autoscaling.maxReplicas Maximum number of webdav replicas
+  ## @param webdav.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param webdav.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+
+  ## @section WebDAV Traffic Exposure Parameters
+  ##
+
+  ## WebDAV service parameters
+  ##
+  service:
+    ## @param webdav.service.type WebDAV service type
+    ##
+    type: ClusterIP
+    ## @param webdav.service.ports.http WebDAV service HTTP port (HTTPS if `webdav.tls.enabled` is `true`)
+    ##
+    ports:
+      http: 7333
+    ## Node ports to expose
+    ## @param webdav.service.nodePorts.http Node port for HTTP (HTTPS if `webdav.tls.enabled` is `true`)
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param webdav.service.clusterIP WebDAV service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param webdav.service.loadBalancerIP WebDAV service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param webdav.service.loadBalancerSourceRanges WebDAV service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param webdav.service.externalTrafficPolicy WebDAV service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param webdav.service.annotations Additional custom annotations for WebDAV service
+    ##
+    annotations: {}
+    ## @param webdav.service.extraPorts Extra ports to expose in WebDAV service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param webdav.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param webdav.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param webdav.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## Network Policies for WebDAV
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param webdav.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for WebDAV
+    ##
+    enabled: true
+    ## @param webdav.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param webdav.networkPolicy.allowExternalEgress Allow the WebDAV pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param webdav.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param webdav.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param webdav.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param webdav.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  ## WebDAV ingress parameters
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
+  ##
+  ingress:
+    ## @param webdav.ingress.enabled Enable ingress record generation for WebDAV
+    ##
+    enabled: false
+    ## @param webdav.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param webdav.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param webdav.ingress.hostname Default host for the ingress record
+    ##
+    hostname: webdav.seaweedfs.local
+    ## @param webdav.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param webdav.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param webdav.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param webdav.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param webdav.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param webdav.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: webdav.seaweedfs.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param webdav.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param webdav.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - webdav.seaweedfs.local
+    ##   secretName: webdav.seaweedfs.local-tls
+    ##
+    extraTls: []
+    ## @param webdav.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: webdav.seaweedfs.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param webdav.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r21
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volumePermissions.resourcesPreset Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set init container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.enabled Enabled init container' Security Context
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in init container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 0
+
+## @section Other Parameters
+##
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: true
+
+## @section Database Parameters
+##
+
+## MariaDB chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
+##
+mariadb:
+  ## @param mariadb.enabled Deploy a MariaDB server to satisfy the Filer server database requirements
+  ## To use an external database set this to false and configure the `externalDatabase.*` parameters
+  ##
+  enabled: true
+  ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
+  ##
+  architecture: standalone
+  ## MariaDB Authentication parameters
+  ## @param mariadb.auth.rootPassword MariaDB root password
+  ## @param mariadb.auth.database MariaDB custom database
+  ## @param mariadb.auth.username MariaDB custom user name
+  ## @param mariadb.auth.password MariaDB custom user password
+  ## @param mariadb.auth.usePasswordFiles Mount credentials as a file instead of using an environment variable
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb#setting-the-root-password-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-on-first-run
+  ##      https://github.com/bitnami/containers/blob/main/bitnami/mariadb/README.md#creating-a-database-user-on-first-run
+  ##
+  auth:
+    rootPassword: ""
+    database: bitnami_seaweedfs
+    username: bn_seaweedfs
+    password: ""
+    usePasswordFiles: false
+  ## @param mariadb.initdbScripts [object] Specify dictionary of scripts to be run at first boot
+  ##
+  initdbScripts:
+    create_table.sql: |
+      USE bitnami_seaweedfs;
+      CREATE TABLE IF NOT EXISTS `filemeta` (
+        `dirhash`   BIGINT NOT NULL       COMMENT 'first 64 bits of MD5 hash value of directory field',
+        `name`      VARCHAR(766) NOT NULL COMMENT 'directory or file name',
+        `directory` TEXT NOT NULL         COMMENT 'full path to parent directory',
+        `meta`      LONGBLOB,
+        PRIMARY KEY (`dirhash`, `name`)
+      ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  ## MariaDB Primary configuration
+  ##
+  primary:
+    ## MariaDB Primary Persistence parameters
+    ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+    ## @param mariadb.primary.persistence.enabled Enable persistence on MariaDB using PVC(s)
+    ## @param mariadb.primary.persistence.storageClass Persistent Volume storage class
+    ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes
+    ## @param mariadb.primary.persistence.size Persistent Volume size
+    ##
+    persistence:
+      enabled: true
+      storageClass: ""
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+    ## MariaDB primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mariadb.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param mariadb.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+## External Database Configuration
+## All of these values are only used if `mariadb.enabled=false`
+##
+externalDatabase:
+  ## @param externalDatabase.host External Database server host
+  ##
+  host: localhost
+  ## @param externalDatabase.port External Database server port
+  ##
+  port: 3306
+  ## @param externalDatabase.user External Database username
+  ##
+  user: bn_seaweedfs
+  ## @param externalDatabase.password External Database user password
+  ##
+  password: ""
+  ## @param externalDatabase.database External Database database name
+  ##
+  database: bitnami_seaweedfs
+  ## @param externalDatabase.existingSecret The name of an existing secret with database credentials. Evaluated as a template
+  ## NOTE: Must contain key `mariadb-password`
+  ## NOTE: When it's set, the `externalDatabase.password` parameter is ignored
+  ##
+  existingSecret: ""

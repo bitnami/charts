@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,17 +6,17 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r3
+      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r8
     - name: elasticsearch
-      image: docker.io/bitnami/elasticsearch:7.17.19-debian-12-r1
+      image: docker.io/bitnami/elasticsearch:7.17.21-debian-12-r3
     - name: magento
-      image: docker.io/bitnami/magento:2.4.6-debian-12-r25
+      image: docker.io/bitnami/magento:2.4.7-debian-12-r5
     - name: mariadb
-      image: docker.io/bitnami/mariadb:10.6.17-debian-12-r10
+      image: docker.io/bitnami/mariadb:10.6.17-debian-12-r13
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
-appVersion: 2.4.6
+appVersion: 2.4.7
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
@@ -27,7 +27,7 @@ dependencies:
 - condition: elasticsearch.enabled
   name: elasticsearch
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 20.x.x
+  version: 21.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -43,9 +43,9 @@ keywords:
 - web
 - php
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: magento
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 26.0.1
+version: 27.0.2

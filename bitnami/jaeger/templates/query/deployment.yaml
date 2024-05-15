@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -110,6 +110,8 @@ spec:
               value: {{ include "jaeger.cassandra.datacenter" . }}
             - name: QUERY_HTTP_SERVER_HOST_PORT
               value: {{ printf ":%v" .Values.query.containerPorts.api | quote }}
+            - name: QUERY_GRPC_SERVER_HOST_PORT
+              value: {{ printf ":%v" .Values.query.containerPorts.grpc | quote }}
             - name: ADMIN_HTTP_HOST_PORT
               value: {{ printf ":%v" .Values.query.containerPorts.admin | quote }}
             - name: BITNAMI_DEBUG

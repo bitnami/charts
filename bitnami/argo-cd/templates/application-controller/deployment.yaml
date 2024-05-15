@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -146,11 +146,12 @@ spec:
             - --self-heal-timeout-seconds
             - {{ .Values.controller.defaultArgs.selfHealTimeout | quote }}
             - --repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             - --logformat
             - {{ .Values.controller.logFormat | quote }}
             - --loglevel
             - {{ .Values.controller.logLevel | quote }}
+            - --metrics-port={{ .Values.controller.containerPorts.metrics }}
             # TODO(miguelaeh): Test the chart using redis sentinel enabled: https://github.com/argoproj/argo-cd/blob/2a410187565e15633b6f2a8c8d8da22cf02b257d/util/cache/cache.go#L40
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
@@ -159,9 +160,6 @@ spec:
           {{- end }}
           {{- end }}
           ports:
-            - name: controller
-              containerPort: {{ .Values.controller.containerPorts.controller }}
-              protocol: TCP
             - name: metrics
               containerPort: {{ .Values.controller.containerPorts.metrics }}
               protocol: TCP
@@ -172,6 +170,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
@@ -196,7 +204,7 @@ spec:
           startupProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.controller.containerPorts.controller }}
+              port: metrics
             initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
@@ -209,7 +217,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: {{ .Values.controller.containerPorts.controller }}
+              port: metrics
             initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
@@ -221,7 +229,7 @@ spec:
           {{- else if .Values.controller.readinessProbe.enabled }}
           readinessProbe:
             tcpSocket:
-              port: {{ .Values.controller.containerPorts.controller }}
+              port: metrics
             initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}

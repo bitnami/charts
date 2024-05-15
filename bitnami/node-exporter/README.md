@@ -47,7 +47,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -58,6 +58,12 @@ Bitnami will release a new chart updating its containers if a new version of the
 This chart allows you to set custom Pod affinity using the `affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Resource Type
+
+This chart, by default, installs Node Exporter as a `DaemonSet`. There are some cases where you may need to run Node Exporter as a `Deployment` (e.g., when using its textfile collector exclusively). In these instances, you can install the helm chart by setting the `resourceType` parameter to `Deployment`.
+
+Installing the Node Exporter chart in `Deployment` mode will overwrite `hostNetwork` and `hostPid` to `false` and will not mount `/proc` and `/sys` from the host to the container. You can control this behavior by setting the `isolatedDeployment` parameter.
 
 ## Parameters
 
@@ -90,6 +96,9 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 
 | Name                                                | Description                                                                                                                                                                                                       | Value                           |
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `resourceType`                                      | Specify how to deploy Node Exporter (allowed values: `daemonset` and `deployment`)                                                                                                                                | `daemonset`                     |
+| `replicaCount`                                      | Number of replicas to deploy (when `resourceType` is `deployment`)                                                                                                                                                | `1`                             |
+| `isolatedDeployment`                                | Specify whether to deploy the Node Exporter in an isolated deployment without access to host network, host PID and /proc and /sys of the host. (when `resourceType` is `deployment`)                              | `true`                          |
 | `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                | `false`                         |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                       | `[]`                            |
 | `rbac.create`                                       | Whether to create and use RBAC resources or not                                                                                                                                                                   | `true`                          |
@@ -146,7 +155,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `networkPolicy.enabled`                             | Specifies whether a NetworkPolicy should be created                                                                                                                                                               | `true`                          |
 | `networkPolicy.allowExternal`                       | Don't require server label for connections                                                                                                                                                                        | `true`                          |
 | `networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                   | `true`                          |
-| `networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolice                                                                                                                                                                      | `[]`                            |
+| `networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                      | `[]`                            |
 | `networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                      | `[]`                            |
 | `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                            | `{}`                            |
 | `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                        | `{}`                            |
@@ -203,6 +212,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                          | `false`                         |
 | `serviceMonitor.attachMetadata`                     | Attaches node metadata to discovered targets                                                                                                                                                                      | `{}`                            |
 | `serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted.                                                                                                                                              | `""`                            |
+| `podSecurityPolicy.annotations`                     | Annotations for Pod Security Policy. Evaluated as a template.                                                                                                                                                     | `{}`                            |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 

@@ -1,0 +1,17 @@
+containerPorts:
+  gremlin: 8183
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  type: LoadBalancer
+  ports:
+    gremlin: 8184
+metrics:
+  enabled: true
+  service:
+    ports:
+      metrics: 5557

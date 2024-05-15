@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -298,7 +298,7 @@ spec:
             - name: ZOO_ENABLE_PROMETHEUS_METRICS
               value: "yes"
             - name: ZOO_PROMETHEUS_METRICS_PORT_NUMBER
-              value: {{ .Values.metrics.containerPort | quote }}
+              value: {{ coalesce .Values.metrics.containerPort .Values.containerPorts.metrics | quote }}
             {{- end }}
             {{- if .Values.tls.client.enabled }}
             - name: ZOO_TLS_PORT_NUMBER
@@ -355,6 +355,8 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
+            - name: ZOO_ADMIN_SERVER_PORT_NUMBER
+              value: {{ .Values.containerPorts.adminServer | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -378,14 +380,19 @@ spec:
             - name: client-tls
               containerPort: {{ .Values.containerPorts.tls }}
             {{- end }}
+            {{- if gt (int .Values.replicaCount) 1 }}
+            {{- /* These ports are only open when there are more than 1 replica */}}
             - name: follower
               containerPort: {{ .Values.containerPorts.follower }}
             - name: election
               containerPort: {{ .Values.containerPorts.election }}
+            {{- end }}
             {{- if .Values.metrics.enabled }}
             - name: metrics
-              containerPort: {{ .Values.metrics.containerPort }}
+              containerPort: {{ coalesce .Values.metrics.containerPort .Values.containerPorts.metrics }}
             {{- end }}
+            - name: http-admin
+              containerPort: {{ .Values.containerPorts.adminServer }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: tensorflow-resnet
-      image: docker.io/bitnami/tensorflow-resnet:2.14.1-debian-12-r16
+      image: docker.io/bitnami/tensorflow-resnet:2.16.1-debian-12-r3
     - name: tensorflow-serving
-      image: docker.io/bitnami/tensorflow-serving:2.14.1-debian-12-r11
+      image: docker.io/bitnami/tensorflow-serving:2.16.1-debian-12-r3
 apiVersion: v2
-appVersion: 2.14.1
+appVersion: 2.16.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -28,9 +28,9 @@ keywords:
 - learning
 - library
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: tensorflow-resnet
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 4.0.1
+version: 4.0.4

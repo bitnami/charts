@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -65,7 +65,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.10.0-debian-12-r6
+  tag: 1.10.1-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -80,12 +80,22 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param containerPorts [object] Controller container ports to open
+## @param containerPorts.http Nginx Ingress Controller HTTP port
+## @param containerPorts.https Nginx Ingress Controller HTTPS port
+## @param containerPorts.defaultServer Nginx Ingress Controller default server port
+## @param containerPorts.metrics Nginx Ingress Controller metrics port
+## @param containerPorts.profiler Nginx Ingress Controller profiler port
+## @param containerPorts.status Nginx Ingress Controller status port
+## @param containerPorts.stream Nginx Ingress Controller stream port
 ##
 containerPorts:
   http: 8080
   https: 8443
+  defaultServer: 8181
   metrics: 10254
+  profiler: 10245
+  status: 10246
+  stream: 10247
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -519,7 +529,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r7
+    tag: 1.26.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -814,7 +824,7 @@ defaultBackend:
     ## @param defaultBackend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param defaultBackend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -966,7 +976,7 @@ networkPolicy:
   ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
   ##
   kubeAPIServerPorts: [443, 6443, 8443]
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:

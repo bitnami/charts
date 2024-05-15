@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -196,7 +196,7 @@ spec:
     - metadata:
         name: data
         {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := include "common.tplvalues.merge (dict "values" .Values.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" (dict "values" .Values.persistence.annotations .Values.commonAnnotations "context" .) | fromYaml }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
@@ -215,4 +215,3 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
-{{- end }}

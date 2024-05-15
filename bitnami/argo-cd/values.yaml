@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -65,7 +65,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.10.6-debian-12-r1
+  tag: 2.11.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -149,7 +149,7 @@ controller:
   ## @param controller.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if controller.resources is set (controller.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "micro"
   ## @param controller.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -234,10 +234,8 @@ controller:
   ##
   logLevel: info
   ## Argo CD application controller ports
-  ## @param controller.containerPorts.controller Argo CD application controller port number
   ## @param controller.containerPorts.metrics Argo CD application controller metrics port number
   containerPorts:
-    controller: 8082
     metrics: 8082
   ## Argo CD application controller service parameters
   ##
@@ -245,14 +243,16 @@ controller:
     ## @param controller.service.type Argo CD service type
     ##
     type: ClusterIP
-    ## @param controller.service.port Argo CD application controller service port
+    ## @param controller.service.ports.metrics Argo CD application controller service port
     ##
-    port: 8082
+    ports:
+      metrics: 8082
     ## Node ports to expose
-    ## @param controller.service.nodePort Node port for Argo CD application controller service
+    ## @param controller.service.nodePorts.metrics Node port for Argo CD application controller service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort: ""
+    nodePorts:
+      metrics: ""
     ## @param controller.service.clusterIP Argo CD application controller service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -309,7 +309,7 @@ controller:
     ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -357,14 +357,16 @@ controller:
       ## @param controller.metrics.service.type Argo CD application controller service type
       ##
       type: ClusterIP
-      ## @param controller.metrics.service.port Argo CD application controller metrics service port
+      ## @param controller.metrics.service.ports.metrics Argo CD application controller metrics service port
       ##
-      port: 8082
+      ports:
+        metrics: 8082
       ## Node ports to expose
-      ## @param controller.metrics.service.nodePort Node port for the application controller service
+      ## @param controller.metrics.service.nodePorts.metrics Node port for the application controller service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort: ""
+      nodePorts:
+        metrics: ""
       ## @param controller.metrics.service.clusterIP Argo CD application controller metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -687,14 +689,16 @@ applicationSet:
       ## @param applicationSet.metrics.service.type Argo CD applicationSet controller service type
       ##
       type: ClusterIP
-      ## @param applicationSet.metrics.service.port Argo CD applicationSet controller metrics service port
+      ## @param applicationSet.metrics.service.ports.metrics Argo CD applicationSet controller metrics service port
       ##
-      port: 8085
+      ports:
+        metrics: 8085
       ## Node ports to expose
-      ## @param applicationSet.metrics.service.nodePort Node port for the applicationSet controller service
+      ## @param applicationSet.metrics.service.nodePorts.metrics Node port for the applicationSet controller service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort: ""
+      nodePorts:
+        metrics: ""
       ## @param applicationSet.metrics.service.clusterIP Argo CD applicationSet controller metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -775,14 +779,16 @@ applicationSet:
     ## @param applicationSet.service.type Argo CD applicationSet controller service type
     ##
     type: ClusterIP
-    ## @param applicationSet.service.port Argo CD applicationSet controller service port
+    ## @param applicationSet.service.ports.webhook Argo CD applicationSet controller service port
     ##
-    port: 7000
+    ports:
+      webhook: 7000
     ## Node ports to expose
-    ## @param applicationSet.service.nodePort Node port for Argo CD applicationSet controller service
+    ## @param applicationSet.service.nodePorts.webhook Node port for Argo CD applicationSet controller service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort: ""
+    nodePorts:
+      webhook: ""
     ## @param applicationSet.service.clusterIP Argo CD applicationSet controller service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -840,7 +846,7 @@ applicationSet:
     ## @param applicationSet.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1135,6 +1141,9 @@ notifications:
   ## @param notifications.extraArgs Add extra arguments to the default arguments for the Argo CD notifications controller
   ##
   extraArgs: []
+  ## @param notifications.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## Argo CD notifications controller log format: text|json
   ## @param notifications.logFormat Format for the Argo CD notifications controller logs. Options: [text, json]
   ##
@@ -1158,14 +1167,16 @@ notifications:
       ## @param notifications.metrics.service.type Argo CD notifications controller service type
       ##
       type: ClusterIP
-      ## @param notifications.metrics.service.port Argo CD notifications controller metrics service port
+      ## @param notifications.metrics.service.ports.metrics Argo CD notifications controller metrics service port
       ##
-      port: 8085
+      ports:
+        metrics: 8085
       ## Node ports to expose
-      ## @param notifications.metrics.service.nodePort Node port for the notifications controller service
+      ## @param notifications.metrics.service.nodePorts.metrics Node port for the notifications controller service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort: ""
+      nodePorts:
+        metrics: ""
       ## @param notifications.metrics.service.clusterIP Argo CD notifications controller metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -1240,57 +1251,6 @@ notifications:
       ## @param notifications.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
       ##
       honorLabels: false
-  ## Argo CD notifications controller service parameters
-  ##
-  service:
-    ## @param notifications.service.type Argo CD notifications controller service type
-    ##
-    type: ClusterIP
-    ## @param notifications.service.port Argo CD notifications controller service port
-    ##
-    port: 7000
-    ## Node ports to expose
-    ## @param notifications.service.nodePort Node port for Argo CD notifications controller service
-    ## NOTE: choose port between <30000-32767>
-    ##
-    nodePort: ""
-    ## @param notifications.service.clusterIP Argo CD notifications controller service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param notifications.service.loadBalancerIP Argo CD notifications controller service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param notifications.service.loadBalancerSourceRanges Argo CD notifications controller service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param notifications.service.externalTrafficPolicy Argo CD notifications controller service external traffic policy
-    ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param notifications.service.annotations Additional custom annotations for Argo CD notifications controller service
-    ##
-    annotations: {}
-    ## @param notifications.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
-    ##
-    extraPorts: []
-    ## @param notifications.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
-    ## If "ClientIP", consecutive client requests will be directed to the same Pod
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
-    ##
-    sessionAffinity: None
-    ## @param notifications.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   clientIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1311,7 +1271,7 @@ notifications:
     ## @param notifications.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1622,14 +1582,16 @@ notifications:
         ## @param notifications.bots.slack.service.type Argo CD Slack bot service type
         ##
         type: LoadBalancer
-        ## @param notifications.bots.slack.service.port Argo CD Slack bot service port
+        ## @param notifications.bots.slack.service.ports.http Argo CD Slack bot service port
         ##
-        port: 80
+        ports:
+          http: 80
         ## Node ports to expose
-        ## @param notifications.bots.slack.service.nodePort Node port for Argo CD Slack bot service
+        ## @param notifications.bots.slack.service.nodePorts.http Node port for Argo CD Slack bot service
         ## NOTE: choose port between <30000-32767>
         ##
-        nodePort: ""
+        nodePorts:
+          http: ""
         ## @param notifications.bots.slack.service.clusterIP Argo CD Slack bot service Cluster IP
         ## e.g.:
         ## clusterIP: None
@@ -1687,7 +1649,7 @@ notifications:
         ## @param notifications.bots.slack.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
         ##
         kubeAPIServerPorts: [443, 6443, 8443]
-        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
         ## e.g:
         ## extraIngress:
         ##   - ports:
@@ -2250,14 +2212,16 @@ server:
       ## @param server.metrics.service.type Argo CD server service type
       ##
       type: ClusterIP
-      ## @param server.metrics.service.port Argo CD server metrics service port
+      ## @param server.metrics.service.ports.metrics Argo CD server metrics service port
       ##
-      port: 8083
+      ports:
+        metrics: 8083
       ## Node ports to expose
-      ## @param server.metrics.service.nodePort Node port for Argo CD server metrics service
+      ## @param server.metrics.service.nodePorts.metrics Node port for Argo CD server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort: ""
+      nodePorts:
+        metrics: ""
       ## @param server.metrics.service.clusterIP Argo CD server metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -2529,7 +2493,7 @@ server:
     ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2844,14 +2808,16 @@ repoServer:
     ## @param repoServer.service.type Repo server service type
     ##
     type: ClusterIP
-    ## @param repoServer.service.port Repo server service port
+    ## @param repoServer.service.ports.repoServer Repo server service port
     ##
-    port: 8081
+    ports:
+      repoServer: 8081
     ## Node ports to expose
-    ## @param repoServer.service.nodePort Node port for the repo server service
+    ## @param repoServer.service.nodePorts.repoServer Node port for the repo server service
     ## NOTE: choose port between <30000-32767>
     ##
-    nodePort: ""
+    nodePorts:
+      repoServer: ""
     ## @param repoServer.service.clusterIP Repo server service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -2908,7 +2874,7 @@ repoServer:
     ## @param repoServer.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2972,14 +2938,16 @@ repoServer:
       ## @param repoServer.metrics.service.type Argo CD repo server service type
       ##
       type: ClusterIP
-      ## @param repoServer.metrics.service.port Argo CD repo server metrics service port
+      ## @param repoServer.metrics.service.ports.metrics Argo CD repo server metrics service port
       ##
-      port: 8084
+      ports:
+        metrics: 8084
       ## Node ports to expose
-      ## @param repoServer.metrics.service.nodePort Node port for the repo server metrics service
+      ## @param repoServer.metrics.service.nodePorts.metrics Node port for the repo server metrics service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort: ""
+      nodePorts:
+        metrics: ""
       ## @param repoServer.metrics.service.clusterIP Argo CD repo server metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -3237,7 +3205,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.39.0-debian-12-r2
+    tag: 2.39.1-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3448,7 +3416,7 @@ dex:
     ## @param dex.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3506,14 +3474,16 @@ dex:
       ## @param dex.metrics.service.type Dex service type
       ##
       type: ClusterIP
-      ## @param dex.metrics.service.port Dex metrics service port
+      ## @param dex.metrics.service.ports.metrics Dex metrics service port
       ##
-      port: 5558
+      ports:
+        metrics: 5558
       ## Node ports to expose
-      ## @param dex.metrics.service.nodePort Node port for the Dex service
+      ## @param dex.metrics.service.nodePorts.metrics Node port for the Dex service
       ## NOTE: choose port between <30000-32767>
       ##
-      nodePort: ""
+      nodePorts:
+        metrics: ""
       ## @param dex.metrics.service.clusterIP Dex service metrics service Cluster IP
       ## e.g.:
       ## clusterIP: None
@@ -3923,7 +3893,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3985,7 +3955,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.4-debian-12-r11
+    tag: 7.2.4-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4006,10 +3976,11 @@ redis:
   ## @param redis.nameOverride Name override for the Redis dependency
   ##
   nameOverride: ""
-  ## @param redis.service.port Service port for Redis dependency
+  ## @param redis.service.ports.redis Service port for Redis dependency
   ##
   service:
-    port: 6379
+    ports:
+      redis: 6379
   ## Use password authentication
   ## @param redis.auth.enabled Enable Redis dependency authentication
   ## @param redis.auth.existingSecret Existing secret to load redis dependency password
@@ -4033,6 +4004,10 @@ redis:
 ## External Redis&reg;
 ##
 externalRedis:
+  ## Can be enabled after redisWait.enabled and redis.enabled are set to false
+  ## @param externalRedis.enabled Enables External Redis
+  ##
+  enabled: false
   ## Redis&reg; host
   ## @param externalRedis.host External Redis host
   ##
@@ -4054,6 +4029,15 @@ externalRedis:
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
+  ## Specify a label to use with the label selector
+  ## @param externalRedis.selector External Redis selector labels
+  ##
+  selector: {}
+  #
+  # selector:
+    # app.kubernetes.io/component: master
+    # app.kubernetes.io/instance: redis
+    # app.kubernetes.io/name: redis
 ## Wait-for-redis init container configuration
 ##
 redisWait:

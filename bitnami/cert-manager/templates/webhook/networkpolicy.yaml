@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,7 +39,7 @@ spec:
         {{- end }}
     # Allow outbound connections to other cluster pods
     - ports:
-        - port: {{ .Values.webhook.containerPort }}
+        - port: {{ coalesce .Values.webhook.containerPort .Values.webhook.containerPorts.https }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -49,7 +49,7 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.webhook.containerPort }}
+        - port: {{ coalesce .Values.webhook.containerPort .Values.webhook.containerPorts.https }}
       {{- if not .Values.webhook.networkPolicy.allowExternal }}
       from:
         - podSelector:

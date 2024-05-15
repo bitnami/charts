@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -140,10 +140,10 @@ spec:
             - --staticassets
             - /opt/bitnami/argo-cd/app
             - --repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             {{- if .Values.dex.enabled }}
             - --dex-server
-            - https://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
+            - https://{{ include "argocd.dex" . }}:{{ coalesce .Values.dex.service.port .Values.dex.service.ports.http }}
             {{- end }}
             - --logformat
             - {{ .Values.server.logFormat }}
@@ -155,6 +155,8 @@ spec:
             {{- if .Values.server.insecure }}
             - --insecure
             {{- end }}
+            - --port={{ .Values.server.containerPorts.http }}
+            - --metrics-port={{ .Values.server.containerPorts.metrics }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -163,11 +165,9 @@ spec:
             - name: http
               containerPort: {{ .Values.server.containerPorts.http }}
               protocol: TCP
-            {{- if .Values.server.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.server.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
           env:
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
@@ -175,6 +175,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}

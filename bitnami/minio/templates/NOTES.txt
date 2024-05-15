@@ -10,8 +10,8 @@ MinIO&reg; can be accessed via port {{ .Values.service.port }} on the following 
 
 To get your credentials run:
 
-   export ROOT_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.root-user}" | base64 -d)
-   export ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.root-password}" | base64 -d)
+   export ROOT_USER=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.rootUserKey" . }}}" | base64 -d)
+   export ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "minio.secretName" . }} -o jsonpath="{.data.{{ include "minio.rootPasswordKey" . }}}" | base64 -d)
 
 To connect to your MinIO&reg; server using a client:
 

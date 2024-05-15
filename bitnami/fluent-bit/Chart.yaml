@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: fluent-bit
-      image: docker.io/bitnami/fluent-bit:3.0.1-debian-12-r0
+      image: docker.io/bitnami/fluent-bit:3.0.3-debian-12-r2
 apiVersion: v2
-appVersion: 3.0.1
+appVersion: 3.0.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -23,9 +23,9 @@ keywords:
 - logging
 - monitoring
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: fluent-bit
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
-version: 2.0.0
+version: 2.1.2

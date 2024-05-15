@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,19 +6,19 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:2.9.0-debian-12-r0
+      image: docker.io/bitnami/airflow:2.9.1-debian-12-r4
     - name: airflow-exporter
-      image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-12-r29
+      image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-12-r34
     - name: airflow-scheduler
-      image: docker.io/bitnami/airflow-scheduler:2.9.0-debian-12-r0
+      image: docker.io/bitnami/airflow-scheduler:2.9.1-debian-12-r4
     - name: airflow-worker
-      image: docker.io/bitnami/airflow-worker:2.9.0-debian-12-r0
+      image: docker.io/bitnami/airflow-worker:2.9.1-debian-12-r1
     - name: git
-      image: docker.io/bitnami/git:2.44.0-debian-12-r2
+      image: docker.io/bitnami/git:2.45.0-debian-12-r2
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
-appVersion: 2.9.0
+appVersion: 2.9.1
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -42,9 +42,9 @@ keywords:
 - workflow
 - dag
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 18.0.3
+version: 18.0.10

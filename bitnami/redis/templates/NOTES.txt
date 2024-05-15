@@ -205,4 +205,8 @@ No need to upgrade, ports and nodeports have been set from values
 YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
 {{- end }}
 {{- end }}
-{{- include "common.warnings.resources" (dict "sections" (list "master" "metrics" "replica" "sentinel" "sysctl" "volumePermissions") "context" $) }}
+{{- $resourceSections := list "metrics" "replica" "sentinel" "sysctl" "volumePermissions" }}
+{{- if not (and (eq .Values.architecture "replication") .Values.sentinel.enabled) }}
+  {{- $resourceSections = append $resourceSections "master" -}}
+{{- end }}
+{{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}

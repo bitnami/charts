@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -306,13 +306,13 @@ spec:
             {{- end }}
             - name: CASSANDRA_RACK
               value: {{ .Values.cluster.rack }}
-            {{- if .Values.jvm.maxHeapSize }}
+            {{- if or .Values.jvm.maxHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: MAX_HEAP_SIZE
-              value: {{ .Values.jvm.maxHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateMaxHeapSize" . | quote }}
             {{- end }}
-            {{- if .Values.jvm.newHeapSize }}
+            {{- if or .Values.jvm.newHeapSize (include "cassandra.memory.getLimitInM" .) }}
             - name: HEAP_NEWSIZE
-              value: {{ .Values.jvm.newHeapSize | quote }}
+              value: {{ include "cassandra.memory.calculateNewHeapSize" . | quote }}
             {{- end }}
             {{- if .Values.jvm.extraOpts }}
             - name: JVM_EXTRA_OPTS

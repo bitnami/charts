@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -86,8 +86,9 @@ spec:
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.enableDefaultInitContainers }}
+      {{- if or .Values.enableDefaultInitContainers .Values.initContainers }}
       initContainers:
+        {{- if .Values.enableDefaultInitContainers }}
         - name: init-quarkus-directory
           image: {{ template "keycloak.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -113,6 +114,7 @@ spec:
             - name: empty-dir
               mountPath: /quarkus
               subPath: app-quarkus-dir
+        {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -211,8 +213,12 @@ spec:
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
             {{- if .Values.adminIngress.enabled }}
-            - name: KC_HOSTNAME_ADMIN
-              value: {{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+            {{- end }}
+            {{- if and .Values.adminIngress.enabled (not .Values.ingress.enabled) }}
+            - name: KC_HOSTNAME_URL
+              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -242,9 +248,9 @@ spec:
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
             {{- end }}
-            - name: infinispan
-              containerPort: {{ .Values.containerPorts.infinispan }}
-              protocol: TCP
+            {{- /* Constant in code: https://github.com/keycloak/keycloak/blob/ce8e925c1ad9bf7a3180d1496e181aeea0ab5f8a/operator/src/main/java/org/keycloak/operator/Constants.java#L60 */}}
+            - name: discovery
+              containerPort: 7800
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}

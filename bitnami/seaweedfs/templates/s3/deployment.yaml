@@ -1,0 +1,269 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.s3.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "seaweedfs.s3.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: s3
+  {{- if or .Values.s3.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.s3.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.s3.autoscaling.enabled }}
+  replicas: {{ .Values.s3.replicaCount }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.s3.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: s3
+  {{- if .Values.s3.updateStrategy }}
+  strategy: {{- toYaml .Values.s3.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        {{- if and .Values.s3.auth.enabled (not .Values.s3.auth.existingSecret) }}
+        checksum/auth-secret: {{ include (print $.Template.BasePath "/s3/auth-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.s3.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.s3.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: s3
+    spec:
+      {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      automountServiceAccountToken: {{ .Values.s3.automountServiceAccountToken }}
+      {{- if .Values.s3.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.s3.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.s3.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.s3.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.s3.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.s3.podAffinityPreset "component" "s3" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.s3.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.s3.podAntiAffinityPreset "component" "s3" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.s3.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.s3.nodeAffinityPreset.type "key" .Values.s3.nodeAffinityPreset.key "values" .Values.s3.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.s3.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.s3.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.s3.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.s3.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.s3.priorityClassName }}
+      priorityClassName: {{ .Values.s3.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.s3.schedulerName }}
+      schedulerName: {{ .Values.s3.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.s3.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.s3.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.s3.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.s3.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.s3.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.s3.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if and .Values.s3.auth.enabled (not .Values.s3.auth.existingSecret) }}
+        {{- include "seaweedfs.s3.authConfigInitContainer" . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.s3.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.s3.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: seaweedfs
+          image: {{ template "seaweedfs.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.s3.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.s3.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.s3.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.s3.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.s3.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.s3.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -logtostderr=true
+            - -v={{ .Values.s3.logLevel }}
+            - s3
+            {{- if .Values.s3.auth.enabled }}
+            - -config=/auth/{{ ternary "config.json" (default "config.json" .Values.s3.auth.existingSecretConfigKey) (empty .Values.s3.auth.existingSecret) }}
+            {{- end }}
+            - -ip.bind={{ .Values.s3.bindAddress }}
+            - -port={{ .Values.s3.containerPorts.http }}
+            - -port.grpc={{ .Values.s3.containerPorts.grpc }}
+            {{- if .Values.s3.metrics.enabled }}
+            - -metricsPort={{ .Values.s3.containerPorts.metrics }}
+            {{- end }}
+            - -filer={{ printf "%s:%d" (include "seaweedfs.filer.fullname" .) (int .Values.filer.service.ports.http) }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: WEED_CLUSTER_DEFAULT
+              value: {{ .Values.clusterDefault | quote }}
+            {{- if .Values.s3.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.s3.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.s3.extraEnvVarsCM .Values.s3.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.s3.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.s3.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.s3.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.s3.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.s3.resources }}
+          resources: {{- toYaml .Values.s3.resources | nindent 12 }}
+          {{- else if ne .Values.s3.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.s3.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.s3.containerPorts.http }}
+            - name: grpc
+              containerPort: {{ .Values.s3.containerPorts.grpc }}
+            {{- if .Values.s3.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.s3.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.s3.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.s3.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.s3.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.s3.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.s3.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.s3.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /status
+              port: http
+          {{- end }}
+          {{- if .Values.s3.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.s3.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.s3.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.s3.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /status
+              port: http
+          {{- end }}
+          {{- if .Values.s3.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.s3.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.s3.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.s3.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /status
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.s3.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.s3.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.s3.auth.enabled }}
+            - mountPath: /auth
+              readOnly: true
+            {{- if .Values.s3.auth.existingSecret }}
+              name: auth
+              subPath: {{ default "config.json" .Values.s3.auth.existingSecretConfigKey }}
+            {{- else }}
+              name: empty-dir
+              subPath: auth-dir
+            {{- end }}
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            - name: security-config
+              mountPath: /etc/seaweedfs/security.toml
+              subPath: security.toml
+              readOnly: true
+            {{- if .Values.security.mTLS.enabled  }}
+            - name: ca-cert
+              readOnly: true
+              mountPath: /certs/ca
+            - name: master-cert
+              readOnly: true
+              mountPath: /certs/master
+            - name: filer-cert
+              readOnly: true
+              mountPath: /certs/filer
+            - name: volume-cert
+              readOnly: true
+              mountPath: /certs/volume
+            - name: client-cert
+              readOnly: true
+              mountPath: /certs/client
+            {{- end }}
+            {{- end }}
+          {{- if .Values.s3.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.s3.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.s3.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.s3.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if and .Values.s3.auth.enabled .Values.s3.auth.existingSecret }}
+        - name: auth
+          secret:
+            secretName: {{ print (tpl .Values.s3.auth.existingSecret .) }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: security-config
+          configMap:
+            name: {{ printf "%s-security" (include "common.names.fullname" .) }}
+        {{- if .Values.security.mTLS.enabled  }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.caSecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: master-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.master.secretName" . }}
+        - name: filer-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.filer.secretName" . }}
+        - name: volume-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.volume.secretName" . }}
+        - name: client-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.s3.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.s3.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

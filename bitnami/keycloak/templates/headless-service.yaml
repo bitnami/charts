@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -19,12 +19,12 @@ spec:
   clusterIP: None
   ports:
     - name: http
-      port: {{ coalesce .Values.service.ports.http .Values.service.port }}
+      port: {{ .Values.containerPorts.http }}
       protocol: TCP
       targetPort: http
     {{- if .Values.tls.enabled }}
     - name: https
-      port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}
+      port: {{ .Values.containerPorts.https }}
       protocol: TCP
       targetPort: https
     {{- end }}

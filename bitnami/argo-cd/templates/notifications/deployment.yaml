@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -32,6 +32,7 @@ spec:
     spec:
       serviceAccountName: {{ include "argocd.notifications.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.notifications.automountServiceAccountToken }}
       {{- if .Values.notifications.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -71,7 +72,7 @@ spec:
             - --metrics-port
             - {{ .Values.notifications.containerPorts.metrics | quote }}
             - --argocd-repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
           {{- if .Values.notifications.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.notifications.extraArgs "context" $) | nindent 12 }}
           {{- end }}

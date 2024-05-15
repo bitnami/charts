@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -47,7 +47,7 @@ spec:
     - ports:
         - port: {{ .Values.containerPorts.client }}
         {{- if .Values.metrics.enabled }}
-        - port: {{ .Values.metrics.containerPort }}
+        - port: {{ coalesce .Values.metrics.containerPort .Values.containerPorts.metrics }}
         {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:

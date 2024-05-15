@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -131,16 +131,16 @@ spec:
             - --service-type-filter={{ . }}
             {{- end }}
             {{- range .Values.domainFilters }}
-            - --domain-filter={{ . }}
+            - --domain-filter={{- include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- range .Values.excludeDomains }}
-            - --exclude-domains={{ . }}
+            - --exclude-domains={{- include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- if .Values.regexDomainFilter }}
-            - --regex-domain-filter={{ .Values.regexDomainFilter }}
+            - --regex-domain-filter={{- include "common.tplvalues.render" (dict "value" .Values.regexDomainFilter "context" $) }}
             {{- end }}
             {{- if .Values.regexDomainExclusion }}
-            - --regex-domain-exclusion={{ .Values.regexDomainExclusion }}
+            - --regex-domain-exclusion={{- include "common.tplvalues.render" (dict "value" .Values.regexDomainExclusion "context" $) }}
             {{- end }}
             {{- range .Values.zoneNameFilters }}
             - --zone-name-filter={{ . }}
@@ -228,6 +228,9 @@ spec:
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
             {{- end }}
+            {{- if .Values.aws.zoneMatchParent }}
+            - --aws-zone-match-parent
+            {{- end }}
             {{- if or (and (eq .Values.provider "azure") (not .Values.azure.secretName)) (eq .Values.provider "azure-private-dns") }}
             # Azure Arguments
             {{- if .Values.azure.resourceGroup }}
@@ -243,6 +246,9 @@ spec:
             # Cloudflare arguments
               {{- if .Values.cloudflare.proxied }}
             - --cloudflare-proxied
+              {{- end }}
+              {{- if .Values.cloudflare.dnsRecordsPerPage }}
+            - --cloudflare-dns-records-per-page={{ .Values.cloudflare.dnsRecordsPerPage }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "google" }}
@@ -280,6 +286,13 @@ spec:
               {{- end }}
               {{- if .Values.infoblox.maxResults }}
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}
+              {{- end }}
+            {{- end }}
+            {{- if and (eq .Values.provider "oci") .Values.oci.useInstancePrincipal }}
+            # OCI Arguments
+            - --oci-auth-instance-principal
+              {{- if .Values.oci.compartmentOCID }}
+            - --oci-compartment-ocid={{ .Values.oci.compartmentOCID }}
               {{- end }}
             {{- end }}
             {{- if eq .Values.provider "ns1" }}
@@ -782,7 +795,7 @@ spec:
             - name: google-service-account
               mountPath: /etc/secrets/service-account/
             {{- end }}
-            {{- if eq .Values.provider "oci" }}
+            {{- if and (eq .Values.provider "oci") (not .Values.oci.useInstancePrincipal) }}
             - name: oci-config-file
               mountPath: /etc/kubernetes/
             {{- end }}
@@ -851,7 +864,7 @@ spec:
             type: File
           {{- end }}
         {{- end }}
-        {{- if (eq .Values.provider "oci")}}
+        {{- if and (eq .Values.provider "oci") (not .Values.oci.useInstancePrincipal) }}
         - name: oci-config-file
           secret:
             secretName: {{ template "external-dns.secretName" . }}

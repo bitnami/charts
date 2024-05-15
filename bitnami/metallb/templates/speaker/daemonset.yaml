@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -67,8 +67,46 @@ spec:
       {{- if .Values.speaker.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.speaker.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if .Values.speaker.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
+      {{- if or .Values.speaker.initContainers .Values.speaker.frr.enabled }}
+      initContainers:
+        {{- if .Values.speaker.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.speaker.frr.enabled }}
+          # Copies the initial config files with the right permissions to the shared volume.
+          - name: cp-frr-files
+            image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+            {{- if .Values.speaker.frr.image.pullPolicy }}
+            imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+            {{- end }}
+            command: ["/bin/sh", "-c", "cp -rLf /tmp/frr/* /etc/frr/"]
+            volumeMounts:
+              - name: frr-startup
+                mountPath: /tmp/frr
+              - name: frr-conf
+                mountPath: /etc/frr
+          # Copies the reloader to the shared volume between the speaker and reloader.
+          - name: cp-reloader
+            image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+            {{- if .Values.speaker.frr.image.pullPolicy }}
+            imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+            {{- end }}
+            command: ["/bin/sh", "-c", "cp -f /opt/bitnami/metallb-speaker/bin/frr-reloader.sh /etc/frr_reloader/"]
+            volumeMounts:
+              - name: reloader
+                mountPath: /etc/frr_reloader
+          # Copies the metrics exporter
+          - name: cp-metrics
+            image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+            {{- if .Values.speaker.frr.image.pullPolicy }}
+            imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+            {{- end }}
+            command: ["/bin/sh", "-c", "cp -f /opt/bitnami/metallb-speaker/bin/frr-metrics /etc/frr_metrics/"]
+            volumeMounts:
+              - name: metrics
+                mountPath: /etc/frr_metrics
+      shareProcessNamespace: true
+        {{- end }}
       {{- end }}
       containers:
         - name: metallb-speaker
@@ -115,6 +153,14 @@ spec:
                   fieldPath: metadata.namespace
             - name: METALLB_ML_SECRET_KEY_PATH
               value: /etc/memberlist
+            {{- if .Values.speaker.frr.enabled }}
+            - name: FRR_CONFIG_FILE
+              value: /etc/frr_reloader/frr.conf
+            - name: FRR_RELOADER_PID_FILE
+              value: /etc/frr_reloader/reloader.pid
+            - name: METALLB_BGP_TYPE
+              value: frr
+            {{- end }}
             {{- if .Values.speaker.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -164,9 +210,127 @@ spec:
             - name: memberlist-secret
               mountPath: /etc/memberlist
               readOnly: true
+            {{- if .Values.speaker.frr.enabled }}
+            - name: reloader
+              mountPath: /etc/frr_reloader
+            {{- end }}
             {{- if .Values.speaker.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+        {{- if .Values.speaker.frr.enabled }}
+        - name: frr
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.speaker.frr.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- end }}
+          volumeMounts:
+            - name: frr-sockets
+              mountPath: /var/run/frr
+            - name: frr-conf
+              mountPath: /etc/frr
+          # The command is FRR's default entrypoint & waiting for the log file to appear and tailing it.
+          # If the log file isn't created in 60 seconds the tail fails and the container is restarted.
+          # This workaround is needed to have the frr logs as part of kubectl logs -c frr < speaker_pod_name >.
+          command:
+            - /bin/bash
+            - -c
+            - |
+              . /usr/lib/frr/frrcommon.sh
+              /usr/lib/frr/watchfrr $(daemon_list) &
+              attempts=0
+              until [[ -f /etc/frr/frr.log || $attempts -eq 60 ]]; do
+                sleep 1
+                attempts=$(( $attempts + 1 ))
+              done
+              tail -f /etc/frr/frr.log
+          {{- if .Values.speaker.frr.resources }}
+          resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.speaker.frr.resources }}
+          resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 12 }}
+          {{- end }}
+        - name: reloader
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command: ["/etc/frr_reloader/frr-reloader.sh"]
+          volumeMounts:
+            - name: frr-sockets
+              mountPath: /var/run/frr
+            - name: frr-conf
+              mountPath: /etc/frr
+            - name: reloader
+              mountPath: /etc/frr_reloader
+          {{- if .Values.speaker.frr.resources }}
+          resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 12 }}
+          {{- end }}
+        - name: frr-metrics
+          image: {{ include "common.images.image" (dict "imageRoot" .Values.speaker.frr.image "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.speaker.frr.image.pullPolicy }}
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command: ["/etc/frr_metrics/frr-metrics"]
+          {{- if .Values.speaker.frr.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.speaker.frr.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          args:
+            - --metrics-port={{ .Values.speaker.frr.containerPorts.metrics }}
+          ports:
+            - containerPort: {{ .Values.speaker.frr.containerPorts.metrics }}
+              name: monitoring
+          volumeMounts:
+            - name: frr-sockets
+              mountPath: /var/run/frr
+            - name: frr-conf
+              mountPath: /etc/frr
+            - name: metrics
+              mountPath: /etc/frr_metrics
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.speaker.frr.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.frr.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /livez
+              port: {{ .Values.speaker.frr.containerPorts.metrics }}
+          {{- end }}
+          {{- if .Values.speaker.frr.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.frr.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /livez
+              port: {{ .Values.speaker.frr.containerPorts.metrics }}
+          {{- end }}
+          {{- if .Values.speaker.frr.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.frr.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /livez
+              port: {{ .Values.speaker.frr.containerPorts.metrics }}
+          {{- end }}
+          {{- end }}
+
+          {{- if .Values.speaker.frr.resources }}
+          resources: {{- toYaml .Values.speaker.frr.resources | nindent 12 }}
+          {{- else if ne .Values.speaker.frr.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.speaker.frr.resourcesPreset) | nindent 12 }}
+          {{- end }}
+        {{- end }}
         {{- if .Values.speaker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.sidecars "context" $) | nindent 8 }}
         {{- end }}
@@ -178,6 +342,19 @@ spec:
             items:
               - key: {{ include "metallb.speaker.secretKey" . }}
                 path: secretkey
+        {{- if .Values.speaker.frr.enabled }}
+        - name: frr-sockets
+          emptyDir: {}
+        - name: frr-startup
+          configMap:
+            name: {{ printf "%s-speaker-frr-startup" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+        - name: frr-conf
+          emptyDir: {}
+        - name: reloader
+          emptyDir: {}
+        - name: metrics
+          emptyDir: {}
+        {{- end }}
         {{- if .Values.speaker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

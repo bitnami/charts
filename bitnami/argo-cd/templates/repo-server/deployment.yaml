@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -164,6 +164,8 @@ spec:
             - {{ .Values.repoServer.logLevel | quote }}
             - --redis
             - {{ include "argocd.redisHost" . }}:{{ include "argocd.redisPort" . }}
+            - --port={{ .Values.repoServer.containerPorts.repoServer }}
+            - --metrics-port={{ .Values.repoServer.containerPorts.metrics }}
             {{- if .Values.repoServer.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -172,11 +174,9 @@ spec:
             - name: repo-server
               containerPort: {{ .Values.repoServer.containerPorts.repoServer }}
               protocol: TCP
-            {{- if .Values.repoServer.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.repoServer.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
           env:
             {{- if and .Values.redis.enabled (include "argocd.redis.auth.enabled" .) }}
             - name: REDIS_PASSWORD
@@ -184,6 +184,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.repoServer.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.repoServer.extraEnvVars "context" $) | nindent 12 }}

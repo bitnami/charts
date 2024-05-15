@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -90,12 +90,15 @@ spec:
           ports:
             - name: binary
               containerPort: {{ .Values.agent.containerPorts.binary }}
+              protocol: UDP
             - name: zipkin
               containerPort: {{ .Values.agent.containerPorts.zipkin }}
+              protocol: UDP
             - name: admin
               containerPort: {{ .Values.agent.containerPorts.admin }}
             - name: compact
               containerPort: {{ .Values.agent.containerPorts.compact }}
+              protocol: UDP
             - name: config
               containerPort: {{ .Values.agent.containerPorts.config }}
           env:

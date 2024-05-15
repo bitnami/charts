@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -84,7 +84,7 @@ mimir:
   image:
     registry: docker.io
     repository: bitnami/grafana-mimir
-    tag: 2.12.0-debian-12-r2
+    tag: 2.12.0-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -316,7 +316,7 @@ mimir:
       ##
       annotations: {}
   ## BlockStorage config for mimir pods
-  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
+  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
   ## @param mimir.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
   ## @param mimir.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
@@ -702,7 +702,7 @@ alertmanager:
     ## @param alertmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -751,7 +751,7 @@ alertmanager:
     minAvailable: 1
     maxUnavailable: ""
   ## BlockStorage config for alertmanager pods
-  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
+  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
   ## @param alertmanager.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
   ## @param alertmanager.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
@@ -1128,7 +1128,7 @@ compactor:
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1504,7 +1504,7 @@ distributor:
     ## @param distributor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1571,7 +1571,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r7
+    tag: 1.26.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1910,7 +1910,7 @@ gateway:
     ## @param gateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param gateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param gateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2419,7 +2419,7 @@ ingester:
     ## @param ingester.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2798,7 +2798,7 @@ overridesExporter:
     ## @param overridesExporter.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param overridesExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param overridesExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3174,7 +3174,7 @@ querier:
     ## @param querier.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3550,7 +3550,7 @@ queryFrontend:
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3929,7 +3929,7 @@ queryScheduler:
     ## @param queryScheduler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryScheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryScheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -4348,7 +4348,7 @@ storeGateway:
     ## @param storeGateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param storeGateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param storeGateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -4761,7 +4761,7 @@ ruler:
     ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -4810,7 +4810,7 @@ ruler:
     minAvailable: 1
     maxUnavailable: ""
   ## BlockStorage config for ruler pods
-  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
+  ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
   ## @param ruler.blockStorage.backend Backend storage to use. NOTE: if minio.enable == true, this configuration will be ignored.
   ## @param ruler.blockStorage.config Configures connection to the backend store. NOTE: if minio.enable == true, this configuration will be ignored.
   ## e.g.:
@@ -4847,7 +4847,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -5066,7 +5066,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -5122,7 +5122,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -5178,7 +5178,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -5234,7 +5234,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.26-debian-12-r1
+    tag: 1.6.27-debian-12-r1
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##

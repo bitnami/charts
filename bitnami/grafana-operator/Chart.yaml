@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana
-      image: docker.io/bitnami/grafana:10.4.1-debian-12-r2
+      image: docker.io/bitnami/grafana:10.4.2-debian-12-r6
     - name: grafana-operator
-      image: docker.io/bitnami/grafana-operator:5.8.1-debian-12-r1
+      image: docker.io/bitnami/grafana-operator:5.9.0-debian-12-r3
 apiVersion: v2
-appVersion: 5.8.1
+appVersion: 5.9.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -25,9 +25,9 @@ keywords:
 - operator
 - monitoring
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: grafana-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-operator
-version: 4.0.3
+version: 4.2.3

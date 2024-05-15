@@ -47,7 +47,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -315,7 +315,7 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 | `server.networkPolicy.kubeAPIServerPorts`         | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                               | `[]`                     |
 | `server.networkPolicy.allowExternal`              | Don't require server label for connections                                                                                       | `true`                   |
 | `server.networkPolicy.allowExternalEgress`        | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
-| `server.networkPolicy.extraIngress`               | Add extra ingress rules to the NetworkPolice                                                                                     | `[]`                     |
+| `server.networkPolicy.extraIngress`               | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `server.networkPolicy.extraEgress`                | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `server.networkPolicy.ingressNSMatchLabels`       | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
 | `server.networkPolicy.ingressNSPodMatchLabels`    | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
@@ -346,17 +346,18 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 
 ### Source Conttroller Persistence Parameters
 
-| Name                               | Description                                                                             | Value                 |
-| ---------------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
-| `server.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                       | `true`                |
-| `server.persistence.mountPath`     | Persistent Volume mount root path                                                       | `/bitnami/vault/data` |
-| `server.persistence.storageClass`  | Persistent Volume storage class                                                         | `""`                  |
-| `server.persistence.accessModes`   | Persistent Volume access modes                                                          | `[]`                  |
-| `server.persistence.size`          | Persistent Volume size                                                                  | `10Gi`                |
-| `server.persistence.dataSource`    | Custom PVC data source                                                                  | `{}`                  |
-| `server.persistence.annotations`   | Annotations for the PVC                                                                 | `{}`                  |
-| `server.persistence.selector`      | Selector to match an existing Persistent Volume (this value is evaluated as a template) | `{}`                  |
-| `server.persistence.existingClaim` | The name of an existing PVC to use for persistence                                      | `""`                  |
+| Name                                           | Description                                                                                                  | Value                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `server.persistence.enabled`                   | Enable persistence using Persistent Volume Claims                                                            | `true`                |
+| `server.persistence.mountPath`                 | Persistent Volume mount root path                                                                            | `/bitnami/vault/data` |
+| `server.persistence.storageClass`              | Persistent Volume storage class                                                                              | `""`                  |
+| `server.persistence.accessModes`               | Persistent Volume access modes                                                                               | `[]`                  |
+| `server.persistence.size`                      | Persistent Volume size                                                                                       | `10Gi`                |
+| `server.persistence.dataSource`                | Custom PVC data source                                                                                       | `{}`                  |
+| `server.persistence.annotations`               | Annotations for the PVC                                                                                      | `{}`                  |
+| `server.persistence.selector`                  | Selector to match an existing Persistent Volume (this value is evaluated as a template)                      | `{}`                  |
+| `server.persistence.existingClaim`             | The name of an existing PVC to use for persistence                                                           | `""`                  |
+| `server.persistence.extraVolumeClaimTemplates` | Add additional VolumeClaimTemplates for enabling any plugins or any other purpose to the Vault Server pod(s) | `[]`                  |
 
 ### Vault Server Metrics Parameters
 
@@ -418,7 +419,7 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 | `csiProvider.networkPolicy.enabled`                                      | Specifies whether a NetworkPolicy should be created                                                                                                                                                                                                         | `true`                                        |
 | `csiProvider.networkPolicy.kubeAPIServerPorts`                           | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)                                                                                                                                                          | `[]`                                          |
 | `csiProvider.networkPolicy.allowExternalEgress`                          | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                             | `true`                                        |
-| `csiProvider.networkPolicy.extraIngress`                                 | Add extra ingress rules to the NetworkPolice                                                                                                                                                                                                                | `[]`                                          |
+| `csiProvider.networkPolicy.extraIngress`                                 | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                                | `[]`                                          |
 | `csiProvider.networkPolicy.extraEgress`                                  | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                                | `[]`                                          |
 | `csiProvider.provider.containerPorts.health`                             | CSI Provider health container port                                                                                                                                                                                                                          | `8080`                                        |
 | `csiProvider.provider.livenessProbe.enabled`                             | Enable livenessProbe on CSI Provider container                                                                                                                                                                                                              | `true`                                        |
@@ -620,7 +621,7 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 | `injector.networkPolicy.kubeAPIServerPorts`      | List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)   | `[]`        |
 | `injector.networkPolicy.allowExternal`           | Don't require injector label for connections                                                         | `true`      |
 | `injector.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                      | `true`      |
-| `injector.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                                                         | `[]`        |
+| `injector.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                         | `[]`        |
 | `injector.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                         | `[]`        |
 | `injector.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                               | `{}`        |
 | `injector.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                           | `{}`        |
@@ -635,6 +636,7 @@ The [Bitnami vault](https://github.com/bitnami/containers/tree/main/bitnami/vaul
 | `injector.serviceAccount.name`                              | The name of the ServiceAccount to use.                                                                                                                                                                                                                | `""`                       |
 | `injector.serviceAccount.annotations`                       | Additional Service Account annotations (evaluated as a template)                                                                                                                                                                                      | `{}`                       |
 | `injector.serviceAccount.automountServiceAccountToken`      | Automount service account token for the server service account                                                                                                                                                                                        | `false`                    |
+| `injector.webhook.namespaceSelector`                        | Enabling specify which namespace you want to work with webhook                                                                                                                                                                                        | `{}`                       |
 | `volumePermissions.enabled`                                 | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                                                                                                                                       | `false`                    |
 | `volumePermissions.image.registry`                          | OS Shell + Utility image registry                                                                                                                                                                                                                     | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                        | OS Shell + Utility image repository                                                                                                                                                                                                                   | `REPOSITORY_NAME/os-shell` |

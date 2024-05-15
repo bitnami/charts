@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -19,22 +19,15 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: data
+    - name: tcp-data
       port: {{ .Values.taskmanager.service.ports.data }}
-      targetPort: {{ .Values.taskmanager.containerPorts.data }}
-      {{- if and (or (eq .Values.taskmanager.service.type "NodePort") (eq .Values.taskmanager.service.type "LoadBalancer")) (not (empty .Values.taskmanager.service.nodePorts.data)) }}
-      nodePort: {{ .Values.taskmanager.service.nodePorts.data }}
-      {{- else if eq .Values.taskmanager.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
+      targetPort: data
     - name: tcp-rpc
       port: {{ .Values.taskmanager.service.ports.rpc }}
-      targetPort: {{ .Values.taskmanager.containerPorts.rpc }}
-      {{- if and (or (eq .Values.taskmanager.service.type "NodePort") (eq .Values.taskmanager.service.type "LoadBalancer")) (not (empty .Values.taskmanager.service.nodePorts.rpc)) }}
-      nodePort: {{ .Values.taskmanager.service.nodePorts.rpc }}
-      {{- else if eq .Values.taskmanager.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
+      targetPort: rpc
+    - name: tcp-internal-metrics
+      port: {{ .Values.taskmanager.service.ports.internalMetrics }}
+      targetPort: int-metrics
     {{- if .Values.taskmanager.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

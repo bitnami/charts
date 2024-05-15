@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -54,6 +54,12 @@ spec:
             matchLabels:
               app.kubernetes.io/name: redis
               app.kubernetes.io/instance: {{ .Release.Name }}              
+      {{- else if .Values.externalRedis.enabled }}
+        - port: {{ .Values.externalRedis.port }}
+      to:
+        - podSelector:
+            matchLabels:
+              {{- toYaml .Values.externalRedis.selector | nindent 14 }}
       {{- end }}
     {{- if .Values.controller.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.controller.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
@@ -61,7 +67,6 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.controller.containerPorts.controller }}
         - port: {{ .Values.controller.containerPorts.metrics }}
       {{- if not .Values.controller.networkPolicy.allowExternal }}
       from:

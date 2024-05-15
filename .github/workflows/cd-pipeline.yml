@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 name: '[CI/CD] CD Pipeline'
@@ -21,7 +21,7 @@ jobs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -71,7 +71,7 @@ jobs:
       CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
       VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
         name: Checkout Repository
         with:
           path: charts
@@ -82,8 +82,9 @@ jobs:
           config: charts/.vib/
         env:
           VIB_ENV_S3_URL: s3://${{ secrets.AWS_S3_BUCKET }}/bitnami
-          VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          VIB_ENV_S3_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
+          VIB_ENV_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
+          VIB_ENV_S3_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
   update-index:
     runs-on: ubuntu-latest
     needs:
@@ -94,7 +95,7 @@ jobs:
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
         with:
           ref: 'index'
           path: index
@@ -107,10 +108,13 @@ jobs:
       - id: update-index
         name: Fetch chart and update index
         env: 
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
+          AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
+          # Configure AWS account
+          export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn ${AWS_ASSUME_ROLE_ARN} --role-session-name GitHubCharts --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
           # Extract chart release metadata from the publish report file
           vib_publish_report_file=$(find ~/artifacts -name "report.json" -print -quit)
           chart_name=$(jq -re '.actions|map(select(.action_id == "helm-publish"))[0] | .application.name' $vib_publish_report_file)
@@ -128,15 +132,24 @@ jobs:
           is_index_updated=0
           while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
+
+            # Pull changes from remote
             git fetch origin index
-            git reset --hard origin/index
+            current_commit_id=$(git rev-parse origin/index)
+            git reset --hard $(git commit-tree origin/index^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
+            # Compare size of files
+            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+              echo "New index.yaml file is shorter than the current one"
+              exit 1
+            fi
             cp ../download/index.yaml bitnami/index.yaml
+
             # Push changes
-            git add bitnami/index.yaml && git commit -m "${chart_name}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+            git add bitnami/index.yaml && git commit --signoff --amend --no-edit
+            git push origin index --force-with-lease=index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then
@@ -154,7 +167,7 @@ jobs:
     steps:
       - name: Notify in Slack channel
         if: ${{ needs.update-index.result != 'success' }}
-        uses: slackapi/slack-github-action@6c661ce58804a1a20f6dc5fbee7f0381b469e001
+        uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
           payload: |

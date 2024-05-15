@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -45,6 +45,17 @@ spec:
       {{- else if eq .Values.secondary.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
+    {{- if .Values.secondary.enableMySQLX }}
+    - name: mysqlx
+      port: {{ .Values.secondary.service.ports.mysqlx }}
+      protocol: TCP
+      targetPort: mysqlx
+      {{- if (and (or (eq .Values.secondary.service.type "NodePort") (eq .Values.secondary.service.type "LoadBalancer")) .Values.secondary.service.nodePorts.mysqlx) }}
+      nodePort: {{ .Values.secondary.service.nodePorts.mysqlx }}
+      {{- else if eq .Values.secondary.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
     {{- if .Values.secondary.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.secondary.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

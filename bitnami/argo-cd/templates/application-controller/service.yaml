@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -35,12 +35,12 @@ spec:
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
-    - name: tcp-controller
-      port: {{ .Values.controller.service.port }}
-      targetPort: controller
+    - name: http-metrics
+      port: {{ coalesce .Values.controller.service.port .Values.controller.service.ports.metrics }}
+      targetPort: metrics
       protocol: TCP
-      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty .Values.controller.service.nodePort))) }}
-      nodePort: {{ .Values.controller.service.nodePort }}
+      {{- if (and (or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer")) (not (empty (coalesce .Values.controller.service.nodePort .Values.controller.service.nodePorts.metrics)))) }}
+      nodePort: {{ coalesce .Values.controller.service.nodePort .Values.controller.service.nodePorts.metrics }}
       {{- else if eq .Values.controller.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

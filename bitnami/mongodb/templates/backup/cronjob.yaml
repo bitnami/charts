@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -103,8 +103,8 @@ spec:
                 {{- if .Values.externalAccess.service.loadBalancerIPs }}
                 - -i {{ join "," .Values.externalAccess.service.loadBalancerIPs }}
                 {{- end }}
-                {{- if .Values.tls.extraDnsNames }}
-                - -n {{ join "," .Values.tls.extraDnsNames }}
+                {{- if or .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames }}
+                - -n {{ join "," ( concat .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
                 {{- end }}
               {{- if .Values.tls.resources }}
               resources: {{- toYaml .Values.tls.resources | nindent 16 }}

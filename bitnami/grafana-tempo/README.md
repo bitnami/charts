@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -286,6 +286,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `compactor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Compactor container(s)                                                                                                                                               | `[]`             |
 | `compactor.sidecars`                                          | Add additional sidecar containers to the Compactor pod(s)                                                                                                                                                                             | `[]`             |
 | `compactor.initContainers`                                    | Add additional init containers to the Compactor pod(s)                                                                                                                                                                                | `[]`             |
+| `compactor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                 | `true`           |
 
 ### Compactor Traffic Exposure Parameters
 
@@ -293,6 +294,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
 | `compactor.service.type`                          | Compactor service type                                           | `ClusterIP` |
 | `compactor.service.ports.http`                    | Compactor HTTP service port                                      | `3200`      |
+| `compactor.service.ports.grpc`                    | Compactor GRPC service port                                      | `9095`      |
 | `compactor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
 | `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
 | `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
@@ -305,7 +307,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -380,6 +382,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `distributor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Distributor container(s)                                                                                                                                                 | `[]`             |
 | `distributor.sidecars`                                          | Add additional sidecar containers to the Distributor pod(s)                                                                                                                                                                               | `[]`             |
 | `distributor.initContainers`                                    | Add additional init containers to the Distributor pod(s)                                                                                                                                                                                  | `[]`             |
+| `distributor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                     | `true`           |
 
 ### Distributor Traffic Exposure Parameters
 
@@ -401,7 +404,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -477,6 +480,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `metricsGenerator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the metricsGenerator container(s)                                                                                                                                                      | `[]`             |
 | `metricsGenerator.sidecars`                                          | Add additional sidecar containers to the metricsGenerator pod(s)                                                                                                                                                                                    | `[]`             |
 | `metricsGenerator.initContainers`                                    | Add additional init containers to the metricsGenerator pod(s)                                                                                                                                                                                       | `[]`             |
+| `metricsGenerator.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                               | `true`           |
 
 ### Metrics Generator Traffic Exposure Parameters
 
@@ -497,7 +501,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `metricsGenerator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `metricsGenerator.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `metricsGenerator.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `metricsGenerator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `metricsGenerator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `metricsGenerator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `metricsGenerator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `metricsGenerator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -572,6 +576,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `ingester.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ingester container(s)                                                                                                                                              | `[]`             |
 | `ingester.sidecars`                                          | Add additional sidecar containers to the Ingester pod(s)                                                                                                                                                                            | `[]`             |
 | `ingester.initContainers`                                    | Add additional init containers to the Ingester pod(s)                                                                                                                                                                               | `[]`             |
+| `ingester.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`           |
 
 ### Ingester Persistence Parameters
 
@@ -606,7 +611,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -681,6 +686,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `querier.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the querier container(s)                                                                                                                                             | `[]`             |
 | `querier.sidecars`                                          | Add additional sidecar containers to the Querier pod(s)                                                                                                                                                                           | `[]`             |
 | `querier.initContainers`                                    | Add additional init containers to the Querier pod(s)                                                                                                                                                                              | `[]`             |
+| `querier.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`           |
 
 ### Querier Traffic Exposure Parameters
 
@@ -702,7 +708,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `querier.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -777,6 +783,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `queryFrontend.extraVolumeMounts`                                       | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                                                                                                                                                               | `[]`                                  |
 | `queryFrontend.sidecars`                                                | Add additional sidecar containers to the queryFrontend pod(s)                                                                                                                                                                                             | `[]`                                  |
 | `queryFrontend.initContainers`                                          | Add additional init containers to the queryFrontend pod(s)                                                                                                                                                                                                | `[]`                                  |
+| `queryFrontend.enableServiceLinks`                                      | Whether information about services should be injected into pod's environment variable                                                                                                                                                                     | `true`                                |
 | `queryFrontend.query.image.registry`                                    | Grafana Tempo Query image registry                                                                                                                                                                                                                        | `REGISTRY_NAME`                       |
 | `queryFrontend.query.image.repository`                                  | Grafana Tempo Query image repository                                                                                                                                                                                                                      | `REPOSITORY_NAME/grafana-tempo-query` |
 | `queryFrontend.query.image.digest`                                      | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                       | `""`                                  |
@@ -785,6 +792,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `queryFrontend.query.configuration`                                     | Query sidecar configuration                                                                                                                                                                                                                               | `""`                                  |
 | `queryFrontend.query.containerPorts.jaegerMetrics`                      | queryFrontend query sidecar Jaeger metrics container port                                                                                                                                                                                                 | `16687`                               |
 | `queryFrontend.query.containerPorts.jaegerUI`                           | queryFrontend query sidecar Jaeger UI container port                                                                                                                                                                                                      | `16686`                               |
+| `queryFrontend.query.containerPorts.jaegerGRPC`                         | queryFrontend query sidecar Jaeger UI container port                                                                                                                                                                                                      | `16685`                               |
 | `queryFrontend.query.existingConfigmap`                                 | Name of a configmap with the query configuration                                                                                                                                                                                                          | `""`                                  |
 | `queryFrontend.query.extraEnvVars`                                      | Array with extra environment variables to add to queryFrontend nodes                                                                                                                                                                                      | `[]`                                  |
 | `queryFrontend.query.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for queryFrontend nodes                                                                                                                                                                              | `""`                                  |
@@ -848,7 +856,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
@@ -930,6 +938,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `vulture.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Vulture container(s)                                                                                                                                             | `[]`                                    |
 | `vulture.sidecars`                                          | Add additional sidecar containers to the Vulture pod(s)                                                                                                                                                                           | `[]`                                    |
 | `vulture.initContainers`                                    | Add additional init containers to the Vulture pod(s)                                                                                                                                                                              | `[]`                                    |
+| `vulture.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`                                  |
 
 ### Vulture Traffic Exposure Parameters
 
@@ -949,7 +958,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `vulture.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
 | `vulture.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
 | `vulture.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `vulture.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                     | `[]`        |
+| `vulture.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `vulture.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
 | `vulture.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
 | `vulture.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |

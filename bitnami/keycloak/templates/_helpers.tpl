@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -209,14 +209,14 @@ Add environment variables to configure database values
     {{- if .Values.externalDatabase.existingSecretUserKey -}}
         {{- printf "%s" .Values.externalDatabase.existingSecretUserKey -}}
     {{- else -}}
-        {{- print "db-port" -}}
+        {{- print "db-user" -}}
     {{- end -}}
 {{- end -}}
 {{- define "keycloak.databaseSecretDatabaseKey" -}}
     {{- if .Values.externalDatabase.existingSecretDatabaseKey -}}
         {{- printf "%s" .Values.externalDatabase.existingSecretDatabaseKey -}}
     {{- else -}}
-        {{- print "db-port" -}}
+        {{- print "db-database" -}}
     {{- end -}}
 {{- end -}}
 

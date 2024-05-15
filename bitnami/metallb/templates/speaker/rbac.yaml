@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,6 +16,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  - apiGroups:
+      - "metallb.io"
+    resources:
+      - "servicel2statuses"
+      - "servicel2statuses/status"
+    verbs:
+      - "*"
   - apiGroups:
       - ''
     resources:

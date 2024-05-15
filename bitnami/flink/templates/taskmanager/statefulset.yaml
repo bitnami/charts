@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -90,8 +90,10 @@ spec:
           ports:
             - name: data
               containerPort: {{ .Values.taskmanager.containerPorts.data }}
-            - name: tcp-rpc
+            - name: rpc
               containerPort: {{ .Values.taskmanager.containerPorts.rpc }}
+            - name: int-metrics
+              containerPort: {{ .Values.taskmanager.containerPorts.internalMetrics }}
           env:
             - name: MY_POD_NAME
               valueFrom:
@@ -106,8 +108,12 @@ spec:
               value: {{ .Values.jobmanager.service.ports.rpc | quote }}
             - name: FLINK_CFG_JOBMANAGER_BIND__HOST
               value: 0.0.0.0
+            - name: FLINK_CFG_TASKMANAGER_DATA_PORT
+              value: {{ .Values.taskmanager.containerPorts.data | quote }}
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
+            - name: FLINK_CFG_METRICS_INTERNAL_QUERY__SERVICE_PORT
+              value: {{ .Values.taskmanager.containerPorts.internalMetrics | quote }}
             {{- $releaseNamespace := include "common.names.namespace" . }}
             {{- $headlessServiceName := printf "%s-headless" (include "flink.taskmanager.fullname" .) | trunc 63 | trimSuffix "-" }}
             {{- $clusterDomain := .Values.clusterDomain }}
@@ -135,21 +141,21 @@ spec:
           {{- else if .Values.taskmanager.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: tcp-rpc
+              port: rpc
           {{- end }}
           {{- if .Values.taskmanager.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: tcp-rpc
+              port: rpc
           {{- end }}
           {{- if .Values.taskmanager.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: tcp-rpc
+              port: rpc
           {{- end }}
           {{- end }}
           {{- if .Values.taskmanager.resources }}

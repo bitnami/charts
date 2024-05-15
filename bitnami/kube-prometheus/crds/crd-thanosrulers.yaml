@@ -1,12 +1,12 @@
 # Source: https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v{version}/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
-# Version: 0.73.0
+# Version: 0.73.2
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-    operator.prometheus.io/version: 0.73.0
+    operator.prometheus.io/version: 0.73.2
   name: thanosrulers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com

@@ -1,0 +1,248 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.filer.enabled .Values.webdav.enabled }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "seaweedfs.webdav.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: webdav
+  {{- if or .Values.webdav.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.webdav.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.webdav.autoscaling.enabled }}
+  replicas: {{ .Values.webdav.replicaCount }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.webdav.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: webdav
+  {{- if .Values.webdav.updateStrategy }}
+  strategy: {{- toYaml .Values.webdav.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.security.enabled }}
+        checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.webdav.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webdav.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: webdav
+    spec:
+      {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      automountServiceAccountToken: {{ .Values.webdav.automountServiceAccountToken }}
+      {{- if .Values.webdav.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webdav.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.webdav.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.webdav.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.webdav.podAffinityPreset "component" "webdav" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.webdav.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.webdav.podAntiAffinityPreset "component" "webdav" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.webdav.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.webdav.nodeAffinityPreset.type "key" .Values.webdav.nodeAffinityPreset.key "values" .Values.webdav.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.webdav.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.webdav.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webdav.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webdav.priorityClassName }}
+      priorityClassName: {{ .Values.webdav.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.webdav.schedulerName }}
+      schedulerName: {{ .Values.webdav.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.webdav.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webdav.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.webdav.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.webdav.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.webdav.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.webdav.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webdav.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: seaweedfs
+          image: {{ template "seaweedfs.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.webdav.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.webdav.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.webdav.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.webdav.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -logtostderr=true
+            - -v={{ .Values.webdav.logLevel }}
+            - webdav
+            - -cacheDir=/cache
+            - -port={{ .Values.webdav.containerPorts.http }}
+            {{- if .Values.webdav.tls.enabled }}
+            - -cert.file=/certs/tls/tls.crt
+            - -key.file=/certs/tls/tls.key
+            {{- end }}
+            - -filer={{ printf "%s:%d" (include "seaweedfs.filer.fullname" .) (int .Values.filer.service.ports.http) }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: WEED_CLUSTER_DEFAULT
+              value: {{ .Values.clusterDefault | quote }}
+            {{- if .Values.webdav.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.webdav.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.webdav.extraEnvVarsCM .Values.webdav.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.webdav.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.webdav.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.webdav.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.webdav.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.webdav.resources }}
+          resources: {{- toYaml .Values.webdav.resources | nindent 12 }}
+          {{- else if ne .Values.webdav.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.webdav.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
+              containerPort: {{ .Values.webdav.containerPorts.http }}
+            {{- if .Values.webdav.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.webdav.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.webdav.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.webdav.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
+          {{- end }}
+          {{- if .Values.webdav.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.webdav.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.readinessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
+          {{- end }}
+          {{- if .Values.webdav.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.webdav.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.webdav.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: {{ ternary "https" "http" .Values.webdav.tls.enabled }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.webdav.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /cache
+              subPath: cache-dir
+            {{- if .Values.webdav.tls.enabled }}
+            - name: tls-cert
+              mountPath: /certs/tls
+              readOnly: true
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            - name: security-config
+              mountPath: /etc/seaweedfs/security.toml
+              subPath: security.toml
+              readOnly: true
+            {{- if .Values.security.mTLS.enabled  }}
+            - name: ca-cert
+              readOnly: true
+              mountPath: /certs/ca
+            - name: master-cert
+              readOnly: true
+              mountPath: /certs/master
+            - name: filer-cert
+              readOnly: true
+              mountPath: /certs/filer
+            - name: volume-cert
+              readOnly: true
+              mountPath: /certs/volume
+            - name: client-cert
+              readOnly: true
+              mountPath: /certs/client
+            {{- end }}
+            {{- end }}
+          {{- if .Values.webdav.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.webdav.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.webdav.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.webdav.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.webdav.tls.enabled }}
+        - name: tls-cert
+          secret:
+            secretName: {{ template "seaweedfs.webdav.tls.secretName" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: security-config
+          configMap:
+            name: {{ printf "%s-security" (include "common.names.fullname" .) }}
+        {{- if .Values.security.mTLS.enabled  }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.caSecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: master-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.master.secretName" . }}
+        - name: filer-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.filer.secretName" . }}
+        - name: volume-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.volume.secretName" . }}
+        - name: client-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.webdav.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.webdav.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

@@ -1,4 +1,4 @@
-## Copyright VMware, Inc.
+## Copyright Broadcom, Inc. All Rights Reserved.
 ## SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -87,7 +87,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.3.12-debian-12-r0
+    tag: 2.4.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -268,7 +268,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.7-debian-12-r0
+    tag: 2.4.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4601,7 +4601,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.8-debian-12-r5
+    tag: 2.3.10-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -5160,7 +5160,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
