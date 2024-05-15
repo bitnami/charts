@@ -285,9 +285,7 @@ To learn more, please consult RabbitMQ documentation guides:
 
 #### Do Not Force Boot Nodes on a Regular Basis
 
-Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**.
-Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster
-nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
+Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
 
 ### Known issues
 
