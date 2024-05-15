@@ -115,9 +115,9 @@ jobs:
       - id: update-index
         name: git-add-push
         run: |
+          git config user.name "Bitnami Containers"
+          git config user.email "bitnami-bot@vmware.com"
           git fetch origin archive-full-index
           git reset --hard $(git commit-tree origin/archive-full-index^{tree} -m "Update index.yaml")
           cp index.yaml bitnami/index.yaml
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
           git add bitnami/index.yaml && git commit --signoff --amend --no-edit && git push origin archive-full-index --force-with-lease
