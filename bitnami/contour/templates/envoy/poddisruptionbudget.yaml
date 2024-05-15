@@ -2,6 +2,7 @@
 Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
+
 {{- $replicaCount := int .Values.envoy.replicaCount }}
 {{- if and .Values.envoy.enabled (eq .Values.envoy.kind "deployment") .Values.envoy.pdb.create (or (gt $replicaCount 1) .Values.envoy.autoscaling.enabled) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
