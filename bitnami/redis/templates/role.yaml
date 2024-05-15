@@ -23,7 +23,7 @@ rules:
       - 'use'
     resourceNames: [{{ printf "%s-master" (include "common.names.fullname" .) }}]
   {{- end }}
-  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+  {{- if and .Values.sentinel.enabled (or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster) }}
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["list", "patch"]

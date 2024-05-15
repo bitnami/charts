@@ -131,16 +131,16 @@ spec:
             - --service-type-filter={{ . }}
             {{- end }}
             {{- range .Values.domainFilters }}
-            - --domain-filter={{ . }}
+            - --domain-filter={{- include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- range .Values.excludeDomains }}
-            - --exclude-domains={{ . }}
+            - --exclude-domains={{- include "common.tplvalues.render" (dict "value" . "context" $) }}
             {{- end }}
             {{- if .Values.regexDomainFilter }}
-            - --regex-domain-filter={{ .Values.regexDomainFilter }}
+            - --regex-domain-filter={{- include "common.tplvalues.render" (dict "value" .Values.regexDomainFilter "context" $) }}
             {{- end }}
             {{- if .Values.regexDomainExclusion }}
-            - --regex-domain-exclusion={{ .Values.regexDomainExclusion }}
+            - --regex-domain-exclusion={{- include "common.tplvalues.render" (dict "value" .Values.regexDomainExclusion "context" $) }}
             {{- end }}
             {{- range .Values.zoneNameFilters }}
             - --zone-name-filter={{ . }}
@@ -227,6 +227,9 @@ spec:
             {{- end }}
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
+            {{- end }}
+            {{- if .Values.aws.zoneMatchParent }}
+            - --aws-zone-match-parent
             {{- end }}
             {{- if or (and (eq .Values.provider "azure") (not .Values.azure.secretName)) (eq .Values.provider "azure-private-dns") }}
             # Azure Arguments

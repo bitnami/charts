@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -286,6 +286,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `compactor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Compactor container(s)                                                                                                                                               | `[]`             |
 | `compactor.sidecars`                                          | Add additional sidecar containers to the Compactor pod(s)                                                                                                                                                                             | `[]`             |
 | `compactor.initContainers`                                    | Add additional init containers to the Compactor pod(s)                                                                                                                                                                                | `[]`             |
+| `compactor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                 | `true`           |
 
 ### Compactor Traffic Exposure Parameters
 
@@ -381,6 +382,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `distributor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Distributor container(s)                                                                                                                                                 | `[]`             |
 | `distributor.sidecars`                                          | Add additional sidecar containers to the Distributor pod(s)                                                                                                                                                                               | `[]`             |
 | `distributor.initContainers`                                    | Add additional init containers to the Distributor pod(s)                                                                                                                                                                                  | `[]`             |
+| `distributor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                     | `true`           |
 
 ### Distributor Traffic Exposure Parameters
 
@@ -478,6 +480,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `metricsGenerator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the metricsGenerator container(s)                                                                                                                                                      | `[]`             |
 | `metricsGenerator.sidecars`                                          | Add additional sidecar containers to the metricsGenerator pod(s)                                                                                                                                                                                    | `[]`             |
 | `metricsGenerator.initContainers`                                    | Add additional init containers to the metricsGenerator pod(s)                                                                                                                                                                                       | `[]`             |
+| `metricsGenerator.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                               | `true`           |
 
 ### Metrics Generator Traffic Exposure Parameters
 
@@ -573,6 +576,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `ingester.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ingester container(s)                                                                                                                                              | `[]`             |
 | `ingester.sidecars`                                          | Add additional sidecar containers to the Ingester pod(s)                                                                                                                                                                            | `[]`             |
 | `ingester.initContainers`                                    | Add additional init containers to the Ingester pod(s)                                                                                                                                                                               | `[]`             |
+| `ingester.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`           |
 
 ### Ingester Persistence Parameters
 
@@ -682,6 +686,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `querier.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the querier container(s)                                                                                                                                             | `[]`             |
 | `querier.sidecars`                                          | Add additional sidecar containers to the Querier pod(s)                                                                                                                                                                           | `[]`             |
 | `querier.initContainers`                                    | Add additional init containers to the Querier pod(s)                                                                                                                                                                              | `[]`             |
+| `querier.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`           |
 
 ### Querier Traffic Exposure Parameters
 
@@ -778,6 +783,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `queryFrontend.extraVolumeMounts`                                       | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                                                                                                                                                               | `[]`                                  |
 | `queryFrontend.sidecars`                                                | Add additional sidecar containers to the queryFrontend pod(s)                                                                                                                                                                                             | `[]`                                  |
 | `queryFrontend.initContainers`                                          | Add additional init containers to the queryFrontend pod(s)                                                                                                                                                                                                | `[]`                                  |
+| `queryFrontend.enableServiceLinks`                                      | Whether information about services should be injected into pod's environment variable                                                                                                                                                                     | `true`                                |
 | `queryFrontend.query.image.registry`                                    | Grafana Tempo Query image registry                                                                                                                                                                                                                        | `REGISTRY_NAME`                       |
 | `queryFrontend.query.image.repository`                                  | Grafana Tempo Query image repository                                                                                                                                                                                                                      | `REPOSITORY_NAME/grafana-tempo-query` |
 | `queryFrontend.query.image.digest`                                      | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                       | `""`                                  |
@@ -932,6 +938,7 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `vulture.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Vulture container(s)                                                                                                                                             | `[]`                                    |
 | `vulture.sidecars`                                          | Add additional sidecar containers to the Vulture pod(s)                                                                                                                                                                           | `[]`                                    |
 | `vulture.initContainers`                                    | Add additional init containers to the Vulture pod(s)                                                                                                                                                                              | `[]`                                    |
+| `vulture.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`                                  |
 
 ### Vulture Traffic Exposure Parameters
 

@@ -1,5 +1,5 @@
 # Source: https://github.com/apache/apisix-ingress-controller/samples/deploy/crd?ref=v{version}
-# Version: 1.8.1
+# Version: 1.8.2
 # VersionOf: apisix-ingress-controller
 # UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1

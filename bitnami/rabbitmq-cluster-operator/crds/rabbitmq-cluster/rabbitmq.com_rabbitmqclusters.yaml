@@ -1,8 +1,8 @@
 # Source: https://raw.githubusercontent.com/rabbitmq/cluster-operator/v{version}/config/crd/bases/rabbitmq.com_rabbitmqclusters.yaml
-# Version: 2.8.0
+# Version: 2.9.0
 # RabbitMQ Cluster Operator
 #
-# Copyright 2020 Broadcom, Inc. All Rights Reserved.
+# Copyright 2020 VMware, Inc. All Rights Reserved.
 #
 # This product is licensed to you under the Mozilla Public license, Version 2.0 (the "License").  You may not use this product except in compliance with the Mozilla Public License.
 #
@@ -4795,6 +4795,9 @@ spec:
                                 Path in Vault PKI engine.
                                 For example "pki/issue/hashicorp-com".
                                 required
+                              type: string
+                            pkiRootPath:
+                              description: Specifies an optional path to retrieve the root CA from vault.  Useful if certificates are issued by an intermediate CA
                               type: string
                           type: object
                       type: object

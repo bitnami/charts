@@ -71,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets-controller
-  tag: 0.26.2-debian-12-r1
+  tag: 0.26.2-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -138,9 +138,11 @@ privateKeyLabels: {}
 ##
 logInfoStdout: false
 ## @param containerPorts.http Controller HTTP container port to open
+## @param containerPorts.metrics Controller metrics container port
 ##
 containerPorts:
   http: 8080
+  metrics: 8081
 ## Sealed Secret resource requests and limits
 ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
@@ -614,6 +616,41 @@ pdb:
 ## @section Metrics parameters
 ##
 metrics:
+  ## @param metrics.enabled Sealed Secrets toggle metrics service definition
+  enabled: false
+  service:
+    ## @param metrics.service.type Sealed Secrets metrics service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.ports.metrics Sealed Secrets metrics service port
+    ##
+    ports:
+      metrics: 8081
+    ## @param metrics.service.externalTrafficPolicy Sealed Secrets metrics service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param metrics.service.loadBalancerIP Sealed Secrets metrics service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges Sealed Secrets metrics service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.annotations Additional custom annotations for Sealed Secrets metrics service
+    ##
+    annotations: {}
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
   serviceMonitor:
     ## @param metrics.serviceMonitor.enabled Specify if a ServiceMonitor will be deployed for Prometheus Operator
     ##
@@ -621,6 +658,11 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
+    port:
+      ## @param metrics.serviceMonitor.port.number Port number for the serviceMonitor
+      name: "metrics"
+      ## @param metrics.serviceMonitor.port.name Port name for the serviceMonitor
+      number: 8081
     ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}

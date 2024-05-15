@@ -64,7 +64,7 @@ $ kubeseal --fetch-cert \
 
 Refer to Sealed Secrets documentation for more information about [kubeseal usage](https://github.com/bitnami-labs/sealed-secrets#usage).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -218,6 +218,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `privateKeyLabels`                                  | Map of labels to be set on the sealing keypairs                                                                                                                                                                   | `{}`                             |
 | `logInfoStdout`                                     | Specifies whether the Sealed Secrets controller will log info to stdout                                                                                                                                           | `false`                          |
 | `containerPorts.http`                               | Controller HTTP container port to open                                                                                                                                                                            | `8080`                           |
+| `containerPorts.metrics`                            | Controller metrics container port                                                                                                                                                                                 | `8081`                           |
 | `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`                           |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                             |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Sealed Secret containers                                                                                                                                                                  | `true`                           |
@@ -338,19 +339,29 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                      | Value   |
-| ------------------------------------------ | -------------------------------------------------------------------------------- | ------- |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false` |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                         | `""`    |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                              | `{}`    |
-| `metrics.serviceMonitor.annotations`       | Additional ServiceMonitor annotations (evaluated as a template)                  | `{}`    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus | `""`    |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels         | `false` |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                     | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                          | `""`    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                         | `[]`    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`    |
+| Name                                       | Description                                                                      | Value       |
+| ------------------------------------------ | -------------------------------------------------------------------------------- | ----------- |
+| `metrics.enabled`                          | Sealed Secrets toggle metrics service definition                                 | `false`     |
+| `metrics.service.type`                     | Sealed Secrets metrics service type                                              | `ClusterIP` |
+| `metrics.service.ports.metrics`            | Sealed Secrets metrics service port                                              | `8081`      |
+| `metrics.service.externalTrafficPolicy`    | Sealed Secrets metrics service external traffic policy                           | `Cluster`   |
+| `metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                   | `[]`        |
+| `metrics.service.loadBalancerIP`           | Sealed Secrets metrics service Load Balancer IP                                  | `""`        |
+| `metrics.service.loadBalancerSourceRanges` | Sealed Secrets metrics service Load Balancer sources                             | `[]`        |
+| `metrics.service.annotations`              | Additional custom annotations for Sealed Secrets metrics service                 | `{}`        |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator             | `false`     |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                         | `""`        |
+| `metrics.serviceMonitor.port.number`       | Port number for the serviceMonitor                                               | `8081`      |
+| `metrics.serviceMonitor.port.name`         | Port name for the serviceMonitor                                                 | `metrics`   |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                              | `{}`        |
+| `metrics.serviceMonitor.annotations`       | Additional ServiceMonitor annotations (evaluated as a template)                  | `{}`        |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus | `""`        |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels         | `false`     |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                     | `""`        |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                          | `""`        |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                         | `[]`        |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`        |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
