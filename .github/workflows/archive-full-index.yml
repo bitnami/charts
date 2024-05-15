@@ -119,9 +119,9 @@ jobs:
           git config user.email "bitnami-bot@vmware.com"
           git fetch origin archive-full-index
           git reset --hard $(git commit-tree origin/archive-full-index^{tree} -m "Update index.yaml")
-          # Compare sizes of files
+          # Compare size of files
           if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s index.yaml) ]]; then
-            echo "New file is shorter than the current index.yaml file"
+            echo "New index.yaml file is shorter than the current one"
             exit 1
           fi
           cp index.yaml bitnami/index.yaml
