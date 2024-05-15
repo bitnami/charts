@@ -263,35 +263,31 @@ extraConfiguration: |
   log.console.formatter = json
 ```
 
-## How to Avoid Deadlocked Deployments After a Cluster-Wide Restart
+### How to Avoid Deadlocked Deployments After a Cluster-Wide Restart
 
-RabbitMQ nodes assume their peers come back online within five minutes (by default). When the `OrderedReady` pod management policy is used
-with a readiness probe that implicitly requires a fully booted node, the deployment can deadlock:
+RabbitMQ nodes assume their peers come back online within five minutes (by default). When the `OrderedReady` pod management policy is used with a readiness probe that implicitly requires a fully booted node, the deployment can deadlock:
 
 - Kubernetes will expect the first node to pass a readiness probe
 - The readiness probe may require a fully booted node
 - The node will fully boot after it detects that its peers have come online
 - Kubernetes will not start any more pods until the first one boots
 
-Using [RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview) is the easiest solution.
+Using [Bitnami RabbitMQ Cluster Operator](https://hub.docker.com/r/bitnamicharts/rabbitmq-cluster-operator) is the easiest solution.
 
 Alternatively, the following combination of deployment settings avoids the problem:
 
 - Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
 - Use `rabbitmq-diagnostics ping` for readiness probe
 
-Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism
-in RabbitMQ that helps make remaining clusters nodes to recover and rejoin each other after a permanent loss of some of their former
-peers. In other words, forced booting a node is en emergency event recovery procedure.
+Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
 
 To learn more, see
 
 - [RabbitMQ Clustering guide: Node Restarts](https://www.rabbitmq.com/docs/clustering#restarting)
 - [RabbitMQ Clustering guide: Restarts and Readiness Probes](https://www.rabbitmq.com/docs/clustering#restarting-readiness-probes)
-- [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for [Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview)-less (DIY) deployments to Kubernetes
-- [DIY RabbitMQ deployments on Kubernetes](https://www.rabbitmq.com/blog/2020/08/10/deploying-rabbitmq-to-kubernetes-whats-involved): What's Involved?
+- [Recommendations](https://www.rabbitmq.com/docs/cluster-formation#peer-discovery-k8s) for [Operator](https://hub.docker.com/r/bitnamicharts/rabbitmq-cluster-operator)-less (DIY) deployments to Kubernetes
 
-## Known issues
+### Known issues
 
 - Changing the password through RabbitMQ's UI can make the pod fail due to the default liveness probes. If you do so, remember to make the chart aware of the new password. Updating the default secret with the password you set through RabbitMQ's UI will automatically recreate the pods. If you are using your own secret, you may have to manually recreate the pods.
 
