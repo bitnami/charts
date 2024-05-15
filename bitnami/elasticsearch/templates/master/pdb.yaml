@@ -3,7 +3,8 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and ( include "elasticsearch.master.enabled" . ) .Values.master.pdb.create }}
+{{- $replicaCount := int .Values.master.replicaCount }}
+{{- if and ( include "elasticsearch.master.enabled" . ) .Values.master.pdb.create (or (gt $replicaCount 1) .Values.master.autoscaling.enabled) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
