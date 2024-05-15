@@ -1205,11 +1205,16 @@ extraVolumes: []
 ## @param extraVolumeMounts A list of volume mounts to be added to the pod
 ##
 extraVolumeMounts: []
-## @param podDisruptionBudget Configure PodDisruptionBudget
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
-
-podDisruptionBudget: {}
+pdb:
+  create: false
+  minAvailable: 1
+  maxUnavailable: ""
 ## Prometheus Exporter / Metrics
 ##
 metrics:
