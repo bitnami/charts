@@ -132,27 +132,11 @@ jobs:
           is_index_updated=0
           while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
-            git fetch origin index
-            git reset --hard origin/index
-
-            # Rebuild index
-            helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
-            cp ../download/index.yaml bitnami/index.yaml
-            # Push changes
-            git add bitnami/index.yaml && git commit -m "${chart_name}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
-          done
-
-          # Temporary code to confirm index is not broken
-          attempts=0
-          is_index_test_updated=0
-          while [[ $attempts -lt $max_attempts && $is_index_test_updated -eq 0 ]]; do
-            attempts=$((attempts + 1))
 
             # Pull changes from remote
-            git fetch origin index-test
-            current_commit_id=$(git rev-parse origin/index-test)
-            git reset --hard $(git commit-tree origin/index-test^{tree} -m "Update index.yaml")
+            git fetch origin index
+            current_commit_id=$(git rev-parse origin/index)
+            git reset --hard $(git commit-tree origin/index^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
@@ -160,7 +144,7 @@ jobs:
 
             # Push changes
             git add bitnami/index.yaml && git commit --signoff --amend --no-edit
-            git push origin index:index-test --force-with-lease=index-test:${current_commit_id} && is_index_test_updated=1 || echo "Failed to push during attempt $attempts"
+            git push origin index --force-with-lease=index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then
