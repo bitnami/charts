@@ -1,0 +1,93 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- $scylladbPasswordKey := ( include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") ) -}}
+{{- $scylladbSecretName := ( include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) ) -}}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/scylladb/entrypoint.sh /opt/bitnami/scripts/scylladb/run.sh
+
+{{- else }}
+
+Scylladb can be accessed through the following URLs from within the cluster:
+
+  - CQL: {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.cql }}
+
+To get your password run:
+
+   {{ include "common.utils.secret.getvalue" (dict "secret" $scylladbSecretName "field" $scylladbPasswordKey "context" $) }}
+
+Check the cluster status by running:
+
+   kubectl exec -it --namespace {{ include "common.names.namespace" . }} $(kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }} -o jsonpath='{.items[0].metadata.name}') nodetool status
+
+To connect to your Scylladb cluster using CQL:
+
+1. Run a Scylladb pod that you can use as a client:
+
+   kubectl run --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+   --env SCYLLADB_PASSWORD=$SCYLLADB_PASSWORD \
+   {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.name" . }}-client=true"{{ end }} \
+   --image {{ include "scylladb.image" . }} -- bash
+
+2. Connect using the cqlsh client:
+
+   cqlsh -u {{ .Values.dbUser.user }} -p $SCYLLADB_PASSWORD {{ include "common.names.fullname" . }}
+
+{{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}
+Note: Since NetworkPolicy is enabled, only pods with the label below will be able to connect to Scylladb:
+
+  "{{ include "common.names.fullname" . }}-client=true"
+
+{{- else -}}
+
+To connect to your database from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+
+   cqlsh -u {{ .Values.dbUser.user }} -p $SCYLLADB_PASSWORD $NODE_IP $NODE_PORT
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+   NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+         Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "common.names.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   cqlsh -u {{ .Values.dbUser.user }} -p $SCYLLADB_PASSWORD $SERVICE_IP
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} {{ .Values.service.ports.cql }}:{{ .Values.service.ports.cql }} &
+   cqlsh -u {{ .Values.dbUser.user }} -p $SCYLLADB_PASSWORD 127.0.0.1 {{ .Values.service.ports.cql }}
+
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.metrics.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "scylladb.validateValues" . }}
+{{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "tls" "jmxProxy" "volumePermissions") "context" $) }}
+{{- include "scylladb.warnings.jvm" . }}
