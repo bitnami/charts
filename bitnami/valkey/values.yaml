@@ -1,0 +1,2116 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.valkey.password Global Valkey password (overrides `auth.password`)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+  valkey:
+    password: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param secretAnnotations Annotations to add to secret
+##
+secretAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param useHostnames Use hostnames internally when announcing replication. If false, the hostname will be resolved to an IP address
+##
+useHostnames: true
+## @param nameResolutionThreshold Failure threshold for internal hostnames resolution
+##
+nameResolutionThreshold: 5
+## @param nameResolutionTimeout Timeout seconds between probes for internal hostnames resolution
+##
+nameResolutionTimeout: 5
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @section Valkey Image parameters
+##
+
+## Bitnami Valkey image
+## ref: https://hub.docker.com/r/bitnami/valkey/tags/
+## @param image.registry [default: REGISTRY_NAME] Valkey image registry
+## @param image.repository [default: REPOSITORY_NAME/valkey] Valkey image repository
+## @skip image.tag Valkey image tag (immutable tags are recommended)
+## @param image.digest Valkey image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Valkey image pull policy
+## @param image.pullSecrets Valkey image pull secrets
+## @param image.debug Enable image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/valkey
+  tag: 7.2.5-debian-12-r4
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+## @section Valkey common configuration parameters
+## https://github.com/bitnami/containers/tree/main/bitnami/valkey#configuration
+##
+
+## @param architecture Valkey architecture. Allowed values: `standalone` or `replication`
+##
+architecture: replication
+## Valkey Authentication parameters
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/valkey#setting-the-server-password-on-first-run
+##
+auth:
+  ## @param auth.enabled Enable password authentication
+  ##
+  enabled: true
+  ## @param auth.sentinel Enable password authentication on sentinels too
+  ##
+  sentinel: true
+  ## @param auth.password Valkey password
+  ## Defaults to a random 10-character alphanumeric string if not set
+  ##
+  password: ""
+  ## @param auth.existingSecret The name of an existing secret with Valkey credentials
+  ## NOTE: When it's set, the previous `auth.password` parameter is ignored
+  ##
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
+  ##
+  usePasswordFiles: false
+  ## @param auth.usePasswordFileFromSecret Mount password file from secret
+  ##
+  usePasswordFileFromSecret: true
+## @param commonConfiguration [string] Common configuration to be added into the ConfigMap
+## ref: https://valkey.io/topics/config
+##
+commonConfiguration: |-
+  # Enable AOF https://valkey.io/docs/topics/persistence.html
+  appendonly yes
+  # Disable RDB persistence, AOF persistence already enabled.
+  save ""
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Valkey nodes
+##
+existingConfigmap: ""
+## @section Valkey master configuration parameters
+##
+master:
+  ## @param master.replicaCount Number of Valkey master instances to deploy (experimental, requires additional configuration)
+  ##
+  replicaCount: 1
+  ## @param master.configuration Configuration for Valkey master nodes
+  ## ref: https://valkey.io/topics/config
+  ##
+  configuration: ""
+  ## @param master.disableCommands Array with Valkey commands to disable on master nodes
+  ## Commands will be completely disabled by renaming each to an empty string.
+  ## ref: https://valkey.io/topics/security#disabling-of-specific-commands
+  ##
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  ## @param master.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param master.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
+  ## @param master.preExecCmds Additional commands to run prior to starting Valkey master
+  ##
+  preExecCmds: []
+  ## @param master.extraFlags Array with additional command line flags for Valkey master
+  ## e.g:
+  ## extraFlags:
+  ##  - "--maxmemory-policy volatile-ttl"
+  ##  - "--repl-backlog-size 1024mb"
+  ##
+  extraFlags: []
+  ## @param master.extraEnvVars Array with extra environment variables to add to Valkey master nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Valkey master nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Valkey master nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param master.containerPorts.valkey Container port to open on Valkey master nodes
+  ##
+  containerPorts:
+    valkey: 6379
+  ## Configure extra options for Valkey containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.startupProbe.enabled Enable startupProbe on Valkey master nodes
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.livenessProbe.enabled Enable livenessProbe on Valkey master nodes
+  ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param master.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param master.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param master.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.readinessProbe.enabled Enable readinessProbe on Valkey master nodes
+  ## @param master.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param master.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param master.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param master.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param master.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Valkey master resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enabled Valkey master pods' Security Context
+  ## @param master.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param master.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param master.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param master.podSecurityContext.fsGroup Set Valkey master pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.containerSecurityContext.enabled Enabled Valkey master containers' Security Context
+  ## @param master.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param master.containerSecurityContext.runAsUser Set Valkey master containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set Valkey master containers' Security Context runAsGroup
+  ## @param master.containerSecurityContext.runAsNonRoot Set Valkey master containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate Valkey pod(s) privileges
+  ## @param master.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
+  ## @param master.containerSecurityContext.seccompProfile.type Set Valkey master containers' Security Context seccompProfile
+  ## @param master.containerSecurityContext.capabilities.drop Set Valkey master containers' Security Context capabilities to drop
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ["ALL"]
+  ## @param master.kind Use either Deployment, StatefulSet (default) or DaemonSet
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
+  ## @param master.schedulerName Alternate scheduler for Valkey master pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.updateStrategy.type Valkey master statefulset strategy type
+  ## @skip master.updateStrategy.rollingUpdate
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate, OnDelete (statefulset), Recreate (deployment)
+    ##
+    type: RollingUpdate
+  ## @param master.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
+  ## @param master.priorityClassName Valkey master pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param master.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param master.hostAliases Valkey master pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param master.podLabels Extra labels for Valkey master pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param master.podAnnotations Annotations for Valkey master pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param master.shareProcessNamespace Share a single process namespace between all of the containers in Valkey master pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node master.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `master.affinity` is set
+    ##
+    key: ""
+    ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `master.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param master.affinity Affinity for Valkey master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `master.podAffinityPreset`, `master.podAntiAffinityPreset`, and `master.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param master.nodeSelector Node labels for Valkey master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param master.tolerations Tolerations for Valkey master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param master.topologySpreadConstraints Spread Constraints for Valkey master pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## E.g.
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: node
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: []
+  ## @param master.dnsPolicy DNS Policy for Valkey master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  ##
+  dnsPolicy: ""
+  ## @param master.dnsConfig DNS Configuration for Valkey master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  ##
+  dnsConfig: {}
+  ## @param master.lifecycleHooks for the Valkey master container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the Valkey master pod(s)
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey master container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the Valkey master pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the Valkey master pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Persistence parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param master.persistence.enabled Enable persistence on Valkey master nodes using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
+    ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
+    ## @param master.persistence.path The path the volume will be mounted at on Valkey master containers
+    ## NOTE: Useful when using different Valkey images
+    ##
+    path: /data
+    ## @param master.persistence.subPath The subdirectory of the volume to mount on Valkey master containers
+    ## NOTE: Useful in dev environments
+    ##
+    subPath: ""
+    ## @param master.persistence.subPathExpr Used to construct the subPath subdirectory of the volume to mount on Valkey master containers
+    ##
+    subPathExpr: ""
+    ## @param master.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param master.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.persistence.size Persistent Volume size
+    ##
+    size: 8Gi
+    ## @param master.persistence.annotations Additional custom annotations for the PVC
+    ##
+    annotations: {}
+    ## @param master.persistence.labels Additional custom labels for the PVC
+    ##
+    labels: {}
+    ## @param master.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## NOTE: requires master.persistence.enabled: true
+    ##
+    existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param master.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## Valkey master service parameters
+  ##
+  service:
+    ## @param master.service.type Valkey master service type
+    ##
+    type: ClusterIP
+    ## @param master.service.ports.valkey Valkey master service port
+    ##
+    ports:
+      valkey: 6379
+    ## @param master.service.nodePorts.valkey Node port for Valkey master
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      valkey: ""
+    ## @param master.service.externalTrafficPolicy Valkey master service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param master.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param master.service.internalTrafficPolicy Valkey master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
+    ##
+    internalTrafficPolicy: Cluster
+    ## @param master.service.clusterIP Valkey master service Cluster IP
+    ##
+    clusterIP: ""
+    ## @param master.service.loadBalancerIP Valkey master service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param master.service.loadBalancerClass master service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
+    ## @param master.service.loadBalancerSourceRanges Valkey master service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param master.service.externalIPs Valkey master service External IPs
+    ## https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+    ## e.g.
+    ## externalIPs:
+    ##   - 10.10.10.1
+    ##   - 201.22.30.1
+    ##
+    externalIPs: []
+    ## @param master.service.annotations Additional custom annotations for Valkey master service
+    ##
+    annotations: {}
+    ## @param master.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param master.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## @param master.terminationGracePeriodSeconds Integer setting the termination grace period for the valkey-master pods
+  ##
+  terminationGracePeriodSeconds: 30
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param master.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param master.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param master.serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+    ##
+    automountServiceAccountToken: false
+    ## @param master.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
+## @section Valkey replicas configuration parameters
+##
+replica:
+  ## @param replica.kind Use either DaemonSet or StatefulSet (default)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
+  ## @param replica.replicaCount Number of Valkey replicas to deploy
+  ##
+  replicaCount: 3
+  ## @param replica.configuration Configuration for Valkey replicas nodes
+  ## ref: https://valkey.io/topics/config
+  ##
+  configuration: ""
+  ## @param replica.disableCommands Array with Valkey commands to disable on replicas nodes
+  ## Commands will be completely disabled by renaming each to an empty string.
+  ## ref: https://valkey.io/topics/security#disabling-of-specific-commands
+  ##
+  disableCommands:
+    - FLUSHDB
+    - FLUSHALL
+  ## @param replica.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param replica.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param replica.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
+  ## @param replica.preExecCmds Additional commands to run prior to starting Valkey replicas
+  ##
+  preExecCmds: []
+  ## @param replica.extraFlags Array with additional command line flags for Valkey replicas
+  ## e.g:
+  ## extraFlags:
+  ##  - "--maxmemory-policy volatile-ttl"
+  ##  - "--repl-backlog-size 1024mb"
+  ##
+  extraFlags: []
+  ## @param replica.extraEnvVars Array with extra environment variables to add to Valkey replicas nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param replica.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Valkey replicas nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param replica.extraEnvVarsSecret Name of existing Secret containing extra env vars for Valkey replicas nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param replica.externalMaster.enabled Use external master for bootstrapping
+  ## @param replica.externalMaster.host External master host to bootstrap from
+  ## @param replica.externalMaster.port Port for Valkey service external master host
+  ##
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 6379
+  ## @param replica.containerPorts.valkey Container port to open on Valkey replicas nodes
+  ##
+  containerPorts:
+    valkey: 6379
+  ## Configure extra options for Valkey containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param replica.startupProbe.enabled Enable startupProbe on Valkey replicas nodes
+  ## @param replica.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param replica.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param replica.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param replica.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param replica.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 22
+  ## @param replica.livenessProbe.enabled Enable livenessProbe on Valkey replicas nodes
+  ## @param replica.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param replica.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param replica.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param replica.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param replica.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param replica.readinessProbe.enabled Enable readinessProbe on Valkey replicas nodes
+  ## @param replica.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param replica.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param replica.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param replica.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param replica.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param replica.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param replica.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param replica.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Valkey replicas resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param replica.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if replica.resources is set (replica.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param replica.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param replica.podSecurityContext.enabled Enabled Valkey replicas pods' Security Context
+  ## @param replica.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+  ## @param replica.podSecurityContext.sysctls Set kernel settings using the sysctl interface
+  ## @param replica.podSecurityContext.supplementalGroups Set filesystem extra groups
+  ## @param replica.podSecurityContext.fsGroup Set Valkey replicas pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param replica.containerSecurityContext.enabled Enabled Valkey replicas containers' Security Context
+  ## @param replica.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param replica.containerSecurityContext.runAsUser Set Valkey replicas containers' Security Context runAsUser
+  ## @param replica.containerSecurityContext.runAsGroup Set Valkey replicas containers' Security Context runAsGroup
+  ## @param replica.containerSecurityContext.runAsNonRoot Set Valkey replicas containers' Security Context runAsNonRoot
+  ## @param replica.containerSecurityContext.allowPrivilegeEscalation Set Valkey replicas pod's Security Context allowPrivilegeEscalation
+  ## @param replica.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
+  ## @param replica.containerSecurityContext.seccompProfile.type Set Valkey replicas containers' Security Context seccompProfile
+  ## @param replica.containerSecurityContext.capabilities.drop Set Valkey replicas containers' Security Context capabilities to drop
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ["ALL"]
+  ## @param replica.schedulerName Alternate scheduler for Valkey replicas pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param replica.updateStrategy.type Valkey replicas statefulset strategy type
+  ## @skip replica.updateStrategy.rollingUpdate
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate, OnDelete (statefulset), Recreate (deployment)
+    ##
+    type: RollingUpdate
+  ## @param replica.minReadySeconds How many seconds a pod needs to be ready before killing the next, during update
+  ##
+  minReadySeconds: 0
+  ## @param replica.priorityClassName Valkey replicas pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param replica.podManagementPolicy podManagementPolicy to manage scaling operation of %%MAIN_CONTAINER_NAME%% pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: ""
+  ## @param replica.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: false
+  ## @param replica.hostAliases Valkey replicas pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param replica.podLabels Extra labels for Valkey replicas pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param replica.podAnnotations Annotations for Valkey replicas pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param replica.shareProcessNamespace Share a single process namespace between all of the containers in Valkey replicas pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
+  ## @param replica.podAffinityPreset Pod affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param replica.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param replica.nodeAffinityPreset.type Node affinity preset type. Ignored if `replica.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param replica.nodeAffinityPreset.key Node label key to match. Ignored if `replica.affinity` is set
+    ##
+    key: ""
+    ## @param replica.nodeAffinityPreset.values Node label values to match. Ignored if `replica.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param replica.affinity Affinity for Valkey replicas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `replica.podAffinityPreset`, `replica.podAntiAffinityPreset`, and `replica.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param replica.nodeSelector Node labels for Valkey replicas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector: {}
+  ## @param replica.tolerations Tolerations for Valkey replicas pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param replica.topologySpreadConstraints Spread Constraints for Valkey replicas pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## E.g.
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: node
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: []
+  ## @param replica.dnsPolicy DNS Policy for Valkey replica pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  ##
+  dnsPolicy: ""
+  ## @param replica.dnsConfig DNS Configuration for Valkey replica pods
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  ##
+  dnsConfig: {}
+  ## @param replica.lifecycleHooks for the Valkey replica container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param replica.extraVolumes Optionally specify extra list of additional volumes for the Valkey replicas pod(s)
+  ##
+  extraVolumes: []
+  ## @param replica.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey replicas container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param replica.sidecars Add additional sidecar containers to the Valkey replicas pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param replica.initContainers Add additional init containers to the Valkey replicas pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Persistence Parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param replica.persistence.enabled Enable persistence on Valkey replicas nodes using Persistent Volume Claims
+    ##
+    enabled: true
+    ## @param replica.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
+    ## @param replica.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
+    ##  @param replica.persistence.path The path the volume will be mounted at on Valkey replicas containers
+    ## NOTE: Useful when using different Valkey images
+    ##
+    path: /data
+    ## @param replica.persistence.subPath The subdirectory of the volume to mount on Valkey replicas containers
+    ## NOTE: Useful in dev environments
+    ##
+    subPath: ""
+    ## @param replica.persistence.subPathExpr Used to construct the subPath subdirectory of the volume to mount on Valkey replicas containers
+    ##
+    subPathExpr: ""
+    ## @param replica.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param replica.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param replica.persistence.size Persistent Volume size
+    ##
+    size: 8Gi
+    ## @param replica.persistence.annotations Additional custom annotations for the PVC
+    ##
+    annotations: {}
+    ## @param replica.persistence.labels Additional custom labels for the PVC
+    ##
+    labels: {}
+    ## @param replica.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param replica.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param replica.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## NOTE: requires replica.persistence.enabled: true
+    ##
+    existingClaim: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param replica.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param replica.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param replica.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## Valkey replicas service parameters
+  ##
+  service:
+    ## @param replica.service.type Valkey replicas service type
+    ##
+    type: ClusterIP
+    ## @param replica.service.ports.valkey Valkey replicas service port
+    ##
+    ports:
+      valkey: 6379
+    ## @param replica.service.nodePorts.valkey Node port for Valkey replicas
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      valkey: ""
+    ## @param replica.service.externalTrafficPolicy Valkey replicas service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param replica.service.internalTrafficPolicy Valkey replicas service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
+    ##
+    internalTrafficPolicy: Cluster
+    ## @param replica.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param replica.service.clusterIP Valkey replicas service Cluster IP
+    ##
+    clusterIP: ""
+    ## @param replica.service.loadBalancerIP Valkey replicas service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param replica.service.loadBalancerClass replicas service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
+    ## @param replica.service.loadBalancerSourceRanges Valkey replicas service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param replica.service.annotations Additional custom annotations for Valkey replicas service
+    ##
+    annotations: {}
+    ## @param replica.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param replica.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## @param replica.terminationGracePeriodSeconds Integer setting the termination grace period for the valkey-replicas pods
+  ##
+  terminationGracePeriodSeconds: 30
+  ## @section Autoscaling
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ##
+  autoscaling:
+    vpa:
+      ## @param replica.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param replica.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: {}
+      ## @param replica.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: []
+      ## @param replica.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: {}
+      ## @param replica.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: {}
+      ## @section VPA update policy
+      ##
+      updatePolicy:
+        ## @param replica.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param replica.autoscaling.hpa.enabled Enable HPA
+      ##
+      enabled: false
+      ## @param replica.autoscaling.hpa.minReplicas Minimum number of replicas
+      ##
+      minReplicas: ""
+      ## @param replica.autoscaling.hpa.maxReplicas Maximum number of replicas
+      ##
+      maxReplicas: ""
+      ## @param replica.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param replica.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param replica.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param replica.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param replica.serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+    ##
+    automountServiceAccountToken: false
+    ## @param replica.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
+## @section Valkey Sentinel configuration parameters
+##
+
+sentinel:
+  ## @param sentinel.enabled Use Valkey Sentinel on Valkey pods.
+  ## IMPORTANT: this will disable the master and replicas services and
+  ## create a single Valkey service exposing both the Valkey and Sentinel ports
+  ##
+  enabled: false
+  ## Bitnami Valkey Sentinel image version
+  ## ref: https://hub.docker.com/r/bitnami/valkey-sentinel/tags/
+  ## @param sentinel.image.registry [default: REGISTRY_NAME] Valkey Sentinel image registry
+  ## @param sentinel.image.repository [default: REPOSITORY_NAME/valkey-sentinel] Valkey Sentinel image repository
+  ## @skip sentinel.image.tag Valkey Sentinel image tag (immutable tags are recommended)
+  ## @param sentinel.image.digest Valkey Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param sentinel.image.pullPolicy Valkey Sentinel image pull policy
+  ## @param sentinel.image.pullSecrets Valkey Sentinel image pull secrets
+  ## @param sentinel.image.debug Enable image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/valkey-sentinel
+    tag: 7.2.5-debian-12-r3
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param sentinel.annotations Additional custom annotations for Valkey Sentinel resource
+  ##
+  annotations: {}
+  ## @param sentinel.masterSet Master set name
+  ##
+  masterSet: mymaster
+  ## @param sentinel.quorum Sentinel Quorum
+  ##
+  quorum: 2
+  ## @param sentinel.getMasterTimeout Amount of time to allow before get_sentinel_master_info() times out.
+  ##
+  getMasterTimeout: 90
+  ## @param sentinel.automateClusterRecovery Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it.
+  ## This also prevents any new replica from starting until the last remaining replica is elected as master to guarantee that it is the one to be elected by Sentinel, and not a newly started replica with no data.
+  ## NOTE: This feature requires a "downAfterMilliseconds" value less or equal to 2000.
+  ##
+  automateClusterRecovery: false
+  ## @param sentinel.valkeyShutdownWaitFailover Whether the Valkey master container waits for the failover at shutdown (in addition to the Valkey Sentinel container).
+  ##
+  valkeyShutdownWaitFailover: true
+  ## Sentinel timing restrictions
+  ## @param sentinel.downAfterMilliseconds Timeout for detecting a Valkey node is down
+  ## @param sentinel.failoverTimeout Timeout for performing a election failover
+  ##
+  downAfterMilliseconds: 60000
+  failoverTimeout: 180000
+  ## @param sentinel.parallelSyncs Number of replicas that can be reconfigured in parallel to use the new master after a failover
+  ##
+  parallelSyncs: 1
+  ## @param sentinel.configuration Configuration for Valkey Sentinel nodes
+  ## ref: https://valkey.io/topics/sentinel
+  ##
+  configuration: ""
+  ## @param sentinel.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param sentinel.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param sentinel.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ##
+  enableServiceLinks: true
+  ## @param sentinel.preExecCmds Additional commands to run prior to starting Valkey Sentinel
+  ##
+  preExecCmds: []
+  ## @param sentinel.extraEnvVars Array with extra environment variables to add to Valkey Sentinel nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param sentinel.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Valkey Sentinel nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param sentinel.extraEnvVarsSecret Name of existing Secret containing extra env vars for Valkey Sentinel nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param sentinel.externalMaster.enabled Use external master for bootstrapping
+  ## @param sentinel.externalMaster.host External master host to bootstrap from
+  ## @param sentinel.externalMaster.port Port for Valkey service external master host
+  ##
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 6379
+  ## @param sentinel.containerPorts.sentinel Container port to open on Valkey Sentinel nodes
+  ##
+  containerPorts:
+    sentinel: 26379
+  ## Configure extra options for Valkey containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param sentinel.startupProbe.enabled Enable startupProbe on Valkey Sentinel nodes
+  ## @param sentinel.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param sentinel.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param sentinel.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param sentinel.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param sentinel.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 22
+  ## @param sentinel.livenessProbe.enabled Enable livenessProbe on Valkey Sentinel nodes
+  ## @param sentinel.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param sentinel.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param sentinel.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param sentinel.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param sentinel.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param sentinel.readinessProbe.enabled Enable readinessProbe on Valkey Sentinel nodes
+  ## @param sentinel.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param sentinel.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param sentinel.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param sentinel.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param sentinel.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 6
+  ## @param sentinel.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param sentinel.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param sentinel.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Persistence parameters
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ##
+  persistence:
+    ## @param sentinel.persistence.enabled Enable persistence on Valkey sentinel nodes using Persistent Volume Claims (Experimental)
+    ##
+    enabled: false
+    ## @param sentinel.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: ""
+    ## @param sentinel.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param sentinel.persistence.size Persistent Volume size
+    ##
+    size: 100Mi
+    ## @param sentinel.persistence.annotations Additional custom annotations for the PVC
+    ##
+    annotations: {}
+    ## @param sentinel.persistence.labels Additional custom labels for the PVC
+    ##
+    labels: {}
+    ## @param sentinel.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param sentinel.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param sentinel.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
+    ## @param sentinel.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
+  ## persistentVolumeClaimRetentionPolicy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ## @param sentinel.persistentVolumeClaimRetentionPolicy.enabled Controls if and how PVCs are deleted during the lifecycle of a StatefulSet
+  ## @param sentinel.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ## @param sentinel.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    enabled: false
+    whenScaled: Retain
+    whenDeleted: Retain
+  ## Valkey Sentinel resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param sentinel.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sentinel.resources is set (sentinel.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param sentinel.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param sentinel.containerSecurityContext.enabled Enabled Valkey Sentinel containers' Security Context
+  ## @param sentinel.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param sentinel.containerSecurityContext.runAsUser Set Valkey Sentinel containers' Security Context runAsUser
+  ## @param sentinel.containerSecurityContext.runAsGroup Set Valkey Sentinel containers' Security Context runAsGroup
+  ## @param sentinel.containerSecurityContext.runAsNonRoot Set Valkey Sentinel containers' Security Context runAsNonRoot
+  ## @param sentinel.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
+  ## @param sentinel.containerSecurityContext.allowPrivilegeEscalation Set Valkey Sentinel containers' Security Context allowPrivilegeEscalation
+  ## @param sentinel.containerSecurityContext.seccompProfile.type Set Valkey Sentinel containers' Security Context seccompProfile
+  ## @param sentinel.containerSecurityContext.capabilities.drop Set Valkey Sentinel containers' Security Context capabilities to drop
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ["ALL"]
+  ## @param sentinel.lifecycleHooks for the Valkey sentinel container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param sentinel.extraVolumes Optionally specify extra list of additional volumes for the Valkey Sentinel
+  ##
+  extraVolumes: []
+  ## @param sentinel.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey Sentinel container(s)
+  ##
+  extraVolumeMounts: []
+  ## Valkey Sentinel service parameters
+  ##
+  service:
+    ## @param sentinel.service.type Valkey Sentinel service type
+    ##
+    type: ClusterIP
+    ## @param sentinel.service.ports.valkey Valkey service port for Valkey
+    ## @param sentinel.service.ports.sentinel Valkey service port for Valkey Sentinel
+    ##
+    ports:
+      valkey: 6379
+      sentinel: 26379
+    ## @param sentinel.service.nodePorts.valkey Node port for Valkey
+    ## @param sentinel.service.nodePorts.sentinel Node port for Sentinel
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## NOTE: choose port between <30000-32767>
+    ## NOTE: By leaving these values blank, they will be generated by ports-configmap
+    ##       If setting manually, please leave at least replica.replicaCount + 1 in between sentinel.service.nodePorts.valkey and sentinel.service.nodePorts.sentinel to take into account the ports that will be created while incrementing that base port
+    ##
+    nodePorts:
+      valkey: ""
+      sentinel: ""
+    ## @param sentinel.service.externalTrafficPolicy Valkey Sentinel service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param sentinel.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param sentinel.service.clusterIP Valkey Sentinel service Cluster IP
+    ##
+    clusterIP: ""
+
+    ## @param sentinel.service.createMaster Enable master service pointing to the current master (experimental)
+    ## NOTE: rbac.create need to be set to true
+    ##
+    createMaster: false
+
+    ## @param sentinel.service.loadBalancerIP Valkey Sentinel service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param sentinel.service.loadBalancerClass sentinel service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
+    ## @param sentinel.service.loadBalancerSourceRanges Valkey Sentinel service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param sentinel.service.annotations Additional custom annotations for Valkey Sentinel service
+    ##
+    annotations: {}
+    ## @param sentinel.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param sentinel.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param sentinel.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
+  ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the valkey-node pods
+  ##
+  terminationGracePeriodSeconds: 30
+## @section Other Parameters
+##
+
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require client label for connections
+  ## When set to false, only pods with the correct client label will have network access to the ports
+  ## Valkey is listening on. When true, Valkey will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress Add extra egress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+  metrics:
+    ## @param networkPolicy.metrics.allowExternal Don't require client label for connections for metrics endpoint
+    ## When set to false, only pods with the correct client label will have network access to the metrics port
+    ##
+    allowExternal: true
+    ## @param networkPolicy.metrics.ingressNSMatchLabels Labels to match to allow traffic from other namespaces to metrics endpoint
+    ## @param networkPolicy.metrics.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces to metrics endpoint
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+## PodSecurityPolicy configuration
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  ## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
+  ##
+  create: false
+  ## @param podSecurityPolicy.enabled Enable PodSecurityPolicy's RBAC rules
+  ##
+  enabled: false
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: false
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules: []
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: false
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+## Valkey Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Specifies whether a PodDisruptionBudget should be created
+  ##
+  create: false
+  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction
+  ##
+  minAvailable: 1
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
+  ##
+  maxUnavailable: ""
+## TLS configuration
+##
+tls:
+  ## @param tls.enabled Enable TLS traffic
+  ##
+  enabled: false
+  ## @param tls.authClients Require clients to authenticate
+  ##
+  authClients: true
+  ## @param tls.autoGenerated Enable autogenerated certificates
+  ##
+  autoGenerated: false
+  ## @param tls.existingSecret The name of the existing secret that contains the TLS certificates
+  ##
+  existingSecret: ""
+  ## @param tls.certFilename Certificate filename
+  ##
+  certFilename: ""
+  ## @param tls.certKeyFilename Certificate Key filename
+  ##
+  certKeyFilename: ""
+  ## @param tls.certCAFilename CA Certificate filename
+  ##
+  certCAFilename: ""
+  ## @param tls.dhParamsFilename File containing DH params (in order to support DH based ciphers)
+  ##
+  dhParamsFilename: ""
+## @section Metrics Parameters
+##
+metrics:
+  ## @param metrics.enabled Start a sidecar prometheus exporter to expose Valkey metrics
+  ##
+  enabled: false
+  ## Bitnami Valkey Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/valkey-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Valkey Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/valkey-exporter] Valkey Exporter image repository
+  ## @skip metrics.image.tag Valkey Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Valkey Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy Valkey Exporter image pull policy
+  ## @param metrics.image.pullSecrets Valkey Exporter image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/redis-exporter
+    tag: 1.59.0-debian-12-r6
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.containerPorts.http Metrics HTTP container port
+  ##
+  containerPorts:
+    http: 9121
+  ## Configure extra options for Valkey containers' liveness, readiness & startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  ## @param metrics.startupProbe.enabled Enable startupProbe on Valkey replicas nodes
+  ## @param metrics.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param metrics.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param metrics.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param metrics.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param metrics.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe on Valkey replicas nodes
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe on Valkey replicas nodes
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 3
+  ## @param metrics.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param metrics.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param metrics.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param metrics.command Override default metrics container init command (useful when using custom images)
+  ##
+  command: []
+  ## @param metrics.valkeyTargetHost A way to specify an alternative Valkey hostname
+  ## Useful for certificate CN/SAN matching
+  ##
+  valkeyTargetHost: "localhost"
+  ## @param metrics.extraArgs Extra arguments for Valkey exporter, for example:
+  ## e.g.:
+  ## extraArgs:
+  ##   check-keys: myKey,myOtherKey
+  ##
+  extraArgs: {}
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Valkey exporter
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled Valkey exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set Valkey exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Valkey exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Valkey exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Valkey exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Valkey exporter containers' Security Context seccompProfile
+  ## @param metrics.containerSecurityContext.capabilities.drop Set Valkey exporter containers' Security Context capabilities to drop
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ["ALL"]
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Valkey metrics sidecar
+  ##
+  extraVolumes: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Valkey metrics sidecar
+  ##
+  extraVolumeMounts: []
+  ## Valkey exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## @param metrics.podLabels Extra labels for Valkey exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param metrics.podAnnotations [object] Annotations for Valkey exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9121"
+  ## Valkey exporter service parameters
+  ##
+  service:
+    ## @param metrics.service.enabled Create Service resource(s) for scraping metrics using PrometheusOperator ServiceMonitor, can be disabled when using a PodMonitor
+    ##
+    enabled: true
+    ## @param metrics.service.type Valkey exporter service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.ports.http Valkey exporter service port
+    ##
+    ports:
+      http: 9121
+    ## @param metrics.service.externalTrafficPolicy Valkey exporter service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param metrics.service.loadBalancerIP Valkey exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerClass exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
+    ## @param metrics.service.loadBalancerSourceRanges Valkey exporter service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.annotations Additional custom annotations for Valkey exporter service
+    ##
+    annotations: {}
+    ## @param metrics.service.clusterIP Valkey exporter service Cluster IP
+    ##
+    clusterIP: ""
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.port the service port to scrape metrics from
+    ##
+    port: http-metrics
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabelings Metrics RelabelConfigs to apply to samples before scraping.
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    ##
+    podTargetLabels: []
+    ## @param metrics.serviceMonitor.sampleLimit Limit of how many samples should be scraped from every Pod
+    ##
+    sampleLimit: false
+    ## @param metrics.serviceMonitor.targetLimit Limit of how many targets should be scraped
+    ##
+    targetLimit: false
+    ## @param metrics.serviceMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ##
+    additionalEndpoints: []
+    # uncomment in order to scrape sentinel metrics, also to in order distinguish between Sentinel and Valkey container metrics
+    # add metricRelabelings with label like app=valkey to main valkey pod-monitor port
+    # - interval: "30s"
+    #   path: "/scrape"
+    #   port: "metrics"
+    #   params:
+    #     target: ["localhost:26379"]
+    #   metricRelabelings:
+    #     - targetLabel: "app"
+    #       replacement: "sentinel"
+  ## Prometheus Pod Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#podmonitor
+  ##
+  podMonitor:
+    ## @param metrics.podMonitor.port the pod port to scrape metrics from
+    ##
+    port: metrics
+    ## @param metrics.podMonitor.enabled Create PodMonitor resource(s) for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.podMonitor.namespace The namespace in which the PodMonitor will be created
+    ##
+    namespace: ""
+    ## @param metrics.podMonitor.interval The interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.podMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.podMonitor.relabelings Metrics RelabelConfigs to apply to samples before scraping.
+    ##
+    relabelings: []
+    ## @param metrics.podMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
+    ##
+    metricRelabelings: []
+    # - targetLabel: "app"
+    #   replacement: "valkey"
+    ## @param metrics.podMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.podMonitor.additionalLabels Additional labels that can be used so PodMonitor resource(s) can be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.podMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    ##
+    podTargetLabels: []
+    ## @param metrics.podMonitor.sampleLimit Limit of how many samples should be scraped from every Pod
+    ##
+    sampleLimit: false
+    ## @param metrics.podMonitor.targetLimit Limit of how many targets should be scraped
+    ##
+    targetLimit: false
+    ## @param metrics.podMonitor.additionalEndpoints  Additional endpoints to scrape (e.g sentinel)
+    ##
+    additionalEndpoints: []
+    # - interval: "30s"
+    #   path: "/scrape"
+    #   port: "metrics"
+    #   params:
+    #     target: ["localhost:26379"]
+    #   metricRelabelings:
+    #     - targetLabel: "app"
+    #       replacement: "sentinel"
+  ## Custom PrometheusRule to be defined
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace The namespace in which the prometheusRule will be created
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Custom Prometheus rules
+    ## e.g:
+    ## rules:
+    ##   - alert: ValkeyDown
+    ##     expr: valkey_up{service="{{ template "common.names.fullname" . }}-metrics"} == 0
+    ##     for: 2m
+    ##     labels:
+    ##       severity: error
+    ##     annotations:
+    ##       summary: Valkey instance {{ "{{ $labels.instance }}" }} down
+    ##       description: Valkey instance {{ "{{ $labels.instance }}" }} is down
+    ##    - alert: ValkeyMemoryHigh
+    ##      expr: >
+    ##        valkey_memory_used_bytes{service="{{ template "common.names.fullname" . }}-metrics"} * 100
+    ##        /
+    ##        valkey_memory_max_bytes{service="{{ template "common.names.fullname" . }}-metrics"}
+    ##        > 90
+    ##      for: 2m
+    ##      labels:
+    ##        severity: error
+    ##      annotations:
+    ##        summary: Valkey instance {{ "{{ $labels.instance }}" }} is using too much memory
+    ##        description: |
+    ##          Valkey instance {{ "{{ $labels.instance }}" }} is using {{ "{{ $value }}" }}% of its available memory.
+    ##    - alert: ValkeyKeyEviction
+    ##      expr: |
+    ##        increase(valkey_evicted_keys_total{service="{{ template "common.names.fullname" . }}-metrics"}[5m]) > 0
+    ##      for: 1s
+    ##      labels:
+    ##        severity: error
+    ##      annotations:
+    ##        summary: Valkey instance {{ "{{ $labels.instance }}" }} has evicted keys
+    ##        description: |
+    ##          Valkey instance {{ "{{ $labels.instance }}" }} has evicted {{ "{{ $value }}" }} keys in the last 5 minutes.
+    ##
+    rules: []
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r21
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    seLinuxOptions: {}
+    runAsUser: 0
+
+## Kubectl InitContainer
+## used by Sentinel to update the isMaster label on the Valkey(TM) pods
+##
+kubectl:
+  ## Bitnami Kubectl image version
+  ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
+  ## @param kubectl.image.registry [default: REGISTRY_NAME] Kubectl image registry
+  ## @param kubectl.image.repository [default: REPOSITORY_NAME/kubectl] Kubectl image repository
+  ## @skip kubectl.image.tag Kubectl image tag (immutable tags are recommended), by default, using the current version
+  ## @param kubectl.image.digest Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param kubectl.image.pullPolicy Kubectl image pull policy
+  ## @param kubectl.image.pullSecrets Kubectl pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/kubectl
+    tag: 1.30.0-debian-12-r5
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param kubectl.command kubectl command to execute
+  ##
+  command: ["/opt/bitnami/scripts/kubectl-scripts/update-master-label.sh"]
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param kubectl.containerSecurityContext.enabled Enabled kubectl containers' Security Context
+  ## @param kubectl.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param kubectl.containerSecurityContext.runAsUser Set kubectl containers' Security Context runAsUser
+  ## @param kubectl.containerSecurityContext.runAsGroup Set kubectl containers' Security Context runAsGroup
+  ## @param kubectl.containerSecurityContext.runAsNonRoot Set kubectl containers' Security Context runAsNonRoot
+  ## @param kubectl.containerSecurityContext.allowPrivilegeEscalation Set kubectl containers' Security Context allowPrivilegeEscalation
+  ## @param kubectl.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context read-only root filesystem
+  ## @param kubectl.containerSecurityContext.seccompProfile.type Set kubectl containers' Security Context seccompProfile
+  ## @param kubectl.containerSecurityContext.capabilities.drop Set kubectl containers' Security Context capabilities to drop
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop: ["ALL"]
+  ## Bitnami Kubectl resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param kubectl.resources.limits The resources limits for the kubectl containers
+  ## @param kubectl.resources.requests The requested resources for the kubectl containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+## @section useExternalDNS Parameters
+##
+## @param useExternalDNS.enabled Enable various syntax that would enable external-dns to work.  Note this requires a working installation of `external-dns` to be usable.
+## @param useExternalDNS.additionalAnnotations Extra annotations to be utilized when `external-dns` is enabled.
+## @param useExternalDNS.annotationKey The annotation key utilized when `external-dns` is enabled. Setting this to `false` will disable annotations.
+## @param useExternalDNS.suffix The DNS suffix utilized when `external-dns` is enabled.  Note that we prepend the suffix with the full name of the release.
+##
+useExternalDNS:
+  enabled: false
+  suffix: ""
+  annotationKey: external-dns.alpha.kubernetes.io/
+  additionalAnnotations: {}

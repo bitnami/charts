@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r3
+      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r8
     - name: matomo
-      image: docker.io/bitnami/matomo:5.0.3-debian-12-r4
+      image: docker.io/bitnami/matomo:5.0.3-debian-12-r8
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
 appVersion: 5.0.3
 dependencies:
@@ -39,4 +39,4 @@ maintainers:
 name: matomo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/matomo
-version: 7.1.0
+version: 7.1.1

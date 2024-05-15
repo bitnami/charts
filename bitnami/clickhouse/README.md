@@ -65,7 +65,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### ClickHouse keeper support
 
-You can set `keeper.enabled` to use ClickHouse keeper. If `keeper.enabled=true`, Zookeeper settings will not be ignore.
+You can set `keeper.enabled` to use ClickHouse keeper. If `keeper.enabled=true`, Zookeeper settings will be ignore.
 
 ### External Zookeeper support
 

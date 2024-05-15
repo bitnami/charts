@@ -147,36 +147,62 @@ In order to access MongoDB(&reg;) nodes from outside the cluster when using a re
 
 #### Use LoadBalancer services
 
-Two alternatives are available to use *LoadBalancer* services:
+Three alternatives are available to use *LoadBalancer* services:
 
 - Use random load balancer IP addresses using an *initContainer* that waits for the IP addresses to be ready and discovers them automatically. An example deployment configuration is shown below:
 
-    ```text
-    architecture=replicaset
-    replicaCount=2
-    externalAccess.enabled=true
-    externalAccess.service.type=LoadBalancer
-    externalAccess.service.port=27017
-    externalAccess.autoDiscovery.enabled=true
-    serviceAccount.create=true
-    rbac.create=true
+    ```yaml
+    architecture: replicaset
+    replicaCount: 2
+    externalAccess:
+      enabled: true
+      service:
+        type: LoadBalancer
+      autoDiscovery:
+        enabled: true
+    serviceAccount:
+      create: true
+    automountServiceAccountToken: true
+    rbac:
+      create: true
     ```
 
     > NOTE: This option requires creating RBAC rules on clusters where RBAC policies are enabled.
 
 - Manually specify the load balancer IP addresses. An example deployment configuration is shown below, with the placeholder EXTERNAL-IP-ADDRESS-X used in place of the load balancer IP addresses:
 
-    ```text
-    architecture=replicaset
-    replicaCount=2
-    externalAccess.enabled=true
-    externalAccess.service.type=LoadBalancer
-    externalAccess.service.port=27017
-    externalAccess.service.loadBalancerIPs[0]='EXTERNAL-IP-ADDRESS-1'
-    externalAccess.service.loadBalancerIPs[1]='EXTERNAL-IP-ADDRESS-2'
+    ```yaml
+    architecture: replicaset
+    replicaCount: 2
+    externalAccess:
+      enabled: true
+      service:
+        type: LoadBalancer
+        loadBalancerIPs:
+          - 'EXTERNAL-IP-ADDRESS-1'
+          - 'EXTERNAL-IP-ADDRESS-2'
     ```
 
     > NOTE: This option requires knowing the load balancer IP addresses, so that each MongoDB&reg; node's advertised hostname is configured with it.
+
+- Specify `externalAccess.service.publicNames`. These names must be resolvable by the MongoDB&reg; containers. To ensure that, if this value is set, an initContainer is added to wait for the ip addresses associated to those names. We can combine this feature with `external-dns`, setting the required annotations to configure the load balancer names:
+
+    ```yaml
+    architecture: replicaset
+    replicaCount: 2
+    externalAccess:
+      enabled: true
+      service:
+        type: LoadBalancer
+        publicNames:
+          - 'mongodb-0.example.com'
+          - 'mongodb-1.example.com'
+        annotationsList:
+          - external-dns.alpha.kubernetes.io/hostname: mongodb-0.example.com
+          - external-dns.alpha.kubernetes.io/hostname: mongodb-1.example.com
+    ```
+
+    > NOTE: If register new DNS records for those names is not an option, the release can be upgraded setting `hostAliases` with the public IPs assigned to the external services.
 
 #### Use NodePort services
 
@@ -332,6 +358,19 @@ A Kubernetes Secret is used to hold the signed certificate created above, and th
 To use your own CA, set `tls.caCert` and `tls.caKey` with appropriate base64 encoded data. The `secrets-ca.yaml` file will utilize this data to create the Secret.
 
 > NOTE: Currently, only RSA private keys are supported.
+
+#### Use your own certificates
+
+To use your own certificates, set `tls.standalone.existingSecret`, `tls.replicaset.existingSecrets`, `tls.hidden.existingSecrets` and/or `tls.arbiter.existingSecret` secrets according to your needs. All of them must be references to `kubernetes.io/tls` secrets and the certificates must be created using the same CA. The CA can be added directly to each secret using the `ca.crt` key:
+
+```shell
+kubectl create secret tls "mongodb-0-cert"  --cert="mongodb-0.crt" --key="mongodb-0.key"
+kubectl patch secret "mongodb-0-cert" -p="{\"data\":{\"ca.crt\": \"$(cat ca.crt | base64 -w0 )\"}}"
+```
+
+Or adding it to the "endpoint certificate" and setting the value `tls.pemChainIncluded`. If we reuse the example above, the `mongodb-0.crt` file should include CA cert and we shouldn't need to patch the secret to add the `ca.crt` set key.
+
+> NOTE: Certificates should be signed for the fully qualified domain names. If `externalAccess.service.publicNames`is set, those names should be used in the certificates set in `tls.replicaset.existingSecrets`.
 
 #### Access the cluster
 
@@ -562,6 +601,13 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                                                                                                                                            | `[]`                      |
 | `externalAccess.autoDiscovery.resourcesPreset`                | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production). | `nano`                    |
 | `externalAccess.autoDiscovery.resources`                      | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                           | `{}`                      |
+| `externalAccess.dnsCheck.image.registry`                      | Init container dns-check image registry                                                                                                                                                                                                                                     | `REGISTRY_NAME`           |
+| `externalAccess.dnsCheck.image.repository`                    | Init container dns-check image repository                                                                                                                                                                                                                                   | `REPOSITORY_NAME/kubectl` |
+| `externalAccess.dnsCheck.image.digest`                        | Init container dns-check image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                    | `""`                      |
+| `externalAccess.dnsCheck.image.pullPolicy`                    | Init container dns-check image pull policy                                                                                                                                                                                                                                  | `IfNotPresent`            |
+| `externalAccess.dnsCheck.image.pullSecrets`                   | Init container dns-check image pull secrets                                                                                                                                                                                                                                 | `[]`                      |
+| `externalAccess.dnsCheck.resourcesPreset`                     | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if externalAccess.autoDiscovery.resources is set (externalAccess.autoDiscovery.resources is recommended for production). | `nano`                    |
+| `externalAccess.dnsCheck.resources`                           | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                                           | `{}`                      |
 | `externalAccess.externalMaster.enabled`                       | Use external master for bootstrapping                                                                                                                                                                                                                                       | `false`                   |
 | `externalAccess.externalMaster.host`                          | External master host to bootstrap from                                                                                                                                                                                                                                      | `""`                      |
 | `externalAccess.externalMaster.port`                          | Port for MongoDB(&reg;) service external master host                                                                                                                                                                                                                        | `27017`                   |
@@ -569,14 +615,16 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                                                                                                                                                         | `mongodb`                 |
 | `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                                                                                                                                              | `27017`                   |
 | `externalAccess.service.loadBalancerIPs`                      | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                                                                                                                                                         | `[]`                      |
+| `externalAccess.service.publicNames`                          | Array of public names. The size should be equal to the number of replicas.                                                                                                                                                                                                  | `[]`                      |
 | `externalAccess.service.loadBalancerClass`                    | loadBalancerClass when service type is LoadBalancer                                                                                                                                                                                                                         | `""`                      |
 | `externalAccess.service.loadBalancerSourceRanges`             | Address(es) that are allowed when service is LoadBalancer                                                                                                                                                                                                                   | `[]`                      |
-| `externalAccess.service.allocateLoadBalancerNodePorts`        | Wheter to allocate node ports when service type is LoadBalancer                                                                                                                                                                                                             | `true`                    |
+| `externalAccess.service.allocateLoadBalancerNodePorts`        | Whether to allocate node ports when service type is LoadBalancer                                                                                                                                                                                                            | `true`                    |
 | `externalAccess.service.externalTrafficPolicy`                | MongoDB(&reg;) service external traffic policy                                                                                                                                                                                                                              | `Local`                   |
 | `externalAccess.service.nodePorts`                            | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                                                                                                                                                      | `[]`                      |
 | `externalAccess.service.domain`                               | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                                                                                                                                                    | `""`                      |
 | `externalAccess.service.extraPorts`                           | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                                                              | `[]`                      |
-| `externalAccess.service.annotations`                          | Service annotations for external access                                                                                                                                                                                                                                     | `{}`                      |
+| `externalAccess.service.annotations`                          | Service annotations for external access. These annotations are common for all services created.                                                                                                                                                                             | `{}`                      |
+| `externalAccess.service.annotationsList`                      | Service annotations for eache external service. This value contains a list allowing different annotations per each external service.                                                                                                                                        | `[]`                      |
 | `externalAccess.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                                                                                                                                                            | `None`                    |
 | `externalAccess.service.sessionAffinityConfig`                | Additional settings for the sessionAffinity                                                                                                                                                                                                                                 | `{}`                      |
 | `externalAccess.hidden.enabled`                               | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                                                                                                                                                    | `false`                   |
@@ -617,6 +665,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `persistence.accessModes`                          | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
 | `persistence.size`                                 | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
 | `persistence.annotations`                          | PVC annotations                                                                                                                       | `{}`                |
+| `persistence.labels`                               | PVC labels                                                                                                                            | `{}`                |
 | `persistence.mountPath`                            | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
 | `persistence.subPath`                              | Subdirectory of the volume to mount at                                                                                                | `""`                |
 | `persistence.volumeClaimTemplates.selector`        | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |

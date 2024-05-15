@@ -88,7 +88,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.16.2-debian-12-r2
+    tag: 1.16.2-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -823,7 +823,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.2-debian-12-r5
+    tag: 1.4.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1328,7 +1328,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.4.1-debian-12-r4
+    tag: 1.4.1-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1760,6 +1760,17 @@ injector:
     ## @param injector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
+
+  ## @param injector.webhook.namespaceSelector Enabling specify which namespace you want to work with webhook
+  ## Example:
+  ##   namespaceSelector:
+  ##     matchExpressions:
+  ##     - key: kubernetes.io/metadata.name
+  ##       operator: In
+  ##       values:
+  ##         - "{{ .Release.Namespace }}"
+  webhook:
+    namespaceSelector: {}
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -1780,7 +1791,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

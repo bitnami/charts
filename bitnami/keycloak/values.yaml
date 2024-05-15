@@ -101,7 +101,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 24.0.4-debian-12-r0
+  tag: 24.0.4-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -912,6 +912,7 @@ pdb:
   ##
   maxUnavailable: ""
 ## Keycloak Autoscaling configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 ## @param autoscaling.enabled Enable autoscaling for Keycloak
 ## @param autoscaling.minReplicas Minimum number of Keycloak replicas
 ## @param autoscaling.maxReplicas Maximum number of Keycloak replicas
@@ -924,6 +925,41 @@ autoscaling:
   maxReplicas: 11
   targetCPU: ""
   targetMemory: ""
+  ## HPA Scaling Behavior
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior
+  ##
+  behavior:
+    ## HPA behavior when scaling up
+    ## @param autoscaling.behavior.scaleUp.stabilizationWindowSeconds The number of seconds for which past recommendations should be considered while scaling up
+    ## @param autoscaling.behavior.scaleUp.selectPolicy The priority of policies that the autoscaler will apply when scaling up
+    ## @param autoscaling.behavior.scaleUp.policies [array] HPA scaling policies when scaling up
+    ## e.g:
+    ## Policy to scale 20% of the pod in 60s
+    ## - type: Percent
+    ##   value: 20
+    ##   periodSeconds: 60
+    ##
+    scaleUp:
+      stabilizationWindowSeconds: 120
+      selectPolicy: Max
+      policies: []
+    ## HPA behavior when scaling down
+    ## @param autoscaling.behavior.scaleDown.stabilizationWindowSeconds The number of seconds for which past recommendations should be considered while scaling down
+    ## @param autoscaling.behavior.scaleDown.selectPolicy The priority of policies that the autoscaler will apply when scaling down
+    ## @param autoscaling.behavior.scaleDown.policies [array] HPA scaling policies when scaling down
+    ## e.g:
+    ## Policy to scale one pod in 300s
+    ## - type: Pods
+    ##   value: 1
+    ##   periodSeconds: 300
+    ##
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      selectPolicy: Max
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 300
 ## @section Metrics parameters
 ##
 
@@ -1043,7 +1079,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.12.0-debian-12-r3
+    tag: 5.12.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
