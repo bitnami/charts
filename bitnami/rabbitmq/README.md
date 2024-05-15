@@ -272,14 +272,17 @@ RabbitMQ nodes assume their peers come back online within five minutes (by defau
 - The node will fully boot after it detects that its peers have come online
 - Kubernetes will not start any more pods until the first one boots
 
-Using [Bitnami RabbitMQ Cluster Operator](https://hub.docker.com/r/bitnamicharts/rabbitmq-cluster-operator) is the easiest solution.
-
-Alternatively, the following combination of deployment settings avoids the problem:
+The following combination of deployment settings avoids the problem:
 
 - Use `podManagementPolicy: "Parallel"` to boot multiple cluster nodes in parallel
 - Use `rabbitmq-diagnostics ping` for readiness probe
 
-Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**. Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
+This combination is what [the official RabbitMQ Cluster Operator](https://www.rabbitmq.com/kubernetes/operator/operator-overview) uses,
+for example.
+
+Note that forcing nodes to boot is **not a solution** and doing so **can be dangerous**.
+Forced booting is a last resort mechanism in RabbitMQ that helps make remaining cluster
+nodes recover and rejoin each other after a permanent loss of some of their former peers. In other words, forced booting a node is an emergency event recovery procedure.
 
 To learn more, see
 
