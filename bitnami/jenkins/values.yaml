@@ -38,10 +38,10 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
-## @param commonLabels Labels to add to all deployed objects
+## @param replicaCount Number of container replicas
 ##
-replicas: {}
-## @param replicas Defining number of container replicas
+replicaCount: 1
+## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
