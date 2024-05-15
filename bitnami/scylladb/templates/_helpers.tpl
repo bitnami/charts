@@ -61,7 +61,11 @@ Return the list of Scylladb seed nodes
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $seedCount := .Values.cluster.seedCount | int }}
 {{- range $e, $i := until $seedCount }}
+{{- if $.Values.service.internal.enabled -}}
+{{- $seeds = append $seeds (printf "%s-%d-internal.%s.svc.%s" $fullname $i $releaseNamespace $clusterDomain) }}
+{{- else -}}
 {{- $seeds = append $seeds (printf "%s-%d.%s-headless.%s.svc.%s" $fullname $i $fullname $releaseNamespace $clusterDomain) }}
+{{- end }}
 {{- end }}
 {{- range .Values.cluster.extraSeeds }}
 {{- $seeds = append $seeds . }}

@@ -189,6 +189,9 @@ spec:
                   # Only node 0 will execute the startup initdb scripts
                   export SCYLLADB_IGNORE_INITDB_SCRIPTS=1
               fi
+              {{- if .Values.service.internal.enabled }}
+              export SCYLLADB_BROADCAST_ADDRESS=${POD_NAME}-internal
+              {{- end }}
               /opt/bitnami/scripts/scylladb/entrypoint.sh /opt/bitnami/scripts/scylladb/run.sh
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -211,10 +214,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) }}
                   key: {{ include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") }}
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
             - name: POD_NAME
               valueFrom:
                 fieldRef:

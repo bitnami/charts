@@ -211,6 +211,12 @@ replicaCount: 1
 ##
 updateStrategy:
   type: RollingUpdate
+## @param nameResolutionThreshold Failure threshold for internal hostnames resolution
+##
+nameResolutionThreshold: 5
+## @param nameResolutionTimeout Timeout seconds between probes for internal hostnames resolution
+##
+nameResolutionTimeout: 5
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
@@ -710,6 +716,18 @@ service:
   ##
   headless:
     ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+  ## Internal service properties
+  ##
+  internal:
+    ## @param service.internal.enabled Create a service per pod (this improves the cluster stability when scaling or performing upgrades)
+    ##
+    enabled: true
+    ## @param service.internal.labels Labels for the internal services.
+    ##
+    labels: {}
+    ## @param service.internal.annotations Annotations for the internal services.
     ##
     annotations: {}
 ## Network Policies

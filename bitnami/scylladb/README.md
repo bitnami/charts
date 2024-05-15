@@ -185,6 +185,8 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `replicaCount`                                      | Number of Scylladb replicas                                                                                                                                                                                       | `1`              |
 | `updateStrategy.type`                               | updateStrategy for Scylladb statefulset                                                                                                                                                                           | `RollingUpdate`  |
+| `nameResolutionThreshold`                           | Failure threshold for internal hostnames resolution                                                                                                                                                               | `5`              |
+| `nameResolutionTimeout`                             | Timeout seconds between probes for internal hostnames resolution                                                                                                                                                  | `5`              |
 | `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                | `false`          |
 | `hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                       | `[]`             |
 | `podManagementPolicy`                               | StatefulSet pod management policy                                                                                                                                                                                 | `OrderedReady`   |
@@ -323,31 +325,34 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Traffic Exposure Parameters
 
-| Name                                    | Description                                                                        | Value       |
-| --------------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
-| `service.type`                          | Scylladb service type                                                              | `ClusterIP` |
-| `service.ports.cql`                     | Scylladb service CQL Port                                                          | `9042`      |
-| `service.ports.cqlShard`                | Scylladb service CQL Port (sharded)                                                | `19042`     |
-| `service.ports.metrics`                 | Scylladb service metrics port                                                      | `8080`      |
-| `service.nodePorts.cql`                 | Node port for CQL                                                                  | `""`        |
-| `service.nodePorts.cqlShard`            | Node port for CQL (sharded)                                                        | `""`        |
-| `service.nodePorts.metrics`             | Node port for metrics                                                              | `""`        |
-| `service.extraPorts`                    | Extra ports to expose in the service (normally used with the `sidecar` value)      | `[]`        |
-| `service.loadBalancerIP`                | LoadBalancerIP if service type is `LoadBalancer`                                   | `""`        |
-| `service.loadBalancerSourceRanges`      | Service Load Balancer sources                                                      | `[]`        |
-| `service.clusterIP`                     | Service Cluster IP                                                                 | `""`        |
-| `service.externalTrafficPolicy`         | Service external traffic policy                                                    | `Cluster`   |
-| `service.annotations`                   | Provide any additional annotations which may be required.                          | `{}`        |
-| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
-| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                        | `{}`        |
-| `service.headless.annotations`          | Annotations for the headless service.                                              | `{}`        |
-| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                | `true`      |
-| `networkPolicy.allowExternal`           | Don't require server label for connections                                         | `true`      |
-| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                    | `true`      |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                       | `[]`        |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true) | `[]`        |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                             | `{}`        |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                         | `{}`        |
+| Name                                    | Description                                                                                        | Value       |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                          | Scylladb service type                                                                              | `ClusterIP` |
+| `service.ports.cql`                     | Scylladb service CQL Port                                                                          | `9042`      |
+| `service.ports.cqlShard`                | Scylladb service CQL Port (sharded)                                                                | `19042`     |
+| `service.ports.metrics`                 | Scylladb service metrics port                                                                      | `8080`      |
+| `service.nodePorts.cql`                 | Node port for CQL                                                                                  | `""`        |
+| `service.nodePorts.cqlShard`            | Node port for CQL (sharded)                                                                        | `""`        |
+| `service.nodePorts.metrics`             | Node port for metrics                                                                              | `""`        |
+| `service.extraPorts`                    | Extra ports to expose in the service (normally used with the `sidecar` value)                      | `[]`        |
+| `service.loadBalancerIP`                | LoadBalancerIP if service type is `LoadBalancer`                                                   | `""`        |
+| `service.loadBalancerSourceRanges`      | Service Load Balancer sources                                                                      | `[]`        |
+| `service.clusterIP`                     | Service Cluster IP                                                                                 | `""`        |
+| `service.externalTrafficPolicy`         | Service external traffic policy                                                                    | `Cluster`   |
+| `service.annotations`                   | Provide any additional annotations which may be required.                                          | `{}`        |
+| `service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                               | `None`      |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                        | `{}`        |
+| `service.headless.annotations`          | Annotations for the headless service.                                                              | `{}`        |
+| `service.internal.enabled`              | Create a service per pod (this improves the cluster stability when scaling or performing upgrades) | `true`      |
+| `service.internal.labels`               | Labels for the internal services.                                                                  | `{}`        |
+| `service.internal.annotations`          | Annotations for the internal services.                                                             | `{}`        |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                | `true`      |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                                                         | `true`      |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                    | `true`      |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                       | `[]`        |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                 | `[]`        |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                             | `{}`        |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                         | `{}`        |
 
 ### Persistence parameters
 
