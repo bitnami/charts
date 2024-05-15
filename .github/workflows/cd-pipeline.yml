@@ -160,7 +160,7 @@ jobs:
 
             # Push changes
             git add bitnami/index.yaml && git commit --signoff --amend --no-edit
-            git push origin index:index-test --force-with-lease=index-test:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
+            git push origin index:index-test --force-with-lease=index-test:${current_commit_id} && is_index_test_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then
