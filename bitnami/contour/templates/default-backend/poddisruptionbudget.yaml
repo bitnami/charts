@@ -2,8 +2,8 @@
 Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
-
-{{- if and .Values.defaultBackend.enabled .Values.defaultBackend.pdb.create }}
+{{- $replicaCount := int .Values.defaultBackend.replicaCount }}
+{{- if and .Values.defaultBackend.enabled .Values.defaultBackend.pdb.create  (gt $replicaCount 1) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
