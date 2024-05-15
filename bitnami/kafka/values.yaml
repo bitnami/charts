@@ -2198,6 +2198,17 @@ metrics:
       ## Can be set to false if pods using this serviceAccount do not need to use K8s API
       ##
       automountServiceAccountToken: false
+    ## Pod Disruption Budget configuration
+    ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+    ## @param metrics.kafka.pdb.create Enable/disable a Pod Disruption Budget creation
+    ## @param metrics.kafka.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+    ## @param metrics.kafka.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    ##
+    pdb:
+      create: false
+      minAvailable: 1
+      maxUnavailable: ""
+
   ## Prometheus JMX exporter: exposes the majority of Kafka metrics
   ##
   jmx:
