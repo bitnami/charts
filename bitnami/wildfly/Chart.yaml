@@ -33,4 +33,4 @@ maintainers:
 name: wildfly
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/wildfly
-version: 20.0.0
+version: 20.0.1
