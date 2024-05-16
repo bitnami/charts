@@ -319,7 +319,6 @@ startupProbe:
   failureThreshold: 6
   successThreshold: 1
 ## @param livenessProbe.enabled Enable liveness probe
-## @param livenessProbe.path Path to access on the HTTP server
 ## @param livenessProbe.port Port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -329,7 +328,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: "/"
   port: http
   initialDelaySeconds: 180
   periodSeconds: 20
