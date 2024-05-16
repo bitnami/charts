@@ -20,15 +20,16 @@ WARNING: Rolling tag detected ({{ .repository }}:{{ .tag }}), please note that i
 {{/*
 Warning about replaced images from the original.
 Usage:
-{{ include "common.warnings.modifiedImages" (list .Values.path.to.the.imageRoot) }}
+{{ include "common.warnings.modifiedImages" (dict "images" (list .Values.path.to.the.imageRoot) "context" $) }}
 */}}
 {{- define "common.warnings.modifiedImages" -}}
-{{- $images := . -}}
 {{- $affectedImages := list -}}
 {{- $printMessage := false -}}
-{{- range $images -}}
-  {{- if not (regexMatch "^bitnami/" .repository) }}
-    {{- $affectedImages = append $affectedImages (printf "%s:%s" .repository .tag) -}}
+{{- $originalImages := .context.Chart.Annotations.images -}}
+{{- range .images -}}
+  {{- $fullImageName := printf (printf "%s/%s:%s" .registry .repository .tag) -}}
+  {{- if not (contains $fullImageName $originalImages) }}
+    {{- $affectedImages = append $affectedImages (printf "%s/%s:%s" .registry .repository .tag) -}}
     {{- $printMessage = true -}}
   {{- end -}}
 {{- end -}}
