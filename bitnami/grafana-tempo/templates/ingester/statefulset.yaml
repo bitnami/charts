@@ -66,6 +66,7 @@ spec:
       {{- if .Values.ingester.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.ingester.enableServiceLinks }}
       initContainers:
         {{- if .Values.ingester.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.ingester.initContainers "context" $) | nindent 8 }}

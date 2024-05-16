@@ -34,4 +34,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 21.0.4
+version: 21.0.5

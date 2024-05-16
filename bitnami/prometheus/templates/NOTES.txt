@@ -26,7 +26,7 @@ In order to replicate the container startup scripts execute this command:
 
 Prometheus can be accessed via port "{{ .Values.server.service.ports.http }}" on the following DNS name from within your cluster:
 
-    {{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.cluster.local
+    {{ template "prometheus.server.fullname" . }}.{{ include "common.names.namespace" . }}.svc.cluster.local
 
 To access Prometheus from outside the cluster execute the following commands:
 
