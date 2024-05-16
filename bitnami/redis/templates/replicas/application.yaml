@@ -535,9 +535,11 @@ spec:
       kind: PersistentVolumeClaim
       metadata:
         name: redis-data
-        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
-        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
+        labels:
           app.kubernetes.io/component: replica
+        {{- if .Values.replica.persistence.labels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}
         {{- end }}
