@@ -18,6 +18,32 @@ WARNING: Rolling tag detected ({{ .repository }}:{{ .tag }}), please note that i
 {{- end -}}
 
 {{/*
+Warning about replaced images from the original.
+Usage:
+{{ include "common.warnings.modifiedImages" (list .Values.path.to.the.imageRoot) }}
+*/}}
+{{- define "common.warnings.modifiedImages" -}}
+{{- $images := . -}}
+{{- $affectedImages := list -}}
+{{- $printMessage := false -}}
+{{- range $images -}}
+  {{- if not (regexMatch "^bitnami/" .repository) }}
+    {{- $affectedImages = append $affectedImages (printf "%s:%s" .repository .tag) -}}
+    {{- $printMessage = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if $printMessage }}
+
+SECURITY WARNING: Original containers have been substituted. This Helm chart was designed, tested, and validated on multiple platforms using a specific set of Bitnami and Tanzu Application Catalog containers. Substituting other containers is likely to cause degraded security and performance, broken chart features, and missing environment variables.
+
+Substituted images detected:
+{{- range $affectedImages }}
+  - {{ . }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Warning about not setting the resource object in all deployments.
 Usage:
 {{ include "common.warnings.resources" (dict "sections" (list "path1" "path2") context $) }}
