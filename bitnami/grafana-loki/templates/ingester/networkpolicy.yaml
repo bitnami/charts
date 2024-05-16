@@ -125,10 +125,10 @@ spec:
         {{- end }}
         {{- if .Values.ingester.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" $ingressNSMatchLabels "context" $ ) | nindent 14 }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- if .Values.ingester.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels: {{- include "common.tplvalues.render" (dict "value" $ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}
