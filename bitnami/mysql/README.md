@@ -56,9 +56,11 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Use a different MySQL version
+### Use a different MySQL 8.x version
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+> **Warning**: This chart is tested with MySQL version 8.x. Older versions most likely won't work if you merely switch the tag.
 
 ### Customize a new MySQL instance
 
