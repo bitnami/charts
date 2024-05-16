@@ -66,6 +66,7 @@ spec:
       {{- if .Values.compactor.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.compactor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.compactor.enableServiceLinks }}
       initContainers:
         {{- if .Values.compactor.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.initContainers "context" $) | nindent 8 }}

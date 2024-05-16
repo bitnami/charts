@@ -39,4 +39,4 @@ maintainers:
 name: mediawiki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
-version: 20.0.3
+version: 20.0.4
