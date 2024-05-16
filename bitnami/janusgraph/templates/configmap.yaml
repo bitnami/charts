@@ -1,0 +1,49 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if not .Values.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: janusgraph
+    app.kubernetes.io/part-of: janusgraph
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.janusgraphProperties }}
+  janusgraph.properties: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.janusgraphProperties "context" $ ) | nindent 4 }}
+  {{- else }}
+  janusgraph.properties: |-
+    storage.backend={{ include "janusgraph.storage.backend" . }}
+    {{- if eq (include "janusgraph.storage.backend" .) "berkeleyje" }}
+    storage.directory={{ .Values.storageBackend.berkeleyje.directory }}
+    {{- else }}
+    storage.hostname={{ include "janusgraph.storage.hostname" . }}
+    {{- if (include "janusgraph.storage.port" .)}}
+    storage.port={{ include "janusgraph.storage.port" . }}
+    {{- end }}
+    {{- end }}
+    {{- if (include "janusgraph.index.enabled" .) }}
+    index.search.backend={{ include "janusgraph.index.backend" . }}
+    {{- if eq (include "janusgraph.index.backend" .) "lucene" }}
+    index.search.directory={{ .Values.indexBackend.lucene.directory }}
+    {{- else }}
+    index.hostname={{ include "janusgraph.index.hostname" . }}
+    index.port={{ include "janusgraph.index.port" . }}
+    {{- end }}
+    {{- end }}
+    cache.db-cache={{ ternary "true" "false" .Values.cache.enabled }}
+    {{- if .Values.metrics.enabled }}
+    metrics.enabled=true
+    metrics.jmx.enabled=true
+    {{- end }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.extraJanusgraphProperties "context" $ ) | nindent 4 }}
+  {{- end }}
+{{- end }}

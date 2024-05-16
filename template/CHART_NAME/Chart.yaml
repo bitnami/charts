@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -24,7 +24,7 @@ keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - ...
 maintainers:
-  - name: VMware, Inc.
+  - name: Broadcom, Inc. All Rights Reserved.
     url: https://github.com/bitnami/charts
 name: %%CHART_NAME%%
 sources:

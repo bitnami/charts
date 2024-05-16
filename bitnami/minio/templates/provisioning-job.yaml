@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -176,7 +176,6 @@ spec:
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
               {{- end }}
 
-              {{- $isDistributedMode := (eq .Values.mode "distributed") }}
               {{- range $bucket := .Values.provisioning.buckets }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
               {{- $region := ternary (printf "--region=%s" $bucket.region) ("") (not (empty $bucket.region)) }}
@@ -195,7 +194,6 @@ spec:
               {{- end }}
               {{- end }}
 
-              {{- if $isDistributedMode }}
               {{- if (or ((empty $bucket.withLock)) (not $bucket.withLock)) }}
               {{- $versioning := default "Suspended" $bucket.versioning }}
               {{- if kindIs "bool" $bucket.versioning }}
@@ -209,7 +207,6 @@ spec:
               {{- fail (printf "Invalid value '%s' for versioning of bucket '%s'" $versioning $bucket.name) }}
               {{- end }}
               {{- end }}
-              {{- end }}
 
               {{- if $bucket.tags }}
               {{- $target := printf "%s/%s" $minioAlias $bucket.name }}
@@ -217,7 +214,7 @@ spec:
               {{- range $name, $value := $bucket.tags }}
               {{- $tags = (printf "%s=%s" $name $value) | append $tags }}
               {{- end }}
-              {{- $tags := join "&" $tags | quote }}
+              {{- $tags = join "&" $tags | quote }}
               mc tag set {{ $target }} {{ $tags }};
               {{- end }}
               {{- end }}

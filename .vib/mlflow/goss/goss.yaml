@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 file:
@@ -25,17 +25,21 @@ http:
   # Unauthenticated
   http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}:
     status: 401
+    timeout: 10000
   http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}:
     status: 401
+    timeout: 10000
   # Authenticated
   http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
     password: {{ .Vars.tracking.auth.password  }}
+    timeout: 10000
   http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
     password: {{ .Vars.tracking.auth.password  }}
+    timeout: 10000
   # Metrics
   http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}/metrics:
     status: 200
@@ -43,12 +47,14 @@ http:
     password: {{ .Vars.tracking.auth.password  }}
     body:
       - /mlflow_http_request_duration_seconds_bucket/
+    timeout: 10000
   http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/metrics:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
     password: {{ .Vars.tracking.auth.password  }}
     body:
       - /mlflow_http_request_duration_seconds_bucket/
+    timeout: 10000
   # API Check to ensure that the Job succeeded and got stored
   http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}/api/2.0/mlflow/runs/search:
     status: 200
@@ -65,6 +71,7 @@ http:
       - /FINISHED/
       # The job uses RandomForestRegressor (which is used in the example)
       - /RandomForestRegressor/
+    timeout: 10000
   http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/api/2.0/mlflow/runs/search:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
@@ -72,7 +79,7 @@ http:
     method: POST
     request-body: '{"experiment_ids":["0"]}'
     request-headers:
-       - "Content-Type: application/json"  
+       - "Content-Type: application/json"
     body:
       # The job is lauched by the admin user
       - /{{ .Vars.tracking.auth.username }}/
@@ -80,6 +87,7 @@ http:
       - /FINISHED/
       # The job uses RandomForestRegressor (which is used in the example)
       - /RandomForestRegressor/
+    timeout: 10000
 command:
   {{- $uid := .Vars.tracking.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.tracking.podSecurityContext.fsGroup }}

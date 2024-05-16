@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -22,6 +22,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") (not (empty .Values.readReplicas.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.readReplicas.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") (not (empty .Values.readReplicas.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.readReplicas.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.readReplicas.service.type "LoadBalancer") (not (empty .Values.readReplicas.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.readReplicas.service.loadBalancerIP }}

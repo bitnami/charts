@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r3
+      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r8
     - name: joomla
-      image: docker.io/bitnami/joomla:5.1.0-debian-12-r0
+      image: docker.io/bitnami/joomla:5.1.0-debian-12-r4
 apiVersion: v2
 appVersion: 5.1.0
 dependencies:
@@ -31,9 +31,9 @@ keywords:
 - http
 - php
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: joomla
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/joomla
-version: 19.0.2
+version: 19.0.4

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.29.4-debian-12-r0
+      image: docker.io/bitnami/kubectl:1.30.0-debian-12-r5
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
     - name: redis
-      image: docker.io/bitnami/redis:7.2.4-debian-12-r12
+      image: docker.io/bitnami/redis:7.2.4-debian-12-r16
     - name: redis-exporter
-      image: docker.io/bitnami/redis-exporter:1.58.0-debian-12-r7
+      image: docker.io/bitnami/redis-exporter:1.59.0-debian-12-r6
     - name: redis-sentinel
-      image: docker.io/bitnami/redis-sentinel:7.2.4-debian-12-r9
+      image: docker.io/bitnami/redis-sentinel:7.2.4-debian-12-r13
 apiVersion: v2
 appVersion: 7.2.4
 dependencies:
@@ -31,9 +31,9 @@ keywords:
 - keyvalue
 - database
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 19.1.3
+version: 19.3.2

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -67,6 +67,7 @@ spec:
       {{- if .Values.vulture.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.vulture.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.vulture.enableServiceLinks }}
       initContainers:
         {{- if .Values.vulture.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.vulture.initContainers "context" $) | nindent 8 }}

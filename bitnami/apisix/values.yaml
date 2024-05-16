@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.8.0-debian-12-r7
+  tag: 3.9.1-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -269,8 +269,8 @@ dataPlane:
         enable: true
         listen:
           - port: {{ .Values.dataPlane.containerPorts.https }}
-            enable_http2: true
         ssl_trusted_certificate: /bitnami/certs/{{ .Values.dataPlane.tls.certCAFilename }}
+      enable_http2: true
       {{- end }}
       control:
         ip: 0.0.0.0
@@ -581,7 +581,7 @@ dataPlane:
     ## @param dataPlane.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param dataPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dataPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1363,7 +1363,7 @@ controlPlane:
     ## @param controlPlane.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param controlPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param controlPlane.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1665,7 +1665,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-12-r21
+    tag: 3.0.1-debian-12-r33
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2180,7 +2180,7 @@ dashboard:
     ## @param dashboard.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2402,7 +2402,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.8.0-debian-12-r11
+    tag: 1.8.2-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2819,7 +2819,7 @@ ingressController:
     ## @param ingressController.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param ingressController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ingressController.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3106,7 +3106,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r15
+    tag: 12-debian-12-r21
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

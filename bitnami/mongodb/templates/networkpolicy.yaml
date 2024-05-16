@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -69,25 +69,25 @@ spec:
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
-            matchLabels:
-              {{ template "common.names.fullname" . }}-client: "true"
-        - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: mongodb
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
+        - podSelector:
+            matchLabels: 
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- $ingressNSMatchLabels := coalesce .Values.networkPolicy.ingressNSMatchLabels .Values.networkPolicy.namespaceSelector }}
         {{- if $ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := $ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" $ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- $ingressNSPodMatchLabels := coalesce .Values.networkPolicy.ingressNSPodMatchLabels .Values.networkPolicy.podSelector }}
           {{- if $ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels:
-              {{- range $key, $value := $ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" $ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -185,8 +185,8 @@ ldap:
   ## User Mapping
   ## @param ldap.user.baseDn Distinguished Name (DN) of the root node in LDAP from which to search for users.
   ## @param ldap.user.request LDAP user request.
-  ## @param ldap.user.realNameAttribute in LDAP defining the user’s real name.
-  ## @param ldap.user.emailAttribute Attribute in LDAP defining the user’s email.
+  ## @param ldap.user.realNameAttribute in LDAP defining the user's real name.
+  ## @param ldap.user.emailAttribute Attribute in LDAP defining the user's email.
   ##
   user:
     baseDn: ""
@@ -196,7 +196,7 @@ ldap:
   ## Group Mapping
   ## @param ldap.group.baseDn Distinguished Name (DN) of the root node in LDAP from which to search for groups.
   ## @param ldap.group.request LDAP group request.
-  ## @param ldap.group.idAttribute Attribute in LDAP defining the group’s real name.
+  ## @param ldap.group.idAttribute Attribute in LDAP defining the group's real name.
   ##
   group:
     baseDn: ""
@@ -537,7 +537,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:

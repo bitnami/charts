@@ -1,5 +1,5 @@
-# Source: https://github.com/apache/apisix-ingress-controller/samples/deploy/crd?ref={version}
-# Version: 1.8.0
+# Source: https://github.com/apache/apisix-ingress-controller/samples/deploy/crd?ref=v{version}
+# Version: 1.8.2
 # VersionOf: apisix-ingress-controller
 # UseKustomize: true
 apiVersion: apiextensions.k8s.io/v1
@@ -702,7 +702,6 @@ spec:
                           type: array
                         paths:
                           items:
-                            pattern: ^/[a-zA-Z0-9\-._~%!$&'()+,;=:@/]*\*?$
                             type: string
                           minItems: 1
                           type: array
@@ -718,6 +717,9 @@ spec:
                       minLength: 1
                       type: string
                     plugin_config_name:
+                      minLength: 1
+                      type: string
+                    plugin_config_namespace:
                       minLength: 1
                       type: string
                     plugins:

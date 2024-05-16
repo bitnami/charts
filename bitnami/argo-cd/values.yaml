@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -65,7 +65,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.10.7-debian-12-r0
+  tag: 2.11.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -309,7 +309,7 @@ controller:
     ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -846,7 +846,7 @@ applicationSet:
     ## @param applicationSet.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param applicationSet.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1141,6 +1141,9 @@ notifications:
   ## @param notifications.extraArgs Add extra arguments to the default arguments for the Argo CD notifications controller
   ##
   extraArgs: []
+  ## @param notifications.automountServiceAccountToken Mount Service Account token in pod
+  ##
+  automountServiceAccountToken: true
   ## Argo CD notifications controller log format: text|json
   ## @param notifications.logFormat Format for the Argo CD notifications controller logs. Options: [text, json]
   ##
@@ -1268,7 +1271,7 @@ notifications:
     ## @param notifications.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param notifications.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1646,7 +1649,7 @@ notifications:
         ## @param notifications.bots.slack.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
         ##
         kubeAPIServerPorts: [443, 6443, 8443]
-        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+        ## @param notifications.bots.slack.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
         ## e.g:
         ## extraIngress:
         ##   - ports:
@@ -2490,7 +2493,7 @@ server:
     ## @param server.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2871,7 +2874,7 @@ repoServer:
     ## @param repoServer.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param repoServer.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3202,7 +3205,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.39.1-debian-12-r0
+    tag: 2.39.1-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3413,7 +3416,7 @@ dex:
     ## @param dex.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dex.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3890,7 +3893,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3952,7 +3955,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.4-debian-12-r11
+    tag: 7.2.4-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4001,6 +4004,10 @@ redis:
 ## External Redis&reg;
 ##
 externalRedis:
+  ## Can be enabled after redisWait.enabled and redis.enabled are set to false
+  ## @param externalRedis.enabled Enables External Redis
+  ##
+  enabled: false
   ## Redis&reg; host
   ## @param externalRedis.host External Redis host
   ##
@@ -4022,6 +4029,15 @@ externalRedis:
   ## @param externalRedis.existingSecretPasswordKey Password key for the existing secret containing the external redis password
   ##
   existingSecretPasswordKey: 'redis-password'
+  ## Specify a label to use with the label selector
+  ## @param externalRedis.selector External Redis selector labels
+  ##
+  selector: {}
+  #
+  # selector:
+    # app.kubernetes.io/component: master
+    # app.kubernetes.io/instance: redis
+    # app.kubernetes.io/name: redis
 ## Wait-for-redis init container configuration
 ##
 redisWait:

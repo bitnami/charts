@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -112,7 +112,7 @@ jwt:
     image:
       registry: docker.io
       repository: bitnami/jwt-cli
-      tag: 6.0.0-debian-12-r20
+      tag: 6.0.0-debian-12-r23
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -139,7 +139,7 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.29.4-debian-12-r1
+      tag: 1.30.0-debian-12-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -444,7 +444,7 @@ auth:
   image:
     registry: docker.io
     repository: bitnami/gotrue
-    tag: 2.149.0-debian-12-r1
+    tag: 2.151.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -768,7 +768,7 @@ auth:
     ## @param auth.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param auth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param auth.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -846,7 +846,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.80.0-debian-12-r2
+    tag: 0.80.1-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1170,7 +1170,7 @@ meta:
     ## @param meta.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param meta.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param meta.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1264,7 +1264,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.28.32-debian-12-r1
+    tag: 2.28.37-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1588,7 +1588,7 @@ realtime:
     ## @param realtime.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param realtime.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param realtime.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1664,7 +1664,7 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.2-debian-12-r15
+    tag: 11.2.2-debian-12-r26
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1988,7 +1988,7 @@ rest:
     ## @param rest.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param rest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param rest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2070,7 +2070,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.48.4-debian-12-r1
+    tag: 1.2.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2394,7 +2394,7 @@ storage:
     ## @param storage.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param storage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param storage.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2521,7 +2521,7 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 0.24.3-debian-12-r2
+    tag: 0.24.3-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2845,7 +2845,7 @@ studio:
     ## @param studio.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param studio.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param studio.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -3005,7 +3005,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r21
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -3056,7 +3056,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.1-debian-12-r26
+  tag: 15.1.1-debian-12-r52
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3231,7 +3231,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.1-debian-12-r26
+    tag: 15.1.1-debian-12-r52
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

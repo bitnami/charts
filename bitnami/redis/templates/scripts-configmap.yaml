@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -57,7 +57,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -287,7 +287,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -356,7 +356,7 @@ data:
         export REDIS_REPLICATION_MODE="replica"
     fi
 
-    {{- if .Values.sentinel.service.createMaster }}
+    {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
         echo "${REDIS_MASTER_HOST/.*}" > /etc/shared/current
@@ -368,7 +368,7 @@ data:
       REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
     fi
 
-    # To prevent incomplete configuration and as the redis container accesses /opt/bitnami/redis-sentinel/etc/sentinel.conf 
+    # To prevent incomplete configuration and as the redis container accesses /opt/bitnami/redis-sentinel/etc/sentinel.conf
     # as well, prepare the new config in `prepare-sentinel.conf` and move it atomically to the ultimate destination when it is complete.
     cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- if .Values.auth.enabled }}
@@ -467,7 +467,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -547,7 +547,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -596,7 +596,7 @@ data:
         exit 0
     fi
 
-  {{- if .Values.sentinel.service.createMaster}}
+  {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
   push-master-label.sh: |
     #!/bin/bash
     # https://download.redis.io/redis-stable/sentinel.conf
@@ -693,7 +693,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -764,7 +764,7 @@ data:
   {{- end }}
 {{- end }}
 ---
-{{- if .Values.sentinel.service.createMaster}}
+{{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

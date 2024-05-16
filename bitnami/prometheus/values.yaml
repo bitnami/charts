@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -90,7 +90,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.27.0-debian-12-r4
+    tag: 0.27.0-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -106,7 +106,7 @@ alertmanager:
     ##
     pullSecrets: []
   ## @param alertmanager.configuration [string] Alertmanager configuration. This content will be stored in the the alertmanager.yaml file and the content can be a template.
-  ## ref: <https://github.com/prometheus-community/helm-charts/blob/8f2743ed3a9c93c56978a95b62a63e84c52f5748/charts/alertmanager/values.yaml#L171-L188>
+  ## ref: <https://github.com/prometheus-community/helm-charts/blob/8f2743ed3a9c93c56978a95b62a63e84c52f5748/charts/alertmanager/values.yaml#L171-L188>
   ##
   configuration: |
     receivers:
@@ -520,7 +520,7 @@ alertmanager:
     ## @param alertmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -666,7 +666,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.51.2-debian-12-r0
+    tag: 2.52.0-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -682,7 +682,7 @@ server:
     ##
     pullSecrets: []
   ## @param server.configuration [string] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
-  ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
+  ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
   ##
   configuration: |
     global:
@@ -726,11 +726,11 @@ server:
       - rules.yaml
     {{- end }}
   ## @param server.alertingRules Prometheus alerting rules. This content will be stored in the the rules.yaml file and the content can be a template.
-  ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/>
+  ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/>
   ##
   alertingRules: {}
   ## @param server.extraScrapeConfigs Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.
-  ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
+  ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
   ##
   extraScrapeConfigs: []
   ## @param server.replicaCount Number of Prometheus replicas to deploy
@@ -1060,7 +1060,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.34.1-debian-12-r3
+      tag: 0.35.0-debian-12-r4
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1476,7 +1476,7 @@ server:
     ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1659,7 +1659,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

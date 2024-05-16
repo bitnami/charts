@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -68,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2024.4.18-debian-12-r0
+  tag: 2024.5.10-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -96,7 +96,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2024.3.30-debian-12-r2
+  tag: 2024.5.9-debian-12-r2
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -303,6 +303,10 @@ provisioning:
   ##           - "s3:GetObject"
   ##           - "s3:ListMultipartUploadParts"
   ##           - "s3:PutObject"
+  ##         condition:
+  ##           StringLike:
+  ##               "s3:prefix":
+  ##                 - "${aws:username}/*"
   policies: []
   ## @param provisioning.users MinIO&reg; users provisioning. Can be used in addition to provisioning.usersExistingSecrets.
   ## https://docs.min.io/docs/minio-admin-complete-guide.html#user
@@ -1099,7 +1103,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

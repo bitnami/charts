@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -243,7 +243,7 @@ spec:
                   if [[ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.secondary.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customStartupProbe "context" $) | nindent 12 }}
@@ -258,7 +258,7 @@ spec:
                   if [[ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.secondary.resources }}

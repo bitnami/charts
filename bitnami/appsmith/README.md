@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -314,7 +314,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `client.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
 | `client.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
 | `client.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
-| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `client.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `client.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `client.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `client.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
@@ -604,7 +604,7 @@ The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/a
 | `rts.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
 | `rts.networkPolicy.allowExternal`           | Don't require client label for connections                      | `true` |
 | `rts.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
-| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolice                    | `[]`   |
+| `rts.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `rts.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
 | `rts.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
 | `rts.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |

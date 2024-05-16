@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,15 +6,15 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: aws-cli
-      image: docker.io/bitnami/aws-cli:2.15.30-debian-12-r1
+      image: docker.io/bitnami/aws-cli:2.15.40-debian-12-r3
     - name: azure-cli
-      image: docker.io/bitnami/azure-cli:2.59.0-debian-12-r0
+      image: docker.io/bitnami/azure-cli:2.60.0-debian-12-r2
     - name: google-cloud-sdk
-      image: docker.io/bitnami/google-cloud-sdk:0.471.0-debian-12-r1
+      image: docker.io/bitnami/google-cloud-sdk:0.475.0-debian-12-r1
     - name: influxdb
-      image: docker.io/bitnami/influxdb:2.7.6-debian-12-r2
+      image: docker.io/bitnami/influxdb:2.7.6-debian-12-r8
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
 appVersion: 2.7.6
 dependencies:
@@ -32,9 +32,9 @@ keywords:
 - database
 - timeseries
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.0.8
+version: 6.0.12

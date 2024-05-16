@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -109,7 +109,7 @@ spec:
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.coordinating.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.coordinating.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.coordinating.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.coordinating.resources }}
           resources: {{- toYaml .Values.coordinating.resources | nindent 12 }}

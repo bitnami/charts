@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -462,7 +462,7 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.sentinel.service.createMaster}}
+            {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster}}
             - name: kubectl-shared
               mountPath: /etc/shared
             {{- end }}
@@ -591,7 +591,7 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if .Values.sentinel.service.createMaster }}
+        {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
         - name: kubectl-shared
           image: {{ template "redis.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
@@ -686,7 +686,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.sentinel.service.createMaster}}
+        {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster}}
         - name: kubectl-shared
           emptyDir: {}
         - name: kubectl-scripts

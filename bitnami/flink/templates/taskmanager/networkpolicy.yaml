@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -49,6 +49,7 @@ spec:
     - ports:
         - port: {{ .Values.taskmanager.containerPorts.data }}
         - port: {{ .Values.taskmanager.containerPorts.rpc }}
+        - port: {{ .Values.taskmanager.containerPorts.internalMetrics }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -62,6 +63,7 @@ spec:
     - ports:
         - port: {{ .Values.taskmanager.containerPorts.data }}
         - port: {{ .Values.taskmanager.containerPorts.rpc }}
+        - port: {{ .Values.taskmanager.containerPorts.internalMetrics }}
       {{- if not .Values.taskmanager.networkPolicy.allowExternal }}
       from:
         - podSelector:

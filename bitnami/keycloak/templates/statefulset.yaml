@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -213,8 +213,12 @@ spec:
               value: {{ .Values.extraStartupArgs | quote }}
             {{- end }}
             {{- if .Values.adminIngress.enabled }}
-            - name: KC_HOSTNAME_ADMIN
-              value: {{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
+            {{- end }}
+            {{- if and .Values.adminIngress.enabled (not .Values.ingress.enabled) }}
+            - name: KC_HOSTNAME_URL
+              value: "http{{ if .Values.adminIngress.tls }}s{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.adminIngress.hostname "context" $) }}"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

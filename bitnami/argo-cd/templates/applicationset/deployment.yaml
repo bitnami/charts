@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -33,6 +33,7 @@ spec:
         app.kubernetes.io/component: applicationSet
     spec:
       serviceAccountName: {{ include "argocd.applicationSet.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.applicationSet.serviceAccount.automountServiceAccountToken }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.applicationSet.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.nodeSelector "context" $) | nindent 8 }}
