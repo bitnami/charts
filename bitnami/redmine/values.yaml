@@ -243,7 +243,6 @@ containerSecurityContext:
 ## Configure extra options for Redmine containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on Redmine containers
-## @param livenessProbe.path Path for to check for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -252,7 +251,6 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /
   initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
