@@ -806,7 +806,7 @@ dataCoord:
   ## @param dataCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Data Coordinator Autoscaling configuration
@@ -1311,7 +1311,7 @@ rootCoord:
   ## @param rootCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Root Coordinator Autoscaling configuration
@@ -1816,7 +1816,7 @@ queryCoord:
   ## @param queryCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Query Coordinator Autoscaling configuration
@@ -2321,7 +2321,7 @@ indexCoord:
   ## @param indexCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Index Coordinator Autoscaling configuration
@@ -2826,7 +2826,7 @@ dataNode:
   ## @param dataNode.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Data Node Autoscaling configuration
@@ -3331,7 +3331,7 @@ queryNode:
   ## @param queryNode.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Query Node Autoscaling configuration
@@ -3836,7 +3836,7 @@ indexNode:
   ## @param indexNode.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Index Node Autoscaling configuration
@@ -4369,7 +4369,7 @@ proxy:
   ## @param proxy.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Proxy Autoscaling configuration
@@ -4887,7 +4887,7 @@ attu:
   ## @param attu.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @section Attu Autoscaling configuration

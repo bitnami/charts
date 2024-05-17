@@ -48,4 +48,4 @@ maintainers:
 name: milvus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 7.0.4
+version: 7.1.0
