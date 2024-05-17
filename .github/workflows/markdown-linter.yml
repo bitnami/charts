@@ -34,9 +34,9 @@ jobs:
           touch "${TEMP_OUTPUT}"
           exit_code=0
           for f in ${md_files}; do
-            # Looking for links that do not start with https, # or img
-            if grep --quiet --perl-regexp '\]\((?!(http|#|img))[^\)]*' $f; then
-              echo "::error:: Please ensure all links in $f starts with http(s), # or img"
+            # Looking for links that do not start with https, #, img or ./
+            if grep --quiet --perl-regexp '\]\((?!(http|#|img|\.\/))[^\)]*' $f; then
+              echo "::error:: Please ensure all links in $f starts with http(s), #, img or ./"
               exit 1
             fi
           done
