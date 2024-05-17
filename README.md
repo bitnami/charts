@@ -66,6 +66,33 @@ Useful Helm Client Commands:
 - Install a chart: `helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 - Upgrade your application: `helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 
+## Creating a new chart
+
+To make a chart that follows the same structure/patterns that the rest of the Bitnami charts, the basic scaffolding is provided in the [`template` directory](https://github.com/bitnami/charts/tree/main/template).
+To make a new chart from the template, first run:
+
+```console
+make new_chart
+```
+
+This will create a copy in `/draft/<chart-name>` and a `/draft/<chart-name>/placeholder.yaml` file. Populate the `/draft/<chart-name>/placeholder.yaml` file with values for your chart, then run:
+
+```console
+make render_template
+```
+
+This will replace all the placeholders throughout the chart with your values. You will still likely need to modify the chart further to meet your needs.
+
+The new chart can then me moved from `/draft/<chart-name>` to your own repo/location. If you wish to add the chart to this Bitnami repository, then refer to [Adding a new chart to the repository](./CONTRIBUTING.md#adding-a-new-chart-to-the-repository)
+
+A chart in the `draft` directory can be recreated from the template by running:
+
+```console
+make recreate_chart
+```
+
+This will overwrite all existing files in the draft chart, except for the `/draft/<chart-name>/placeholder.yaml` file, which will be preserved.
+
 ## License
 
 Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
