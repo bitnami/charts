@@ -144,19 +144,19 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.livenessProbe "enabled") "context" $) | nindent 12 }}
-            %%httpGet || command || etc%%
+            %%LIVENESS_PROBE httpGet or command etc%%
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.readinessProbe "enabled") "context" $) | nindent 12 }}
-            %%httpGet || command || etc%%
+            %%READINESS_PROBE httpGet or command etc%%
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.%%MAIN_OBJECT_BLOCK%%.startupProbe "enabled") "context" $) | nindent 12 }}
-            %%httpGet || command || etc%%
+            %%STARTUP_PROBE httpGet or command etc%%
           {{- end }}
           {{- end }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.lifecycleHooks }}
