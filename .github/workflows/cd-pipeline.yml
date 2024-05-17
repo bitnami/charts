@@ -105,6 +105,8 @@ jobs:
         run: |
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+          # Install file plugin
+          helm plugin add https://github.com/zoobab/helm_file_repo
       - id: update-index
         name: Fetch chart and update index
         env: 
@@ -145,6 +147,12 @@ jobs:
               echo "New index.yaml file is shorter than the current one"
               exit 1
             fi
+            # Adding tmp file as a helm repo
+            if ! helm repo add cache file://../download/ ; then
+              echo "New index.yaml file can't be indexed"
+              exit 1
+            fi
+
             cp ../download/index.yaml bitnami/index.yaml
 
             # Push changes
