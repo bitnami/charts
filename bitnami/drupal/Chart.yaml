@@ -40,4 +40,4 @@ maintainers:
 name: drupal
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/drupal
-version: 18.0.5
+version: 18.0.6
