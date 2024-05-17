@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD001 MD041 -->
 <p align="center">
     <img width="400px" height=auto src="https://bitnami.com/downloads/logos/bitnami-by-vmware.png" />
 </p>
