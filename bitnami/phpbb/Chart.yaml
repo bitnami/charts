@@ -37,4 +37,4 @@ maintainers:
 name: phpbb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/phpbb
-version: 18.0.3
+version: 18.0.4
