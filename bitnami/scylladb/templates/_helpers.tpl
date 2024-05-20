@@ -119,26 +119,6 @@ scylladb: tls.enabled
 {{- end -}}
 
 {{/* vim: set filetype=mustache: */}}
-{{/*
-Return  the proper Commit Storage Class
-{{ include "scylladb.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
-*/}}
-{{- define "scylladb.commitstorage.class" -}}
-{{- $storageClass := .persistence.commitStorageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.storageClass -}}
-    {{- end -}}
-{{- end -}}
-
-{{- if $storageClass -}}
-  {{- if (eq "-" $storageClass) -}}
-      {{- printf "storageClassName: \"\"" -}}
-  {{- else }}
-      {{- printf "storageClassName: %s" $storageClass -}}
-  {{- end -}}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Return type of internode communication connections should be configured

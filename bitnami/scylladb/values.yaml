@@ -880,19 +880,36 @@ persistence:
   ##
   accessModes:
     - ReadWriteOnce
-  ## @param persistence.size PVC Storage Request for Scylladb data volume
-  ##
-  size: 8Gi
-  ## @param persistence.commitLogsize PVC Storage Request for Scylladb commit log volume. Unset by default
-  ##
-  commitLogsize: 2Gi
   ## @param persistence.mountPath The path the data volume will be mounted at
   ##
   mountPath: /bitnami/scylladb
-  ## @param persistence.commitLogMountPath The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/scylladb/commitlog' to enable a separate commit log volume
+  ## @param persistence.size PVC Storage Request for Scylladb data volume
   ##
-  # commitLogMountPath: /bitnami/scylladb/commitlog
-  commitLogMountPath: ""
+  size: 8Gi
+  commitLog:
+    ## @param persistence.commitLog.storageClass PVC Storage Class for Scylladb Commit Log volume
+    ## Storage class to use with SCYLLADB_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/scylladb
+    ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param persistence.commitLog.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param persistence.commitLog.accessModes Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param persistence.commitLog.size PVC Storage Request for Scylladb data volume
+    ##
+    size: 2Gi
+    ## @param persistence.commitLog.mountPath The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/scylladb/commitlog' to enable a separate commit log volume
+    ##
+    # mountPath: /bitnami/scylladb/commitlog
+    mountPath: ""
 ## @section Volume Permissions parameters
 ##
 

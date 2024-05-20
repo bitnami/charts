@@ -101,9 +101,9 @@ spec:
               {{- end }}
               mkdir -p {{ .Values.persistence.mountPath }}/data
               chmod 700 {{ .Values.persistence.mountPath }}/data
-              {{- if .Values.persistence.commitLogMountPath }}
-              mkdir -p {{ .Values.persistence.commitLogMountPath }}/commitlog
-              chmod 700 {{ .Values.persistence.commitLogMountPath }}/commitlog
+              {{- if .Values.persistence.commitLog.mountPath }}
+              mkdir -p {{ .Values.persistence.commitLog.mountPath }}/commitlog
+              chmod 700 {{ .Values.persistence.commitLog.mountPath }}/commitlog
               {{- end }}
               find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
@@ -129,9 +129,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.persistence.commitLogMountPath }}
+            {{- if .Values.persistence.commitLog.mountPath }}
             - name: commitlog
-              mountPath: {{ .Values.persistence.commitLogMountPath }}
+              mountPath: {{ .Values.persistence.commitLog.mountPath }}
             {{- end }}
         {{- end }}
         {{- if .Values.sysctl.enabled }}
@@ -272,9 +272,9 @@ spec:
               value: {{ .Values.containerPorts.cqlShard | quote }}
             - name: SCYLLADB_PROMETHEUS_PORT_NUMBER
               value: {{ ternary .Values.containerPorts.metrics "0" .Values.metrics.enabled | quote }}
-            {{- if .Values.persistence.commitLogMountPath }}
+            {{- if .Values.persistence.commitLog.mountPath }}
             - name: SCYLLADB_COMMITLOG_DIR
-              value: {{ .Values.persistence.commitLogMountPath | quote }}
+              value: {{ .Values.persistence.commitLog.mountPath | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -423,9 +423,9 @@ spec:
           volumeMounts:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
-            {{- if .Values.persistence.commitLogMountPath }}
+            {{- if .Values.persistence.commitLog.mountPath }}
             - name: commitlog
-              mountPath: {{ .Values.persistence.commitLogMountPath }}
+              mountPath: {{ .Values.persistence.commitLog.mountPath }}
             {{- end }}
             {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
             - name: cert
@@ -651,23 +651,23 @@ spec:
           requests:
             storage: {{ .Values.persistence.size | quote }}
     {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
-    {{- if .Values.persistence.commitLogMountPath }}
+    {{- if .Values.persistence.commitLog.mountPath }}
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
         name: commitlog
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
-        {{- if .Values.persistence.annotations }}
-        annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
+        {{- if .Values.persistence.commitLog.annotations }}
+        annotations: {{- toYaml .Values.persistence.commitLog.annotations | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
-          {{- range .Values.persistence.accessModes }}
+          {{- range .Values.persistence.commitLog.accessModes }}
           - {{ . | quote }}
           {{- end }}
         resources:
           requests:
-            storage: {{ .Values.persistence.commitLogsize | quote }}
-      {{- include "scylladb.commitstorage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+            storage: {{ .Values.persistence.commitLog.size | quote }}
+      {{- include "common.storage.class" (dict "persistence" .Values.persistence.commitLog "global" .Values.global) | nindent 8 }}
     {{- end }}
   {{- end }}

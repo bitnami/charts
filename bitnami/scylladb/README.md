@@ -380,18 +380,21 @@ As the image run as non-root by default, it is necessary to adjust the ownership
 
 ### Persistence parameters
 
-| Name                             | Description                                                                                                                                         | Value               |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`            | Enable Scylladb data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`              |
-| `persistence.existingClaim`      | Name of an existing PVC to use                                                                                                                      | `""`                |
-| `persistence.storageClass`       | PVC Storage Class for Scylladb data volume                                                                                                          | `""`                |
-| `persistence.commitStorageClass` | PVC Storage Class for Scylladb Commit Log volume                                                                                                    | `""`                |
-| `persistence.annotations`        | Persistent Volume Claim annotations                                                                                                                 | `{}`                |
-| `persistence.accessModes`        | Persistent Volume Access Mode                                                                                                                       | `["ReadWriteOnce"]` |
-| `persistence.size`               | PVC Storage Request for Scylladb data volume                                                                                                        | `8Gi`               |
-| `persistence.commitLogsize`      | PVC Storage Request for Scylladb commit log volume. Unset by default                                                                                | `2Gi`               |
-| `persistence.mountPath`          | The path the data volume will be mounted at                                                                                                         | `/bitnami/scylladb` |
-| `persistence.commitLogMountPath` | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/scylladb/commitlog' to enable a separate commit log volume | `""`                |
+| Name                                 | Description                                                                                                                                         | Value               |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`                | Enable Scylladb data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`              |
+| `persistence.existingClaim`          | Name of an existing PVC to use                                                                                                                      | `""`                |
+| `persistence.storageClass`           | PVC Storage Class for Scylladb data volume                                                                                                          | `""`                |
+| `persistence.commitStorageClass`     | PVC Storage Class for Scylladb Commit Log volume                                                                                                    | `""`                |
+| `persistence.annotations`            | Persistent Volume Claim annotations                                                                                                                 | `{}`                |
+| `persistence.accessModes`            | Persistent Volume Access Mode                                                                                                                       | `["ReadWriteOnce"]` |
+| `persistence.mountPath`              | The path the data volume will be mounted at                                                                                                         | `/bitnami/scylladb` |
+| `persistence.size`                   | PVC Storage Request for Scylladb data volume                                                                                                        | `8Gi`               |
+| `persistence.commitLog.storageClass` | PVC Storage Class for Scylladb Commit Log volume                                                                                                    | `""`                |
+| `persistence.commitLog.annotations`  | Persistent Volume Claim annotations                                                                                                                 | `{}`                |
+| `persistence.commitLog.accessModes`  | Persistent Volume Access Mode                                                                                                                       | `["ReadWriteOnce"]` |
+| `persistence.commitLog.size`         | PVC Storage Request for Scylladb data volume                                                                                                        | `2Gi`               |
+| `persistence.commitLog.mountPath`    | The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/scylladb/commitlog' to enable a separate commit log volume | `""`                |
 
 ### Volume Permissions parameters
 
