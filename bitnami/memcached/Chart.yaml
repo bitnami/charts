@@ -31,4 +31,4 @@ maintainers:
 name: memcached
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/memcached
-version: 7.2.0
+version: 7.3.0
