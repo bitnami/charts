@@ -92,7 +92,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.45.0-debian-12-r2
+  tag: 2.45.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -319,7 +319,6 @@ startupProbe:
   failureThreshold: 6
   successThreshold: 1
 ## @param livenessProbe.enabled Enable liveness probe
-## @param livenessProbe.path Path to access on the HTTP server
 ## @param livenessProbe.port Port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
@@ -329,7 +328,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: "/"
   port: http
   initialDelaySeconds: 180
   periodSeconds: 20

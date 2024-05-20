@@ -224,8 +224,7 @@ startupProbe:
 ## phpMyAdmin containers' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
+## @param livenessProbe.tcpSocket.port Port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -239,8 +238,7 @@ livenessProbe:
   periodSeconds: 10
   successThreshold: 1
   failureThreshold: 6
-  httpGet:
-    path: /
+  tcpSocket:
     port: http
 ## phpMyAdmin containers' readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
