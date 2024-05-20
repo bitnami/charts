@@ -27,7 +27,7 @@ var (
 
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
-	flag.StringVar(&stsName, "name", "", "name of the primary statefulset")
+	flag.StringVar(&stsName, "name", "", "name of the statefulset")
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
 	flag.StringVar(&username, "username", "", "database user")
 	flag.StringVar(&password, "password", "", "database password for username")

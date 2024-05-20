@@ -22,7 +22,9 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
+  {{- if not .Values.autoscaling.hpa.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
@@ -32,10 +34,10 @@ spec:
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
       annotations:
         {{- if .Values.podAnnotations }}
-        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.podAnnotations }}
-        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -78,7 +80,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-      {{- if or .Values.initContainers (include "scylladb.tlsEncryption" . ) (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) }}
+      {{- if or .Values.initContainers (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) }}
       initContainers:
         {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -226,7 +228,7 @@ spec:
               value: {{ .Values.cluster.datacenter | quote }}
             - name: SCYLLADB_ENDPOINT_SNITCH
               value: {{ .Values.cluster.endpointSnitch | quote }}
-            {{- if (include "scylladb.tlsEncryption" . ) }}
+            {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
             - name: SCYLLADB_SSL_CERT_FILE
               value: {{ include "scylladb.tlsCert" . | quote }}
             - name: SCYLLADB_SSL_KEY_FILE
@@ -240,7 +242,7 @@ spec:
             - name: SCYLLADB_INTERNODE_ENCRYPTION
               value: {{ (include "scylladb.internode.tlsEncryption" .) | quote }}
             {{- end }}
-            {{- if (include "scylladb.client.tlsEncryption" .) }}
+            {{- if .Values.tls.clientEncryption }}
             - name: SCYLLADB_CLIENT_ENCRYPTION
               value: "true"
             {{- end }}
@@ -295,17 +297,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            {{- if .Values.jmxProxy.enabled }}
-            exec:
-              command:
-                - /bin/bash
-                - -ec
-                - |
-                  nodetool info | grep "Native Transport active: true"
-            {{- else }}
             tcpSocket:
               port: cql
-            {{- end }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -438,9 +431,11 @@ spec:
             - name: commitlog
               mountPath: {{ .Values.persistence.commitLogMountPath }}
             {{- end }}
-            {{- if (include "scylladb.tlsEncryption" . ) }}
-            - name: certs
-              mountPath: /bitnami/scylladb/certs
+            {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
+            - name: cert
+              mountPath: /bitnami/scylladb/cert
+            - name: ca-cert
+              mountPath: /bitnami/scylladb/ca
             {{- end }}
             {{- if .Values.initDBConfigMap }}
             - name: init-db-cm
@@ -601,8 +596,14 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        {{- if (include "scylladb.tlsEncryption" . ) }}
-        - name: certs
+        {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "scylladb.tlsCASecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: cert
           secret:
             secretName: {{ include "scylladb.tlsSecretName" . }}
             defaultMode: 256
