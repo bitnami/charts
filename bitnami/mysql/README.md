@@ -186,7 +186,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.existingSecret`              | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
 | `auth.usePasswordFiles`            | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                 |
 | `auth.customPasswordFiles`         | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
-| `auth.defaultAuthenticationPlugin` | Sets the default authentication plugin, by default it will use `mysql_native_password`                                                                                              | `""`                    |
+| `auth.authenticationPolicy`        | Sets the authentication policy, by default it will use `caching_sha2_password`                                                                                                      | `""`                    |
 | `initdbScripts`                    | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
 | `initdbScriptsConfigMap`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                    |
 | `startdbScripts`                   | Dictionary of startdb scripts                                                                                                                                                       | `{}`                    |
@@ -544,7 +544,7 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.roo
 
 ### To 11.0.0
 
-This major bump uses mysql `8.4` image, that includes several [removal of deprecated](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-0.html#mysqld-8-4-0-deprecation-removal) configuration settings. This could potentially break your deployment and you would need to adjust the config settings accordingly.
+This major bump uses mysql `8.4` image, that includes several [removal of deprecated](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-0.html#mysqld-8-4-0-deprecation-removal) configuration settings, for example the parameter `auth.defaultAuthenticationPlugin` has been removed in favor of `auth.authenticationPolicy`. This could potentially break your deployment and you would need to adjust the config settings accordingly.
 
 ### To 10.0.0
 
