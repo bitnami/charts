@@ -90,7 +90,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.37-debian-12-r2
+  tag: 8.4.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
