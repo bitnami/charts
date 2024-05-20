@@ -100,7 +100,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/valkey
-  tag: 7.2.5-debian-12-r3
+  tag: 7.2.5-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1135,7 +1135,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/valkey-sentinel
-    tag: 7.2.5-debian-12-r2
+    tag: 7.2.5-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2052,7 +2052,7 @@ kubectl:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.30.0-debian-12-r5
+    tag: 1.30.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

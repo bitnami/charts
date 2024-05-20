@@ -42,4 +42,4 @@ maintainers:
 name: argo-workflows
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
-version: 8.0.8
+version: 8.0.10
