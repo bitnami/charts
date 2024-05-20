@@ -186,7 +186,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
+                  CONNECTION_CHECK_MAX_COUNT=0 airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- if .Values.scheduler.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customReadinessProbe "context" $) | trim | nindent 12 }}
@@ -201,6 +201,14 @@ spec:
           {{- end }}
           {{- if .Values.scheduler.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.scheduler.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.scheduler.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.scheduler.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  CONNECTION_CHECK_MAX_COUNT=0 airflow jobs check --job-type SchedulerJob --local {{- if not .Values.diagnosticMode.enabled }} 2>/dev/null {{- end }}
           {{- end }}
           {{- end }}
           {{- if .Values.scheduler.lifecycleHooks }}

@@ -248,7 +248,7 @@ podAntiAffinityPreset: soft
 ## @param pdb.maxUnavailable Maximum unavailable instances
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: ""
 ## Node affinity preset
