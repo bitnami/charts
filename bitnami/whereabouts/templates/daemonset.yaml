@@ -136,6 +136,7 @@ spec:
             exec:
               command:
                 - pgrep
+                - -f
                 - ip-control-loop
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
