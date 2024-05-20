@@ -542,6 +542,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mysql --set auth.roo
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
 
+### To 11.0.0
+
+This major bump uses mysql `8.4` image, that includes several [removal of deprecated](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-0.html#mysqld-8-4-0-deprecation-removal) configuration settings. This could potentially break your deployment and you would need to adjust the config settings accordingly.
+
 ### To 10.0.0
 
 This major bump changes the following security defaults:
