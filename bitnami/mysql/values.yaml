@@ -214,7 +214,7 @@ primary:
   ##
   configuration: |-
     [mysqld]
-    default_authentication_plugin={{- .Values.auth.defaultAuthenticationPlugin | default "mysql_native_password" }}
+    authentication_policy= '{{- .Values.auth.defaultAuthenticationPlugin | default "caching_sha2_password" }}'
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
