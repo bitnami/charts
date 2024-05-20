@@ -413,7 +413,7 @@ autoscaling:
 ## @param pdb.maxUnavailable Maximum unavailable Memcached replicas
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: 1
 ## @section Traffic Exposure parameters
