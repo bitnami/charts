@@ -38,6 +38,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param replicaCount Number of container replicas
+##
+replicaCount: 1
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -376,7 +379,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3206.0-debian-12-r14
+    tag: 0.3248.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
