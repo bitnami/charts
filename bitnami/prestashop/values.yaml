@@ -363,7 +363,6 @@ containerSecurityContext:
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -372,7 +371,6 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
