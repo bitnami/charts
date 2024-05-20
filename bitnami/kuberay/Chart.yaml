@@ -10,7 +10,7 @@ annotations:
     - name: kuberay-operator
       image: docker.io/bitnami/kuberay-operator:1.1.1-debian-12-r2
     - name: ray
-      image: docker.io/bitnami/ray:2.21.0-debian-12-r1
+      image: docker.io/bitnami/ray:2.22.0-debian-12-r0
 apiVersion: v2
 appVersion: 1.1.1
 dependencies:
@@ -32,4 +32,4 @@ maintainers:
 name: kuberay
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kuberay
-version: 1.0.3
+version: 1.0.4
