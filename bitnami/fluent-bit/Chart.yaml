@@ -28,4 +28,4 @@ maintainers:
 name: fluent-bit
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
-version: 2.1.2
+version: 2.1.4

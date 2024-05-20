@@ -198,7 +198,7 @@ extraVolumeMounts:
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
-livenessProbe:
+startupProbe:
   enabled: true
   path: /redmine/
 ---
@@ -310,7 +310,6 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | `containerSecurityContext.capabilities.add`         | List of capabilities to be added                                                                                                                                                                                  | `["CHOWN","SYS_CHROOT","FOWNER","SETGID","SETUID","DAC_OVERRIDE"]` |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`                                                   |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Redmine containers                                                                                                                                                                        | `true`                                                             |
-| `livenessProbe.path`                                | Path for to check for livenessProbe                                                                                                                                                                               | `/`                                                                |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `300`                                                              |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`                                                               |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `5`                                                                |

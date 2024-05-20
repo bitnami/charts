@@ -333,6 +333,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`    |
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `true`  |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                              | `""`    |
+| `enableServiceLinks`                          | If set to false, disable Kubernetes service links in the pod spec                                                   | `true`  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
