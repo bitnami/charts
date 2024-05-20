@@ -238,7 +238,6 @@ Get initial primary host to configure MongoDB cluster.
 {{/*
 Init container definition to change/establish volume permissions.
 */}}
-
 {{- define "mongodb.initContainer.volumePermissions" }}
 - name: volume-permissions
   image: {{ include "mongodb.volumePermissions.image" . }}
