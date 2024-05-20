@@ -112,7 +112,7 @@ Return  the proper Commit Storage Class
 {{- $storageClass := .persistence.commitStorageClass -}}
 {{- if .global -}}
     {{- if .global.storageClass -}}
-        {{- $storageClass = .global.commitStorageClass -}}
+        {{- $storageClass = .global.storageClass -}}
     {{- end -}}
 {{- end -}}
 
