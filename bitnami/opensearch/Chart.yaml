@@ -30,4 +30,4 @@ maintainers:
 name: opensearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/opensearch
-version: 1.0.6
+version: 1.0.7
