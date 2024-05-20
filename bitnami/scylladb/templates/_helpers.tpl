@@ -72,6 +72,7 @@ Compile all warnings into a single message, and call fail.
 {{- define "scylladb.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "scylladb.validateValues.seedCount" .) -}}
+{{- $messages := append $messages (include "scylladb.validateValues.replicaCount" .) -}}
 {{- $messages := append $messages (include "scylladb.validateValues.tls" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -90,6 +91,20 @@ scylladb: cluster.seedCount
 
     Number of seed nodes must be greater or equal than 1 and less or
     equal to `replicaCount`.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of Scylladb - number of seed nodes using existing claims
+*/}}
+{{- define "scylladb.validateValues.replicaCount" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- if and .Values.persistence.enabled .Values.persistence.existingClaim (gt $replicaCount 1) -}}
+scylladb: seeds-existing-claims
+    A single existing PVC cannot be shared between multiple seed nodes.
+    Please set a valid number of replicas (--set replicaCount=1), disable persistence
+    (--set persistence.enabled=false) or rely on dynamic provisioning via Persistent
+    Volume Claims (--set persistence.existingClaim="").
 {{- end -}}
 {{- end -}}
 
