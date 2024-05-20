@@ -57,7 +57,7 @@ Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgres
 
 {{- if and (.Values.pgpool.networkPolicy.enabled) (not .Values.pgpool.networkPolicy.allowExternal) }}
 
-Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgppol" . }}-client=true" can access postgresql will be able to connect PgPool.
+Note: Since NetworkPolicy is enabled, only pods with label "{{ include "postgresql-ha.pgpool" . }}-client=true" can access postgresql will be able to connect PgPool.
 
 {{- end }}
 
