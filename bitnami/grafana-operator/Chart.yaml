@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana
-      image: docker.io/bitnami/grafana:10.4.2-debian-12-r6
+      image: docker.io/bitnami/grafana:10.4.3-debian-12-r0
     - name: grafana-operator
       image: docker.io/bitnami/grafana-operator:5.9.0-debian-12-r3
 apiVersion: v2
@@ -30,4 +30,4 @@ maintainers:
 name: grafana-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-operator
-version: 4.2.3
+version: 4.2.4

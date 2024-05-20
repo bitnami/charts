@@ -36,4 +36,4 @@ maintainers:
 name: joomla
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/joomla
-version: 19.0.3
+version: 19.0.5
