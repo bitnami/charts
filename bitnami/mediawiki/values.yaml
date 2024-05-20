@@ -275,9 +275,7 @@ startupProbe:
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
-## @param livenessProbe.httpGet.httpHeaders [array] Headers for livenessProbe
+## @param livenessProbe.tcpSocket.port Request port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -286,12 +284,8 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /api.php?action=query&meta=siteinfo&format=none
+  tcpSocket:
     port: http
-    httpHeaders:
-      - name: Host
-        value: "{{ include \"mediawiki.host\" . }}"
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5

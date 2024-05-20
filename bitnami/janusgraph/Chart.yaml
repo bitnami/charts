@@ -37,4 +37,4 @@ name: janusgraph
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
 - https://github.com/janusgraph/janusgraph
-version: 0.1.6
+version: 0.2.0
