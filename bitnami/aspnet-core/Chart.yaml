@@ -31,4 +31,4 @@ maintainers:
 name: aspnet-core
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
-version: 6.0.6
+version: 6.0.8
