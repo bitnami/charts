@@ -30,4 +30,4 @@ maintainers:
 name: logstash
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/logstash
-version: 6.1.0
+version: 6.1.1
