@@ -80,7 +80,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
-      {{- if or .Values.initContainers (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) }}
+      {{- if or .Values.initContainers (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.sysctl.enabled }}
       initContainers:
         {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
@@ -157,14 +157,10 @@ spec:
           {{- else if ne .Values.sysctl.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.sysctl.resourcesPreset) | nindent 12 }}
           {{- end }}
-          {{- if .Values.sysctl.mountHostSys }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            - name: host-sys
-              mountPath: /host-sys
-          {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -538,9 +534,10 @@ spec:
           readinessProbe:
             exec:
               command:
-                - pgrep
-                - -f
-                - scylla-jmx
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool info | grep "Native Transport active: true"
             initialDelaySeconds: {{ .Values.jmxProxy.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jmxProxy.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.jmxProxy.readinessProbe.timeoutSeconds }}

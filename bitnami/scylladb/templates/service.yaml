@@ -11,8 +11,8 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: scylladb
     app.kubernetes.io/component: scylladb
-    {{- if and .Values.metrics.eanbled .Values.metrics.serviceMonitor.enabled }}
-    {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */ }}
+    {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+    {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
     servicemonitor-scrape: true
     {{- end }}
   {{- if or .Values.service.annotations .Values.commonAnnotations }}

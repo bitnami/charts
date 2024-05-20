@@ -1093,9 +1093,6 @@ sysctl:
   ##
   sysctls:
     "fs.aio-max-nr": "30000000"
-  ## @param sysctl.mountHostSys Mount the host `/sys` folder to `/host-sys`
-  ##
-  mountHostSys: false
   ## Init container's resource requests and limits
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sysctl.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctl.resources is set (sysctl.resources is recommended for production).
