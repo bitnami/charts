@@ -13,7 +13,7 @@ Return the proper Scylladb image name
 {{- end -}}
 
 {{/*
-Return the proper Scylladb image name
+Return the proper image name (for the init container sysctl image)
 */}}
 {{- define "scylladb.sysctl.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.sysctl.image "global" .Values.global) }}
