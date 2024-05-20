@@ -21,7 +21,7 @@ jobs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
           path: charts
           fetch-depth: 2 # to be able to obtain files changed in the latest commit
@@ -71,7 +71,7 @@ jobs:
       CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
       VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         name: Checkout Repository
         with:
           path: charts
@@ -95,7 +95,7 @@ jobs:
         with:
           path: ~/artifacts
       # If we perform a checkout of the main branch, we will find conflicts with the submodules
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
           ref: 'index'
           path: index
@@ -105,6 +105,8 @@ jobs:
         run: |
           HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
           curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+          # Install file plugin
+          helm plugin add https://github.com/zoobab/helm_file_repo
       - id: update-index
         name: Fetch chart and update index
         env: 
@@ -132,35 +134,30 @@ jobs:
           is_index_updated=0
           while [[ $attempts -lt $max_attempts && $is_index_updated -eq 0 ]]; do
             attempts=$((attempts + 1))
-            git fetch origin index
-            git reset --hard origin/index
-
-            # Rebuild index
-            helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
-            cp ../download/index.yaml bitnami/index.yaml
-            # Push changes
-            git add bitnami/index.yaml && git commit -m "${chart_name}-${chart_version}: Update index.yaml" -s
-            git push && is_index_updated=1 || echo "Failed to push during attempt $attempts"
-          done
-
-          # Temporary code to confirm index is not broken
-          attempts=0
-          is_index_test_updated=0
-          while [[ $attempts -lt $max_attempts && $is_index_test_updated -eq 0 ]]; do
-            attempts=$((attempts + 1))
 
             # Pull changes from remote
-            git fetch origin index-test
-            current_commit_id=$(git rev-parse origin/index-test)
-            git reset --hard $(git commit-tree origin/index-test^{tree} -m "Update index.yaml")
+            git fetch origin index
+            current_commit_id=$(git rev-parse origin/index)
+            git reset --hard $(git commit-tree origin/index^{tree} -m "Update index.yaml")
 
             # Rebuild index
             helm repo index --url https://charts.bitnami.com/bitnami --merge bitnami/index.yaml ../download
+            # Compare size of files
+            if [[ $(stat -c%s bitnami/index.yaml) -gt $(stat -c%s ../download/index.yaml) ]]; then
+              echo "New index.yaml file is shorter than the current one"
+              exit 1
+            fi
+            # Adding tmp file as a helm repo
+            if ! helm repo add cache file://../download/ ; then
+              echo "New index.yaml file can't be indexed"
+              exit 1
+            fi
+
             cp ../download/index.yaml bitnami/index.yaml
 
             # Push changes
             git add bitnami/index.yaml && git commit --signoff --amend --no-edit
-            git push origin index:index-test --force-with-lease=index-test:${current_commit_id} && is_index_test_updated=1 || echo "Failed to push during attempt $attempts"
+            git push origin index --force-with-lease=index:${current_commit_id} && is_index_updated=1 || echo "Failed to push during attempt $attempts"
           done
 
           if [[ $is_index_updated -ne 1 ]]; then

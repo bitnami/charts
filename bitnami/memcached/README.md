@@ -232,32 +232,34 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `autoscaling.maxReplicas`                           | memcached statefulset autoscaling maximum number of replicas                                                                                                                                                      | `6`              |
 | `autoscaling.targetCPU`                             | memcached statefulset autoscaling target CPU percentage                                                                                                                                                           | `50`             |
 | `autoscaling.targetMemory`                          | memcached statefulset autoscaling target CPU memory                                                                                                                                                               | `50`             |
-| `pdb.create`                                        | Deploy a pdb object for the Memcached pod                                                                                                                                                                         | `false`          |
+| `pdb.create`                                        | Deploy a pdb object for the Memcached pod                                                                                                                                                                         | `true`           |
 | `pdb.minAvailable`                                  | Minimum available Memcached replicas                                                                                                                                                                              | `""`             |
 | `pdb.maxUnavailable`                                | Maximum unavailable Memcached replicas                                                                                                                                                                            | `1`              |
 
 ### Traffic Exposure parameters
 
-| Name                                    | Description                                                                             | Value       |
-| --------------------------------------- | --------------------------------------------------------------------------------------- | ----------- |
-| `service.type`                          | Kubernetes Service type                                                                 | `ClusterIP` |
-| `service.ports.memcached`               | Memcached service port                                                                  | `11211`     |
-| `service.nodePorts.memcached`           | Node port for Memcached                                                                 | `""`        |
-| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                        | `""`        |
-| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                             | `{}`        |
-| `service.clusterIP`                     | Memcached service Cluster IP                                                            | `""`        |
-| `service.loadBalancerIP`                | Memcached service Load Balancer IP                                                      | `""`        |
-| `service.loadBalancerSourceRanges`      | Memcached service Load Balancer sources                                                 | `[]`        |
-| `service.externalTrafficPolicy`         | Memcached service external traffic policy                                               | `Cluster`   |
-| `service.annotations`                   | Additional custom annotations for Memcached service                                     | `{}`        |
-| `service.extraPorts`                    | Extra ports to expose in the Memcached service (normally used with the `sidecar` value) | `[]`        |
-| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                              | `true`      |
-| `networkPolicy.allowExternal`           | The Policy model to apply                                                               | `true`      |
-| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                         | `true`      |
-| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
-| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                            | `[]`        |
-| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                  | `{}`        |
-| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                              | `{}`        |
+| Name                                    | Description                                                                                                   | Value       |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                          | Kubernetes Service type                                                                                       | `ClusterIP` |
+| `service.ports.memcached`               | Memcached service port                                                                                        | `11211`     |
+| `service.nodePorts.memcached`           | Node port for Memcached                                                                                       | `""`        |
+| `service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                              | `""`        |
+| `service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                   | `{}`        |
+| `service.clusterIP`                     | Memcached service Cluster IP                                                                                  | `""`        |
+| `service.loadBalancerIP`                | Memcached service Load Balancer IP                                                                            | `""`        |
+| `service.loadBalancerSourceRanges`      | Memcached service Load Balancer sources                                                                       | `[]`        |
+| `service.externalTrafficPolicy`         | Memcached service external traffic policy                                                                     | `Cluster`   |
+| `service.annotations`                   | Additional custom annotations for Memcached service                                                           | `{}`        |
+| `service.extraPorts`                    | Extra ports to expose in the Memcached service (normally used with the `sidecar` value)                       | `[]`        |
+| `networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                    | `true`      |
+| `networkPolicy.allowExternal`           | The Policy model to apply                                                                                     | `true`      |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                               | `true`      |
+| `networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.     | `true`      |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                  | `[]`        |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                  | `[]`        |
+| `networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.           | `{}`        |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.     | `{}`        |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Other Parameters
 
