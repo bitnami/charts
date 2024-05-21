@@ -36,4 +36,3 @@ name: oauth2-proxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
 version: 5.1.1
-
