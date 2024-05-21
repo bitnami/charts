@@ -2,7 +2,7 @@
 
 ## 18.2.0 (2024-05-21)
 
-* [bitnami/] feat: :sparkles: :lock: Add warning when original images are replaced ([#26172](https://github.com/bitnami/charts/pulls/26172))
+* [bitnami/airflow] feat: :sparkles: :lock: Add warning when original images are replaced ([#26172](https://github.com/bitnami/charts/pulls/26172))
 
 ## <small>18.1.1 (2024-05-21)</small>
 
