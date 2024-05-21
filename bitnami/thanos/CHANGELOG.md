@@ -1,8 +1,13 @@
 # Changelog
 
+## 15.5.1 (2024-05-21)
+
+* [bitnami/thanos] Use different liveness/readiness probes ([#26165](https://github.com/bitnami/charts/pulls/26165))
+
 ## 15.5.0 (2024-05-21)
 
-* [bitnami/thanos] feat: :sparkles: :lock: Add warning when original images are replaced ([#26283](https://github.com/bitnami/charts/pulls/26283))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/thanos] feat: :sparkles: :lock: Add warning when original images are replaced (#26283) ([2a39de8](https://github.com/bitnami/charts/commit/2a39de8)), closes [#26283](https://github.com/bitnami/charts/issues/26283)
 
 ## <small>15.4.7 (2024-05-18)</small>
 
