@@ -450,7 +450,7 @@ postgresql:
   ## @param postgresql.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## PostgreSQL configuration parameters
@@ -957,7 +957,7 @@ witness:
   ## @param witness.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param witness.upgradeRepmgrExtension Upgrade repmgr extension in the database
@@ -1465,7 +1465,7 @@ pgpool:
   ## @param pgpool.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param pgpool.updateStrategy Strategy used to replace old Pods by new ones
