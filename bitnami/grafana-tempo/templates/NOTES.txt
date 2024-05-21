@@ -55,3 +55,4 @@ Installed components:
 {{- include "grafana-tempo.checkRollingTags" . }}
 {{- include "grafana-tempo.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "compactor" "distributor" "ingester" "metricsGenerator" "querier" "queryFrontend.query" "queryFrontend" "volumePermissions" "vulture") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.tempo.image .Values.queryFrontend.query.image .Values.vulture.image .Values.volumePermissions.image) "context" $) }}

@@ -54,3 +54,4 @@ Option B:
 {{- include "metrics-server.checkRollingTags" . }}
 
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

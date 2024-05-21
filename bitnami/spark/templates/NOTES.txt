@@ -101,3 +101,4 @@ In order to replicate the container startup scripts execute this command:
 {{ include "spark.checkRollingTags" . }}
 {{ include "spark.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "master" "security.ssl" "worker") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}
