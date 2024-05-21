@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: contour
-      image: docker.io/bitnami/contour:1.28.4-debian-12-r2
+      image: docker.io/bitnami/contour:1.29.0-debian-12-r0
     - name: envoy
-      image: docker.io/bitnami/envoy:1.29.4-debian-12-r5
+      image: docker.io/bitnami/envoy:1.29.4-debian-12-r6
     - name: nginx
-      image: docker.io/bitnami/nginx:1.26.0-debian-12-r0
+      image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
 apiVersion: v2
-appVersion: 1.28.4
+appVersion: 1.29.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,4 +32,4 @@ maintainers:
 name: contour
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/contour
-version: 17.0.14
+version: 18.0.1

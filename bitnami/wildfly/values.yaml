@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wildfly
-  tag: 31.0.1-debian-12-r8
+  tag: 32.0.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -339,7 +339,7 @@ startupProbe:
   failureThreshold: 6
   successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
-## @skip livenessProbe.httpGet
+## @skip livenessProbe.tcpSocket
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -348,8 +348,7 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /
+  tcpSocket:
     port: http
   initialDelaySeconds: 120
   periodSeconds: 10
