@@ -259,7 +259,6 @@ containerSecurityContext:
 ## Configure extra options for Odoo containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Path for to check for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -268,7 +267,6 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /web/health
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5

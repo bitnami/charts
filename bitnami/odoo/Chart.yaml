@@ -34,4 +34,4 @@ maintainers:
 name: odoo
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/odoo
-version: 26.0.4
+version: 26.0.5
