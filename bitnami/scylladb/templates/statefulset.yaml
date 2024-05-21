@@ -90,8 +90,9 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - /bin/sh
-            - -cx
+            - /bin/bash
+          args:
+            - -ec
             - |
               {{- if .Values.persistence.enabled }}
               {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
