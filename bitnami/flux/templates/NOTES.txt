@@ -54,3 +54,4 @@ Read the upstream flux documentation to start working with the controllers:
 {{- include "common.warnings.rollingTag" .Values.kustomizeController.image }}
 {{- include "flux.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "helmController" "imageAutomationController" "imageReflectorController" "kustomizeController" "notificationController" "sourceController" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.kustomizeController.image .Values.helmController.image .Values.sourceController.image .Values.notificationController.image .Values.imageAutomationController.image .Values.imageReflectorController.image .Values.volumePermissions.image) "context" $) }}
