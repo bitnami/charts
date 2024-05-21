@@ -735,7 +735,7 @@ extraVolumes: []
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction
   ##
   minAvailable: 1
@@ -1824,7 +1824,7 @@ arbiter:
   pdb:
     ## @param arbiter.pdb.create Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)
     ##
-    create: false
+    create: true
     ## @param arbiter.pdb.minAvailable Minimum number/percentage of Arbiter pods that should remain scheduled
     ##
     minAvailable: 1
@@ -2168,7 +2168,7 @@ hidden:
   pdb:
     ## @param hidden.pdb.create Enable/disable a Pod Disruption Budget creation for hidden node pod(s)
     ##
-    create: false
+    create: true
     ## @param hidden.pdb.minAvailable Minimum number/percentage of hidden node pods that should remain scheduled
     ##
     minAvailable: 1
