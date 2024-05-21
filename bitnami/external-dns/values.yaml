@@ -1207,13 +1207,15 @@ extraVolumes: []
 extraVolumeMounts: []
 ## Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-## DEPRECATED: podDisruptionBudget will be removed in a future release - Please use pdb instead
+## @param podDisruptionBudget DEPRECATED podDisruptionBudget will be removed in a future release. Please use pdb instead
+## 
+podDisruptionBudget: {}
 ## @param pdb.create Enable/disable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: 1
   maxUnavailable: ""
 ## Prometheus Exporter / Metrics
