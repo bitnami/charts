@@ -140,8 +140,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.kafka.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.kafka.customReadinessProbe }}
