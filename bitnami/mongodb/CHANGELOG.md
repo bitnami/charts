@@ -1,8 +1,13 @@
 # Changelog
 
+## 15.5.1 (2024-05-21)
+
+* [bitnami/mongodb] Use different liveness/readiness probes ([#26152](https://github.com/bitnami/charts/pulls/26152))
+
 ## 15.5.0 (2024-05-21)
 
-* [bitnami/mongodb] feat: :sparkles: :lock: Add warning when original images are replaced ([#26247](https://github.com/bitnami/charts/pulls/26247))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/mongodb] feat: :sparkles: :lock: Add warning when original images are replaced (#26247) ([8a2137a](https://github.com/bitnami/charts/commit/8a2137a)), closes [#26247](https://github.com/bitnami/charts/issues/26247)
 
 ## <small>15.4.5 (2024-05-20)</small>
 
