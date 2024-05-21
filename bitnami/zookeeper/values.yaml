@@ -280,7 +280,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-  probeCommandTimeout: 2
+  probeCommandTimeout: 3
 ## @param readinessProbe.enabled Enable readinessProbe on ZooKeeper containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe

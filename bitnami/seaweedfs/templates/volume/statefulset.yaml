@@ -78,7 +78,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.volume.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.volume.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.volume.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.volume.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.volume.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.volume.terminationGracePeriodSeconds }}

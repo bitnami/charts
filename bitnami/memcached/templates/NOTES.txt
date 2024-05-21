@@ -42,3 +42,4 @@ To access the Memcached Prometheus metrics from outside the cluster execute the 
 {{- include "memcached.validateValues" . }}
 {{- include "memcached.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
