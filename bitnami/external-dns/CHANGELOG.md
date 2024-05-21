@@ -1,15 +1,5 @@
 # Changelog
 
-<<<<<<< HEAD
-## 7.4.1 (2024-05-21)
-
-* [bitnami/external-dns] PDB fixes ([#26292](https://github.com/bitnami/charts/pulls/26292))
-=======
-## 7.5.0 (2024-05-21)
-
-* [bitnami/external-dns] feat: :sparkles: :lock: Add warning when original images are replaced ([#26201](https://github.com/bitnami/charts/pulls/26201))
->>>>>>> upstream/main
-
 ## 7.5.0 (2024-05-21)
 
 * [bitnami/external-dns] feat: :sparkles: :lock: Add warning when original images are replaced (#26201 ([03f2cfd](https://github.com/bitnami/charts/commit/03f2cfd)), closes [#26201](https://github.com/bitnami/charts/issues/26201)
