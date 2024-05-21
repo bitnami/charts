@@ -299,7 +299,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 | Name                       | Description                                                    | Value   |
 | -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
+| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `true`  |
 | `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
 | `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Odoo                     | `false` |
