@@ -29,4 +29,5 @@ name: sealed-secrets
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets
 - https://github.com/bitnami-labs/sealed-secrets
-version: 2.2.0
+version: 2.2.1
+
