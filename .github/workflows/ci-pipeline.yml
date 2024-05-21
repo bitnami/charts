@@ -140,6 +140,7 @@ jobs:
           # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
           echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${{ github.event.pull_request.title }} ([#${{ github.event.number }}](${{ github.server_url }}/${{ github.repository }}/pulls/${{ github.event.number }}))\n" > ${changelog_file}
           cat ${changelog_tmp} >> ${changelog_file}
+          rm ${changelog_tmp}
           if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
             git add "bitnami/${CHART}/CHANGELOG.md" && git commit -m "Update CHANGELOG.md" --signoff
           fi
