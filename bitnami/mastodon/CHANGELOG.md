@@ -1,8 +1,13 @@
 # Changelog
 
+## 6.1.1 (2024-05-21)
+
+* [bitnami/mastodon] Use different liveness/readiness probes ([#26126](https://github.com/bitnami/charts/pulls/26126))
+
 ## 6.1.0 (2024-05-21)
 
-* [bitnami/mastodon] feat: :sparkles: :lock: Add warning when original images are replaced ([#26238](https://github.com/bitnami/charts/pulls/26238))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/mastodon] feat: :sparkles: :lock: Add warning when original images are replaced (#26238) ([d8f42ab](https://github.com/bitnami/charts/commit/d8f42ab)), closes [#26238](https://github.com/bitnami/charts/issues/26238)
 
 ## <small>6.0.3 (2024-05-18)</small>
 
