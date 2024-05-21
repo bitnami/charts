@@ -283,7 +283,7 @@ alertmanager:
   ## @param alertmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Node affinity preset
@@ -898,7 +898,7 @@ server:
   ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Node affinity preset
