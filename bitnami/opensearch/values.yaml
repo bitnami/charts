@@ -521,7 +521,7 @@ master:
   ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param master.nameOverride String to partially override opensearch.master.fullname
@@ -943,7 +943,7 @@ data:
   ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param data.nameOverride String to partially override opensearch.data.fullname
@@ -1362,7 +1362,7 @@ coordinating:
   ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param coordinating.nameOverride String to partially override opensearch.coordinating.fullname
@@ -1744,7 +1744,7 @@ ingest:
   ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param ingest.nameOverride String to partially override opensearch.ingest.fullname
@@ -2586,7 +2586,7 @@ dashboards:
   ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## @param dashboards.nameOverride String to partially override opensearch.dashboards.fullname
