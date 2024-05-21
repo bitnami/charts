@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: deepspeed
-      image: docker.io/bitnami/deepspeed:0.14.2-debian-12-r3
+      image: docker.io/bitnami/deepspeed:0.14.2-debian-12-r4
     - name: git
       image: docker.io/bitnami/git:2.45.1-debian-12-r0
     - name: os-shell
@@ -35,5 +35,4 @@ name: deepspeed
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/deepspeed
 - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 2.1.1
-
+version: 2.1.2
