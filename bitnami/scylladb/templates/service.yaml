@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: scylladb
     {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
     {{- /* Adding extra selector for the ServiceMonitor object to avoid duplicate targets  */}}
-    servicemonitor-scrape: true
+    prometheus.io/scrape: true
     {{- end }}
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.annotations .Values.commonAnnotations ) "context" . ) }}
