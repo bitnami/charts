@@ -35,4 +35,4 @@ maintainers:
 name: mongodb-sharded
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded
-version: 8.1.0
+version: 8.2.0
