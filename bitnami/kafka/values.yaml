@@ -140,6 +140,10 @@ existingLog4jConfigMap: ""
 ## @param heapOpts Kafka Java Heap size
 ##
 heapOpts: -Xmx1024m -Xms1024m
+## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
+## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
+##
+brokerRackAssignment: ""
 ## @param interBrokerProtocolVersion Override the setting 'inter.broker.protocol.version' during the ZK migration.
 ## Ref. https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html
 ##
@@ -265,9 +269,9 @@ sasl:
   ## @param sasl.existingSecret Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser
   ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
   ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=inter-broker-client-secret=INTER_BROKER_CLIENT_SECRET --from-literal=controller-password=CONTROLLER_PASSWORD --from-literal=controller-client-secret=CONTROLLER_CLIENT_SECRET --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
-  ## The client secrets are only required when using oauthbearer as sasl mechanism. 
+  ## The client secrets are only required when using oauthbearer as sasl mechanism.
   ## Client, interbroker and controller passwords are only required if the sasl mechanism includes something other than oauthbearer.
-  ## 
+  ##
   existingSecret: ""
 ## @section Kafka TLS parameters
 ## Kafka TLS settings, required if SSL or SASL_SSL listeners are configured
@@ -1530,7 +1534,7 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation
     ## @param externalAccess.autoDiscovery.containerSecurityContext.readOnlyRootFilesystem Set Kafka auto-discovery containers' Security Context readOnlyRootFilesystem
     ## @param externalAccess.autoDiscovery.containerSecurityContext.capabilities.drop Set Kafka auto-discovery containers' Security Context capabilities to be dropped
-    ## @param externalAccess.autoDiscovery.containerSecurityContext.seccompProfile.type Set Kafka auto-discovery seccomp profile type 
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.seccompProfile.type Set Kafka auto-discovery seccomp profile type
     ## e.g:
     ##   containerSecurityContext:
     ##     enabled: true
