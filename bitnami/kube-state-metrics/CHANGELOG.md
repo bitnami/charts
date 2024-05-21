@@ -1,8 +1,13 @@
 # Changelog
 
+## 4.1.1 (2024-05-21)
+
+* [bitnami/kube-state-metrics-probes] Use different liveness/readiness probes ([#26174](https://github.com/bitnami/charts/pulls/26174))
+
 ## 4.1.0 (2024-05-21)
 
-* [bitnami/kube-state-metrics] feat: :sparkles: :lock: Add warning when original images are replaced ([#26230](https://github.com/bitnami/charts/pulls/26230))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/kube-state-metrics] feat: :sparkles: :lock: Add warning when original images are replaced ( ([24028d6](https://github.com/bitnami/charts/commit/24028d6)), closes [#26230](https://github.com/bitnami/charts/issues/26230)
 
 ## <small>4.0.7 (2024-05-18)</small>
 
