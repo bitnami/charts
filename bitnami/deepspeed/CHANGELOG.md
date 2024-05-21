@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.1.1 (2024-05-21)
+
+* [bitnami/deepspeed] Use different liveness/readiness probes (part 2) ([#26168](https://github.com/bitnami/charts/pulls/26168))
+
 ## 2.1.0 (2024-05-21)
 
-* [bitnami/deepspeed] feat: :sparkles: :lock: Add warning when original images are replaced ([#26192](https://github.com/bitnami/charts/pulls/26192))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/deepspeed] feat: :sparkles: :lock: Add warning when original images are replaced (#26192) ([309aec1](https://github.com/bitnami/charts/commit/309aec1)), closes [#26192](https://github.com/bitnami/charts/issues/26192)
 
 ## <small>2.0.6 (2024-05-21)</small>
 
