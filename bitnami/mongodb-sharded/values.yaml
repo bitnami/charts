@@ -558,7 +558,7 @@ configsvr:
   pdb:
     ## @param configsvr.pdb.create Enable pod disruption budget
     ##
-    create: false
+    create: true
     ## @param configsvr.pdb.minAvailable Minimum number of available config pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -965,7 +965,7 @@ mongos:
   pdb:
     ## @param mongos.pdb.create Enable pod disruption budget
     ##
-    create: false
+    create: true
     ## @param mongos.pdb.minAvailable Minimum number of available mongo pods allowed (`0` to disable)
     ##
     minAvailable: 0
@@ -1274,7 +1274,7 @@ shardsvr:
     pdb:
       ## @param shardsvr.dataNode.pdb.create Enable pod disruption budget
       ##
-      create: false
+      create: true
       ## @param shardsvr.dataNode.pdb.minAvailable Minimum number of available data pods allowed (`0` to disable)
       ##
       minAvailable: 0

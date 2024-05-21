@@ -35,4 +35,4 @@ name: deepspeed
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/deepspeed
 - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 2.0.5
+version: 2.0.6

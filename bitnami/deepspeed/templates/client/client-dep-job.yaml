@@ -160,7 +160,7 @@ spec:
               command:
                 - python
                 - -c
-                - import deepspeed; deepspeed.__version__
+                - import torch; torch.__version__
           {{- end }}
           {{- if .Values.client.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customReadinessProbe "context" $) | nindent 12 }}
