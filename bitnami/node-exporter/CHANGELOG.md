@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.2.4 (2024-05-21)
+## 4.3.0 (2024-05-21)
 
-* [bitnami/node-exporter] Use different liveness/readiness probes ([#26178](https://github.com/bitnami/charts/pulls/26178))
+* [bitnami/node-exporter] feat: :sparkles: :lock: Add warning when original images are replaced ([#26255](https://github.com/bitnami/charts/pulls/26255))
+
+## <small>4.2.4 (2024-05-21)</small>
+
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/node-exporter] Use different liveness/readiness probes (#26178) ([4d3dd04](https://github.com/bitnami/charts/commit/4d3dd04)), closes [#26178](https://github.com/bitnami/charts/issues/26178)
 
 ## <small>4.2.3 (2024-05-18)</small>
 
