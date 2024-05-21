@@ -274,8 +274,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.broker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.broker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.broker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: "client"
+            exec:
+              command:
+                - pgrep
+                - -f
+                - kafka
           {{- end }}
           {{- if .Values.broker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.broker.customReadinessProbe "context" $) | nindent 12 }}

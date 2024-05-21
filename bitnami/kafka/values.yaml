@@ -841,7 +841,7 @@ controller:
   ## @param controller.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: 1
   ## Enable persistence using Persistent Volume Claims
@@ -1251,7 +1251,7 @@ broker:
   ## @param broker.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: 1
   ## @section Experimental: Kafka Broker Autoscaling configuration
@@ -2205,7 +2205,7 @@ metrics:
     ## @param metrics.kafka.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
     ##
     pdb:
-      create: false
+      create: true
       minAvailable: 1
       maxUnavailable: ""
 
