@@ -105,11 +105,11 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          path: charts
+          path: ~/charts
       - name: Clone upstream bitnami/charts repository
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
-          path: upstream-charts
+          path: ~/upstream-charts
       - name: Setup git configuration
         run: |
           cd ~/charts
