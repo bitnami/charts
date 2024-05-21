@@ -4,6 +4,11 @@
 
 * [bitnami/kubernetes-event-exporter] feat: :sparkles: :lock: Add warning when original images are replaced ([#26233](https://github.com/bitnami/charts/pulls/26233))
 
+## <small>3.0.7 (2024-05-21)</small>
+
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/kubernetes-event-exporter] Use different liveness/readiness … (#26173) ([1664d3e](https://github.com/bitnami/charts/commit/1664d3e)), closes [#26173](https://github.com/bitnami/charts/issues/26173)
+
 ## <small>3.0.6 (2024-05-18)</small>
 
 * [bitnami/kubernetes-event-exporter] Release 3.0.6 updating components versions (#26037) ([75c7b44](https://github.com/bitnami/charts/commit/75c7b44)), closes [#26037](https://github.com/bitnami/charts/issues/26037)
