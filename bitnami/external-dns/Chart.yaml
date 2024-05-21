@@ -28,4 +28,4 @@ maintainers:
 name: external-dns
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/external-dns
-version: 7.3.4
+version: 7.4.0
