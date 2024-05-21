@@ -1,8 +1,13 @@
 # Changelog
 
+## 5.1.1 (2024-05-21)
+
+* [bitnami/oauth2-proxy] Use different liveness/readiness probes ([#26300](https://github.com/bitnami/charts/pulls/26300))
+
 ## 5.1.0 (2024-05-21)
 
-* [bitnami/oauth2-proxy] feat: :sparkles: :lock: Add warning when original images are replaced ([#26256](https://github.com/bitnami/charts/pulls/26256))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/oauth2-proxy] feat: :sparkles: :lock: Add warning when original images are replaced (#26256 ([b3d7bf5](https://github.com/bitnami/charts/commit/b3d7bf5)), closes [#26256](https://github.com/bitnami/charts/issues/26256)
 
 ## <small>5.0.7 (2024-05-18)</small>
 
