@@ -74,7 +74,7 @@ spec:
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.webdav.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.webdav.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.webdav.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.webdav.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.webdav.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.webdav.terminationGracePeriodSeconds }}
