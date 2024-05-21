@@ -1,8 +1,13 @@
 # Changelog
 
+## 0.2.1 (2024-05-21)
+
+* [bitnami/seaweedfs] fix: adapt pod security context to openshift ([#26294](https://github.com/bitnami/charts/pulls/26294))
+
 ## 0.2.0 (2024-05-21)
 
-* [bitnami/seaweedfs] feat: :sparkles: :lock: Add warning when original images are replaced ([#26276](https://github.com/bitnami/charts/pulls/26276))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/seaweedfs] feat: :sparkles: :lock: Add warning when original images are replaced (#26276) ([0f63987](https://github.com/bitnami/charts/commit/0f63987)), closes [#26276](https://github.com/bitnami/charts/issues/26276)
 
 ## <small>0.1.7 (2024-05-18)</small>
 
