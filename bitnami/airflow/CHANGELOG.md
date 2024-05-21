@@ -1,8 +1,8 @@
 # Changelog
 
-## 18.2.0 (2024-05-21)
+## 18.2.1 (2024-05-21)
 
-* [bitnami/airflow] feat: :sparkles: :lock: Add warning when original images are replaced ([#26172](https://github.com/bitnami/charts/pulls/26172))
+* Fix Airflow k8s config generation and filesystem writability ([#26307](https://github.com/bitnami/charts/pulls/26307))
 
 ## <small>18.1.1 (2024-05-21)</small>
 
