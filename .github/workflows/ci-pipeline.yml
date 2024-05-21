@@ -112,6 +112,7 @@ jobs:
           path: upstream-charts
       - name: Setup git configuration
         run: |
+          cd ~/charts
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
       # In order to avoid doing a full clone (which would fetch the index branch), we
