@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.1 (2024-05-21)
+## 2.1.2 (2024-05-21)
 
-* [bitnami/deepspeed] Use different liveness/readiness probes (part 2) ([#26168](https://github.com/bitnami/charts/pulls/26168))
+* [bitnami/deepspeed] Release 2.1.2 ([#26305](https://github.com/bitnami/charts/pulls/26305))
+
+## <small>2.1.1 (2024-05-21)</small>
+
+* [bitnami/deepspeed] Use different liveness/readiness probes (part 2) (#26168) ([a2bb3bd](https://github.com/bitnami/charts/commit/a2bb3bd)), closes [#26168](https://github.com/bitnami/charts/issues/26168)
 
 ## 2.1.0 (2024-05-21)
 
