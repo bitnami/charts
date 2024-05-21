@@ -327,7 +327,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `defaultBackend.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                    | `[]`                    |
 | `defaultBackend.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                          | `{}`                    |
 | `defaultBackend.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                                      | `{}`                    |
-| `defaultBackend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Default backend                                                                                                                                                                             | `false`                 |
+| `defaultBackend.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Default backend                                                                                                                                                                             | `true`                  |
 | `defaultBackend.pdb.minAvailable`                                  | Minimum number/percentage of Default backend pods that should remain scheduled                                                                                                                                                                  | `1`                     |
 | `defaultBackend.pdb.maxUnavailable`                                | Maximum number/percentage of Default backend pods that may be made unavailable                                                                                                                                                                  | `""`                    |
 
@@ -376,7 +376,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 | Name                       | Description                                                               | Value   |
 | -------------------------- | ------------------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable/disable a Pod Disruption Budget creation for Controller            | `false` |
+| `pdb.create`               | Enable/disable a Pod Disruption Budget creation for Controller            | `true`  |
 | `pdb.minAvailable`         | Minimum number/percentage of Controller pods that should remain scheduled | `1`     |
 | `pdb.maxUnavailable`       | Maximum number/percentage of Controller pods that may be made unavailable | `""`    |
 | `autoscaling.enabled`      | Enable autoscaling for Controller                                         | `false` |

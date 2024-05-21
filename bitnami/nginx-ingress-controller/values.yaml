@@ -868,7 +868,7 @@ defaultBackend:
   pdb:
     ## @param defaultBackend.pdb.create Enable/disable a Pod Disruption Budget creation for Default backend
     ##
-    create: false
+    create: true
     ## @param defaultBackend.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
     ##
     minAvailable: 1
@@ -1060,7 +1060,7 @@ rbac:
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation for Controller
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of Controller pods that should remain scheduled
   ##
   minAvailable: 1
