@@ -105,14 +105,14 @@ jobs:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
           token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          path: ~/charts
+          path: charts
       - name: Clone upstream bitnami/charts repository
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
-          path: ~/upstream-charts
+          path: upstream-charts
       - name: Setup git configuration
         run: |
-          cd ~/charts
+          cd $GITHUB_WORKSPACE/charts
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
       # In order to avoid doing a full clone (which would fetch the index branch), we
@@ -120,10 +120,9 @@ jobs:
       # regenerate the changelog too
       - name: Unshallow main branch and get tags
         run: |
-          cd ~/upstream-charts
+          cd $GITHUB_WORKSPACE/upstream-charts
           git fetch origin main --unshallow
           git fetch --tags
-          cd ..
       - name: Install conventional-changelog-cli
         run: npm install -g conventional-changelog-cli
       - id: generate-changelog
@@ -131,14 +130,14 @@ jobs:
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
-          cd ~/upstream-charts
+          cd $GITHUB_WORKSPACE/upstream-charts
           # The generator needs the file to exist
-          chart_version="$(yq e '.version' ~/charts/bitnami/${CHART}/Chart.yaml)"
-          changelog_file="~/charts/bitnami/${CHART}/CHANGELOG.md"
-          changelog_tmp="~/charts/bitnami/${CHART}/CHANGELOG.md.tmp"
+          chart_version="$(yq e '.version' $GITHUB_WORKSPACE/charts/bitnami/${CHART}/Chart.yaml)"
+          changelog_file="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md"
+          changelog_tmp="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md.tmp"
           touch "$changelog_file"
           npx conventional-changelog-cli -i ${changelog_file} -s -t ${CHART}/ -r 0 --commit-path bitnami/${CHART}
-          cd ~/charts
+          cd $GITHUB_WORKSPACE/charts
           # Remove unreleased section (includes all intermediate commits in the branch) and create future entry based on PR title
           # The unreleased section looks like this "## (YYYY-MM-DD)" whereas a released section looks like this "## 0.0.1 (YYYY-MM-DD)"
           # So we only need to find a released section to start printing in the awk script below
@@ -164,7 +163,7 @@ jobs:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
             exit_code=0
-            cd ~/charts
+            cd $GITHUB_WORKSPACE/charts
             echo "Validating README.md for bitnami/${CHART}"
             # Validating *.registry parameters
             while read line; do
@@ -211,7 +210,7 @@ jobs:
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           # Updating CRDs stored at 'bitnami/$CHART/crds' and 'bitnami/$CHART/templates/crds'
-          cd ~/charts
+          cd $GITHUB_WORKSPACE/charts
           mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
           for file in "${crd_files[@]}"; do
             # Automatically update CRDs that use the '# Source' header
@@ -292,7 +291,7 @@ jobs:
       - id: update-pr
         name: Push changes
         run: |
-          cd ~/charts
+          cd $GITHUB_WORKSPACE/charts
           # Push all the new commits, if any
           if [[ $(git cherry -v) ]]; then
             git push
