@@ -169,7 +169,7 @@ spec:
               command:
                 - python
                 - -c
-                - import torch; print(torch.__version__)
+                - import torchvision; print(torchvision.__version__)
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
