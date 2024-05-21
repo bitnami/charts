@@ -109,7 +109,6 @@ jobs:
       - name: Clone upstream bitnami/charts repository
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
-          repository: bitnami/charts
           path: upstream-charts
       - name: Setup git configuration
         run: |
@@ -120,7 +119,7 @@ jobs:
       # regenerate the changelog too
       - name: Unshallow main branch and get tags
         run: |
-          cd upstream-charts
+          cd ~/upstream-charts
           git fetch origin main --unshallow
           git fetch --tags
           cd ..
