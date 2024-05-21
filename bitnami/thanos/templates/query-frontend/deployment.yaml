@@ -135,15 +135,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.auth.basicAuthUsers }}
-            httpGet:
-              path: /-/healthy
-              port: http
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
-            {{- else }}
             tcpSocket:
               port: http
-            {{- end }}
           {{- end }}
           {{- if .Values.queryFrontend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customReadinessProbe "context" $) | nindent 12 }}

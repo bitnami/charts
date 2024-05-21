@@ -160,15 +160,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.receiveDistributor.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.receiveDistributor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if not .Values.auth.basicAuthUsers }}
-            httpGet:
-              path: /-/healthy
-              port: http
-              scheme: {{ ternary "HTTPS" "HTTP" .Values.https.enabled }}
-            {{- else }}
             tcpSocket:
               port: http
-            {{- end }}
           {{- end }}
           {{- if .Values.receiveDistributor.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.customReadinessProbe "context" $) | nindent 12 }}
