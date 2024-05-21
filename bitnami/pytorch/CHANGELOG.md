@@ -1,8 +1,13 @@
 # Changelog
 
-## 4.0.6 (2024-05-21)
+## 4.1.0 (2024-05-21)
 
-* [bitnami/pytorch] Use different liveness/readiness probes ([#26166](https://github.com/bitnami/charts/pulls/26166))
+* [bitnami/pytorch] feat: :sparkles: :lock: Add warning when original images are replaced ([#26268](https://github.com/bitnami/charts/pulls/26268))
+
+## <small>4.0.6 (2024-05-21)</small>
+
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/pytorch] Use different liveness/readiness probes (#26166) ([d21265b](https://github.com/bitnami/charts/commit/d21265b)), closes [#26166](https://github.com/bitnami/charts/issues/26166)
 
 ## <small>4.0.5 (2024-05-18)</small>
 
