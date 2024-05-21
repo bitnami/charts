@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.2.0 (2024-05-21)
+
+* [bitnami/kubernetes-event-exporter] Add PDB ([#26145](https://github.com/bitnami/charts/pulls/26145))
+
 ## 3.1.0 (2024-05-21)
 
-* [bitnami/kubernetes-event-exporter] feat: :sparkles: :lock: Add warning when original images are replaced ([#26233](https://github.com/bitnami/charts/pulls/26233))
+* [bitnami/kubernetes-event-exporter] feat: :sparkles: :lock: Add warning when original images are rep ([1ab8808](https://github.com/bitnami/charts/commit/1ab8808)), closes [#26233](https://github.com/bitnami/charts/issues/26233)
 
 ## <small>3.0.7 (2024-05-21)</small>
 
