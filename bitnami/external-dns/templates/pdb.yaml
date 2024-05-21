@@ -17,8 +17,8 @@ spec:
   {{- if .Values.podDisruptionBudget }}
   {{- include "common.tplvalues.render" (dict "value" .Values.podDisruptionBudget "context" $) | nindent 2 }}
   {{- else }}
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- if or .Values.pdb.minAvailable (not .Values.pdb.maxUnavailable) }}
+  minAvailable: {{ .Values.pdb.minAvailable | default 1 }}
   {{- end }}
   {{- if .Values.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.pdb.maxUnavailable }}
