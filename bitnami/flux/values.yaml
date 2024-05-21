@@ -325,7 +325,7 @@ kustomizeController:
   ## @param kustomizeController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Autoscaling configuration
@@ -840,7 +840,7 @@ helmController:
   ## @param helmController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Autoscaling configuration
@@ -1357,7 +1357,7 @@ sourceController:
   ## @param sourceController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Autoscaling configuration
@@ -1973,7 +1973,7 @@ notificationController:
   ## @param notificationController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Autoscaling configuration
@@ -2596,7 +2596,7 @@ imageAutomationController:
   ## @param imageAutomationController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Autoscaling configuration
@@ -3111,7 +3111,7 @@ imageReflectorController:
   ## @param imageReflectorController.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: 1
     maxUnavailable: ""
   ## Autoscaling configuration

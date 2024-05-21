@@ -12,13 +12,13 @@ annotations:
     - name: prometheus-rsocket-proxy
       image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r15
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.2-debian-12-r18
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.3-debian-12-r0
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.2-debian-12-r15
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.3-debian-12-r0
     - name: spring-cloud-skipper
-      image: docker.io/bitnami/spring-cloud-skipper:2.11.2-debian-12-r14
+      image: docker.io/bitnami/spring-cloud-skipper:2.11.3-debian-12-r0
 apiVersion: v2
-appVersion: 2.11.2
+appVersion: 2.11.3
 dependencies:
 - condition: rabbitmq.enabled
   name: rabbitmq
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 28.0.4
+version: 28.0.5
