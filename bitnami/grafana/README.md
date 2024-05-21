@@ -512,6 +512,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `grafana.lifecycleHooks`                                    | for the Grafana container(s) to automate configuration before or after startup                                                                                                                                                    | `{}`             |
 | `grafana.sidecars`                                          | Attach additional sidecar containers to the Grafana pod                                                                                                                                                                           | `[]`             |
 | `grafana.initContainers`                                    | Add additional init containers to the Grafana pod(s)                                                                                                                                                                              | `[]`             |
+| `grafana.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`           |
 | `grafana.extraVolumes`                                      | Additional volumes for the Grafana pod                                                                                                                                                                                            | `[]`             |
 | `grafana.extraVolumeMounts`                                 | Additional volume mounts for the Grafana container                                                                                                                                                                                | `[]`             |
 | `grafana.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Grafana nodes                                                                                                                                                            | `""`             |
@@ -652,6 +653,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This major release only bumps the Grafana version to 11.x. No major issues are expected during the upgrade. See the upstream documentation <https://grafana.com/docs/grafana/latest/whatsnew/whats-new-in-v11-0/> for more info about the changes included in this new major version of the application
 
 ### To 10.0.0
 

@@ -28,4 +28,4 @@ maintainers:
 name: zookeeper
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/zookeeper
-version: 13.2.1
+version: 13.2.3

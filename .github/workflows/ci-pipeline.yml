@@ -92,7 +92,7 @@ jobs:
   update-pr:
     runs-on: ubuntu-latest
     needs: [get-chart]
-    name: Automatically update README and CRDs
+    name: Automatically update README, CRDs and CHANGELOG
     permissions:
       contents: write
     outputs:
@@ -100,7 +100,7 @@ jobs:
     if: needs.get-chart.outputs.result == 'ok'
     steps:
       - name: Checkout bitnami/charts
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         with:
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
@@ -109,6 +109,40 @@ jobs:
         run: |
           git config user.name "Bitnami Containers"
           git config user.email "bitnami-bot@vmware.com"
+      # In order to avoid doing a full clone (which would fetch the index branch), we
+      # unshallow the clone only using the main branch. We need to get the tags to
+      # regenerate the changelog too
+      - name: Unshallow main branch and get tags
+        run: |
+          git fetch origin main --unshallow
+          git fetch --tags
+      - name: Install conventional-changelog-cli
+        run: npm install -g conventional-changelog-cli
+      - id: generate-changelog
+        name: Generate changelog
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          # The generator needs the file to exist
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          changelog_file="bitnami/${CHART}/CHANGELOG.md"
+          changelog_tmp="bitnami/${CHART}/CHANGELOG.md.tmp"
+          touch "$changelog_file"
+          npx conventional-changelog-cli -i ${changelog_file} -s -t ${CHART}/ -r 0 --commit-path bitnami/${CHART}
+          # Remove unreleased section (includes all intermediate commits in the branch) and create future entry based on PR title
+          # The unreleased section looks like this "## (YYYY-MM-DD)" whereas a released section looks like this "## 0.0.1 (YYYY-MM-DD)"
+          # So we only need to find a released section to start printing in the awk script below
+          awk '/^##[^(]*[0-9]/ {flag=1} flag {print}' ${changelog_file} > ${changelog_tmp}
+          # Remove extra newlines so the changelog file passes the markdown linter
+          sed -i -E -e '/^$/d' ${changelog_tmp} && sed -i -E -e 's/(##.*)/\n\1\n/g' ${changelog_tmp}
+          # Include h1 heading and add entry for the current version. There is no tag for the current version (this will be created once merged), so we need to manually add it.
+          # We know the final squashed commit title, which will be the PR title. We cannot add a link to the commit in the main branch because it has not been
+          # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
+          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${{ github.event.pull_request.title }} ([#${{ github.event.number }}](${{ github.server_url }}/${{ github.repository }}/pulls/${{ github.event.number }}))\n" > ${changelog_file}
+          mv ${changelog_tmp} ${changelog_file}
+          if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
+            git add "bitnami/${CHART}/CHANGELOG.md" && git commit -m "Update CHANGELOG.md" --signoff
+          fi
       - name: Install readme-generator-for-helm
         if: needs.get-chart.outputs.values-updated == 'true'
         run: npm install -g @bitnami/readme-generator-for-helm
@@ -270,7 +304,7 @@ jobs:
       )
     name: VIB Verify
     steps:
-      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
