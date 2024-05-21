@@ -133,10 +133,8 @@ spec:
       {{- end }}
       {{- if .Values.alertmanager.livenessProbe.enabled }}
       livenessProbe:
-        httpGet:
-          path: {{ .Values.alertmanager.livenessProbe.path }}
+        tcpSocket:
           port: web
-          scheme: HTTP
         initialDelaySeconds: {{ .Values.alertmanager.livenessProbe.initialDelaySeconds }}
         periodSeconds: {{ .Values.alertmanager.livenessProbe.periodSeconds }}
         timeoutSeconds: {{ .Values.alertmanager.livenessProbe.timeoutSeconds }}
