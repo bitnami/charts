@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.3.2
+  version: 15.3.3
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.19.2
 - name: cassandra
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 11.1.7
-digest: sha256:f98529d6a63510ae5eaf83a71ea86ebeb0508cfceacd08b25892541a935aacc7
-generated: "2024-05-18T01:28:32.048250206Z"
+digest: sha256:28ff2d97d4dcece708875a10f9ed3e3e32498f1fab34a2cef43f101861b55fbd
+generated: "2024-05-20T17:38:55.69796+02:00"
