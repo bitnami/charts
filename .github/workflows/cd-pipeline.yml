@@ -109,7 +109,7 @@ jobs:
           helm plugin add https://github.com/zoobab/helm_file_repo
       - id: update-index
         name: Fetch chart and update index
-        env: 
+        env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
           AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
@@ -163,6 +163,34 @@ jobs:
           if [[ $is_index_updated -ne 1 ]]; then
             echo "Could not update the index after $max_attempts attempts"
             exit 1
+          fi
+  push-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs:
+      - get-chart
+      - vib-publish
+    name: Push tag
+    if: ${{ needs.get-chart.outputs.result == 'ok' }}
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        with:
+          path: charts
+          fetch-depth: 2 # to be able to obtain files changed in the latest commit
+      - id: push-tag
+        name: 'Push tag'
+        env:
+          CHART: ${{ needs.get-chart.outputs.chart }}
+        run: |
+          cd charts
+          # Get chart version and list of tags
+          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
+          git fetch --tags
+          # If the tag does not exist, create and push it (this allows re-executing the job)
+          if ! git tag | grep ${CHART}/${chart_version}; then
+            git tag ${CHART}/${chart_version}
+            git push --tags
           fi
   # If the CD Pipeline does not succeed we should notify the interested agents
   slack-notif:
