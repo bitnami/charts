@@ -17,11 +17,11 @@ spec:
   {{- if .Values.podDisruptionBudget }}
   {{- include "common.tplvalues.render" (dict "value" .Values.podDisruptionBudget "context" $) | nindent 2 }}
   {{- else }}
-  {{- if or .Values.pdb.minAvailable (not .Values.pdb.maxUnavailable) }}
-  minAvailable: {{ .Values.pdb.minAvailable | default 1 }}
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- if or .Values.pdb.maxUnavailable (not .Values.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}

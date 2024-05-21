@@ -857,7 +857,7 @@ schedulerName: ""
 topologySpreadConstraints: []
 ## @param replicaCount Desired number of ExternalDNS replicas
 ##
-replicaCount: 2
+replicaCount: 1
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
