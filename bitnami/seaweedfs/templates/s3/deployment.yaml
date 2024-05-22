@@ -162,8 +162,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.s3.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.s3.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.s3.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.s3.customReadinessProbe }}
