@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.1.1 (2024-05-21)
+
+* [bitnami/kuberay] Use different liveness/readiness probes ([#26170](https://github.com/bitnami/charts/pulls/26170))
+
 ## 1.1.0 (2024-05-21)
 
-* [bitnami/kuberay] feat: :sparkles: :lock: Add warning when original images are replaced ([#26232](https://github.com/bitnami/charts/pulls/26232))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/kuberay] feat: :sparkles: :lock: Add warning when original images are replaced (#26232) ([ca2bc25](https://github.com/bitnami/charts/commit/ca2bc25)), closes [#26232](https://github.com/bitnami/charts/issues/26232)
 
 ## <small>1.0.4 (2024-05-18)</small>
 
