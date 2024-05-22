@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.5.1 (2024-05-21)
+## 7.5.1 (2024-05-22)
 
 * [bitnami/external-dns] PDB fixes ([#26292](https://github.com/bitnami/charts/pulls/26292))
 
