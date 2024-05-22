@@ -21,10 +21,9 @@ metadata:
 spec:
   {{- if .Values.server.pdb.minAvailable }}
   minAvailable: {{ .Values.server.pdb.minAvailable }}
-  {{- else if .Values.server.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.server.pdb.maxUnavailable }}
-  {{- else }}
-  minAvailable: 0
+  {{- end }}
+  {{- if or .Values.server.pdb.maxUnavailable (not .Values.controller.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.server.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

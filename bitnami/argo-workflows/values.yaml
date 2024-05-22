@@ -286,12 +286,12 @@ server:
   ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param server.pdb.enabled Create Pod Disruption Budget for the server component
   ## @param server.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
-  ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: 1
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Run the argo server in "secure" mode.
   ## Ref: https://argoproj.github.io/argo-workflows/tls/
   ## @param server.secure Run Argo server in secure mode
@@ -854,12 +854,12 @@ controller:
   ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ## @param controller.pdb.enabled Create Pod Disruption Budget for the controller component
   ## @param controller.pdb.minAvailable Sets the min number of pods availables for the Pod Disruption Budget
-  ## @param controller.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
+  ## @param controller.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget.  Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: 1
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Controller Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
