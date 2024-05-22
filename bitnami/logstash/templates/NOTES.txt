@@ -62,3 +62,4 @@ To access Logstash from outside the cluster execute the following commands:
 {{- include "logstash.validateValues" . }}
 {{- include "logstash.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
