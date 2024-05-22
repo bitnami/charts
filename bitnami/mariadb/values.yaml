@@ -582,8 +582,8 @@ primary:
     create: true
     ## @param primary.pdb.minAvailable Minimum number/percentage of MariaDB primary pods that must still be available after the eviction
     ##
-    minAvailable: 1
-    ## @param primary.pdb.maxUnavailable Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction
+    minAvailable: ""
+    ## @param primary.pdb.maxUnavailable Maximum number/percentage of MariaDB primary pods that can be unavailable after the eviction. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## @param primary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet
@@ -999,8 +999,8 @@ secondary:
     create: true
     ## @param secondary.pdb.minAvailable Minimum number/percentage of MariaDB secondary pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MariaDB secondary pods that may be made unavailable
+    minAvailable: ""
+    ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MariaDB secondary pods that may be made unavailable. Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## @param secondary.revisionHistoryLimit Maximum number of revisions that will be maintained in the StatefulSet

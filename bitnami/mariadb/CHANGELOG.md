@@ -2,7 +2,7 @@
 
 ## 18.1.0 (2024-05-21)
 
-* [bitnami/mariadb] PDB review ([#25978](https://github.com/bitnami/charts/pulls/25978))
+* [bitnami/mariadb] feat: :sparkles: :lock: Add warning when original images are replaced ([#26236](https://github.com/bitnami/charts/pulls/26236))
 
 ## <small>18.0.6 (2024-05-18)</small>
 

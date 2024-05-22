@@ -65,3 +65,4 @@ Examples for the different methods can be found in the README.
 {{ include "pytorch.validateValues" . }}
 {{ include "pytorch.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.cloneFilesFromGit .Values.git .Values.volumePermissions.image) "context" $) }}
