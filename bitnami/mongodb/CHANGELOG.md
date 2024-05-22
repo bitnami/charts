@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.1 (2024-05-21)
+## 15.6.0 (2024-05-22)
 
-* [bitnami/mongodb] Use different liveness/readiness probes ([#26152](https://github.com/bitnami/charts/pulls/26152))
+* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap ([#26324](https://github.com/bitnami/charts/pulls/26324))
+
+## <small>15.5.1 (2024-05-21)</small>
+
+* [bitnami/mongodb] Use different liveness/readiness probes (#26152) ([c8b04d4](https://github.com/bitnami/charts/commit/c8b04d4)), closes [#26152](https://github.com/bitnami/charts/issues/26152)
 
 ## 15.5.0 (2024-05-21)
 
