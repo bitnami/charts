@@ -297,16 +297,16 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Other Parameters
 
-| Name                       | Description                                                    | Value   |
-| -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `true`  |
-| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `1`     |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Odoo                     | `false` |
-| `autoscaling.minReplicas`  | Minimum number of Odoo replicas                                | `1`     |
-| `autoscaling.maxReplicas`  | Maximum number of Odoo replicas                                | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
+| Name                       | Description                                                                                                                                    | Value   |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `pdb.create`               | Enable a Pod Disruption Budget creation                                                                                                        | `true`  |
+| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled                                                                                 | `""`    |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Odoo                                                                                                     | `false` |
+| `autoscaling.minReplicas`  | Minimum number of Odoo replicas                                                                                                                | `1`     |
+| `autoscaling.maxReplicas`  | Maximum number of Odoo replicas                                                                                                                | `11`    |
+| `autoscaling.targetCPU`    | Target CPU utilization percentage                                                                                                              | `50`    |
+| `autoscaling.targetMemory` | Target Memory utilization percentage                                                                                                           | `50`    |
 
 ### Database Parameters
 
