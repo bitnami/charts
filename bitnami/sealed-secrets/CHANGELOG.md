@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.2.1 (2024-05-21)
+
+* [bitnami/sealed-secrets] Use different liveness/readiness probes ([#26299](https://github.com/bitnami/charts/pulls/26299))
+
 ## 2.2.0 (2024-05-21)
 
-* [bitnami/sealed-secrets] feat: :sparkles: :lock: Add warning when original images are replaced ([#26275](https://github.com/bitnami/charts/pulls/26275))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/sealed-secrets] feat: :sparkles: :lock: Add warning when original images are replaced (#262 ([89f973b](https://github.com/bitnami/charts/commit/89f973b)), closes [#26275](https://github.com/bitnami/charts/issues/26275)
 
 ## <small>2.1.4 (2024-05-18)</small>
 

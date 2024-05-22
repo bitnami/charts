@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.1 (2024-05-21)
+## 0.2.2 (2024-05-21)
 
-* [bitnami/seaweedfs] fix: adapt pod security context to openshift ([#26294](https://github.com/bitnami/charts/pulls/26294))
+* [bitnami/seaweedfs] Use different liveness/readiness probes ([#26298](https://github.com/bitnami/charts/pulls/26298))
+
+## <small>0.2.1 (2024-05-21)</small>
+
+* [bitnami/seaweedfs] fix: adapt pod security context to openshift (#26294) ([ef66c18](https://github.com/bitnami/charts/commit/ef66c18)), closes [#26294](https://github.com/bitnami/charts/issues/26294)
 
 ## 0.2.0 (2024-05-21)
 

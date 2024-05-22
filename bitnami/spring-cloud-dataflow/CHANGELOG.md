@@ -1,8 +1,13 @@
 # Changelog
 
+## 28.1.1 (2024-05-21)
+
+* [bitnami/spring-cloud-dataflow] Use different liveness/readiness probes ([#26297](https://github.com/bitnami/charts/pulls/26297))
+
 ## 28.1.0 (2024-05-21)
 
-* [bitnami/spring-cloud-dataflow] feat: :sparkles: :lock: Add warning when original images are replaced ([#26280](https://github.com/bitnami/charts/pulls/26280))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/spring-cloud-dataflow] feat: :sparkles: :lock: Add warning when original images are replace ([d9dfc42](https://github.com/bitnami/charts/commit/d9dfc42)), closes [#26280](https://github.com/bitnami/charts/issues/26280)
 
 ## <small>28.0.5 (2024-05-21)</small>
 
