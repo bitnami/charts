@@ -267,8 +267,8 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `sidecarSingleProcessNamespace`                     | Enable sharing the process namespace with sidecars                                                                                                                                                                | `false`          |
 | `initContainers`                                    | Extra init containers                                                                                                                                                                                             | `[]`             |
 | `pdb.create`                                        | Created a PodDisruptionBudget                                                                                                                                                                                     | `true`           |
-| `pdb.minAvailable`                                  | Min number of pods that must still be available after the eviction.                                                                                                                                               | `1`              |
-| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction.                                                                                                                                                    | `0`              |
+| `pdb.minAvailable`                                  | Min number of pods that must still be available after the eviction.                                                                                                                                               | `""`             |
+| `pdb.maxUnavailable`                                | Max number of pods that can be unavailable after the eviction.                                                                                                                                                    | `""`             |
 
 ### Custom NGINX application parameters
 
