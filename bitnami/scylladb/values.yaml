@@ -542,8 +542,8 @@ jmxProxy:
   readinessProbe:
     enabled: true
     initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 30
     failureThreshold: 5
     successThreshold: 1
   ## @param jmxProxy.startupProbe.enabled Enable startupProbe on JMX Proxy containers
@@ -1094,7 +1094,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r20
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
