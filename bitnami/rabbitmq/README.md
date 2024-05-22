@@ -532,8 +532,8 @@ You can enable this `initContainer` by setting `volumePermissions.enabled` to `t
 | `initContainers`                                    | Add init containers to the RabbitMQ pod                                                                                                                                                                           | `[]`             |
 | `sidecars`                                          | Add sidecar containers to the RabbitMQ pod                                                                                                                                                                        | `[]`             |
 | `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                    | `""`             |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### RBAC parameters
 

@@ -880,8 +880,8 @@ pdb:
   create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
   ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## @section RBAC parameters
