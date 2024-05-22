@@ -52,4 +52,5 @@ maintainers:
 name: kubeapps
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 15.0.5
+version: 15.1.1
+

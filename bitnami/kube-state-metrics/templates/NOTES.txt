@@ -60,3 +60,4 @@ To access kube-state-metrics from outside the cluster execute the following comm
 
 {{- include "kube-state-metrics.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}
