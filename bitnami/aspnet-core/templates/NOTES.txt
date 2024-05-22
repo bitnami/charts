@@ -53,3 +53,4 @@ To access ASP.NET Core from outside the cluster execute the following commands:
 {{- include "common.warnings.rollingTag" .Values.appFromExternalRepo.publish.image }}
 {{- include "aspnet-core.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.appFromExternalRepo.clone.image .Values.appFromExternalRepo.clone .Values.appFromExternalRepo.publish.image) "context" $) }}

@@ -94,3 +94,4 @@ You can access Apache Prometheus metrics following the steps below:
 {{- include "common.warnings.rollingTag" .Values.metrics.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

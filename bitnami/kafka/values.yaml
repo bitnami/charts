@@ -843,7 +843,7 @@ controller:
   pdb:
     create: true
     minAvailable: ""
-    maxUnavailable: 1
+    maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1253,7 +1253,7 @@ broker:
   pdb:
     create: true
     minAvailable: ""
-    maxUnavailable: 1
+    maxUnavailable: ""
   ## @section Experimental: Kafka Broker Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -2206,7 +2206,7 @@ metrics:
     ##
     pdb:
       create: true
-      minAvailable: 1
+      minAvailable: ""
       maxUnavailable: ""
 
   ## Prometheus JMX exporter: exposes the majority of Kafka metrics

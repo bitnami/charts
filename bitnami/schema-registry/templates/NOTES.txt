@@ -48,3 +48,4 @@ To access Schema Registry from outside the cluster execute the following command
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "schema-registry.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

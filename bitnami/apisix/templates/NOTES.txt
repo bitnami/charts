@@ -197,3 +197,4 @@ APISIX Data Plane:
 {{- include "common.warnings.rollingTag" .Values.ingressController.image }}
 {{- include "apisix.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "controlPlane" "dashboard" "dataPlane" "ingressController") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.dashboard.image .Values.ingressController.image .Values.waitContainer.image) "context" $) }}

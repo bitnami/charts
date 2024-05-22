@@ -18,8 +18,8 @@ spec:
   {{- if .Values.metrics.kafka.pdb.minAvailable }}
   minAvailable: {{ .Values.metrics.kafka.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.metrics.kafka.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.metrics.kafka.pdb.maxUnavailable }}
+  {{- if or .Values.metrics.kafka.pdb.maxUnavailable (not .Values.metrics.kafka.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.metrics.kafka.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.metrics.kafka.podLabels .Values.commonLabels) "context" .) }}
   selector:

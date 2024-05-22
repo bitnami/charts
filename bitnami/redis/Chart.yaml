@@ -36,4 +36,4 @@ maintainers:
 name: redis
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis
-version: 19.3.4
+version: 19.4.0

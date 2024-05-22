@@ -2,7 +2,7 @@
 
 ## 28.3.0 (2024-05-21)
 
-* [bitnami/kafka] PDB review ([#25938](https://github.com/bitnami/charts/pulls/25938))
+* [bitnami/kafka] feat: :sparkles: :lock: Add warning when original images are replaced ([#26224](https://github.com/bitnami/charts/pulls/26224))
 
 ## <small>28.2.6 (2024-05-21)</small>
 
