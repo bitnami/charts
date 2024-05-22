@@ -37,4 +37,4 @@ maintainers:
 name: concourse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/concourse
-version: 4.2.0
+version: 4.2.1
