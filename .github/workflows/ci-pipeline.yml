@@ -137,6 +137,11 @@ jobs:
           changelog_tmp="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md.tmp"
           touch "$changelog_file"
           npx conventional-changelog-cli -i ${changelog_file} -s -t ${CHART}/ -r 0 --commit-path bitnami/${CHART}
+          # The tool uses short sha to generate commit links. Sometimes, Github does not offer links with the short sha, so we change all commit links to use the full sha instead
+          for i in $(grep -Eo "/commit/[a-z0-9]+" ${changelog_file} |  awk -F/ '{print $3}'); do
+            long_sha="$(git rev-parse $i)";
+            sed -i "s%/commit/$i%/commit/$long_sha%g" ${changelog_file};
+          done
           cd $GITHUB_WORKSPACE/charts
           # Remove unreleased section (includes all intermediate commits in the branch) and create future entry based on PR title
           # The unreleased section looks like this "## (YYYY-MM-DD)" whereas a released section looks like this "## 0.0.1 (YYYY-MM-DD)"
