@@ -83,8 +83,9 @@ data:
                 . /opt/bitnami/scripts/airflow-worker-env.sh
                 . /opt/bitnami/scripts/libairflowworker.sh
 
+                export AIRFLOW_CONF_FILE=/tmp/airflow.cfg
                 airflow_generate_config # Generate the config file
-                cp /opt/bitnami/airflow/airflow.cfg /opt/bitnami/airflow/k8s-executor-config/airflow.cfg
+                cp /tmp/airflow.cfg /k8s-executor-config/airflow.cfg
           env:
             {{- include "airflow.configure.airflow.common" . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
@@ -103,7 +104,10 @@ data:
           {{- end }}
           volumeMounts:
             - name: empty-dir
-              mountPath: /opt/bitnami/airflow/k8s-executor-config
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /k8s-executor-conf
               subPath: app-k8s-executor-conf-dir
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | trim | nindent 8 }}
@@ -210,8 +214,20 @@ data:
           {{- end }}
           volumeMounts:
             - name: empty-dir
+              mountPath: /opt/bitnami/airflow/nss-wrapper
+              subPath: app-nss-wrapper-dir
+            - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/airflow/airflow.db
+              subPath: app-default-conf-dir/airflow.db
             {{- if .Files.Glob "files/dags/*.py" }}
             - name: local-dag-files
               mountPath: /opt/bitnami/airflow/dags/local
