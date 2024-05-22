@@ -1,8 +1,13 @@
 # Changelog
 
+## 15.1.1 (2024-05-21)
+
+* [bitnami/kubeapps] Use different liveness/readiness probes ([#26171](https://github.com/bitnami/charts/pulls/26171))
+
 ## 15.1.0 (2024-05-21)
 
-* [bitnami/kubeapps] feat: :sparkles: :lock: Add warning when original images are replaced ([#26231](https://github.com/bitnami/charts/pulls/26231))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/kubeapps] feat: :sparkles: :lock: Add warning when original images are replaced (#26231) ([8be3e8b](https://github.com/bitnami/charts/commit/8be3e8b)), closes [#26231](https://github.com/bitnami/charts/issues/26231)
 
 ## <small>15.0.5 (2024-05-20)</small>
 
