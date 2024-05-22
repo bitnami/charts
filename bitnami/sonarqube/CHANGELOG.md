@@ -1,8 +1,13 @@
 # Changelog
 
+## 5.1.1 (2024-05-22)
+
+* [bitnami/sonarqube] Release 5.0.4 ([#26099](https://github.com/bitnami/charts/pulls/26099))
+
 ## 5.1.0 (2024-05-21)
 
-* [bitnami/sonarqube] feat: :sparkles: :lock: Add warning when original images are replaced ([#26278](https://github.com/bitnami/charts/pulls/26278))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/sonarqube] feat: :sparkles: :lock: Add warning when original images are replaced (#26278) ([8926823](https://github.com/bitnami/charts/commit/8926823)), closes [#26278](https://github.com/bitnami/charts/issues/26278)
 
 ## <small>5.0.4 (2024-05-20)</small>
 
