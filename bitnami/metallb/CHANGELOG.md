@@ -1,8 +1,13 @@
 # Changelog
 
+## 6.2.1 (2024-05-21)
+
+* [bitnami/metallb] Use different liveness/readiness probes ([#26293](https://github.com/bitnami/charts/pulls/26293))
+
 ## 6.2.0 (2024-05-21)
 
-* [bitnami/metallb] feat: :sparkles: :lock: Add warning when original images are replaced ([#26242](https://github.com/bitnami/charts/pulls/26242))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/metallb] feat: :sparkles: :lock: Add warning when original images are replaced (#26242) ([0e2b32c](https://github.com/bitnami/charts/commit/0e2b32c)), closes [#26242](https://github.com/bitnami/charts/issues/26242)
 
 ## <small>6.1.7 (2024-05-18)</small>
 
