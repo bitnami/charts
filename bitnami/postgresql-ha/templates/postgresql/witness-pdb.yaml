@@ -19,8 +19,8 @@ spec:
   {{- if .Values.witness.pdb.minAvailable }}
   minAvailable: {{ .Values.witness.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.witness.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.witness.pdb.maxUnavailable }}
+  {{- if or .Values.witness.pdb.maxUnavailable (not .Values.witness.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.witness.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.postgresql.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
