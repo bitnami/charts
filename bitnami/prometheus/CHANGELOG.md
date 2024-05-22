@@ -1,12 +1,8 @@
 # Changelog
 
-## 1.2.0 (2024-05-21)
+## 1.2.0 (2024-05-22)
 
 * [bitnami/prometheus] Network policy review ([#25902](https://github.com/bitnami/charts/pulls/25902))
-
-## 1.1.0 (2024-05-21)
-
-* [bitnami/prometheus] feat: :sparkles: :lock: Add warning when original images are replaced ([#26267](https://github.com/bitnami/charts/pulls/26267))
 
 ## <small>1.0.13 (2024-05-18)</small>
 
