@@ -1845,10 +1845,6 @@ apache:
   # We need to change the liveness probe to use the Mastodon streaming health checkpoint
   # We use the streaming because it is the last service to be initialized together with
   # sidekiq
-  ## @param apache.livenessProbe.path Apache liveness probe path
-  ##
-  livenessProbe:
-    path: "/api/v1/streaming/health"
   ## @param apache.readinessProbe.path Apache readiness probe path
   ##
   readinessProbe:
