@@ -4,6 +4,11 @@
 
 * [bitnami/prometheus] Network policy review ([#25902](https://github.com/bitnami/charts/pulls/25902))
 
+## 1.1.0 (2024-05-21)
+
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/prometheus] feat: :sparkles: :lock: Add warning when original images are replaced (#26267) ([5ec42f2](https://github.com/bitnami/charts/commit/5ec42f2)), closes [#26267](https://github.com/bitnami/charts/issues/26267)
+
 ## <small>1.0.13 (2024-05-18)</small>
 
 * [bitnami/prometheus] Release 1.0.13 updating components versions (#26068) ([0aa454e](https://github.com/bitnami/charts/commit/0aa454e)), closes [#26068](https://github.com/bitnami/charts/issues/26068)
