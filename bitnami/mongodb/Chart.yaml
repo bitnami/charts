@@ -39,5 +39,5 @@ maintainers:
 name: mongodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
-version: 15.6.0
+version: 15.5.2
 
