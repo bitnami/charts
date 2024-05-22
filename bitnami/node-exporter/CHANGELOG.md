@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.3.1 (2024-05-22)
+
+* [bitnami/node-exporter] Release 4.3.1 ([#26313](https://github.com/bitnami/charts/pulls/26313))
+
 ## 4.3.0 (2024-05-21)
 
-* [bitnami/node-exporter] feat: :sparkles: :lock: Add warning when original images are replaced ([#26255](https://github.com/bitnami/charts/pulls/26255))
+* [bitnami/node-exporter] feat: :sparkles: :lock: Add warning when original images are replaced (#2625 ([50ef0d7](https://github.com/bitnami/charts/commit/50ef0d7)), closes [#26255](https://github.com/bitnami/charts/issues/26255)
 
 ## <small>4.2.4 (2024-05-21)</small>
 
