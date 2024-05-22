@@ -2,7 +2,7 @@
 
 ## 3.2.1 (2024-05-22)
 
-* [bitnami/appsmith] Release 3.2.1 ([#26335](https://github.com/bitnami/charts/pulls/26335))
+* [bitnami/appsmith] Release 3.2.1 ([#26335](https://github.com/bitnami/charts/pull/26335))
 
 ## 3.2.0 (2024-05-21)
 
