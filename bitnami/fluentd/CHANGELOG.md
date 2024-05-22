@@ -1,8 +1,13 @@
 # Changelog
 
+## 6.3.1 (2024-05-22)
+
+* [bitnami/fluentd] Use different liveness/readiness probes ([#26311](https://github.com/bitnami/charts/pulls/26311))
+
 ## 6.3.0 (2024-05-21)
 
-* [bitnami/fluentd] feat: :sparkles: :lock: Add warning when original images are replaced ([#26205](https://github.com/bitnami/charts/pulls/26205))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/fluentd] feat: :sparkles: :lock: Add warning when original images are replaced (#26205) ([929a4c8](https://github.com/bitnami/charts/commit/929a4c8)), closes [#26205](https://github.com/bitnami/charts/issues/26205)
 
 ## <small>6.2.3 (2024-05-18)</small>
 
