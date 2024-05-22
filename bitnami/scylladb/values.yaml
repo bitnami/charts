@@ -81,9 +81,8 @@ diagnosticMode:
 ##
 image:
   registry: docker.io
-  # TODO: Change the image once it is published
-  repository: javsalgar/scylla-test
-  tag: 11
+  repository: bitnami/scylladb
+  tag: 5.4.6-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
