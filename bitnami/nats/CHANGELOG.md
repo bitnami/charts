@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.2.1 (2024-05-22)
+
+* [bitnami/nats] Release 8.2.1 ([#26312](https://github.com/bitnami/charts/pulls/26312))
+
 ## 8.2.0 (2024-05-21)
 
-* [bitnami/nats] feat: :sparkles: :lock: Add warning when original images are replaced ([#26252](https://github.com/bitnami/charts/pulls/26252))
+* [bitnami/nats] feat: :sparkles: :lock: Add warning when original images are replaced (#26252) ([a1f466b](https://github.com/bitnami/charts/commit/a1f466b)), closes [#26252](https://github.com/bitnami/charts/issues/26252)
 
 ## 8.1.0 (2024-05-21)
 

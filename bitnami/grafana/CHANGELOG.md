@@ -1,8 +1,14 @@
 # Changelog
 
+## 11.2.0 (2024-05-21)
+
+* [bitnami/grafana] Network policy review ([#25903](https://github.com/bitnami/charts/pulls/25903))
+
 ## 11.1.0 (2024-05-21)
 
-* [bitnami/grafana] feat: :sparkles: :lock: Add warning when original images are replaced ([#26209](https://github.com/bitnami/charts/pulls/26209))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/grafana] feat: :sparkles: :lock: Add warning when original images are replaced (#26209) ([9c7da7c](https://github.com/bitnami/charts/commit/9c7da7c)), closes [#26209](https://github.com/bitnami/charts/issues/26209)
+* [bitnami/grafana] Update README with the latest major version (#26151) ([f7b09d5](https://github.com/bitnami/charts/commit/f7b09d5)), closes [#26151](https://github.com/bitnami/charts/issues/26151)
 
 ## 11.0.0 (2024-05-20)
 
