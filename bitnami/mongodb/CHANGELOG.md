@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.6.0 (2024-05-22)
+## 15.5.2 (2024-05-22)
 
-* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap ([#26324](https://github.com/bitnami/charts/pulls/26324))
+* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap ([#26324](https://github.com/bitnami/charts/pull/26324))
 
 ## <small>15.5.1 (2024-05-21)</small>
 
