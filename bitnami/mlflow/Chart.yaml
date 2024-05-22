@@ -43,4 +43,4 @@ name: mlflow
 sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/mlflow
 - https://github.com/mlflow/mlflow
-version: 1.1.0
+version: 1.1.1
