@@ -315,8 +315,10 @@ spec:
       {{- end }}
       {{- if .Values.prometheus.thanos.livenessProbe.enabled }}
       livenessProbe:
-        tcpSocket:
+        httpGet:
+          path: {{ .Values.prometheus.thanos.livenessProbe.path }}
           port: http
+          scheme: HTTP
         initialDelaySeconds: {{ .Values.prometheus.thanos.livenessProbe.initialDelaySeconds }}
         periodSeconds: {{ .Values.prometheus.thanos.livenessProbe.periodSeconds }}
         timeoutSeconds: {{ .Values.prometheus.thanos.livenessProbe.timeoutSeconds }}
@@ -348,8 +350,10 @@ spec:
       {{- end }}
       {{- if .Values.prometheus.livenessProbe.enabled }}
       livenessProbe:
-        tcpSocket:
+        httpGet:
+          path: {{ .Values.prometheus.livenessProbe.path }}
           port: web
+          scheme: HTTP
         initialDelaySeconds: {{ .Values.prometheus.livenessProbe.initialDelaySeconds }}
         periodSeconds: {{ .Values.prometheus.livenessProbe.periodSeconds }}
         timeoutSeconds: {{ .Values.prometheus.livenessProbe.timeoutSeconds }}
