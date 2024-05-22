@@ -77,3 +77,4 @@ WARNING: You deployed Thanos without enabling Thanos Query!!
 {{- include "thanos.validateValues" . }}
 {{- include "thanos.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "bucketweb" "compactor" "query" "queryFrontend" "receive" "receiveDistributor" "ruler" "storegateway") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

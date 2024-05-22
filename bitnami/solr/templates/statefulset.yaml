@@ -295,7 +295,7 @@ spec:
               - /bin/bash
               - -ec
               - |
-                curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/api/node/health | grep --quiet  '\"status\":\"OK\"'
+                curl --silent --connect-timeout 15000 {{ ternary "--user ${SOLR_ADMIN_USERNAME}:${SOLR_ADMIN_PASSWORD}" "" .Values.auth.enabled }} http://localhost:${SOLR_PORT_NUMBER}/solr/admin/info/system | grep --quiet  '\"status\":0'
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}

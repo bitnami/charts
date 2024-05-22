@@ -141,8 +141,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.query.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.query.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.query.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: admin
           {{- end }}
           {{- if .Values.query.customReadinessProbe }}

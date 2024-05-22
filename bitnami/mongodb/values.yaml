@@ -738,8 +738,8 @@ pdb:
   create: true
   ## @param pdb.minAvailable Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction
   ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## @section Traffic exposure parameters
@@ -1827,8 +1827,8 @@ arbiter:
     create: true
     ## @param arbiter.pdb.minAvailable Minimum number/percentage of Arbiter pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable
+    minAvailable: ""
+    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable. Defaults to `1` if both `arbiter.pdb.minAvailable` and `arbiter.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## MongoDB(&reg;) Arbiter service parameters
@@ -2171,8 +2171,8 @@ hidden:
     create: true
     ## @param hidden.pdb.minAvailable Minimum number/percentage of hidden node pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable
+    minAvailable: ""
+    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable. Defaults to `1` if both `hidden.pdb.minAvailable` and `hidden.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
