@@ -601,8 +601,8 @@ primary:
     create: true
     ## @param primary.pdb.minAvailable Minimum number/percentage of MySQL primary pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param primary.pdb.maxUnavailable Maximum number/percentage of MySQL primary pods that may be made unavailable
+    minAvailable: ""
+    ## @param primary.pdb.maxUnavailable Maximum number/percentage of MySQL primary pods that may be made unavailable. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## @param primary.podLabels MySQL Primary pod label. If labels are same as commonLabels , this will take precedence
@@ -1030,8 +1030,8 @@ secondary:
     create: true
     ## @param secondary.pdb.minAvailable Minimum number/percentage of MySQL secondary pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MySQL secondary pods that may be made unavailable
+    minAvailable: ""
+    ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MySQL secondary pods that may be made unavailable. Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## @param secondary.podLabels Additional pod labels for MySQL secondary pods
