@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.1.1 (2024-05-21)
+## 28.1.2 (2024-05-22)
 
-* [bitnami/spring-cloud-dataflow] Use different liveness/readiness probes ([#26297](https://github.com/bitnami/charts/pulls/26297))
+* [bitnami/spring-cloud-dataflow] Fix variables definition sensitive to Helm 'release-name' ([#26315](https://github.com/bitnami/charts/pulls/26315))
+
+## <small>28.1.1 (2024-05-22)</small>
+
+* [bitnami/spring-cloud-dataflow] Use different liveness/readiness probes (#26297) ([a50e35e](https://github.com/bitnami/charts/commit/a50e35e)), closes [#26297](https://github.com/bitnami/charts/issues/26297)
 
 ## 28.1.0 (2024-05-21)
 
