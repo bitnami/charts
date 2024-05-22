@@ -1,8 +1,13 @@
 # Changelog
 
+## 11.2.1 (2024-05-21)
+
+* [bitnami/nginx-ingress-controller] Use different liveness/readiness probes ([#26301](https://github.com/bitnami/charts/pulls/26301))
+
 ## 11.2.0 (2024-05-21)
 
-* [bitnami/nginx-ingress-controller] feat: :sparkles: :lock: Add warning when original images are replaced ([#26254](https://github.com/bitnami/charts/pulls/26254))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/nginx-ingress-controller] feat: :sparkles: :lock: Add warning when original images are repl ([f979e95](https://github.com/bitnami/charts/commit/f979e95)), closes [#26254](https://github.com/bitnami/charts/issues/26254)
 
 ## <small>11.1.5 (2024-05-18)</small>
 
