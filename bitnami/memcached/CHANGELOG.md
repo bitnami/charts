@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.4.1 (2024-05-21)
+
+* [bitnami/memcached] Use different liveness/readiness probes ([#26295](https://github.com/bitnami/charts/pulls/26295))
+
 ## 7.4.0 (2024-05-21)
 
-* [bitnami/memcached] feat: :sparkles: :lock: Add warning when original images are replaced ([#26241](https://github.com/bitnami/charts/pulls/26241))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/memcached] feat: :sparkles: :lock: Add warning when original images are replaced (#26241) ([778b421](https://github.com/bitnami/charts/commit/778b421)), closes [#26241](https://github.com/bitnami/charts/issues/26241)
 
 ## 7.3.0 (2024-05-20)
 
