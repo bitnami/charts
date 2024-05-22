@@ -158,9 +158,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.client.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - python
-                - -c
-                - import torch; torch.__version__
+                - deepspeed
+                - --help
           {{- end }}
           {{- if .Values.client.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customReadinessProbe "context" $) | nindent 12 }}

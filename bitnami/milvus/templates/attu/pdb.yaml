@@ -21,8 +21,8 @@ spec:
   {{- if .Values.attu.pdb.minAvailable }}
   minAvailable: {{ .Values.attu.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.attu.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.attu.pdb.maxUnavailable }}
+  {{- if or .Values.attu.pdb.maxUnavailable (not .Values.attu.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.attu.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.attu.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

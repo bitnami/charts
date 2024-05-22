@@ -102,3 +102,4 @@ To access your MLflow site from outside the cluster follow the steps below:
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "mlflow.v0.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "run" "tracking" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.gitImage .Values.run.source.git .Values.volumePermissions.image .Values.waitContainer.image) "context" $) }}

@@ -19,8 +19,8 @@ spec:
   {{- if .Values.proxy.pdb.minAvailable }}
   minAvailable: {{ .Values.proxy.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.proxy.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.proxy.pdb.maxUnavailable }}
+  {{- if or .Values.proxy.pdb.maxUnavailable (not .Values.proxy.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.proxy.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels ) "context" . ) }}
   selector:

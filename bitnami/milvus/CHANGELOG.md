@@ -1,8 +1,13 @@
 # Changelog
 
+## 7.1.1 (2024-05-22)
+
+* [bitnami/milvus] Use different liveness/readiness probes ([#26325](https://github.com/bitnami/charts/pulls/26325))
+
 ## 7.1.0 (2024-05-21)
 
-* [bitnami/milvus] PDB review ([#25983](https://github.com/bitnami/charts/pulls/25983))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/milvus] feat: :sparkles: :lock: Add warning when original images are replaced (#26244) ([1b10aa5](https://github.com/bitnami/charts/commit/1b10aa5)), closes [#26244](https://github.com/bitnami/charts/issues/26244)
 
 ## <small>7.0.5 (2024-05-18)</small>
 
