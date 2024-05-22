@@ -4,7 +4,7 @@
 
 ScyllaDB is an open-source, distributed NoSQL wide-column data store. Written in C++, it is designed for high throughput and low latency, compatible with Apache Cassandra.
 
-[Overview of ScyllaDB](http://scylladb.com/)
+[Overview of ScyllaDB](https://www.scylladb.com/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
