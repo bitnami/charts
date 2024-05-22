@@ -279,12 +279,12 @@ alertmanager:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param alertmanager.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param alertmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param alertmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param alertmanager.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `alertmanager.pdb.minAvailable` and `alertmanager.pdb.maxUnavailable` are empty.
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -894,12 +894,12 @@ server:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param server.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param server.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
