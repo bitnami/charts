@@ -1,8 +1,12 @@
 # Changelog
 
+## 8.2.1 (2024-05-21)
+
+* [bitnami/mongodb-sharded] Use different liveness/readiness probes ([#26153](https://github.com/bitnami/charts/pulls/26153))
+
 ## 8.2.0 (2024-05-21)
 
-* [bitnami/mongodb-sharded] feat: :sparkles: :lock: Add warning when original images are replaced ([#26248](https://github.com/bitnami/charts/pulls/26248))
+* [bitnami/mongodb-sharded] feat: :sparkles: :lock: Add warning when original images are replaced (#26 ([462a80f](https://github.com/bitnami/charts/commit/462a80f)), closes [#26248](https://github.com/bitnami/charts/issues/26248)
 
 ## 8.1.0 (2024-05-21)
 
