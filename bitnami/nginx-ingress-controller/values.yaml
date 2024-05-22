@@ -871,8 +871,8 @@ defaultBackend:
     create: true
     ## @param defaultBackend.pdb.minAvailable Minimum number/percentage of Default backend pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that may be made unavailable
+    minAvailable: ""
+    ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `defaultBackend.pdb.minAvailable` and `defaultBackend.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
 ## @section Traffic exposure parameters
@@ -1063,8 +1063,8 @@ pdb:
   create: true
   ## @param pdb.minAvailable Minimum number/percentage of Controller pods that should remain scheduled
   ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of Controller pods that may be made unavailable
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## Controller Autoscaling configuration
