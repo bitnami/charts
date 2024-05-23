@@ -18,7 +18,7 @@ postgresql:
   replicaCount: 4
   password: psqlPassword123!4
   containerPorts:
-    postgresql: 5432
+    postgresql: 5431
   podSecurityContext:
     enabled: true
     fsGroup: 1002

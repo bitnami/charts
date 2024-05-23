@@ -731,7 +731,6 @@ Get the readiness probe command
   [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
 {{- end }}
 {{- else -}}
-- |
-  exec pg_isready -U "postgres" -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
+- exec pg_isready -U "postgres" -h 127.0.0.1 -p {{ $block.containerPorts.postgresql }}
 {{- end }}
 {{- end -}}
