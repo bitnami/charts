@@ -340,7 +340,6 @@ lifecycleHooks: {}
 ## NGINX containers' startup probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param startupProbe.enabled Enable startupProbe
-## @param startupProbe.path Request path for livenessProbe
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -349,7 +348,6 @@ lifecycleHooks: {}
 ##
 startupProbe:
   enabled: false
-  path: /
   initialDelaySeconds: 30
   timeoutSeconds: 5
   periodSeconds: 10
