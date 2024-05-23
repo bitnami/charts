@@ -1,0 +1,43 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:
+  {{ .Vars.persistence.mountPath }}:
+    exists: true
+    filetype: directory
+    mode: "2775"
+    owner: root
+  /opt/bitnami/scylladb/etc/scylla/scylla.yaml:
+    exists: true
+    filetype: file
+    mode: "0644"
+    contents:
+      - /num_tokens.*{{ .Vars.cluster.numTokens }}/
+command:
+  {{- $dbUser := .Vars.dbUser.user }}
+  {{- $dbPassword := .Vars.dbUser.password }}
+  {{- $port := .Vars.containerPorts.cql }}
+  {{- $nodes := .Vars.replicaCount }}
+  {{- $keyspace := printf "test_%s" (randAlpha 5) }}
+  manage-keyspace:
+    exec: "cqlsh -u {{ $dbUser }} -p {{ $dbPassword }} -e 'CREATE KEYSPACE {{ $keyspace }} WITH REPLICATION = { $$class$$: $$SimpleStrategy$$, $$replication_factor$$ : {{ $nodes }} };' scylladb-0.scylladb-headless {{ $port }}{{ range $e, $i := until $nodes }} && cqlsh -u {{ $dbUser }} -p {{ $dbPassword }} -e 'USE {{ $keyspace }};' scylladb-{{ $i }}.scylladb-headless {{ $port }}{{ end }}"
+    exit-status: 0
+    timeout: 20000
+  cluster-size:
+    exec: if [ "$(nodetool status | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ $nodes }} ]; then exit 1; fi
+    exit-status: 0
+    timeout: 20000
+  {{- $uid := .Vars.containerSecurityContext.runAsUser }}
+  {{- $gid := .Vars.podSecurityContext.fsGroup }}
+  check-user-info:
+    # The UID and GID should always be either the one specified as vars (always a bigger number that the default)
+    # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
+    exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
+    exit-status: 0
+  {{ if .Vars.automountServiceAccountToken }}
+  check-sa:
+    exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
+    exit-status: 0
+    stdout:
+    - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
+  {{ end }}
