@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.2.0 (2024-05-22)
+## 14.2.0 (2024-05-23)
 
 * [bitnami/postgresql-ha] Enable PodDisruptionBudgets ([#26200](https://github.com/bitnami/charts/pull/26200))
 
