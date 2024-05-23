@@ -215,7 +215,7 @@ spec:
           {{- else if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.forwarder.livenessProbe.httpGet.port }}
+              port: {{ .Values.forwarder.livenessProbe.tcpSocket.port }}
             initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}

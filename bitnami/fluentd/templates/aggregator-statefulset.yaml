@@ -223,7 +223,7 @@ spec:
           {{- else if .Values.aggregator.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.aggregator.livenessProbe.httpGet.port }}
+              port: {{ .Values.aggregator.livenessProbe.tcpSocket.port }}
             initialDelaySeconds: {{ .Values.aggregator.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.aggregator.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.aggregator.livenessProbe.timeoutSeconds }}
