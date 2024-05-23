@@ -271,7 +271,7 @@ spec:
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /
+              path: {{ .Values.readinessProbe.path }}
               port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
@@ -279,7 +279,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /
+              path: {{ .Values.startupProbe.path }}
               port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- end }}
