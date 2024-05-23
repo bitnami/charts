@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.2.1 (2024-05-22)
+## 9.2.1 (2024-05-23)
 
 * [bitnami/kube-prometheus] Use different liveness/readiness probes ([#26291](https://github.com/bitnami/charts/pull/26291))
 
