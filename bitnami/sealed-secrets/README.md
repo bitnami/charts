@@ -333,9 +333,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                                                                        | `false` |
 | `networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                                                                                                   | `false` |
 | `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                                                                            | `true`  |
-| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `false` |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                                                                               | `true`  |
 | `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                                                        | `""`    |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                                                                        | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                        | `""`    |
 
 ### Metrics parameters
 
