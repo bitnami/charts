@@ -223,7 +223,7 @@ spec:
           {{- else if .Values.backend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- if .Values.backend.customStartupProbe }}
@@ -231,7 +231,7 @@ spec:
           {{- else if .Values.backend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- end }}
