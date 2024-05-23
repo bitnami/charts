@@ -1,0 +1,45 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "cilium.agent.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: agent
+  {{- if or .Values.agent.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.agent.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: ClusterIP
+  {{- if .Values.agent.service.clusterIP }}
+  clusterIP: {{ .Values.agent.service.clusterIP }}
+  {{- end }}
+  internalTrafficPolicy: {{ .Values.agent.service.internalTrafficPolicy }}
+  ports:
+    - name: tcp-hubble-peer
+      port: {{ .Values.agent.service.ports.hubblePeer }}
+      targetPort: hubble-peer
+      protocol: TCP
+    {{- if .Values.agent.metrics.enabled }}
+    - name: tcp-metrics
+      port: {{ .Values.agent.service.ports.metrics }}
+      targetPort: metrics
+      protocol: TCP
+    - name: tcp-hubble-metrics
+      port: {{ .Values.agent.service.ports.hubbleMetrics }}
+      targetPort: hubble-metrics
+      protocol: TCP
+    {{- end }}
+    {{- if .Values.agent.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.agent.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: agent

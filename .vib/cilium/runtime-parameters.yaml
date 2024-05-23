@@ -1,0 +1,10 @@
+agent:
+  cniPlugin:
+    install: true
+    hostCNIBinDir: /home/kubernetes/bin
+    hostCNINetDir: /etc/cni/net.d
+  containerSecurityContext:
+    runAsUser: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true

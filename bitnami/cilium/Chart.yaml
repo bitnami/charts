@@ -1,0 +1,44 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
+    - name: cilium
+      image: docker.io/bitnami/cilium:1.15.4-debian-12-r0
+    - name: cilium-operator
+      image: docker.io/bitnami/cilium-operator:1.15.4-debian-12-r0
+apiVersion: v2
+appVersion: 1.15.4
+dependencies:
+  - condition: etcd.enabled
+    name: etcd
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - cilium-database
+    version: 10.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Cilium is an eBPF-based networking, observability, and security for Linux container management platforms like Docker and Kubernetes.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/cilium/img/cilium-stack-220x234.png
+keywords:
+  - cilium
+  - cni
+  - networking
+  - observability
+  - security
+maintainers:
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
+name: cilium
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/cilium
+  - https://github.com/bitnami/containers/tree/main/bitnami/cilium-operator
+version: 0.1.0
