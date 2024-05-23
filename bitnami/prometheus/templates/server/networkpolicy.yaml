@@ -51,21 +51,21 @@ spec:
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.server.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
-              {{ template "prometheus.server.fullname" . }}-client: "true"
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.server.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.server.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- if .Values.server.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.server.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.server.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- if .Values.server.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.server.networkPolicy.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.server.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}

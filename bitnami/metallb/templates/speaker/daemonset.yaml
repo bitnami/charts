@@ -181,8 +181,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.speaker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.speaker.customReadinessProbe }}
@@ -311,8 +310,7 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.frr.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.speaker.frr.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.frr.readinessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /livez
+            tcpSocket:
               port: {{ .Values.speaker.frr.containerPorts.metrics }}
           {{- end }}
           {{- if .Values.speaker.frr.customStartupProbe }}
