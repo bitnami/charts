@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.5.0 (2024-05-22)
+## 19.5.0 (2024-05-23)
 
 * [bitnami/redis] Enable PodDisruptionBudgets ([#26355](https://github.com/bitnami/charts/pull/26355))
 
