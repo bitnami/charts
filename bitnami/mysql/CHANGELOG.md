@@ -1,6 +1,6 @@
 # Changelog
 
-## 11.0.0 (2024-05-22)
+## 11.0.0 (2024-05-23)
 
 * [bitnami/mysql] Release 11.0.0 ([#26352](https://github.com/bitnami/charts/pull/26352))
 
