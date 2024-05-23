@@ -2,7 +2,7 @@
 
 ## 17.2.0 (2024-05-23)
 
-* [bitnami/nginx] Allow custom path for readinessProbe and startupProbe ([#26362](https://github.com/bitnami/charts/pull/26362))
+* [bitnami/nginx] Allow custom path for readinessProbe and update startupProbe ([#26362](https://github.com/bitnami/charts/pull/26362))
 
 ## 17.1.0 (2024-05-21)
 
