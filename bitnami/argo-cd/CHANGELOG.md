@@ -1,6 +1,6 @@
 # Changelog
 
-## 6.3.1 (2024-05-22)
+## 6.3.1 (2024-05-23)
 
 * [bitnami/argo-cd] Release 6.3.1 ([#26356](https://github.com/bitnami/charts/pull/26356))
 
