@@ -43,4 +43,4 @@ maintainers:
 name: flux
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flux
-version: 2.2.0
+version: 2.3.0
