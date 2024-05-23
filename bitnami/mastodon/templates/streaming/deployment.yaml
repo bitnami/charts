@@ -182,8 +182,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.streaming.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.streaming.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/streaming/health
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.streaming.customReadinessProbe }}

@@ -1,3 +1,12 @@
+# Changelog
+
+## 6.3.0 (2024-05-21)
+
+* [bitnami/argo-cd] feat: :sparkles: :lock: Add warning when original images are replaced ([#26182](https://github.com/bitnami/charts/pulls/26182))
+
+## <small>6.2.4 (2024-05-21)</small>
+
+* [bitnami/argo-cd] Release 6.2.4 (#26155) ([07644cf](https://github.com/bitnami/charts/commit/07644cf)), closes [#26155](https://github.com/bitnami/charts/issues/26155)
 
 ## <small>6.2.3 (2024-05-21)</small>
 
