@@ -3357,6 +3357,9 @@ mariadb:
 ## All of these values are only used if `mariadb.enabled=false`
 ##
 externalDatabase:
+  ## @param externalDatabase.enabled Enable secret with external mariadb database credentials
+  ##
+  enabled: false
   ## @param externalDatabase.host External Database server host
   ##
   host: localhost
