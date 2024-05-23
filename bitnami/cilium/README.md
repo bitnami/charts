@@ -183,7 +183,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `tls.hubble.cert`                                  | Hubble certificate for TLS. Ignored if `tls.hubble.existingSecret` is set                                           | `""`            |
 | `tls.hubble.key`                                   | Hubble key for TLS. Ignored if `tls.hubble.existingSecret` is set                                                   | `""`            |
 | `tls.hubble.existingSecret`                        | The name of an existing Secret containing the Hubble certificates for TLS                                           | `""`            |
-| `provider`                                         | Cloud provider                                                                                                      | `""`            |
 
 ### Cilium Agent Parameters
 

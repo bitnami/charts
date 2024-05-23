@@ -131,19 +131,6 @@ Compile all warnings into a single message.
 {{- end -}}
 
 {{/*
-Validate values of Cilium - Cilium Agent routing mode
-*/}}
-{{- define "cilium.validateValues.agent.routingMode" -}}
-{{- if and (ne .Values.agent.routingMode "tunnel") (ne .Values.agent.routingMode "native") -}}
-agent.routingMode
-    Invalid routing mode. Valid values are "tunnel" or "native".
-{{- else if and (eq .Values.provider "gke") (eq .Values.agent.routingMode "tunnel") -}}
-agent.routingMode
-    GKE does not support tunnel mode. Please use native mode.
-{{- end -}}
-{{- end -}}
-
-{{/*
 Validate values of Cilium - KeyValue Store
 */}}
 {{- define "cilium.validateValues.kvstore" -}}
