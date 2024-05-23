@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.2.0 (2024-05-22)
+## 7.2.0 (2024-05-23)
 
 * [bitnami/milvus] PDB review ([#25983](https://github.com/bitnami/charts/pull/25983))
 
