@@ -214,8 +214,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.forwarder.livenessProbe.httpGet.path }}
+            tcpSocket:
               port: {{ .Values.forwarder.livenessProbe.httpGet.port }}
             initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
