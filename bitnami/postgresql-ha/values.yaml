@@ -127,7 +127,7 @@ postgresql:
     pullSecrets: []
     ## Set to true if you would like to see extra information on logs
     ##
-    debug: false
+    debug: true
   ## @param postgresql.labels Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
@@ -696,7 +696,7 @@ witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
   ## @param witness.create Create PostgreSQL witness nodes
   ##
-  create: false
+  create: true
   ## @param witness.labels Labels to add to the StatefulSet. Evaluated as template
   ##
   labels: {}
@@ -1144,7 +1144,7 @@ pgpool:
     pullSecrets: []
     ## Set to true if you would like to see extra information on logs
     ##
-    debug: false
+    debug: true
   ## @param pgpool.customUsers.usernames Comma or semicolon separated list of additional users that will be performing connections to the database using pgpool.
   ## @param pgpool.customUsers.passwords Comma or semicolon separated list of the associated passwords for the users above. Must have the same number of elements as the usernames list.
   ## Use this property in order to create new user/password entries that will be appended to the "pgpool_passwd" file.
