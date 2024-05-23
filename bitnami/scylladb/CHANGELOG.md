@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.2 (2024-05-23)
+## 0.1.3 (2024-05-23)
 
-* [bitnami/scylladb] Release 0.1.2 ([#26361](https://github.com/bitnami/charts/pull/26361))
+* [bitnami/scylladb] Release 0.1.3 ([#26368](https://github.com/bitnami/charts/pull/26368))
+
+## <small>0.1.2 (2024-05-23)</small>
+
+* [bitnami/scylladb] Release 0.1.2 (#26361) ([fd7d307](https://github.com/bitnami/charts/commit/fd7d3072f8c542f55c1b328870d68db574da9f99)), closes [#26361](https://github.com/bitnami/charts/issues/26361)
 
 ## <small>0.1.1 (2024-05-22)</small>
 
