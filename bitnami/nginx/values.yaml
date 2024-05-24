@@ -372,6 +372,7 @@ livenessProbe:
 ## NGINX containers' readiness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path Request path for livenessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -380,6 +381,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  path: /
   initialDelaySeconds: 5
   timeoutSeconds: 3
   periodSeconds: 5

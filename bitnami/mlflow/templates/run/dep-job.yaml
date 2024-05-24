@@ -177,33 +177,12 @@ spec:
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.run.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.run.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.run.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.run.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - python
-                - -c
-                - import mlflow; mlflow.__version__
           {{- end }}
           {{- if .Values.run.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.run.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.run.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.run.readinessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - python
-                - -c
-                - import mlflow; mlflow.__version__
           {{- end }}
           {{- if .Values.run.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.run.customStartupProbe "context" $) | nindent 12 }}
-          {{- else if .Values.run.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.run.startupProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - python
-                - -c
-                - import mlflow; mlflow.__version__
           {{- end }}
           {{- end }}
           {{- if .Values.run.lifecycleHooks }}

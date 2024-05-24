@@ -120,3 +120,4 @@ In order to replicate the container startup scripts execute this command:
 {{- end }}
 {{ include "opensearch.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "coordinating" "dashboards" "data" "ingest" "master" "sysctlImage" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.sysctlImage .Values.dashboards.image) "context" $) }}
