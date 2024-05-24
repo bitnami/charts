@@ -4,6 +4,14 @@
 
 * [bitnami/argo-cd] Release 6.3.1 ([#26356](https://github.com/bitnami/charts/pull/26356))
 
+## <small>6.3.2 (2024-05-24)</small>
+
+* [bitnami/argo-cd] Use different liveness/readiness probes (#26367) ([6416961](https://github.com/bitnami/charts/commit/641696157e9dcb47341bb68d04c62e7d49181312)), closes [#26367](https://github.com/bitnami/charts/issues/26367)
+
+## <small>6.3.1 (2024-05-23)</small>
+
+* [bitnami/argo-cd] fix: :bug: :ambulance: Remove non-existent image in replacedImages check (#26371) ([d635edc](https://github.com/bitnami/charts/commit/d635edc8fc38e1a6c24d0c538e1906dc1656de08)), closes [#26371](https://github.com/bitnami/charts/issues/26371)
+
 ## 6.3.0 (2024-05-21)
 
 * [bitnami/argo-cd] feat: :sparkles: :lock: Add warning when original images are replaced (#26182) ([a2f3186](https://github.com/bitnami/charts/commit/a2f318614a312f8b4b6914460a77e37be25b2c3a)), closes [#26182](https://github.com/bitnami/charts/issues/26182)
