@@ -1,8 +1,14 @@
 # Changelog
 
+<<<<<<< HEAD
 ## 2.3.0 (2024-05-23)
 
 * [bitnami/sealed-secrets] Enable PodDisruptionBudgets ([#26378](https://github.com/bitnami/charts/pull/26378))
+=======
+## 2.2.2 (2024-05-23)
+
+* [bitnami/sealed-secrets] Release 2.2.2 ([#26386](https://github.com/bitnami/charts/pull/26386))
+>>>>>>> upstream/main
 
 ## <small>2.2.1 (2024-05-22)</small>
 
