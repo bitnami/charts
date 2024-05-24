@@ -2,7 +2,7 @@
 
 ## 0.2.1 (2024-05-24)
 
-* binami/valkey fix: wrong port set for sentinel setup ([#26391](https://github.com/bitnami/charts/pull/26391))
+* [binami/valkey] fix: wrong port set for sentinel setup ([#26391](https://github.com/bitnami/charts/pull/26391))
 
 ## 0.2.0 (2024-05-21)
 
