@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.2.1 (2024-05-24)
+## 17.3.0 (2024-05-24)
 
-* [bitnami/nginx] Fix readiness probe ([#26394](https://github.com/bitnami/charts/pull/26394))
+* [bitnami/nginx] PDB review ([#26159](https://github.com/bitnami/charts/pull/26159))
+
+## <small>17.2.1 (2024-05-24)</small>
+
+* [bitnami/nginx] Fix readiness probe (#26394) ([0722a57](https://github.com/bitnami/charts/commit/0722a57fe19f7a84c995e1f54953ab36bc4b611b)), closes [#26394](https://github.com/bitnami/charts/issues/26394)
 
 ## 17.2.0 (2024-05-23)
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 29.0.0 (2024-05-24)
+
+* [bitnami/kafka] Deprecate Kafka Exporter ([#26395](https://github.com/bitnami/charts/pull/26395))
+
 ## 28.3.1 (2024-05-24)
 
 * [bitnami/kafka] Release 28.3.1 ([#26403](https://github.com/bitnami/charts/pull/26403))

@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.5.2 (2024-05-22)
+## 15.6.0 (2024-05-24)
 
-* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap ([#26324](https://github.com/bitnami/charts/pull/26324))
+* [bitnami/mongodb] PDB review ([#26154](https://github.com/bitnami/charts/pull/26154))
+
+## <small>15.5.3 (2024-05-24)</small>
+
+* [bitnami/mongodb]Add "or" condition between .Values.auth.existingSecret and .Values.auth.rootPasswor ([5f2204f](https://github.com/bitnami/charts/commit/5f2204f02bdd65fa5514dc0158797d0c3d85b635)), closes [#25944](https://github.com/bitnami/charts/issues/25944) [#25885](https://github.com/bitnami/charts/issues/25885)
+
+## <small>15.5.2 (2024-05-22)</small>
+
+* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap (#26324) ([dc5fe4b](https://github.com/bitnami/charts/commit/dc5fe4b8240dc1c935280a541e0133426a4f349b)), closes [#26324](https://github.com/bitnami/charts/issues/26324)
 
 ## <small>15.5.1 (2024-05-21)</small>
 
