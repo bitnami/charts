@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.1 (2024-05-22)
+## 3.2.2 (2024-05-23)
 
-* [bitnami/appsmith] Release 3.2.1 ([#26335](https://github.com/bitnami/charts/pull/26335))
+* [bitnami/appsmith] Use different liveness/readiness probes ([#26332](https://github.com/bitnami/charts/pull/26332))
+
+## <small>3.2.1 (2024-05-22)</small>
+
+* [bitnami/appsmith] Release 3.2.1 (#26335) ([091403e](https://github.com/bitnami/charts/commit/091403e4e8ee633aedc047c9fe713c7215152e71)), closes [#26335](https://github.com/bitnami/charts/issues/26335)
 
 ## 3.2.0 (2024-05-21)
 
