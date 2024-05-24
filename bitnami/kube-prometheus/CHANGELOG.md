@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.1 (2024-05-23)
+## 9.2.2 (2024-05-24)
 
-* [bitnami/kube-prometheus] Use different liveness/readiness probes ([#26291](https://github.com/bitnami/charts/pull/26291))
+* Add keepDroppedTargets parameter kube-prometheus configuration ([#26409](https://github.com/bitnami/charts/pull/26409))
+
+## <small>9.2.1 (2024-05-23)</small>
+
+* [bitnami/kube-prometheus] Use different liveness/readiness probes (#26291) ([b28ac6d](https://github.com/bitnami/charts/commit/b28ac6d18768394dd5a62431c76cf1963b284316)), closes [#26291](https://github.com/bitnami/charts/issues/26291)
 
 ## 9.2.0 (2024-05-21)
 
