@@ -1150,6 +1150,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 29.0.0
+
+This major version of Kafka deprecates Kafka Exporter component.
+
 ### To 28.0.0
 
 This major bump changes the following security defaults:

@@ -332,4 +332,4 @@ ssl.endpoint.identification.algorithm=
 {{- include "kafka.checkRollingTags" . }}
 {{- include "kafka.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "broker" "controller" "externalAccess.autoDiscovery" "metrics.jmx" "metrics.kafka" "provisioning" "volumePermissions") "context" $) }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.kafka.image .Values.metrics.jmx.image) "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.jmx.image) "context" $) }}
