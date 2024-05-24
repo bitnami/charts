@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.3 (2024-05-23)
+## 0.1.4 (2024-05-24)
 
-* [bitnami/scylladb] Release 0.1.3 ([#26368](https://github.com/bitnami/charts/pull/26368))
+* [bitnami/scylladb] chore: :wrench: Increase initialDelaySeconds in liveness probe ([#26416](https://github.com/bitnami/charts/pull/26416))
+
+## <small>0.1.3 (2024-05-23)</small>
+
+* [bitnami/scylladb] Release 0.1.3 (#26368) ([c35b26f](https://github.com/bitnami/charts/commit/c35b26f04310369303d7e4a2073713cb2cd6cb11)), closes [#26368](https://github.com/bitnami/charts/issues/26368)
 
 ## <small>0.1.2 (2024-05-23)</small>
 
