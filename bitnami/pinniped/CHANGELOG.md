@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.1.1 (2024-05-22)
+
+* [bitnami/pinniped] Use different liveness/readiness probes ([#26321](https://github.com/bitnami/charts/pulls/26321))
+
 ## 2.1.0 (2024-05-21)
 
-* [bitnami/pinniped] feat: :sparkles: :lock: Add warning when original images are replaced ([#26263](https://github.com/bitnami/charts/pulls/26263))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/pinniped] feat: :sparkles: :lock: Add warning when original images are replaced (#26263) ([c061c62](https://github.com/bitnami/charts/commit/c061c62)), closes [#26263](https://github.com/bitnami/charts/issues/26263)
 
 ## <small>2.0.8 (2024-05-18)</small>
 
