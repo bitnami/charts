@@ -168,7 +168,7 @@ nodeAffinityPreset:
 affinity: {}
 ## @param hostNetwork Specify if host network should be enabled for NGINX pod
 ##
-hostNetwork: true
+hostNetwork: false
 ## @param hostIPC Specify if host IPC should be enabled for NGINX pod
 ##
 hostIPC: false
