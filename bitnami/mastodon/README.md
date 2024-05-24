@@ -783,7 +783,6 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `apache.service.loadBalancerIP` | Apache service LoadBalancer IP                                  | `""`                       |
 | `apache.service.ports.http`     | Apache service port                                             | `80`                       |
 | `apache.vhostsConfigMap`        | Name of the ConfigMap containing the Apache vhost configuration | `""`                       |
-| `apache.livenessProbe.path`     | Apache liveness probe path                                      | `/api/v1/streaming/health` |
 | `apache.readinessProbe.path`    | Apache readiness probe path                                     | `/api/v1/streaming/health` |
 | `apache.startupProbe.path`      | Apache startup probe path                                       | `/api/v1/streaming/health` |
 | `apache.ingress.enabled`        | Enable ingress                                                  | `false`                    |

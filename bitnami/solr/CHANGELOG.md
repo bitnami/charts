@@ -1,8 +1,13 @@
 # Changelog
 
+## 9.2.1 (2024-05-21)
+
+* [bitnami/solr] Use different liveness/readiness probes ([#26125](https://github.com/bitnami/charts/pulls/26125))
+
 ## 9.2.0 (2024-05-21)
 
-* [bitnami/solr] feat: :sparkles: :lock: Add warning when original images are replaced ([#26277](https://github.com/bitnami/charts/pulls/26277))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/solr] feat: :sparkles: :lock: Add warning when original images are replaced (#26277) ([816155e](https://github.com/bitnami/charts/commit/816155e)), closes [#26277](https://github.com/bitnami/charts/issues/26277)
 
 ## <small>9.1.6 (2024-05-18)</small>
 

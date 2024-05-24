@@ -1,8 +1,13 @@
 # Changelog
 
+## 14.3.0 (2024-05-21)
+
+* [bitnami/rabbitmq] Network policy review ([#25900](https://github.com/bitnami/charts/pulls/25900))
+
 ## 14.2.0 (2024-05-21)
 
-* [bitnami/rabbitmq] feat: :sparkles: :lock: Add warning when original images are replaced ([#26269](https://github.com/bitnami/charts/pulls/26269))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/rabbitmq] feat: :sparkles: :lock: Add warning when original images are replaced (#26269) ([17516c1](https://github.com/bitnami/charts/commit/17516c1)), closes [#26269](https://github.com/bitnami/charts/issues/26269)
 
 ## <small>14.1.5 (2024-05-18)</small>
 

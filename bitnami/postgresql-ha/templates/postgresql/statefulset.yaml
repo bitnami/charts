@@ -418,7 +418,7 @@ spec:
               command:
                 - bash
                 - -ec
-                - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
+                {{- include "postgresql-ha.readinessProbeCommand" (dict "component" "postgresql" "context" $) | nindent 16 }}
             {{- end }}
           {{- end }}
           {{- if .Values.postgresql.customStartupProbe }}
@@ -536,8 +536,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tpcSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}

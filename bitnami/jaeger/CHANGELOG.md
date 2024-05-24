@@ -1,8 +1,13 @@
 # Changelog
 
+## 2.2.1 (2024-05-21)
+
+* [bitnami/jaeger] Use different liveness/readiness probes ([#26302](https://github.com/bitnami/charts/pulls/26302))
+
 ## 2.2.0 (2024-05-21)
 
-* [bitnami/jaeger] feat: :sparkles: :lock: Add warning when original images are replaced ([#26218](https://github.com/bitnami/charts/pulls/26218))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/jaeger] feat: :sparkles: :lock: Add warning when original images are replaced (#26218) ([7f61fc9](https://github.com/bitnami/charts/commit/7f61fc9)), closes [#26218](https://github.com/bitnami/charts/issues/26218)
 
 ## <small>2.1.5 (2024-05-18)</small>
 
