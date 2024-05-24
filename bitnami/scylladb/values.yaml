@@ -362,7 +362,7 @@ resources: {}
 ##
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 60
+  initialDelaySeconds: 100
   periodSeconds: 30
   timeoutSeconds: 30
   successThreshold: 1
