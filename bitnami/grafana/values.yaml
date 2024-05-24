@@ -448,8 +448,6 @@ grafana:
   ## Grafana containers' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
-  ## @param grafana.livenessProbe.path Path for livenessProbe
-  ## @param grafana.livenessProbe.scheme Scheme for livenessProbe
   ## @param grafana.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param grafana.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param grafana.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -458,8 +456,6 @@ grafana:
   ##
   livenessProbe:
     enabled: true
-    path: /api/health
-    scheme: HTTP
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -697,6 +693,9 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -730,8 +729,14 @@ networkPolicy:
   ##                   - frontend
   ##
   extraEgress: []
-  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: {}
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}

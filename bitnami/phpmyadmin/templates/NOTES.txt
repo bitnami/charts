@@ -66,3 +66,4 @@ $ helm upgrade {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/phpm
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image) "context" $) }}
