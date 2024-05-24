@@ -1,8 +1,12 @@
 # Changelog
 
+## 28.2.1 (2024-05-24)
+
+* [bitnami/spring-cloud-dataflow] Release 28.2.1 ([#26401](https://github.com/bitnami/charts/pull/26401))
+
 ## 28.2.0 (2024-05-24)
 
-* [bitnami/spring-cloud-dataflow] Enable PodDisruptionBudgets ([#26380](https://github.com/bitnami/charts/pull/26380))
+* [bitnami/spring-cloud-dataflow] Enable PodDisruptionBudgets (#26380) ([c3ea103](https://github.com/bitnami/charts/commit/c3ea10304e1eb1fe9e3861e8423858ddaeecf71f)), closes [#26380](https://github.com/bitnami/charts/issues/26380)
 
 ## <small>28.1.2 (2024-05-23)</small>
 
