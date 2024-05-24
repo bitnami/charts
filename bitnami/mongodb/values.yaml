@@ -735,11 +735,11 @@ extraVolumes: []
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction
   ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## @section Traffic exposure parameters
@@ -843,7 +843,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.30.0-debian-12-r5
+      tag: 1.30.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1824,11 +1824,11 @@ arbiter:
   pdb:
     ## @param arbiter.pdb.create Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)
     ##
-    create: false
+    create: true
     ## @param arbiter.pdb.minAvailable Minimum number/percentage of Arbiter pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable
+    minAvailable: ""
+    ## @param arbiter.pdb.maxUnavailable Maximum number/percentage of Arbiter pods that may be made unavailable. Defaults to `1` if both `arbiter.pdb.minAvailable` and `arbiter.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## MongoDB(&reg;) Arbiter service parameters
@@ -2168,11 +2168,11 @@ hidden:
   pdb:
     ## @param hidden.pdb.create Enable/disable a Pod Disruption Budget creation for hidden node pod(s)
     ##
-    create: false
+    create: true
     ## @param hidden.pdb.minAvailable Minimum number/percentage of hidden node pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable
+    minAvailable: ""
+    ## @param hidden.pdb.maxUnavailable Maximum number/percentage of hidden node pods that may be made unavailable. Defaults to `1` if both `hidden.pdb.minAvailable` and `hidden.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims

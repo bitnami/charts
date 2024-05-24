@@ -538,7 +538,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.9.1-debian-12-r4
+    tag: 2.9.1-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -606,6 +606,20 @@ scheduler:
     periodSeconds: 10
     timeoutSeconds: 15
     failureThreshold: 6
+    successThreshold: 1
+  ## @param scheduler.startupProbe.enabled Enable startupProbe on Airflow scheduler containers
+  ## @param scheduler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param scheduler.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param scheduler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param scheduler.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param scheduler.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
     successThreshold: 1
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -859,7 +873,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.9.1-debian-12-r1
+    tag: 2.9.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1220,7 +1234,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.45.0-debian-12-r2
+    tag: 2.45.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

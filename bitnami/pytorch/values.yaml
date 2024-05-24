@@ -116,7 +116,7 @@ containerPorts:
 livenessProbe:
   enabled: true
   initialDelaySeconds: 5
-  periodSeconds: 5
+  periodSeconds: 20
   timeoutSeconds: 20
   successThreshold: 1
   failureThreshold: 5
@@ -548,7 +548,7 @@ networkPolicy:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.45.0-debian-12-r3
+  tag: 2.45.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

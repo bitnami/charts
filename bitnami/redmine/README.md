@@ -198,7 +198,7 @@ extraVolumeMounts:
 ## Configure extra options for liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes)
 ##
-livenessProbe:
+startupProbe:
   enabled: true
   path: /redmine/
 ---
@@ -310,7 +310,6 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 | `containerSecurityContext.capabilities.add`         | List of capabilities to be added                                                                                                                                                                                  | `["CHOWN","SYS_CHROOT","FOWNER","SETGID","SETUID","DAC_OVERRIDE"]` |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`                                                   |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Redmine containers                                                                                                                                                                        | `true`                                                             |
-| `livenessProbe.path`                                | Path for to check for livenessProbe                                                                                                                                                                               | `/`                                                                |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `300`                                                              |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`                                                               |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `5`                                                                |
@@ -417,16 +416,16 @@ helm install test --set persistence.existingClaim=PVC_REDMINE,mariadb.persistenc
 
 ### Other Parameters
 
-| Name                       | Description                                                    | Value   |
-| -------------------------- | -------------------------------------------------------------- | ------- |
-| `pdb.create`               | Enable a Pod Disruption Budget creation                        | `false` |
-| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled | `""`    |
-| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable | `""`    |
-| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Redmine                  | `false` |
-| `autoscaling.minReplicas`  | Minimum number of Redmine replicas                             | `1`     |
-| `autoscaling.maxReplicas`  | Maximum number of Redmine replicas                             | `11`    |
-| `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `50`    |
-| `autoscaling.targetMemory` | Target Memory utilization percentage                           | `50`    |
+| Name                       | Description                                                                                                                                                  | Value   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `pdb.create`               | Enable a Pod Disruption Budget creation                                                                                                                      | `true`  |
+| `pdb.minAvailable`         | Minimum number/percentage of pods that should remain scheduled                                                                                               | `""`    |
+| `pdb.maxUnavailable`       | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`      | Enable Horizontal POD autoscaling for Redmine                                                                                                                | `false` |
+| `autoscaling.minReplicas`  | Minimum number of Redmine replicas                                                                                                                           | `1`     |
+| `autoscaling.maxReplicas`  | Maximum number of Redmine replicas                                                                                                                           | `11`    |
+| `autoscaling.targetCPU`    | Target CPU utilization percentage                                                                                                                            | `50`    |
+| `autoscaling.targetMemory` | Target Memory utilization percentage                                                                                                                         | `50`    |
 
 ### Database Parameters
 

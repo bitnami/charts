@@ -1,12 +1,12 @@
 dependencies:
 - name: memcached
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.0.6
+  version: 7.3.0
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.0.5
+  version: 18.0.6
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.19.2
-digest: sha256:88f139bdbfc47912743cec19b9ae0dccb73703e9df39b18a6797915702078ce9
-generated: "2024-05-15T12:57:13.430837+02:00"
+  version: 2.19.3
+digest: sha256:35732a74b2ba7e4a3356880a19dd58c0ebbc22c0a7ac0d8551a62e81b8c0b486
+generated: "2024-05-20T20:58:04.995617872Z"
