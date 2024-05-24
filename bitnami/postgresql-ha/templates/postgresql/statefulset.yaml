@@ -536,7 +536,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tpcSocket:
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.metrics.customReadinessProbe }}

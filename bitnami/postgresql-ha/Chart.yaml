@@ -40,4 +40,4 @@ maintainers:
 name: postgresql-ha
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
-version: 14.1.1
+version: 14.1.2
