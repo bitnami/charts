@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.1.1 (2024-05-23)
+## 14.2.0 (2024-05-24)
 
-* [bitnami/postgresql-ha] Use different liveness/readiness probes ([#26388](https://github.com/bitnami/charts/pull/26388))
+* [bitnami/postgresql-ha] Enable PodDisruptionBudgets ([#26200](https://github.com/bitnami/charts/pull/26200))
+
+## <small>14.1.1 (2024-05-23)</small>
+
+* [bitnami/postgresql-ha] Use different liveness/readiness probes (#26388) ([26f7610](https://github.com/bitnami/charts/commit/26f761041f61f2a27e32813857fd40fd1fc62b74)), closes [#26388](https://github.com/bitnami/charts/issues/26388)
 
 ## 14.1.0 (2024-05-21)
 
