@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.2 (2024-05-23)
+## 6.3.3 (2024-05-24)
 
-* [bitnami/argo-cd] Use different liveness/readiness probes ([#26367](https://github.com/bitnami/charts/pull/26367))
+* [bitnami/argo-cd] Release 6.3.3 ([#26415](https://github.com/bitnami/charts/pull/26415))
+
+## <small>6.3.2 (2024-05-24)</small>
+
+* [bitnami/argo-cd] Use different liveness/readiness probes (#26367) ([6416961](https://github.com/bitnami/charts/commit/641696157e9dcb47341bb68d04c62e7d49181312)), closes [#26367](https://github.com/bitnami/charts/issues/26367)
 
 ## <small>6.3.1 (2024-05-23)</small>
 
