@@ -159,7 +159,7 @@ nodeAffinityPreset:
   ##   - e2e-az1
   ##   - e2e-az2
   ##
-  values: 
+  values:
     - ip-10-0-2-8.eu-central-1.compute.internal
 ## @param affinity Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
