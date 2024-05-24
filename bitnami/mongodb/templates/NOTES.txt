@@ -168,3 +168,4 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.tls.image }}
 {{- include "mongodb.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "arbiter" "externalAccess.autoDiscovery" "hidden" "metrics" "" "tls" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.tls.image .Values.externalAccess.autoDiscovery.image .Values.externalAccess.dnsCheck.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

@@ -465,8 +465,7 @@ forwarder:
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param forwarder.livenessProbe.enabled Enable livenessProbe
-  ## @param forwarder.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param forwarder.livenessProbe.httpGet.port Port for livenessProbe
+  ## @param forwarder.livenessProbe.tcpSocket.port Port for livenessProbe
   ## @param forwarder.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param forwarder.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param forwarder.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -475,8 +474,7 @@ forwarder:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+    tcpSocket:
       port: http
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -1147,8 +1145,7 @@ aggregator:
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param aggregator.livenessProbe.enabled Enable livenessProbe
-  ## @param aggregator.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param aggregator.livenessProbe.httpGet.port Port for livenessProbe
+  ## @param aggregator.livenessProbe.tcpSocket.port Port for livenessProbe
   ## @param aggregator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param aggregator.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param aggregator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -1157,8 +1154,7 @@ aggregator:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+    tcpSocket:
       port: http
     initialDelaySeconds: 60
     periodSeconds: 10
