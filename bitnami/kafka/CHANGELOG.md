@@ -1,12 +1,8 @@
 # Changelog
 
-## 29.0.1 (2024-05-24)
+## 29.0.3 (2024-05-24)
 
 * [bitnami/kafka] Fix linter rules after deprecating Kafka Exporter ([#26411](https://github.com/bitnami/charts/pull/26411))
-
-## 28.3.1 (2024-05-24)
-
-* [bitnami/kafka] Release 28.3.1 ([#26403](https://github.com/bitnami/charts/pull/26403))
 
 ## 28.3.0 (2024-05-21)
 
