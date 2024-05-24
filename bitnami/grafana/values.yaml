@@ -448,8 +448,6 @@ grafana:
   ## Grafana containers' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
-  ## @param grafana.livenessProbe.path Path for livenessProbe
-  ## @param grafana.livenessProbe.scheme Scheme for livenessProbe
   ## @param grafana.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param grafana.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param grafana.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -458,8 +456,6 @@ grafana:
   ##
   livenessProbe:
     enabled: true
-    path: /api/health
-    scheme: HTTP
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5

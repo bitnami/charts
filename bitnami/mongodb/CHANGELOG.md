@@ -1,8 +1,8 @@
 # Changelog
 
-## 15.6.0 (2024-05-22)
+## 15.5.3 (2024-05-24)
 
-* [bitnami/mongodb] PDB review ([#26154](https://github.com/bitnami/charts/pull/26154))
+* [bitnami/mongodb]Add or condition between .Values.auth.existingSecret and .Values.auth.rootPassword ([#25944](https://github.com/bitnami/charts/pull/25944))
 
 ## <small>15.5.2 (2024-05-22)</small>
 
