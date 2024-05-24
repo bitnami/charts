@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.2.0 (2024-06-03)
+
+* [bitnami/milvus] feat: config external kafka tls client certs setting ([#26118](https://github.com/bitnami/charts/pull/26118))
+
 ## 8.1.0 (2024-05-29)
 
 * [bitnami/milvus] PDB review ([#25983](https://github.com/bitnami/charts/pull/25983))
