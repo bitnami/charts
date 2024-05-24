@@ -101,6 +101,9 @@ spec:
   {{- if .Values.prometheus.enforcedSampleLimit }}
   enforcedSampleLimit: {{ .Values.prometheus.enforcedSampleLimit }}
   {{- end }}
+  {{- if .Values.prometheus.keepDroppedTargets }}
+  keepDroppedTargets: {{ .Values.prometheus.keepDroppedTargets }}
+  {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   {{- else if ne .Values.prometheus.resourcesPreset "none" }}
