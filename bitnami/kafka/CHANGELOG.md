@@ -4,6 +4,10 @@
 
 * [bitnami/kafka] Deprecate Kafka Exporter ([#26395](https://github.com/bitnami/charts/pull/26395))
 
+## 28.3.1 (2024-05-24)
+
+* [bitnami/kafka] Release 28.3.1 ([#26403](https://github.com/bitnami/charts/pull/26403))
+
 ## 28.3.0 (2024-05-21)
 
 * [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c9e4e574725a09505d2d313fb93f1b4c0a)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
