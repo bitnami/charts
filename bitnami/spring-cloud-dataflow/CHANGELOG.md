@@ -1,8 +1,8 @@
 # Changelog
 
-## 28.2.0 (2024-05-23)
+## 28.1.2 (2024-05-22)
 
-* [bitnami/spring-cloud-dataflow] Enable PodDisruptionBudgets ([#26380](https://github.com/bitnami/charts/pull/26380))
+* [bitnami/spring-cloud-dataflow] Fix variables definition sensitive to Helm 'release-name' ([#26315](https://github.com/bitnami/charts/pulls/26315))
 
 ## <small>28.1.1 (2024-05-22)</small>
 
