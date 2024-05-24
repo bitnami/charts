@@ -187,8 +187,8 @@ podSecurityContext:
 ## @param pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
