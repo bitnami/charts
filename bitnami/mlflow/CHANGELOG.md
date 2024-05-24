@@ -2,7 +2,7 @@
 
 ## 1.2.1 (2024-05-24)
 
-* [bitnami/mlflow] Use different liveness/readiness probes (part 2) ([#26417](https://github.com/bitnami/charts/pull/26417))
+* [bitnami/mlflow] Use different liveness/readiness pending probes (part 2) ([#26417](https://github.com/bitnami/charts/pull/26417))
 
 ## 1.2.0 (2024-05-23)
 
