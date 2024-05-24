@@ -147,10 +147,8 @@ spec:
                 timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
                 successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
                 failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-                httpGet:
-                  path: /api/health
+                tcpSocket:
                   port: 3000
-                  scheme: HTTP
               {{- end }}
               {{- if .Values.grafana.readinessProbe.enabled }}
               readinessProbe:
