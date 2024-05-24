@@ -154,12 +154,6 @@ By setting the following parameter: `listeners.client.protocol=SSL` and `listene
 
 As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
 
-If you also enable exposing metrics using the Kafka exporter, and you are using `SSL` or `SASL_SSL` security protocols protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
-
-```console
-metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
-```
-
 ### Accessing Kafka brokers from outside the cluster
 
 In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
@@ -284,14 +278,8 @@ externalAccess:
 
 The chart can optionally start two metrics exporters:
 
-- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
 - JMX exporter, to expose JMX metrics. By default, it uses port 5556.
-
-To create a separate Kafka exporter, use the parameter below:
-
-```text
-metrics.kafka.enabled: true
-```
+- Zookeeper exporter, to expose Zookeeper metrics. By default, it uses port 9141.
 
 To expose JMX metrics to Prometheus, use the parameter below:
 
