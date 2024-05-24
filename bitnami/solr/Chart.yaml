@@ -34,4 +34,5 @@ maintainers:
 name: solr
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/solr
-version: 9.1.6
+version: 9.2.1
+

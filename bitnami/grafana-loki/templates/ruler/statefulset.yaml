@@ -170,7 +170,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ruler.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ruler.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /ready
               port: http
           {{- end }}
           {{- if .Values.ruler.customStartupProbe }}

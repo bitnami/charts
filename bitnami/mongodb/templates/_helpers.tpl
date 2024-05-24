@@ -222,7 +222,7 @@ Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mongodb.initdbScriptsCM" -}}
 {{- if .Values.initdbScriptsConfigMap -}}
-{{- printf "%s" .Values.initdbScriptsConfigMap -}}
+{{- printf "%s" (tpl .Values.initdbScriptsConfigMap $) -}}
 {{- else -}}
 {{- printf "%s-init-scripts" (include "mongodb.fullname" .) -}}
 {{- end -}}
@@ -238,7 +238,7 @@ Get initial primary host to configure MongoDB cluster.
 {{/*
 Init container definition to change/establish volume permissions.
 */}}
-{{- define "mongodb.initContainer.volumePermissions" -}}
+{{- define "mongodb.initContainer.volumePermissions" }}
 - name: volume-permissions
   image: {{ include "mongodb.volumePermissions.image" . }}
   imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
