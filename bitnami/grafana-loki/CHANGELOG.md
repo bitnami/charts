@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.1 (2024-05-22)
+## 4.3.0 (2024-05-24)
 
-* [bitnami/grafana-loki] Use different liveness/readiness probes ([#26351](https://github.com/bitnami/charts/pull/26351))
+* [bitnami/grafana-loki] Allow disabling enableServiceLinks ([#25858](https://github.com/bitnami/charts/pull/25858))
+
+## <small>4.2.1 (2024-05-23)</small>
+
+* [bitnami/grafana-loki] Use different liveness/readiness probes (#26351) ([3dbb011](https://github.com/bitnami/charts/commit/3dbb0111f588082f064a4e8236466924a9b82f80)), closes [#26351](https://github.com/bitnami/charts/issues/26351)
 
 ## 4.2.0 (2024-05-21)
 
