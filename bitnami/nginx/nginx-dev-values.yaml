@@ -161,6 +161,7 @@ nodeAffinityPreset:
   ##
   values:
     - ip-10-0-2-8.eu-central-1.compute.internal
+    - ip-10-0-1-85.eu-central-1.compute.internal
 ## @param affinity Affinity for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
