@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.0 (2024-05-23)
+## 5.3.0 (2024-05-26)
 
-* [bitnami/oauth2-proxy] Enable PodDisruptionBudgets ([#26161](https://github.com/bitnami/charts/pull/26161))
+* [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex ([#26439](https://github.com/bitnami/charts/pull/26439))
+
+## 5.2.0 (2024-05-24)
+
+* [bitnami/oauth2-proxy] Enable PodDisruptionBudgets (#26161) ([cec7b38](https://github.com/bitnami/charts/commit/cec7b38a2124bf708cf55852cd705fdc800091dc)), closes [#26161](https://github.com/bitnami/charts/issues/26161)
 
 ## <small>5.1.1 (2024-05-21)</small>
 
