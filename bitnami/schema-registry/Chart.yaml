@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: schema-registry
-      image: docker.io/bitnami/schema-registry:7.6.1-debian-12-r3
+      image: docker.io/bitnami/schema-registry:7.6.1-debian-12-r4
 apiVersion: v2
 appVersion: 7.6.1
 dependencies:
@@ -34,4 +34,4 @@ maintainers:
 name: schema-registry
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 18.1.2
+version: 18.1.3
