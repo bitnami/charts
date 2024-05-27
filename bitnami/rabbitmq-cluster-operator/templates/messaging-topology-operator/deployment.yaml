@@ -139,8 +139,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.msgTopologyOperator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.msgTopologyOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: http-metrics
           {{- end }}
           {{- if .Values.msgTopologyOperator.customReadinessProbe }}
