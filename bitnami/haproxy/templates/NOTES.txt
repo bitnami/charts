@@ -53,3 +53,4 @@ In order to replicate the container startup scripts execute this command:
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "haproxy.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

@@ -657,6 +657,9 @@ compactor:
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param compactor.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -690,8 +693,14 @@ compactor:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param compactor.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -714,7 +723,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.26.0-debian-12-r0
+    tag: 1.26.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1056,6 +1065,9 @@ gateway:
     ## @param gateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param gateway.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param gateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1089,8 +1101,14 @@ gateway:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param gateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param gateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param gateway.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param gateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `gateway.networkPolicy.allowExternal` is true.
+    ## @param gateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `gateway.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -1549,6 +1567,9 @@ indexGateway:
     ## @param indexGateway.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param indexGateway.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param indexGateway.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1582,8 +1603,14 @@ indexGateway:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param indexGateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param indexGateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param indexGateway.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param indexGateway.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `indexGateway.networkPolicy.allowExternal` is true.
+    ## @param indexGateway.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `indexGateway.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -1903,6 +1930,9 @@ distributor:
     ## @param distributor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param distributor.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1936,8 +1966,14 @@ distributor:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param distributor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param distributor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param distributor.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param distributor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ## @param distributor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -2300,6 +2336,9 @@ ingester:
     ## @param ingester.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param ingester.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2333,8 +2372,14 @@ ingester:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param ingester.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param ingester.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param ingester.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param ingester.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ## @param ingester.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -2697,6 +2742,9 @@ querier:
     ## @param querier.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param querier.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `querier.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -2730,8 +2778,14 @@ querier:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param querier.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param querier.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param querier.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param querier.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ## @param querier.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -3057,6 +3111,9 @@ queryFrontend:
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param queryFrontend.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -3090,8 +3147,14 @@ queryFrontend:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param queryFrontend.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -3414,6 +3477,9 @@ queryScheduler:
     ## @param queryScheduler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param queryScheduler.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param queryScheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -3447,8 +3513,14 @@ queryScheduler:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param queryScheduler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param queryScheduler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param queryScheduler.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param queryScheduler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
+    ## @param queryScheduler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `queryScheduler.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -3814,6 +3886,9 @@ ruler:
     ## @param ruler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param ruler.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param ruler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -3847,8 +3922,14 @@ ruler:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param ruler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param ruler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param ruler.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param ruler.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `ruler.networkPolicy.allowExternal` is true.
+    ## @param ruler.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `ruler.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -4171,6 +4252,9 @@ tableManager:
     ## @param tableManager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param tableManager.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param tableManager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -4204,8 +4288,14 @@ tableManager:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param tableManager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param tableManager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param tableManager.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param tableManager.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `tableManager.networkPolicy.allowExternal` is true.
+    ## @param tableManager.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `tableManager.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -4227,7 +4317,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 3.0.0-debian-12-r4
+    tag: 3.0.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4647,6 +4737,9 @@ promtail:
     ## @param promtail.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param promtail.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param promtail.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
@@ -4683,8 +4776,14 @@ promtail:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param promtail.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param promtail.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param promtail.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param promtail.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.
+    ## @param promtail.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `promtail.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -4866,7 +4965,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r1
+    tag: 1.6.27-debian-12-r2
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4922,7 +5021,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r1
+    tag: 1.6.27-debian-12-r2
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4978,7 +5077,7 @@ memcachedindexqueries:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r1
+    tag: 1.6.27-debian-12-r2
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -5034,7 +5133,7 @@ memcachedindexwrites:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r1
+    tag: 1.6.27-debian-12-r2
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

@@ -1090,7 +1090,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.475.0-debian-12-r1
+        tag: 0.476.0-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1200,7 +1200,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.15.40-debian-12-r3
+        tag: 2.15.50-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

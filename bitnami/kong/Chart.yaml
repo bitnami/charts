@@ -8,7 +8,7 @@ annotations:
     - name: kong
       image: docker.io/bitnami/kong:3.6.1-debian-12-r23
     - name: kong-ingress-controller
-      image: docker.io/bitnami/kong-ingress-controller:3.1.4-debian-12-r4
+      image: docker.io/bitnami/kong-ingress-controller:3.1.5-debian-12-r0
     - name: postgresql
       image: docker.io/bitnami/postgresql:14.12.0-debian-12-r4
 apiVersion: v2
@@ -45,4 +45,4 @@ maintainers:
 name: kong
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 12.0.10
+version: 12.1.0

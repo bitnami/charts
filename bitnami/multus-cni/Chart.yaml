@@ -29,4 +29,4 @@ maintainers:
 name: multus-cni
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
-version: 2.0.4
+version: 2.1.0
