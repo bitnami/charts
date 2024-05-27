@@ -280,7 +280,7 @@ livenessProbe:
   timeoutSeconds: 5
   failureThreshold: 6
   successThreshold: 1
-  probeCommandTimeout: 2
+  probeCommandTimeout: 3
 ## @param readinessProbe.enabled Enable readinessProbe on ZooKeeper containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
@@ -510,12 +510,12 @@ initContainers: []
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ## @param pdb.create Deploy a pdb object for the ZooKeeper pod
 ## @param pdb.minAvailable Minimum available ZooKeeper replicas
-## @param pdb.maxUnavailable Maximum unavailable ZooKeeper replicas
+## @param pdb.maxUnavailable Maximum unavailable ZooKeeper replicas. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
-  maxUnavailable: 1
+  maxUnavailable: ""
 ## @param enableServiceLinks Whether information about services should be injected into pod's environment variable
 ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
 ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.

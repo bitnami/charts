@@ -210,3 +210,4 @@ YOU NEED TO PERFORM AN UPGRADE FOR THE SERVICES AND WORKLOAD TO BE CREATED
   {{- $resourceSections = append $resourceSections "master" -}}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" $resourceSections "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.sentinel.image .Values.metrics.image .Values.volumePermissions.image .Values.kubectl.image .Values.sysctl.image) "context" $) }}

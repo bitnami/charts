@@ -21,7 +21,7 @@ dependencies:
 - condition: mysql.enabled
   name: mysql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.x.x
+  version: 11.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -42,4 +42,4 @@ maintainers:
 name: argo-workflows
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
-version: 8.0.9
+version: 9.0.0

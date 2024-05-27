@@ -8,7 +8,7 @@ annotations:
     - name: elasticsearch
       image: docker.io/bitnami/elasticsearch:8.13.4-debian-12-r0
     - name: elasticsearch-exporter
-      image: docker.io/bitnami/elasticsearch-exporter:1.7.0-debian-12-r18
+      image: docker.io/bitnami/elasticsearch-exporter:1.7.0-debian-12-r25
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
@@ -34,4 +34,4 @@ maintainers:
 name: elasticsearch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 21.0.5
+version: 21.1.0

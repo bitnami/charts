@@ -32,4 +32,4 @@ maintainers:
 name: etcd
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/etcd
-version: 10.0.10
+version: 10.1.1
