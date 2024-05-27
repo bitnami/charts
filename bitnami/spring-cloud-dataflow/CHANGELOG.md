@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.0.1 (2024-05-27)
+## 29.0.2 (2024-05-27)
 
-* [bitnami/spring-cloud-dataflow] Release 29.0.1 ([#26457](https://github.com/bitnami/charts/pull/26457))
+* [bitnami/spring-cloud-dataflow] Support taskServiceAccountName ([#26450](https://github.com/bitnami/charts/pull/26450))
+
+## <small>29.0.1 (2024-05-27)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.1 (#26457) ([e0b6418](https://github.com/bitnami/charts/commit/e0b641821fa1d5bdf74fb33dfa94dd31ebcfa6c8)), closes [#26457](https://github.com/bitnami/charts/issues/26457)
 
 ## 29.0.0 (2024-05-27)
 
