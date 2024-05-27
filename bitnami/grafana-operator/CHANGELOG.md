@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.1 (2024-05-22)
+## 4.3.2 (2024-05-26)
 
-* [bitnami/grafana-operator] Use different liveness/readiness probes ([#26330](https://github.com/bitnami/charts/pulls/26330))
+* [bitnami/grafana-operator] Release 4.3.2 ([#26440](https://github.com/bitnami/charts/pull/26440))
+
+## <small>4.3.1 (2024-05-24)</small>
+
+* [bitnami/grafana-operator] Use different liveness/readiness probes (#26330) ([6fc05c7](https://github.com/bitnami/charts/commit/6fc05c74a7a363605861268951d110754c9ceede)), closes [#26330](https://github.com/bitnami/charts/issues/26330)
 
 ## 4.3.0 (2024-05-21)
 

@@ -1,139 +1,223 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanaalertrulegroups.yaml
-# Version: 5.9.0
+# Version: 5.9.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: grafanacontactpoints.grafana.integreatly.org
+  name: grafanaalertrulegroups.grafana.integreatly.org
 spec:
   group: grafana.integreatly.org
   names:
-    kind: GrafanaContactPoint
-    listKind: GrafanaContactPointList
-    plural: grafanacontactpoints
-    singular: grafanacontactpoint
+    kind: GrafanaAlertRuleGroup
+    listKind: GrafanaAlertRuleGroupList
+    plural: grafanaalertrulegroups
+    singular: grafanaalertrulegroup
   scope: Namespaced
   versions:
-    - name: v1beta1
-      schema:
-        openAPIV3Schema:
-          properties:
-            apiVersion:
-              type: string
-            kind:
-              type: string
-            metadata:
-              type: object
-            spec:
-              properties:
-                allowCrossNamespaceImport:
-                  type: boolean
-                disableResolveMessage:
-                  type: boolean
-                instanceSelector:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              allowCrossNamespaceImport:
+                type: boolean
+              folderRef:
+                type: string
+              folderUID:
+                type: string
+              instanceSelector:
+                properties:
+                  matchExpressions:
+                    items:
+                      properties:
+                        key:
+                          type: string
+                        operator:
+                          type: string
+                        values:
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
+              interval:
+                format: duration
+                pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
+                type: string
+              resyncPeriod:
+                default: 10m
+                format: duration
+                pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
+                type: string
+              rules:
+                items:
                   properties:
-                    matchExpressions:
-                      items:
-                        properties:
-                          key:
-                            type: string
-                          operator:
-                            type: string
-                          values:
-                            items:
-                              type: string
-                            type: array
-                        required:
-                          - key
-                          - operator
-                        type: object
-                      type: array
-                    matchLabels:
+                    annotations:
                       additionalProperties:
                         type: string
                       type: object
+                    condition:
+                      type: string
+                    data:
+                      items:
+                        properties:
+                          datasourceUid:
+                            type: string
+                          model:
+                            x-kubernetes-preserve-unknown-fields: true
+                          queryType:
+                            type: string
+                          refId:
+                            type: string
+                          relativeTimeRange:
+                            properties:
+                              from:
+                                format: int64
+                                type: integer
+                              to:
+                                format: int64
+                                type: integer
+                            type: object
+                        type: object
+                      type: array
+                    execErrState:
+                      enum:
+                      - OK
+                      - Alerting
+                      - Error
+                      - KeepLast
+                      type: string
+                    for:
+                      format: duration
+                      pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
+                      type: string
+                    isPaused:
+                      type: boolean
+                    labels:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    noDataState:
+                      enum:
+                      - Alerting
+                      - NoData
+                      - OK
+                      - KeepLast
+                      type: string
+                    notificationSettings:
+                      properties:
+                        group_by:
+                          items:
+                            type: string
+                          type: array
+                        group_interval:
+                          type: string
+                        group_wait:
+                          type: string
+                        mute_time_intervals:
+                          items:
+                            type: string
+                          type: array
+                        receiver:
+                          type: string
+                        repeat_interval:
+                          type: string
+                      required:
+                      - receiver
+                      type: object
+                    title:
+                      example: Always firing
+                      maxLength: 190
+                      minLength: 1
+                      type: string
+                    uid:
+                      pattern: ^[a-zA-Z0-9-_]+$
+                      type: string
+                  required:
+                  - condition
+                  - data
+                  - execErrState
+                  - for
+                  - noDataState
+                  - title
+                  - uid
                   type: object
-                  x-kubernetes-map-type: atomic
-                name:
-                  type: string
-                resyncPeriod:
-                  default: 10m
-                  format: duration
-                  pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
-                  type: string
-                settings:
-                  x-kubernetes-preserve-unknown-fields: true
-                type:
-                  enum:
-                    - alertmanager
-                    - dingding
-                    - discord
-                    - email
-                    - googlechat
-                    - kafka
-                    - line
-                    - opsgenie
-                    - pagerduty
-                    - pushover
-                    - sensugo
-                    - slack
-                    - teams
-                    - telegram
-                    - threema
-                    - victorops
-                    - webhook
-                    - wecom
-                  type: string
-              required:
-                - instanceSelector
-                - name
-                - settings
-              type: object
-            status:
-              properties:
-                conditions:
-                  items:
-                    properties:
-                      lastTransitionTime:
-                        format: date-time
-                        type: string
-                      message:
-                        maxLength: 32768
-                        type: string
-                      observedGeneration:
-                        format: int64
-                        minimum: 0
-                        type: integer
-                      reason:
-                        maxLength: 1024
-                        minLength: 1
-                        pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
-                        type: string
-                      status:
-                        enum:
-                          - "True"
-                          - "False"
-                          - Unknown
-                        type: string
-                      type:
-                        maxLength: 316
-                        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
-                        type: string
-                    required:
-                      - lastTransitionTime
-                      - message
-                      - reason
-                      - status
-                      - type
-                    type: object
-                  type: array
-              required:
-                - conditions
-              type: object
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
+                type: array
+            required:
+            - instanceSelector
+            - interval
+            - rules
+            type: object
+            x-kubernetes-validations:
+            - message: Only one of FolderUID or FolderRef can be set
+              rule: (has(self.folderUID) && !(has(self.folderRef))) || (has(self.folderRef)
+                && !(has(self.folderUID)))
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            required:
+            - conditions
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

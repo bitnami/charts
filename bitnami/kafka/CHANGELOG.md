@@ -1,8 +1,8 @@
 # Changelog
 
-## 29.0.4 (2024-05-24)
+## 29.1.0 (2024-05-27)
 
-* [bitnami/kafka] Fixed Network-Policies for jmx metrics export ([#26369](https://github.com/bitnami/charts/pull/26369))
+* [bitnami/kafka] Restore value brokerRackAssignment ([#26296](https://github.com/bitnami/charts/pull/26296))
 
 ## <small>29.0.3 (2024-05-24)</small>
 

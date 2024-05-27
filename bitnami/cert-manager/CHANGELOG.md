@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.1 (2024-05-23)
+## 1.3.0 (2024-05-24)
 
-* [bitnami/cert-manager] Use different liveness/readiness probes ([#26310](https://github.com/bitnami/charts/pull/26310))
+* [bitnami/cert-manager] Enable PodDisruptionBudgets ([#26421](https://github.com/bitnami/charts/pull/26421))
+
+## <small>1.2.1 (2024-05-23)</small>
+
+* [bitnami/cert-manager] Use different liveness/readiness probes (#26310) ([5225821](https://github.com/bitnami/charts/commit/522582196e58b35eebc21306f5843680f805e9b9)), closes [#26310](https://github.com/bitnami/charts/issues/26310)
 
 ## 1.2.0 (2024-05-21)
 
