@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.5.2 (2024-05-24)
+## 7.6.0 (2024-05-27)
 
-* [bitnami/external-dns] Use different liveness/readiness probes ([#26317](https://github.com/bitnami/charts/pull/26317))
+* [bitnami/external-dns] feat: Add support for provider scaleway secretName ([#24630](https://github.com/bitnami/charts/pull/24630))
+
+## <small>7.5.2 (2024-05-24)</small>
+
+* [bitnami/external-dns] Use different liveness/readiness probes (#26317) ([465cecf](https://github.com/bitnami/charts/commit/465cecf3e3c6023ac32c7b552b86ba6cfd7a31ce)), closes [#26317](https://github.com/bitnami/charts/issues/26317)
 
 ## <small>7.5.1 (2024-05-22)</small>
 
