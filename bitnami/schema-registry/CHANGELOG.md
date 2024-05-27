@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.1.3 (2024-05-26)
+## 19.0.0 (2024-05-27)
 
-* [bitnami/schema-registry] Release 18.1.3 ([#26441](https://github.com/bitnami/charts/pull/26441))
+* [bitnami/schema-registry] Update dependencies ([#26446](https://github.com/bitnami/charts/pull/26446))
+
+## <small>18.1.3 (2024-05-26)</small>
+
+* [bitnami/schema-registry] Release 18.1.3 (#26441) ([82f2f80](https://github.com/bitnami/charts/commit/82f2f80cf10a38b25c4937ed8a8b048afce47a48)), closes [#26441](https://github.com/bitnami/charts/issues/26441)
 
 ## <small>18.1.2 (2024-05-24)</small>
 
