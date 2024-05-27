@@ -2,7 +2,7 @@
 
 ## 6.2.0 (2024-05-27)
 
-* Feature/influxdb separate persistence options ([#26453](https://github.com/bitnami/charts/pull/26453))
+* [bitnami/influxdb] Allow separate persistence cfg for backups ([#26453](https://github.com/bitnami/charts/pull/26453))
 
 ## <small>6.1.1 (2024-05-23)</small>
 
