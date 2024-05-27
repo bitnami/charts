@@ -181,9 +181,9 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sidekiq.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/sh
-                - -c
-                - pgrep -f ^sidekiq
+                - pgrep
+                - -f
+                - sidekiq
           {{- end }}
           {{- if .Values.sidekiq.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sidekiq.customReadinessProbe "context" $) | nindent 12 }}

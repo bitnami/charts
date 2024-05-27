@@ -227,7 +227,7 @@ spec:
                   if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.secondary.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customLivenessProbe "context" $) | nindent 12 }}
@@ -257,7 +257,7 @@ spec:
                   if [[ -f "${MARIADB_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.secondary.resources }}

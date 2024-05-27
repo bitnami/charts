@@ -1,5 +1,5 @@
 # Source: https://github.com/fluxcd/image-automation-controller/releases/download/v{version}/image-automation-controller.crds.yaml
-# Version: 0.37.1
+# Version: 0.38.0
 # VersionOf: fluxcd-image-automation-controller
 # Conditional: .Values.imageAutomationController.installCRDs
 {{- if .Values.imageAutomationController.installCRDs }}
@@ -7,7 +7,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: imageupdateautomations.image.toolkit.fluxcd.io
 spec:
   group: image.toolkit.fluxcd.io
@@ -22,6 +22,8 @@ spec:
     - jsonPath: .status.lastAutomationRunTime
       name: Last run
       type: string
+    deprecated: true
+    deprecationWarning: v1beta1 ImageUpdateAutomation is deprecated, upgrade to v1beta2
     name: v1beta1
     schema:
       openAPIV3Schema:
@@ -29,14 +31,19 @@ spec:
           API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -44,36 +51,41 @@ spec:
             description: ImageUpdateAutomationSpec defines the desired state of ImageUpdateAutomation
             properties:
               git:
-                description: GitSpec contains all the git-specific definitions. This
-                  is technically optional, but in practice mandatory until there are
+                description: |-
+                  GitSpec contains all the git-specific definitions. This is
+                  technically optional, but in practice mandatory until there are
                   other kinds of source allowed.
                 properties:
                   checkout:
-                    description: Checkout gives the parameters for cloning the git
-                      repository, ready to make changes. If not present, the `spec.ref`
-                      field from the referenced `GitRepository` or its default will
-                      be used.
+                    description: |-
+                      Checkout gives the parameters for cloning the git repository,
+                      ready to make changes. If not present, the `spec.ref` field from the
+                      referenced `GitRepository` or its default will be used.
                     properties:
                       ref:
-                        description: Reference gives a branch, tag or commit to clone
-                          from the Git repository.
+                        description: |-
+                          Reference gives a branch, tag or commit to clone from the Git
+                          repository.
                         properties:
                           branch:
                             description: Branch to check out, defaults to 'master'
                               if no other field is defined.
                             type: string
                           commit:
-                            description: "Commit SHA to check out, takes precedence
-                              over all reference fields. \n This can be combined with
-                              Branch to shallow clone the branch, in which the commit
-                              is expected to exist."
+                            description: |-
+                              Commit SHA to check out, takes precedence over all reference fields.
+
+
+                              This can be combined with Branch to shallow clone the branch, in which
+                              the commit is expected to exist.
                             type: string
                           name:
-                            description: "Name of the reference to check out; takes
-                              precedence over Branch, Tag and SemVer. \n It must be
-                              a valid Git reference: https://git-scm.com/docs/git-check-ref-format#_description
-                              Examples: \"refs/heads/main\", \"refs/tags/v0.1.0\",
-                              \"refs/pull/420/head\", \"refs/merge-requests/1/head\""
+                            description: |-
+                              Name of the reference to check out; takes precedence over Branch, Tag and SemVer.
+
+
+                              It must be a valid Git reference: https://git-scm.com/docs/git-check-ref-format#_description
+                              Examples: "refs/heads/main", "refs/tags/v0.1.0", "refs/pull/420/head", "refs/merge-requests/1/head"
                             type: string
                           semver:
                             description: SemVer tag expression to check out, takes
@@ -90,8 +102,9 @@ spec:
                     description: Commit specifies how to commit to the git repository.
                     properties:
                       author:
-                        description: Author gives the email and optionally the name
-                          to use as the author of commits.
+                        description: |-
+                          Author gives the email and optionally the name to use as the
+                          author of commits.
                         properties:
                           email:
                             description: Email gives the email to provide when making
@@ -105,19 +118,20 @@ spec:
                         - email
                         type: object
                       messageTemplate:
-                        description: MessageTemplate provides a template for the commit
-                          message, into which will be interpolated the details of
-                          the change made.
+                        description: |-
+                          MessageTemplate provides a template for the commit message,
+                          into which will be interpolated the details of the change made.
                         type: string
                       signingKey:
                         description: SigningKey provides the option to sign commits
                           with a GPG key
                         properties:
                           secretRef:
-                            description: SecretRef holds the name to a secret that
-                              contains a 'git.asc' key corresponding to the ASCII
-                              Armored file containing the GPG signing keypair as the
-                              value. It must be in the same namespace as the ImageUpdateAutomation.
+                            description: |-
+                              SecretRef holds the name to a secret that contains a 'git.asc' key
+                              corresponding to the ASCII Armored file containing the GPG signing
+                              keypair as the value. It must be in the same namespace as the
+                              ImageUpdateAutomation.
                             properties:
                               name:
                                 description: Name of the referent.
@@ -130,40 +144,46 @@ spec:
                     - author
                     type: object
                   push:
-                    description: Push specifies how and where to push commits made
-                      by the automation. If missing, commits are pushed (back) to
+                    description: |-
+                      Push specifies how and where to push commits made by the
+                      automation. If missing, commits are pushed (back) to
                       `.spec.checkout.branch` or its default.
                     properties:
                       branch:
-                        description: Branch specifies that commits should be pushed
-                          to the branch named. The branch is created using `.spec.checkout.branch`
-                          as the starting point, if it doesn't already exist.
+                        description: |-
+                          Branch specifies that commits should be pushed to the branch
+                          named. The branch is created using `.spec.checkout.branch` as the
+                          starting point, if it doesn't already exist.
                         type: string
                       options:
                         additionalProperties:
                           type: string
-                        description: 'Options specifies the push options that are
-                          sent to the Git server when performing a push operation.
-                          For details, see: https://git-scm.com/docs/git-push#Documentation/git-push.txt---push-optionltoptiongt'
+                        description: |-
+                          Options specifies the push options that are sent to the Git
+                          server when performing a push operation. For details, see:
+                          https://git-scm.com/docs/git-push#Documentation/git-push.txt---push-optionltoptiongt
                         type: object
                       refspec:
-                        description: 'Refspec specifies the Git Refspec to use for
-                          a push operation. If both Branch and Refspec are provided,
-                          then the commit is pushed to the branch and also using the
-                          specified refspec. For more details about Git Refspecs,
-                          see: https://git-scm.com/book/en/v2/Git-Internals-The-Refspec'
+                        description: |-
+                          Refspec specifies the Git Refspec to use for a push operation.
+                          If both Branch and Refspec are provided, then the commit is pushed
+                          to the branch and also using the specified refspec.
+                          For more details about Git Refspecs, see:
+                          https://git-scm.com/book/en/v2/Git-Internals-The-Refspec
                         type: string
                     type: object
                 required:
                 - commit
                 type: object
               interval:
-                description: Interval gives an lower bound for how often the automation
+                description: |-
+                  Interval gives an lower bound for how often the automation
                   run should be attempted.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               sourceRef:
-                description: SourceRef refers to the resource giving access details
+                description: |-
+                  SourceRef refers to the resource giving access details
                   to a git repository.
                 properties:
                   apiVersion:
@@ -187,20 +207,23 @@ spec:
                 - name
                 type: object
               suspend:
-                description: Suspend tells the controller to not run this automation,
-                  until it is unset (or set to false). Defaults to false.
+                description: |-
+                  Suspend tells the controller to not run this automation, until
+                  it is unset (or set to false). Defaults to false.
                 type: boolean
               update:
                 default:
                   strategy: Setters
-                description: Update gives the specification for how to update the
-                  files in the repository. This can be left empty, to use the default
+                description: |-
+                  Update gives the specification for how to update the files in
+                  the repository. This can be left empty, to use the default
                   value.
                 properties:
                   path:
-                    description: Path to the directory containing the manifests to
-                      be updated. Defaults to 'None', which translates to the root
-                      path of the GitRepositoryRef.
+                    description: |-
+                      Path to the directory containing the manifests to be updated.
+                      Defaults to 'None', which translates to the root path
+                      of the GitRepositoryRef.
                     type: string
                   strategy:
                     default: Setters
@@ -224,42 +247,42 @@ spec:
               conditions:
                 items:
                   description: "Condition contains details for one aspect of the current
-                    state of this API Resource. --- This struct is intended for direct
-                    use as an array at the field path .status.conditions.  For example,
-                    \n type FooStatus struct{ // Represents the observations of a
-                    foo's current state. // Known .status.conditions.type are: \"Available\",
-                    \"Progressing\", and \"Degraded\" // +patchMergeKey=type // +patchStrategy=merge
-                    // +listType=map // +listMapKey=type Conditions []metav1.Condition
-                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
-                    protobuf:\"bytes,1,rep,name=conditions\"` \n // other fields }"
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
                   properties:
                     lastTransitionTime:
-                      description: lastTransitionTime is the last time the condition
-                        transitioned from one status to another. This should be when
-                        the underlying condition changed.  If that is not known, then
-                        using the time when the API field changed is acceptable.
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
                       format: date-time
                       type: string
                     message:
-                      description: message is a human readable message indicating
-                        details about the transition. This may be an empty string.
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
                       maxLength: 32768
                       type: string
                     observedGeneration:
-                      description: observedGeneration represents the .metadata.generation
-                        that the condition was set based upon. For instance, if .metadata.generation
-                        is currently 12, but the .status.conditions[x].observedGeneration
-                        is 9, the condition is out of date with respect to the current
-                        state of the instance.
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
                       format: int64
                       minimum: 0
                       type: integer
                     reason:
-                      description: reason contains a programmatic identifier indicating
-                        the reason for the condition's last transition. Producers
-                        of specific condition types may define expected values and
-                        meanings for this field, and whether the values are considered
-                        a guaranteed API. The value should be a CamelCase string.
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
                         This field may not be empty.
                       maxLength: 1024
                       minLength: 1
@@ -273,11 +296,12 @@ spec:
                       - Unknown
                       type: string
                     type:
-                      description: type of condition in CamelCase or in foo.example.com/CamelCase.
-                        --- Many .condition.type values are consistent across resources
-                        like Available, but because arbitrary conditions can be useful
-                        (see .node.status.conditions), the ability to deconflict is
-                        important. The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                       maxLength: 316
                       pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                       type: string
@@ -290,19 +314,22 @@ spec:
                   type: object
                 type: array
               lastAutomationRunTime:
-                description: LastAutomationRunTime records the last time the controller
-                  ran this automation through to completion (even if no updates were
+                description: |-
+                  LastAutomationRunTime records the last time the controller ran
+                  this automation through to completion (even if no updates were
                   made).
                 format: date-time
                 type: string
               lastHandledReconcileAt:
-                description: LastHandledReconcileAt holds the value of the most recent
-                  reconcile request value, so a change of the annotation value can
-                  be detected.
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile request value, so a change of the annotation value
+                  can be detected.
                 type: string
               lastPushCommit:
-                description: LastPushCommit records the SHA1 of the last commit made
-                  by the controller, for this automation object
+                description: |-
+                  LastPushCommit records the SHA1 of the last commit made by the
+                  controller, for this automation object
                 type: string
               lastPushTime:
                 description: LastPushTime records the time of the last pushed change.
@@ -311,6 +338,402 @@ spec:
               observedGeneration:
                 format: int64
                 type: integer
+            type: object
+        type: object
+    served: true
+    storage: false
+    subresources:
+      status: {}
+  - additionalPrinterColumns:
+    - jsonPath: .status.lastAutomationRunTime
+      name: Last run
+      type: string
+    name: v1beta2
+    schema:
+      openAPIV3Schema:
+        description: ImageUpdateAutomation is the Schema for the imageupdateautomations
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ImageUpdateAutomationSpec defines the desired state of ImageUpdateAutomation
+            properties:
+              git:
+                description: |-
+                  GitSpec contains all the git-specific definitions. This is
+                  technically optional, but in practice mandatory until there are
+                  other kinds of source allowed.
+                properties:
+                  checkout:
+                    description: |-
+                      Checkout gives the parameters for cloning the git repository,
+                      ready to make changes. If not present, the `spec.ref` field from the
+                      referenced `GitRepository` or its default will be used.
+                    properties:
+                      ref:
+                        description: |-
+                          Reference gives a branch, tag or commit to clone from the Git
+                          repository.
+                        properties:
+                          branch:
+                            description: Branch to check out, defaults to 'master'
+                              if no other field is defined.
+                            type: string
+                          commit:
+                            description: |-
+                              Commit SHA to check out, takes precedence over all reference fields.
+
+
+                              This can be combined with Branch to shallow clone the branch, in which
+                              the commit is expected to exist.
+                            type: string
+                          name:
+                            description: |-
+                              Name of the reference to check out; takes precedence over Branch, Tag and SemVer.
+
+
+                              It must be a valid Git reference: https://git-scm.com/docs/git-check-ref-format#_description
+                              Examples: "refs/heads/main", "refs/tags/v0.1.0", "refs/pull/420/head", "refs/merge-requests/1/head"
+                            type: string
+                          semver:
+                            description: SemVer tag expression to check out, takes
+                              precedence over Tag.
+                            type: string
+                          tag:
+                            description: Tag to check out, takes precedence over Branch.
+                            type: string
+                        type: object
+                    required:
+                    - ref
+                    type: object
+                  commit:
+                    description: Commit specifies how to commit to the git repository.
+                    properties:
+                      author:
+                        description: |-
+                          Author gives the email and optionally the name to use as the
+                          author of commits.
+                        properties:
+                          email:
+                            description: Email gives the email to provide when making
+                              a commit.
+                            type: string
+                          name:
+                            description: Name gives the name to provide when making
+                              a commit.
+                            type: string
+                        required:
+                        - email
+                        type: object
+                      messageTemplate:
+                        description: |-
+                          MessageTemplate provides a template for the commit message,
+                          into which will be interpolated the details of the change made.
+                        type: string
+                      signingKey:
+                        description: SigningKey provides the option to sign commits
+                          with a GPG key
+                        properties:
+                          secretRef:
+                            description: |-
+                              SecretRef holds the name to a secret that contains a 'git.asc' key
+                              corresponding to the ASCII Armored file containing the GPG signing
+                              keypair as the value. It must be in the same namespace as the
+                              ImageUpdateAutomation.
+                            properties:
+                              name:
+                                description: Name of the referent.
+                                type: string
+                            required:
+                            - name
+                            type: object
+                        type: object
+                    required:
+                    - author
+                    type: object
+                  push:
+                    description: |-
+                      Push specifies how and where to push commits made by the
+                      automation. If missing, commits are pushed (back) to
+                      `.spec.checkout.branch` or its default.
+                    properties:
+                      branch:
+                        description: |-
+                          Branch specifies that commits should be pushed to the branch
+                          named. The branch is created using `.spec.checkout.branch` as the
+                          starting point, if it doesn't already exist.
+                        type: string
+                      options:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Options specifies the push options that are sent to the Git
+                          server when performing a push operation. For details, see:
+                          https://git-scm.com/docs/git-push#Documentation/git-push.txt---push-optionltoptiongt
+                        type: object
+                      refspec:
+                        description: |-
+                          Refspec specifies the Git Refspec to use for a push operation.
+                          If both Branch and Refspec are provided, then the commit is pushed
+                          to the branch and also using the specified refspec.
+                          For more details about Git Refspecs, see:
+                          https://git-scm.com/book/en/v2/Git-Internals-The-Refspec
+                        type: string
+                    type: object
+                required:
+                - commit
+                type: object
+              interval:
+                description: |-
+                  Interval gives an lower bound for how often the automation
+                  run should be attempted.
+                pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
+                type: string
+              policySelector:
+                description: |-
+                  PolicySelector allows to filter applied policies based on labels.
+                  By default includes all policies in namespace.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
+                          type: string
+                        values:
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                    x-kubernetes-list-type: atomic
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              sourceRef:
+                description: |-
+                  SourceRef refers to the resource giving access details
+                  to a git repository.
+                properties:
+                  apiVersion:
+                    description: API version of the referent.
+                    type: string
+                  kind:
+                    default: GitRepository
+                    description: Kind of the referent.
+                    enum:
+                    - GitRepository
+                    type: string
+                  name:
+                    description: Name of the referent.
+                    type: string
+                  namespace:
+                    description: Namespace of the referent, defaults to the namespace
+                      of the Kubernetes resource object that contains the reference.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              suspend:
+                description: |-
+                  Suspend tells the controller to not run this automation, until
+                  it is unset (or set to false). Defaults to false.
+                type: boolean
+              update:
+                default:
+                  strategy: Setters
+                description: |-
+                  Update gives the specification for how to update the files in
+                  the repository. This can be left empty, to use the default
+                  value.
+                properties:
+                  path:
+                    description: |-
+                      Path to the directory containing the manifests to be updated.
+                      Defaults to 'None', which translates to the root path
+                      of the GitRepositoryRef.
+                    type: string
+                  strategy:
+                    default: Setters
+                    description: Strategy names the strategy to be used.
+                    enum:
+                    - Setters
+                    type: string
+                required:
+                - strategy
+                type: object
+            required:
+            - interval
+            - sourceRef
+            type: object
+          status:
+            default:
+              observedGeneration: -1
+            description: ImageUpdateAutomationStatus defines the observed state of
+              ImageUpdateAutomation
+            properties:
+              conditions:
+                items:
+                  description: "Condition contains details for one aspect of the current
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              lastAutomationRunTime:
+                description: |-
+                  LastAutomationRunTime records the last time the controller ran
+                  this automation through to completion (even if no updates were
+                  made).
+                format: date-time
+                type: string
+              lastHandledReconcileAt:
+                description: |-
+                  LastHandledReconcileAt holds the value of the most recent
+                  reconcile request value, so a change of the annotation value
+                  can be detected.
+                type: string
+              lastPushCommit:
+                description: |-
+                  LastPushCommit records the SHA1 of the last commit made by the
+                  controller, for this automation object
+                type: string
+              lastPushTime:
+                description: LastPushTime records the time of the last pushed change.
+                format: date-time
+                type: string
+              observedGeneration:
+                format: int64
+                type: integer
+              observedPolicies:
+                additionalProperties:
+                  description: ImageRef represents an image reference.
+                  properties:
+                    name:
+                      description: Name is the bare image's name.
+                      type: string
+                    tag:
+                      description: Tag is the image's tag.
+                      type: string
+                  required:
+                  - name
+                  - tag
+                  type: object
+                description: |-
+                  ObservedPolicies is the list of observed ImagePolicies that were
+                  considered by the ImageUpdateAutomation update process.
+                type: object
+              observedSourceRevision:
+                description: |-
+                  ObservedPolicies []ObservedPolicy `json:"observedPolicies,omitempty"`
+                  ObservedSourceRevision is the last observed source revision. This can be
+                  used to determine if the source has been updated since last observation.
+                type: string
             type: object
         type: object
     served: true

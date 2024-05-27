@@ -172,8 +172,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ingester.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.ingester.customReadinessProbe }}

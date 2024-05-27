@@ -49,3 +49,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{ include "harbor.validateValues" . }}
 {{ include "harbor.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "core" "exporter" "jobservice" "nginx" "portal" "registry.controller" "registry.server" "trivy" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.volumePermissions.image .Values.nginx.image .Values.portal.image .Values.core.image .Values.jobservice.image .Values.registry.server.image .Values.registry.controller.image .Values.trivy.image .Values.exporter.image .Values.postgresql.image) "context" $) }}

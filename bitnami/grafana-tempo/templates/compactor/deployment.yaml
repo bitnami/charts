@@ -66,6 +66,7 @@ spec:
       {{- if .Values.compactor.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.compactor.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.compactor.enableServiceLinks }}
       initContainers:
         {{- if .Values.compactor.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.compactor.initContainers "context" $) | nindent 8 }}
@@ -121,8 +122,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.compactor.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.compactor.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.compactor.customReadinessProbe }}

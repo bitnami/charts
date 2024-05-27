@@ -131,8 +131,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.clusterOperator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.clusterOperator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.clusterOperator.customReadinessProbe }}

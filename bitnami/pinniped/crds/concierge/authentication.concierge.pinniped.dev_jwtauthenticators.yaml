@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/concierge/authentication.concierge.pinniped.dev_jwtauthenticators.yaml
-# Version: 0.29.0
+# Version: 0.30.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition

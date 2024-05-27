@@ -3,9 +3,9 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.shards .Values.shardsvr.dataNode.pdb.create -}}
-{{- $replicas := .Values.shards | int -}}
-{{- range $i, $e := until $replicas -}}
+{{- if and .Values.shards .Values.shardsvr.dataNode.pdb.create }}
+{{- $replicas := .Values.shards | int }}
+{{- range $i, $e := until $replicas }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" $ }}
 metadata:

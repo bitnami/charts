@@ -151,3 +151,4 @@ IMPORTANT: When accessing Studio via browser, it will try to access the API via 
 {{- include "common.warnings.rollingTag" .Values.jwt.autoGenerate.kubectlImage }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "auth" "jwt.autoGenerate" "meta" "realtime" "rest" "storage" "studio" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.jwt.autoGenerate.image .Values.jwt.autoGenerate.kubectlImage .Values.auth.image .Values.meta.image .Values.realtime.image .Values.rest.image .Values.storage.image .Values.studio.image .Values.volumePermissions.image .Values.psqlImage .Values.postgresql.image) "context" $) }}

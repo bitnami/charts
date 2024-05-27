@@ -67,3 +67,4 @@ To access Janusgraph from outside the cluster follow the steps below:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "janusgraph.validateValues" . }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "context" $) }}

@@ -125,3 +125,4 @@ To connect to Airflow from outside the cluster, perform the following steps:
 {{ include "airflow.validateValues" . }}
 {{ include "airflow.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "git.clone" "git.sync" "metrics" "scheduler" "web" "worker") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.dags.image .Values.web.image .Values.scheduler.image .Values.worker.image .Values.git.image .Values.metrics.image) "context" $) }}

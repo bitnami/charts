@@ -1,0 +1,802 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if or .Release.IsUpgrade (ne .Values.sentinel.service.type "NodePort")  .Values.sentinel.service.nodePorts.valkey -}}
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ printf "%s-node" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: node
+    app.kubernetes.io/part-of: valkey
+  {{- if or .Values.commonAnnotations .Values.sentinel.annotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replica.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: node
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  {{- if .Values.replica.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  minReadySeconds: {{ .Values.replica.minReadySeconds }}
+  {{- end }}
+  {{- if .Values.replica.podManagementPolicy }}
+  podManagementPolicy: {{ .Values.replica.podManagementPolicy | quote }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: node
+        {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if (include "valkey.createConfigmap" .) }}
+        checksum/configmap: {{ pick ( include (print $.Template.BasePath "/configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        {{- end }}
+        checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        checksum/scripts: {{ pick ( include (print $.Template.BasePath "/scripts-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        checksum/secret: {{ pick ( include (print $.Template.BasePath "/secret.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        {{- if .Values.replica.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- include "valkey.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.replica.automountServiceAccountToken }}
+      {{- if .Values.replica.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.replica.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.replica.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "valkey.serviceAccountName" . }}
+      {{- if .Values.replica.priorityClassName }}
+      priorityClassName: {{ .Values.replica.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.replica.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.replica.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "node" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "node" "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.replica.nodeAffinityPreset.type "key" .Values.replica.nodeAffinityPreset.key "values" .Values.replica.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.replica.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.replica.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.replica.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.replica.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.replica.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.replica.shareProcessNamespace }}
+      {{- end }}
+      {{- if .Values.replica.schedulerName }}
+      schedulerName: {{ .Values.replica.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.replica.dnsPolicy }}
+      dnsPolicy: {{ .Values.replica.dnsPolicy }}
+      {{- end }}
+      {{- if .Values.replica.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.replica.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
+      enableServiceLinks: {{ .Values.sentinel.enableServiceLinks }}
+      terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds }}
+      {{- $needsVolumePermissions := and .Values.volumePermissions.enabled .Values.replica.persistence.enabled .Values.replica.podSecurityContext.enabled .Values.replica.containerSecurityContext.enabled }}
+      {{- if or .Values.replica.initContainers $needsVolumePermissions }}
+      initContainers:
+        {{- if .Values.replica.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.replica.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if $needsVolumePermissions }}
+        - name: volume-permissions
+          image: {{ include "valkey.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` {{ .Values.replica.persistence.path }}
+              {{- else }}
+              chown -R {{ .Values.replica.containerSecurityContext.runAsUser }}:{{ .Values.replica.podSecurityContext.fsGroup }} {{ .Values.replica.persistence.path }}
+              {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: valkey-data
+              mountPath: {{ .Values.replica.persistence.path }}
+              {{- if .Values.replica.persistence.subPath }}
+              subPath: {{ .Values.replica.persistence.subPath }}
+              {{- else if .Values.replica.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.replica.persistence.subPathExpr }}
+              {{- end }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: valkey
+          image: {{ template "valkey.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.replica.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.replica.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-valkey.sh
+          {{- end }}
+          {{- end }}
+          {{- if .Values.replica.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.replica.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.replica.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.replica.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.replica.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.replica.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -c
+            - /opt/bitnami/scripts/start-scripts/start-node.sh
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: VALKEY_MASTER_PORT_NUMBER
+              value: {{ .Values.replica.containerPorts.valkey | quote }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
+            {{- if .Values.auth.enabled }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: VALKEY_PASSWORD_FILE
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
+            - name: VALKEY_MASTER_PASSWORD_FILE
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
+            {{- else }}
+            - name: VALKEY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "valkey.secretName" . }}
+                  key: {{ template "valkey.secretPasswordKey" . }}
+            - name: VALKEY_MASTER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "valkey.secretName" . }}
+                  key: {{ template "valkey.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            - name: VALKEY_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: VALKEY_TLS_PORT
+              value: {{ .Values.replica.containerPorts.valkey | quote }}
+            - name:  VALKEY_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  VALKEY_TLS_CERT_FILE
+              value: {{ template "valkey.tlsCert" . }}
+            - name:  VALKEY_TLS_KEY_FILE
+              value: {{ template "valkey.tlsCertKey" . }}
+            - name:  VALKEY_TLS_CA_FILE
+              value: {{ template "valkey.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  VALKEY_TLS_DH_PARAMS_FILE
+              value: {{ template "valkey.tlsDHParams" . }}
+            {{- end }}
+            {{- else }}
+            - name: VALKEY_PORT
+              value: {{ .Values.replica.containerPorts.valkey | quote }}
+            {{- end }}
+            - name: VALKEY_SENTINEL_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: VALKEY_SENTINEL_TLS_PORT_NUMBER
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            - name:  VALKEY_SENTINEL_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  VALKEY_SENTINEL_TLS_CERT_FILE
+              value: {{ template "valkey.tlsCert" . }}
+            - name:  VALKEY_SENTINEL_TLS_KEY_FILE
+              value: {{ template "valkey.tlsCertKey" . }}
+            - name:  VALKEY_SENTINEL_TLS_CA_FILE
+              value: {{ template "valkey.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  VALKEY_SENTINEL_TLS_DH_PARAMS_FILE
+              value: {{ template "valkey.tlsDHParams" . }}
+            {{- end }}
+            {{- else }}
+            - name: VALKEY_SENTINEL_PORT
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            {{- end }}
+            - name: VALKEY_DATA_DIR
+              value: {{ .Values.replica.persistence.path }}
+            {{- if .Values.replica.externalMaster.enabled }}
+            - name:  VALKEY_EXTERNAL_MASTER_HOST
+              value: {{ .Values.replica.externalMaster.host | quote }}
+            - name:  VALKEY_EXTERNAL_MASTER_PORT
+              value: {{ .Values.replica.externalMaster.port | quote }}
+            {{- end }}
+            {{- if .Values.replica.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.replica.extraEnvVarsCM .Values.replica.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.replica.extraEnvVarsCM }}
+            - configMapRef:
+              name: {{ .Values.replica.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.replica.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.replica.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: valkey
+              containerPort: {{ .Values.replica.containerPorts.valkey }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.replica.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.replica.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.replica.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.replica.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.replica.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.replica.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.replica.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.replica.livenessProbe.failureThreshold }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_liveness_local.sh {{ .Values.replica.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.replica.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.replica.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.replica.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.replica.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.replica.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.replica.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.replica.readinessProbe.failureThreshold }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_readiness_local.sh {{ .Values.replica.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.replica.resources }}
+          resources: {{- toYaml .Values.replica.resources | nindent 12 }}
+          {{- else if ne .Values.replica.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.replica.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: start-scripts
+              mountPath: /opt/bitnami/scripts/start-scripts
+            - name: health
+              mountPath: /health
+            - name: sentinel-data
+              mountPath: /opt/bitnami/valkey-sentinel/etc
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: valkey-password
+              mountPath: /opt/bitnami/valkey/secrets/
+            {{- end }}
+            - name: valkey-data
+              mountPath: {{ .Values.replica.persistence.path }}
+              {{- if .Values.replica.persistence.subPath }}
+              subPath: {{ .Values.replica.persistence.subPath }}
+              {{- else if .Values.replica.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.replica.persistence.subPathExpr }}
+              {{- end }}
+            - name: config
+              mountPath: /opt/bitnami/valkey/mounted-etc
+            - name: empty-dir
+              mountPath: /opt/bitnami/valkey/etc
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.tls.enabled }}
+            - name: valkey-certificates
+              mountPath: /opt/bitnami/valkey/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.replica.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+        - name: sentinel
+          image: {{ template "valkey.sentinel.image" . }}
+          imagePullPolicy: {{ .Values.sentinel.image.pullPolicy | quote }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.sentinel.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.lifecycleHooks "context" $) | nindent 12 }}
+          {{- else }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /opt/bitnami/scripts/start-scripts/prestop-sentinel.sh
+          {{- end }}
+          {{- end }}
+          {{- if .Values.sentinel.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.sentinel.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -c
+            - /opt/bitnami/scripts/start-scripts/start-sentinel.sh
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.sentinel.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.auth.enabled }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: VALKEY_PASSWORD_FILE
+              value: "/opt/bitnami/valkey/secrets/valkey-password"
+            {{- else }}
+            - name: VALKEY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "valkey.secretName" . }}
+                  key: {{ template "valkey.secretPasswordKey" . }}
+            {{- end }}
+            {{- else }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            {{- end }}
+            - name: VALKEY_SENTINEL_TLS_ENABLED
+              value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
+            {{- if .Values.tls.enabled }}
+            - name: VALKEY_SENTINEL_TLS_PORT_NUMBER
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            - name:  VALKEY_SENTINEL_TLS_AUTH_CLIENTS
+              value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
+            - name:  VALKEY_SENTINEL_TLS_CERT_FILE
+              value: {{ template "valkey.tlsCert" . }}
+            - name:  VALKEY_SENTINEL_TLS_KEY_FILE
+              value: {{ template "valkey.tlsCertKey" . }}
+            - name:  VALKEY_SENTINEL_TLS_CA_FILE
+              value: {{ template "valkey.tlsCACert" . }}
+            {{- if .Values.tls.dhParamsFilename }}
+            - name:  VALKEY_SENTINEL_TLS_DH_PARAMS_FILE
+              value: {{ template "valkey.tlsDHParams" . }}
+            {{- end }}
+            {{- else }}
+            - name: VALKEY_SENTINEL_PORT
+              value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.externalMaster.enabled }}
+            - name:  VALKEY_EXTERNAL_MASTER_HOST
+              value: {{ .Values.sentinel.externalMaster.host | quote }}
+            - name:  VALKEY_EXTERNAL_MASTER_PORT
+              value: {{ .Values.sentinel.externalMaster.port | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.sentinel.extraEnvVarsCM .Values.sentinel.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.sentinel.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ .Values.sentinel.extraEnvVarsCM }}
+            {{- end }}
+            {{- if .Values.sentinel.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ .Values.sentinel.extraEnvVarsSecret }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: valkey-sentinel
+              containerPort: {{ .Values.sentinel.containerPorts.sentinel }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.sentinel.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.sentinel.startupProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.sentinel.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.livenessProbe.enabled }}
+          livenessProbe:
+            initialDelaySeconds: {{ .Values.sentinel.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sentinel.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sentinel.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sentinel.livenessProbe.failureThreshold }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_sentinel.sh {{ .Values.sentinel.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.sentinel.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.sentinel.readinessProbe.enabled }}
+          readinessProbe:
+            initialDelaySeconds: {{ .Values.sentinel.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sentinel.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sentinel.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.sentinel.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.sentinel.readinessProbe.failureThreshold }}
+            exec:
+              command:
+                - sh
+                - -c
+                - /health/ping_sentinel.sh {{ .Values.sentinel.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.sentinel.resources }}
+          resources: {{- toYaml .Values.sentinel.resources | nindent 12 }}
+          {{- else if ne .Values.sentinel.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sentinel.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: start-scripts
+              mountPath: /opt/bitnami/scripts/start-scripts
+            - name: health
+              mountPath: /health
+            {{- if .Values.sentinel.service.createMaster}}
+            - name: kubectl-shared
+              mountPath: /etc/shared
+            {{- end }}
+            - name: sentinel-data
+              mountPath: /opt/bitnami/valkey-sentinel/etc
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: valkey-password
+              mountPath: /opt/bitnami/valkey/secrets/
+            {{- end }}
+            - name: valkey-data
+              mountPath: {{ .Values.replica.persistence.path }}
+              {{- if .Values.replica.persistence.subPath }}
+              subPath: {{ .Values.replica.persistence.subPath }}
+              {{- else if .Values.replica.persistence.subPathExpr }}
+              subPathExpr: {{ .Values.replica.persistence.subPathExpr }}
+              {{- end }}
+            - name: config
+              mountPath: /opt/bitnami/valkey-sentinel/mounted-etc
+            {{- if .Values.tls.enabled }}
+            - name: valkey-certificates
+              mountPath: /opt/bitnami/valkey/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.sentinel.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: {{ template "valkey.metrics.image" . }}
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+            - -c
+            - |
+              if [[ -f '/secrets/valkey-password' ]]; then
+                  export VALKEY_PASSWORD=$(cat /secrets/valkey-password)
+              fi
+              redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: VALKEY_ALIAS
+              value: {{ template "common.names.fullname" . }}
+            - name: VALKEY_EXPORTER_WEB_LISTEN_ADDRESS
+              value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
+            {{- if .Values.auth.enabled }}
+            - name: VALKEY_USER
+              value: default
+            {{- if (not .Values.auth.usePasswordFiles) }}
+            - name: VALKEY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "valkey.secretName" . }}
+                  key: {{ template "valkey.secretPasswordKey" . }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: VALKEY_ADDR
+              value: valkeys://{{ .Values.metrics.valkeyTargetHost }}:{{ .Values.replica.containerPorts.valkey }}
+            {{- if .Values.tls.authClients }}
+            - name: VALKEY_EXPORTER_TLS_CLIENT_KEY_FILE
+              value: {{ template "valkey.tlsCertKey" . }}
+            - name: VALKEY_EXPORTER_TLS_CLIENT_CERT_FILE
+              value: {{ template "valkey.tlsCert" . }}
+            {{- end }}
+            - name: VALKEY_EXPORTER_TLS_CA_CERT_FILE
+              value: {{ template "valkey.tlsCACert" . }}
+            {{- end }}
+            {{- if .Values.metrics.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metrics.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: metrics
+          {{- end }}
+          {{- end }}
+          {{- if .Values.metrics.resources }}
+          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          {{- else if ne .Values.metrics.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: valkey-password
+              mountPath: /secrets/
+            {{- end }}
+            {{- if .Values.tls.enabled }}
+            - name: valkey-certificates
+              mountPath: /opt/bitnami/valkey/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.metrics.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.sentinel.service.createMaster }}
+        - name: kubectl-shared
+          image: {{ template "valkey.kubectl.image" . }}
+          imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
+          command: {{- toYaml .Values.kubectl.command | nindent 12 }}
+          {{- if .Values.kubectl.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.kubectl.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: kubectl-shared
+              mountPath: /etc/shared
+            - name: kubectl-scripts
+              mountPath: /opt/bitnami/scripts/kubectl-scripts
+          {{- if .Values.kubectl.resources }}
+          resources: {{- toYaml .Values.kubectl.resources | nindent 12 }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.replica.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.replica.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: start-scripts
+          configMap:
+            name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        - name: health
+          configMap:
+            name: {{ printf "%s-health" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        {{- if .Values.sentinel.service.createMaster}}
+        - name: kubectl-shared
+          emptyDir: {}
+        - name: kubectl-scripts
+          configMap:
+            name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
+            defaultMode: 0755
+        {{- end }}
+        {{- if .Values.auth.usePasswordFiles }}
+        - name: valkey-password
+          {{ if .Values.auth.usePasswordFileFromSecret }}
+          secret:
+            secretName: {{ template "valkey.secretName" . }}
+            items:
+            - key: {{ template "valkey.secretPasswordKey" . }}
+              path: valkey-password
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- end }}
+        - name: config
+          configMap:
+            name: {{ include "valkey.configmapName" . }}
+        {{- if not .Values.sentinel.persistence.enabled }}
+        - name: sentinel-data
+          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.sentinel.persistence.medium }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- end }}
+        - name: empty-dir
+          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.sentinel.persistence.medium }}
+            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.sentinel.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        {{- if .Values.replica.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sentinel.extraVolumes }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: valkey-certificates
+          secret:
+            secretName: {{ include "valkey.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+  {{- if not .Values.replica.persistence.enabled }}
+        - name: valkey-data
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
+          emptyDir:
+            {{- if .Values.replica.persistence.medium }}
+            medium: {{ .Values.replica.persistence.medium | quote }}
+            {{- end }}
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+  {{- else if .Values.replica.persistence.existingClaim }}
+        - name: valkey-data
+          persistentVolumeClaim:
+            claimName: {{ printf "%s" (tpl .Values.replica.persistence.existingClaim .) }}
+  {{- else }}
+  {{- if .Values.sentinel.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.sentinel.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.sentinel.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: valkey-data
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+          app.kubernetes.io/component: node
+        {{- if .Values.replica.persistence.annotations }}
+        annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.replica.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.replica.persistence.size | quote }}
+        {{- if .Values.replica.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" ( dict "value" .Values.replica.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
+    {{- if .Values.sentinel.persistence.enabled }}
+    - metadata:
+        name: sentinel-data
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.persistence.labels .Values.commonLabels ) "context" . ) }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
+          app.kubernetes.io/component: node
+        {{- if .Values.sentinel.persistence.annotations }}
+        annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.sentinel.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.sentinel.persistence.size | quote }}
+        {{- if .Values.sentinel.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.sentinel.persistence.dataSource }}
+        dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.sentinel.persistence.dataSource "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.sentinel.persistence "global" .Values.global) | nindent 8 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

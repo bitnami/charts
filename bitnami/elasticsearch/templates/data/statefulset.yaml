@@ -134,7 +134,7 @@ spec:
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.data.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.data.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.data.resources }}
           resources: {{- toYaml .Values.data.resources | nindent 12 }}

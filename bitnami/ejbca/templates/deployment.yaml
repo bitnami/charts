@@ -207,8 +207,7 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /ejbca/doc
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}

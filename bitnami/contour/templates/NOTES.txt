@@ -39,3 +39,4 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- include "common.warnings.rollingTag" .Values.contour.image }}
 {{- include "common.warnings.rollingTag" .Values.envoy.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "contour" "defaultBackend" "envoy" "envoy.shutdownManager") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.contour.image .Values.envoy.image .Values.defaultBackend.image) "context" $) }}

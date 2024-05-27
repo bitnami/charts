@@ -215,8 +215,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.backend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/users/me
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.backend.customReadinessProbe }}
@@ -224,7 +223,7 @@ spec:
           {{- else if .Values.backend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- if .Values.backend.customStartupProbe }}
@@ -232,7 +231,7 @@ spec:
           {{- else if .Values.backend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- end }}

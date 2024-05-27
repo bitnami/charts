@@ -57,3 +57,4 @@ Credentials:
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "clickhouse.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.zookeeper.image) "context" $) }}

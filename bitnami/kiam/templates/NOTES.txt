@@ -132,3 +132,4 @@ In order to associate your pods with AWS IAM roles, follow the steps below:
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "kiam.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "agent" "server") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

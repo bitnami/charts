@@ -86,3 +86,4 @@ To access Kubeapps from outside your K8s cluster, follow the steps below:
 {{- include "kubeapps.checkRollingTags" . }}
 {{- include "kubeapps.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "apprepository" "authProxy" "dashboard" "frontend" "kubeappsapis" "ociCatalog" "pinnipedProxy" "postgresql") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.frontend.image .Values.dashboard.image .Values.apprepository.image .Values.apprepository.syncImage .Values.authProxy.image .Values.pinnipedProxy.image .Values.kubeappsapis.image .Values.ociCatalog.image) "context" $) }}

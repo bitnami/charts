@@ -154,8 +154,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: tcp-ssh
+            exec:
+              command:
+                - pgrep
+                - -f
+                - sshd
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}

@@ -214,8 +214,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.hub.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.hub.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.hub.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: {{ .Values.hub.baseUrl | trimSuffix "/" }}/hub/health
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.hub.customReadinessProbe }}

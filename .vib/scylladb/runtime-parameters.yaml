@@ -1,0 +1,28 @@
+dbUser:
+  user: test_scylladb
+  password: ComplicatedPassword123!4
+replicaCount: 2
+cluster:
+  numTokens: 256
+containerPorts:
+  intra: 7001
+  tls: 7002
+  jmx: 7198
+  cql: 9043
+  cqlShard: 9099
+  api: 12394
+persistence:
+  mountPath: /bitnami/scylladb
+service:
+  ports:
+    cql: 80
+  type: LoadBalancer
+serviceAccount:
+  create: true
+automountServiceAccountToken: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002

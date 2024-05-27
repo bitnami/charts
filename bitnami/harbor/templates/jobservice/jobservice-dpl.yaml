@@ -194,10 +194,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.jobservice.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/stats
+            tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
           {{- end }}
           {{- if .Values.jobservice.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}

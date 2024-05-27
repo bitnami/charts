@@ -1,0 +1,674 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.statefulsetLabels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: scylladb
+    app.kubernetes.io/component: scylladb
+  {{- if or .Values.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  podManagementPolicy: {{ .Values.podManagementPolicy }}
+  {{- if not .Values.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: scylladb
+        app.kubernetes.io/component: scylladb
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
+      annotations:
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.metrics.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- include "scylladb.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      {{- if .Values.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ template "scylladb.serviceAccountName" . }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+      {{- if or .Values.initContainers (and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.sysctl.enabled }}
+      initContainers:
+        {{- if and .Values.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "scylladb.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              {{- if .Values.persistence.enabled }}
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+              chown `id -u`:`id -G | cut -d " " -f2` {{ .Values.persistence.mountPath }}
+              {{- else }}
+              chown {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
+              {{- end }}
+              mkdir -p {{ .Values.persistence.mountPath }}/data
+              chmod 700 {{ .Values.persistence.mountPath }}/data
+              {{- if .Values.persistence.commitLog.mountPath }}
+              mkdir -p {{ .Values.persistence.commitLog.mountPath }}/commitlog
+              chmod 700 {{ .Values.persistence.commitLog.mountPath }}/commitlog
+              {{- end }}
+              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+              {{- else }}
+                xargs chown -R {{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}
+              {{- end }}
+              {{- end }}
+          {{- end }}
+          {{- if eq ( toString ( .Values.volumePermissions.securityContext.runAsUser )) "auto" }}
+          securityContext: {{- omit .Values.volumePermissions.securityContext "runAsUser" | toYaml | nindent 12 }}
+          {{- else }}
+          securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.persistence.commitLog.mountPath }}
+            - name: commitlog
+              mountPath: {{ .Values.persistence.commitLog.mountPath }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.sysctl.enabled }}
+        - name: init-sysctl
+          image: {{ include "scylladb.sysctl.image" . }}
+          imagePullPolicy: {{ default "" .Values.sysctl.image.pullPolicy | quote }}
+          securityContext:
+            privileged: true
+            runAsUser: 0
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              {{- range $key, $val := .Values.sysctl.sysctls }}
+              echo "Applying sysctl {{ $key }}={{ $val }}"
+              sysctl -w {{ $key }}={{ $val }}
+              {{- end }}
+          {{- if .Values.sysctl.resources }}
+          resources: {{- toYaml .Values.sysctl.resources | nindent 12 }}
+          {{- else if ne .Values.sysctl.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.sysctl.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: scylladb
+          image: {{ include "scylladb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - bash
+            - -ec
+            - |
+              # Node 0 is the password seeder
+              if [[ $POD_NAME =~ (.*)-0$ ]]; then
+                  echo "Setting node as password seeder"
+                  export SCYLLADB_PASSWORD_SEEDER=yes
+              else
+                  # Only node 0 will execute the startup initdb scripts
+                  export SCYLLADB_IGNORE_INITDB_SCRIPTS=1
+              fi
+              {{- if .Values.service.internal.enabled }}
+              export SCYLLADB_BROADCAST_ADDRESS=${POD_NAME}-internal
+              {{- end }}
+              /opt/bitnami/scripts/scylladb/entrypoint.sh /opt/bitnami/scripts/scylladb/run.sh
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: SCYLLADB_CLUSTER_NAME
+              value: {{ .Values.cluster.name }}
+            - name: SCYLLADB_SEEDS
+              value: {{ (include "scylladb.seeds" .) | quote }}
+            - name: SCYLLADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "common.secrets.name" (dict "existingSecret" .Values.dbUser.existingSecret "context" $) }}
+                  key: {{ include "common.secrets.key" (dict "existingSecret" .Values.dbUser.existingSecret "key" "scylladb-password") }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: SCYLLADB_USER
+              value: {{ .Values.dbUser.user | quote }}
+            - name: SCYLLADB_NUM_TOKENS
+              value: {{ .Values.cluster.numTokens | quote }}
+            - name: SCYLLADB_DATACENTER
+              value: {{ .Values.cluster.datacenter | quote }}
+            - name: SCYLLADB_ENDPOINT_SNITCH
+              value: {{ .Values.cluster.endpointSnitch | quote }}
+            {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
+            - name: SCYLLADB_SSL_CERT_FILE
+              value: {{ include "scylladb.tlsCert" . | quote }}
+            - name: SCYLLADB_SSL_KEY_FILE
+              value: {{ include "scylladb.tlsCertKey" . | quote }}
+            {{- if (include "scylladb.tlsCACert" .) }}
+            - name: SCYLLADB_SSL_CA_FILE
+              value: {{ include "scylladb.tlsCACert" . | quote }}
+            {{- end }}
+            {{- end }}
+            {{- if ne "none" (include "scylladb.internode.tlsEncryption" .) }}
+            - name: SCYLLADB_INTERNODE_ENCRYPTION
+              value: {{ (include "scylladb.internode.tlsEncryption" .) | quote }}
+            {{- end }}
+            {{- if .Values.tls.clientEncryption }}
+            - name: SCYLLADB_CLIENT_ENCRYPTION
+              value: "true"
+            {{- end }}
+            - name: SCYLLADB_RACK
+              value: {{ .Values.cluster.rack }}
+            {{- if or .Values.jvm.maxHeapSize (include "scylladb.memory.getLimitInM" .) }}
+            - name: MAX_HEAP_SIZE
+              value: {{ include "scylladb.memory.calculateMaxHeapSize" . | quote }}
+            {{- end }}
+            {{- if or .Values.jvm.newHeapSize (include "scylladb.memory.getLimitInM" .) }}
+            - name: HEAP_NEWSIZE
+              value: {{ include "scylladb.memory.calculateNewHeapSize" . | quote }}
+            {{- end }}
+            {{- if .Values.jvm.extraOpts }}
+            - name: JVM_EXTRA_OPTS
+              value: {{ .Values.jvm.extraOpts | quote }}
+            {{- end }}
+            {{- if .Values.cluster.enableUDF }}
+            - name: SCYLLADB_ENABLE_USER_DEFINED_FUNCTIONS
+              value: {{ .Values.cluster.enableUDF | quote }}
+            {{- end }}
+            - name: SCYLLADB_TRANSPORT_PORT_NUMBER
+              value: {{ .Values.containerPorts.intra | quote }}
+            - name: SCYLLADB_JMX_PORT_NUMBER
+              value: {{ .Values.containerPorts.jmx | quote }}
+            - name: SCYLLADB_CQL_PORT_NUMBER
+              value: {{ .Values.containerPorts.cql | quote }}
+            - name: SCYLLADB_API_PORT_NUMBER
+              value: {{ .Values.containerPorts.api | quote }}
+            - name: SCYLLADB_CQL_SHARD_PORT_NUMBER
+              value: {{ .Values.containerPorts.cqlShard | quote }}
+            - name: SCYLLADB_PROMETHEUS_PORT_NUMBER
+              value: {{ ternary .Values.containerPorts.metrics "0" .Values.metrics.enabled | quote }}
+            {{- if .Values.persistence.commitLog.mountPath }}
+            - name: SCYLLADB_COMMITLOG_DIR
+              value: {{ .Values.persistence.commitLog.mountPath | quote }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: cql
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            {{- if .Values.jmxProxy.enabled }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool info | grep "Native Transport active: true"
+            {{- else }}
+            tcpSocket:
+              port: cql
+            {{- end }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.startupProbe.enabled }}
+          startupProbe:
+            {{- if .Values.jmxProxy.enabled }}
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool info -p {{ .Values.containerPorts.jmx }} | grep "Native Transport active: true"
+            {{- else }}
+            tcpSocket:
+              port: cql
+            {{- end }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if and (not .Values.lifecycleHooks) .Values.jmxProxy.enabled }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -ec
+                  # After stopping the node, create a flag file so the JMX Proxy can stop
+                  {{- if not .Values.persistence.enabled }}
+                  - nodetool decommission -p {{ .Values.containerPorts.jmx }} && touch /tmp/.node_decommissioned
+                  {{- else }}
+                  - nodetool drain -p {{ .Values.containerPorts.jmx }} && touch /tmp/.node_decommissioned
+                  {{- end }}
+          {{- else if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          ports:
+            - name: intra
+              containerPort: {{ .Values.containerPorts.intra }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.intra }}
+              {{- else if .Values.hostPorts.intra }}
+              hostPort: {{ .Values.hostPorts.intra }}
+              {{- end }}
+            - name: jmx
+              containerPort: {{ .Values.containerPorts.jmx }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.jmx }}
+              {{- else if .Values.hostPorts.jmx }}
+              hostPort: {{ .Values.hostPorts.jmx }}
+              {{- end }}
+            {{- if (ne (include "scylladb.internode.tlsEncryption" .) "none") }}
+            - name: tls
+              containerPort: {{ .Values.containerPorts.tls }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.tls }}
+              {{- else if .Values.hostPorts.tls }}
+              hostPort: {{ .Values.hostPorts.tls }}
+              {{- end }}
+            {{- end }}
+            - name: cql
+              containerPort: {{ .Values.containerPorts.cql }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.cql }}
+              {{- else if .Values.hostPorts.cql }}
+              hostPort: {{ .Values.hostPorts.cql }}
+              {{- end }}
+            - name: cql-shard
+              containerPort: {{ .Values.containerPorts.cqlShard }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.cqlShard }}
+              {{- else if .Values.hostPorts.cqlShard }}
+              hostPort: {{ .Values.hostPorts.cqlShard }}
+              {{- end }}
+            - name: api
+              containerPort: {{ .Values.containerPorts.api }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.api }}
+              {{- else if .Values.hostPorts.api }}
+              hostPort: {{ .Values.hostPorts.api }}
+              {{- end }}
+            - name: metrics
+              containerPort: {{ .Values.containerPorts.metrics }}
+              {{- if .Values.hostNetwork }}
+              hostPort: {{ .Values.containerPorts.metrics }}
+              {{- else if .Values.hostPorts.metrics }}
+              hostPort: {{ .Values.hostPorts.metrics }}
+              {{- end }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.persistence.commitLog.mountPath }}
+            - name: commitlog
+              mountPath: {{ .Values.persistence.commitLog.mountPath }}
+            {{- end }}
+            {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
+            - name: cert
+              mountPath: /bitnami/scylladb/cert
+            - name: ca-cert
+              mountPath: /bitnami/scylladb/ca
+            {{- end }}
+            {{- if .Values.initDBConfigMap }}
+            - name: init-db-cm
+              mountPath: /docker-entrypoint-initdb.d/configmap
+            {{- end }}
+            {{- if .Values.initDBSecret }}
+            - name: init-db-secret
+              mountPath: /docker-entrypoint-initdb.d/secret
+            {{- end }}
+            {{ if .Values.existingConfiguration }}
+            - name: configurations
+              mountPath: {{ printf "%s/etc" .Values.persistence.mountPath }}
+            {{- end }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/scylladb/etc
+              subPath: app-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/scylladb/tmp
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/scylladb/logs
+              subPath: app-logs-dir
+            - name: empty-dir
+              mountPath: /.cassandra
+              subPath: app-cqlsh-tmp-dir
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.jmxProxy.enabled }}
+        - name: scylladb-jmx-proxy
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.jmxProxy.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /opt/bitnami/scylladb/supervisor/scylla-jmx.sh
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.jmxProxy.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.args "context" $) | nindent 12 }}
+          {{- end }}
+          image: {{ include "scylladb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.jmxProxy.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jmxProxy.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if or .Values.jvm.maxHeapSize (include "scylladb.memory.getLimitInM" .) }}
+            - name: MAX_HEAP_SIZE
+              value: {{ include "scylladb.memory.calculateMaxHeapSize" . | quote }}
+            {{- end }}
+            {{- if or .Values.jvm.newHeapSize (include "scylladb.memory.getLimitInM" .) }}
+            - name: HEAP_NEWSIZE
+              value: {{ include "scylladb.memory.calculateNewHeapSize" . | quote }}
+            {{- end }}
+            {{- if .Values.jvm.extraOpts }}
+            - name: JVM_EXTRA_OPTS
+              value: {{ .Values.jvm.extraOpts | quote }}
+            {{- end }}
+            - name: SCYLLA_JMX_PORT
+              value: {{ printf "-jp %d" (int .Values.containerPorts.jmx) | quote }}
+            - name: SCYLLA_API_PORT
+              value: {{ printf "-p %d" (int .Values.containerPorts.api) | quote }}
+            {{- if .Values.jmxProxy.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.jmxProxy.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.jmxProxy.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.jmxProxy.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.jmxProxy.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.jmxProxy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jmxProxy.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - -f
+                - scylla-jmx
+            initialDelaySeconds: {{ .Values.jmxProxy.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.jmxProxy.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jmxProxy.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.jmxProxy.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.jmxProxy.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.jmxProxy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jmxProxy.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool info -p {{ .Values.containerPorts.jmx }} | grep "Native Transport active: true"
+            initialDelaySeconds: {{ .Values.jmxProxy.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.jmxProxy.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jmxProxy.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.jmxProxy.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.jmxProxy.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- if .Values.jmxProxy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jmxProxy.startupProbe.enabled }}
+          startupProbe:
+            exec:
+              command:
+                - pgrep
+                - scylla-jmx
+            initialDelaySeconds: {{ .Values.jmxProxy.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.jmxProxy.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.jmxProxy.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.jmxProxy.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.jmxProxy.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- if not .Values.jmxProxy.lifecycleHooks }}
+          lifecycle:
+            # Wait for the scylladb decommission to take place before stopping the JMX proxy
+            preStop:
+              exec:
+                command:
+                  - bash
+                  - -ec
+                  - until [[ -f /tmp/.node_decommissioned ]]; do sleep 1; done && rm /tmp/.node_decommissioned
+          {{- else if .Values.jmxProxy.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.jmxProxy.extraContainerPorts }}
+          ports: {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.extraContainerPorts "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.jmxProxy.resources }}
+          resources: {{ toYaml .Values.jmxProxy.resources | nindent 12 }}
+          {{- else if ne .Values.jmxProxy.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.jmxProxy.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.jmxProxy.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.jmxProxy.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if (include "scylladb.tlsEncryptionEnabled" .) }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "scylladb.tlsCASecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: cert
+          secret:
+            secretName: {{ include "scylladb.tlsSecretName" . }}
+            defaultMode: 256
+        {{- end }}
+        {{- if .Values.existingConfiguration }}
+        - name: configurations
+          configMap:
+            name: {{ tpl .Values.existingConfiguration $ }}
+        {{- end }}
+        - name: empty-dir
+          emptyDir: {}
+        {{- if .Values.initDBConfigMap }}
+        - name: init-db-cm
+          configMap:
+            name: {{ tpl .Values.initDBConfigMap $ }}
+        {{- end }}
+        {{- if .Values.initDBSecret }}
+        - name: init-db-secret
+          secret:
+            secretName: {{ tpl .Values.initDBSecret $ }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl .Values.persistence.existingClaim $ }}
+  {{- else if not .Values.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- if .Values.persistence.annotations }}
+        annotations: {{- toYaml .Values.persistence.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+          {{- range .Values.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size | quote }}
+    {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+    {{- if .Values.persistence.commitLog.mountPath }}
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: commitlog
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- if .Values.persistence.commitLog.annotations }}
+        annotations: {{- toYaml .Values.persistence.commitLog.annotations | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+          {{- range .Values.persistence.commitLog.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.commitLog.size | quote }}
+      {{- include "common.storage.class" (dict "persistence" .Values.persistence.commitLog "global" .Values.global) | nindent 8 }}
+    {{- end }}
+  {{- end }}

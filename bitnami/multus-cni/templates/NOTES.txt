@@ -30,3 +30,4 @@ IMPORTANT: Please ensure that {{ .Values.hostCNIBinDir }} and {{ .Values.hostCNI
 
 {{ include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

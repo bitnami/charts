@@ -25,4 +25,8 @@ spec:
     - ports:
         - port: 5432
           protocol: TCP
+        - port: 53
+          protocol: TCP
+        - port: 53
+          protocol: UDP
 {{- end }}

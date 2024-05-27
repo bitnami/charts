@@ -117,3 +117,4 @@ WARNING: Review values for the following password in the command, if they are co
   {{- end -}}
 {{- end -}}
 {{- include "common.warnings.resources" (dict "sections" (list "deployer" "metrics" "server" "skipper" "waitForBackends") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.server.image .Values.server.composedTaskRunner.image .Values.skipper.image .Values.metrics.image .Values.waitForBackends.image .Values.mariadb.image) "context" $) }}

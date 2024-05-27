@@ -202,8 +202,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.discourse.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /srv/status
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.discourse.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.discourse.livenessProbe.periodSeconds }}
@@ -310,7 +309,10 @@ spec:
           {{- else if .Values.sidekiq.livenessProbe.enabled }}
           livenessProbe:
             exec:
-              command: ["/bin/sh", "-c", "pgrep -f ^sidekiq"]
+              command:
+                - pgreg
+                - -f
+                - sidekiq
             initialDelaySeconds: {{ .Values.sidekiq.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.sidekiq.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.sidekiq.livenessProbe.timeoutSeconds }}

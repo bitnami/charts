@@ -63,3 +63,4 @@ To connect to your database from outside the cluster execute the following comma
 {{- include "mongodb-sharded.validateValues" . -}}
 {{- include "mongodb-sharded.checkRollingTags" . -}}
 {{- include "common.warnings.resources" (dict "sections" (list "configsvr" "metrics" "mongos" "shardsvr.arbiter" "shardsvr.dataNode" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

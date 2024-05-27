@@ -95,8 +95,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.bots.slack.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.notifications.bots.slack.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              port: metrics
+            tcpSocket:
               path: /metrics
             initialDelaySeconds: {{ .Values.notifications.bots.slack.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.notifications.bots.slack.livenessProbe.periodSeconds }}

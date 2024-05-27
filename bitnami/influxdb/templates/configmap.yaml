@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  influxdb.conf: |-
+  config.yaml: |-
     # User-supplied configuration:
     {{ include "common.tplvalues.render" (dict "value" .Values.influxdb.configuration "context" $) | nindent 4 }}
 {{- end }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: whereabouts
-      image: docker.io/bitnami/whereabouts:0.7.0-debian-12-r0
+      image: docker.io/bitnami/whereabouts:0.7.0-debian-12-r3
 apiVersion: v2
 appVersion: 0.7.0
 dependencies:
@@ -24,9 +24,9 @@ keywords:
 - kubernetes
 - networking
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: whereabouts
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/whereabouts
-version: 1.0.3
+version: 1.1.0

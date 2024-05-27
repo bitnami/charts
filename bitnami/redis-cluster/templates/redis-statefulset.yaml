@@ -480,6 +480,9 @@ spec:
     - metadata:
         name: redis-data
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+        {{- if .Values.persistence.labels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

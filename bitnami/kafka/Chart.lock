@@ -1,9 +1,9 @@
 dependencies:
 - name: zookeeper
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.2.0
+  version: 13.4.0
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.19.1
-digest: sha256:67d6e7ec04e67cd2dca962ac645455ee4e4dc1c314d7927bd09d8a853840d933
-generated: "2024-04-26T06:16:00.063266311Z"
+  version: 2.19.3
+digest: sha256:d4cf95ede3f4616d73105423fee2b123c0b9afb19bf552cef106e46152e113a7
+generated: "2024-05-24T11:05:47.149497283Z"

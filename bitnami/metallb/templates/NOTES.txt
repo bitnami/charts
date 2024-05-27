@@ -50,3 +50,4 @@ If it is missing create it with:
 {{- end }}
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "controller" "speaker") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controller.image .Values.speaker.image .Values.speaker.frr.image) "context" $) }}

@@ -119,3 +119,4 @@ host. To configure MediaWiki to use and external database host:
 
 {{ include "mediawiki.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image) "context" $) }}

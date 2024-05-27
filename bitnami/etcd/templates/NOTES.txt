@@ -45,7 +45,7 @@ etcd can be accessed via port {{ coalesce .Values.service.ports.client .Values.s
 
 To create a pod that you can use as a etcd client run the following command:
 
-    kubectl run {{ template "common.names.fullname" . }}-client --restart='Never' --image {{ template "etcd.image" . }}{{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }} --env ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 -d){{- end }} --env ETCDCTL_ENDPOINTS="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}" --namespace {{ .Release.Namespace }} --command -- sleep infinity
+    kubectl run {{ template "common.names.fullname" . }}-client --restart='Never' --image {{ template "etcd.image" . }}{{- if or .Values.auth.rbac.create .Values.auth.rbac.enabled }} --env ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{{ if .Values.auth.rbac.existingSecret }}{.data.{{ .Values.auth.rbac.existingSecretPasswordKey }}}{{ else }}{.data.etcd-root-password}{{ end }}" | base64 -d){{- end }} --env ETCDCTL_ENDPOINTS="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}" --namespace {{ .Release.Namespace }} --command -- sleep infinity
 
 Then, you can set/get a key using the commands below:
 
@@ -80,7 +80,7 @@ To connect to your etcd server from outside the cluster execute the following co
 
  * As rbac is enabled you should add the flag `--user root:$ETCD_ROOT_PASSWORD` to the etcdctl commands. Use the command below to export the password:
 
-    export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.etcd-root-password}" | base64 -d)
+    export ETCD_ROOT_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ if .Values.auth.rbac.existingSecret }}{{ .Values.auth.rbac.existingSecret }}{{ else }}{{ template "common.names.fullname" . }}{{ end }} -o jsonpath="{{ if .Values.auth.rbac.existingSecret }}{.data.{{ .Values.auth.rbac.existingSecretPasswordKey }}}{{ else }}{.data.etcd-root-password}{{ end }}" | base64 -d)
 
 {{- end }}
 {{- if .Values.auth.client.secureTransport }}
@@ -118,3 +118,4 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- $requiredEtcdPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredEtcdPasswordErrors) "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "disasterRecovery.cronjob" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

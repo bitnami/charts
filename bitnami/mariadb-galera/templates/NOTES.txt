@@ -100,3 +100,4 @@ To upgrade this helm chart:
 {{- $requiredRedisPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredRedisPasswordErrors) "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "metrics" "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image) "context" $) }}

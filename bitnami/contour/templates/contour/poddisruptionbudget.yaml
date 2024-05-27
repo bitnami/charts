@@ -1,0 +1,30 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+{{- $replicaCount := int .Values.contour.replicaCount }}
+{{- if and .Values.contour.enabled .Values.contour.pdb.create  (gt $replicaCount 1) }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.contour.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: contour
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.contour.pdb.minAvailable }}
+  minAvailable: {{ .Values.contour.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.contour.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.contour.pdb.maxUnavailable }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.contour.podLabels .Values.commonLabels ) "context" . ) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: contour
+{{- end }}

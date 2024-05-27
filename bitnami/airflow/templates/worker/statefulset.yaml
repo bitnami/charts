@@ -195,8 +195,13 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.worker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: worker
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  source /opt/bitnami/airflow/venv/bin/activate && \
+                  CONNECTION_CHECK_MAX_COUNT=0 python -m celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d celery@$(hostname)
           {{- end }}
           {{- if .Values.worker.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.worker.customReadinessProbe "context" $) | nindent 12 }}

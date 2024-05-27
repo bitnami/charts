@@ -3,8 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.webdav.replicaCount }}
-{{- if and .Values.filer.enabled .Values.webdav.enabled .Values.webdav.pdb.create (or (gt $replicaCount 1) .Values.webdav.autoscaling.enabled) }}
+{{- if and .Values.filer.enabled .Values.webdav.enabled .Values.webdav.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -19,8 +18,8 @@ spec:
   {{- if .Values.webdav.pdb.minAvailable }}
   minAvailable: {{ .Values.webdav.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.webdav.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.webdav.pdb.maxUnavailable }}
+  {{- if or .Values.webdav.pdb.maxUnavailable (not .Values.webdav.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.webdav.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.webdav.podLabels .Values.commonLabels) "context" .) }}
   selector:

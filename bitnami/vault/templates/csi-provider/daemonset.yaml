@@ -124,8 +124,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.provider.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.csiProvider.provider.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.csiProvider.provider.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /health/ready
+            tcpSocket:
               port: http-health
           {{- end }}
           {{- if .Values.csiProvider.provider.customReadinessProbe }}

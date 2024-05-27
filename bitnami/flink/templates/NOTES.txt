@@ -43,3 +43,4 @@ In order to replicate the container startup scripts execute this command:
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.resources" (dict "sections" (list "jobmanager" "taskmanager") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

@@ -55,9 +55,6 @@ spec:
         {{- if .Values.externalAccess.enabled }}
         - port: {{ .Values.listeners.external.containerPort }}
         {{- end }}
-        {{- if .Values.metrics.kafka.enabled }}
-        - port: {{ .Values.metrics.kafka.containerPorts.metrics }}
-        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

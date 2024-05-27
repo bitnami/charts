@@ -184,7 +184,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.13.0-debian-12-r0
+  tag: 2.14.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -518,11 +518,11 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param master.nameOverride String to partially override opensearch.master.fullname
   ##
@@ -940,11 +940,11 @@ data:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param data.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param data.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `data.pdb.minAvailable` and `data.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param data.nameOverride String to partially override opensearch.data.fullname
   ##
@@ -1359,11 +1359,11 @@ coordinating:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param coordinating.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param coordinating.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `coordinating.pdb.minAvailable` and `coodinating.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param coordinating.nameOverride String to partially override opensearch.coordinating.fullname
   ##
@@ -1741,11 +1741,11 @@ ingest:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param ingest.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param ingest.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ingest.pdb.minAvailable` and `ingest.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param ingest.nameOverride String to partially override opensearch.ingest.fullname
   ##
@@ -2294,7 +2294,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2341,7 +2341,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r18
+  tag: 12-debian-12-r21
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2394,7 +2394,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.12.0-debian-12-r3
+    tag: 2.13.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2583,11 +2583,11 @@ dashboards:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dashboards.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param dashboards.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboards.pdb.minAvailable` and `dashboards.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param dashboards.nameOverride String to partially override opensearch.dashboards.fullname
   ##

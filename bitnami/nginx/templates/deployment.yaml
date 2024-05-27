@@ -80,7 +80,7 @@ spec:
           image: {{ include "nginx.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
@@ -269,8 +269,9 @@ spec:
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled" "path") "context" $) | nindent 12 }}
+            httpGet:
+              path: {{ .Values.readinessProbe.path }}
               port: {{ ternary "https" "http" (and (empty .Values.containerPorts.http) (not (empty .Values.containerPorts.https))) }}
           {{- end }}
           {{- if .Values.customStartupProbe }}

@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: metrics-server
-      image: docker.io/bitnami/metrics-server:0.7.1-debian-12-r3
+      image: docker.io/bitnami/metrics-server:0.7.1-debian-12-r7
 apiVersion: v2
 appVersion: 0.7.1
 dependencies:
@@ -23,9 +23,9 @@ keywords:
 - cluster
 - metrics
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: metrics-server
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
-version: 7.0.3
+version: 7.2.0

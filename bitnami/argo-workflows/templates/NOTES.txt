@@ -61,3 +61,4 @@ Obtain the Argo Workflows access token:
 {{- include "common.warnings.rollingTag" .Values.executor.image }}
 {{- include "argo-workflows.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "controller" "executor" "server") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.server.image .Values.controller.image .Values.executor.image) "context" $) }}

@@ -23,6 +23,7 @@ Cypress.Commands.add(
    host = Cypress.env('host')) => {
      cy.visit('/?#/connect');
      cy.get('[data-cy="address"]').should('be.enabled').clear({force: true}).type(host);
+     cy.get('span.MuiSwitch-root').eq(0).find('input').click();
      cy.get('[data-cy="username"]').should('be.enabled').type(username);
      cy.get('[data-cy="password"]').should('be.enabled').type(`${password}{enter}`);
      cy.contains('Overview');

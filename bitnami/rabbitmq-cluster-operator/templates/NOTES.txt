@@ -49,3 +49,4 @@ RabbitMQ Messaging Topology Operator won't be able to access resources in other 
 {{ include "common.warnings.rollingTag" .Values.credentialUpdaterImage }}
 {{ include "common.warnings.rollingTag" .Values.rabbitmqImage }}
 {{- include "common.warnings.resources" (dict "sections" (list "clusterOperator" "msgTopologyOperator") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.rabbitmqImage .Values.credentialUpdaterImage .Values.clusterOperator.image .Values.msgTopologyOperator.image) "context" $) }}
