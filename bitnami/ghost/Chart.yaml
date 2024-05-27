@@ -17,7 +17,7 @@ dependencies:
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
   - ghost-database
-  version: 10.x.x
+  version: 11.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -40,4 +40,4 @@ maintainers:
 name: ghost
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ghost
-version: 20.1.0
+version: 21.0.0
