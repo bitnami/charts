@@ -290,7 +290,8 @@ spec:
           livenessProbe:
             httpGet:
               port: {{ .Values.containerPorts.client }} 
-              path: /health
+              path: /livez
+              scheme: {{ ternary "HTTPS" "HTTP" .Values.auth.client.secureTransport | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
