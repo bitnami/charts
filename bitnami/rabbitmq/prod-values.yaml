@@ -217,7 +217,7 @@ communityPlugins: ""
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
 ##
-extraPlugins: "rabbitmq_auth_backend_ldap"
+extraPlugins: ""
 
 ## Clustering settings
 ##
