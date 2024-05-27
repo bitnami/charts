@@ -85,7 +85,7 @@ data:
 
                 export AIRFLOW_CONF_FILE=/tmp/airflow.cfg
                 airflow_generate_config # Generate the config file
-                cp /tmp/airflow.cfg /k8s-executor-config/airflow.cfg
+                cp /tmp/airflow.cfg /k8s-executor-conf/airflow.cfg
           env:
             {{- include "airflow.configure.airflow.common" . | nindent 12 }}
             {{- include "airflow.configure.database" . | nindent 12 }}
