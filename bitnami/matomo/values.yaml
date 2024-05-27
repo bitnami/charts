@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -68,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 5.0.3-debian-12-r3
+  tag: 5.0.3-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -408,13 +408,8 @@ startupProbe:
   failureThreshold: 5
   successThreshold: 1
 ## Configure extra options for liveness probe
-## Matomo core exposes / to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
-## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Matomo.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -423,7 +418,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /matomo.php
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -431,7 +425,7 @@ livenessProbe:
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## Matomo core exposes / to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
+## default startup and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
 ## module that alters that route, or an image that does not auto-install Matomo.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -741,7 +735,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -761,7 +755,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -792,7 +786,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r1
+    tag: 1.0.7-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -806,7 +800,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -874,7 +868,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -906,7 +900,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -949,7 +943,7 @@ networkPolicy:
 cronjobs:
   ## DEPRECATED @param cronjobs.enabled Please use cronjobs.taskScheduler.enabled and/or cronjobs.archive.enabled
   ##
-  # enabled: true
+  # enabled: true
   taskScheduler:
     ## @param cronjobs.taskScheduler.enabled Whether to enable scheduled mail-to-task CronJob
     ##
@@ -963,6 +957,14 @@ cronjobs:
     ## @param cronjobs.taskScheduler.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param cronjobs.taskScheduler.nodeSelector Node labels for CronJob pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
+    ## @param cronjobs.taskScheduler.tolerations Tolerations for CronJob pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
     ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1017,11 +1019,11 @@ cronjobs:
 
     ## Persistence using Persistent Volume Claims for the taskScheduler CronJob
     ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-    ## @param cronjobs.taskScheduler.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.taskScheduler.persistence.enabled Enable persistence using Persistent Volume Claims
     ## @param cronjobs.taskScheduler.persistence.existingClaim A manually managed Persistent Volume Claim
     ##
     persistence:
-      enable: true
+      enabled: true
       existingClaim: ""
 
     ## Configure Pods Security Context for the taskScheduler CronJob
@@ -1054,6 +1056,14 @@ cronjobs:
     ## @param cronjobs.archive.affinity Affinity for CronJob pod assignment
     ##
     affinity: {}
+    ## @param cronjobs.archive.tolerations Tolerations for CronJob pod assignment
+    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
+    ## @param cronjobs.archive.nodeSelector Node labels for CronJob pod assignment. Evaluated as a template.
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+    ##
+    nodeSelector: {}
     ## @param cronjobs.archive.command Override default container command (useful when using custom images)
     ##
     command: []
@@ -1111,11 +1121,11 @@ cronjobs:
 
     ## Persistence using Persistent Volume Claims for the archive CronJob
     ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-    ## @param cronjobs.archive.persistence.enable Enable persistence using Persistent Volume Claims
+    ## @param cronjobs.archive.persistence.enabled Enable persistence using Persistent Volume Claims
     ## @param cronjobs.archive.persistence.existingClaim A manually managed Persistent Volume Claim
     ##
     persistence:
-      enable: true
+      enabled: true
       existingClaim: ""
 
     ## Configure Pods Security Context for the archive CronJob

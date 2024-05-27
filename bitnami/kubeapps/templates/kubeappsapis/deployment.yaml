@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -7,7 +7,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ template "kubeapps.kubeappsapis.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.kubeappsapis.image "chart" .Chart ) ) }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -189,8 +189,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.kubeappsapis.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
+            tcpSocket:
+              port: grpc-http
           {{- end }}
           {{- if .Values.kubeappsapis.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
@@ -289,8 +289,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ociCatalog.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command: ["grpc_health_probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
+            tcpSocket:
+              port: grpc-http
           {{- end }}
           {{- if .Values.ociCatalog.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customReadinessProbe "context" $) | nindent 12 }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -86,7 +86,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 6.5.5-debian-12-r0
+    tag: 7.0.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -185,6 +185,10 @@ server:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
   ##
   masterKey: ""
+  ## @param server.masterKeyIps Parse server Master setting an allowed IP address
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#configuration
+  ##
+  masterKeyIps: "0.0.0.0/0"
   ## @param server.extraEnvVars An array to add extra env vars
   ## For example:
   ## extraEnvVars:
@@ -452,7 +456,7 @@ server:
     ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -509,7 +513,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.3.0-debian-12-r3
+    tag: 5.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -863,7 +867,7 @@ dashboard:
     ## @param dashboard.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1087,7 +1091,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

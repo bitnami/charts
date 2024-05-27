@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,32 +6,32 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubeapps-apis
-      image: docker.io/bitnami/kubeapps-apis:2.9.0-debian-12-r19
+      image: docker.io/bitnami/kubeapps-apis:2.10.0-debian-12-r5
     - name: kubeapps-apprepository-controller
-      image: docker.io/bitnami/kubeapps-apprepository-controller:2.9.0-debian-12-r18
+      image: docker.io/bitnami/kubeapps-apprepository-controller:2.10.0-debian-12-r4
     - name: kubeapps-asset-syncer
-      image: docker.io/bitnami/kubeapps-asset-syncer:2.9.0-debian-12-r19
+      image: docker.io/bitnami/kubeapps-asset-syncer:2.10.0-debian-12-r4
     - name: kubeapps-dashboard
-      image: docker.io/bitnami/kubeapps-dashboard:2.9.0-debian-12-r18
+      image: docker.io/bitnami/kubeapps-dashboard:2.10.0-debian-12-r4
     - name: kubeapps-oci-catalog
-      image: docker.io/bitnami/kubeapps-oci-catalog:2.9.0-debian-12-r17
+      image: docker.io/bitnami/kubeapps-oci-catalog:2.10.0-debian-12-r4
     - name: kubeapps-pinniped-proxy
-      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.9.0-debian-12-r17
+      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.10.0-debian-12-r4
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.4-debian-12-r3
+      image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r4
+      image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r12
 apiVersion: v2
-appVersion: 2.9.0
+appVersion: 2.10.0
 dependencies:
 - condition: packaging.flux.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
+  version: 19.x.x
 - condition: packaging.helm.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
+  version: 15.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -47,9 +47,10 @@ keywords:
 - deployment
 kubeVersion: '>=1.21.0-0'
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: kubeapps
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 14.7.2
+version: 15.1.1
+

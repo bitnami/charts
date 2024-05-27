@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -141,8 +141,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.proxy.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.proxy.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http-metrics
           {{- end }}
           {{- if .Values.proxy.customReadinessProbe }}

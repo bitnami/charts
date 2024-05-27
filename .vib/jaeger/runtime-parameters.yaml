@@ -1,7 +1,7 @@
 query:
-  sidecars:
+  sidecars: |-
     - name: hotrod-example
-      image: davidbhlm/hotrod-example:1.53
+      image: jaegertracing/example-hotrod:{{ .Chart.AppVersion }}
       args: ['all']
       env:
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
@@ -10,6 +10,9 @@ query:
         runAsNonRoot: true
         privileged: false
         allowPrivilegeEscalation: false
+        {{- if not (.Capabilities.APIVersions.Has "security.openshift.io/v1") }}
+        runAsUser: 1001
+        {{- end }}
         capabilities:
           drop: [ "ALL" ]
         seccompProfile:
@@ -59,6 +62,13 @@ agent:
   serviceAccount:
     create: true
     automountServiceAccountToken: true
+  extraVolumes:
+    - name: empty-dir
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: empty-dir
+      mountPath: /tmp
+      subPath: tmp-dir
 
 cassandra:
   enabled: true

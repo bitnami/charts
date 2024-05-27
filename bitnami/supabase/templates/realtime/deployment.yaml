@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -39,6 +39,7 @@ spec:
         checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/realtime/secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: supabase
         app.kubernetes.io/component: realtime
     spec:
       serviceAccountName: {{ template "supabase.serviceAccountName" . }}
@@ -133,6 +134,14 @@ spec:
               realtime eval Realtime.Release.migrate && realtime start
           {{- end }}
           env:
+            - name: DB_USER
+              value: {{ include "supabase.database.user" . | quote }}
+            - name: DB_HOST
+              value: {{ include "supabase.database.host" . | quote }}
+            - name: DB_PORT
+              value: {{ include "supabase.database.port" . | quote }}
+            - name: DB_NAME
+              value: {{ include "supabase.database.name" . | quote }}
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -179,8 +188,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.realtime.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.realtime.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.realtime.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.realtime.customReadinessProbe }}

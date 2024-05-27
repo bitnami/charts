@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -203,6 +203,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                       | `[]`             |
 | `containerPorts.http`                               | HTTP port to expose at container level                                                                                                                                                                            | `8080`           |
 | `containerPorts.https`                              | HTTPS port to expose at container level                                                                                                                                                                           | `8443`           |
+| `extraContainerPorts`                               | Optionally specify extra list of additional ports for phpMyAdmin container(s)                                                                                                                                     | `[]`             |
 | `updateStrategy.type`                               | Strategy to use to update Pods                                                                                                                                                                                    | `RollingUpdate`  |
 | `podSecurityContext.enabled`                        | Enable phpMyAdmin pods' Security Context                                                                                                                                                                          | `true`           |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                | `Always`         |
@@ -212,14 +213,15 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`           |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`            |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                     | `true`           |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                       | `false`          |
-| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                           | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                           | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                         | `false`          |
 | `containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                | `["ALL"]`        |
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault` |
 | `replicas`                                          | Number of replicas                                                                                                                                                                                                | `1`              |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`           |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `micro`          |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`             |
 | `startupProbe.enabled`                              | Enable startupProbe                                                                                                                                                                                               | `false`          |
 | `startupProbe.httpGet.path`                         | Request path for startupProbe                                                                                                                                                                                     | `/`              |
@@ -230,8 +232,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                | `6`              |
 | `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                | `1`              |
 | `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                              | `true`           |
-| `livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                                                                                                                                                    | `/`              |
-| `livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                                                                                                                                            | `http`           |
+| `livenessProbe.tcpSocket.port`                      | Port for livenessProbe                                                                                                                                                                                            | `http`           |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `30`             |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`             |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `30`             |
@@ -334,7 +335,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                   | `""`                              |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                                                                                                                                                 | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                                                                                                  | `[]`                              |
-| `metrics.resourcesPreset`                  | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `none`                            |
+| `metrics.resourcesPreset`                  | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `nano`                            |
 | `metrics.resources`                        | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                              |
 | `metrics.service.type`                     | Prometheus metrics service type                                                                                                                                                                                                   | `ClusterIP`                       |
 | `metrics.service.port`                     | Prometheus metrics service port                                                                                                                                                                                                   | `9117`                            |
@@ -358,23 +359,15 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                                    | Value   |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                        | `false` |
-| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                                 | `false` |
-| `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                         | `{}`    |
-| `networkPolicy.metrics.podSelector`                           | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                     | `{}`    |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                      | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.                  | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                              | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by phpMyAdmin's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                               | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes phpMyAdmin only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                             | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                 | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                     | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 For more information please refer to the [bitnami/phpmyadmin](https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin) image documentation.
 
@@ -403,6 +396,18 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/phpmy
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 16.0.0
+
+This major bump changes the following security defaults:
+
+- `runAsGroup` is changed from `0` to `1001`
+- `readOnlyRootFilesystem` is set to `true`
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
 
 ### To 15.0.0
 
@@ -485,7 +490,7 @@ Please read the update notes carefully.
 
 ##### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

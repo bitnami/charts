@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -246,16 +246,15 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
+            tcpSocket:
               port: http
-              httpHeaders:
-                - name: Host
-                  value: {{ include "prestashop.host" . | quote }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}

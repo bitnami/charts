@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -73,7 +73,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.1-debian-12-r0
+  tag: 0.14.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -295,6 +295,9 @@ aws:
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/0483ffde22e60436f16be154b9fe1a388a1400d0/docs/registry/dynamodb.md
   ##
   dynamodbRegion: ""
+  ## @param aws.zoneMatchParent When using the AWS provider, lets a domain filter match subdomains within the same zone by using their parent domain
+  ##
+  zoneMatchParent: false
 ## Azure configuration to be set via arguments/env. variables
 ##
 azure:
@@ -358,6 +361,10 @@ cloudflare:
   ## @param cloudflare.proxied When using the Cloudflare provider, enable the proxy feature (DDOS protection, CDN...) (optional)
   ##
   proxied: true
+  ## @param cloudflare.dnsRecordsPerPage Number of DNS records to fetch per page. (optional)
+  ## When using the Cloudflare provider, specify how many DNS records listed per page, max possible 5,000 (default: 100)
+  ##
+  dnsRecordsPerPage: 100
 ## CoreDNS configuration to be set via arguments/env variables
 ##
 coredns:
@@ -612,6 +619,12 @@ oci:
   ## Ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/oracle.md#deploy-externaldns
   ##
   secretName: ""
+  ## @param oci.useInstancePrincipal When using the OCI provider, enable IAM Instance Principal
+  ## Ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/oracle.md#oci-iam-instance-principal
+  useInstancePrincipal: false
+  ## @param oci.useWorkloadIdentity When using the OCI provider, enable IAM Workload Identity
+  ## Ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/oracle.md#oci-iam-instance-principal
+  useWorkloadIdentity: false
 ## OVH configuration to be set via arguments/env. variables
 ##
 ovh:
@@ -992,7 +1005,7 @@ networkPolicy:
   ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
   ##
   kubeAPIServerPorts: [443, 6443, 8443]
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -1192,11 +1205,19 @@ extraVolumes: []
 ## @param extraVolumeMounts A list of volume mounts to be added to the pod
 ##
 extraVolumeMounts: []
-## @param podDisruptionBudget Configure PodDisruptionBudget
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
-##
-
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param podDisruptionBudget DEPRECATED podDisruptionBudget will be removed in a future release. Please use pdb instead
+## 
 podDisruptionBudget: {}
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
+##
+pdb:
+  create: true
+  minAvailable: ""
+  maxUnavailable: ""
 ## Prometheus Exporter / Metrics
 ##
 metrics:

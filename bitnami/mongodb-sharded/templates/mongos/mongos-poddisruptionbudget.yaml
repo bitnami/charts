@@ -1,9 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.mongos.pdb.create -}}
+{{- if .Values.mongos.pdb.create }}
 kind: PodDisruptionBudget
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:

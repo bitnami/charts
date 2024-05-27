@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -57,7 +57,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -126,15 +126,12 @@ data:
     master_in_sentinel="$(get_sentinel_master_info)"
     redisRetVal=$?
 
-    {{- if .Values.sentinel.persistence.enabled }}
     if [[ -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
         master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
         master_port_in_persisted_conf="$(awk '/monitor/ {print $5}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
         info "Found previous master ${master_in_persisted_conf}:${master_port_in_persisted_conf} in /opt/bitnami/redis-sentinel/etc/sentinel.conf"
         debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
-        touch /opt/bitnami/redis-sentinel/etc/.node_read
     fi
-    {{- end }}
 
     if [[ $redisRetVal -ne 0 ]]; then
         if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
@@ -290,7 +287,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -316,10 +313,10 @@ data:
         value="${value//\?/\\?}"
         [[ "$value" = "" ]] && value="\"$value\""
 
-        replace_in_file "/opt/bitnami/redis-sentinel/etc/sentinel.conf" "^#*\s*${key} .*" "${key} ${value}" false
+        replace_in_file "/opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf" "^#*\s*${key} .*" "${key} ${value}" false
     }
     sentinel_conf_add() {
-        echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/sentinel.conf"
+        echo $'\n'"$@" >> "/opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf"
     }
     host_id() {
         echo "$1" | openssl sha1 | awk '{print $2}'
@@ -338,35 +335,28 @@ data:
 
     master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
 
-    {{- if .Values.sentinel.persistence.enabled }}
     if [[ -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]; then
-        check_lock_file() {
-            [[ -f /opt/bitnami/redis-sentinel/etc/.node_read ]]
-        }
-        retry_while "check_lock_file"
-        rm -f /opt/bitnami/redis-sentinel/etc/.node_read
         master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/redis-sentinel/etc/sentinel.conf)"
         info "Found previous master $master_in_persisted_conf in /opt/bitnami/redis-sentinel/etc/sentinel.conf"
         debug "$(cat /opt/bitnami/redis-sentinel/etc/sentinel.conf | grep monitor)"
     fi
-    {{- end }}
-    if ! get_sentinel_master_info && [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
-        # No master found, lets create a master node
-        export REDIS_REPLICATION_MODE="master"
-
-        REDIS_MASTER_HOST=$(get_full_hostname "$HOSTNAME")
-        REDIS_MASTER_PORT_NUMBER="$REDISPORT"
-    else
-        export REDIS_REPLICATION_MODE="replica"
-
-        # Fetches current master's host and port
-        REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
+    REDIS_SENTINEL_INFO=($(get_sentinel_master_info))
+    if [ "$?" -eq "0" ]; then
+        # current master's host and port obtained from other Sentinel
         info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
+    else
+        REDIS_MASTER_HOST="$master_in_persisted_conf"
+        REDIS_MASTER_PORT_NUMBER="$REDISPORT"
+    fi
+    if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+        export REDIS_REPLICATION_MODE="master"
+    else
+        export REDIS_REPLICATION_MODE="replica"
     fi
 
-    {{- if .Values.sentinel.service.createMaster }}
+    {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
     if [[ "${REDIS_REPLICATION_MODE}" == "master" ]]; then
         # Add isMaster label to master node for master service
         echo "${REDIS_MASTER_HOST/.*}" > /etc/shared/current
@@ -378,14 +368,16 @@ data:
       REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
     fi
 
-    cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    # To prevent incomplete configuration and as the redis container accesses /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    # as well, prepare the new config in `prepare-sentinel.conf` and move it atomically to the ultimate destination when it is complete.
+    cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- if .Values.auth.enabled }}
-    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- if and .Values.auth.enabled .Values.auth.sentinel }}
-    printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    printf "\nrequirepass %s" "$REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
     {{- end }}
-    printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
 
     if [[ -z "$REDIS_MASTER_HOST" ]] || [[ -z "$REDIS_MASTER_PORT_NUMBER" ]]
     then
@@ -421,18 +413,18 @@ data:
         add_known_replica "$hostname" "$ip"
     done
 
-    echo "" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    echo "" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- if not (contains "sentinel announce-hostnames" .Values.sentinel.configuration) }}
-    echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    echo "sentinel announce-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
     {{- if not (contains "sentinel resolve-hostnames" .Values.sentinel.configuration) }}
-    echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    echo "sentinel resolve-hostnames yes" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
     {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
-    echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
     {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
-    echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
+    echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf
     {{- end }}
 
     {{- if .Values.tls.enabled }}
@@ -450,6 +442,7 @@ data:
     {{- if .Values.sentinel.preExecCmds }}
     {{ .Values.sentinel.preExecCmds | nindent 4 }}
     {{- end }}
+    mv /opt/bitnami/redis-sentinel/etc/prepare-sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
     exec redis-server /opt/bitnami/redis-sentinel/etc/sentinel.conf {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }} --sentinel
   prestop-sentinel.sh: |
     #!/bin/bash
@@ -474,7 +467,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -554,7 +547,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -603,7 +596,7 @@ data:
         exit 0
     fi
 
-  {{- if .Values.sentinel.service.createMaster}}
+  {{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
   push-master-label.sh: |
     #!/bin/bash
     # https://download.redis.io/redis-stable/sentinel.conf
@@ -700,7 +693,7 @@ data:
         echo "${full_hostname}"
         {{- else }}
         retry_count=0
-        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do
             if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
                 sleep {{ .Values.nameResolutionTimeout }}
             else
@@ -771,7 +764,7 @@ data:
   {{- end }}
 {{- end }}
 ---
-{{- if .Values.sentinel.service.createMaster}}
+{{- if or .Values.sentinel.masterService.enabled .Values.sentinel.service.createMaster }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

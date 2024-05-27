@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -73,7 +73,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.72.0-debian-12-r1
+    tag: 0.74.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -304,7 +304,7 @@ operator:
     ## @param operator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -602,6 +602,17 @@ operator:
   ## @param operator.namespaces Optional comma-separated list of namespaces to watch (default=all).
   ##
   namespaces: ""
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param operator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param operator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param operator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
 ## @section Prometheus Parameters
 ##
 
@@ -622,7 +633,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.50.1-debian-12-r1
+    tag: 2.52.0-debian-12-r2
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -718,7 +729,7 @@ prometheus:
     ## @param prometheus.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param prometheus.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param prometheus.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1380,7 +1391,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.34.1-debian-12-r0
+      tag: 0.35.0-debian-12-r4
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1793,7 +1804,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.27.0-debian-12-r1
+    tag: 0.27.0-debian-12-r10
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1951,7 +1962,7 @@ alertmanager:
     ## @param alertmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param alertmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2136,6 +2147,9 @@ alertmanager:
     ##             name: http
     ##
     extraRules: []
+  ## @param alertmanager.enableFeatures Enable access to Alertmanager disabled features.
+  ##
+  enableFeatures: []
   ## @param alertmanager.externalUrl External URL used to access Alertmanager
   ## e.g:
   ## externalUrl: https://alertmanager.example.com
@@ -2478,7 +2492,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-12-r25
+    tag: 0.25.0-debian-12-r5
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2865,7 +2879,7 @@ blackboxExporter:
     ## @param blackboxExporter.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param blackboxExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param blackboxExporter.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2903,6 +2917,16 @@ blackboxExporter:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param blackboxExporter.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param blackboxExporter.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param blackboxExporter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
 ## Component scraping the kube-apiserver
 ##
 kubeApiServer:

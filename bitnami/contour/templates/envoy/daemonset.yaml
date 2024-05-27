@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -68,6 +68,7 @@ spec:
           args:
             - envoy
             - shutdown-manager
+            - --serve-port={{ .Values.envoy.shutdownManager.containerPorts.http }}
             {{- if .Values.envoy.shutdownManager.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -126,10 +127,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.shutdownManager.livenessProbe.enabled }}
           livenessProbe:
-            exec:
-              command:
-                - pgrep
-                - contour
+            tcpSocket:
+              port: http-shutdown
             initialDelaySeconds: {{ .Values.envoy.shutdownManager.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.timeoutSeconds }}
@@ -140,23 +139,25 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.shutdownManager.readinessProbe.enabled }}
           readinessProbe:
-            exec:
-              command:
-                - pgrep
-                - contour
+            httpGet:
+              port: http-shutdown
+              path: /healthz
             initialDelaySeconds: {{ .Values.envoy.shutdownManager.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.shutdownManager.readinessProbe.failureThreshold }}
           {{- end }}
+          ports:
+            - containerPort: {{ .Values.envoy.shutdownManager.containerPorts.http }}
+              name: http-shutdown
           volumeMounts:
             - name: empty-dir
               mountPath: /admin
               subPath: app-admin-dir
-          {{- if .Values.envoy.extraVolumeMounts }}
+            {{- if .Values.envoy.extraVolumeMounts }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.extraVolumeMounts "context" $ ) | nindent 12 }}
-          {{- end }}
+            {{- end }}
         {{- end }}
         - name: envoy
           {{- if .Values.envoy.command }}
@@ -210,7 +211,6 @@ spec:
           {{- end }}
           ports:
             - containerPort: {{ .Values.envoy.containerPorts.http }}
-
               {{- if .Values.envoy.useHostPort.http }}
               hostPort: {{ .Values.envoy.hostPorts.http }}
               {{- end }}
@@ -237,7 +237,9 @@ spec:
               {{- end }}
               name: metrics
               protocol: TCP
-          {{- if .Values.envoy.readinessProbe.enabled }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /ready
@@ -250,8 +252,7 @@ spec:
           {{- end }}
           {{- if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
@@ -282,7 +283,7 @@ spec:
               {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
-                port: {{ .Values.envoy.shutdownManager.port }}
+                port: {{ coalesce .Values.envoy.shutdownManager.port .Values.envoy.shutdownManager.containerPorts.http }}
                 scheme: HTTP
               {{- else }}
               exec:

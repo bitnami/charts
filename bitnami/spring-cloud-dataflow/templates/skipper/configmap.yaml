@@ -1,9 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "scdf.skipper.createConfigmap" .) }}
+{{- if and (include "scdf.skipper.createConfigmap" .) (.Values.skipper.enabled) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -61,8 +61,8 @@ data:
                       {{- end }}
                     {{- else if .Values.kafka.enabled }}
                     environmentVariables:
-                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_KAFKA_SERVICE_PORT}
-                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ .Release.Name }}_ZOOKEEPER_SERVICE_PORT}
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_KAFKA_SERVICE_HOST}:${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_KAFKA_SERVICE_PORT}
+                      - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_ZOOKEEPER_SERVICE_HOST}:${{ printf "{" }}{{ regexReplaceAll "\\W+" (upper .Release.Name) "_" }}_ZOOKEEPER_SERVICE_PORT}
                       {{- if $environmentVariables }}
                       {{- $environmentVariables | nindent 22 }}
                       {{- end }}

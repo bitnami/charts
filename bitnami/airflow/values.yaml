@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -128,7 +128,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -193,7 +193,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.8.3-debian-12-r0
+    tag: 2.9.1-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -485,7 +485,7 @@ web:
     ## @param web.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param web.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param web.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -538,7 +538,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.8.3-debian-12-r0
+    tag: 2.9.1-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -606,6 +606,20 @@ scheduler:
     periodSeconds: 10
     timeoutSeconds: 15
     failureThreshold: 6
+    successThreshold: 1
+  ## @param scheduler.startupProbe.enabled Enable startupProbe on Airflow scheduler containers
+  ## @param scheduler.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param scheduler.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param scheduler.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param scheduler.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param scheduler.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 15
     successThreshold: 1
   ## @param scheduler.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
@@ -806,7 +820,7 @@ scheduler:
     ## @param scheduler.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param scheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param scheduler.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -859,7 +873,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.8.3-debian-12-r0
+    tag: 2.9.1-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1165,7 +1179,7 @@ worker:
     ## @param worker.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param worker.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1220,7 +1234,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.44.0-debian-12-r0
+    tag: 2.45.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1600,7 +1614,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r27
+    tag: 0.20220314.0-debian-12-r34
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1823,7 +1837,7 @@ metrics:
     ## @param metrics.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param metrics.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

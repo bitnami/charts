@@ -1,8 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if eq .Values.resourceType "daemonset" }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -110,8 +111,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -165,3 +165,4 @@ spec:
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -130,8 +130,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.indexGateway.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.indexGateway.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.indexGateway.customReadinessProbe }}
@@ -160,6 +159,8 @@ spec:
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
+            - name: data
+              mountPath: {{ .Values.loki.dataDir }}
           {{- if .Values.indexGateway.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -175,4 +176,33 @@ spec:
         {{- if .Values.indexGateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+  {{- if not .Values.indexGateway.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+  {{- else }}
+  volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: data
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if or .Values.indexGateway.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexGateway.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+        {{- range .Values.indexGateway.persistence.accessModes }}
+          - {{ . | quote }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.indexGateway.persistence.size | quote }}
+        {{- if .Values.indexGateway.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.persistence.selector "context" $) | nindent 10 }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.indexGateway.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
 {{- end }}

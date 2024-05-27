@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -75,9 +75,10 @@ spec:
       {{- if .Values.grafana.updateStrategy }}
       strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 8 }}
       {{- end }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.podLabels .Values.commonLabels ) "context" . ) }}
       template:
         metadata:
-          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: grafana
         spec:
           {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
@@ -146,10 +147,8 @@ spec:
                 timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
                 successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
                 failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-                httpGet:
-                  path: /api/health
+                tcpSocket:
                   port: 3000
-                  scheme: HTTP
               {{- end }}
               {{- if .Values.grafana.readinessProbe.enabled }}
               readinessProbe:

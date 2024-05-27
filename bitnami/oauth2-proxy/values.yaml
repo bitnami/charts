@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -138,7 +138,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -307,7 +307,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.6.0-debian-12-r4
+  tag: 7.6.0-debian-12-r12
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -510,11 +510,11 @@ resources: {}
 ##   maxUnavailable: 1
 ## @param pdb.create Enable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod

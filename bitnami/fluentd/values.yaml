@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.16.5-debian-12-r0
+  tag: 1.17.0-debian-12-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -403,7 +403,7 @@ forwarder:
     ## @param forwarder.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param forwarder.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param forwarder.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -465,8 +465,7 @@ forwarder:
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param forwarder.livenessProbe.enabled Enable livenessProbe
-  ## @param forwarder.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param forwarder.livenessProbe.httpGet.port Port for livenessProbe
+  ## @param forwarder.livenessProbe.tcpSocket.port Port for livenessProbe
   ## @param forwarder.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param forwarder.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param forwarder.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -475,8 +474,7 @@ forwarder:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+    tcpSocket:
       port: http
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -662,6 +660,27 @@ forwarder:
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
   ##
   lifecycleHooks: {}
+  ## install-extra-gems and tmp-dir-permissions containers resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param forwarder.initResourcePresets Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  initResourcePresets: "nano"
+  ## @param forwarder.initResources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## initResources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  initResources: {}
   ## @param forwarder.initContainers Additional init containers to add to the pods
   ## For example:
   ## initContainers:
@@ -964,7 +983,7 @@ aggregator:
     ## @param aggregator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param aggregator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param aggregator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1126,8 +1145,7 @@ aggregator:
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param aggregator.livenessProbe.enabled Enable livenessProbe
-  ## @param aggregator.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param aggregator.livenessProbe.httpGet.port Port for livenessProbe
+  ## @param aggregator.livenessProbe.tcpSocket.port Port for livenessProbe
   ## @param aggregator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param aggregator.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param aggregator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -1136,8 +1154,7 @@ aggregator:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+    tcpSocket:
       port: http
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -1355,6 +1372,27 @@ aggregator:
   ##     command: ["/bin/sh","-c","nginx -s quit; while killall -0 nginx; do sleep 1; done"]
   ##
   lifecycleHooks: {}
+  ## install-extra-gems and tmp-dir-permissions containers resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param aggregator.initResourcePresets Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if aggregator.resources is set (aggregator.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  initResourcePresets: "nano"
+  ## @param aggregator.initResources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## initResources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  initResources: {}
   ## @param aggregator.initContainers Add init containers to aggregator pods
   ## Example
   ##

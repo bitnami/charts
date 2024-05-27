@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -65,8 +65,49 @@ spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ template "phpmyadmin.serviceAccountName" . }}
       {{- end }}
+      initContainers:
+        - name: prepare-base-dir
+          image: {{ include "phpmyadmin.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+              . /opt/bitnami/scripts/libfs.sh
+
+              info "Copying base dir to empty dir"
+              # In order to not break the application functionality (such as upgrades or plugins) we need
+              # to make the base directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/phpmyadmin /emptydir/app-base-dir
+
+              info "Copying symlinks to stdout/stderr"
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/apache/logs; then
+                cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
+              fi
+              info "Copying php var directory"
+              # PhpMyAdmin will fail to start if the php var folder is not populated
+              if ! is_dir_empty /opt/bitnami/php/var; then
+                cp -r /opt/bitnami/php/var /emptydir/php-var-dir
+              fi
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
       {{- if .Values.initContainers }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
@@ -151,6 +192,9 @@ spec:
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
               protocol: TCP
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
@@ -172,6 +216,30 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/apache/conf
+              subPath: apache-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/apache/logs
+              subPath: apache-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/apache/var/run
+              subPath: apcahe-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/php/etc
+              subPath: php-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/php/tmp
+              subPath: php-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/php/var
+              subPath: php-var-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/phpmyadmin
+              subPath: app-base-dir
             {{- if .Values.db.enableSsl }}
             - name: ssl-certs
               mountPath: /db_certs
@@ -204,11 +272,17 @@ spec:
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
         {{- end }}
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         {{- if .Values.db.enableSsl }}
         - name: ssl-certs
           secret:

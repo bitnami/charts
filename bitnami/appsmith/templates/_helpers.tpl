@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -11,12 +11,26 @@ Return the proper Appsmith image name
 {{- end -}}
 
 {{/*
+Return the proper Appsmith image name
+*/}}
+{{- define "appsmith.redirect.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.backend.redirectAmbassador.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Appsmith backend fullname
 */}}
 {{- define "appsmith.backend.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "backend" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+
+{{/*
+Return the proper Appsmith backend fullname
+*/}}
+{{- define "appsmith.redirect.fullname" -}}
+{{- printf "%s-%s" (include "appsmith.backend.fullname" .) "redirect" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{/*
 Return the proper Appsmith rts fullname
 */}}
@@ -35,7 +49,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "appsmith.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.backend.redirectAmbassador.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*

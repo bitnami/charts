@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -122,21 +122,21 @@ spec:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: grafana-loki
+        {{- if .Values.compactor.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
               {{ template "grafana-loki.compactor.fullname" . }}-compactor: "true"
+        {{- end }}
+        {{- if .Values.compactor.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- if .Values.compactor.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.compactor.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- if .Values.compactor.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.compactor.networkPolicy.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}

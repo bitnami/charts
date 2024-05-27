@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -64,8 +64,34 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or (and .Values.volumePermissions.enabled .Values.persistence.enabled) .Values.initContainers }}
       initContainers:
+        - name: prepare-base-dir
+          image: {{ include "ghost.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.resources }}
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+          {{- else if ne .Values.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying base dir to empty dir"
+              # In order to not break the application functionality (such as upgrades or plugins) we need
+              # to make the base directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/ghost /emptydir/app-base-dir
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "ghost.volumePermissions.image" . }}
@@ -97,7 +123,6 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-      {{- end }}
       containers:
         - name: {{ include "common.names.fullname" . }}
           image: {{ include "ghost.image" . }}
@@ -242,15 +267,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
-              port: {{ ternary "https" "http" .Values.ghostEnableHttps | quote }}
-              scheme: HTTP
-              {{- if .Values.ghostEnableHttps }}
-              httpHeaders:
-                - name: x-forwarded-proto
-                  value: https
-              {{- end }}
+            tcpSocket:
+              port: {{ ternary .Values.containerPorts.https .Values.containerPorts.http .Values.ghostEnableHttps }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -283,6 +301,15 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/ghost
+              subPath: app-base-dir
+            - name: empty-dir
+              mountPath: /.ghost
+              subPath: app-tmp-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: ghost-data
               mountPath: /bitnami/ghost
             {{- if .Values.persistence.subPath }}
@@ -295,6 +322,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: ghost-data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:

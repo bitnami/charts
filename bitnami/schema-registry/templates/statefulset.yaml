@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -104,8 +104,8 @@ spec:
               ID="${MY_POD_NAME#"{{ $fullname }}-"}"
               if [[ -f "/certs/schema-registry.truststore.jks" ]] && [[ -f "/certs/schema-registry-${ID}.keystore.jks" ]]; then
                   mkdir -p /opt/bitnami/schema-registry/certs
-                  cp "/certs/schema-registry.truststore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks"
-                  cp "/certs/schema-registry-${ID}.keystore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks" ]] || cp "/certs/schema-registry.truststore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.truststore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks" ]] || cp "/certs/schema-registry-${ID}.keystore.jks" "/opt/bitnami/schema-registry/certs/schema-registry.keystore.jks"
               else
                   echo "Couldn't find the expected Java Key Stores (JKS) files! They are mandatory when encryption via TLS is enabled with Kafka brokers."
                   exit 1
@@ -113,10 +113,10 @@ spec:
               {{- end }}
               if [[ -f "/certs/ssl.keystore.jks" ]]; then
                   mkdir -p /opt/bitnami/schema-registry/certs
-                  cp "/certs/ssl.keystore.jks" "/opt/bitnami/schema-registry/certs/ssl.keystore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/ssl.keystore.jks" ]] || cp "/certs/ssl.keystore.jks" "/opt/bitnami/schema-registry/certs/ssl.keystore.jks"
               fi
               if [[ -f "/certs/ssl.truststore.jks" ]]; then
-                  cp "/certs/ssl.truststore.jks" "/opt/bitnami/schema-registry/certs/ssl.truststore.jks"
+                  [[ -f "/opt/bitnami/schema-registry/certs/ssl.truststore.jks" ]] || cp "/certs/ssl.truststore.jks" "/opt/bitnami/schema-registry/certs/ssl.truststore.jks"
               fi
               exec /opt/bitnami/scripts/schema-registry/entrypoint.sh /opt/bitnami/scripts/schema-registry/run.sh
           {{- end }}
@@ -224,15 +224,17 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
               port: http
+              path: /
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
               port: http
+              path: /
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}

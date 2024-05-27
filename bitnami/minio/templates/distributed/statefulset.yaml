@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -157,22 +157,19 @@ spec:
             {{- if .Values.auth.useCredentialsFiles }}
             - name: MINIO_ROOT_USER_FILE
               value: "/opt/bitnami/minio/secrets/root-user"
+            - name: MINIO_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/minio/secrets/root-password"
             {{- else }}
             - name: MINIO_ROOT_USER
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: root-user
-            {{- end }}
-            {{- if .Values.auth.useCredentialsFiles }}
-            - name: MINIO_ROOT_PASSWORD_FILE
-              value: "/opt/bitnami/minio/secrets/root-password"
-            {{- else }}
+                  key: {{ include "minio.rootUserKey" . }}
             - name: MINIO_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "minio.secretName" . }}
-                  key: root-password
+                  key: {{ include "minio.rootPasswordKey" . }}
             {{- end }}
             - name: MINIO_SKIP_CLIENT
               value: {{ ternary "yes" "no" (empty .Values.defaultBuckets) | quote }}
@@ -193,7 +190,7 @@ spec:
               value: {{ .Values.containerPorts.api | quote }}
             {{- end }}
             - name: MINIO_DATA_DIR
-              value: {{ $mountPath | quote }}
+              value: {{ ternary (printf "%s-0" $mountPath) $mountPath (gt $drivesPerNode 1) | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

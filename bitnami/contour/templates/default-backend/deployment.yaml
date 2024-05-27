@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -115,10 +115,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.defaultBackend.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
-              scheme: HTTP
             initialDelaySeconds: {{ .Values.defaultBackend.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.defaultBackend.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.defaultBackend.livenessProbe.timeoutSeconds }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -98,21 +98,21 @@ spec:
         - port: {{ .Values.vulture.containerPorts.http }}
       {{- if not .Values.vulture.networkPolicy.allowExternal }}
       from:
+        {{- if .Values.vulture.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
               {{ template "grafana-tempo.vulture.fullname" . }}-vulture: "true"
+        {{- end }}
+        {{- if .Values.vulture.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- if .Values.vulture.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.vulture.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- if .Values.vulture.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.vulture.networkPolicy.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}

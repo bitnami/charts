@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -49,21 +49,21 @@ spec:
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        {{- if .Values.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
+        {{- end }}
+        {{- if .Values.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- if .Values.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.networkPolicy.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}

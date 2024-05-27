@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r16
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
     - name: parse
-      image: docker.io/bitnami/parse:6.5.5-debian-12-r0
+      image: docker.io/bitnami/parse:7.0.0-debian-12-r4
     - name: parse-dashboard
-      image: docker.io/bitnami/parse-dashboard:5.3.0-debian-12-r3
+      image: docker.io/bitnami/parse-dashboard:5.4.0-debian-12-r0
 apiVersion: v2
-appVersion: 6.5.5
+appVersion: 7.0.0
 dependencies:
 - name: mongodb
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -33,9 +33,9 @@ keywords:
 - mbaas
 - mobile
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: parse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/parse
-version: 22.0.0
+version: 23.1.0

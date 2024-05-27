@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -38,6 +38,7 @@ spec:
         {{- end }}
         checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: supabase
         app.kubernetes.io/component: storage
     spec:
       serviceAccountName: {{ template "supabase.serviceAccountName" . }}
@@ -88,9 +89,11 @@ spec:
               mkdir -p {{ .Values.storage.persistence.mountPath }}
               find {{ .Values.storage.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.storage.containerSecurityContext.runAsUser }}:{{ .Values.storage.podSecurityContext.fsGroup }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
+          {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.storage.persistence.mountPath }}
@@ -130,7 +133,7 @@ spec:
               #!/bin/bash
 
               cd /opt/bitnami/supabase-storage
-              pm2-runtime start ecosystem.config.js
+              node dist/server.js
           {{- end }}
           env:
             - name: DB_USER
@@ -194,8 +197,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.storage.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.storage.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.storage.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /status
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.storage.customReadinessProbe }}

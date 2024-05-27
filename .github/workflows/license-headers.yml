@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 name: '[License] Check license headers'
@@ -19,7 +19,7 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
         name: Checkout Repository
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -58,10 +58,10 @@ jobs:
           done <<< "$(echo "$files_changed" | grep -oE "^bitnami/.*\.ya?ml$" | sort | uniq || true)"
           if [[ ${#templates[@]} -gt 0 ]] || [[ ${#regular_files[@]} -gt 0 ]]; then
             if [[ ${#templates[@]} -gt 0 ]]; then
-              # There are modifications over yaml tamplates
-              export tamplates_json=$(printf "%s\n" "${templates[@]}" | jq -R . | jq -cs .)
+              # There are modifications over yaml templates
+              export templates_json=$(printf "%s\n" "${templates[@]}" | jq -R . | jq -cs .)
               # Overwrite configuration file to analyze only changed templates
-              yq -i '. | .header[0].paths=env(tamplates_json)' .licenserc.yaml
+              yq -i '. | .header[0].paths=env(templates_json)' .licenserc.yaml
             fi
             if [[ ${#regular_files[@]} -gt 0 ]]; then
               # There are modifications over yaml files
@@ -74,5 +74,5 @@ jobs:
             echo "result=skip" >> $GITHUB_OUTPUT
           fi
       - name: Check license Headers
-        uses: apache/skywalking-eyes/header@6b2529214f6b1ccee3ec92bb0adfeabf6f66f538
+        uses: apache/skywalking-eyes/header@cd7b195c51fd3d6ad52afceb760719ddc6b3ee91
         if: ${{ steps.get-modified-files.outputs.result == 'success' }}

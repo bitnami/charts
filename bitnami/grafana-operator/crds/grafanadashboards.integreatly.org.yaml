@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/grafana/grafana-operator/v{version}/deploy/helm/grafana-operator/crds/grafana.integreatly.org_grafanadashboards.yaml
-# Version: 5.8.0
+# Version: 5.9.1
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.12.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: grafanadashboards.grafana.integreatly.org
 spec:
   group: grafana.integreatly.org
@@ -161,17 +161,22 @@ spec:
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: atomic
                       required:
                       - key
                       - operator
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                   matchLabels:
                     additionalProperties:
                       type: string
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
+                x-kubernetes-validations:
+                - message: Value is immutable
+                  rule: self == oldSelf
               json:
                 type: string
               jsonnet:
@@ -204,6 +209,9 @@ spec:
                   type: object
                 type: array
               resyncPeriod:
+                default: 5m
+                format: duration
+                pattern: ^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$
                 type: string
               url:
                 type: string

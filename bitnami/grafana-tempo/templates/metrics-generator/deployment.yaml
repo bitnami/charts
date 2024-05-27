@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -65,6 +65,7 @@ spec:
       {{- if .Values.metricsGenerator.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metricsGenerator.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.metricsGenerator.enableServiceLinks }}
       initContainers:
         {{- if .Values.metricsGenerator.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.initContainers "context" $) | nindent 8 }}
@@ -120,8 +121,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metricsGenerator.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.metricsGenerator.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metricsGenerator.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.metricsGenerator.customReadinessProbe }}

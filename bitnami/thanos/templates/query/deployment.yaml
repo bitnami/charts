@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -30,10 +30,10 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query
-      {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap .Values.query.podAnnotations }}
+      {{- if or .Values.query.podAnnotations (include "thanos.query.createSDConfigmap" .) }}
       annotations:
-        {{- if or (include "thanos.query.createSDConfigmap" .) .Values.query.existingSDConfigmap }}
-        checksum/ruler-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
+        {{- if (include "thanos.query.createSDConfigmap" .) }}
+        checksum/query-sd-configuration: {{ include "thanos.querySDConfigMap" . | sha256sum }}
         {{- end }}
         {{- if .Values.query.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.query.podAnnotations "context" $) | nindent 8 }}
@@ -127,11 +127,19 @@ spec:
             {{- $shards = len .Values.storegateway.sharded.timePartitioning }}
             {{- end }}
             {{- range $index, $_ := until $shards }}
+            {{- if $.Values.storegateway.useEndpointGroup }}
+            - --endpoint-group={{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}:{{ $.Values.storegateway.service.ports.grpc }}
+            {{- else }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "common.names.fullname" $ }}-storegateway-{{ toString $index }}.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}
             {{- end }}
             {{- end }}
+            {{- end }}
             {{- if and .Values.storegateway.enabled .Values.query.dnsDiscovery.enabled (not .Values.storegateway.sharded.enabled ) }}
+            {{- if .Values.storegateway.useEndpointGroup }}
+            - --endpoint-group={{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}:{{ .Values.storegateway.service.ports.grpc }}
+            {{- else }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.storegateway.fullname" . }}{{ if .Values.storegateway.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
+            {{- end }}
             {{- end }}
             {{- if and .Values.ruler.enabled .Values.query.dnsDiscovery.enabled }}
             - --endpoint=dnssrv+_grpc._tcp.{{ include "thanos.ruler.fullname" . }}{{ if .Values.ruler.service.additionalHeadless }}-headless{{ end }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
@@ -145,7 +153,9 @@ spec:
             {{- if .Values.query.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if .Values.query.grpc.server.tls.clientAuthEnabled }}
             - --grpc-server-tls-client-ca=/certs/server/{{ include "common.secrets.key" (dict "existingSecret" .Values.query.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.query.grpc.client.tls.enabled }}
             - --grpc-client-tls-secure

@@ -37,17 +37,17 @@ extraDeploy:
                 - -ec
                 - |
                   #!/bin/bash
-    
+
                   set -o errexit
                   set -o nounset
                   set -o pipefail
-    
+
                   . /opt/bitnami/scripts/libos.sh
-    
+
                   # Set the endpoint URL
                   host=flink-jobmanager
                   port={{ .Values.jobmanager.service.ports.rpc }}
-    
+
                   jobmanager_ready() {
                       # Test the TCP connection with a timeout
                       if timeout 5 bash -c "</dev/tcp/$host/$port"; then
@@ -56,7 +56,7 @@ extraDeploy:
                           return 1
                       fi
                   }
-    
+
                   echo "0" > /tmp/ready
                   info "Waiting for the Jobmanager instance"
                   if ! retry_while "jobmanager_ready" 12 30; then
@@ -89,19 +89,12 @@ extraDeploy:
                 timeoutSeconds: 1
                 failureThreshold: 15
                 successThreshold: 1
-              securityContext:
-                runAsUser: 1001
-                runAsNonRoot: true
-                privileged: false
-                readOnlyRootFilesystem: false
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop: ["ALL"]
-                seccompProfile:
-                  type: "RuntimeDefault"
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.jobmanager.containerSecurityContext "context" $) | nindent 12 }}
               volumeMounts:
                 - name: flink-config-volume
                   mountPath: /opt/bitnami/flink/conf
+                - name: tmp
+                  mountPath: /tmp
           volumes:
             - name: flink-config-volume
               configMap:
@@ -109,6 +102,8 @@ extraDeploy:
                 items:
                   - key: config.yaml
                     path: config.yaml
+            - name: tmp
+              emptyDir: {}
 
   - |
     apiVersion: v1

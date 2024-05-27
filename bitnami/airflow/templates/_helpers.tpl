@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -159,6 +159,8 @@ Get the Postgresql credentials secret.
         {{- if .Values.global.postgresql.auth }}
             {{- if .Values.global.postgresql.auth.existingSecret }}
                 {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
+            {{- else -}}
+                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
             {{- end -}}
         {{- else -}}
             {{- if and ( .Values.postgresql.auth.existingSecret ) ( .Values.postgresql.auth.enablePostgresUser ) }}
@@ -204,7 +206,7 @@ Load DAGs init-container
   image: {{ include "airflow.dags.image" .context }}
   imagePullPolicy: {{ .context.Values.dags.image.pullPolicy }}
   {{- if $compDefinition.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $compDefinition.containerSecurityContext "context" $) | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $compDefinition.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
   command:
     - /bin/bash

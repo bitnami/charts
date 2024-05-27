@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,27 +6,27 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: harbor-adapter-trivy
-      image: docker.io/bitnami/harbor-adapter-trivy:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-adapter-trivy:2.10.2-debian-12-r4
     - name: harbor-core
-      image: docker.io/bitnami/harbor-core:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-core:2.10.2-debian-12-r5
     - name: harbor-exporter
-      image: docker.io/bitnami/harbor-exporter:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-exporter:2.10.2-debian-12-r5
     - name: harbor-jobservice
-      image: docker.io/bitnami/harbor-jobservice:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-jobservice:2.10.2-debian-12-r5
     - name: harbor-portal
-      image: docker.io/bitnami/harbor-portal:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-portal:2.10.2-debian-12-r4
     - name: harbor-registry
-      image: docker.io/bitnami/harbor-registry:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-registry:2.10.2-debian-12-r5
     - name: harbor-registryctl
-      image: docker.io/bitnami/harbor-registryctl:2.10.1-debian-12-r0
+      image: docker.io/bitnami/harbor-registryctl:2.10.2-debian-12-r5
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.4-debian-12-r3
+      image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r16
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
     - name: postgresql
-      image: docker.io/bitnami/postgresql:13.14.0-debian-12-r8
+      image: docker.io/bitnami/postgresql:13.15.0-debian-12-r2
 apiVersion: v2
-appVersion: 2.10.1
+appVersion: 2.10.2
 dependencies:
 - condition: redis.enabled
   name: redis
@@ -50,9 +50,9 @@ keywords:
 - vulnerability
 - scan
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 21.0.0
+version: 21.2.1

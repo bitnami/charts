@@ -1,5 +1,5 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
@@ -19,18 +19,19 @@ it('allows admin to add a product to the store', () => {
   cy.contains('Salable Quantity');
   cy.contains('Add Product').click();
   cy.fixture('products').then((product) => {
-    cy.get('[name="product[name]"]').type(
+    cy.get('[name="product[name]"]', {timeout: 60000}).type(
       `${product.newProduct.productName}.${random}`
     );
     cy.get('[name="product[price]"]').type(product.newProduct.price);
   });
   cy.contains('Images And Videos').click();
-  cy.get('#fileupload').selectFile('cypress/fixtures/images/image.png', {
+  cy.get('div[class*="fileinput"]').selectFile('cypress/fixtures/images/image.png', {
+    action: 'drag-drop',
     force: true,
   });
   cy.get('.product-image').should('be.visible');
   cy.get('#save-button').click();
-  cy.get('#menu-magento-catalog-catalog').click();
+  cy.get('#menu-magento-catalog-catalog', {timeout: 60000}).click();
   cy.contains('Products').click();
   cy.fixture('products').then((product) => {
     cy.contains(`${product.newProduct.productName}.${random}`);

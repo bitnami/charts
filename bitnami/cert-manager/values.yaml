@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## Global Docker image parameters
@@ -79,7 +79,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/cert-manager
-    tag: 1.14.4-debian-12-r0
+    tag: 1.14.5-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -110,7 +110,7 @@ controller:
     image:
       registry: docker.io
       repository: bitnami/acmesolver
-      tag: 1.14.4-debian-12-r0
+      tag: 1.14.5-debian-12-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -218,9 +218,12 @@ controller:
   ##
   nodeSelector: {}
   ## Controller Container port
-  ## @param controller.containerPort Controller container port
+  ## @param controller.containerPorts.http Controller HTTP container port
+  ## @param controller.containerPorts.health Controller Health container port
   ##
-  containerPort: 9402
+  containerPorts:
+    http: 9402
+    health: 9403
   ## @param controller.command Override Controller default command
   ##
   command: []
@@ -422,7 +425,7 @@ controller:
     ## @param controller.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param controller.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -481,7 +484,7 @@ webhook:
   image:
     registry: docker.io
     repository: bitnami/cert-manager-webhook
-    tag: 1.14.4-debian-12-r0
+    tag: 1.14.5-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -589,13 +592,18 @@ webhook:
   ##
   nodeSelector: {}
   ## Webhook Container port
-  ## @param webhook.containerPort Webhook container port
+  ## @param webhook.containerPorts.https Webhook HTTPS container port
+  ## @param webhook.containerPorts.health Webhook health container port
   ##
-  containerPort: 10250
+  containerPorts:
+    https: 10250
+    health: 6080
   ## Webhook https port
-  ## @param webhook.httpsPort Webhook container port
+  ## @param webhook.service.ports.https Webhook HTTPS service port
   ##
-  httpsPort: 443
+  service:
+    ports:
+      https: 443
   ## @param webhook.command Override Webhook default command
   ##
   command: []
@@ -777,7 +785,7 @@ webhook:
     ## @param webhook.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
     ##
     kubeAPIServerPorts: [443, 6443, 8443]
-    ## @param webhook.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param webhook.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -836,7 +844,7 @@ cainjector:
   image:
     registry: docker.io
     repository: bitnami/cainjector
-    tag: 1.14.4-debian-12-r0
+    tag: 1.14.5-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1118,7 +1126,7 @@ cainjector:
     ## @param cainjector.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param cainjector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param cainjector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1166,7 +1174,7 @@ metrics:
   podAnnotations:
     prometheus.io/path: "/metrics"
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.controller.containerPort }}"
+    prometheus.io/port: "{{ .Values.controller.containerPorts.http }}"
   ## Prometheus Operator ServiceMonitor resource
   ##
   serviceMonitor:

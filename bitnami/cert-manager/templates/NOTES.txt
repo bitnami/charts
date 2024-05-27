@@ -12,3 +12,4 @@ To configure a new ingress to automatically provision certificates, you will fin
 
 https://cert-manager.io/docs/usage/ingress/
 {{- include "common.warnings.resources" (dict "sections" (list "cainjector" "controller" "webhook") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.controller.image .Values.controller.acmesolver.image .Values.webhook.image .Values.cainjector.image) "context" $) }}

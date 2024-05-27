@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -140,15 +140,16 @@ spec:
               containerPort: {{ .Values.dataPlane.containerPorts.https }}
             - name: http-control
               containerPort: {{ .Values.dataPlane.containerPorts.control }}
+            {{- if .Values.dataPlane.metrics.enabled }}
             - name: http-metrics
               containerPort: {{ .Values.dataPlane.containerPorts.metrics }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.dataPlane.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.dataPlane.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dataPlane.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /v1/healthcheck
+            tcpSocket:
               port: http-control
          {{- end }}
           {{- if .Values.dataPlane.customReadinessProbe }}

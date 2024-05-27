@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -131,6 +131,12 @@ spec:
             - name: serflan-udp
               containerPort: {{ .Values.containerPorts.serfLAN }}
               protocol: "UDP"
+            - name: serfwan-tcp
+              protocol: "TCP"
+              containerPort: {{ .Values.containerPorts.serfWAN }}
+            - name: serfwan-udp
+              containerPort: {{ .Values.containerPorts.serfWAN }}
+              protocol: "UDP"
             - name: rpc-server
               containerPort: {{ .Values.containerPorts.rpcServer }}
             - name: dns-tcp
@@ -186,6 +192,8 @@ spec:
               value: {{ .Values.containerPorts.rpc | quote }}
             - name: CONSUL_SERF_LAN_PORT_NUMBER
               value: {{ .Values.containerPorts.serfLAN | quote }}
+            - name: CONSUL_SERF_WAN_PORT_NUMBER
+              value: {{ .Values.containerPorts.serfWAN | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -275,6 +283,10 @@ spec:
             {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: /bitnami/consul
+            {{- else }}
+            - name: empty-dir
+              mountPath: /bitnami/consul
+              subPath: app-data-dir
             {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: consul-config

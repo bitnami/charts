@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: schema-registry
-      image: docker.io/bitnami/schema-registry:7.6.0-debian-12-r0
+      image: docker.io/bitnami/schema-registry:7.6.1-debian-12-r4
 apiVersion: v2
-appVersion: 7.6.0
+appVersion: 7.6.1
 dependencies:
 - condition: kafka.enabled
   name: kafka
@@ -29,9 +29,9 @@ keywords:
 - zookeeper
 - streaming
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: schema-registry
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 18.0.0
+version: 18.1.3

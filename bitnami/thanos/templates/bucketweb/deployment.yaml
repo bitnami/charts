@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -30,13 +30,15 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: bucketweb
+      {{- if or .Values.bucketweb.podAnnotations (include "thanos.createObjstoreSecret" .) }}
       annotations:
-        {{- if (include "thanos.objstoreConfig" $) }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
         {{- if .Values.bucketweb.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "thanos.bucketweb.serviceAccountName" . }}

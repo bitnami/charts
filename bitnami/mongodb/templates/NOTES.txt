@@ -33,38 +33,6 @@ In order to replicate the container startup scripts execute this command:
 {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
 {{- end }}
 
-{{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $loadBalancerIPListLength )) (eq .Values.externalAccess.service.type "LoadBalancer") }}
-
-####################################################################################
-### ERROR: You enabled external access to MongoDB&reg; nodes without specifying  ###
-###   the array of load balancer IPs for MongoDB&reg; nodes.                     ###
-####################################################################################
-
-This deployment will be incomplete until you configure the array of load balancer
-IPs for MongoDB&reg; nodes. To complete your deployment follow the steps below:
-
-1. Wait for the load balancer IPs (it may take a few minutes for them to be available):
-
-    kubectl get svc --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ template "mongodb.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=mongodb" -w
-
-2. Obtain the load balancer IPs and upgrade your chart:
-
-    {{- range $e, $i := until $replicaCount }}
-    LOAD_BALANCER_IP_{{ add $i 1 }}="$(kubectl get svc --namespace {{ $releaseNamespace }} {{ $fullname }}-{{ $i }}-external -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-    {{- end }}
-
-3. Upgrade you chart:
-
-    helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
-      --set mongodb.replicaCount={{ $replicaCount }} \
-      --set mongodb.externalAccess.enabled=true \
-      {{- range $i, $e := until $replicaCount }}
-      --set mongodb.externalAccess.service.loadBalancerIPs[{{ $i }}]=$LOAD_BALANCER_IP_{{ add $i 1 }} \
-      {{- end }}
-      --set mongodb.externalAccess.service.type=LoadBalancer
-
-{{- else }}
-
 {{- if and (or (and (eq .Values.architecture "standalone") (or (eq .Values.service.type "LoadBalancer") (eq .Values.service.type "NodePort"))) (and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled)) (not .Values.auth.enabled) }}
 -------------------------------------------------------------------------------
  WARNING
@@ -72,7 +40,7 @@ IPs for MongoDB&reg; nodes. To complete your deployment follow the steps below:
     By not enabling "mongodb.auth.enabled" you have most likely exposed the
     MongoDB&reg; service externally without any authentication mechanism.
 
-    For security reasons, we strongly suggest that you enable authentiation
+    For security reasons, we strongly suggest that you enable authentication
     setting the "mongodb.auth.enabled" parameter to "true".
 
 -------------------------------------------------------------------------------
@@ -107,7 +75,6 @@ To get the password for "{{ $user }}" run:
 
     export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ include "mongodb.namespace" $ }} {{ include "mongodb.secretName" $ }} -o jsonpath="{.data.mongodb-passwords}" | base64 -d | awk -F',' '{print ${{ add 1 $index }}}')
 
-{{- end }}
 {{- end }}
 
 To connect to your database, create a MongoDB&reg; client container:
@@ -201,3 +168,4 @@ Then, open the obtained URL in a browser.
 {{- include "common.warnings.rollingTag" .Values.tls.image }}
 {{- include "mongodb.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "arbiter" "externalAccess.autoDiscovery" "hidden" "metrics" "" "tls" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.tls.image .Values.externalAccess.autoDiscovery.image .Values.externalAccess.dnsCheck.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

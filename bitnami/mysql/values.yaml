@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -90,7 +90,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.36-debian-12-r10
+  tag: 8.4.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -155,10 +155,10 @@ auth:
   ##   replicator: /vault/secrets/mysql-replicator
   ##
   customPasswordFiles: {}
-  ## @param auth.defaultAuthenticationPlugin Sets the default authentication plugin, by default it will use `mysql_native_password`
-  ## NOTE: `mysql_native_password` will be deprecated in future mysql version and it is used here for compatibility with previous version. If you want to use the new default authentication method set it to `caching_sha2_password`.
+  ## @param auth.authenticationPolicy Sets the authentication policy, by default it will use `* ,,`
+  ## ref: https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html#sysvar_authentication_policy
   ##
-  defaultAuthenticationPlugin: ""
+  authenticationPolicy: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -205,17 +205,23 @@ primary:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param primary.enableMySQLX Enable mysqlx port
+  ## ref: https://dev.mysql.com/doc/dev/mysql-server/latest/mysqlx_protocol_xplugin.html
+  ##
+  enableMySQLX: false
   ## @param primary.configuration [string] Configure MySQL Primary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
   configuration: |-
     [mysqld]
-    default_authentication_plugin={{- .Values.auth.defaultAuthenticationPlugin | default "mysql_native_password" }}
+    authentication_policy='{{- .Values.auth.authenticationPolicy | default "* ,," }}'
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
     plugin_dir=/opt/bitnami/mysql/lib/plugin
-    port= {{ .Values.primary.containerPorts.mysql }}
+    port={{ .Values.primary.containerPorts.mysql }}
+    mysqlx={{ ternary 1 0 .Values.primary.enableMySQLX }}
+    mysqlx_port={{ .Values.primary.containerPorts.mysqlx }}
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
@@ -228,13 +234,13 @@ primary:
     long_query_time=10.0
 
     [client]
-    port=3306
+    port={{ .Values.primary.containerPorts.mysql }}
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
     plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
-    port=3306
+    port={{ .Values.primary.containerPorts.mysql }}
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
   ## @param primary.existingConfigmap Name of existing ConfigMap with MySQL Primary configuration.
@@ -242,9 +248,11 @@ primary:
   ##
   existingConfigmap: ""
   ## @param primary.containerPorts.mysql Container port for mysql
+  ## @param primary.containerPorts.mysqlx Container port for mysqlx
   ##
   containerPorts:
     mysql: 3306
+    mysqlx: 33060
   ## @param primary.updateStrategy.type Update strategy type for the MySQL primary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -528,14 +536,18 @@ primary:
     ##
     type: ClusterIP
     ## @param primary.service.ports.mysql MySQL Primary K8s service port
+    ## @param primary.service.ports.mysqlx MySQL Primary K8s service mysqlx port
     ##
     ports:
       mysql: 3306
+      mysqlx: 33060
     ## @param primary.service.nodePorts.mysql MySQL Primary K8s service node port
+    ## @param primary.service.nodePorts.mysqlx MySQL Primary K8s service node port mysqlx
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       mysql: ""
+      mysqlx: ""
     ## @param primary.service.clusterIP MySQL Primary K8s service clusterIP IP
     ## e.g:
     ## clusterIP: None
@@ -621,17 +633,23 @@ secondary:
   ## @param secondary.lifecycleHooks for the MySQL Secondary container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param secondary.enableMySQLX Enable mysqlx port
+  ## ref: https://dev.mysql.com/doc/dev/mysql-server/latest/mysqlx_protocol_xplugin.html
+  ##
+  enableMySQLX: false
   ## @param secondary.configuration [string] Configure MySQL Secondary with a custom my.cnf file
   ## ref: https://mysql.com/kb/en/mysql/configuring-mysql-with-mycnf/#example-of-configuration-file
   ##
   configuration: |-
     [mysqld]
-    default_authentication_plugin=mysql_native_password
+    authentication_policy='{{- .Values.auth.authenticationPolicy | default "* ,," }}'
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
     plugin_dir=/opt/bitnami/mysql/lib/plugin
     port={{ .Values.secondary.containerPorts.mysql }}
+    mysqlx={{ ternary 1 0 .Values.secondary.enableMySQLX }}
+    mysqlx_port={{ .Values.secondary.containerPorts.mysqlx }}
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
@@ -644,13 +662,13 @@ secondary:
     long_query_time=10.0
 
     [client]
-    port=3306
+    port={{ .Values.secondary.containerPorts.mysql }}
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
     plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
-    port=3306
+    port={{ .Values.secondary.containerPorts.mysql }}
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
   ## @param secondary.existingConfigmap Name of existing ConfigMap with MySQL Secondary configuration.
@@ -658,9 +676,11 @@ secondary:
   ##
   existingConfigmap: ""
   ## @param secondary.containerPorts.mysql Container port for mysql
+  ## @param secondary.containerPorts.mysqlx Container port for mysqlx
   ##
   containerPorts:
     mysql: 3306
+    mysqlx: 33060
   ## @param secondary.updateStrategy.type Update strategy type for the MySQL secondary statefulset
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -945,14 +965,18 @@ secondary:
     ##
     type: ClusterIP
     ## @param secondary.service.ports.mysql MySQL secondary Kubernetes service port
+    ## @param secondary.service.ports.mysqlx MySQL secondary Kubernetes service port mysqlx
     ##
     ports:
       mysql: 3306
+      mysqlx: 33060
     ## @param secondary.service.nodePorts.mysql MySQL secondary Kubernetes service node port
+    ## @param secondary.service.nodePorts.mysqlx MySQL secondary Kubernetes service node port mysqlx
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     ##
     nodePorts:
       mysql: ""
+      mysqlx: ""
     ## @param secondary.service.clusterIP MySQL secondary Kubernetes service clusterIP IP
     ## e.g:
     ## clusterIP: None
@@ -1129,7 +1153,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1174,7 +1198,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-12-r10
+    tag: 0.15.1-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

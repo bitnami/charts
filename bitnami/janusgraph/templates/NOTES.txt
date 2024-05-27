@@ -1,0 +1,70 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/janusgraph/entrypoint.sh /opt/bitnami/scripts/janusgraph/run.sh
+
+{{- else }}
+
+Access Janusgraph from within the cluster using the following URL:
+
+  - {{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.service.ports.gremlin }}
+
+To connect to your Janusgraph cluster using Gremlin/Tinkerpop:
+
+1. Run a Janusgraph pod that you can use as a client:
+
+   kubectl run --namespace {{ include "common.names.namespace" . }} {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' \
+   --env GREMLIN_REMOTE_PORT={{ .Values.service.ports.gremlin }} \
+   --env GREMLIN_REMOTE_HOSTS={{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} \
+   {{ if and (.Values.networkPolicy.enabled) (not .Values.networkPolicy.allowExternal) }}--labels="{{ include "common.names.name" . }}-client=true"{{ end }} \
+   --image {{ include "janusgraph.image" . }} -- bash
+
+2. Connect using the gremlin.sh tool:
+
+   $ gremlin.sh
+   gremlin> :remote connect tinkerpop.server conf/remote.yaml
+   gremlin> :remote console
+
+To access Janusgraph from outside the cluster follow the steps below:
+
+1. Get the Janusgraph server URL by running these commands:
+
+
+{{- if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "Janusgraph server available at $NODE_IP:$NODE_PORT"
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "Janusgraph server available at $SERVICE_IP:{{ .Values.service.ports.gremlin }}"
+{{- else if contains "ClusterIP" .Values.service.type }}
+    echo "Janusgraph server available at 127.0.0.1:8182"
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 8182:{{ .Values.service.ports.gremlin }} &
+{{- end }}
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "janusgraph.validateValues" . }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.metrics.image .Values.volumePermissions.image) "context" $) }}

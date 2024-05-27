@@ -1,0 +1,170 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+Execute the 'weed' command with the same arguments used in the pod to replicate the container startup.
+
+{{- else }}
+
+The Master Server replicas can be accessed through the following DNS name from within your cluster:
+
+    {{ include "seaweedfs.master.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.master.service.ports.http }} for HTTP)
+    {{ include "seaweedfs.master.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.master.service.ports.grpc }} for gRPC)
+
+To access the Master Server replica from outside the cluster follow the steps below:
+
+{{- if .Values.master.ingress.enabled }}
+
+1. Get the Master Server API URL and associate Master Server hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Master Server API URL: http{{ if .Values.master.ingress.tls }}s{{ end }}://{{ .Values.master.ingress.hostname }}{{ .Values.master.ingress.path }}"
+   echo "$CLUSTER_IP  {{ .Values.master.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.master.service.ports.http | toString }}
+
+1. Get the Master Server API URL by running these commands:
+
+{{- if contains "NodePort" .Values.master.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "seaweedfs.master.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Master Server API URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.master.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "seaweedfs.master.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "seaweedfs.master.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Master Server API URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.master.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.master.service.type }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "seaweedfs.master.fullname" . }} {{ .Values.master.service.ports.http }}:{{ .Values.master.service.ports.http }} &
+   echo "Master Server API URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.master.service.ports.http }}{{ end }}/"
+
+{{- end }}
+{{- end }}
+
+2. Access the Master Server API with your favorite REST client or using the "weed" CLI.
+
+{{- if and .Values.filer.enabled .Values.s3.enabled }}
+
+The chart was deployed enabling the Amazon S3 API, to access it from outside the cluster follow the steps below:
+
+{{- if .Values.s3.ingress.enabled }}
+
+1. Get the Amazon S3 API URL and associate the hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Amazon S3 API URL: http{{ if .Values.s3.ingress.tls }}s{{ end }}://{{ .Values.s3.ingress.hostname }}{{ .Values.s3.ingress.path }}"
+   echo "$CLUSTER_IP  {{ .Values.s3.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.s3.service.ports.http | toString }}
+
+1. Get the Amazon S3 API URL by running these commands:
+
+{{- if contains "NodePort" .Values.s3.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "seaweedfs.s3.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Amazon S3 API URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.s3.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "seaweedfs.s3.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "seaweedfs.s3.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Amazon S3 API URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.s3.service.ports.http }}{{ end }}"
+
+{{- else if contains "ClusterIP"  .Values.s3.service.type }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "seaweedfs.s3.fullname" . }} {{ .Values.s3.service.ports.http }}:{{ .Values.s3.service.ports.http }} &
+   echo "Amazon S3 API URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.s3.service.ports.http }}{{ end }}/"
+
+{{- end }}
+{{- end }}
+
+2. Access the Amazon S3 API with your favorite REST client or using the "aws" CLI.
+{{- if and .Values.s3.auth.enabled (not .Values.s3.auth.existingSecret) }}
+3. Obtain the credentials to configure "aws" CLI ("aws configure" command) running the commands below:
+
+   echo "Admin access key id: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }} -o jsonpath="{.data.admin_access_key_id}" | base64 -d)"
+   echo "Admin secret key: $(kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ printf "%s-auth" (include "seaweedfs.s3.fullname" .) }} -o jsonpath="{.data.admin_secret_access_key}" | base64 -d)"
+
+{{- end }}
+4. Example using "aws" CLI to create a new bucket "foo" and upload a "sample.txt" file:
+
+   aws s3 --endpoint-url [AMAZON_S3_API_URL] mb s3://foo
+   aws s3 --endpoint-url [AMAZON_S3_API_URL] cp sample.txt s3://foo
+
+{{- end }}
+
+{{- if and .Values.filer.enabled .Values.webdav.enabled }}
+
+The chart was deployed enabling WebDAV, to access it from outside the cluster follow the steps below:
+
+{{- if .Values.webdav.ingress.enabled }}
+
+1. Get the WebDAV URL and associate the hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "WebDAV URL: http{{ if .Values.webdav.ingress.tls }}s{{ end }}://{{ .Values.webdav.ingress.hostname }}{{ .Values.webdav.ingress.path }}"
+   echo "$CLUSTER_IP  {{ .Values.webdav.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.webdav.service.ports.http | toString }}
+
+1. Get the WebDAV URL by running these commands:
+
+{{- if contains "NodePort" .Values.webdav.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "seaweedfs.webdav.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "WebDAV URL: http{{ if .Values.webdav.tls.enabled }}s{{ end }}://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.webdav.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "seaweedfs.webdav.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "seaweedfs.webdav.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "WebDAV URL: http{{ if .Values.webdav.tls.enabled }}s{{ end }}://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.webdav.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.webdav.service.type }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "seaweedfs.webdav.fullname" . }} {{ .Values.webdav.service.ports.http }}:{{ .Values.webdav.service.ports.http }} &
+   echo "WebDAV URL: http{{ if .Values.webdav.tls.enabled }}s{{ end }}://127.0.0.1{{- if ne $port "80" }}:{{ .Values.webdav.service.ports.http }}{{ end }}/"
+
+{{- end }}
+{{- end }}
+
+2. Connect to WebDAV server as explained at https://github.com/seaweedfs/seaweedfs/wiki/WebDAV.
+
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "seaweedfs.validateValues" . }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

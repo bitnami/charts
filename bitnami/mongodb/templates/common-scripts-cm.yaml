@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -81,9 +81,6 @@ data:
     {{- else }}
     DNS.3 = $svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
     {{- end }}
-    DNS.4 = localhost
-    IP.0 = ${MY_POD_HOST_IP}
-    IP.1 = 127.0.0.1
     EOL
     index=2
     for ip in "${additional_ips[@]}"; do

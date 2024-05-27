@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kiam
-      image: docker.io/bitnami/kiam:4.2.0-debian-12-r22
+      image: docker.io/bitnami/kiam:4.2.0-debian-12-r29
 apiVersion: v2
 appVersion: 4.2.0
 dependencies:
@@ -23,9 +23,9 @@ keywords:
 - iam
 - security
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: kiam
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kiam
-version: 2.0.0
+version: 2.1.1

@@ -1,9 +1,9 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.worker.enabled .Values.worker.pdb.create -}}
+{{- if and .Values.worker.enabled (or (not .Values.web.enabled) (include "concourse.host" .)) .Values.worker.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

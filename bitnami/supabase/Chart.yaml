@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,36 +6,36 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: gotrue
-      image: docker.io/bitnami/gotrue:1.0.1-debian-12-r21
+      image: docker.io/bitnami/gotrue:2.151.0-debian-12-r3
     - name: jwt-cli
-      image: docker.io/bitnami/jwt-cli:6.0.0-debian-12-r17
+      image: docker.io/bitnami/jwt-cli:6.0.0-debian-12-r23
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.29.2-debian-12-r2
+      image: docker.io/bitnami/kubectl:1.30.1-debian-12-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r16
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
     - name: postgrest
-      image: docker.io/bitnami/postgrest:11.2.2-debian-12-r12
+      image: docker.io/bitnami/postgrest:11.2.2-debian-12-r26
     - name: supabase-postgres
-      image: docker.io/bitnami/supabase-postgres:15.1.1-debian-12-r13
+      image: docker.io/bitnami/supabase-postgres:15.1.1-debian-12-r52
     - name: supabase-postgres-meta
-      image: docker.io/bitnami/supabase-postgres-meta:0.79.0-debian-12-r0
+      image: docker.io/bitnami/supabase-postgres-meta:0.80.1-debian-12-r3
     - name: supabase-realtime
-      image: docker.io/bitnami/supabase-realtime:2.25.65-debian-12-r0
+      image: docker.io/bitnami/supabase-realtime:2.28.40-debian-12-r1
     - name: supabase-storage
-      image: docker.io/bitnami/supabase-storage:0.47.0-debian-12-r3
+      image: docker.io/bitnami/supabase-storage:1.3.1-debian-12-r0
     - name: supabase-studio
-      image: docker.io/bitnami/supabase-studio:0.23.11-debian-12-r8
+      image: docker.io/bitnami/supabase-studio:1.24.4-debian-12-r0
 apiVersion: v2
-appVersion: 0.23.11
+appVersion: 1.24.4
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
+  version: 15.x.x
 - condition: kong.enabled
   name: kong
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.x.x
+  version: 12.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -48,9 +48,10 @@ keywords:
 - development
 - dashboards
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 2.11.0
+version: 5.1.1
+

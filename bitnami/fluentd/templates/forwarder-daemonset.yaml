@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -88,6 +88,11 @@ spec:
               # copy installed gems to shared dir
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
+          {{- if .Values.forwarder.initResources }}
+          resources: {{- toYaml .Values.forwarder.initResources | nindent 12 }}
+          {{- else if ne .Values.forwarder.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.initResourcePresets) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
@@ -113,6 +118,11 @@ spec:
             - |-
               #!/bin/sh
               chmod o-rwx /tmp
+          {{- if .Values.forwarder.initResources }}
+          resources: {{- toYaml .Values.forwarder.initResources | nindent 12 }}
+          {{- else if ne .Values.forwarder.initResourcePresets "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.forwarder.initResourcePresets) | nindent 12 }}
+          {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
@@ -204,9 +214,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.forwarder.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.forwarder.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.forwarder.livenessProbe.httpGet.path }}
-              port: {{ .Values.forwarder.livenessProbe.httpGet.port }}
+            tcpSocket:
+              port: {{ .Values.forwarder.livenessProbe.tcpSocket.port }}
             initialDelaySeconds: {{ .Values.forwarder.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.forwarder.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.forwarder.livenessProbe.timeoutSeconds }}

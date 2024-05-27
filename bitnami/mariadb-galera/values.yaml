@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -86,7 +86,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 11.3.2-debian-12-r0
+  tag: 11.3.2-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -853,15 +853,18 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## Pod disruption budget configuration
-##
-podDisruptionBudget:
-  ## @param podDisruptionBudget.create Specifies whether a Pod disruption budget should be created
+## 
+## @param podDisruptionBudget DEPRECATED podDisruptionBudget will be removed in a future release. Please use pdb instead
+## 
+podDisruptionBudget: {}
+pdb:
+  ## @param pdb.create Specifies whether a Pod disruption budget should be created
   ##
-  create: false
-  ## @param podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
+  create: true
+  ## @param pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
   ##
-  minAvailable: 1
-  ## @param podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## Prometheus exporter configuration
@@ -882,7 +885,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.1-debian-12-r10
+    tag: 0.15.1-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

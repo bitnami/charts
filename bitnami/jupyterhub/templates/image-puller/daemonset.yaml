@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -130,30 +130,12 @@ spec:
           {{- end }}
           {{- if .Values.imagePuller.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customStartupProbe "context" $) | nindent 12 }}
-          {{- else if .Values.imagePuller.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.proxy.startupProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - pgrep
-                - sleep
           {{- end }}
           {{- if .Values.imagePuller.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.imagePuller.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.proxy.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - pgrep
-                - sleep
           {{- end }}
           {{- if .Values.imagePuller.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.imagePuller.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.proxy.readinessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - pgrep
-                - sleep
           {{- end }}
           {{- if .Values.imagePuller.extraVolumeMounts }}
           volumeMounts:

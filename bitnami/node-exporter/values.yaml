@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -69,6 +69,15 @@ diagnosticMode:
     - infinity
 ## @section Node Exporter parameters
 
+## @param resourceType Specify how to deploy Node Exporter (allowed values: `daemonset` and `deployment`)
+##
+resourceType: daemonset
+## @param replicaCount Number of replicas to deploy (when `resourceType` is `deployment`)
+##
+replicaCount: 1
+## @param isolatedDeployment Specify whether to deploy the Node Exporter in an isolated deployment without access to host network, host PID and /proc and /sys of the host. (when `resourceType` is `deployment`)
+##
+isolatedDeployment: true
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
@@ -110,7 +119,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.7.0-debian-12-r13
+  tag: 1.8.1-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -306,7 +315,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -558,3 +567,13 @@ serviceMonitor:
   ## @param serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
   ##
   sampleLimit: ""
+## Pod Security Policy for Node Exporter to use.
+## WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
+## @param podSecurityPolicy.annotations Annotations for Pod Security Policy. Evaluated as a template. 
+## e.g:
+## annotations:
+##   seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
+##   seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
+##
+podSecurityPolicy:
+  annotations: {}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -137,6 +137,17 @@ spec:
               if ! is_dir_empty /opt/bitnami/apache/logs; then
                 cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
               fi
+              {{- if and (not .Values.allowOverrideNone) .Values.customHTAccessCM }}
+              # HACK: To avoid issues with ConfigMap mount permissions, we need to create the
+              # conf/vhosts/htaccess folder when mounting a custom htaccess. Otherwise, the vhosts
+              # folder will have read-only permissions, causing the initialization logic to fail
+              info "Custom htaccess mounted, creating folder in volume"
+              mkdir -p /emptydir/apache-conf-dir/vhosts/htaccess
+              {{- end }}
+
+              info "Copying default PHP config"
+              cp -r --preserve=mode /opt/bitnami/php/etc /emptydir/php-conf-dir
+
               info "Copy operation completed"
           volumeMounts:
             - name: empty-dir

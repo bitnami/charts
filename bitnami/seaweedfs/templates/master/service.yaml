@@ -1,0 +1,61 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "seaweedfs.master.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master
+  {{- if or .Values.master.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.master.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.master.service.type }}
+  {{- if and .Values.master.service.clusterIP (eq .Values.master.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.master.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.master.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.master.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.master.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.master.service.type "LoadBalancer") (eq .Values.master.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.master.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.master.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.master.service.type "LoadBalancer") (not (empty .Values.master.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.master.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.master.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.master.service.type "NodePort") (eq .Values.master.service.type "LoadBalancer")) (not (empty .Values.master.service.nodePorts.http)) }}
+      nodePort: {{ .Values.master.service.nodePorts.http }}
+      {{- else if eq .Values.master.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.master.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and (or (eq .Values.master.service.type "NodePort") (eq .Values.master.service.type "LoadBalancer")) (not (empty .Values.master.service.nodePorts.grpc)) }}
+      nodePort: {{ .Values.master.service.nodePorts.grpc }}
+      {{- else if eq .Values.master.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.master.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.master.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.master.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: master

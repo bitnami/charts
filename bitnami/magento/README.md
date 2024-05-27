@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -265,12 +265,12 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value      |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`       |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
+| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
 
 ### Common parameters
 
@@ -340,7 +340,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                                                                                                                                         | `[]`                      |
 | `affinity`                                          | Affinity for pod assignment                                                                                                                                                                                       | `{}`                      |
 | `nodeSelector`                                      | Node labels for pod assignment                                                                                                                                                                                    | `{}`                      |
-| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`                    |
+| `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `medium`                  |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                      |
 | `podSecurityContext.enabled`                        | Enable Magento pods' Security Context                                                                                                                                                                             | `true`                    |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                | `Always`                  |
@@ -348,8 +348,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                       | `[]`                      |
 | `podSecurityContext.fsGroup`                        | Magento pods' group ID                                                                                                                                                                                            | `1001`                    |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`                    |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`                     |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`                      |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`                    |
+| `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                       | `0`                       |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                     | `true`                    |
 | `containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                       | `false`                   |
 | `containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                           | `false`                   |
@@ -383,65 +384,67 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                                         | Value   |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                             | `false` |
-| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                                      | `false` |
-| `networkPolicy.metrics.namespaceSelector`                     | magento Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                      | `{}`    |
-| `networkPolicy.metrics.podSelector`                           | magento Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                  | `{}`    |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                           | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | magento Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.               | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | magento Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                           | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb, elasticsearch) only accessible by magento's pods.                              | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | magento Backend selector labels. These labels will be used to identify the backend pods.                                            | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes magento only accessible from a particular origin                                                     | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | magento Namespace selector label that is allowed to access magento. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | magento Pods selector label that is allowed to access magento. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | magento Custom network policy ingress rule                                                                                          | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                      | `false` |
-| `networkPolicy.egressRules.customRules`                       | magento Custom network policy rule                                                                                                  | `{}`    |
+| Name                                    | Description                                                     | Value  |
+| --------------------------------------- | --------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created             | `true` |
+| `networkPolicy.allowExternal`           | Don't require server label for connections                      | `true` |
+| `networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations. | `true` |
+| `networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                    | `[]`   |
+| `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces          | `{}`   |
+| `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces      | `{}`   |
 
 ### Database parameters
 
-| Name                                        | Description                                                                                             | Value                     |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                   | `true`                    |
-| `mariadb.image.registry`                    | MariaDB image registry                                                                                  | `REGISTRY_NAME`           |
-| `mariadb.image.repository`                  | MariaDB image repository                                                                                | `REPOSITORY_NAME/mariadb` |
-| `mariadb.image.digest`                      | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`              |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                    | `""`                      |
-| `mariadb.auth.database`                     | Database name to create                                                                                 | `bitnami_magento`         |
-| `mariadb.auth.username`                     | Database user to create                                                                                 | `bn_magento`              |
-| `mariadb.auth.password`                     | Password for the database                                                                               | `""`                      |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                   | `true`                    |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                         | `""`                      |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                 | `["ReadWriteOnce"]`       |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                         | `8Gi`                     |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                | `""`                      |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                | `""`                      |
-| `externalDatabase.host`                     | Host of the existing database                                                                           | `""`                      |
-| `externalDatabase.port`                     | Port of the existing database                                                                           | `3306`                    |
-| `externalDatabase.user`                     | Existing username in the external db                                                                    | `bn_magento`              |
-| `externalDatabase.password`                 | Password for the above username                                                                         | `""`                      |
-| `externalDatabase.database`                 | Name of the existing database                                                                           | `bitnami_magento`         |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                                          | `""`                      |
+| Name                                        | Description                                                                                                                                                                                                                | Value                     |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                                                                                                                                      | `true`                    |
+| `mariadb.image.registry`                    | MariaDB image registry                                                                                                                                                                                                     | `REGISTRY_NAME`           |
+| `mariadb.image.repository`                  | MariaDB image repository                                                                                                                                                                                                   | `REPOSITORY_NAME/mariadb` |
+| `mariadb.image.digest`                      | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                    | `""`                      |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                                                                                                                                        | `standalone`              |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                                                                                                                                       | `""`                      |
+| `mariadb.auth.database`                     | Database name to create                                                                                                                                                                                                    | `bitnami_magento`         |
+| `mariadb.auth.username`                     | Database user to create                                                                                                                                                                                                    | `bn_magento`              |
+| `mariadb.auth.password`                     | Password for the database                                                                                                                                                                                                  | `""`                      |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                                                                                                                                                      | `true`                    |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                                                                                                                                                            | `""`                      |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                                                                                                                                                    | `["ReadWriteOnce"]`       |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                                                                                                                                                            | `8Gi`                     |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)                                                                                                                                   | `""`                      |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                                                                                                                                   | `""`                      |
+| `mariadb.primary.resourcesPreset`           | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production). | `micro`                   |
+| `mariadb.primary.resources`                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                          | `{}`                      |
+| `externalDatabase.host`                     | Host of the existing database                                                                                                                                                                                              | `""`                      |
+| `externalDatabase.port`                     | Port of the existing database                                                                                                                                                                                              | `3306`                    |
+| `externalDatabase.user`                     | Existing username in the external db                                                                                                                                                                                       | `bn_magento`              |
+| `externalDatabase.password`                 | Password for the above username                                                                                                                                                                                            | `""`                      |
+| `externalDatabase.database`                 | Name of the existing database                                                                                                                                                                                              | `bitnami_magento`         |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                                                                                                                                                             | `""`                      |
 
 ### Elasticsearch parameters
 
-| Name                                      | Description                                                                                                   | Value                           |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `elasticsearch.enabled`                   | Whether to deploy a elasticsearch server to use as magento's search engine                                    | `true`                          |
-| `elasticsearch.image.registry`            | Elasticsearch image registry                                                                                  | `REGISTRY_NAME`                 |
-| `elasticsearch.image.repository`          | Elasticsearch image repository                                                                                | `REPOSITORY_NAME/elasticsearch` |
-| `elasticsearch.image.digest`              | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
-| `elasticsearch.sysctlImage.enabled`       | Enable kernel settings modifier image for Elasticsearch                                                       | `true`                          |
-| `elasticsearch.master.replicaCount`       | Desired number of Elasticsearch master-eligible nodes                                                         | `1`                             |
-| `elasticsearch.coordinating.replicaCount` | Desired number of Elasticsearch coordinating-only nodes                                                       | `1`                             |
-| `elasticsearch.data.replicaCount`         | Desired number of Elasticsearch data nodes                                                                    | `1`                             |
-| `elasticsearch.ingest.replicaCount`       | Desired number of Elasticsearch ingest nodes                                                                  | `1`                             |
-| `externalElasticsearch.host`              | Host of the external elasticsearch server                                                                     | `""`                            |
-| `externalElasticsearch.port`              | Port of the external elasticsearch server                                                                     | `""`                            |
+| Name                                         | Description                                                                                                                                                                                                                          | Value                           |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- |
+| `elasticsearch.enabled`                      | Whether to deploy a elasticsearch server to use as magento's search engine                                                                                                                                                           | `true`                          |
+| `elasticsearch.image.registry`               | Elasticsearch image registry                                                                                                                                                                                                         | `REGISTRY_NAME`                 |
+| `elasticsearch.image.repository`             | Elasticsearch image repository                                                                                                                                                                                                       | `REPOSITORY_NAME/elasticsearch` |
+| `elasticsearch.image.digest`                 | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                        | `""`                            |
+| `elasticsearch.sysctlImage.enabled`          | Enable kernel settings modifier image for Elasticsearch                                                                                                                                                                              | `true`                          |
+| `elasticsearch.master.replicaCount`          | Desired number of Elasticsearch master-eligible nodes                                                                                                                                                                                | `1`                             |
+| `elasticsearch.master.resourcesPreset`       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).             | `small`                         |
+| `elasticsearch.master.resources`             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`                            |
+| `elasticsearch.coordinating.replicaCount`    | Desired number of Elasticsearch coordinating-only nodes                                                                                                                                                                              | `1`                             |
+| `elasticsearch.coordinating.resourcesPreset` | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production). | `small`                         |
+| `elasticsearch.coordinating.resources`       | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`                            |
+| `elasticsearch.data.replicaCount`            | Desired number of Elasticsearch data nodes                                                                                                                                                                                           | `1`                             |
+| `elasticsearch.data.resourcesPreset`         | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production).                 | `medium`                        |
+| `elasticsearch.data.resources`               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`                            |
+| `elasticsearch.ingest.replicaCount`          | Desired number of Elasticsearch ingest nodes                                                                                                                                                                                         | `1`                             |
+| `elasticsearch.ingest.resourcesPreset`       | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production).             | `small`                         |
+| `elasticsearch.ingest.resources`             | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                    | `{}`                            |
+| `externalElasticsearch.host`                 | Host of the external elasticsearch server                                                                                                                                                                                            | `""`                            |
+| `externalElasticsearch.port`                 | Port of the external elasticsearch server                                                                                                                                                                                            | `""`                            |
 
 ### Persistence parameters
 
@@ -600,6 +603,14 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Notable changes
 
+### To 27.0.0
+
+This major updates the Elasticsearch subchart to its newest major, 21.0.0, which removes support for elasticsearch-curator. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-2100) for more information.
+
+### To 26.0.0
+
+This major release bumps the and MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
+
 ### To 23.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading/) for upgrading to MariaDB 10.6. No major issues are expected during the upgrade.
@@ -671,7 +682,15 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 
 ### To 24.0.0
 
-This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
+This major bump changes the following security defaults:
+
+- `resourcesPreset` is changed from `none` to the minimum size working in our test suites (NOTE: `resourcesPreset` is not meant for production usage, but `resources` adapted to your use case).
+- `global.compatibility.openshift.adaptSecurityContext` is changed from `disabled` to `auto`.
+- The `networkPolicy` section has been normalized amongst all Bitnami charts. Compared to the previous approach, the values section has been simplified (check the Parameters section) and now it set to `enabled=true` by default. Egress traffic is allowed by default and ingress traffic is allowed by all pods but only to the ports set in `containerPorts` and `extraContainerPorts`.
+
+This could potentially break any customization or init scripts used in your deployment. If this is the case, change the default values to the previous ones.
+
+Also, this major release bumps the MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
 
 ### To 22.0.0
 
@@ -747,7 +766,7 @@ Please read the update notes carefully.
 
 ##### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -26,7 +26,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/ghost
-  tag: 5.81.1-debian-12-r0
+  tag: 5.82.11-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -293,7 +293,7 @@ tolerations: []
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -312,6 +312,13 @@ resources: {}
 containerPorts:
   http: 2368
   https: 2368
+## @param extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled Ghost pods' Security Context
@@ -331,6 +338,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -339,11 +347,12 @@ podSecurityContext:
 ## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -619,7 +628,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -702,6 +711,27 @@ mysql:
       accessModes:
         - ReadWriteOnce
       size: 8Gi
+    ## MySQL primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mysql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param mysql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External Database Configuration
 ## All of these values are only used if `mysql.enabled=false`
 ##
@@ -734,80 +764,62 @@ externalDatabase:
   sslCaFile: ""
 ## @section NetworkPolicy parameters
 
-## Add networkpolicies
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  ingress:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: ingress
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: ingress
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mysql) only accessible by Ghost's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Ghost only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Ghost. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Ghost. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingressRules:
-    ## mysql backend only can be accessed from Ghost
-    ##
-    backendOnlyAccessibleByFrontend: false
-    customBackendSelector: {}
-    ## Allow only from the indicated:
-    ##
-    accessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-    ## custom ingress rules
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  egressRules:
-    ## Deny connections to external. This is not compatible with an external database.
-    ##
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ## @param serviceAccount.create Specifies whether a ServiceAccount should be created

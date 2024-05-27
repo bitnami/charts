@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -110,21 +110,21 @@ spec:
         - port: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
       {{- if not .Values.queryFrontend.networkPolicy.allowExternal }}
       from:
+        {{- if .Values.queryFrontend.networkPolicy.addExternalClientAccess }}
         - podSelector:
             matchLabels:
               {{ template "grafana-tempo.query-frontend.fullname" . }}-query-frontend: "true"
+        {{- end }}
+        {{- if .Values.queryFrontend.networkPolicy.ingressPodMatchLabels }}
+        - podSelector:
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.networkPolicy.ingressPodMatchLabels "context" $ ) | nindent 14 }}
+        {{- end }}
         {{- if .Values.queryFrontend.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.queryFrontend.networkPolicy.ingressNSMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.networkPolicy.ingressNSMatchLabels "context" $ ) | nindent 14 }}
           {{- if .Values.queryFrontend.networkPolicy.ingressNSPodMatchLabels }}
           podSelector:
-            matchLabels:
-              {{- range $key, $value := .Values.queryFrontend.networkPolicy.ingressNSPodMatchLabels }}
-              {{ $key | quote }}: {{ $value | quote }}
-              {{- end }}
+            matchLabels: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.networkPolicy.ingressNSPodMatchLabels "context" $ ) | nindent 14 }}
           {{- end }}
         {{- end }}
       {{- end }}

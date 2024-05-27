@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -34,8 +34,12 @@ spec:
     - ports:
         - port: {{ .Values.primary.containerPorts.mysql }}
         - port: {{ .Values.secondary.containerPorts.mysql }}
-        - port: {{ .Values.primary.service.ports.mysql }}
-        - port: {{ .Values.secondary.service.ports.mysql }}
+      {{- if .Values.primary.enableMySQLX }}
+        - port: {{ .Values.primary.containerPorts.mysqlx }}
+      {{- end }}
+      {{- if .Values.secondary.enableMySQLX }}
+        - port: {{ .Values.secondary.containerPorts.mysql }}
+      {{- end }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
@@ -47,6 +51,12 @@ spec:
     - ports:
         - port: {{ .Values.primary.containerPorts.mysql }}
         - port: {{ .Values.secondary.containerPorts.mysql }}
+      {{- if .Values.primary.enableMySQLX }}
+        - port: {{ .Values.primary.containerPorts.mysqlx }}
+      {{- end }}
+      {{- if .Values.secondary.enableMySQLX }}
+        - port: {{ .Values.secondary.containerPorts.mysql }}
+      {{- end }}
       {{- if .Values.metrics.enabled }}
         - port: {{ .Values.metrics.containerPorts.http }}
       {{- end }}

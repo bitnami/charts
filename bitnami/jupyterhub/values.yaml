@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -77,7 +77,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.1.4-debian-12-r0
+    tag: 4.1.5-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -701,7 +701,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.1-debian-12-r12
+    tag: 4.6.1-debian-12-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1358,48 +1358,6 @@ imagePuller:
   ## @param imagePuller.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
   extraEnvVarsSecret: ""
-  ## @param imagePuller.livenessProbe.enabled Enable livenessProbe on ImagePuller containers
-  ## @param imagePuller.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param imagePuller.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param imagePuller.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param imagePuller.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param imagePuller.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 1
-    periodSeconds: 10
-    failureThreshold: 30
-    timeoutSeconds: 3
-    successThreshold: 1
-  ## @param imagePuller.readinessProbe.enabled Enable readinessProbe on ImagePuller containers
-  ## @param imagePuller.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param imagePuller.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param imagePuller.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param imagePuller.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param imagePuller.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 1
-    periodSeconds: 10
-    failureThreshold: 30
-    timeoutSeconds: 3
-    successThreshold: 1
-  ## @param imagePuller.startupProbe.enabled Enable startupProbe on ImagePuller containers
-  ## @param imagePuller.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param imagePuller.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param imagePuller.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param imagePuller.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param imagePuller.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 1
-    periodSeconds: 10
-    failureThreshold: 30
-    timeoutSeconds: 3
-    successThreshold: 1
   ## @param imagePuller.customStartupProbe Override default startup probe
   ##
   customStartupProbe: {}
@@ -1621,7 +1579,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.1.3-debian-12-r0
+    tag: 4.1.5-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1861,7 +1819,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r17
+  tag: 12-debian-12-r21
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

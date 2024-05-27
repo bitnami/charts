@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -158,9 +158,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.client.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - python
-                - -c
-                - import deepspeed; deepspeed.__version__
+                - deepspeed
+                - --help
           {{- end }}
           {{- if .Values.client.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customReadinessProbe "context" $) | nindent 12 }}

@@ -214,7 +214,7 @@ helm install test mychart --set path.to.value00="",path.to.value01=""
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

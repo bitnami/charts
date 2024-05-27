@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -45,6 +45,15 @@ spec:
       protocol: TCP
       {{- if (and (or (eq .Values.promtail.service.type "NodePort") (eq .Values.promtail.service.type "LoadBalancer")) (not (empty .Values.promtail.service.nodePorts.http))) }}
       nodePort: {{ .Values.promtail.service.nodePorts.http }}
+      {{- else if eq .Values.promtail.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: grpc
+      port: {{ .Values.promtail.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if (and (or (eq .Values.promtail.service.type "NodePort") (eq .Values.promtail.service.type "LoadBalancer")) (not (empty .Values.promtail.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.promtail.service.nodePorts.grpc }}
       {{- else if eq .Values.promtail.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

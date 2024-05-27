@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 4.3.3-debian-12-r7
+  tag: 4.4.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -81,8 +81,29 @@ image:
   ##
   debug: false
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
+## Setting this will fix the number replica count needed for Moodle&trade;
+## This can be overridden by setting autoscaling.enabled to true
+## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas 
 ##
 replicaCount: 1
+## When enabled, the number of Moodle&trade; replicas will be automatically adjusted based on targets on given metrics.
+## Enabling this feature will override the replicaCount value
+## When disabled, the number of Moodle&trade; replicas will be fixed and set by the replicaCount parameter
+## Warning: Before enabling ensure that your persistent volume claim has `Access Modes: RWX` since Autoscaling requires ReadWriteMany PVC support.
+## Moodle Autoscaling parameters
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+## @param autoscaling.enabled Enable Horizontal POD autoscaling for Moodle&trade;
+## @param autoscaling.minReplicas Minimum number of Moodle&trade; replicas
+## @param autoscaling.maxReplicas Maximum number of Moodle&trade; replicas
+## @param autoscaling.targetCPU Target CPU utilization percentage
+## @param autoscaling.targetMemory Target Memory utilization percentage
+##
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPU: 80
+  targetMemory: 80
 ## @param moodleSkipInstall Skip Moodle&trade; installation wizard. Useful for migrations and restoring from SQL dump
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/moodle#configuration
 ##
@@ -357,7 +378,7 @@ containerSecurityContext:
     type: "RuntimeDefault"
 ## Configure extra options for liveness and readiness probes
 ## Moodle&trade; core exposes /user/login to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
+## default startup and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
 ## module that alters that route, or an image that does not auto-install Moodle&trade;.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -378,7 +399,6 @@ startupProbe:
   failureThreshold: 60
   successThreshold: 1
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -387,7 +407,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /login/index.php
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -730,7 +749,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -775,7 +794,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r1
+    tag: 1.0.7-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -903,7 +922,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -937,7 +956,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -78,11 +78,33 @@ spec:
       {{- if .Values.primary.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or .Values.primary.initContainers (and .Values.primary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.primary.persistence.enabled) }}
       initContainers:
-        {{- if .Values.primary.initContainers }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.primary.initContainers "context" $) | nindent 8 }}
-        {{- end }}
+        - name: preserve-logs-symlinks
+          image: {{ include "mariadb.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.primary.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.primary.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.primary.resources }}
+          resources: {{ toYaml .Values.primary.resources | nindent 12 }}
+          {{- else if ne .Values.primary.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.primary.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/libfs.sh
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/mariadb/logs; then
+                cp -r /opt/bitnami/mariadb/logs /emptydir/app-logs-dir
+              fi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if and .Values.primary.podSecurityContext.enabled .Values.volumePermissions.enabled .Values.primary.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "mariadb.volumePermissions.image" . }}
@@ -109,7 +131,9 @@ spec:
               mountPath: /tmp
               subPath: tmp-dir
         {{- end }}
-      {{- end }}
+        {{- if .Values.primary.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.primary.initContainers "context" $) | nindent 8 }}
+        {{- end }}
       containers:
         - name: mariadb
           image: {{ include "mariadb.image" . }}
@@ -216,7 +240,7 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.primary.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}
@@ -246,7 +270,7 @@ spec:
                   if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.primary.resources }}

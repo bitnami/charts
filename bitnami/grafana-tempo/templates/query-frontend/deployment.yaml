@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -33,7 +33,6 @@ spec:
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query-frontend
-        tempo-gossip-member: "true"
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
@@ -67,6 +66,7 @@ spec:
       {{- if .Values.queryFrontend.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.queryFrontend.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.queryFrontend.enableServiceLinks }}
       initContainers:
         {{- if .Values.queryFrontend.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.initContainers "context" $) | nindent 8 }}
@@ -108,8 +108,6 @@ spec:
           ports:
             - containerPort: {{ .Values.tempo.containerPorts.web }}
               name: http
-            - containerPort: {{ .Values.tempo.containerPorts.gossipRing }}
-              name: http-memberlist
             - containerPort: {{ .Values.tempo.containerPorts.grpc }}
               name: grpc
           {{- if .Values.queryFrontend.resources }}
@@ -122,8 +120,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: {{ .Values.tempo.containerPorts.web }}
           {{- end }}
           {{- if .Values.queryFrontend.customReadinessProbe }}
@@ -200,6 +197,8 @@ spec:
               name: jaeger-ui
             - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerMetrics }}
               name: jaeger-metrics
+            - containerPort: {{ .Values.queryFrontend.query.containerPorts.jaegerGRPC }}
+              name: jaeger-grpc
           {{- if .Values.queryFrontend.query.resources }}
           resources: {{- toYaml .Values.queryFrontend.query.resources | nindent 12 }}
           {{- else if ne .Values.queryFrontend.query.resourcesPreset "none" }}
@@ -217,7 +216,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.query.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.queryFrontend.query.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.queryFrontend.query.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /
               port: jaeger-ui
           {{- end }}
           {{- if .Values.queryFrontend.query.customStartupProbe }}

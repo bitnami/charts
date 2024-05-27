@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -36,11 +36,11 @@ spec:
   {{- end }}
   ports:
     - name: tcp-repo-server
-      port: {{ .Values.repoServer.service.port }}
+      port: {{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
       targetPort: repo-server
       protocol: TCP
-      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty .Values.repoServer.service.nodePort))) }}
-      nodePort: {{ .Values.repoServer.service.nodePort }}
+      {{- if (and (or (eq .Values.repoServer.service.type "NodePort") (eq .Values.repoServer.service.type "LoadBalancer")) (not (empty (coalesce .Values.repoServer.service.nodePort .Values.repoServer.service.nodePorts.repoServer)))) }}
+      nodePort: {{ coalesce .Values.repoServer.service.nodePort .Values.repoServer.service.nodePorts.repoServer }}
       {{- else if eq .Values.repoServer.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

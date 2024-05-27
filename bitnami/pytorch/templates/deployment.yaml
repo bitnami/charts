@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -169,7 +169,7 @@ spec:
               command:
                 - python
                 - -c
-                - import torch; print(torch.__version__)
+                - import torchvision; print(torchvision.__version__)
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -179,7 +179,7 @@ spec:
               command:
                 - python
                 - -c
-                - import torch; print(torch.__version__)
+                - import torch; print(torch.__config__.show())
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
@@ -189,7 +189,7 @@ spec:
               command:
                 - python
                 - -c
-                - import torch; print(torch.__version__)
+                - import torch; print(torch.__config__.show())
           {{- end }}
           {{- end }}
           {{- if .Values.lifecycleHooks }}

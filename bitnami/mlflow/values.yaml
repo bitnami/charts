@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -85,7 +85,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mlflow
-  tag: 2.11.3-debian-12-r3
+  tag: 2.13.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -115,7 +115,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.44.0-debian-12-r2
+  tag: 2.45.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -857,50 +857,6 @@ run:
   ## @param run.terminationGracePeriodSeconds Run termination grace period (in seconds)
   ##
   terminationGracePeriodSeconds: ""
-  ## Configure extra options for Run containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param run.livenessProbe.enabled Enable livenessProbe on Run nodes
-  ## @param run.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param run.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param run.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param run.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param run.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    timeoutSeconds: 20
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param run.readinessProbe.enabled Enable readinessProbe on Run nodes
-  ## @param run.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param run.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param run.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param run.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param run.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    timeoutSeconds: 20
-    failureThreshold: 5
-    successThreshold: 1
-  ## @param run.startupProbe.enabled Enable startupProbe on Run containers
-  ## @param run.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param run.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param run.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param run.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param run.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 30
-    timeoutSeconds: 5
-    failureThreshold: 5
-    successThreshold: 1
   ## @param run.customLivenessProbe Custom livenessProbe that overrides the default one
   ##
   customLivenessProbe: {}
@@ -1252,7 +1208,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1301,7 +1257,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

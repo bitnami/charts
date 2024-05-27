@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -58,13 +58,6 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Return the proper Kafka exporter image name
-*/}}
-{{- define "kafka.metrics.kafka.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.kafka.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
 Return the proper JMX exporter image name
 */}}
 {{- define "kafka.metrics.jmx.image" -}}
@@ -75,26 +68,7 @@ Return the proper JMX exporter image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "kafka.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.kafka.image .Values.metrics.jmx.image) "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Create a default fully qualified Kafka exporter name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "kafka.metrics.kafka.fullname" -}}
-  {{- printf "%s-exporter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-{{- end -}}
-
-{{/*
- Create the name of the service account to use for Kafka exporter pods
- */}}
-{{- define "kafka.metrics.kafka.serviceAccountName" -}}
-{{- if .Values.metrics.kafka.serviceAccount.create -}}
-    {{ default (include "kafka.metrics.kafka.fullname" .) .Values.metrics.kafka.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.metrics.kafka.serviceAccount.name }}
-{{- end -}}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.externalAccess.autoDiscovery.image .Values.volumePermissions.image .Values.metrics.jmx.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -444,23 +418,6 @@ Return the Kafka log4j ConfigMap name.
     {{- include "common.tplvalues.render" (dict "value" .Values.existingLog4jConfigMap "context" $) -}}
 {{- else -}}
     {{- printf "%s-log4j-configuration" (include "common.names.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the SASL mechanism to use for the Kafka exporter to access Kafka
-The exporter uses a different nomenclature so we need to do this hack
-*/}}
-{{- define "kafka.metrics.kafka.saslMechanism" -}}
-{{- $saslMechanisms := .Values.sasl.enabledMechanisms }}
-{{- if contains "OAUTHBEARER" (upper $saslMechanisms) }}
-    {{- print "oauthbearer" -}}
-{{- else if contains "SCRAM-SHA-512" (upper $saslMechanisms) }}
-    {{- print "scram-sha512" -}}
-{{- else if contains "SCRAM-SHA-256" (upper $saslMechanisms) }}
-    {{- print "scram-sha256" -}}
-{{- else if contains "PLAIN" (upper $saslMechanisms) }}
-    {{- print "plain" -}}
 {{- end -}}
 {{- end -}}
 
@@ -981,7 +938,6 @@ Check if there are rolling tags in the images
 {{- define "kafka.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.externalAccess.autoDiscovery.image }}
-{{- include "common.warnings.rollingTag" .Values.metrics.kafka.image }}
 {{- include "common.warnings.rollingTag" .Values.metrics.jmx.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- end -}}

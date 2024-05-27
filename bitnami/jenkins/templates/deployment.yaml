@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -16,6 +16,7 @@ spec:
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+  replicas: {{ .Values.replicaCount }}
   strategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
@@ -309,8 +310,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /login
+            tcpSocket:
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -474,6 +474,11 @@ spec:
             {{- if .Values.configAsCode.autoReload.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.configAsCode.autoReload.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if .Values.configAsCode.autoReload.resources }}
+          resources: {{- toYaml .Values.configAsCode.autoReload.resources | nindent 12 }}
+          {{- else if ne .Values.configAsCode.autoReload.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.configAsCode.autoReload.resourcesPreset) | nindent 12 }}
+          {{- end }}
           {{- if or .Values.configAsCode.autoReload.extraEnvVarsCM .Values.configAsCode.autoReload.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.configAsCode.autoReload.extraEnvVarsCM }}

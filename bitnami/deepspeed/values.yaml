@@ -1,4 +1,4 @@
-## Copyright VMware, Inc.
+## Copyright Broadcom, Inc. All Rights Reserved.
 ## SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.14.0-debian-12-r0
+  tag: 0.14.2-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1015,7 +1015,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.44.0-debian-12-r0
+  tag: 2.45.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1042,7 +1042,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

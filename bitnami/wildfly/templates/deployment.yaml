@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -133,6 +133,8 @@ spec:
                   key: wildfly-password
             - name: WILDFLY_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
+            - name: WILDFLY_HTTPS_PORT_NUMBER
+              value: {{ .Values.containerPorts.https | quote }}
             - name: WILDFLY_MANAGEMENT_PORT_NUMBER
               value: {{ .Values.containerPorts.mgmt | quote }}
             - name: WILDFLY_SERVER_LISTEN_ADDRESS
@@ -156,6 +158,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.containerPorts.https }}
             - name: mgmt
               containerPort: {{ .Values.containerPorts.mgmt }}
             {{- if .Values.extraContainerPorts }}

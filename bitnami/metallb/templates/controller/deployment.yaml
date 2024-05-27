@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -116,6 +116,10 @@ spec:
             - name: METALLB_DEPLOYMENT
               value: {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
             {{- end }}
+            {{- if .Values.speaker.frr.enabled }}
+            - name: METALLB_BGP_TYPE
+              value: frr
+            {{- end }}
             {{- if .Values.controller.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -146,8 +150,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.controller.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.controller.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if .Values.controller.customReadinessProbe }}
@@ -178,7 +181,7 @@ spec:
         - name: cert
           secret:
             defaultMode: 420
-            secretName: webhook-server-cert
+            secretName: metallb-webhook-cert
         {{- if .Values.controller.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.controller.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

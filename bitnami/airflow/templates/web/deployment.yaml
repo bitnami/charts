@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -235,14 +235,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.web.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if include "airflow.baseUrl" . }}
-            tcpSocket:
-              port: http
-            {{- else }}
-            httpGet:
-              path: /health
-              port: http
-            {{- end }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - airflow-webserver
           {{- end }}
           {{- if .Values.web.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}

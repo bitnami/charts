@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/projectcontour/contour/v{version}/examples/contour/01-crds.yaml
-# Version: 1.28.2
+# Version: 1.29.0
 # Conditional: .Values.contour.manageCRDs
 {{- if .Values.contour.manageCRDs }}
 ---
@@ -7,7 +7,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: contourconfigurations.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -604,9 +604,9 @@ spec:
                 description: |-
                   FeatureFlags defines toggle to enable new contour features.
                   Available toggles are:
-                  useEndpointSlices - configures contour to fetch endpoint data
-                  from k8s endpoint slices. defaults to false and reading endpoint
-                  data from the k8s endpoints.
+                  useEndpointSlices - Configures contour to fetch endpoint data
+                  from k8s endpoint slices. defaults to true,
+                  If false then reads endpoint data from the k8s endpoints.
                 items:
                   type: string
                 type: array
@@ -615,22 +615,10 @@ spec:
                   Gateway contains parameters for the gateway-api Gateway that Contour
                   is configured to serve traffic.
                 properties:
-                  controllerName:
-                    description: |-
-                      ControllerName is used to determine whether Contour should reconcile a
-                      GatewayClass. The string takes the form of "projectcontour.io/<namespace>/contour".
-                      If unset, the gatewayclass controller will not be started.
-                      Exactly one of ControllerName or GatewayRef must be set.
-                      Deprecated: users should use GatewayRef, or the Gateway provisioner,
-                      in place of this field. This field will be removed in a future release.
-                    type: string
                   gatewayRef:
                     description: |-
-                      GatewayRef defines a specific Gateway that this Contour
-                      instance corresponds to. If set, Contour will reconcile
-                      only this gateway, and will not reconcile any gateway
-                      classes.
-                      Exactly one of ControllerName or GatewayRef must be set.
+                      GatewayRef defines the specific Gateway that this Contour
+                      instance corresponds to.
                     properties:
                       name:
                         type: string
@@ -640,6 +628,8 @@ spec:
                     - name
                     - namespace
                     type: object
+                required:
+                - gatewayRef
                 type: object
               globalExtAuth:
                 description: |-
@@ -1155,7 +1145,7 @@ spec:
                   type:
                     description: |-
                       Defines the XDSServer to use for `contour serve`.
-                      Values: `contour` (default), `envoy`.
+                      Values: `envoy` (default), `contour (deprecated)`.
                       Other values will produce an error.
                     type: string
                 type: object
@@ -1374,7 +1364,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: contourdeployments.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -1828,6 +1818,8 @@ spec:
                             to container and the other way around.
                             When not set, MountPropagationNone is used.
                             This field is beta in 1.10.
+                            When RecursiveReadOnly is set to IfPossible or to Enabled, MountPropagation must be None or unspecified
+                            (which defaults to None).
                           type: string
                         name:
                           description: This must match the Name of a Volume.
@@ -1837,6 +1829,21 @@ spec:
                             Mounted read-only if true, read-write otherwise (false or unspecified).
                             Defaults to false.
                           type: boolean
+                        recursiveReadOnly:
+                          description: |-
+                            RecursiveReadOnly specifies whether read-only mounts should be handled
+                            recursively.
+                            If ReadOnly is false, this field has no meaning and must be unspecified.
+                            If ReadOnly is true, and this field is set to Disabled, the mount is not made
+                            recursively read-only.  If this field is set to IfPossible, the mount is made
+                            recursively read-only, if it is supported by the container runtime.  If this
+                            field is set to Enabled, the mount is made recursively read-only if it is
+                            supported by the container runtime, otherwise the pod will not be started and
+                            an error will be generated to indicate the reason.
+                            If this field is set to IfPossible or Enabled, MountPropagation must be set to
+                            None (or be unspecified, which defaults to None).
+                            If this field is not specified, it is treated as an equivalent of Disabled.
+                          type: string
                         subPath:
                           description: |-
                             Path within the volume from which the container's volume should be mounted.
@@ -1964,6 +1971,7 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                             path:
                               description: 'path is Optional: Used as the mounted
                                 root, rather than the full Ceph tree, default is /'
@@ -2092,6 +2100,7 @@ spec:
                                 - path
                                 type: object
                               type: array
+                              x-kubernetes-list-type: atomic
                             name:
                               description: |-
                                 Name of the referent.
@@ -2176,8 +2185,8 @@ spec:
                                 properties:
                                   fieldRef:
                                     description: 'Required: Selects a field of the
-                                      pod: only annotations, labels, name and namespace
-                                      are supported.'
+                                      pod: only annotations, labels, name, namespace
+                                      and uid are supported.'
                                     properties:
                                       apiVersion:
                                         description: Version of the schema the FieldPath
@@ -2236,6 +2245,7 @@ spec:
                                 - path
                                 type: object
                               type: array
+                              x-kubernetes-list-type: atomic
                           type: object
                         emptyDir:
                           description: |-
@@ -2327,6 +2337,7 @@ spec:
                                       items:
                                         type: string
                                       type: array
+                                      x-kubernetes-list-type: atomic
                                     dataSource:
                                       description: |-
                                         dataSource field can be used to specify either:
@@ -2471,11 +2482,13 @@ spec:
                                                 items:
                                                   type: string
                                                 type: array
+                                                x-kubernetes-list-type: atomic
                                             required:
                                             - key
                                             - operator
                                             type: object
                                           type: array
+                                          x-kubernetes-list-type: atomic
                                         matchLabels:
                                           additionalProperties:
                                             type: string
@@ -2503,7 +2516,7 @@ spec:
                                         If the resource referred to by volumeAttributesClass does not exist, this PersistentVolumeClaim will be
                                         set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource
                                         exists.
-                                        More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#volumeattributesclass
+                                        More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/
                                         (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled.
                                       type: string
                                     volumeMode:
@@ -2547,6 +2560,7 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                             wwids:
                               description: |-
                                 wwids Optional: FC volume world wide identifiers (wwids)
@@ -2554,6 +2568,7 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                           type: object
                         flexVolume:
                           description: |-
@@ -2774,6 +2789,7 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                             readOnly:
                               description: |-
                                 readOnly here will force the ReadOnly setting in VolumeMounts.
@@ -2958,11 +2974,13 @@ spec:
                                                   items:
                                                     type: string
                                                   type: array
+                                                  x-kubernetes-list-type: atomic
                                               required:
                                               - key
                                               - operator
                                               type: object
                                             type: array
+                                            x-kubernetes-list-type: atomic
                                           matchLabels:
                                             additionalProperties:
                                               type: string
@@ -3041,6 +3059,7 @@ spec:
                                           - path
                                           type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                       name:
                                         description: |-
                                           Name of the referent.
@@ -3068,7 +3087,7 @@ spec:
                                             fieldRef:
                                               description: 'Required: Selects a field
                                                 of the pod: only annotations, labels,
-                                                name and namespace are supported.'
+                                                name, namespace and uid are supported.'
                                               properties:
                                                 apiVersion:
                                                   description: Version of the schema
@@ -3132,6 +3151,7 @@ spec:
                                           - path
                                           type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                     type: object
                                   secret:
                                     description: secret information about the secret
@@ -3175,6 +3195,7 @@ spec:
                                           - path
                                           type: object
                                         type: array
+                                        x-kubernetes-list-type: atomic
                                       name:
                                         description: |-
                                           Name of the referent.
@@ -3218,6 +3239,7 @@ spec:
                                     type: object
                                 type: object
                               type: array
+                              x-kubernetes-list-type: atomic
                           type: object
                         quobyte:
                           description: quobyte represents a Quobyte mount on the host
@@ -3288,6 +3310,7 @@ spec:
                               items:
                                 type: string
                               type: array
+                              x-kubernetes-list-type: atomic
                             pool:
                               description: |-
                                 pool is the rados pool name.
@@ -3443,6 +3466,7 @@ spec:
                                 - path
                                 type: object
                               type: array
+                              x-kubernetes-list-type: atomic
                             optional:
                               description: optional field specify whether the Secret
                                 or its keys must be defined
@@ -4299,9 +4323,9 @@ spec:
                     description: |-
                       FeatureFlags defines toggle to enable new contour features.
                       Available toggles are:
-                      useEndpointSlices - configures contour to fetch endpoint data
-                      from k8s endpoint slices. defaults to false and reading endpoint
-                      data from the k8s endpoints.
+                      useEndpointSlices - Configures contour to fetch endpoint data
+                      from k8s endpoint slices. defaults to true,
+                      If false then reads endpoint data from the k8s endpoints.
                     items:
                       type: string
                     type: array
@@ -4310,22 +4334,10 @@ spec:
                       Gateway contains parameters for the gateway-api Gateway that Contour
                       is configured to serve traffic.
                     properties:
-                      controllerName:
-                        description: |-
-                          ControllerName is used to determine whether Contour should reconcile a
-                          GatewayClass. The string takes the form of "projectcontour.io/<namespace>/contour".
-                          If unset, the gatewayclass controller will not be started.
-                          Exactly one of ControllerName or GatewayRef must be set.
-                          Deprecated: users should use GatewayRef, or the Gateway provisioner,
-                          in place of this field. This field will be removed in a future release.
-                        type: string
                       gatewayRef:
                         description: |-
-                          GatewayRef defines a specific Gateway that this Contour
-                          instance corresponds to. If set, Contour will reconcile
-                          only this gateway, and will not reconcile any gateway
-                          classes.
-                          Exactly one of ControllerName or GatewayRef must be set.
+                          GatewayRef defines the specific Gateway that this Contour
+                          instance corresponds to.
                         properties:
                           name:
                             type: string
@@ -4335,6 +4347,8 @@ spec:
                         - name
                         - namespace
                         type: object
+                    required:
+                    - gatewayRef
                     type: object
                   globalExtAuth:
                     description: |-
@@ -4852,7 +4866,7 @@ spec:
                       type:
                         description: |-
                           Defines the XDSServer to use for `contour serve`.
-                          Values: `contour` (default), `envoy`.
+                          Values: `envoy` (default), `contour (deprecated)`.
                           Other values will produce an error.
                         type: string
                     type: object
@@ -4947,7 +4961,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: extensionservices.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -5395,7 +5409,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: httpproxies.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -8250,6 +8264,7 @@ spec:
                           x-kubernetes-list-type: atomic
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                 type: object
             type: object
         required:
@@ -8265,7 +8280,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: tlscertificatedelegations.projectcontour.io
 spec:
   preserveUnknownFields: false

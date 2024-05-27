@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -33,6 +33,7 @@ spec:
         app.kubernetes.io/component: applicationSet
     spec:
       serviceAccountName: {{ include "argocd.applicationSet.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.applicationSet.serviceAccount.automountServiceAccountToken }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.applicationSet.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.nodeSelector "context" $) | nindent 8 }}
@@ -75,7 +76,7 @@ spec:
             - --probe-addr
             - ":{{ .Values.applicationSet.containerPorts.probe }}"
             - --argocd-repo-server
-            - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
+            - {{ include "argocd.repo-server" . }}:{{ coalesce .Values.repoServer.service.port .Values.repoServer.service.ports.repoServer }}
             - --policy
             - {{ .Values.applicationSet.defaultArgs.policy | quote }}
             {{- if or (gt ( .Values.applicationSet.replicaCount | int64) 1) .Values.applicationSet.defaultArgs.enableLeaderElection }}
@@ -118,8 +119,10 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.applicationSet.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: probe
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
             initialDelaySeconds: {{ .Values.applicationSet.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.applicationSet.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.applicationSet.livenessProbe.timeoutSeconds }}

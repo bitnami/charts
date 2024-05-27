@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -88,11 +88,11 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
-            - name: tcp-rpc
+            - name: rpc
               containerPort: {{ .Values.jobmanager.containerPorts.rpc }}
             - name: http
               containerPort: {{ .Values.jobmanager.containerPorts.http }}
-            - name: tcp-blob
+            - name: blob
               containerPort: {{ .Values.jobmanager.containerPorts.blob }}
           env:
             - name: FLINK_MODE
@@ -133,21 +133,24 @@ spec:
           {{- else if .Values.jobmanager.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobmanager.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: tcp-rpc
+              port: rpc
           {{- end }}
           {{- if .Values.jobmanager.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.jobmanager.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: tcp-rpc
+            exec:
+              command:
+              - pgrep
+              - -f
+              - jobmanager
           {{- end }}
           {{- if .Values.jobmanager.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.jobmanager.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: tcp-rpc
+              port: rpc
           {{- end }}
           {{- end }}
           {{- if .Values.jobmanager.resources }}

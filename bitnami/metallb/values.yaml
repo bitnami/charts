@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -155,7 +155,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.14.3-debian-12-r7
+    tag: 0.14.5-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -554,7 +554,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.14.3-debian-12-r8
+    tag: 0.14.5-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -915,6 +915,179 @@ speaker:
   ## @param speaker.logLevel Sets the speaker log level. Does not work if the args are overridden
   ##
   logLevel: "info"
+  ## @section FRR Speaker
+  frr:
+    ## @param speaker.frr.enabled Whether to enable FRR mode
+    ## ref: https://metallb.universe.tf/concepts/bgp/#frr-mode
+    ##
+    enabled: false
+    image:
+      ## @param speaker.frr.image.registry [default: REGISTRY_NAME] MetalLB Speaker image registry
+      ## @param speaker.frr.image.repository [default: REPOSITORY_NAME/metallb-speaker] MetalLB Speaker image repository
+      ## @skip speaker.frr.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
+      ## @param speaker.frr.image.digest MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+      ## @param speaker.frr.image.pullPolicy MetalLB Speaker image pull policy
+      ## @param speaker.frr.image.pullSecrets Specify docker-registry secret names as an array
+      ##
+      registry: docker.io
+      repository: bitnami/metallb-speaker
+      tag: 0.14.5-debian-12-r6
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+    ## Speaker container resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param speaker.frr.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if speaker.resources is set (speaker.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param speaker.frr.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+    ## Configure Container Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+    ## @param speaker.frr.containerSecurityContext.enabled Enabled Speaker containers' Security Context
+    ## @param speaker.frr.containerSecurityContext.capabilities.add [array] Add capabilities for the securityContext
+    ## @param speaker.frr.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+    ## @param speaker.frr.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 0
+      runAsGroup: 0
+      capabilities:
+        add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+          - NET_BIND_SERVICE
+    ## @param speaker.frr.containerPorts.metrics HTTP Metrics Endpoint
+    ##
+    containerPorts:
+      metrics: 7473
+    ## @section FRR Speaker Prometheus metrics export
+    metrics:
+      ## Prometheus Exporter service parameters
+      ##
+      service:
+        ## @param speaker.frr.metrics.service.port Prometheus metrics service port
+        ##
+        port: 7473
+        ## @param speaker.frr.metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+        ##
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "7473"
+          prometheus.io/path: "/metrics"
+      ## Prometheus Operator service monitors
+      ##
+      serviceMonitor:
+        ## @param speaker.frr.metrics.serviceMonitor.enabled Enable support for Prometheus Operator
+        ##
+        enabled: false
+        ## @param speaker.frr.metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+        ## e.g:
+        ## namespace: monitoring
+        ##
+        namespace: ""
+        ## @param speaker.frr.metrics.serviceMonitor.jobLabel Job label for scrape target
+        ##
+        jobLabel: "app.kubernetes.io/name"
+        ## @param speaker.frr.metrics.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used
+        ##
+        interval: ""
+        ## @param speaker.frr.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+        ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+        ##
+        scrapeTimeout: ""
+        ## @param speaker.frr.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+        ##
+        metricRelabelings: []
+        ## @param speaker.frr.metrics.serviceMonitor.relabelings Specify general relabeling
+        ##
+        relabelings: []
+        ## @param speaker.frr.metrics.serviceMonitor.selector ServiceMonitor selector labels
+        ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+        ##
+        ## selector:
+        ##   prometheus: my-prometheus
+        ##
+        selector: {}
+        ## @param speaker.frr.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+        ##
+        labels: {}
+        ## @param speaker.frr.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+        ##
+        honorLabels: false
+
+    ## Liveness probe values
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param speaker.frr.livenessProbe.enabled Enable livenessProbe
+    ## @param speaker.frr.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+    ## @param speaker.frr.livenessProbe.periodSeconds Period seconds for livenessProbe
+    ## @param speaker.frr.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+    ## @param speaker.frr.livenessProbe.failureThreshold Failure threshold for livenessProbe
+    ## @param speaker.frr.livenessProbe.successThreshold Success threshold for livenessProbe
+    ##
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    ## Readiness probe values
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param speaker.frr.readinessProbe.enabled Enable readinessProbe
+    ## @param speaker.frr.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+    ## @param speaker.frr.readinessProbe.periodSeconds Period seconds for readinessProbe
+    ## @param speaker.frr.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+    ## @param speaker.frr.readinessProbe.failureThreshold Failure threshold for readinessProbe
+    ## @param speaker.frr.readinessProbe.successThreshold Success threshold for readinessProbe
+    ##
+    readinessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    ## Startup probe values
+    ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+    ## @param speaker.frr.startupProbe.enabled Enable startupProbe
+    ## @param speaker.frr.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+    ## @param speaker.frr.startupProbe.periodSeconds Period seconds for startupProbe
+    ## @param speaker.frr.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+    ## @param speaker.frr.startupProbe.failureThreshold Failure threshold for startupProbe
+    ## @param speaker.frr.startupProbe.successThreshold Success threshold for startupProbe
+    ##
+    startupProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    ## @param speaker.frr.customStartupProbe Custom liveness probe for the Web component
+    ##
+    customStartupProbe: {}
+    ## @param speaker.frr.customLivenessProbe Custom liveness probe for the Web component
+    ##
+    customLivenessProbe: {}
+    ## @param speaker.frr.customReadinessProbe Custom readiness probe for the Web component
+    ##
+    customReadinessProbe: {}
   ## @section Speaker Prometheus metrics export
   metrics:
     ## @param speaker.metrics.enabled Enable the export of Prometheus metrics

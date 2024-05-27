@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -63,7 +63,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/phpmyadmin
-  tag: 5.2.1-debian-12-r24
+  tag: 5.2.1-debian-12-r29
   digest: ""
   ## Specify a imagePullPolicy
   ##
@@ -122,6 +122,13 @@ hostAliases:
 containerPorts:
   http: 8080
   https: 8443
+## @param extraContainerPorts Optionally specify extra list of additional ports for phpMyAdmin container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## @param updateStrategy.type Strategy to use to update Pods
 ##
 updateStrategy:
@@ -148,6 +155,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -159,9 +167,10 @@ containerSecurityContext:
   enabled: true
   seLinuxOptions: null
   runAsUser: 1001
+  runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -179,7 +188,7 @@ replicas: 1
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -215,8 +224,7 @@ startupProbe:
 ## phpMyAdmin containers' liveness probe. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.httpGet.path Request path for livenessProbe
-## @param livenessProbe.httpGet.port Port for livenessProbe
+## @param livenessProbe.tcpSocket.port Port for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -230,8 +238,7 @@ livenessProbe:
   periodSeconds: 10
   successThreshold: 1
   failureThreshold: 6
-  httpGet:
-    path: /
+  tcpSocket:
     port: http
 ## phpMyAdmin containers' readiness probes. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -610,7 +617,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r1
+    tag: 1.0.7-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -624,7 +631,7 @@ metrics:
   ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -727,93 +734,58 @@ metrics:
     selector: {}
 ## @section NetworkPolicy parameters
 
-## Add networkpolicies
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  metrics:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: monitoring
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: monitoring
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingress:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: ingress
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: ingress
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb) only accessible by phpMyAdmin's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes phpMyAdmin only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access phpMyAdmin. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  ingressRules:
-    ## mariadb backend only can be accessed from phpMyAdmin
-    ##
-    backendOnlyAccessibleByFrontend: false
-    customBackendSelector: {}
-    ## Allow only from the indicated:
-    ##
-    accessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-    ## custom ingress rules
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
   ##
-  egressRules:
-    ## Deny connections to external. This is not compatible with an external database.
-    ##
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}

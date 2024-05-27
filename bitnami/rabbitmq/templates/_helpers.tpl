@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -141,7 +141,7 @@ Return the proper RabbitMQ plugin list
 Return the number of bytes given a value
 following a base 2 or base 10 number system.
 Input can be: b | B | k | K | m | M | g | G | Ki | Mi | Gi
-Or number without suffix
+Or number without suffix (then the number gets interpreted as bytes)
 Usage:
 {{ include "rabbitmq.toBytes" .Values.path.to.the.Value }}
 */}}
@@ -224,7 +224,7 @@ Validate values of rabbitmq - Memory high watermark
 rabbitmq: memoryHighWatermark.type
     Invalid Memory high watermark type. Valid values are "absolute" and
     "relative". Please set a valid mode (--set memoryHighWatermark.type="xxxx")
-{{- else if and .Values.memoryHighWatermark.enabled (not (dig "limits" "memory" "" .Values.resources)) (eq .Values.memoryHighWatermark.type "relative") }}
+{{- else if and .Values.memoryHighWatermark.enabled (not (dig "limits" "memory" "" .Values.resources)) }}
 rabbitmq: memoryHighWatermark
     You enabled configuring memory high watermark using a relative limit. However,
     no memory limits were defined at POD level. Define your POD limits as shown below:

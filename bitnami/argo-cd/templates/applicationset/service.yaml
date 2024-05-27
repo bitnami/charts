@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -37,10 +37,10 @@ spec:
   {{- end }}
   ports:
     - name: webhook
-      port: {{ .Values.applicationSet.service.port }}
+      port: {{ coalesce .Values.applicationSet.service.port .Values.applicationSet.service.ports.webhook }}
       targetPort: webhook
-      {{- if (and (or (eq .Values.applicationSet.service.type "NodePort") (eq .Values.applicationSet.service.type "LoadBalancer")) (not (empty .Values.applicationSet.service.nodePort))) }}
-      nodePort: {{ .Values.applicationSet.service.nodePort }}
+      {{- if (and (or (eq .Values.applicationSet.service.type "NodePort") (eq .Values.applicationSet.service.type "LoadBalancer")) (not (empty (coalesce .Values.applicationSet.service.nodePort .Values.applicationSet.service.nodePorts.webhook)))) }}
+      nodePort: {{ coalesce .Values.applicationSet.service.nodePort .Values.applicationSet.service.nodePorts.webhook }}
       {{- else if eq .Values.applicationSet.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

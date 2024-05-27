@@ -1,11 +1,11 @@
 /*
- * Copyright VMware, Inc.
+ * Copyright Broadcom, Inc. All Rights Reserved.
  * SPDX-License-Identifier: APACHE-2.0
  */
 
 /// <reference types="cypress" />
 import { random } from '../support/utils';
-import { BASE_URL } from "../support/commands";
+import { baseURL } from '../support/commands';
 
 it('allows to create a new website', () => {
   cy.login();
@@ -30,28 +30,30 @@ it('allows to create a new website', () => {
 // Source: https://matomo.org/guide/apis/analytics-api/
 it('allows to use the API to retrieve analytics', () => {
   // Record a new visit in order to generate analytics beforehand
-  cy.request(`${BASE_URL}/matomo.php?idsite=1&rec=1`).then((response) => {
+  cy.request(`${baseURL()}/matomo.php?idsite=1&rec=1`).then((response) => {
     expect(response.status).to.eq(200);
   });
 
   cy.login();
-  // Navitage using the UI as Matomo will randomly fail with
+  // Navigate using the UI as Matomo will randomly fail with
   // "token mismatch" if accessed directly
+  cy.contains('Forms', {timeout: 60000});
   cy.get('#topmenu-coreadminhome').click();
+  cy.contains('System Summary', {timeout: 60000});
   cy.contains('Personal').click();
   cy.contains('Security').click();
-  cy.contains('Create new token').click();
-  cy.get('#login_form_password').type(Cypress.env('password'));
+  cy.contains('Create new token', {timeout: 60000}).click();
+  cy.get('#login_form_password', {timeout: 60000}).type(Cypress.env('password'));
   cy.get('[type="submit"]').click();
-  cy.get('#description').type(random);
+  cy.get('#description', {timeout: 60000}).type(random);
   cy.get('input[id="secure_only"]').click({ force: true });
   cy.get('[type="submit"]').click();
-  cy.contains('Token successfully generated');
+  cy.contains('Token successfully generated', {timeout: 60000});
   cy.get('code')
     .invoke('text')
     .then((apiToken) => {
       cy.request({
-        url: `${BASE_URL}/index.php`,
+        url: `${baseURL()}/index.php`,
         method: 'GET',
         qs: {
           module: 'API',

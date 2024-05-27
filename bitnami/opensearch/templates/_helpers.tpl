@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -122,7 +122,7 @@ Return the copy plugins init container definition
 {{/*
 Set Elasticsearch PVC.
 */}}
-{{- define "opensearh.dashboards.pvc" -}}
+{{- define "opensearch.dashboards.pvc" -}}
 {{- .Values.dashboards.persistence.existingClaim | default (include "opensearch.dashboards.fullname" .) -}}
 {{- end -}}
 

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -105,7 +105,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.2.0-debian-12-r12
+  tag: 16.3.0-debian-12-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -222,7 +222,7 @@ audit:
 ## @param ldap.searchAttribute Attribute to match against the user name in the search
 ## @param ldap.searchFilter The search filter to use when doing search+bind authentication
 ## @param ldap.scheme Set to `ldaps` to use LDAPS
-## DEPRECATED ldap.tls as string is deprecated，please use 'ldap.tls.enabled' instead
+## DEPRECATED ldap.tls as string is deprecated, please use 'ldap.tls.enabled' instead
 ## @param ldap.tls.enabled Se to true to enable TLS encryption
 ##
 ldap:
@@ -633,7 +633,7 @@ primary:
     ## @param primary.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param primary.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param primary.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -696,6 +696,10 @@ primary:
     ## @param primary.service.annotations Annotations for PostgreSQL primary service
     ##
     annotations: {}
+    ## @param primary.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param primary.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1073,7 +1077,7 @@ readReplicas:
     ## @param readReplicas.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param readReplicas.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param readReplicas.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1136,6 +1140,10 @@ readReplicas:
     ## @param readReplicas.service.annotations Annotations for PostgreSQL read only service
     ##
     annotations: {}
+    ## @param readReplicas.service.loadBalancerClass Load balancer class if service type is `LoadBalancer`
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    ##
+    loadBalancerClass: ""
     ## @param readReplicas.service.loadBalancerIP Load balancer IP if service type is `LoadBalancer`
     ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
@@ -1306,6 +1314,10 @@ backup:
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
     ##
     nodeSelector: {}
+    ## @param backup.cronjob.tolerations Tolerations for PostgreSQL backup CronJob pods assignment
+    ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+    ##
+    tolerations: []
     ## backup cronjob container resource requests and limits
     ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param backup.cronjob.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if backup.cronjob.resources is set (backup.cronjob.resources is recommended for production).
@@ -1395,7 +1407,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1504,7 +1516,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.15.0-debian-12-r15
+    tag: 0.15.0-debian-12-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

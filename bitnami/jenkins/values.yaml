@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -38,6 +38,9 @@ nameOverride: ""
 ## @param fullnameOverride String to fully override common.names.fullname
 ##
 fullnameOverride: ""
+## @param replicaCount Number of container replicas
+##
+replicaCount: 1
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
@@ -79,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.440.2-debian-12-r0
+  tag: 2.452.1-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -338,6 +341,23 @@ configAsCode:
         drop: ["ALL"]
       seccompProfile:
         type: "RuntimeDefault"
+    ## Jenkins containers' resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param configAsCode.autoReload.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if configAsCode.autoReload.resources is set (configAsCode.autoReload.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "none"
+    ## @param configAsCode.autoReload.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## Jenkins agents (EXPERIMENTAL)
 ## This feature won't take effect if ConfigAsCode is not enabled.
 ## NOTE: Values under this field may use Jenkins syntax instead of Kubernetes syntax
@@ -359,7 +379,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3206.0-debian-12-r9
+    tag: 0.3248.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -747,7 +767,7 @@ networkPolicy:
   ## @param networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
   ##
   kubeAPIServerPorts: [443, 6443, 8443]
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -1005,7 +1025,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

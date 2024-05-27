@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -26,7 +26,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/magento
-  tag: 2.4.6-debian-12-r21
+  tag: 2.4.7-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -288,7 +288,7 @@ nodeSelector: {}
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "none"
+resourcesPreset: "medium"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 ## resources:
@@ -319,6 +319,7 @@ podSecurityContext:
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
 ## @param containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
 ## @param containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set container's Security Context privileged
 ## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -328,8 +329,9 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
   privileged: false
   readOnlyRootFilesystem: false
@@ -408,100 +410,61 @@ podAnnotations: {}
 podLabels: {}
 ## @section NetworkPolicy parameters
 
-## Add networkpolicies
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled or metrics.enabled are true, configure networkPolicy.ingress and networkPolicy.metrics selectors respectively to allow communication
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.metrics.enabled Enable network policy for metrics (prometheus)
-  ## @param networkPolicy.metrics.namespaceSelector magento Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.
-  ## @param networkPolicy.metrics.podSelector magento Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  metrics:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: monitoring
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: monitoring
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector magento Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector magento Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingress:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: ingress
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: ingress
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backend (mariadb, elasticsearch) only accessible by magento's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector magento Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes magento only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector magento Namespace selector label that is allowed to access magento. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector magento Pods selector label that is allowed to access magento. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules magento Custom network policy ingress rule
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  ingressRules:
-    ## mariadb and elacticsearch backends only can be accessed from magento
-    ##
-    backendOnlyAccessibleByFrontend: false
-    ## Additional custom backend selector
-    ## e.g:
-    ## customBackendSelector:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    customBackendSelector: {}
-    ## Allow only from the indicated:
-    ##
-    accessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: access
-      ##
-      namespaceSelector: {}
-    ## custom ingress rules
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules magento Custom network policy rule
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
   ##
-  egressRules:
-    # Deny connections to external. This is not compatible with an external database.
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    customRules: {}
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
 ## @section Database parameters
 
 ## MariaDB chart configuration
@@ -522,7 +485,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.6.17-debian-12-r6
+    tag: 10.6.18-debian-12-r0
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
@@ -574,6 +537,27 @@ mariadb:
       ## Use an existing PVC
       ##
       existingClaim: ""
+    ## MariaDB primary container's resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param mariadb.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "micro"
+    ## @param mariadb.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External database configuration
 ##
 externalDatabase:
@@ -615,7 +599,7 @@ elasticsearch:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch
-    tag: 7.17.18-debian-12-r6
+    tag: 7.17.21-debian-12-r3
     digest: ""
   ## @param elasticsearch.sysctlImage.enabled Enable kernel settings modifier image for Elasticsearch
   ##
@@ -626,21 +610,93 @@ elasticsearch:
   ##
   master:
     replicaCount: 1
+    ## Elasticsearch resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param elasticsearch.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param elasticsearch.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## Elasticsearch coordinating-only node parameters
   ## @param elasticsearch.coordinating.replicaCount Desired number of Elasticsearch coordinating-only nodes
   ##
   coordinating:
     replicaCount: 1
+    ## Elasticsearch resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param elasticsearch.coordinating.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if coordinating.resources is set (coordinating.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param elasticsearch.coordinating.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## Elasticsearch data node parameters
   ## @param elasticsearch.data.replicaCount Desired number of Elasticsearch data nodes
   ##
   data:
     replicaCount: 1
+    ## Elasticsearch resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param elasticsearch.data.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if data.resources is set (data.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "medium"
+    ## @param elasticsearch.data.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   ## Elasticsearch ingest node parameters
   ## @param elasticsearch.ingest.replicaCount Desired number of Elasticsearch ingest nodes
   ##
   ingest:
     replicaCount: 1
+    ## Elasticsearch resource requests and limits
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param elasticsearch.ingest.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if ingest.resources is set (ingest.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "small"
+    ## @param elasticsearch.ingest.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External elasticsearch configuration
 ##
 externalElasticsearch:
@@ -723,7 +779,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -941,7 +997,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.6-debian-12-r7
+    tag: 1.0.7-debian-12-r8
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1041,7 +1097,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

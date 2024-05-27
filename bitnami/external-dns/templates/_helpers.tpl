@@ -1,5 +1,5 @@
 {{/*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -257,6 +257,12 @@ region = {{ .Values.aws.region }}
 }
 {{ end }}
 {{- define "external-dns.oci-credentials" -}}
+{{- if .Values.oci.useWorkloadIdentity }}
+auth:
+  region: {{ .Values.oci.region }}
+  useWorkloadIdentity: true
+compartment: {{ .Values.oci.compartmentOCID }}
+{{- else }}
 auth:
   region: {{ .Values.oci.region }}
   tenancy: {{ .Values.oci.tenancyOCID }}
@@ -268,7 +274,8 @@ auth:
   passphrase: {{ .Values.oci.privateKeyPassphrase }}
   {{- end }}
 compartment: {{ .Values.oci.compartmentOCID }}
-{{ end }}
+{{- end }}
+{{- end }}
 
 {{/*
 Compile all warnings into a single message, and call fail if the validation is enabled
@@ -464,7 +471,7 @@ external-dns: pdns.apiKey
 {{- define "external-dns.checkRollingTags" -}}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/tutorials/understand-rolling-tags-containers
++info https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html
 {{- end }}
 {{- end -}}
 

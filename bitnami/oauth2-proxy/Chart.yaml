@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r4
+      image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r12
 apiVersion: v2
 appVersion: 7.6.0
 dependencies:
@@ -30,9 +30,9 @@ keywords:
 - google
 - github
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: oauth2-proxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
-version: 5.0.0
+version: 5.2.0

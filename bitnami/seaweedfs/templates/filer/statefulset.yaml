@@ -1,0 +1,295 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.filer.enabled }}
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ template "seaweedfs.filer.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: filer
+  {{- if or .Values.filer.statefulsetAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.filer.statefulsetAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.filer.autoscaling.enabled }}
+  replicas: {{ .Values.filer.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.filer.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.filer.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: filer
+  serviceName: {{ printf "%s-headless" (include "seaweedfs.filer.fullname" .) }}
+  {{- if .Values.filer.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.filer.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        {{- if and .Values.filer.config (empty .Values.filer.existingConfigmap) }}
+        checksum/config: {{ include (print $.Template.BasePath "/filer/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        checksum/security-config: {{ include (print $.Template.BasePath "/security-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.filer.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.filer.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: filer
+    spec:
+      {{- include "seaweedfs.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "seaweedfs.serviceAccountName" . }}    
+      automountServiceAccountToken: {{ .Values.filer.automountServiceAccountToken }}
+      {{- if .Values.filer.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.filer.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.filer.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.filer.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.filer.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.filer.podAffinityPreset "component" "filer" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.filer.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.filer.podAntiAffinityPreset "component" "filer" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.filer.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.filer.nodeAffinityPreset.type "key" .Values.filer.nodeAffinityPreset.key "values" .Values.filer.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.filer.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.filer.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.filer.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.filer.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.filer.priorityClassName }}
+      priorityClassName: {{ .Values.filer.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.filer.schedulerName }}
+      schedulerName: {{ .Values.filer.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.filer.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.filer.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.filer.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.filer.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.filer.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.filer.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        {{- include "seaweedfs.filer.waitForDBInitContainer" . | nindent 8 }}
+        {{- if .Values.filer.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.filer.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: seaweedfs
+          image: {{ template "seaweedfs.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.filer.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.filer.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.filer.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.filer.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.filer.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.filer.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -logtostderr=true
+            - -v={{ .Values.filer.logLevel }}
+            {{- if or .Values.security.enabled .Values.filer.config .Values.filer.existingConfigmap }}
+            - -config_dir=/etc/seaweedfs
+            {{- end }}
+            - filer
+            - -ip.bind={{ .Values.filer.bindAddress }}
+            - -ip=$(POD_NAME).{{ printf "%s-headless" (include "seaweedfs.filer.fullname" .) }}.$(NAMESPACE).svc.{{ .Values.clusterDomain }}
+            - -port={{ .Values.filer.containerPorts.http }}
+            - -port.grpc={{ .Values.filer.containerPorts.grpc }}
+            - -master={{ include "seaweedfs.master.servers" . }}
+            {{- if .Values.filer.metrics.enabled }}
+            - -metricsPort={{ .Values.filer.containerPorts.metrics }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: WEED_CLUSTER_DEFAULT
+              value: {{ .Values.clusterDefault | quote }}
+            - name: WEED_MYSQL_ENABLED
+              value: "true"
+            - name: WEED_MYSQL_HOSTNAME
+              value: {{ include "seaweedfs.database.host" . | quote }}
+            - name: WEED_MYSQL_PORT
+              value: {{ include "seaweedfs.database.port" . | quote }}
+            - name: WEED_MYSQL_DATABASE
+              value: {{ include "seaweedfs.database.name" . | quote }}
+            - name: WEED_MYSQL_USERNAME
+              value: {{ include "seaweedfs.database.user" . | quote }}
+            - name: WEED_MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "seaweedfs.database.secretName" . }}
+                  key: mariadb-password
+            - name: WEED_MYSQL_CONNECTION_MAX_IDLE
+              value: "5"
+            - name: WEED_MYSQL_CONNECTION_MAX_OPEN
+              value: "75" 
+            - name: WEED_MYSQL_CONNECTION_MAX_LIFETIME_SECONDS
+              value: "600"
+            - name: WEED_MYSQL_INTERPOLATEPARAMS
+              value: "true"
+            {{- if .Values.filer.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.filer.extraEnvVarsCM .Values.filer.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.filer.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.filer.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.filer.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.filer.resources }}
+          resources: {{- toYaml .Values.filer.resources | nindent 12 }}
+          {{- else if ne .Values.filer.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.filer.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.filer.containerPorts.http }}
+            - name: grpc
+              containerPort: {{ .Values.filer.containerPorts.grpc }}
+            {{- if .Values.filer.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.filer.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.filer.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.filer.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.filer.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.filer.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.filer.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http
+          {{- end }}
+          {{- if .Values.filer.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.filer.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.filer.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.filer.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          {{- if .Values.filer.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.filer.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.filer.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.filer.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.filer.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.filer.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if or .Values.filer.config .Values.filer.existingConfigmap }}
+            - name: config
+              mountPath: /etc/seaweedfs/filer.toml
+              subPath: filer.toml
+              readOnly: true
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            - name: security-config
+              mountPath: /etc/seaweedfs/security.toml
+              subPath: security.toml
+              readOnly: true
+            {{- if .Values.security.mTLS.enabled  }}
+            - name: ca-cert
+              readOnly: true
+              mountPath: /certs/ca
+            - name: master-cert
+              readOnly: true
+              mountPath: /certs/master
+            - name: filer-cert
+              readOnly: true
+              mountPath: /certs/filer
+            - name: volume-cert
+              readOnly: true
+              mountPath: /certs/volume
+            - name: client-cert
+              readOnly: true
+              mountPath: /certs/client
+            {{- end }}
+            {{- end }}
+          {{- if .Values.filer.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.filer.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.filer.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        {{- if or .Values.filer.config .Values.filer.existingConfigmap }}
+        - name: config
+          configMap:
+            name: {{ template "seaweedfs.filer.configmapName" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: security-config
+          configMap:
+            name: {{ printf "%s-security" (include "common.names.fullname" .) }}
+        {{- if .Values.security.mTLS.enabled  }}
+        - name: ca-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.caSecretName" . }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+        - name: master-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.master.secretName" . }}
+        - name: filer-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.filer.secretName" . }}
+        - name: volume-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.volume.secretName" . }}
+        - name: client-cert
+          secret:
+            secretName: {{ template "seaweedfs.security.mTLS.client.secretName" . }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.filer.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.filer.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

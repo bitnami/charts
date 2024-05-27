@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -8,7 +8,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ default include "common.names.namespace" . .Values.metrics.serviceMonitor.namespace | quote }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}

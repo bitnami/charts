@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -26,7 +26,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -211,7 +211,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.4-debian-12-r3
+    tag: 1.26.0-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -261,19 +261,18 @@ frontend:
   ## @param frontend.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if frontend.resources is set (frontend.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
-  ## @param frontend.resources.limits.memory The memory limits for the NGINX container
-  ## @param frontend.resources.requests.cpu The requested CPU for the NGINX container
-  ## @param frontend.resources.requests.memory The requested memory for the NGINX container
+  resourcesPreset: "micro"
+  ## @param frontend.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
   ## @param frontend.extraEnvVars Array with extra environment variables to add to the NGINX container
   ## e.g:
   ## extraEnvVars:
@@ -322,10 +321,10 @@ frontend:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -537,6 +536,64 @@ frontend:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param frontend.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param frontend.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param frontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param frontend.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param frontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param frontend.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param frontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param frontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section Dashboard parameters
 
 ## Dashboard parameters
@@ -558,7 +615,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.9.0-debian-12-r18
+    tag: 2.10.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -657,19 +714,18 @@ dashboard:
   ## @param dashboard.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if dashboard.resources is set (dashboard.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
-  ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
-  ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
-  ## @param dashboard.resources.requests.memory The requested memory for the Dashboard container
+  resourcesPreset: "micro"
+  ## @param dashboard.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboard.podSecurityContext.enabled Enabled Dashboard pods' Security Context
@@ -701,10 +757,10 @@ dashboard:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -876,6 +932,64 @@ dashboard:
     ## @param dashboard.service.annotations Additional custom annotations for Dashboard service
     ##
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dashboard.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param dashboard.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dashboard.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param dashboard.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param dashboard.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param dashboard.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dashboard.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dashboard.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
 ## @section AppRepository Controller parameters
 
 ## AppRepository Controller parameters
@@ -893,7 +1007,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.9.0-debian-12-r18
+    tag: 2.10.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -920,7 +1034,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.9.0-debian-12-r19
+    tag: 2.10.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1032,19 +1146,18 @@ apprepository:
   ## @param apprepository.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if apprepository.resources is set (apprepository.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
-  ## @param apprepository.resources.limits.memory The memory limits for the AppRepository Controller container
-  ## @param apprepository.resources.requests.cpu The requested CPU for the AppRepository Controller container
-  ## @param apprepository.resources.requests.memory The requested memory for the AppRepository Controller container
+  resourcesPreset: "micro"
+  ## @param apprepository.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param apprepository.podSecurityContext.enabled Enabled AppRepository Controller pods' Security Context
@@ -1076,10 +1189,10 @@ apprepository:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1199,6 +1312,52 @@ apprepository:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param apprepository.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param apprepository.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param apprepository.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param apprepository.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param apprepository.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
   ## AppRepository Controller Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param apprepository.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -1232,7 +1391,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.6.0-debian-12-r4
+    tag: 7.6.0-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1342,10 +1501,10 @@ authProxy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1356,19 +1515,18 @@ authProxy:
   ## @param authProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if authProxy.resources is set (authProxy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
-  ## @param authProxy.resources.limits.memory The memory limits for the OAuth2 Proxy container
-  ## @param authProxy.resources.requests.cpu The requested CPU for the OAuth2 Proxy container
-  ## @param authProxy.resources.requests.memory The requested memory for the OAuth2 Proxy container
+  resourcesPreset: "micro"
+  ## @param authProxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
 ## @section Pinniped Proxy parameters
 
 ## Pinniped Proxy configuration for converting user OIDC tokens to k8s client authorization certs
@@ -1389,7 +1547,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.9.0-debian-12-r17
+    tag: 2.10.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1473,10 +1631,10 @@ pinnipedProxy:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1487,21 +1645,18 @@ pinnipedProxy:
   ## @param pinnipedProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if pinnipedProxy.resources is set (pinnipedProxy.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## Pinniped Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
-  ## @param pinnipedProxy.resources.limits.memory The memory limits for the Pinniped Proxy container
-  ## @param pinnipedProxy.resources.requests.cpu The requested CPU for the Pinniped Proxy container
-  ## @param pinnipedProxy.resources.requests.memory The requested memory for the Pinniped Proxy container
+  resourcesPreset: "micro"
+  ## @param pinnipedProxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
   ## Pinniped Proxy service parameters
   ##
   service:
@@ -1612,16 +1767,19 @@ postgresql:
   ## @param postgresql.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if postgresql.resources is set (postgresql.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
-  ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
-  ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
+  resourcesPreset: "micro"
+  ## @param postgresql.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits: {}
-    requests:
-      memory: 256Mi
-      cpu: 250m
+  ##
+  resources: {}
 ## @section kubeappsapis parameters
 kubeappsapis:
   ## @param kubeappsapis.enabledPlugins Manually override which plugins are enabled for the Kubeapps-APIs service
@@ -1704,7 +1862,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.9.0-debian-12-r19
+    tag: 2.10.0-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1768,19 +1926,18 @@ kubeappsapis:
   ## @param kubeappsapis.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if kubeappsapis.resources is set (kubeappsapis.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
-  ## @param kubeappsapis.resources.limits.memory The memory limits for the KubeappsAPIs container
-  ## @param kubeappsapis.resources.requests.cpu The requested CPU for the KubeappsAPIs container
-  ## @param kubeappsapis.resources.requests.memory The requested memory for the KubeappsAPIs container
+  resourcesPreset: "micro"
+  ## @param kubeappsapis.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param kubeappsapis.podSecurityContext.enabled Enabled KubeappsAPIs pods' Security Context
@@ -1812,10 +1969,10 @@ kubeappsapis:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1987,6 +2144,64 @@ kubeappsapis:
     ## @param kubeappsapis.service.annotations Additional custom annotations for KubeappsAPIs service
     ##
     annotations: {}
+  ## Network Policies
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param kubeappsapis.networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+    ##
+    enabled: true
+    ## @param kubeappsapis.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param kubeappsapis.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param kubeappsapis.networkPolicy.kubeAPIServerPorts [array] List of possible endpoints to kube-apiserver (limit to your cluster settings to increase security)
+    ##
+    kubeAPIServerPorts: [443, 6443, 8443]
+    ## @param kubeappsapis.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param kubeappsapis.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param kubeappsapis.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param kubeappsapis.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
   ## kubeappsapis Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param kubeappsapis.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -2017,7 +2232,7 @@ ociCatalog:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-oci-catalog
-    tag: 2.9.0-debian-12-r17
+    tag: 2.10.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2060,19 +2275,18 @@ ociCatalog:
   ## @param ociCatalog.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if ociCatalog.resources is set (ociCatalog.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
-  ## @param ociCatalog.resources.limits.cpu The CPU limits for the OCI Catalog container
-  ## @param ociCatalog.resources.limits.memory The memory limits for the OCI Catalog container
-  ## @param ociCatalog.resources.requests.cpu The requested CPU for the OCI Catalog container
-  ## @param ociCatalog.resources.requests.memory The requested memory for the OCI Catalog container
+  resourcesPreset: "micro"
+  ## @param ociCatalog.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
   ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
+  resources: {}
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param ociCatalog.containerSecurityContext.enabled Enabled containers' Security Context
@@ -2090,10 +2304,10 @@ ociCatalog:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -2211,6 +2425,23 @@ redis:
       ## @param redis.master.persistence.enabled Enable Redis&reg; master data persistence using PVC
       ##
       enabled: false
+    ## Redis&reg; master resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param redis.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
   replica:
     ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
     ##

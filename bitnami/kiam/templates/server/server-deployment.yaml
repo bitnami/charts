@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -174,8 +174,8 @@ spec:
                 - --key=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.keyFileName }}
                 - --ca=/bitnami/kiam/tls/{{ .Values.server.tlsCerts.caFileName }}
                 - --server-address=127.0.0.1:{{ .Values.server.containerPort }}
-                - --server-address-refresh=2s
-                - --timeout=5s
+                - --server-address-refresh=4s
+                - --timeout=10s
                 - --gateway-timeout-creation={{ .Values.server.gatewayTimeoutCreation }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}

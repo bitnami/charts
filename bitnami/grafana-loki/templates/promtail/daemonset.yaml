@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -116,6 +116,8 @@ spec:
           ports:
             - containerPort: {{ .Values.promtail.containerPorts.http }}
               name: http
+            - containerPort: {{ .Values.promtail.containerPorts.grpc }}
+              name: grpc
           {{- if .Values.promtail.resources }}
           resources: {{- toYaml .Values.promtail.resources | nindent 12 }}
           {{- else if ne .Values.promtail.resourcesPreset "none" }}
@@ -126,8 +128,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.promtail.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.promtail.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.promtail.customReadinessProbe }}

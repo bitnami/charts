@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -206,7 +206,11 @@ spec:
             {{- end }}
           ports:
             - name: mysql
-              containerPort: 3306
+              containerPort: {{ .Values.secondary.containerPorts.mysql }}
+            {{- if .Values.secondary.enableMySQLX }}
+            - name: mysqlx
+              containerPort: {{ .Values.secondary.containerPorts.mysqlx }}
+            {{- end }}
             {{- if .Values.secondary.extraPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.secondary.extraPorts "context" $) | nindent 12 }}
             {{- end }}
@@ -239,7 +243,7 @@ spec:
                   if [[ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.secondary.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.customStartupProbe "context" $) | nindent 12 }}
@@ -254,7 +258,7 @@ spec:
                   if [[ -f "${MYSQL_MASTER_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_MASTER_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mysqladmin ping -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.secondary.resources }}

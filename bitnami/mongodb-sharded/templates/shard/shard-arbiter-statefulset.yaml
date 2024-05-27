@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -206,8 +206,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if $.Values.shardsvr.arbiter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: mongodb
+            exec:
+              command:
+                - pgrep
+                - -f
+                - mongodb
           {{- end }}
           {{- if $.Values.shardsvr.arbiter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.arbiter.customReadinessProbe "context" $) | nindent 12 }}
@@ -322,8 +325,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /metrics
+            tcpSocket:
               port: metrics
           {{- end }}
           {{- if $.Values.metrics.customReadinessProbe }}

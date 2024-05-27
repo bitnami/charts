@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -174,9 +174,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.registry.server.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.server.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+            tcpSocket:
               port: registry
           {{- end }}
           {{- if .Values.registry.server.customReadinessProbe }}
@@ -330,9 +328,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.registry.controller.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.registry.controller.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.registry.controller.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/health
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+            tcpSocket:
               port: registryctl
           {{- end }}
           {{- if .Values.registry.controller.customReadinessProbe }}

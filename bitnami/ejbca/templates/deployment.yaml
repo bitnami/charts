@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -176,6 +176,11 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.containerPorts.https }}
+            {{- /* Currently hardcoded in EJBCA logic: https://github.com/bitnami/containers/blob/main/bitnami/ejbca/8/debian-12/rootfs/opt/bitnami/scripts/libejbca.sh#L212 */}}
+            - name: https-pub
+              containerPort: 8442
+            - name: ajp
+              containerPort: 8009
             {{- if .Values.extraContainerPorts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
@@ -202,8 +207,7 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            httpGet:
-              path: /ejbca/doc
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}

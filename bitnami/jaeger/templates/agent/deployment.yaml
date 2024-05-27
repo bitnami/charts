@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -90,12 +90,15 @@ spec:
           ports:
             - name: binary
               containerPort: {{ .Values.agent.containerPorts.binary }}
+              protocol: UDP
             - name: zipkin
               containerPort: {{ .Values.agent.containerPorts.zipkin }}
+              protocol: UDP
             - name: admin
               containerPort: {{ .Values.agent.containerPorts.admin }}
             - name: compact
               containerPort: {{ .Values.agent.containerPorts.compact }}
+              protocol: UDP
             - name: config
               containerPort: {{ .Values.agent.containerPorts.config }}
           env:
@@ -153,8 +156,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.agent.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: admin
           {{- end }}
           {{- if .Values.agent.customReadinessProbe }}
@@ -172,7 +174,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.agent.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if .Values.agent.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.agent.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.agent.sidecars "context" $) | nindent 8 }}

@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -26,7 +26,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 3.2.1-debian-12-r0
+  tag: 3.2.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -304,6 +304,13 @@ discourse:
   ##
   containerPorts:
     http: 8080
+  ## @param discourse.extraContainerPorts Optionally specify extra list of additional ports for WordPress container(s)
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
   ## Configure extra options for Discourse containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param discourse.livenessProbe.enabled Enable livenessProbe on Discourse containers
@@ -362,7 +369,7 @@ discourse:
   ## @param discourse.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if discourse.resources is set (discourse.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "xlarge"
   ## @param discourse.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -376,17 +383,30 @@ discourse:
   resources: {}
   ## Configure Discourse containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param discourse.containerSecurityContext.enabled Enabled Discourse containers' Security Context
+  ## @param discourse.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param discourse.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param discourse.containerSecurityContext.runAsUser Set Discourse containers' Security Context runAsUser
-  ## @param discourse.containerSecurityContext.runAsNonRoot Set Discourse containers' Security Context runAsNonRoot
+  ## @param discourse.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param discourse.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param discourse.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param discourse.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param discourse.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param discourse.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param discourse.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param discourse.containerSecurityContext.capabilities.add List of capabilities to be added
   ## @param discourse.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
     runAsNonRoot: false
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+      add: ["CHOWN", "SYS_CHROOT", "FOWNER", "SETGID", "SETUID", "DAC_OVERRIDE"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param discourse.lifecycleHooks for the Discourse container(s) to automate configuration before or after startup
@@ -508,7 +528,7 @@ sidekiq:
   ## @param sidekiq.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sidekiq.resources is set (sidekiq.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param sidekiq.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -522,17 +542,30 @@ sidekiq:
   resources: {}
   ## Configure Sidekiq containers (only main one) Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param sidekiq.containerSecurityContext.enabled Enabled Sidekiq containers' Security Context
+  ## @param sidekiq.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param sidekiq.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param sidekiq.containerSecurityContext.runAsUser Set Sidekiq containers' Security Context runAsUser
-  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set Sidekiq containers' Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param sidekiq.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param sidekiq.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param sidekiq.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param sidekiq.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param sidekiq.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param sidekiq.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param sidekiq.containerSecurityContext.capabilities.add List of capabilities to be added
   ## @param sidekiq.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
+    runAsGroup: 0
     runAsNonRoot: false
+    privileged: false
+    readOnlyRootFilesystem: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+      add: ["CHOWN", "CHMOD", "SYS_CHROOT", "FOWNER", "SETGID", "SETUID", "DAC_OVERRIDE"]
     seccompProfile:
       type: "RuntimeDefault"
   ## @param sidekiq.lifecycleHooks for the Sidekiq container(s) to automate configuration before or after startup
@@ -719,7 +752,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -735,7 +768,7 @@ volumePermissions:
   ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "nano"
   ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -755,7 +788,7 @@ volumePermissions:
   ## @param volumePermissions.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0
     seccompProfile:
       type: "RuntimeDefault"
@@ -780,78 +813,62 @@ serviceAccount:
   ##
   annotations: {}
 ## @section NetworkPolicy parameters
+## Network Policy configuration
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
 networkPolicy:
-  ## @param networkPolicy.enabled Enable network policies
-  ## If ingress.enabled is true, configure networkPolicy.ingress selectors to allow communication
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
   ##
-  enabled: false
-  ## @param networkPolicy.ingress.enabled Enable network policy for Ingress Proxies
-  ## @param networkPolicy.ingress.namespaceSelector Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.
-  ## @param networkPolicy.ingress.podSelector Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
   ##
-  ingress:
-    enabled: false
-    ## e.g:
-    ## podSelector:
-    ##   label: ingress
-    ##
-    podSelector: {}
-    ## e.g:
-    ## namespaceSelector:
-    ##   label: ingress
-    ##
-    namespaceSelector: {}
-  ## @param networkPolicy.ingressRules.backendOnlyAccessibleByFrontend Enable ingress rule that makes the backends (PostgreSQL and Redis) only accessible by Discourse's pods.
-  ## @param networkPolicy.ingressRules.customBackendSelector Backend selector labels. These labels will be used to identify the backend pods.
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.enabled Enable ingress rule that makes Discourse only accessible from a particular origin
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector Namespace selector label that is allowed to access Discourse. This label will be used to identified the allowed namespace(s).
-  ## @param networkPolicy.ingressRules.accessOnlyFrom.podSelector Pods selector label that is allowed to access Discourse. This label will be used to identified the allowed pod(s).
-  ## @param networkPolicy.ingressRules.customRules Custom network policy ingress rule
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
-  ingressRules:
-    ## PostgreSQL and Redis backends only can be accessed from Discourse
-    ##
-    backendOnlyAccessibleByFrontend: false
-    customBackendSelector: {}
-    ## Allow only from the indicated:
-    ##
-    accessOnlyFrom:
-      enabled: false
-      ## e.g:
-      ## namespaceSelector:
-      ##   label: ingress
-      ##
-      namespaceSelector: {}
-      ## e.g:
-      ## podSelector:
-      ##   label: access
-      ##
-      podSelector: {}
-    ## custom ingress rules
-    ## e.g:
-    ## customRules:
-    ##   - from:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
-  ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules Custom network policy rule
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
   ##
-  egressRules:
-    ## Deny connections to external. This is not compatible with an external database.
-    ##
-    denyConnectionsToExternal: false
-    ## Additional custom egress rules
-    ## e.g:
-    ## customRules:
-    ##   - to:
-    ##       - namespaceSelector:
-    ##           matchLabels:
-    ##             label: example
-    ##
-    customRules: {}
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
 ## @section Discourse database parameters
 
 ## PostgreSQL chart configuration
@@ -875,6 +892,24 @@ postgresql:
     database: bitnami_application
     existingSecret: ""
   architecture: standalone
+  primary:
+    ## PostgreSQL Primary resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param postgresql.primary.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if primary.resources is set (primary.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param postgresql.primary.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
 ## External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
@@ -922,6 +957,25 @@ redis:
     password: ""
     existingSecret: ""
   architecture: standalone
+  master:
+    ## Redis&reg; master resource requests and limits
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+    ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
+    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+    ##
+    resourcesPreset: "nano"
+    ## @param redis.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+    ## Example:
+    ## resources:
+    ##   requests:
+    ##     cpu: 2
+    ##     memory: 512Mi
+    ##   limits:
+    ##     cpu: 3
+    ##     memory: 1024Mi
+    ##
+    resources: {}
+
 ## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
 ## @param externalRedis.host Redis&reg; host

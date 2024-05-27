@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -88,7 +88,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.16.0-debian-12-r0
+    tag: 1.16.2-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -287,11 +287,11 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node server.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -368,6 +368,10 @@ server:
   ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Vault Server container(s)
   ##
   extraVolumeMounts: []
+  ## e.g.
+  ##- name: plugin
+  ##  mountPath: /tmp
+
   ## @param server.sidecars Add additional sidecar containers to the Vault Server pod(s)
   ## e.g:
   ## sidecars:
@@ -522,7 +526,7 @@ server:
     ## @param server.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param server.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -726,6 +730,21 @@ server:
     ## @param server.persistence.existingClaim The name of an existing PVC to use for persistence
     ##
     existingClaim: ""
+    ## @param server.persistence.extraVolumeClaimTemplates  Add additional VolumeClaimTemplates for enabling any plugins or any other purpose to the Vault Server pod(s)
+    ##
+    extraVolumeClaimTemplates: []
+    ## e.g:
+    ##- metadata:
+    ##    name: plugin
+    ##    annotations:
+    ##  spec:
+    ##    accessModes:
+    ##      - "ReadWriteOnce"
+    ##    resources:
+    ##      requests:
+    ##        storage: "10Gi"
+    ##    storageClassName: nfs-client
+
   ## @section Vault Server Metrics Parameters
   ##
 
@@ -804,7 +823,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.1-debian-12-r16
+    tag: 1.4.2-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -968,7 +987,7 @@ csiProvider:
     ## @param csiProvider.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param csiProvider.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param csiProvider.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1309,7 +1328,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.4.0-debian-12-r1
+    tag: 1.4.1-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1477,11 +1496,11 @@ injector:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param injector.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param injector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param injector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param injector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `injector.pdb.minAvailable` and `injector.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1666,7 +1685,7 @@ injector:
     ## @param injector.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param injector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param injector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1741,6 +1760,17 @@ injector:
     ## @param injector.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
     ##
     automountServiceAccountToken: false
+
+  ## @param injector.webhook.namespaceSelector Enabling specify which namespace you want to work with webhook
+  ## Example:
+  ##   namespaceSelector:
+  ##     matchExpressions:
+  ##     - key: kubernetes.io/metadata.name
+  ##       operator: In
+  ##       values:
+  ##         - "{{ .Release.Namespace }}"
+  webhook:
+    namespaceSelector: {}
 ## 'volumePermissions' init container parameters
 ## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
 ##   based on the podSecurityContext/containerSecurityContext parameters
@@ -1761,7 +1791,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r17
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

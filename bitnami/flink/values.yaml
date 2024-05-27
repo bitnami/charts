@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/flink
-  tag: 1.19.0-debian-12-r1
+  tag: 1.19.0-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -314,7 +314,7 @@ jobmanager:
     ## @param jobmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param jobmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param jobmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -599,13 +599,14 @@ taskmanager:
   extraVolumeMounts: []
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param taskmanager.containerPorts.data data exchange port
+  ## @param taskmanager.containerPorts.rpc Port for RPC
+  ## @param taskmanager.containerPorts.internalMetrics Port for internal metrics query service
+  ##
   containerPorts:
-    ## @param taskmanager.containerPorts.data data exchange port
-    ##
     data: 6121
-    ## @param taskmanager.containerPorts.rpc Port for RPC
-    ##
     rpc: 6122
+    internalMetrics: 6126
   ## Apache Flink taskmanager.service parameters
   ##
   service:
@@ -613,23 +614,24 @@ taskmanager:
     ##
     type: ClusterIP
     ## Ports to expose
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param taskmanager.service.ports.data data exchange port
+    ## @param taskmanager.service.ports.rpc Port for RPC
+    ## @param taskmanager.service.ports.internalMetrics Port for internal metrics query service
+    ##
     ports:
-      ## @param taskmanager.service.ports.data data exchange port
-      ##
       data: 6121
-      ## @param taskmanager.service.ports.rpc Port for RPC
-      ##
       rpc: 6122
+      internalMetrics: 6126
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+    ## @param taskmanager.service.nodePorts.data data exchange port
+    ## @param taskmanager.service.nodePorts.rpc Port for RPC
+    ## @param taskmanager.service.nodePorts.internalMetrics Port for internal metrics query service
+    ##
     nodePorts:
-      ## @param taskmanager.service.nodePorts.data data exchange port
-      ##
       data: ""
-      ## @param taskmanager.service.nodePorts.rpc Port for RPC
-      ##
       rpc: ""
+      internalMetrics: ""
     ## @param taskmanager.service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
     ##
     extraPorts: []
@@ -686,7 +688,7 @@ taskmanager:
     ## @param taskmanager.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param taskmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param taskmanager.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -178,9 +178,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.core.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.core.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.core.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v2.0/ping
-              scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
+            tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
           {{- end }}
           {{- if .Values.core.customReadinessProbe }}

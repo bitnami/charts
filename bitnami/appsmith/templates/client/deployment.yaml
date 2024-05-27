@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -66,9 +66,38 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.client.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        - name: preserve-logs-symlinks
+          image: {{ include "appsmith.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.client.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.client.resources }}
+          resources: {{- toYaml .Values.client.resources | nindent 12 }}
+          {{- else if ne .Values.client.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.client.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+              . /opt/bitnami/scripts/libfs.sh
+              . /opt/bitnami/scripts/liblog.sh
+
+              info "Copying the nginx symlinks"
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/nginx/logs; then
+                cp -r /opt/bitnami/nginx/logs /emptydir/nginx-logs-dir
+              fi
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
         {{- if not .Values.diagnosticMode.enabled }}
-        {{- include "appsmith.waitForBackendInitContainer" . | nindent 8 }}
         {{- include "appsmith.waitForRTSInitContainer" . | nindent 8 }}
+        {{- include "appsmith.waitForBackendInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.client.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.client.initContainers "context" $) | nindent 8 }}
@@ -105,6 +134,8 @@ spec:
               value: {{ .Values.rts.service.ports.http | quote }}
             - name: APPSMITH_UI_HTTP_PORT
               value: {{ .Values.client.containerPorts.http | quote }}
+            - name: APPSMITH_UI_HTTPS_PORT
+              value: {{ .Values.client.containerPorts.https | quote }}
             {{- if .Values.client.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.client.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -125,13 +156,14 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.client.containerPorts.http }}
+            - name: https
+              containerPort: {{ .Values.client.containerPorts.https }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.client.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.client.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.client.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.client.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.client.customReadinessProbe }}

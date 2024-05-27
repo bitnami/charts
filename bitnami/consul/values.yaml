@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.18.1-debian-12-r0
+  tag: 1.18.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -211,6 +211,7 @@ extraEnvVarsSecret: ""
 ## @param containerPorts.rpc Port to open for RPC in Consul
 ## @param containerPorts.rpcServer Port to open for RPC Server in Consul
 ## @param containerPorts.serfLAN Port to open for Serf LAN in Consul
+## @param containerPorts.serfWAN Port to open for Serf WAN in Consul
 ##
 containerPorts:
   http: 8500
@@ -218,6 +219,7 @@ containerPorts:
   rpc: 8400
   rpcServer: 8300
   serfLAN: 8301
+  serfWAN: 8302
 ## @param lifecycleHooks Add lifecycle hooks to the deployment
 ##
 lifecycleHooks: {}
@@ -524,7 +526,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:
@@ -718,7 +720,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r17
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -767,7 +769,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.11.0-debian-12-r12
+    tag: 0.12.0-debian-12-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -795,7 +797,7 @@ metrics:
     enabled: true
     seLinuxOptions: {}
     runAsUser: 1001
-    runAsGroup: 0
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
@@ -803,7 +805,7 @@ metrics:
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
   ## Consul Prometheus exporter service type
   ##
   service:

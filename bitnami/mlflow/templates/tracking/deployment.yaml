@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -185,6 +185,8 @@ spec:
                   name: {{ include "mlflow.v0.s3.secretName" . }}
                   key: {{ include "mlflow.v0.s3.secretAccessKeyKey" . | quote }}
             {{- end }}
+            {{- end }}
+            {{- if .Values.minio.enabled }}
             - name: MLFLOW_S3_ENDPOINT_URL
               value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
             {{- end }}
@@ -213,14 +215,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.tracking.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if .Values.tracking.auth.enabled }}
             tcpSocket:
               port: {{ include "mlflow.v0.tracking.portName" . }}
-            {{- else }}
-            httpGet:
-              path: /
-              port: {{ include "mlflow.v0.tracking.portName" . }}
-            {{- end }}
           {{- end }}
           {{- if .Values.tracking.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customReadinessProbe "context" $) | nindent 12 }}

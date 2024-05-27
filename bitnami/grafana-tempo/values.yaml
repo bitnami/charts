@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -81,7 +81,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.4.1-debian-12-r0
+    tag: 2.4.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -499,6 +499,11 @@ compactor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param compactor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Compactor Traffic Exposure Parameters
 
   ## compactor service parameters
@@ -508,9 +513,11 @@ compactor:
     ##
     type: ClusterIP
     ## @param compactor.service.ports.http Compactor HTTP service port
+    ## @param compactor.service.ports.grpc Compactor GRPC service port
     ##
     ports:
       http: 3200
+      grpc: 9095
     ## Node ports to expose
     ## NOTE: choose port between <30000-32767>
     ## @param compactor.service.nodePorts.http Node port for HTTP
@@ -571,7 +578,10 @@ compactor:
     ## @param compactor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param compactor.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param compactor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -604,8 +614,14 @@ compactor:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param compactor.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param compactor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.
+    ## @param compactor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -845,6 +861,11 @@ distributor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param distributor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Distributor Traffic Exposure Parameters
 
   ## distributor service parameters
@@ -921,7 +942,10 @@ distributor:
     ## @param distributor.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param distributor.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param distributor.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -954,8 +978,14 @@ distributor:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param distributor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param distributor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param distributor.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param distributor.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.
+    ## @param distributor.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -1197,6 +1227,12 @@ metricsGenerator:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param metricsGenerator.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+
   ## @section Metrics Generator Traffic Exposure Parameters
 
   ## metricsGenerator service parameters
@@ -1264,10 +1300,13 @@ metricsGenerator:
     ## (with the correct destination port).
     ##
     allowExternal: true
+    ## @param metricsGenerator.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param metricsGenerator.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param metricsGenerator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param metricsGenerator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1300,8 +1339,14 @@ metricsGenerator:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param metricsGenerator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param metricsGenerator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param metricsGenerator.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param metricsGenerator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.
+    ## @param metricsGenerator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -1541,6 +1586,11 @@ ingester:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingester.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Ingester Persistence Parameters
 
   ## Enable persistence using Persistent Volume Claims
@@ -1659,7 +1709,10 @@ ingester:
     ## @param ingester.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param ingester.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param ingester.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1692,8 +1745,14 @@ ingester:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param ingester.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param ingester.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param ingester.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param ingester.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.
+    ## @param ingester.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -1933,6 +1992,11 @@ querier:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param querier.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Querier Traffic Exposure Parameters
 
   ## querier service parameters
@@ -2009,7 +2073,10 @@ querier:
     ## @param querier.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param querier.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `querier.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param querier.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2042,8 +2109,14 @@ querier:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param querier.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param querier.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param querier.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param querier.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.
+    ## @param querier.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -2283,6 +2356,11 @@ queryFrontend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param queryFrontend.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Query sidecar settings
   ##
   query:
@@ -2298,7 +2376,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 2.4.1-debian-12-r0
+      tag: 2.4.2-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2319,10 +2397,12 @@ queryFrontend:
       backend: 127.0.0.1:{{ .Values.tempo.containerPorts.web }}
     ## @param queryFrontend.query.containerPorts.jaegerMetrics queryFrontend query sidecar Jaeger metrics container port
     ## @param queryFrontend.query.containerPorts.jaegerUI queryFrontend query sidecar Jaeger UI container port
+    ## @param queryFrontend.query.containerPorts.jaegerGRPC queryFrontend query sidecar Jaeger UI container port
     ##
     containerPorts:
       jaegerMetrics: 16687
       jaegerUI: 16686
+      jaegerGRPC: 16685
     ## @param queryFrontend.query.existingConfigmap Name of a configmap with the query configuration
     ##
     existingConfigmap: ""
@@ -2531,7 +2611,10 @@ queryFrontend:
     ## @param queryFrontend.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param queryFrontend.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param queryFrontend.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2564,11 +2647,18 @@ queryFrontend:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param queryFrontend.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param queryFrontend.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
+    ## @param queryFrontend.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+
 ## @section Vulture Deployment Parameters
 ##
 vulture:
@@ -2587,7 +2677,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 2.4.1-debian-12-r0
+    tag: 2.4.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2839,6 +2929,11 @@ vulture:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param vulture.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Vulture Traffic Exposure Parameters
 
   ## Vulture service parameters
@@ -2911,7 +3006,10 @@ vulture:
     ## @param vulture.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param vulture.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param vulture.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `vulture.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param vulture.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -2944,8 +3042,14 @@ vulture:
     ##                   - frontend
     ##
     extraEgress: []
-    ## @param vulture.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-    ## @param vulture.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ## @param vulture.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `vulture.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param vulture.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `vulture.networkPolicy.allowExternal` is true.
+    ## @param vulture.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `vulture.networkPolicy.allowExternal` is true.
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
@@ -2972,7 +3076,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r16
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

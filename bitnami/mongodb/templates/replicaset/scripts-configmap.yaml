@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -73,7 +73,7 @@ data:
     export MONGODB_ADVERTISED_HOSTNAME="$(<${SHARED_FILE})"
     {{- else }}
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-    export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
+    export MONGODB_ADVERTISED_HOSTNAME=$(echo '{{ coalesce .Values.externalAccess.service.publicNames .Values.externalAccess.service.loadBalancerIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
@@ -113,7 +113,6 @@ data:
       {{- $fullname := include "mongodb.fullname" . }}
       {{- $releaseNamespace := include "mongodb.namespace" . }}
       {{- $clusterDomain := .Values.clusterDomain }}
-      {{- $loadBalancerIPListLength := len .Values.externalAccess.service.loadBalancerIPs }}
       {{- $mongoList := list }}
       {{- range $e, $i := until $replicaCount }}
       {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
@@ -159,7 +158,6 @@ data:
         export MONGODB_EXTRA_DATABASES_FILE=""
         export MONGODB_EXTRA_PASSWORDS_FILE=""
     fi
-
     exec /opt/bitnami/scripts/mongodb/entrypoint.sh /opt/bitnami/scripts/mongodb/run.sh
   setup-hidden.sh: |-
     #!/bin/bash
@@ -224,7 +222,7 @@ data:
 
     SLEEP_PERIOD=10
 
-    {{- if and .Values.auth.enabled .Values.auth.rootPassword }}
+    {{- if and .Values.auth.enabled (or .Values.auth.rootPassword .Values.auth.existingSecret)}}
     usernameAndPassword="{{- if .Values.tls.enabled}} --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert{{- end }} -u ${MONGODB_ROOT_USER} -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
@@ -315,3 +313,4 @@ data:
     done
   {{- end }}
 {{- end }}
+  

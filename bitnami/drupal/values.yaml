@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -65,7 +65,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/drupal
-  tag: 10.2.5-debian-12-r0
+  tag: 10.2.6-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -378,13 +378,8 @@ startupProbe:
   failureThreshold: 5
   successThreshold: 1
 ## Configure extra options for liveness probe
-## Drupal core exposes /user/login to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
-## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Drupal.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -393,7 +388,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /user/login
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -401,7 +395,7 @@ livenessProbe:
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## Drupal core exposes /user/login to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
+## default startup and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
 ## module that alters that route, or an image that does not auto-install Drupal.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -688,7 +682,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -738,7 +732,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r1
+    tag: 1.0.7-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -905,7 +899,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r18
+    tag: 12-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -936,7 +930,7 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
-  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
   ##   - ports:

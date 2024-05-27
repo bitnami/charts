@@ -1,0 +1,959 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.name
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## Settings for the the storage backend
+##
+storageBackend:
+  ## @param storageBackend.usePasswordFiles Mount credentials as a files instead of using an environment variable
+  ## Note: ignored when backend does not require authentication
+  ##
+  usePasswordFiles: false
+  ## Cassandra storage backend
+  ##
+  cassandra:
+    ## @param storageBackend.cassandra.enabled Use Apache Casandra subchart as storage backend
+    ##
+    enabled: true
+  ## BerkeleyDB storage backend
+  ##
+  berkeleyje:
+    ## @param storageBackend.berkeleyje.enabled Use BerkeleyDB (local) as storage backend
+    ##
+    enabled: false
+    ## @param storageBackend.berkeleyje.directory Path for the BerkeleyDB data
+    ##
+    directory: "/bitnami/janusgraph/data/storage"
+  ## External storage backend
+  ##
+  external:
+    ## @param storageBackend.external.backend Type of the external storage backend to be used
+    ##
+    backend: ""
+    ## @param storageBackend.external.hostname Hostname of the external storage backend
+    ##
+    hostname: ""
+    ## @param storageBackend.external.port Port of the external storage backend
+    ##
+    port: ""
+    ## @param storageBackend.external.username Username used to authenticate to the storage backend, in case it requires authentication
+    ##
+    username: ""
+    ## @param storageBackend.external.existingSecret Existing secret containing the password of the external storage backend, in case its needed
+    ##
+    existingSecret: ""
+    ## @param storageBackend.external.existingSecretPasswordKey Name of an existing secret key containing the storage backend password
+    ##
+    existingSecretPasswordKey: ""
+
+## Settings for index management
+##
+indexBackend:
+  ## Lucene index backend
+  ##
+  lucene:
+    ## @param indexBackend.lucene.enabled Use Lucene (local) as index management backend
+    ##
+    enabled: false
+    ## @param indexBackend.lucene.directory Path for the BerkeleyDB data
+    ##
+    directory: "/bitnami/janusgraph/data/index"
+  ## External index backend
+  ##
+  external:
+    ## @param indexBackend.external.backend Type of the external index backend to be used
+    ##
+    backend: ""
+    ## @param indexBackend.external.hostname Hostname of the external index backend
+    ##
+    hostname: ""
+    ## @param indexBackend.external.port Port of the external index backend
+    ##
+    port: ""
+
+## Settings for JanusGraph caching.
+##
+cache:
+  ## @param cache.enabled Enable Janusgraph cache feature
+  ## Ref. https://docs.janusgraph.org/operations/cache/
+  ##
+  enabled: true
+
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for JanusGraph
+## NOTE: By providing a ConfigMap, other settings provided using values may be ignored.
+##
+existingConfigmap: ""
+## @param extraJanusgraphProperties Additional JanusGraph to be appended at the end of the janusgraph.properties configmap
+##
+extraJanusgraphProperties: ""
+## @param janusgraphProperties Override the content of the janusgraph.properties file.
+## NOTE: By providing the content of janusgraph.properties, other settings provided using values may be ignored.
+##
+janusgraphProperties: ""
+## @param javaOptions Java options for JanusGraph execution
+##
+javaOptions: ""
+
+## Bitnami JanusGraph image
+## ref: https://hub.docker.com/r/bitnami/janusgraph/tags/
+## @param image.registry [default: REGISTRY_NAME] JanusGraph image registry
+## @param image.repository [default: REPOSITORY_NAME/janusgraph] JanusGraph image repository
+## @skip image.tag JanusGraph image tag (immutable tags are recommended)
+## @param image.digest JanusGraph image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy JanusGraph image pull policy
+## @param image.pullSecrets JanusGraph image pull secrets
+## @param image.debug Enable JanusGraph image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/janusgraph
+  tag: 1.0.0-debian-12-r4
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+
+## @param replicaCount Number of JanusGraph replicas to deploy
+##
+replicaCount: 1
+## @param containerPorts.gremlin JanusGraph gremlin server container port
+## @param containerPorts.jmx JanusGraph JMX metrics container port
+##
+containerPorts:
+  gremlin: 8182
+  jmx: 5555
+## Configure extra options for JanusGraph containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe on JanusGraph containers
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 90
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+## @param readinessProbe.enabled Enable readinessProbe on JanusGraph containers
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 90
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+## @param startupProbe.enabled Enable startupProbe on JanusGraph containers
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 90
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe Custom startupProbe that overrides the default one
+##
+customStartupProbe: {}
+## JanusGraph resource requests and limits
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (secondary.resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+##
+resourcesPreset: "xlarge"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
+## Configure Pods Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enable security context for JanusGraph pods
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
+## @param podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
+##
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
+  fsGroup: 1001
+## Configure Container Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled JanusGraph container securityContext
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser User ID for the JanusGraph container
+## @param containerSecurityContext.runAsGroup Group ID for the JanusGraph container
+## @param containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set secondary container's Security Context privileged
+## @param containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.capabilities.drop List of capabilities to be dropped
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+##
+containerSecurityContext:
+  enabled: true
+  seLinuxOptions: null
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param hostAliases JanusGraph pods host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param annotations Annotations for JanusGraph deployment/statefulset
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+annotations: {}
+## @param podLabels Extra labels for JanusGraph pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAnnotations Annotations for JanusGraph pods
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+## @param pdb.create Enable/disable a Pod Disruption Budget creation
+## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+##
+pdb:
+  create: true
+  minAvailable: 1
+  maxUnavailable: ""
+## Node affinity preset
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for JanusGraph pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+##
+affinity: {}
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
+## @param nodeSelector Node labels for JanusGraph pods assignment
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for JanusGraph pods assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param updateStrategy.type JanusGraph strategy type
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  ## StrategyType
+  ## Can be set to RollingUpdate or Recreate
+  ##
+  type: RollingUpdate
+
+## @param priorityClassName JanusGraph pods' priorityClassName
+##
+priorityClassName: ""
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+##
+topologySpreadConstraints: []
+## @param schedulerName Name of the k8s scheduler (other than default) for JanusGraph pods
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param lifecycleHooks for the JanusGraph container(s) to automate configuration before or after startup
+##
+lifecycleHooks: {}
+## @param extraEnvVars Array with extra environment variables to add to JanusGraph nodes
+## e.g:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for JanusGraph nodes
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for JanusGraph nodes
+##
+extraEnvVarsSecret: ""
+## @param extraVolumes Optionally specify extra list of additional volumes for the JanusGraph pod(s)
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the JanusGraph container(s)
+##
+extraVolumeMounts: []
+## @param sidecars Add additional sidecar containers to the JanusGraph pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the JanusGraph pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+
+## @section Autoscaling
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    ## @section VPA update policy
+    ##
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+  hpa:
+    ## @param autoscaling.hpa.enabled Enable HPA
+    ##
+    enabled: false
+    ## @param autoscaling.hpa.minReplicas Minimum number of replicas
+    ##
+    minReplicas: ""
+    ## @param autoscaling.hpa.maxReplicas Maximum number of replicas
+    ##
+    maxReplicas: ""
+    ## @param autoscaling.hpa.targetCPU Target CPU utilization percentage
+    ##
+    targetCPU: ""
+    ## @param autoscaling.hpa.targetMemory Target Memory utilization percentage
+    ##
+    targetMemory: ""
+## @section Traffic Exposure Parameters
+##
+
+## JanusGraph service parameters
+##
+service:
+  ## @param service.type JanusGraph service type
+  ##
+  type: LoadBalancer
+  ## @param service.ports.gremlin JanusGraph service Gremlin port
+  ##
+  ports:
+    gremlin: 8182
+  ## Node ports to expose
+  ## @param service.nodePorts.gremlin Node port for Gremlin
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    gremlin: ""
+  ## @param service.clusterIP JanusGraph service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP JanusGraph service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges JanusGraph service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy JanusGraph service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for JanusGraph service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in JanusGraph service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
+  ## Values: ClientIP or None
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
+## @section Persistence Parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ## NOTE: Janusgraph can be deployed without persistence because the storage will be located in a remote backend.
+  ## Enable when using BerkeleyBD or Lucene backends.
+  ##
+  enabled: false
+  ## @param persistence.mountPath Path to mount the volume at.
+  ##
+  mountPath: /bitnami/janusgraph/data
+  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+  ##
+  subPath: ""
+  ## @param persistence.storageClass Storage class of backing PVC
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Modes
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.size Size of data volume
+  ##
+  size: 8Gi
+  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
+  ##
+  existingClaim: ""
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Janusgraph data PVC
+  ## If set, the PVC can't have a PV dynamically provisioned for it
+  ## E.g.
+  ## selector:
+  ##   matchLabels:
+  ##     app: my-app
+  ##
+  selector: {}
+  ## @param persistence.dataSource Custom PVC data source
+  ##
+  dataSource: {}
+  ## @param persistence.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+  ##
+  resourcePolicy: ""
+
+## @section Prometheus metrics
+##
+metrics:
+  ## @param metrics.enabled Enable the export of Prometheus metrics
+  ##
+  enabled: false
+  ## Bitnami JMX exporter image
+  ## ref: https://hub.docker.com/r/bitnami/jmx-exporter/tags/
+  ## @param metrics.image.registry [default: REGISTRY_NAME] JMX exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/jmx-exporter] JMX exporter image repository
+  ## @skip metrics.image.tag JMX exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param metrics.image.pullPolicy JMX exporter image pull policy
+  ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/jmx-exporter
+    tag: 0.20.0-debian-12-r17
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Prometheus JMX exporter containers' Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled Enable Prometheus JMX exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param metrics.containerSecurityContext.runAsUser Set Prometheus JMX exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Group ID for the Prometheus JMX exporter container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Prometheus JMX exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.privileged Set Prometheus JMX exporter container's Security Context privileged
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Prometheus JMX exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.readOnlyRootFilesystem Set Prometheus JMX exporter containers' Security Context readOnlyRootFilesystem
+  ## @param metrics.containerSecurityContext.capabilities.drop Set Prometheus JMX exporter containers' Security Context capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Prometheus JMX exporter container's Security Context seccomp profile
+  ## e.g:
+  ##   containerSecurityContext:
+  ##     enabled: true
+  ##     capabilities:
+  ##       drop: ["NET_RAW"]
+  ##     readOnlyRootFilesystem: true
+  ##
+  containerSecurityContext:
+    enabled: true
+    privileged: false
+    runAsNonRoot: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param metrics.containerPorts.metrics Prometheus JMX exporter metrics container port
+  ##
+  containerPorts:
+    metrics: 5556
+  ## Prometheus JMX exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param metrics.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param metrics.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure extra options for liveness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.livenessProbe.enabled Enable livenessProbe
+  ## @param metrics.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param metrics.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param metrics.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param metrics.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param metrics.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+  ## Configure extra options for readiness probe
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param metrics.readinessProbe.enabled Enable readinessProbe
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 10
+    successThreshold: 1
+    failureThreshold: 3
+  ## Prometheus JMX exporter service configuration
+  ##
+  service:
+    ## @param metrics.service.ports.metrics Prometheus JMX exporter metrics service port
+    ##
+    ports:
+      metrics: 5556
+    ## @param metrics.service.clusterIP Static clusterIP or None for headless services
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
+    ##
+    clusterIP: ""
+    ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ##
+    sessionAffinity: None
+    ## @param metrics.service.annotations [object] Annotations for the Prometheus JMX exporter service
+    ##
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.metrics.service.ports.metrics }}"
+      prometheus.io/path: "/"
+  ## @param metrics.config [string] Configuration file for JMX exporter
+  ## Specify content for jmx-prometheus.yml. Evaluated as a template
+  ##
+  config: |-
+    jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.containerPorts.jmx }}/jmxrmi
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    ssl: false
+    rules:
+      - pattern: ".*"
+  ## @param metrics.existingConfigmap Name of existing ConfigMap with JMX exporter configuration
+  ## NOTE: This will override metrics.config
+  ##
+  existingConfigmap: ""
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+
+## @section Other Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r21
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param volumePermissions.resources.limits The resources limits for the init container
+  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ##
+  automountServiceAccountToken: false
+
+## @section NetworkPolicy parameters
+## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal The Policy model to apply
+  ## When set to false, only pods with the correct client label will have network access to the ports Janusgraph is
+  ## listening on. When true, Janusgraph will accept connections from any source (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+
+## @section Cassandra storage sub-chart
+## Controlled by value storage.cassandra.enabled
+##
+cassandra:
+  ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
+  ##
+  keyspace: "bitnami_janusgraph"
+  ## Database credentials
+  ## @param cassandra.dbUser.user Cassandra admin user
+  ## @param cassandra.dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ##
+  dbUser:
+    user: bn_janusgraph
+    password: ""
+  ## Cassandra service port
+  ## @param cassandra.service.ports.cql Cassandra cql port
+  service:
+    ports:
+      cql: 9043

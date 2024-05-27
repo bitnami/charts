@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -79,6 +79,7 @@ spec:
           args:
             - envoy
             - shutdown-manager
+            - --serve-port={{ coalesce .Values.envoy.shutdownManager.port .Values.envoy.shutdownManager.containerPorts.http }}
             {{- if .Values.envoy.shutdownManager.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.extraArgs "context" $) | nindent 12 }}
             {{- end }}
@@ -99,6 +100,10 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          ports:
+            - containerPort: {{ coalesce .Values.envoy.shutdownManager.containerPorts.http .Values.envoy.shutdownManager.port }}
+              name: http-shutdown
+              protocol: TCP
           {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.envoy.shutdownManager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
@@ -120,10 +125,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.shutdownManager.livenessProbe.enabled }}
           livenessProbe:
-            exec:
-              command:
-                - pgrep
-                - contour
+            tcpSocket:
+              port: http-shutdown
             initialDelaySeconds: {{ .Values.envoy.shutdownManager.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.shutdownManager.livenessProbe.timeoutSeconds }}
@@ -134,10 +137,9 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.shutdownManager.readinessProbe.enabled }}
           readinessProbe:
-            exec:
-              command:
-                - pgrep
-                - contour
+            httpGet:
+              port: http-shutdown
+              path: /healthz
             initialDelaySeconds: {{ .Values.envoy.shutdownManager.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.shutdownManager.readinessProbe.timeoutSeconds }}
@@ -151,9 +153,6 @@ spec:
                   - contour
                   - envoy
                   - shutdown
-          {{- if .Values.envoy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
-          {{- end }}
           name: shutdown-manager
           {{- if .Values.envoy.shutdownManager.resources }}
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
@@ -249,7 +248,9 @@ spec:
               {{- end }}
               name: metrics
               protocol: TCP
-          {{- if .Values.envoy.readinessProbe.enabled }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /ready
@@ -264,8 +265,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: /ready
+            tcpsocket:
               port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
@@ -308,7 +308,7 @@ spec:
               {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
-                port: {{ .Values.envoy.shutdownManager.port }}
+                port: {{ coalesce .Values.envoy.shutdownManager.port .Values.envoy.shutdownManager.containerPorts.http }}
                 scheme: HTTP
               {{- else }}
               exec:

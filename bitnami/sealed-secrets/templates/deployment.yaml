@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -161,6 +161,11 @@ spec:
             - name: http
               containerPort: {{ .Values.containerPorts.http }}
               protocol: TCP
+          {{- if .Values.metrics.enabled }}
+            - name: metrics 
+              containerPort: {{ .Values.containerPorts.metrics }}
+              protocol: TCP
+          {{- end }}
           {{- if .Values.resources }}
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- else if ne .Values.resourcesPreset "none" }}
@@ -170,8 +175,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}

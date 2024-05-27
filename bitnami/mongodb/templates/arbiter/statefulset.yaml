@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -83,6 +83,9 @@ spec:
         {{- if .Values.arbiter.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.initContainers "context" $) | nindent 8 }}
         {{- end }}
+        {{- if and .Values.externalAccess.enabled ( or .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain ) }}
+        {{- include "mongodb.initContainers.dnsCheck" . | nindent 8 }}
+        {{- end }}
         {{- if and .Values.tls.enabled .Values.arbiter.enabled }}
         - name: generate-tls-certs
           image: {{ include "mongodb.tls.image" . }}
@@ -156,7 +159,7 @@ spec:
             - name: MONGODB_REPLICA_SET_MODE
               value: "arbiter"
             - name: MONGODB_INITIAL_PRIMARY_HOST
-              value: {{ printf "%s-0.%s.$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) (include "mongodb.service.nameOverride" .) .Values.clusterDomain }}
+              value: {{ include "mongodb.initialPrimaryHost" . | quote }}
             - name: MONGODB_REPLICA_SET_NAME
               value: {{ .Values.replicaSetName | quote }}
             - name: MONGODB_ADVERTISED_HOSTNAME
@@ -218,8 +221,10 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.arbiter.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.arbiter.livenessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: mongodb
+            exec:
+              command:
+                - pgrep
+                - mongod
           {{- end }}
           {{- if .Values.arbiter.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customReadinessProbe "context" $) | nindent 12 }}
@@ -232,8 +237,9 @@ spec:
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.arbiter.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.arbiter.startupProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
-              port: mongodb
+            exec:
+              command:
+                - /bitnami/scripts/startup-probe.sh
           {{- end }}
           {{- end }}
           {{- if .Values.arbiter.resources }}

@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -215,8 +215,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.backend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /api/v1/users/me
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.backend.customReadinessProbe }}
@@ -224,7 +223,7 @@ spec:
           {{- else if .Values.backend.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- if .Values.backend.customStartupProbe }}
@@ -232,7 +231,7 @@ spec:
           {{- else if .Values.backend.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.startupProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
-              path: /api/v1/users/me
+              path: /api/v1/health
               port: http
           {{- end }}
           {{- end }}
@@ -269,15 +268,94 @@ spec:
               {{- if .Values.backend.persistence.subPath }}
               subPath: {{ .Values.backend.persistence.subPath }}
               {{- end }}
-          {{- if .Values.backend.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- if .Values.backend.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        - name: rts-redirect
+          image: {{ template "appsmith.redirect.image" . }}
+          imagePullPolicy: {{ .Values.backend.redirectAmbassador.image.pullPolicy }}
+          {{- if .Values.backend.redirectAmbassador.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.backend.redirectAmbassador.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- if .Values.backend.redirectAmbassador.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.backend.redirectAmbassador.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.backend.redirectAmbassador.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.backend.redirectAmbassador.resources }}
+          resources: {{- toYaml .Values.backend.redirectAmbassador.resources | nindent 12 }}
+          {{- else if ne .Values.backend.redirectAmbassador.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.backend.redirectAmbassador.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            # This port needs to be hardcoded because of Appsmith code
+            # https://github.com/appsmithorg/appsmith/blob/021b4177eac01a445cacf8bfb4688de449366701/app/server/appsmith-server/src/main/java/com/appsmith/server/configurations/CommonConfig.java#L136
+            - name: http-redirect
+              containerPort: 8080
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.backend.redirectAmbassador.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectAmbassador.livenessProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: http-redirect
+          {{- end }}
+          {{- if .Values.backend.redirectAmbassador.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectAmbassador.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /rts-api/v1/health-check
+              port: http-redirect
+          {{- end }}
+          {{- if .Values.backend.redirectAmbassador.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.backend.redirectAmbassador.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.backend.redirectAmbassador.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /rts-api/v1/health-check
+              port: http-redirect
+          {{- end }}
+          {{- end }}
+          {{- if .Values.backend.redirectAmbassador.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: haproxy-conf
+              mountPath: /bitnami/haproxy/conf
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            {{- if .Values.backend.redirectAmbassador.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.backend.redirectAmbassador.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.backend.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.backend.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
         - name: empty-dir
           emptyDir: {}
+        - name: haproxy-conf
+          configMap:
+            name: {{ include "appsmith.redirect.fullname" . }}
         - name: data
         {{- if .Values.backend.persistence.enabled }}
           persistentVolumeClaim:

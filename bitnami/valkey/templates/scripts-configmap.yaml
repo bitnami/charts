@@ -1,0 +1,792 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-scripts" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: valkey
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+{{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
+  start-node.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/liblog.sh
+    . /opt/bitnami/scripts/libvalidations.sh
+
+    get_port() {
+        hostname="$1"
+        type="$2"
+
+        port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
+        port=${!port_var}
+
+        if [ -z "$port" ]; then
+            case $type in
+                "SENTINEL")
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
+                    ;;
+                "VALKEY")
+                    echo {{ .Values.master.containerPorts.valkey }}
+                    ;;
+            esac
+        else
+            echo $port
+        fi
+    }
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if .Values.useExternalDNS.enabled }}
+        full_hostname="${hostname}.{{- include "valkey.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
+        {{- else }}
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
+        {{- end }}
+    }
+
+    VALKEYPORT=$(get_port "$HOSTNAME" "VALKEY")
+
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    if [ -n "$VALKEY_EXTERNAL_MASTER_HOST" ]; then
+        VALKEY_SERVICE="$VALKEY_EXTERNAL_MASTER_HOST"
+    else
+        VALKEY_SERVICE="{{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    fi
+
+    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
+    validate_quorum() {
+        if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
+        else
+            quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel master {{ .Values.sentinel.masterSet }}"
+        fi
+        info "about to run the command: $quorum_info_command"
+        eval $quorum_info_command | grep -Fq "s_down"
+    }
+
+    trigger_manual_failover() {
+        if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel failover {{ .Values.sentinel.masterSet }}"
+        else
+            failover_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel failover {{ .Values.sentinel.masterSet }}"
+        fi
+
+        info "about to run the command: $failover_command"
+        eval $failover_command
+    }
+
+    get_sentinel_master_info() {
+        if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_TLS_CERT_FILE} --key ${VALKEY_TLS_KEY_FILE} --cacert ${VALKEY_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        else
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        fi
+
+        info "about to run the command: $sentinel_info_command"
+        retry_while "eval $sentinel_info_command" 2 5
+    }
+
+    {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
+    useradd valkey
+    chown -R valkey {{ .Values.replica.persistence.path }}
+    {{- end }}
+
+    [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
+    [[ -f $VALKEY_MASTER_PASSWORD_FILE ]] && export VALKEY_MASTER_PASSWORD="$(< "${VALKEY_MASTER_PASSWORD_FILE}")"
+
+    # check if there is a master
+    master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
+    master_port_in_persisted_conf="$VALKEY_MASTER_PORT_NUMBER"
+    master_in_sentinel="$(get_sentinel_master_info)"
+    valkeyRetVal=$?
+
+    if [[ -f /opt/bitnami/valkey-sentinel/etc/sentinel.conf ]]; then
+        master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/valkey-sentinel/etc/sentinel.conf)"
+        master_port_in_persisted_conf="$(awk '/monitor/ {print $5}' /opt/bitnami/valkey-sentinel/etc/sentinel.conf)"
+        info "Found previous master ${master_in_persisted_conf}:${master_port_in_persisted_conf} in /opt/bitnami/valkey-sentinel/etc/sentinel.conf"
+        debug "$(cat /opt/bitnami/valkey-sentinel/etc/sentinel.conf | grep monitor)"
+    fi
+
+    if [[ $valkeyRetVal -ne 0 ]]; then
+        if [[ "$master_in_persisted_conf" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+            # Case 1: No active sentinel and in previous sentinel.conf we were the master --> MASTER
+            info "Configuring the node as master"
+            export VALKEY_REPLICATION_MODE="master"
+        else
+            # Case 2: No active sentinel and in previous sentinel.conf we were not master --> REPLICA
+            info "Configuring the node as replica"
+            export VALKEY_REPLICATION_MODE="replica"
+            VALKEY_MASTER_HOST=${master_in_persisted_conf}
+            VALKEY_MASTER_PORT_NUMBER=${master_port_in_persisted_conf}
+        fi
+    else
+        # Fetches current master's host and port
+        VALKEY_SENTINEL_INFO=($(get_sentinel_master_info))
+        info "Current master: VALKEY_SENTINEL_INFO=(${VALKEY_SENTINEL_INFO[0]},${VALKEY_SENTINEL_INFO[1]})"
+        VALKEY_MASTER_HOST=${VALKEY_SENTINEL_INFO[0]}
+        VALKEY_MASTER_PORT_NUMBER=${VALKEY_SENTINEL_INFO[1]}
+
+        if [[ "$VALKEY_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+            # Case 3: Active sentinel and master it is this node --> MASTER
+            info "Configuring the node as master"
+            export VALKEY_REPLICATION_MODE="master"
+        else
+            # Case 4: Active sentinel and master is not this node --> REPLICA
+            info "Configuring the node as replica"
+            export VALKEY_REPLICATION_MODE="replica"
+
+            {{- if and .Values.sentinel.automateClusterRecovery (le (int .Values.sentinel.downAfterMilliseconds) 2000) }}
+            retry_count=1
+            while validate_quorum
+            do
+                info "sleeping, waiting for Valkey master to come up"
+                sleep 1s
+                if ! ((retry_count % 11)); then
+                    info "Trying to manually failover"
+                    failover_result=$(trigger_manual_failover)
+
+                    debug "Failover result: $failover_result"
+                fi
+
+                ((retry_count+=1))
+            done
+            info "Valkey master is up now"
+            {{- end }}
+        fi
+    fi
+
+    if [[ -n "$VALKEY_EXTERNAL_MASTER_HOST" ]]; then
+      VALKEY_MASTER_HOST="$VALKEY_EXTERNAL_MASTER_HOST"
+      VALKEY_MASTER_PORT_NUMBER="${VALKEY_EXTERNAL_MASTER_PORT}"
+    fi
+
+    if [[ -f /opt/bitnami/valkey/mounted-etc/replica.conf ]];then
+        cp /opt/bitnami/valkey/mounted-etc/replica.conf /opt/bitnami/valkey/etc/replica.conf
+    fi
+
+    if [[ -f /opt/bitnami/valkey/mounted-etc/valkey.conf ]];then
+        cp /opt/bitnami/valkey/mounted-etc/valkey.conf /opt/bitnami/valkey/etc/valkey.conf
+    fi
+
+    echo "" >> /opt/bitnami/valkey/etc/replica.conf
+    echo "replica-announce-port $VALKEYPORT" >> /opt/bitnami/valkey/etc/replica.conf
+    echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/valkey/etc/replica.conf
+
+    {{- if .Values.tls.enabled }}
+    ARGS=("--port" "0")
+    ARGS+=("--tls-port" "${VALKEY_TLS_PORT}")
+    ARGS+=("--tls-cert-file" "${VALKEY_TLS_CERT_FILE}")
+    ARGS+=("--tls-key-file" "${VALKEY_TLS_KEY_FILE}")
+    ARGS+=("--tls-ca-cert-file" "${VALKEY_TLS_CA_FILE}")
+    ARGS+=("--tls-auth-clients" "${VALKEY_TLS_AUTH_CLIENTS}")
+    ARGS+=("--tls-replication" "yes")
+    {{- if .Values.tls.dhParamsFilename }}
+    ARGS+=("--tls-dh-params-file" "${VALKEY_TLS_DH_PARAMS_FILE}")
+    {{- end }}
+    {{- else }}
+    ARGS=("--port" "${VALKEY_PORT}")
+    {{- end }}
+
+    if [[ "$VALKEY_REPLICATION_MODE" = "slave" ]] || [[ "$VALKEY_REPLICATION_MODE" = "replica" ]]; then
+        ARGS+=("--replicaof" "${VALKEY_MASTER_HOST}" "${VALKEY_MASTER_PORT_NUMBER}")
+    fi
+
+    {{- if .Values.auth.enabled }}
+    ARGS+=("--requirepass" "${VALKEY_PASSWORD}")
+    ARGS+=("--masterauth" "${VALKEY_MASTER_PASSWORD}")
+    {{- else }}
+    ARGS+=("--protected-mode" "no")
+    {{- end }}
+    ARGS+=("--include" "/opt/bitnami/valkey/etc/replica.conf")
+    ARGS+=("--include" "/opt/bitnami/valkey/etc/valkey.conf")
+    {{- if .Values.replica.extraFlags }}
+    {{- range .Values.replica.extraFlags }}
+    ARGS+=({{ . | quote }})
+    {{- end }}
+    {{- end }}
+
+    {{- if .Values.replica.preExecCmds }}
+    {{- .Values.replica.preExecCmds | nindent 4 }}
+    {{- end }}
+
+    {{- if .Values.replica.command }}
+    exec {{ .Values.replica.command }} "${ARGS[@]}"
+    {{- else }}
+    exec valkey-server "${ARGS[@]}"
+    {{- end }}
+
+  start-sentinel.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libos.sh
+    . /opt/bitnami/scripts/libvalidations.sh
+    . /opt/bitnami/scripts/libfile.sh
+
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+    VALKEY_SERVICE="{{ template "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    get_port() {
+        hostname="$1"
+        type="$2"
+
+        port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
+        port=${!port_var}
+
+        if [ -z "$port" ]; then
+            case $type in
+                "SENTINEL")
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
+                    ;;
+                "VALKEY")
+                    echo {{ .Values.master.containerPorts.valkey }}
+                    ;;
+            esac
+        else
+            echo $port
+        fi
+    }
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if .Values.useExternalDNS.enabled }}
+        full_hostname="${hostname}.{{- include "valkey.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
+        {{- else }}
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
+        {{- end }}
+    }
+
+    SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
+    VALKEYPORT=$(get_port "$HOSTNAME" "VALKEY")
+    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
+
+    sentinel_conf_set() {
+        local -r key="${1:?missing key}"
+        local value="${2:-}"
+
+        # Sanitize inputs
+        value="${value//\\/\\\\}"
+        value="${value//&/\\&}"
+        value="${value//\?/\\?}"
+        [[ "$value" = "" ]] && value="\"$value\""
+
+        replace_in_file "/opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf" "^#*\s*${key} .*" "${key} ${value}" false
+    }
+    sentinel_conf_add() {
+        echo $'\n'"$@" >> "/opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf"
+    }
+    host_id() {
+        echo "$1" | openssl sha1 | awk '{print $2}'
+    }
+    get_sentinel_master_info() {
+        if is_boolean_yes "$VALKEY_SENTINEL_TLS_ENABLED"; then
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${VALKEY_SENTINEL_TLS_CERT_FILE} --key ${VALKEY_SENTINEL_TLS_KEY_FILE} --cacert ${VALKEY_SENTINEL_TLS_CA_FILE} sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        else
+            sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$VALKEY_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} valkey-cli -h $VALKEY_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
+        fi
+        info "about to run the command: $sentinel_info_command"
+        retry_while "eval $sentinel_info_command" 2 5
+    }
+
+    [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
+
+    master_in_persisted_conf="$(get_full_hostname "$HOSTNAME")"
+
+    if [[ -f /opt/bitnami/valkey-sentinel/etc/sentinel.conf ]]; then
+        master_in_persisted_conf="$(awk '/monitor/ {print $4}' /opt/bitnami/valkey-sentinel/etc/sentinel.conf)"
+        info "Found previous master $master_in_persisted_conf in /opt/bitnami/valkey-sentinel/etc/sentinel.conf"
+        debug "$(cat /opt/bitnami/valkey-sentinel/etc/sentinel.conf | grep monitor)"
+    fi
+    VALKEY_SENTINEL_INFO=($(get_sentinel_master_info))
+    if [ "$?" -eq "0" ]; then
+        # current master's host and port obtained from other Sentinel
+        info "printing VALKEY_SENTINEL_INFO=(${VALKEY_SENTINEL_INFO[0]},${VALKEY_SENTINEL_INFO[1]})"
+        VALKEY_MASTER_HOST=${VALKEY_SENTINEL_INFO[0]}
+        VALKEY_MASTER_PORT_NUMBER=${VALKEY_SENTINEL_INFO[1]}
+    else
+        VALKEY_MASTER_HOST="$master_in_persisted_conf"
+        VALKEY_MASTER_PORT_NUMBER="$VALKEYPORT"
+    fi
+    if [[ "$VALKEY_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+        export VALKEY_REPLICATION_MODE="master"
+    else
+        export VALKEY_REPLICATION_MODE="replica"
+    fi
+
+    {{- if .Values.sentinel.service.createMaster }}
+    if [[ "${VALKEY_REPLICATION_MODE}" == "master" ]]; then
+        # Add isMaster label to master node for master service
+        echo "${VALKEY_MASTER_HOST/.*}" > /etc/shared/current
+    fi
+    {{- end }}
+
+    if [[ -n "$VALKEY_EXTERNAL_MASTER_HOST" ]]; then
+      VALKEY_MASTER_HOST="$VALKEY_EXTERNAL_MASTER_HOST"
+      VALKEY_MASTER_PORT_NUMBER="${VALKEY_EXTERNAL_MASTER_PORT}"
+    fi
+
+    # To prevent incomplete configuration and as the valkey container accesses /opt/bitnami/valkey-sentinel/etc/sentinel.conf 
+    # as well, prepare the new config in `prepare-sentinel.conf` and move it atomically to the ultimate destination when it is complete.
+    cp /opt/bitnami/valkey-sentinel/mounted-etc/sentinel.conf /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- if .Values.auth.enabled }}
+    printf "\nsentinel auth-pass %s %s" "{{ .Values.sentinel.masterSet }}" "$VALKEY_PASSWORD" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- if and .Values.auth.enabled .Values.auth.sentinel }}
+    printf "\nrequirepass %s" "$VALKEY_PASSWORD" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- end }}
+    {{- end }}
+    printf "\nsentinel myid %s" "$(host_id "$HOSTNAME")" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+
+    if [[ -z "$VALKEY_MASTER_HOST" ]] || [[ -z "$VALKEY_MASTER_PORT_NUMBER" ]]
+    then
+        # Prevent incorrect configuration to be written to sentinel.conf
+        error "Valkey master host is configured incorrectly (host: $VALKEY_MASTER_HOST, port: $VALKEY_MASTER_PORT_NUMBER)"
+        exit 1
+    fi
+
+    sentinel_conf_set "sentinel monitor" "{{ .Values.sentinel.masterSet }} "$VALKEY_MASTER_HOST" "$VALKEY_MASTER_PORT_NUMBER" {{ .Values.sentinel.quorum }}"
+
+    add_known_sentinel() {
+        hostname="$1"
+        ip="$2"
+
+        if [[ -n "$hostname" && -n "$ip" && "$hostname" != "$HOSTNAME" ]]; then
+            sentinel_conf_add "sentinel known-sentinel {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "SENTINEL") $(host_id "$hostname")"
+        fi
+    }
+    add_known_replica() {
+        hostname="$1"
+        ip="$2"
+
+        if [[ -n "$ip" && "$(get_full_hostname "$hostname")" != "$VALKEY_MASTER_HOST" ]]; then
+            sentinel_conf_add "sentinel known-replica {{ .Values.sentinel.masterSet }} $(get_full_hostname "$hostname") $(get_port "$hostname" "VALKEY")"
+        fi
+    }
+
+    # Add available hosts on the network as known replicas & sentinels
+    for node in $(seq 0 $(({{ .Values.replica.replicaCount }}-1))); do
+        hostname="{{ template "common.names.fullname" . }}-node-$node"
+        ip="$(getent hosts "$hostname.$HEADLESS_SERVICE" | awk '{ print $1 }')"
+        add_known_sentinel "$hostname" "$ip"
+        add_known_replica "$hostname" "$ip"
+    done
+
+    echo "" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- if not (contains "sentinel announce-hostnames" .Values.sentinel.configuration) }}
+    echo "sentinel announce-hostnames yes" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- end }}
+    {{- if not (contains "sentinel resolve-hostnames" .Values.sentinel.configuration) }}
+    echo "sentinel resolve-hostnames yes" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- end }}
+    {{- if not (contains "sentinel announce-port" .Values.sentinel.configuration) }}
+    echo "sentinel announce-port $SERVPORT" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- end }}
+    {{- if not (contains "sentinel announce-ip" .Values.sentinel.configuration) }}
+    echo "sentinel announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf
+    {{- end }}
+
+    {{- if .Values.tls.enabled }}
+    ARGS=("--port" "0")
+    ARGS+=("--tls-port" "${VALKEY_SENTINEL_TLS_PORT_NUMBER}")
+    ARGS+=("--tls-cert-file" "${VALKEY_SENTINEL_TLS_CERT_FILE}")
+    ARGS+=("--tls-key-file" "${VALKEY_SENTINEL_TLS_KEY_FILE}")
+    ARGS+=("--tls-ca-cert-file" "${VALKEY_SENTINEL_TLS_CA_FILE}")
+    ARGS+=("--tls-replication" "yes")
+    ARGS+=("--tls-auth-clients" "${VALKEY_SENTINEL_TLS_AUTH_CLIENTS}")
+    {{- if .Values.tls.dhParamsFilename }}
+    ARGS+=("--tls-dh-params-file" "${VALKEY_SENTINEL_TLS_DH_PARAMS_FILE}")
+    {{- end }}
+    {{- end }}
+    {{- if .Values.sentinel.preExecCmds }}
+    {{ .Values.sentinel.preExecCmds | nindent 4 }}
+    {{- end }}
+    mv /opt/bitnami/valkey-sentinel/etc/prepare-sentinel.conf /opt/bitnami/valkey-sentinel/etc/sentinel.conf
+    exec valkey-server /opt/bitnami/valkey-sentinel/etc/sentinel.conf {{- if .Values.tls.enabled }} "${ARGS[@]}" {{- end }} --sentinel
+  prestop-sentinel.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libvalidations.sh
+    . /opt/bitnami/scripts/libos.sh
+
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if .Values.useExternalDNS.enabled }}
+        full_hostname="${hostname}.{{- include "valkey.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
+        {{- else }}
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
+        {{- end }}
+    }
+
+    run_sentinel_command() {
+        if is_boolean_yes "$VALKEY_SENTINEL_TLS_ENABLED"; then
+            valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$VALKEY_SENTINEL_TLS_CERT_FILE" --key "$VALKEY_SENTINEL_TLS_KEY_FILE" --cacert "$VALKEY_SENTINEL_TLS_CA_FILE" sentinel "$@"
+        else
+            valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_PORT" sentinel "$@"
+        fi
+    }
+    sentinel_failover_finished() {
+      VALKEY_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+      VALKEY_MASTER_HOST="${VALKEY_SENTINEL_INFO[0]}"
+      [[ "$VALKEY_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+    }
+
+    VALKEY_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    {{ if .Values.auth.sentinel -}}
+    # valkey-cli automatically consumes credentials from the REDISCLI_AUTH variable
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -f "$VALKEY_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${VALKEY_PASSWORD_FILE}")"
+    {{- end }}
+
+    if ! sentinel_failover_finished; then
+        echo "I am the master pod and you are stopping me. Starting sentinel failover"
+        if retry_while "sentinel_failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1; then
+            echo "Master has been successfuly failed over to a different pod."
+            exit 0
+        else
+            echo "Master failover failed"
+            exit 1
+        fi
+    else
+        exit 0
+    fi
+  prestop-valkey.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libvalidations.sh
+    . /opt/bitnami/scripts/libos.sh
+
+    run_valkey_command() {
+        if is_boolean_yes "$VALKEY_TLS_ENABLED"; then
+            valkey-cli -h 127.0.0.1 -p "$VALKEY_TLS_PORT" --tls --cert "$VALKEY_TLS_CERT_FILE" --key "$VALKEY_TLS_KEY_FILE" --cacert "$VALKEY_TLS_CA_FILE" "$@"
+        else
+            valkey-cli -h 127.0.0.1 -p "$VALKEY_PORT" "$@"
+        fi
+    }
+    is_master() {
+        VALKEY_ROLE=$(run_valkey_command role | head -1)
+        [[ "$VALKEY_ROLE" == "master" ]]
+    }
+
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{- include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if .Values.useExternalDNS.enabled }}
+        full_hostname="${hostname}.{{- include "valkey.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
+        {{- else }}
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
+        {{- end }}
+    }
+
+    run_sentinel_command() {
+        if is_boolean_yes "$VALKEY_SENTINEL_TLS_ENABLED"; then
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_TLS_PORT_NUMBER" --tls --cert "$VALKEY_SENTINEL_TLS_CERT_FILE" --key "$VALKEY_SENTINEL_TLS_KEY_FILE" --cacert "$VALKEY_SENTINEL_TLS_CA_FILE" sentinel "$@"
+        else
+            {{ .Values.auth.sentinel | ternary "" "env -u REDISCLI_AUTH " -}} valkey-cli -h "$VALKEY_SERVICE" -p "$VALKEY_SENTINEL_PORT" sentinel "$@"
+        fi
+    }
+    sentinel_failover_finished() {
+        VALKEY_SENTINEL_INFO=($(run_sentinel_command get-master-addr-by-name "{{ .Values.sentinel.masterSet }}"))
+        VALKEY_MASTER_HOST="${VALKEY_SENTINEL_INFO[0]}"
+        [[ "$VALKEY_MASTER_HOST" != "$(get_full_hostname $HOSTNAME)" ]]
+    }
+
+    VALKEY_SERVICE="{{ include "common.names.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    # valkey-cli automatically consumes credentials from the REDISCLI_AUTH variable
+    [[ -n "$VALKEY_PASSWORD" ]] && export REDISCLI_AUTH="$VALKEY_PASSWORD"
+    [[ -f "$VALKEY_PASSWORD_FILE" ]] && export REDISCLI_AUTH="$(< "${VALKEY_PASSWORD_FILE}")"
+
+
+    if is_master && ! sentinel_failover_finished; then
+        echo "I am the master pod and you are stopping me. Pausing client connections."
+        # Pausing client write connections to avoid data loss
+        run_valkey_command CLIENT PAUSE "{{ mul (add 2 (sub .Values.sentinel.terminationGracePeriodSeconds 10)) 1000 }}" WRITE
+
+        echo "Issuing failover"
+        # if I am the master, issue a command to failover once
+        run_sentinel_command failover "{{ .Values.sentinel.masterSet }}"
+
+        {{- if .Values.sentinel.valkeyShutdownWaitFailover }}
+        echo "Waiting for sentinel to complete failover for up to {{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}s"
+        retry_while "sentinel_failover_finished" "{{ sub .Values.sentinel.terminationGracePeriodSeconds 10 }}" 1
+        {{- end }}
+    else
+        exit 0
+    fi
+
+  {{- if .Values.sentinel.service.createMaster}}
+  push-master-label.sh: |
+    #!/bin/bash
+    # https://download.valkey.io/valkey-stable/sentinel.conf
+
+    echo "${6/.*}" > /etc/shared/current
+    echo "${4/.*}" > /etc/shared/previous
+  {{- end }}
+{{- else }}
+  start-master.sh: |
+    #!/bin/bash
+
+    [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
+    {{- if and .Values.master.containerSecurityContext.runAsUser (eq (.Values.master.containerSecurityContext.runAsUser | int) 0) }}
+    useradd valkey
+    chown -R valkey {{ .Values.master.persistence.path }}
+    {{- end }}
+    if [[ -f /opt/bitnami/valkey/mounted-etc/master.conf ]];then
+        cp /opt/bitnami/valkey/mounted-etc/master.conf /opt/bitnami/valkey/etc/master.conf
+    fi
+    if [[ -f /opt/bitnami/valkey/mounted-etc/valkey.conf ]];then
+        cp /opt/bitnami/valkey/mounted-etc/valkey.conf /opt/bitnami/valkey/etc/valkey.conf
+    fi
+    {{- if .Values.tls.enabled }}
+    ARGS=("--port" "0")
+    ARGS+=("--tls-port" "${VALKEY_TLS_PORT}")
+    ARGS+=("--tls-cert-file" "${VALKEY_TLS_CERT_FILE}")
+    ARGS+=("--tls-key-file" "${VALKEY_TLS_KEY_FILE}")
+    ARGS+=("--tls-ca-cert-file" "${VALKEY_TLS_CA_FILE}")
+    ARGS+=("--tls-auth-clients" "${VALKEY_TLS_AUTH_CLIENTS}")
+    {{- if .Values.tls.dhParamsFilename }}
+    ARGS+=("--tls-dh-params-file" "${VALKEY_TLS_DH_PARAMS_FILE}")
+    {{- end }}
+    {{- else }}
+    ARGS=("--port" "${VALKEY_PORT}")
+    {{- end }}
+    {{- if .Values.auth.enabled }}
+    ARGS+=("--requirepass" "${VALKEY_PASSWORD}")
+    ARGS+=("--masterauth" "${VALKEY_PASSWORD}")
+    {{- else }}
+    ARGS+=("--protected-mode" "no")
+    {{- end }}
+    ARGS+=("--include" "/opt/bitnami/valkey/etc/valkey.conf")
+    ARGS+=("--include" "/opt/bitnami/valkey/etc/master.conf")
+    {{- if .Values.master.extraFlags }}
+    {{- range .Values.master.extraFlags }}
+    ARGS+=({{ . | quote }})
+    {{- end }}
+    {{- end }}
+    {{- if .Values.master.preExecCmds }}
+    {{ .Values.master.preExecCmds | nindent 4 }}
+    {{- end }}
+    {{- if .Values.master.command }}
+    exec {{ .Values.master.command }} "${ARGS[@]}"
+    {{- else }}
+    exec valkey-server "${ARGS[@]}"
+    {{- end }}
+  {{- if eq .Values.architecture "replication" }}
+  start-replica.sh: |
+    #!/bin/bash
+
+    get_port() {
+        hostname="$1"
+        type="$2"
+
+        port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
+        port=${!port_var}
+
+        if [ -z "$port" ]; then
+            case $type in
+                "SENTINEL")
+                    echo {{ .Values.sentinel.containerPorts.sentinel }}
+                    ;;
+                "VALKEY")
+                    echo {{ .Values.master.containerPorts.valkey }}
+                    ;;
+            esac
+        else
+            echo $port
+        fi
+    }
+
+    get_full_hostname() {
+        hostname="$1"
+
+        {{- if .Values.useExternalDNS.enabled }}
+        full_hostname="${hostname}.{{- include "valkey.externalDNS.suffix" . }}"
+        {{- else if eq .Values.sentinel.service.type "NodePort" }}
+        full_hostname="${hostname}.{{- include "common.names.namespace" . }}"
+        {{- else }}
+        full_hostname="${hostname}.${HEADLESS_SERVICE}"
+        {{- end }}
+
+        {{- if .Values.useHostnames }}
+        echo "${full_hostname}"
+        {{- else }}
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
+        {{- end }}
+    }
+
+    VALKEYPORT=$(get_port "$HOSTNAME" "VALKEY")
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+
+    [[ -f $VALKEY_PASSWORD_FILE ]] && export VALKEY_PASSWORD="$(< "${VALKEY_PASSWORD_FILE}")"
+    [[ -f $VALKEY_MASTER_PASSWORD_FILE ]] && export VALKEY_MASTER_PASSWORD="$(< "${VALKEY_MASTER_PASSWORD_FILE}")"
+    {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
+    useradd valkey
+    chown -R valkey {{ .Values.replica.persistence.path }}
+    {{- end }}
+    if [[ -f /opt/bitnami/valkey/mounted-etc/replica.conf ]];then
+        cp /opt/bitnami/valkey/mounted-etc/replica.conf /opt/bitnami/valkey/etc/replica.conf
+    fi
+    if [[ -f /opt/bitnami/valkey/mounted-etc/valkey.conf ]];then
+        cp /opt/bitnami/valkey/mounted-etc/valkey.conf /opt/bitnami/valkey/etc/valkey.conf
+    fi
+
+    echo "" >> /opt/bitnami/valkey/etc/replica.conf
+    echo "replica-announce-port $VALKEYPORT" >> /opt/bitnami/valkey/etc/replica.conf
+    echo "replica-announce-ip $(get_full_hostname "$HOSTNAME")" >> /opt/bitnami/valkey/etc/replica.conf
+
+    {{- if .Values.tls.enabled }}
+    ARGS=("--port" "0")
+    ARGS+=("--tls-port" "${VALKEY_TLS_PORT}")
+    ARGS+=("--tls-cert-file" "${VALKEY_TLS_CERT_FILE}")
+    ARGS+=("--tls-key-file" "${VALKEY_TLS_KEY_FILE}")
+    ARGS+=("--tls-ca-cert-file" "${VALKEY_TLS_CA_FILE}")
+    ARGS+=("--tls-auth-clients" "${VALKEY_TLS_AUTH_CLIENTS}")
+    ARGS+=("--tls-replication" "yes")
+    {{- if .Values.tls.dhParamsFilename }}
+    ARGS+=("--tls-dh-params-file" "${VALKEY_TLS_DH_PARAMS_FILE}")
+    {{- end }}
+    {{- else }}
+    ARGS=("--port" "${VALKEY_PORT}")
+    {{- end }}
+    ARGS+=("--replicaof" "${VALKEY_MASTER_HOST}" "${VALKEY_MASTER_PORT_NUMBER}")
+    {{- if .Values.auth.enabled }}
+    ARGS+=("--requirepass" "${VALKEY_PASSWORD}")
+    ARGS+=("--masterauth" "${VALKEY_MASTER_PASSWORD}")
+    {{- else }}
+    ARGS+=("--protected-mode" "no")
+    {{- end }}
+    ARGS+=("--include" "/opt/bitnami/valkey/etc/valkey.conf")
+    ARGS+=("--include" "/opt/bitnami/valkey/etc/replica.conf")
+    {{- if .Values.replica.extraFlags }}
+    {{- range .Values.replica.extraFlags }}
+    ARGS+=({{ . | quote }})
+    {{- end }}
+    {{- end }}
+    {{- if .Values.replica.preExecCmds }}
+    {{ .Values.replica.preExecCmds | nindent 4 }}
+    {{- end }}
+    {{- if .Values.replica.command }}
+    exec {{ .Values.replica.command }} "${ARGS[@]}"
+    {{- else }}
+    exec valkey-server "${ARGS[@]}"
+    {{- end }}
+  {{- end }}
+{{- end }}
+---
+{{- if .Values.sentinel.service.createMaster}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  update-master-label.sh: |
+    #!/bin/bash
+    while true; do
+        while [ ! -f "/etc/shared/current" ]; do
+            sleep 1
+        done
+        echo "new master elected, updating label(s)..."
+        kubectl label pod --field-selector metadata.name="$(< "/etc/shared/current")" isMaster="true" --overwrite
+        if [ -f /etc/shared/previous ]; then
+            kubectl label pod --field-selector metadata.name="$(< "/etc/shared/previous")" isMaster="false" --overwrite
+        fi
+        rm "/etc/shared/current" "/etc/shared/previous"
+    done
+{{- end }}

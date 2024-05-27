@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -27,7 +27,7 @@ global:
     openshift:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
-      adaptSecurityContext: disabled
+      adaptSecurityContext: auto
 ## @section Common parameters
 ##
 
@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jaeger
-  tag: 1.55.0-debian-12-r0
+  tag: 1.57.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -194,7 +194,7 @@ query:
   ## @param query.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if query.resources is set (query.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param query.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -212,6 +212,9 @@ query:
   ## Container ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   containerPorts:
+    ## @param query.containerPorts.grpc Port for GRPC
+    ##
+    grpc: 16685
     ## @param query.containerPorts.api Port for API
     ##
     api: 16686
@@ -304,7 +307,7 @@ query:
     ## @param query.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param query.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -376,6 +379,7 @@ query:
   ## @param query.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param query.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param query.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param query.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param query.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param query.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param query.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -385,11 +389,12 @@ query:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -570,7 +575,7 @@ collector:
   ## @param collector.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if collector.resources is set (collector.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param collector.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -725,7 +730,7 @@ collector:
     ## @param collector.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param collector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param collector.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -797,6 +802,7 @@ collector:
   ## @param collector.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param collector.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param collector.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param collector.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param collector.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param collector.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param collector.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -806,11 +812,12 @@ collector:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -991,7 +998,7 @@ agent:
   ## @param agent.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param agent.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1128,7 +1135,7 @@ agent:
     ## @param agent.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param agent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param agent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1200,6 +1207,7 @@ agent:
   ## @param agent.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param agent.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param agent.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param agent.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param agent.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param agent.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param agent.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1211,9 +1219,10 @@ agent:
     enabled: true
     seLinuxOptions: null
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1325,6 +1334,7 @@ migration:
   ## @param migration.containerSecurityContext.enabled Enabled containers' Security Context
   ## @param migration.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
   ## @param migration.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param migration.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
   ## @param migration.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
   ## @param migration.containerSecurityContext.privileged Set container's Security Context privileged
   ## @param migration.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
@@ -1333,11 +1343,12 @@ migration:
   ## @param migration.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     privileged: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
@@ -1371,7 +1382,7 @@ migration:
   ## @param migration.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if migration.resources is set (migration.resources is recommended for production).
   ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   ##
-  resourcesPreset: "none"
+  resourcesPreset: "small"
   ## @param migration.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   ## Example:
   ## resources:
@@ -1400,7 +1411,7 @@ migration:
     ## @param migration.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
-    ## @param migration.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolice
+    ## @param migration.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
     ##   - ports:
@@ -1453,7 +1464,7 @@ migration:
 cqlshImage:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.12-debian-12-r7
+  tag: 4.0.12-debian-12-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1523,3 +1534,28 @@ cassandra:
   service:
     ports:
       cql: 9042
+  ## Cassandra pods' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## Minimum memory for development is 4GB and 2 CPU cores
+  ## Minimum memory for production is 8GB and 4 CPU cores
+  ## ref: http://docs.datastax.com/en/archived/cassandra/2.0/cassandra/architecture/architecturePlanningHardware_c.html
+  ##
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param cassandra.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "large"
+  ## @param cassandra.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

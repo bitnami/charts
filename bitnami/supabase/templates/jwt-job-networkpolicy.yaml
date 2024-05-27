@@ -1,0 +1,49 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "supabase.createInitJob" .) (not .Values.global.jwt.existingSecret) .Values.jwt.autoGenerate.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ include "common.names.fullname" . }}-jwt-init
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: supabase
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jwt.autoGenerate.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: supabase
+      app.kubernetes.io/component: init
+  policyTypes:
+    - Ingress
+    - Egress
+  {{- if .Values.jwt.autoGenerate.networkPolicy.allowExternalEgress }}
+  egress:
+    - {}
+  {{- else }}
+  egress:
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.jwt.autoGenerate.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    {{- if .Values.jwt.autoGenerate.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.jwt.autoGenerate.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  ingress:
+    {{- if .Values.jwt.autoGenerate.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.jwt.autoGenerate.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

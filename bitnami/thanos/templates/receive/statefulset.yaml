@@ -1,5 +1,5 @@
 {{- /*
-Copyright VMware, Inc.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
@@ -36,8 +36,9 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive
+      {{- if or .Values.receive.podAnnotations (include "thanos.receive.createConfigmap" $) (include "thanos.createObjstoreSecret" $) }}
       annotations:
-        {{- if (include "thanos.objstoreConfig" $) }}
+        {{- if (include "thanos.createObjstoreSecret" .) }}
         checksum/objstore-configuration: {{ include "thanos.objstoreConfig" . | sha256sum }}
         {{- end }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
@@ -46,6 +47,7 @@ spec:
         {{- if .Values.receive.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.receive.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "thanos.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "thanos.receive.serviceAccountName" . }}
@@ -81,6 +83,9 @@ spec:
       {{- end }}
       {{- if .Values.receive.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.receive.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.receive.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.receive.topologySpreadConstraints }}
       topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.receive.topologySpreadConstraints "context" $) | nindent 8 }}
@@ -136,7 +141,11 @@ spec:
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
+            {{- if .Values.receive.tsdbPath }}
+            - --tsdb.path={{ .Values.receive.tsdbPath }}
+            {{- else }}
             - --tsdb.path=/var/thanos/receive
+            {{- end }}
             - --label={{ .Values.receive.replicaLabel }}="$(NAME)"
             - --label=receive="true"
             - --tsdb.retention={{ .Values.receive.tsdbRetention }}
@@ -152,7 +161,9 @@ spec:
             {{- if .Values.receive.grpc.server.tls.enabled }}
             - --grpc-server-tls-cert=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-cert") }}
             - --grpc-server-tls-key=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "tls-key") }}
+            {{- if .Values.receive.grpc.server.tls.clientAuthEnabled }}
             - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "ca-cert") }}
+            {{- end }}
             {{- end }}
             {{- if .Values.receive.extraFlags }}
             {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraFlags "context" $) | nindent 12 }}
@@ -303,6 +314,9 @@ spec:
         name: data
         {{- if .Values.receive.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.receive.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" ( dict "value" .Values.receive.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
