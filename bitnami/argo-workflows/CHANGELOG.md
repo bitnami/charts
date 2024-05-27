@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.1.1 (2024-05-22)
+## 9.0.0 (2024-05-27)
 
-* [bitnami/argo-workflows] Use different liveness/readiness probes ([#26338](https://github.com/bitnami/charts/pull/26338))
+* [bitnami/argo-workflows] Update dependencies ([#26449](https://github.com/bitnami/charts/pull/26449))
+
+## <small>8.1.1 (2024-05-23)</small>
+
+* [bitnami/argo-workflows] Use different liveness/readiness probes (#26338) ([74c9d18](https://github.com/bitnami/charts/commit/74c9d1860077443f82d7140c2cdaf95a63fa1615)), closes [#26338](https://github.com/bitnami/charts/issues/26338)
 
 ## 8.1.0 (2024-05-21)
 
