@@ -141,11 +141,16 @@ spec:
             {{- end }}
             {{- if (include "mlflow.v0.s3.enabled" .) }}
             - --artifacts-destination=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            {{- else if .Values.externalGCS.enabled }}
+            - --artifacts-destination=gs://{{ include "mlflow.v0.gcs.bucket" . }}
             {{- else }}
             - --artifacts-destination={{ .Values.tracking.persistence.mountPath }}/mlartifacts
             {{- end }}
             {{- if and (not (include "mlflow.v0.s3.serveArtifacts" .)) (include "mlflow.v0.s3.enabled" .) }}
             - --default-artifact-root=s3://{{ include "mlflow.v0.s3.bucket" . }}
+            - --no-serve-artifacts
+            {{- else if and (not .Values.externalGCS.serveArtifacts) .Values.externalGCS.enabled }}
+            - --default-artifact-root=gs://{{ include "mlflow.v0.gcs.bucket" . }}
             - --no-serve-artifacts
             {{ else }}
             - --serve-artifacts
@@ -189,6 +194,16 @@ spec:
             {{- if .Values.minio.enabled }}
             - name: MLFLOW_S3_ENDPOINT_URL
               value: {{ printf "%s://%s:%v" (include "mlflow.v0.s3.protocol" .) (include "mlflow.v0.s3.host" .) (include "mlflow.v0.s3.port" .) | quote }}
+            {{- end }}
+            {{- if .Values.externalGCS.enabled }}
+            {{- if .Values.externalGCS.useCredentialsInSecret }}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /bitnami/gcs/key.json
+            {{- end }}
+            {{- if .Values.externalGCS.googleCloudProject }}
+            - name: GOOGLE_CLOUD_PROJECT
+              value: {{ .Values.externalGCS.googleCloudProject }}
+            {{- end }}
             {{- end }}
             {{- if .Values.tracking.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraEnvVars "context" $) | nindent 12 }}
@@ -270,6 +285,11 @@ spec:
               {{- if .Values.tracking.persistence.subPath }}
               subPath: {{ .Values.tracking.persistence.subPath }}
               {{- end }}
+            {{- if and .Values.externalGCS.useCredentialsInSecret .Values.externalGCS.existingSecret }}
+            - name: google-application-credentials
+              mountPath: /bitnami/gcs/key.json
+              subPath: key.json
+            {{- end }}
           {{- if .Values.tracking.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -306,5 +326,13 @@ spec:
           {{- end }}
         {{- if .Values.tracking.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.tracking.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.externalGCS.useCredentialsInSecret .Values.externalGCS.existingSecret }}
+        - name: gcs-key
+          secret:
+            secretName: {{ .Values.externalGCS.existingSecret }}
+            items:
+              - key: {{ .Values.externalGCS.existingSecretKey }}
+                path: /bitnami/gcs/key.json
         {{- end }}
 {{- end }}

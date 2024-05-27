@@ -1391,6 +1391,7 @@ minio:
     loadBalancerIP: ""
     ports:
       api: 80
+
 ## @section External S3 parameters
 ## All of these values are only used when minio.enabled is set to false
 ## @param externalS3.host External S3 host
@@ -1416,4 +1417,23 @@ externalS3:
   existingSecretKeySecretKey: "root-password"
   protocol: "https"
   bucket: "mlflow"
+  serveArtifacts: true
+
+## @section External Google Cloud Storage parameters
+## All of these values are only used when minio.enabled is set to false
+## @param externalGCS.useCredentialsInSecret Whether to read the GCS application credentials from a secret
+## @param externalGCS.applicationCredentialsBase64 Base64 encoded Google Cloud application credentials file
+## @param externalGCS.existingSecretApplicationCredentials Name of an existing secret key containing the application credentials file
+## @param externalGCS.existingSecretApplicationCredentialsKey Key in the existing secret containing the application credentials
+## @param externalGCS.bucket GCS bucket name
+## @param externalGCS.serveArtifacts Whether artifact serving is enabled
+##
+
+externalGCS:
+  enabled: false
+  googleCloudProject: ""
+  useCredentialsInSecret: false
+  existingSecret: ""
+  existingSecretKey: ""
+  bucket: ""
   serveArtifacts: true
