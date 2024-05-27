@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.3.0 (2024-05-26)
+## 5.3.0 (2024-05-27)
 
 * [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex ([#26439](https://github.com/bitnami/charts/pull/26439))
 
