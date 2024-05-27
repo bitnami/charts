@@ -1,6 +1,6 @@
 # Changelog
 
-## 18.2.1 (2024-05-22)
+## 18.2.1 (2024-05-27)
 
 * [bitnami/airflow] Fix Airflow k8s config generation in the initContainer and filesystem writability ([#26341](https://github.com/bitnami/charts/pull/26341))
 
