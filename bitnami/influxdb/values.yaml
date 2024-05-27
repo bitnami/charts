@@ -928,9 +928,14 @@ backup:
   ## Persistence parameters
   ##
   persistence:
+    ## @param backup.persistence.ownConfig Prefer independent own persistence parameters to configure the backup volume
+    ## When set to `false` (for backwards compatibility), the rest of the persistence parameters below will be ignored.
+    ## This parameter will be set to `true` and removed in a future release.
+    ##
+    ownConfig: false
     ## @param backup.persistence.enabled Enable data persistence for backup volume
     ##
-    enabled: false
+    enabled: true
     ## @param backup.persistence.existingClaim Use a existing PVC which must be created manually before bound
     ## If defined, PVC must be created manually before volume will be bound
     ## The value is evaluated as a template
@@ -953,7 +958,6 @@ backup:
     ## @param backup.persistence.annotations Persistent Volume Claim annotations
     ##
     annotations: {}
-
   ## Cronjob configuration
   ## This cronjob is used to create InfluxDB&trade; backups
   ##
