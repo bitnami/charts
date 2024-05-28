@@ -357,6 +357,23 @@ primary:
     ## @param primary.initdb.password Specify the PostgreSQL password to execute the initdb scripts
     ##
     password: ""
+  ## Pre-init configuration
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql/#on-container-start
+  preInitDb:
+    ## @param primary.preInitDb.scripts Dictionary of pre-init scripts
+    ## Specify dictionary of shell scripts to be run before db boot
+    ## e.g:
+    ## scripts:
+    ##   my_pre_init_script.sh: |
+    ##      #!/bin/sh
+    ##      echo "Do something."
+    scripts: {}
+    ## @param primary.preInitDb.scriptsConfigMap ConfigMap with pre-init scripts to be run
+    ## NOTE: This will override `primary.preInitDb.scripts`
+    scriptsConfigMap: ""
+    ## @param primary.preInitDb.scriptsSecret Secret with pre-init scripts to be run
+    ## NOTE: This can work along `primary.preInitDb.scripts` or `primary.preInitDb.scriptsConfigMap`
+    scriptsSecret: ""
   ## Configure current cluster's primary server to be the standby server in other cluster.
   ## This will allow cross cluster replication and provide cross cluster high availability.
   ## You will need to configure pgHbaConfiguration if you want to enable this feature with local cluster replication enabled.

@@ -466,6 +466,14 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/postgresql/tmp
               subPath: app-tmp-dir
+            {{- if or .Values.primary.preInitDb.scriptsConfigMap .Values.primary.preInitDb.scripts }}
+            - name: custom-preinit-scripts
+              mountPath: /docker-entrypoint-preinitdb.d/
+            {{- end }}
+            {{- if .Values.primary.preInitDb.scriptsSecret }}
+            - name: custom-preinit-scripts-secret
+              mountPath: /docker-entrypoint-preinitdb.d/secret
+            {{- end }}
             {{- if or .Values.primary.initdb.scriptsConfigMap .Values.primary.initdb.scripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d/
@@ -610,6 +618,16 @@ spec:
         - name: postgresql-password
           secret:
             secretName: {{ include "postgresql.v1.secretName" . }}
+        {{- end }}
+        {{- if or .Values.primary.preInitDb.scriptsConfigMap .Values.primary.preInitDb.scripts }}
+        - name: custom-preinit-scripts
+          configMap:
+            name: {{ include "postgresql.v1.preInitDb.scriptsCM" . }}
+        {{- end }}
+        {{- if .Values.primary.preInitDb.scriptsSecret }}
+        - name: custom-preinit-scripts-secret
+          secret:
+            secretName: {{ tpl .Values.primary.preInitDb.scriptsSecret $ }}
         {{- end }}
         {{- if or .Values.primary.initdb.scriptsConfigMap .Values.primary.initdb.scripts }}
         - name: custom-init-scripts
