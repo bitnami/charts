@@ -930,6 +930,16 @@ nginx:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param nginx.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param nginx.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param nginx.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `nginx.pdb.minAvailable` and `nginx.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param nginx.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the NGINX pods
   ##
   extraVolumeMounts: []
@@ -1262,6 +1272,16 @@ portal:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param portal.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param portal.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param portal.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `portal.pdb.minAvailable` and `portal.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param portal.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Portal pods
   ##
   extraVolumeMounts: []
@@ -1667,6 +1687,16 @@ core:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param core.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param core.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param core.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `core.pdb.minAvailable` and `core.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param core.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Core pods
   ##
   extraVolumeMounts: []
@@ -2037,6 +2067,16 @@ jobservice:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param jobservice.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param jobservice.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param jobservice.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `jobservice.pdb.minAvailable` and `jobservice.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param jobservice.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Harbor Jobservice pods
   ##
   extraVolumeMounts: []
@@ -2288,6 +2328,16 @@ registry:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param registry.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param registry.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param registry.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `registry.pdb.minAvailable` and `registry.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
@@ -3005,6 +3055,16 @@ trivy:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param trivy.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param trivy.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param trivy.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `trivy.pdb.minAvailable` and `trivy.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param trivy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Trivy pods
   ##
   extraVolumeMounts: []
@@ -3332,6 +3392,16 @@ exporter:
   ## @param exporter.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param exporter.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param exporter.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param exporter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `exporter.pdb.minAvailable` and `exporter.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param exporter.extraVolumeMounts
   ##
   extraVolumeMounts: []
