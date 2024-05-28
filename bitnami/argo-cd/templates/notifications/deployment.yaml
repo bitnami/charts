@@ -99,7 +99,7 @@ spec:
           {{- else if .Values.notifications.livenessProbe.enabled }}
           livenessProbe:
             tcpSocket:
-              path: /metrics
+              port: metrics
             initialDelaySeconds: {{ .Values.notifications.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.notifications.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.notifications.livenessProbe.timeoutSeconds }}
