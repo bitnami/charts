@@ -84,7 +84,7 @@ make render_template
 
 This will replace all the placeholders throughout the chart with your values. You will still likely need to modify the chart further to meet your needs.
 
-The new chart can then me moved from `/draft/<chart-name>` to your own repo/location. If you wish to add the chart to this Bitnami repository, then refer to [Adding a new chart to the repository](./CONTRIBUTING.md#adding-a-new-chart-to-the-repository)
+The new chart can then be moved from `/draft/<chart-name>` to your own repo/location. If you wish to add the chart to this Bitnami repository, then refer to [Adding a new chart to the repository](./CONTRIBUTING.md#adding-a-new-chart-to-the-repository)
 
 A chart in the `draft` directory can be recreated from the template by running:
 
