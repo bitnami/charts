@@ -458,6 +458,18 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `externalS3.bucket`                       | External S3 bucket                                                 | `mlflow`        |
 | `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                | `true`          |
 
+### External Google Cloud Storage parameters
+
+| Name                                 | Description                                                                                       | Value   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------- | ------- |
+| `externalGCS.enabled`                | Whether or not to enable Google Cloud Storage                                                     | `false` |
+| `externalGCS.googleCloudProject`     | Which Google Cloud Project to use (optional, needed when using "default application credentials") | `""`    |
+| `externalGCS.useCredentialsInSecret` | Whether to read the GCS application credentials from a secret                                     | `false` |
+| `externalGCS.existingSecret`         | Name of an existing secret key containing the application credentials file                        | `""`    |
+| `externalGCS.existingSecretKey`      | Key in the existing secret containing the application credentials                                 | `""`    |
+| `externalGCS.bucket`                 | GCS bucket name                                                                                   | `""`    |
+| `externalGCS.serveArtifacts`         | Whether artifact serving is enabled                                                               | `true`  |
+
 The MLflow chart supports three different ways to load your files in the `run` deployment. In order of priority, they are:
 
 1. Existing config map
