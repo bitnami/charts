@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.0 (2024-05-23)
+## 10.2.1 (2024-05-28)
 
-* [bitnami/redis-cluster] Enable PodDisruptionBudgets ([#26375](https://github.com/bitnami/charts/pull/26375))
+* [bitnami/redis-cluster] Fix podAnnotation prometheus.io/port ([#26483](https://github.com/bitnami/charts/pull/26483))
+
+## 10.2.0 (2024-05-24)
+
+* [bitnami/redis-cluster] Enable PodDisruptionBudgets (#26375) ([50431fd](https://github.com/bitnami/charts/commit/50431fde7aaf7a1946de384cb15dff13961ccfe9)), closes [#26375](https://github.com/bitnami/charts/issues/26375)
 
 ## 10.1.0 (2024-05-21)
 
