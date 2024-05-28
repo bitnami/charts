@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.1 (2024-05-24)
+## 1.2.1 (2024-05-28)
 
 * [bitnami/mlflow] Use different liveness/readiness pending probes (part 2) ([#26417](https://github.com/bitnami/charts/pull/26417))
 
