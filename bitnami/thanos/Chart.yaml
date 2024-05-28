@@ -34,5 +34,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: thanos
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/thanos
-version: 15.7.1
+- https://github.com/bitnami/charts/tree/main/bitnami/thanos
+version: 15.7.2
