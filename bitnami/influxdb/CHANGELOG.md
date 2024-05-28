@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.1.1 (2024-05-22)
+## 6.2.0 (2024-05-27)
 
-* [bitnami/influxdb] Use different liveness/readiness probes ([#26303](https://github.com/bitnami/charts/pull/26303))
+* [bitnami/influxdb] Allow separate persistence cfg for backups ([#26453](https://github.com/bitnami/charts/pull/26453))
+
+## <small>6.1.1 (2024-05-23)</small>
+
+* [bitnami/influxdb] Use different liveness/readiness probes (#26303) ([1bbf1a0](https://github.com/bitnami/charts/commit/1bbf1a005e9f34891d10990d053f4a6af5e71bb6)), closes [#26303](https://github.com/bitnami/charts/issues/26303)
 
 ## 6.1.0 (2024-05-21)
 

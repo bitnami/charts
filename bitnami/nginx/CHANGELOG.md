@@ -1,8 +1,16 @@
 # Changelog
 
+## 17.3.0 (2024-05-24)
+
+* [bitnami/nginx] PDB review ([#26159](https://github.com/bitnami/charts/pull/26159))
+
+## <small>17.2.1 (2024-05-24)</small>
+
+* [bitnami/nginx] Fix readiness probe (#26394) ([0722a57](https://github.com/bitnami/charts/commit/0722a57fe19f7a84c995e1f54953ab36bc4b611b)), closes [#26394](https://github.com/bitnami/charts/issues/26394)
+
 ## 17.2.0 (2024-05-23)
 
-* [bitnami/nginx] Allow custom path for readinessProbe and update startupProbe ([#26362](https://github.com/bitnami/charts/pull/26362))
+* [bitnami/nginx] Allow custom path for readinessProbe and update startupProbe (#26362) ([24fcc5a](https://github.com/bitnami/charts/commit/24fcc5a3e6872c599d6eafdf6df531dde7272a32)), closes [#26362](https://github.com/bitnami/charts/issues/26362)
 
 ## 17.1.0 (2024-05-21)
 

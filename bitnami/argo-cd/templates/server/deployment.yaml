@@ -221,7 +221,7 @@ spec:
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz?full=true
               port: {{ .Values.server.containerPorts.http }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}

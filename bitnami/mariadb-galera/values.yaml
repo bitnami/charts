@@ -853,15 +853,18 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## Pod disruption budget configuration
-##
-podDisruptionBudget:
-  ## @param podDisruptionBudget.create Specifies whether a Pod disruption budget should be created
+## 
+## @param podDisruptionBudget DEPRECATED podDisruptionBudget will be removed in a future release. Please use pdb instead
+## 
+podDisruptionBudget: {}
+pdb:
+  ## @param pdb.create Specifies whether a Pod disruption budget should be created
   ##
-  create: false
-  ## @param podDisruptionBudget.minAvailable Minimum number / percentage of pods that should remain scheduled
+  create: true
+  ## @param pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
   ##
-  minAvailable: 1
-  ## @param podDisruptionBudget.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
   maxUnavailable: ""
 ## Prometheus exporter configuration

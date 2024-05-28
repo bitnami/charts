@@ -30,4 +30,4 @@ maintainers:
 name: scylladb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/scylladb
-version: 0.1.3
+version: 0.1.4
