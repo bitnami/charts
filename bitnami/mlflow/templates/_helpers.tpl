@@ -533,12 +533,18 @@ Return the volume-permissions init container
       mountPath: /tmp
 {{- end -}}
 
+
+{{/*
+Deal with external artifact storage
+*/}}
+
 {{/*
 Return MinIO(TM) fullname
 */}}
 {{- define "mlflow.v0.minio.fullname" -}}
 {{- include "common.names.dependency.fullname" (dict "chartName" "minio" "chartValues" .Values.minio "context" $) -}}
 {{- end -}}
+
 
 {{/*
 Return whether S3 is enabled
@@ -636,6 +642,29 @@ Return the S3 secret access key inside the secret
         {{- print .Values.externalS3.existingSecretKeySecretKey -}}
     {{- end -}}
 {{- end -}}
+
+{{/*
+Google Cloud Storage Section
+*/}}
+
+{{/*
+Return the GCS bucket
+*/}}
+{{- define "mlflow.v0.gcs.bucket" -}}
+    {{- if .Values.externalGCS.enabled -}}
+        {{- print .Values.externalGCS.bucket -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return whether artifacts should be served from GCS
+*/}}
+{{- define "mlflow.v0.gcs.serveArtifacts" -}}
+    {{- if .Values.externalGCS.serveArtifacts  -}}
+        {{- true }}
+    {{- end -}}
+{{- end -}}
+
 
 
 {{/*
