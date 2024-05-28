@@ -16,7 +16,6 @@ it('allows managing a helm chart release', () => {
   cy.fixture('releases').then((releases) => {
     const releaseName = `${releases.newRelease.name}-${random}`
 
-    cy.get('#search').type(releases.newRelease.application);
     cy.contains('div.card', releases.newRelease.application).click();
     cy.contains(Cypress.env('registryName'));
     cy.contains('Deploy').click();
