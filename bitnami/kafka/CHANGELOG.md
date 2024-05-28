@@ -1,8 +1,12 @@
 # Changelog
 
+## 29.2.0 (2024-05-28)
+
+* [bitnami/kafka] PDB review ([#25938](https://github.com/bitnami/charts/pull/25938))
+
 ## 29.1.0 (2024-05-27)
 
-* [bitnami/kafka] Restore value brokerRackAssignment ([#26296](https://github.com/bitnami/charts/pull/26296))
+* [bitnami/kafka] Restore value brokerRackAssignment (#26296) ([62968c1](https://github.com/bitnami/charts/commit/62968c1bcf75a374076e5161f57673faaee9a96d)), closes [#26296](https://github.com/bitnami/charts/issues/26296)
 
 ## <small>29.0.3 (2024-05-24)</small>
 
