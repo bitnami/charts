@@ -23,7 +23,7 @@ dependencies:
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 28.x.x
+  version: 29.x.x
 - condition: minio.enabled
   name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -48,4 +48,4 @@ maintainers:
 name: milvus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 7.1.2
+version: 8.0.0
