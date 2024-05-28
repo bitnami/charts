@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: mysql
-      image: docker.io/bitnami/mysql:8.0.37-debian-12-r2
+      image: docker.io/bitnami/mysql:8.4.0-debian-12-r3
     - name: mysqld-exporter
       image: docker.io/bitnami/mysqld-exporter:0.15.1-debian-12-r16
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
-appVersion: 8.0.37
+appVersion: 8.4.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -34,4 +34,4 @@ maintainers:
 name: mysql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mysql
-version: 10.3.0
+version: 11.1.0

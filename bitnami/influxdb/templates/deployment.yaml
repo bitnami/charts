@@ -254,21 +254,9 @@ spec:
           {{- else if .Values.influxdb.livenessProbe.enabled }}
           {{- $livenessTimeout := sub (int .Values.influxdb.livenessProbe.timeoutSeconds) 1 }}
           livenessProbe: {{- omit .Values.influxdb.livenessProbe "enabled" | toYaml | nindent 12 }}
-            exec:
-              command:
-                - bash
-                - -c
-                - |
-                  . /opt/bitnami/scripts/libinfluxdb.sh
-
-                  influxdb_env
-
-                  {{- if .Values.auth.enabled }}
-                  export INFLUX_USERNAME="$INFLUXDB_ADMIN_USER"
-                  export INFLUX_PASSWORD="$INFLUXDB_ADMIN_USER_PASSWORD"
-                  {{- end }}
-
-                  timeout {{ $livenessTimeout }}s influx ping --host http://$POD_IP:{{ .Values.influxdb.containerPorts.http }}
+            httpGet:
+              port: http
+              path: /
           {{- end }}
           {{- if .Values.influxdb.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.influxdb.customReadinessProbe "context" $) | nindent 12 }}

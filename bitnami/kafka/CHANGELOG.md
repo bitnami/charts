@@ -1,8 +1,14 @@
 # Changelog
 
-## 28.4.0 (2024-05-22)
+## 29.1.0 (2024-05-27)
 
-* [bitnami/kafka] PDB review ([#25938](https://github.com/bitnami/charts/pull/25938))
+* [bitnami/kafka] Restore value brokerRackAssignment ([#26296](https://github.com/bitnami/charts/pull/26296))
+
+## <small>29.0.3 (2024-05-24)</small>
+
+* [bitnami/kafka] Deprecate Kafka Exporter (#26395) ([bf9a653](https://github.com/bitnami/charts/commit/bf9a6535fabdd4c0ad3210920cdd6c4963c5511c)), closes [#26395](https://github.com/bitnami/charts/issues/26395)
+* [bitnami/kafka] Fix linter rules after deprecating Kafka Exporter (#26411) ([69856e9](https://github.com/bitnami/charts/commit/69856e985f1325b3e72cd126b6990647d35f1cbb)), closes [#26411](https://github.com/bitnami/charts/issues/26411)
+* [bitnami/kafka] Release 28.3.1 (#26403) ([0428ec7](https://github.com/bitnami/charts/commit/0428ec724a1e6b139b12e8c3a6ab489a6459660c)), closes [#26403](https://github.com/bitnami/charts/issues/26403)
 
 ## 28.3.0 (2024-05-21)
 

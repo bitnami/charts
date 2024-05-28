@@ -1,8 +1,13 @@
 # Changelog
 
+## 21.2.1 (2024-05-22)
+
+* [bitnami/harbor] Use different liveness/readiness probes ([#26327](https://github.com/bitnami/charts/pulls/26327))
+
 ## 21.2.0 (2024-05-21)
 
-* [bitnami/harbor] feat: :sparkles: :lock: Add warning when original images are replaced ([#26216](https://github.com/bitnami/charts/pulls/26216))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/harbor] feat: :sparkles: :lock: Add warning when original images are replaced (#26216) ([611ada1](https://github.com/bitnami/charts/commit/611ada1)), closes [#26216](https://github.com/bitnami/charts/issues/26216)
 
 ## <small>21.1.6 (2024-05-18)</small>
 
