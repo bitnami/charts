@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.1 (2024-05-22)
+## 4.3.2 (2024-05-28)
 
-* [bitnami/rabbitmq-cluster-operator] Use different liveness/readiness probes ([#26346](https://github.com/bitnami/charts/pull/26346))
+* [bitnami/rabbitmq-cluster-operator] Fix cert-manager injection when existing secret is used ([#26521](https://github.com/bitnami/charts/pull/26521))
+
+## <small>4.3.1 (2024-05-24)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Use different liveness/readiness probes (#26346) ([76b2afc](https://github.com/bitnami/charts/commit/76b2afcedf58526b6a77c3f1816cc2fca2cd7ed3)), closes [#26346](https://github.com/bitnami/charts/issues/26346)
 
 ## 4.3.0 (2024-05-21)
 
