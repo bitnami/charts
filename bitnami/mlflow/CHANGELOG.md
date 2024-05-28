@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.1 (2024-05-28)
+## 1.2.2 (2024-05-28)
 
 * [bitnami/mlflow] Add chart source URL to sources list ([#26495](https://github.com/bitnami/charts/pull/26495))
+
+## <small>1.2.1 (2024-05-28)</small>
+
+* [bitnami/mlflow] Use different liveness/readiness pending probes (part 2) (#26417) ([3b0ef3f](https://github.com/bitnami/charts/commit/3b0ef3fcf23d150b1ebbe03ab3ac9bf5f5b1d245)), closes [#26417](https://github.com/bitnami/charts/issues/26417)
 
 ## 1.2.0 (2024-05-23)
 
