@@ -69,7 +69,7 @@ Useful Helm Client Commands:
 
 ## Creating a new chart
 
-To make a chart that follows the same structure/patterns that the rest of the Bitnami charts, the basic scaffolding is provided in the [`template` directory](https://github.com/bitnami/charts/tree/main/template).
+To make a chart that follows the same structure/patterns that the rest of the Bitnami charts, the basic scaffolding is provided in the [`template` directory](./template/).
 To make a new chart from the template, first run:
 
 ```console
