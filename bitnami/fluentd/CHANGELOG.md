@@ -1,8 +1,12 @@
 # Changelog
 
+## 6.5.1 (2024-05-28)
+
+* [bitnami/fluentd] fix: :bug: Only check replaced images when set ([#26506](https://github.com/bitnami/charts/pull/26506))
+
 ## 6.5.0 (2024-05-28)
 
-* [bitnami/fluentd] add extra gems extensions volume on forwarders ([#26489](https://github.com/bitnami/charts/pull/26489))
+* [bitnami/fluentd] add extra gems extensions volume on forwarders (#26489) ([64c2708](https://github.com/bitnami/charts/commit/64c27084c6f03dc505a30ad77852a38c46ddf1f5)), closes [#26489](https://github.com/bitnami/charts/issues/26489)
 
 ## 6.4.0 (2024-05-27)
 
