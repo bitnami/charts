@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.3.0 (2024-05-24)
+## 2.2.1 (2024-05-27)
 
-* [bitnami/gitea] Enable PodDisruptionBudgets ([#26433](https://github.com/bitnami/charts/pull/26433))
+* [bitnami/gitea] Release 2.2.1 ([#26460](https://github.com/bitnami/charts/pull/26460))
 
 ## 2.2.0 (2024-05-21)
 

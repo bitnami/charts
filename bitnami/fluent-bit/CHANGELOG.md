@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.1 (2024-05-24)
+## 2.2.2 (2024-05-26)
 
-* [bitnami/fluent-bit] Release 2.2.1 ([#26418](https://github.com/bitnami/charts/pull/26418))
+* [bitnami/fluent-bit] Release 2.2.2 ([#26442](https://github.com/bitnami/charts/pull/26442))
+
+## <small>2.2.1 (2024-05-24)</small>
+
+* [bitnami/fluent-bit] Release 2.2.1 (#26418) ([a77aee2](https://github.com/bitnami/charts/commit/a77aee26883a604a8e5fe8d81ffe05a1142d9857)), closes [#26418](https://github.com/bitnami/charts/issues/26418)
 
 ## 2.2.0 (2024-05-21)
 
