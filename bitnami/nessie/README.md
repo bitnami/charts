@@ -1,10 +1,10 @@
 <!--- app-name: nessie -->
 
-# Bitnami package for nessie
+# Bitnami package for Nessie
 
-nessie is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
+Nessie is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
 
-[Overview of nessie](https://nessie.org/)
+[Overview of Nessie](https://projectnessie.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -14,11 +14,11 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nessie
 ```
 
-Looking to use nessie in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Nessie in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
-This chart bootstraps a [nessie](https://github.com/bitnami/containers/tree/main/bitnami/nessie) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Nessie](https://github.com/bitnami/containers/tree/main/bitnami/nessie) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -37,7 +37,7 @@ helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nessie
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-The command deploys nessie on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+The command deploys Nessie on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -192,13 +192,12 @@ If these sidecars export extra ports, extra port definitions can be added using 
 
 ```yaml
 service:
-  extraPorts:
-  - name: extraPort
-    port: 11311
-    targetPort: 11311
+  server:
+    extraPorts:
+    - name: extraPort
+      port: 11311
+      targetPort: 11311
 ```
-
-> NOTE: This Helm chart already includes sidecar containers for the Prometheus exporters (where applicable). These can be activated by adding the `--enable-metrics=true` parameter at deployment time. The `sidecars` parameter should therefore only be used for any extra sidecar containers.
 
 If additional init containers are needed in the same pod, they can be defined using the `initContainers` parameter. Here is an example:
 

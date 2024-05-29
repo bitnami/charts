@@ -23,7 +23,7 @@ dependencies:
   tags:
   - bitnami-common
   version: 2.x.x
-description: nessie is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
+description: Nessie is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/nessie/img/nessie-stack-220x234.png
 keywords:

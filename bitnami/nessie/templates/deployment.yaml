@@ -198,6 +198,13 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if eq .Values.versionStoreType "ROCKSDB" }}
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
+            {{- end }}
             {{- if .Values.usePasswordFile }}
             {{- if (eq .Values.versionStoreType "JDBC_POSTGRESQL") }}
             - name: database-password
