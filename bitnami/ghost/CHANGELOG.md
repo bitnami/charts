@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.0.1 (2024-05-27)
+## 21.1.0 (2024-05-28)
 
-* [bitnami/ghost] Release 21.0.1 ([#26455](https://github.com/bitnami/charts/pull/26455))
+* [bitnami/ghost] Enable PodDisruptionBudgets ([#26432](https://github.com/bitnami/charts/pull/26432))
+
+## <small>21.0.1 (2024-05-27)</small>
+
+* [bitnami/ghost] Release 21.0.1 (#26455) ([36352c8](https://github.com/bitnami/charts/commit/36352c82518a445588661a7f5143bafc31a80c11)), closes [#26455](https://github.com/bitnami/charts/issues/26455)
 
 ## 21.0.0 (2024-05-27)
 
