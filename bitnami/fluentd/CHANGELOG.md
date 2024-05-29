@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.3.2 (2024-05-23)
+## 6.5.0 (2024-05-28)
 
-* [bitnami/fluentd] Use different liveness/readiness probes (part 2) ([#26358](https://github.com/bitnami/charts/pull/26358))
+* [bitnami/fluentd] add extra gems extensions volume on forwarders ([#26489](https://github.com/bitnami/charts/pull/26489))
+
+## 6.4.0 (2024-05-27)
+
+* [bitnami/fluentd] Enable PodDisruptionBudgets (#26431) ([195c490](https://github.com/bitnami/charts/commit/195c4900ab98bded8a57a3b00c0aad8fe473c721)), closes [#26431](https://github.com/bitnami/charts/issues/26431)
+
+## <small>6.3.2 (2024-05-23)</small>
+
+* [bitnami/fluentd] Use different liveness/readiness probes (part 2) (#26358) ([14d5e15](https://github.com/bitnami/charts/commit/14d5e15087bbef59ea6354249b28ee537d9c7278)), closes [#26358](https://github.com/bitnami/charts/issues/26358)
 
 ## <small>6.3.1 (2024-05-22)</small>
 

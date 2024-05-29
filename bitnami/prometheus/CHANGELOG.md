@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.0 (2024-05-23)
+## 1.3.1 (2024-05-28)
 
-* [bitnami/prometheus] Enable PodDisruptionBudgets ([#26215](https://github.com/bitnami/charts/pull/26215))
+* [bitnami/prometheus] Add chart source URL to sources list ([#26487](https://github.com/bitnami/charts/pull/26487))
+
+## 1.3.0 (2024-05-24)
+
+* [bitnami/prometheus] Enable PodDisruptionBudgets (#26215) ([bca3d85](https://github.com/bitnami/charts/commit/bca3d855e95823d10028ff27a3cd6f65b4204dff)), closes [#26215](https://github.com/bitnami/charts/issues/26215)
 
 ## 1.2.0 (2024-05-22)
 

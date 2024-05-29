@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.1 (2024-05-23)
+## 3.2.0 (2024-05-24)
 
-* [bitnami/kubernetes-event-exporter] Re-enable healthy endpoint for li… ([#26357](https://github.com/bitnami/charts/pull/26357))
+* [bitnami/kubernetes-event-exporter] Add PDB ([#26145](https://github.com/bitnami/charts/pull/26145))
+
+## <small>3.1.1 (2024-05-23)</small>
+
+* [bitnami/kubernetes-event-exporter] Re-enable healthy endpoint for li… (#26357) ([bb022a3](https://github.com/bitnami/charts/commit/bb022a36246a401b2bd2773ac8f002ed557441bd)), closes [#26357](https://github.com/bitnami/charts/issues/26357)
 
 ## 3.1.0 (2024-05-21)
 

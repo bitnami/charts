@@ -1,8 +1,12 @@
 # Changelog
 
+## 15.6.1 (2024-05-28)
+
+* [bitnami/mongodb] Release 15.6.1 ([#26481](https://github.com/bitnami/charts/pull/26481))
+
 ## 15.6.0 (2024-05-24)
 
-* [bitnami/mongodb] PDB review ([#26154](https://github.com/bitnami/charts/pull/26154))
+* [bitnami/mongodb] PDB review (#26154) ([a4ecaf9](https://github.com/bitnami/charts/commit/a4ecaf9ed62fe573de17ce95d9ec090d3b1bde88)), closes [#26154](https://github.com/bitnami/charts/issues/26154)
 
 ## <small>15.5.3 (2024-05-24)</small>
 

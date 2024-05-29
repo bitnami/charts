@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.1.1 (2024-05-22)
+## 6.2.0 (2024-05-24)
 
-* [bitnami/clickhouse] Use different liveness/readiness probes ([#26331](https://github.com/bitnami/charts/pulls/26331))
+* [bitnami/clickhouse] Enable PodDisruptionBudgets ([#26422](https://github.com/bitnami/charts/pull/26422))
+
+## <small>6.1.1 (2024-05-23)</small>
+
+* [bitnami/clickhouse] Use different liveness/readiness probes (#26331) ([16e8a9e](https://github.com/bitnami/charts/commit/16e8a9e6f564cf102456d462ada8ecfe7d783500)), closes [#26331](https://github.com/bitnami/charts/issues/26331)
 
 ## 6.1.0 (2024-05-21)
 
