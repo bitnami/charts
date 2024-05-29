@@ -1,8 +1,8 @@
 # Changelog
 
-## 6.3.0 (2024-05-28)
+## 6.2.1 (2024-05-28)
 
-* [bitnami/influxdb] Enable PodDisruptionBudgets ([#26491](https://github.com/bitnami/charts/pull/26491))
+* [bitnami/influxdb] Release 6.2.1 ([#26511](https://github.com/bitnami/charts/pull/26511))
 
 ## 6.2.0 (2024-05-27)
 
