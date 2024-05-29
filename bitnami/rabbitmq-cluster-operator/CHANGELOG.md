@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.3.2 (2024-05-28)
+## 4.3.2 (2024-05-29)
 
 * [bitnami/rabbitmq-cluster-operator] Fix cert-manager injection when existing secret is used ([#26521](https://github.com/bitnami/charts/pull/26521))
 
