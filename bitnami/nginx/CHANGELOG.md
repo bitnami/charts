@@ -1,8 +1,12 @@
 # Changelog
 
+## 17.3.1 (2024-05-28)
+
+* [bitnami/nginx] Release 17.3.1 ([#26479](https://github.com/bitnami/charts/pull/26479))
+
 ## 17.3.0 (2024-05-24)
 
-* [bitnami/nginx] PDB review ([#26159](https://github.com/bitnami/charts/pull/26159))
+* [bitnami/nginx] PDB review (#26159) ([d91aafc](https://github.com/bitnami/charts/commit/d91aafc4683280af35112449f4e5df81a21135c8)), closes [#26159](https://github.com/bitnami/charts/issues/26159)
 
 ## <small>17.2.1 (2024-05-24)</small>
 

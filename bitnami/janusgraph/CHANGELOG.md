@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.1 (2024-05-22)
+## 0.3.2 (2024-05-28)
 
-* [bitnami/janusgraph] Use different liveness/readiness probes ([#26345](https://github.com/bitnami/charts/pull/26345))
+* [bitnami/janusgraph] Add chart source URL to sources list ([#26493](https://github.com/bitnami/charts/pull/26493))
+
+## <small>0.3.1 (2024-05-23)</small>
+
+* [bitnami/janusgraph] Use different liveness/readiness probes (#26345) ([454f762](https://github.com/bitnami/charts/commit/454f762736ad95ec4eb1515c247ed4bfa127fabf)), closes [#26345](https://github.com/bitnami/charts/issues/26345)
 
 ## 0.3.0 (2024-05-21)
 

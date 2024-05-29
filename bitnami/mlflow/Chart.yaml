@@ -41,6 +41,7 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: mlflow
 sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/mlflow
 - https://github.com/bitnami/containers/tree/main/bitnami/mlflow
 - https://github.com/mlflow/mlflow
-version: 1.2.0
+version: 1.2.2

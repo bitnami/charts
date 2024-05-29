@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.1 (2024-05-22)
+## 11.3.0 (2024-05-28)
 
-* [bitnami/grafana] Use different liveness/readiness probes ([#26328](https://github.com/bitnami/charts/pulls/26328))
+* [bitnami/grafana] Enable PodDisruptionBudgets ([#26473](https://github.com/bitnami/charts/pull/26473))
+
+## <small>11.2.1 (2024-05-23)</small>
+
+* [bitnami/grafana] Use different liveness/readiness probes (#26328) ([dce614b](https://github.com/bitnami/charts/commit/dce614b357cb3e7fa6387c4b31d5904952d60e76)), closes [#26328](https://github.com/bitnami/charts/issues/26328)
 
 ## 11.2.0 (2024-05-22)
 
