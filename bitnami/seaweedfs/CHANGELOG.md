@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.3.1 (2024-05-28)
+## 0.3.1 (2024-05-29)
 
-* [bitnami/seaweedfs] Add chart source URL to sources list ([#26496](https://github.com/bitnami/charts/pull/26496))
+* [bitnami/seaweedfs] Add chart source URL to sources list ([#26538](https://github.com/bitnami/charts/pull/26538))
 
 ## 0.3.0 (2024-05-24)
 
