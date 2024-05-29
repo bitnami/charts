@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.2 (2024-05-28)
+## 15.1.2 (2024-05-29)
 
 *  [bitnami/kubeapps] Fix permissions for apprepositories issue 5323 tanzu RBAC ([#26488](https://github.com/bitnami/charts/pull/26488))
 
