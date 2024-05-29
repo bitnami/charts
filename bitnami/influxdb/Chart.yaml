@@ -12,9 +12,9 @@ annotations:
     - name: google-cloud-sdk
       image: docker.io/bitnami/google-cloud-sdk:0.477.0-debian-12-r0
     - name: influxdb
-      image: docker.io/bitnami/influxdb:2.7.6-debian-12-r9
+      image: docker.io/bitnami/influxdb:2.7.6-debian-12-r10
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
 appVersion: 2.7.6
 dependencies:
@@ -37,4 +37,4 @@ maintainers:
 name: influxdb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/influxdb
-version: 6.3.0
+version: 6.3.1
