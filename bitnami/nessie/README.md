@@ -74,7 +74,7 @@ The chart supports setting Nessie [application properties](https://github.com/pr
 
 In the following example, we use `configOverrides` to disable the HTTP access log and the HTTP decompression:
 
-```
+```yaml
 configOverrides:
   quarkus:
     http:
