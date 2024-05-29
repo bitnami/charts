@@ -151,6 +151,7 @@ rules:
       - secrets
     verbs:
       - create
+      - get
 ---
 # The Kubeapps app repository controller can read and watch its own
 # AppRepository resources cluster-wide. The read and write cluster-roles can
@@ -175,6 +176,12 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - kubeapps.com
+    resources:
+      - secrets
+    verbs:
+      - get
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
