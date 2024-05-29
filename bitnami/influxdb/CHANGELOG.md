@@ -1,8 +1,12 @@
 # Changelog
 
+## 6.2.1 (2024-05-28)
+
+* [bitnami/influxdb] Release 6.2.1 ([#26511](https://github.com/bitnami/charts/pull/26511))
+
 ## 6.2.0 (2024-05-27)
 
-* [bitnami/influxdb] Allow separate persistence cfg for backups ([#26453](https://github.com/bitnami/charts/pull/26453))
+* [bitnami/influxdb] Allow separate persistence cfg for backups (#26453) ([57ba39e](https://github.com/bitnami/charts/commit/57ba39ec1f4376b41b28fd4e91b326ff42378f25)), closes [#26453](https://github.com/bitnami/charts/issues/26453)
 
 ## <small>6.1.1 (2024-05-23)</small>
 

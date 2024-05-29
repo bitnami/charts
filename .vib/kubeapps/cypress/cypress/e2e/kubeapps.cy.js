@@ -12,14 +12,14 @@ it('allows managing a helm chart release', () => {
   // Prefer UI interaction over direct navigation because the URL includes references to
   // the ns name, which is only known at runtime.
   cy.contains('Catalog').click();
-
+  cy.wait(5000);
   cy.fixture('releases').then((releases) => {
     const releaseName = `${releases.newRelease.name}-${random}`
 
     cy.contains('div.card', releases.newRelease.application).click();
     cy.contains(Cypress.env('registryName'));
     cy.contains('Deploy').click();
-
+    cy.wait(5000);
     cy.get('#releaseName').type(releaseName);
 
     // TKG clusters may enforce PodSecurity policies, so podSecurityContext and
@@ -55,7 +55,6 @@ it('allows managing a helm chart release', () => {
           cy.get('cds-button').click();
         });
     }
-
     cy.contains('cds-button', 'Deploy').click();
     cy.get('.application-status-pie-chart-title', { timeout: (Cypress.config('defaultCommandTimeout') * 3) }).should(
       'have.text',

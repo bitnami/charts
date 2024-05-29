@@ -2,7 +2,7 @@
 
 ## 21.3.0 (2024-05-28)
 
-* [bitnami/harbor] Enable PodDisruptionBudgets ([#26486](https://github.com/bitnami/charts/pull/26486))
+* [bitnami/harbor] Enable zero-secret output ([#25453](https://github.com/bitnami/charts/pull/25453))
 
 ## <small>21.2.1 (2024-05-24)</small>
 
