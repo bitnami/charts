@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.3 (2024-05-24)
+## 6.3.4 (2024-05-28)
 
-* [bitnami/argo-cd] Release 6.3.3 ([#26415](https://github.com/bitnami/charts/pull/26415))
+* [bitnami/argo-cd] Define port for notifications probes ([#26485](https://github.com/bitnami/charts/pull/26485))
+
+## <small>6.3.3 (2024-05-24)</small>
+
+* [bitnami/argo-cd] Release 6.3.3 (#26415) ([e4f57d1](https://github.com/bitnami/charts/commit/e4f57d1a1a2c32bb471bb50d28f1241cbac421d3)), closes [#26415](https://github.com/bitnami/charts/issues/26415)
 
 ## <small>6.3.2 (2024-05-24)</small>
 

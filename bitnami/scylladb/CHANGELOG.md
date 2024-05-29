@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.4 (2024-05-24)
+## 0.1.5 (2024-05-29)
 
-* [bitnami/scylladb] chore: :wrench: Increase initialDelaySeconds in liveness probe ([#26416](https://github.com/bitnami/charts/pull/26416))
+* [bitnami/scylladb] Enable PodDisruptionBudgets ([#26533](https://github.com/bitnami/charts/pull/26533))
+
+## <small>0.1.4 (2024-05-24)</small>
+
+* [bitnami/scylladb] chore: :wrench: Increase initialDelaySeconds in liveness probe (#26416) ([fe8a230](https://github.com/bitnami/charts/commit/fe8a230d41274f0222e85d9c5ca581a1d497aef9)), closes [#26416](https://github.com/bitnami/charts/issues/26416)
 
 ## <small>0.1.3 (2024-05-23)</small>
 

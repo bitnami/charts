@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.1.1 (2024-05-22)
+## 4.2.0 (2024-05-29)
 
-* [bitnami/tensorflow-resnet] Use different liveness/readiness probes ([#26347](https://github.com/bitnami/charts/pull/26347))
+* [bitnami/tensorflow-resnet] Enable PodDisruptionBudgets ([#26539](https://github.com/bitnami/charts/pull/26539))
+
+## <small>4.1.1 (2024-05-24)</small>
+
+* [bitnami/tensorflow-resnet] Use different liveness/readiness probes (#26347) ([4a037f5](https://github.com/bitnami/charts/commit/4a037f5db5353a3d408432df5d4c61a250c8ffb8)), closes [#26347](https://github.com/bitnami/charts/issues/26347)
 
 ## 4.1.0 (2024-05-21)
 
