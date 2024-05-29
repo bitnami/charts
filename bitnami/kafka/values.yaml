@@ -845,9 +845,9 @@ controller:
   ## @param controller.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
-    maxUnavailable: 1
+    maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -1255,9 +1255,9 @@ broker:
   ## @param broker.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
-    maxUnavailable: 1
+    maxUnavailable: ""
   ## @section Experimental: Kafka Broker Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -2068,6 +2068,7 @@ metrics:
     ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Kafka
     ##
     groups: []
+
 ## @section Kafka provisioning parameters
 ##
 

@@ -762,5 +762,5 @@ ingress:
 ##
 pdb:
   create: true
-  minAvailable: 1
+  minAvailable: ""
   maxUnavailable: ""

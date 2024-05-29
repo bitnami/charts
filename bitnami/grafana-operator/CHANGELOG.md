@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.2 (2024-05-26)
+## 4.4.0 (2024-05-28)
 
-* [bitnami/grafana-operator] Release 4.3.2 ([#26440](https://github.com/bitnami/charts/pull/26440))
+* [bitnami/grafana-operator] Enable PodDisruptionBudgets ([#26476](https://github.com/bitnami/charts/pull/26476))
+
+## <small>4.3.2 (2024-05-26)</small>
+
+* [bitnami/grafana-operator] Release 4.3.2 (#26440) ([50f93a9](https://github.com/bitnami/charts/commit/50f93a9612b15234a69eb4b83e29381a4a327868)), closes [#26440](https://github.com/bitnami/charts/issues/26440)
 
 ## <small>4.3.1 (2024-05-24)</small>
 
