@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.1.1 (2024-05-27)
+## 29.2.0 (2024-05-29)
 
-* [bitnami/kafka] Fixed Network-Policies for jmx metrics export ([#26369](https://github.com/bitnami/charts/pull/26369))
+* [bitnami/kafka] PDB review ([#25938](https://github.com/bitnami/charts/pull/25938))
+
+## <small>29.1.1 (2024-05-28)</small>
+
+* [bitnami/kafka] Fixed Network-Policies for jmx metrics export (#26369) ([7f9445f](https://github.com/bitnami/charts/commit/7f9445f21003a77971d1e7d9c31cf952b6ba9554)), closes [#26369](https://github.com/bitnami/charts/issues/26369)
 
 ## 29.1.0 (2024-05-27)
 
