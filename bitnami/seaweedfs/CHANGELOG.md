@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.0 (2024-05-23)
+## 0.3.1 (2024-05-28)
 
-* [bitnami/seaweedfs] Enable PodDisruptionBudgets ([#26379](https://github.com/bitnami/charts/pull/26379))
+* [bitnami/seaweedfs] Add chart source URL to sources list ([#26496](https://github.com/bitnami/charts/pull/26496))
+
+## 0.3.0 (2024-05-24)
+
+* [bitnami/seaweedfs] Enable PodDisruptionBudgets (#26379) ([3c7ae2c](https://github.com/bitnami/charts/commit/3c7ae2c0d8cd7943a1c3962bc649821b8d6f3239)), closes [#26379](https://github.com/bitnami/charts/issues/26379)
 
 ## <small>0.2.2 (2024-05-22)</small>
 
