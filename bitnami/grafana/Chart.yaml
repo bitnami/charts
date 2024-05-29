@@ -31,4 +31,4 @@ maintainers:
 name: grafana
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana
-version: 11.2.0
+version: 11.3.0

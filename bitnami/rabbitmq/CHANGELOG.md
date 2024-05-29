@@ -1,8 +1,8 @@
 # Changelog
 
-## 14.4.0 (2024-05-23)
+## 14.3.1 (2024-05-24)
 
-* [bitnami/rabbitmq] Enable PodDisruptionBudgets ([#26222](https://github.com/bitnami/charts/pull/26222))
+* [bitnami/rabbitmq] Pass service.extraPorts to the headless service ([#26136](https://github.com/bitnami/charts/pull/26136))
 
 ## 14.3.0 (2024-05-22)
 

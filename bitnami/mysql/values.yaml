@@ -90,7 +90,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.37-debian-12-r2
+  tag: 8.4.0-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -155,10 +155,10 @@ auth:
   ##   replicator: /vault/secrets/mysql-replicator
   ##
   customPasswordFiles: {}
-  ## @param auth.defaultAuthenticationPlugin Sets the default authentication plugin, by default it will use `mysql_native_password`
-  ## NOTE: `mysql_native_password` will be deprecated in future mysql version and it is used here for compatibility with previous version. If you want to use the new default authentication method set it to `caching_sha2_password`.
+  ## @param auth.authenticationPolicy Sets the authentication policy, by default it will use `* ,,`
+  ## ref: https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html#sysvar_authentication_policy
   ##
-  defaultAuthenticationPlugin: ""
+  authenticationPolicy: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
@@ -214,7 +214,7 @@ primary:
   ##
   configuration: |-
     [mysqld]
-    default_authentication_plugin={{- .Values.auth.defaultAuthenticationPlugin | default "mysql_native_password" }}
+    authentication_policy='{{- .Values.auth.authenticationPolicy | default "* ,," }}'
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
@@ -598,11 +598,11 @@ primary:
   pdb:
     ## @param primary.pdb.create Enable/disable a Pod Disruption Budget creation for MySQL primary pods
     ##
-    create: false
+    create: true
     ## @param primary.pdb.minAvailable Minimum number/percentage of MySQL primary pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param primary.pdb.maxUnavailable Maximum number/percentage of MySQL primary pods that may be made unavailable
+    minAvailable: ""
+    ## @param primary.pdb.maxUnavailable Maximum number/percentage of MySQL primary pods that may be made unavailable. Defaults to `1` if both `primary.pdb.minAvailable` and `primary.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## @param primary.podLabels MySQL Primary pod label. If labels are same as commonLabels , this will take precedence
@@ -642,7 +642,7 @@ secondary:
   ##
   configuration: |-
     [mysqld]
-    default_authentication_plugin=mysql_native_password
+    authentication_policy='{{- .Values.auth.authenticationPolicy | default "* ,," }}'
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
@@ -1027,11 +1027,11 @@ secondary:
   pdb:
     ## @param secondary.pdb.create Enable/disable a Pod Disruption Budget creation for MySQL secondary pods
     ##
-    create: false
+    create: true
     ## @param secondary.pdb.minAvailable Minimum number/percentage of MySQL secondary pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MySQL secondary pods that may be made unavailable
+    minAvailable: ""
+    ## @param secondary.pdb.maxUnavailable Maximum number/percentage of MySQL secondary pods that may be made unavailable. Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## @param secondary.podLabels Additional pod labels for MySQL secondary pods

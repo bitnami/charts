@@ -71,7 +71,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/aspnet-core
-  tag: 8.0.5-debian-12-r0
+  tag: 8.0.6-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

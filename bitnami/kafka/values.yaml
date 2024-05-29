@@ -140,6 +140,10 @@ existingLog4jConfigMap: ""
 ## @param heapOpts Kafka Java Heap size
 ##
 heapOpts: -Xmx1024m -Xms1024m
+## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
+## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
+##
+brokerRackAssignment: ""
 ## @param interBrokerProtocolVersion Override the setting 'inter.broker.protocol.version' during the ZK migration.
 ## Ref. https://docs.confluent.io/platform/current/installation/migrate-zk-kraft.html
 ##
@@ -265,9 +269,9 @@ sasl:
   ## @param sasl.existingSecret Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser
   ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
   ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=inter-broker-client-secret=INTER_BROKER_CLIENT_SECRET --from-literal=controller-password=CONTROLLER_PASSWORD --from-literal=controller-client-secret=CONTROLLER_CLIENT_SECRET --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
-  ## The client secrets are only required when using oauthbearer as sasl mechanism. 
+  ## The client secrets are only required when using oauthbearer as sasl mechanism.
   ## Client, interbroker and controller passwords are only required if the sasl mechanism includes something other than oauthbearer.
-  ## 
+  ##
   existingSecret: ""
 ## @section Kafka TLS parameters
 ## Kafka TLS settings, required if SSL or SASL_SSL listeners are configured
@@ -1530,7 +1534,7 @@ externalAccess:
     ## @param externalAccess.autoDiscovery.containerSecurityContext.allowPrivilegeEscalation Set Kafka auto-discovery containers' Security Context allowPrivilegeEscalation
     ## @param externalAccess.autoDiscovery.containerSecurityContext.readOnlyRootFilesystem Set Kafka auto-discovery containers' Security Context readOnlyRootFilesystem
     ## @param externalAccess.autoDiscovery.containerSecurityContext.capabilities.drop Set Kafka auto-discovery containers' Security Context capabilities to be dropped
-    ## @param externalAccess.autoDiscovery.containerSecurityContext.seccompProfile.type Set Kafka auto-discovery seccomp profile type 
+    ## @param externalAccess.autoDiscovery.containerSecurityContext.seccompProfile.type Set Kafka auto-discovery seccomp profile type
     ## e.g:
     ##   containerSecurityContext:
     ##     enabled: true
@@ -1872,332 +1876,6 @@ rbac:
 ## Prometheus Exporters / Metrics
 ##
 metrics:
-  ## Prometheus Kafka exporter: exposes complimentary metrics to JMX exporter
-  ##
-  kafka:
-    ## @param metrics.kafka.enabled Whether or not to create a standalone Kafka exporter to expose Kafka metrics
-    ##
-    enabled: false
-    ## Bitnami Kafka exporter image
-    ## ref: https://hub.docker.com/r/bitnami/kafka-exporter/tags/
-    ## @param metrics.kafka.image.registry [default: REGISTRY_NAME] Kafka exporter image registry
-    ## @param metrics.kafka.image.repository [default: REPOSITORY_NAME/kafka-exporter] Kafka exporter image repository
-    ## @skip metrics.kafka.image.tag Kafka exporter image tag (immutable tags are recommended)
-    ## @param metrics.kafka.image.digest Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-    ## @param metrics.kafka.image.pullPolicy Kafka exporter image pull policy
-    ## @param metrics.kafka.image.pullSecrets Specify docker-registry secret names as an array
-    ##
-    image:
-      registry: docker.io
-      repository: bitnami/kafka-exporter
-      tag: 1.7.0-debian-12-r27
-      digest: ""
-      ## Specify a imagePullPolicy
-      ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-      ##
-      pullPolicy: IfNotPresent
-      ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
-      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-      ## e.g:
-      ## pullSecrets:
-      ##   - myRegistryKeySecretName
-      ##
-      pullSecrets: []
-    ## @param metrics.kafka.certificatesSecret Name of the existing secret containing the optional certificate and key files
-    ## for Kafka exporter client authentication
-    ##
-    certificatesSecret: ""
-    ## @param metrics.kafka.tlsCert The secret key from the certificatesSecret if 'client-cert' key different from the default (cert-file)
-    ##
-    tlsCert: cert-file
-    ## @param metrics.kafka.tlsKey The secret key from the certificatesSecret if 'client-key' key different from the default (key-file)
-    ##
-    tlsKey: key-file
-    ## @param metrics.kafka.tlsCaSecret Name of the existing secret containing the optional ca certificate for Kafka exporter client authentication
-    ##
-    tlsCaSecret: ""
-    ## @param metrics.kafka.tlsCaCert The secret key from the certificatesSecret or tlsCaSecret if 'ca-cert' key different from the default (ca-file)
-    ##
-    tlsCaCert: ca-file
-    ## @param metrics.kafka.extraFlags Extra flags to be passed to Kafka exporter
-    ## e.g:
-    ## extraFlags:
-    ##   tls.insecure-skip-tls-verify: ""
-    ##   web.telemetry-path: "/metrics"
-    ##
-    extraFlags: {}
-    ## @param metrics.kafka.command Override Kafka exporter container command
-    ##
-    command: []
-    ## @param metrics.kafka.args Override Kafka exporter container arguments
-    ##
-    args: []
-    ## @param metrics.kafka.containerPorts.metrics Kafka exporter metrics container port
-    ##
-    containerPorts:
-      metrics: 9308
-    ## @param metrics.kafka.livenessProbe.enabled Enable livenessProbe
-    ## @param metrics.kafka.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-    ## @param metrics.kafka.livenessProbe.periodSeconds Period seconds for livenessProbe
-    ## @param metrics.kafka.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-    ## @param metrics.kafka.livenessProbe.failureThreshold Failure threshold for livenessProbe
-    ## @param metrics.kafka.livenessProbe.successThreshold Success threshold for livenessProbe
-    ##
-    livenessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 10
-      timeoutSeconds: 1
-      successThreshold: 1
-      failureThreshold: 3
-    ## @param metrics.kafka.readinessProbe.enabled Enable readinessProbe
-    ## @param metrics.kafka.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-    ## @param metrics.kafka.readinessProbe.periodSeconds Period seconds for readinessProbe
-    ## @param metrics.kafka.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-    ## @param metrics.kafka.readinessProbe.failureThreshold Failure threshold for readinessProbe
-    ## @param metrics.kafka.readinessProbe.successThreshold Success threshold for readinessProbe
-    ##
-    readinessProbe:
-      enabled: true
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 1
-      successThreshold: 1
-      failureThreshold: 3
-    ## @param metrics.kafka.startupProbe.enabled Enable startupProbe
-    ## @param metrics.kafka.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-    ## @param metrics.kafka.startupProbe.periodSeconds Period seconds for startupProbe
-    ## @param metrics.kafka.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-    ## @param metrics.kafka.startupProbe.failureThreshold Failure threshold for startupProbe
-    ## @param metrics.kafka.startupProbe.successThreshold Success threshold for startupProbe
-    ##
-    startupProbe:
-      enabled: false
-      initialDelaySeconds: 5
-      periodSeconds: 5
-      timeoutSeconds: 1
-      successThreshold: 1
-      failureThreshold: 3
-    ## Custom Startup probes
-    ## @param metrics.kafka.customStartupProbe Override default startup probe
-    ##
-    customStartupProbe: {}
-    ## Custom Liveness probes
-    ## @param metrics.kafka.customLivenessProbe Override default liveness probe
-    ##
-    customLivenessProbe: {}
-    ## Custom Rediness probes
-    ## @param metrics.kafka.customReadinessProbe Override default readiness probe
-    ##
-    customReadinessProbe: {}
-    ## Kafka exporter resource requests and limits
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-    ## @param metrics.kafka.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.kafka.resources is set (metrics.kafka.resources is recommended for production).
-    ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-    ##
-    resourcesPreset: "micro"
-    ## @param metrics.kafka.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
-    ## Example:
-    ## resources:
-    ##   requests:
-    ##     cpu: 2
-    ##     memory: 512Mi
-    ##   limits:
-    ##     cpu: 3
-    ##     memory: 1024Mi
-    ##
-    resources: {}
-    ## Kafka exporter pods' Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param metrics.kafka.podSecurityContext.enabled Enable security context for the pods
-    ## @param metrics.kafka.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
-    ## @param metrics.kafka.podSecurityContext.sysctls Set kernel settings using the sysctl interface
-    ## @param metrics.kafka.podSecurityContext.supplementalGroups Set filesystem extra groups
-    ## @param metrics.kafka.podSecurityContext.fsGroup Set Kafka exporter pod's Security Context fsGroup
-    ## @param metrics.kafka.podSecurityContext.seccompProfile.type Set Kafka exporter pod's Security Context seccomp profile
-    ##
-    podSecurityContext:
-      enabled: true
-      fsGroupChangePolicy: Always
-      sysctls: []
-      supplementalGroups: []
-      fsGroup: 1001
-      seccompProfile:
-        type: "RuntimeDefault"
-    ## Kafka exporter containers' Security Context
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-    ## @param metrics.kafka.containerSecurityContext.enabled Enable Kafka exporter containers' Security Context
-    ## @param metrics.kafka.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-    ## @param metrics.kafka.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
-    ## @param metrics.kafka.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
-    ## @param metrics.kafka.containerSecurityContext.runAsNonRoot Set Kafka exporter containers' Security Context runAsNonRoot
-    ## @param metrics.kafka.containerSecurityContext.allowPrivilegeEscalation Set Kafka exporter containers' Security Context allowPrivilegeEscalation
-    ## @param metrics.kafka.containerSecurityContext.readOnlyRootFilesystem Set Kafka exporter containers' Security Context readOnlyRootFilesystem
-    ## @param metrics.kafka.containerSecurityContext.capabilities.drop Set Kafka exporter containers' Security Context capabilities to be dropped
-    ## e.g:
-    ##   containerSecurityContext:
-    ##     enabled: true
-    ##     capabilities:
-    ##       drop: ["NET_RAW"]
-    ##     readOnlyRootFilesystem: true
-    ##
-    containerSecurityContext:
-      enabled: true
-      seLinuxOptions: {}
-      runAsUser: 1001
-      runAsGroup: 1001
-      runAsNonRoot: true
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-      capabilities:
-        drop: ["ALL"]
-    ## @param metrics.kafka.automountServiceAccountToken Mount Service Account token in pod
-    ##
-    automountServiceAccountToken: false
-    ## @param metrics.kafka.hostAliases Kafka exporter pods host aliases
-    ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-    ##
-    hostAliases: []
-    ## @param metrics.kafka.podLabels Extra labels for Kafka exporter pods
-    ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-    ##
-    podLabels: {}
-    ## @param metrics.kafka.podAnnotations Extra annotations for Kafka exporter pods
-    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    ##
-    podAnnotations: {}
-    ## @param metrics.kafka.podAffinityPreset Pod affinity preset. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-    ##
-    podAffinityPreset: ""
-    ## @param metrics.kafka.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-    ##
-    podAntiAffinityPreset: soft
-    ## Node metrics.kafka.affinity preset
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-    ##
-    nodeAffinityPreset:
-      ## @param metrics.kafka.nodeAffinityPreset.type Node affinity preset type. Ignored if `metrics.kafka.affinity` is set. Allowed values: `soft` or `hard`
-      ##
-      type: ""
-      ## @param metrics.kafka.nodeAffinityPreset.key Node label key to match Ignored if `metrics.kafka.affinity` is set.
-      ## E.g.
-      ## key: "kubernetes.io/e2e-az-name"
-      ##
-      key: ""
-      ## @param metrics.kafka.nodeAffinityPreset.values Node label values to match. Ignored if `metrics.kafka.affinity` is set.
-      ## E.g.
-      ## values:
-      ##   - e2e-az1
-      ##   - e2e-az2
-      ##
-      values: []
-    ## @param metrics.kafka.affinity Affinity for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-    ## Note: metrics.kafka.podAffinityPreset, metrics.kafka.podAntiAffinityPreset, and metrics.kafka.nodeAffinityPreset will be ignored when it's set
-    ##
-    affinity: {}
-    ## @param metrics.kafka.nodeSelector Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-    ##
-    nodeSelector: {}
-    ## @param metrics.kafka.tolerations Tolerations for pod assignment
-    ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-    ##
-    tolerations: []
-    ## @param metrics.kafka.schedulerName Name of the k8s scheduler (other than default) for Kafka exporter
-    ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-    ##
-    schedulerName: ""
-    ## @param metrics.kafka.enableServiceLinks Whether information about services should be injected into pod's environment variable
-    ## The environment variables injected by service links are not used, but can lead to slow kafka boot times or slow running of the scripts when there are many services in the current namespace.
-    ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
-    ##
-    enableServiceLinks: true
-    ## @param metrics.kafka.priorityClassName Kafka exporter pods' priorityClassName
-    ##
-    priorityClassName: ""
-    ## @param metrics.kafka.topologySpreadConstraints Topology Spread Constraints for pod assignment
-    ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-    ## The value is evaluated as a template
-    ##
-    topologySpreadConstraints: []
-    ## @param metrics.kafka.extraVolumes Optionally specify extra list of additional volumes for the Kafka exporter pod(s)
-    ## e.g:
-    ## extraVolumes:
-    ##   - name: kafka-jaas
-    ##     secret:
-    ##       secretName: kafka-jaas
-    ##
-    extraVolumes: []
-    ## @param metrics.kafka.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kafka exporter container(s)
-    ## extraVolumeMounts:
-    ##   - name: kafka-jaas
-    ##     mountPath: /bitnami/kafka/config/kafka_jaas.conf
-    ##     subPath: kafka_jaas.conf
-    ##
-    extraVolumeMounts: []
-    ## @param metrics.kafka.sidecars Add additional sidecar containers to the Kafka exporter pod(s)
-    ## e.g:
-    ## sidecars:
-    ##   - name: your-image-name
-    ##     image: your-image
-    ##     imagePullPolicy: Always
-    ##     ports:
-    ##       - name: portname
-    ##         containerPort: 1234
-    ##
-    sidecars: []
-    ## @param metrics.kafka.initContainers Add init containers to the Kafka exporter pods
-    ## e.g:
-    ## initContainers:
-    ##   - name: your-image-name
-    ##     image: your-image
-    ##     imagePullPolicy: Always
-    ##     ports:
-    ##       - name: portname
-    ##         containerPort: 1234
-    ##
-    initContainers: []
-    ## Kafka exporter service configuration
-    ##
-    service:
-      ## @param metrics.kafka.service.ports.metrics Kafka exporter metrics service port
-      ##
-      ports:
-        metrics: 9308
-      ## @param metrics.kafka.service.clusterIP Static clusterIP or None for headless services
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#choosing-your-own-ip-address
-      ##
-      clusterIP: ""
-      ## @param metrics.kafka.service.sessionAffinity Control where client requests go, to the same pod or round-robin
-      ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
-      ##
-      sessionAffinity: None
-      ## @param metrics.kafka.service.annotations [object] Annotations for the Kafka exporter service
-      ##
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.metrics.kafka.service.ports.metrics }}"
-        prometheus.io/path: "/metrics"
-    ## Kafka exporter pods ServiceAccount
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-    ##
-    serviceAccount:
-      ## @param metrics.kafka.serviceAccount.create Enable creation of ServiceAccount for Kafka exporter pods
-      ##
-      create: true
-      ## @param metrics.kafka.serviceAccount.name The name of the service account to use. If not set and `create` is `true`, a name is generated
-      ## If not set and create is true, a name is generated using the kafka.metrics.kafka.serviceAccountName template
-      ##
-      name: ""
-      ## @param metrics.kafka.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
-      ## Can be set to false if pods using this serviceAccount do not need to use K8s API
-      ##
-      automountServiceAccountToken: false
   ## Prometheus JMX exporter: exposes the majority of Kafka metrics
   ##
   jmx:
@@ -2344,7 +2022,7 @@ metrics:
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`)
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (requires `metrics.jmx.enabled` to be `true`)
     ##
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
@@ -2378,7 +2056,7 @@ metrics:
     ##
     jobLabel: ""
   prometheusRule:
-    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (requires `metrics.kafka.enabled` or `metrics.jmx.enabled` to be `true`)
+    ## @param metrics.prometheusRule.enabled if `true`, creates a Prometheus Operator PrometheusRule (requires `metrics.jmx.enabled` to be `true`)
     ##
     enabled: false
     ## @param metrics.prometheusRule.namespace Namespace in which Prometheus is running

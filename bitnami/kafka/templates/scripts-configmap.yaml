@@ -379,6 +379,12 @@ data:
     {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
     configure_zookeeper_tls
     {{- end }}
+    {{- if eq .Values.brokerRackAssignment "aws-az" }}
+    # Broker rack awareness
+    echo "Obtaining broker.rack for aws-az rack assignment"
+    export BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
+    kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.rack" "$BROKER_RACK"
+    {{- end }}
     if [ -f /secret-config/server-secret.properties ]; then
       append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
     fi

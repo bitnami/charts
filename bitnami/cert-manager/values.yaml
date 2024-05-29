@@ -463,6 +463,14 @@ controller:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+  ## @param controller.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param controller.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param controller.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Webhook deployment parameters
 
 ## Webhook deployment parameters
@@ -823,6 +831,14 @@ webhook:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
+  ## @param webhook.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param webhook.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param webhook.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `webhook.pdb.minAvailable` and `webhook.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section CAInjector deployment parameters
 
 ## CAInjector deployment parameters
@@ -1159,6 +1175,14 @@ cainjector:
     ##                   - frontend
     ##
     extraEgress: []
+  ## @param cainjector.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param cainjector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param cainjector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cainjector.pdb.minAvailable` and `cainjector.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Metrics Parameters
 metrics:
   ## @param metrics.enabled Start metrics

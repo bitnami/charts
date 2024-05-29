@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.26.0-debian-12-r1
+  tag: 1.26.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -372,6 +372,7 @@ livenessProbe:
 ## NGINX containers' readiness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.path Request path for livenessProbe
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -380,6 +381,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
+  path: /
   initialDelaySeconds: 5
   timeoutSeconds: 3
   periodSeconds: 5
@@ -454,15 +456,15 @@ initContainers: []
 pdb:
   ## @param pdb.create Created a PodDisruptionBudget
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Min number of pods that must still be available after the eviction.
   ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction.
-  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
   ##
-  maxUnavailable: 0
+  maxUnavailable: ""
 ## @section Custom NGINX application parameters
 
 ## Get the server static content from a git repository
