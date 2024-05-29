@@ -6,7 +6,7 @@
 
 ## 15.5.0 (2024-05-29)
 
-* [bitnami/postgresql] Enable PodDisruptionBudgets ([#26530](https://github.com/bitnami/charts/pull/26530))
+* [bitnami/postgresql] Enable PodDisruptionBudgets (#26530) ([c6b2f1c](https://github.com/bitnami/charts/commit/c6b2f1cc32e0b9a8d884b61e8dc17f1089366d06)), closes [#26530](https://github.com/bitnami/charts/issues/26530)
 
 ## <small>15.4.2 (2024-05-28)</small>
 
