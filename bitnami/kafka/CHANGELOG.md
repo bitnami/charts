@@ -1,6 +1,6 @@
 # Changelog
 
-## 29.2.0 (2024-05-29)
+## 29.1.2 (2024-05-29)
 
 * [bitnami/kafka] PDB review ([#25938](https://github.com/bitnami/charts/pull/25938))
 
