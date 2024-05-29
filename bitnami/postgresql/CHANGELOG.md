@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.4.2 (2024-05-28)
+## 15.5.0 (2024-05-29)
 
-* [bitnami/postgresql] Release 15.4.2 ([#26475](https://github.com/bitnami/charts/pull/26475))
+* [bitnami/postgresql] Enable PodDisruptionBudgets ([#26530](https://github.com/bitnami/charts/pull/26530))
+
+## <small>15.4.2 (2024-05-28)</small>
+
+* [bitnami/postgresql] Release 15.4.2 (#26475) ([748b515](https://github.com/bitnami/charts/commit/748b51516a41ff8af151a530a0e5e0d9a62808e4)), closes [#26475](https://github.com/bitnami/charts/issues/26475)
 
 ## <small>15.4.1 (2024-05-27)</small>
 
