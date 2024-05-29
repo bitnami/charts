@@ -162,6 +162,9 @@ spec:
               containerPort: {{ .Values.containerPorts.http }}
             - name: http-management
               containerPort: {{ .Values.containerPorts.management }}
+            {{- if .Values.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}

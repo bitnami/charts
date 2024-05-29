@@ -20,7 +20,7 @@ Access the pod you want to debug by executing
 
 In order to replicate the container startup scripts execute this command:
 
-    /opt/bitnami/scripts/nessie/entrypoint.sh /opt/bitnami/scripts/nessie/run.sh
+    java -jar /opt/bitnami/nessie/quarkus-run.jar
 
 {{- else }}
 
@@ -49,5 +49,8 @@ To access nessie from outside the cluster follow the steps below:
 {{- end }}
 
 {{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.waitContainer.image }}
 {{- include "nessie.validateValues" . }}
-{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.psqlImage) "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.waitContainer.image) "context" $) }}

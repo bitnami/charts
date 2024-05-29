@@ -57,6 +57,9 @@ spec:
     - ports:
         - port: {{ .Values.containerPorts.http }}
         - port: {{ .Values.containerPorts.management }}
+        {{- range .Values.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

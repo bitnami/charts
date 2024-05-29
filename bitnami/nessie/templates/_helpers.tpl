@@ -14,7 +14,7 @@ Return the proper nessie image name
 Return the proper PostgreSQL Client image name
 */}}
 {{- define "nessie.psql.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.psqlImage "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.waitContainer.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -28,7 +28,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "nessie.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.waitContainer.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -85,12 +85,12 @@ Return the PostgreSQL Secret Name
 {{- define "nessie.database.secretName" -}}
 {{- if .Values.postgresql.enabled }}
     {{- if .Values.postgresql.auth.existingSecret -}}
-    {{- print .Values.postgresql.auth.existingSecret -}}
+        {{- print (tpl .Values.postgresql.auth.existingSecret .) -}}
     {{- else -}}
-    {{- print (include "nessie.postgresql.fullname" .) -}}
+        {{- print (include "nessie.postgresql.fullname" .) -}}
     {{- end -}}
 {{- else if .Values.externalDatabase.existingSecret -}}
-    {{- print .Values.externalDatabase.existingSecret -}}
+    {{- print (tpl .Values.externalDatabase.existingSecret .) -}}
 {{- else -}}
     {{- printf "%s-%s" (include "common.names.fullname" .) "externaldb" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -130,7 +130,7 @@ Extra configuration ConfigMap name
 */}}
 {{- define "nessie.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
-    {{- tpl .Values.existingSecret $ -}}
+    {{- tpl .Values.existingConfigmap $ -}}
 {{- else -}}
     {{- include "common.names.fullname" . -}}
 {{- end -}}
@@ -231,8 +231,8 @@ Return the volume-permissions init container
 # We need to wait for the postgresql database to be ready in order to start with Nessie.
 - name: wait-for-db
   image: {{ template "nessie.psql.image" . }}
-  imagePullPolicy: {{ .Values.psqlImage.pullPolicy }}
-  {{- if .Values.containerSecurityContext.enabled }}
+  imagePullPolicy: {{ .Values.waitContainer.image.pullPolicy }}
+  {{- if .Values.waitContainer.containerSecurityContext.enabled }}
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   command:
@@ -265,14 +265,14 @@ Return the volume-permissions init container
           exit 1
       fi
       info "Database is ready"
-  {{- if .Values.resources }}
-  resources: {{- toYaml .Values.resources | nindent 4 }}
-  {{- else if ne .Values.resourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 4 }}
+  {{- if .Values.waitContainer.resources }}
+  resources: {{- toYaml .Values.waitContainer.resources | nindent 4 }}
+  {{- else if ne .Values.waitContainer.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.waitContainer.resourcesPreset) | nindent 4 }}
   {{- end }}
   env:
     - name: BITNAMI_DEBUG
-      value: {{ ternary "true" "false" (or .Values.psqlImage.debug .Values.diagnosticMode.enabled) | quote }}
+      value: {{ ternary "true" "false" (or .Values.waitContainer.image.debug .Values.diagnosticMode.enabled) | quote }}
     - name: DATABASE_HOST
       value: {{ include "nessie.database.host" . | quote }}
     - name: DATABASE_PORT_NUMBER
@@ -304,6 +304,7 @@ Compile all warnings into a single message.
 {{- define "nessie.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "nessie.validateValues.postgresql" .) -}}
+{{- $messages := append $messages (include "nessie.validateValues.extraVolumes" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -319,5 +320,14 @@ Validate values of nessie - At least one storage backend is enabled
 {{- if and (eq .Values.versionStoreType "JDBC_POSTGRESQL") (not .Values.postgresql.enabled) (not .Values.externalDatabase.host) -}}
 nessie: postgresql-jdbc
     Version store type is set to JDBC_POSTGRESQL but database is not configured. Please set postgresql.enabled=true or configure the externalDatabase section.
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Nessie - Incorrect extra volume settings */}}
+{{- define "nessie.validateValues.extraVolumes" -}}
+{{- if and .Values.extraVolumes (not .Values.extraVolumeMounts) -}}
+nessie: missing-extra-volume-mounts
+    You specified extra volumes but not mount points for them. Please set
+    the extraVolumeMounts value
 {{- end -}}
 {{- end -}}

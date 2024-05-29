@@ -143,6 +143,13 @@ replicaCount: 1
 containerPorts:
   http: 19120
   management: 9000
+## @param extraContainerPorts Optionally specify extra list of additional container ports
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
 ## @param deploymentLabels Add extra labels to the Deployment object
 ##
 deploymentLabels: {}
@@ -311,7 +318,7 @@ podAntiAffinityPreset: soft
 ##
 pdb:
   create: true
-  minAvailable: 1
+  minAvailable: ""
   maxUnavailable: ""
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -637,8 +644,8 @@ ingress:
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
-  ##     - nginx.local
-  ##   secretName: nginx.local-tls
+  ##     - nessie.local
+  ##   secretName: nessie.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
@@ -651,7 +658,7 @@ ingress:
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ## e.g:
-  ## - name: nginx.local-tls
+  ## - name: nessie.local-tls
   ##   key:
   ##   certificate:
   ##
@@ -776,6 +783,84 @@ volumePermissions:
     enabled: true
     runAsUser: 0
 
+## Wait for Database init container
+##
+waitContainer:
+  ## Bitnami PostgreSQL image
+  ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] PostgreSQL client image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/supabase-postgres] PostgreSQL client image repository
+  ## @param waitContainer.image.digest PostgreSQL client image digest (overrides image tag)
+  ## @skip waitContainer.image.tag PostgreSQL client image tag (immutable tags are recommended)
+  ## @param waitContainer.image.pullPolicy PostgreSQL client image pull policy
+  ## @param waitContainer.image.pullSecrets PostgreSQL client image pull secrets
+  ## @param waitContainer.image.debug Enable PostgreSQL client image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 16.3.0-debian-12-r8
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## Example:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Set to true if you would like to see extra information on logs
+    ##
+    debug: false
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param waitContainer.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if waitContainer.resources is set (waitContainer.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param waitContainer.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param waitContainer.containerSecurityContext.enabled nessie container securityContext
+  ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param waitContainer.containerSecurityContext.runAsUser User ID for the nessie container
+  ## @param waitContainer.containerSecurityContext.runAsGroup Group ID for the nessie container
+  ## @param waitContainer.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
+  ## @param waitContainer.containerSecurityContext.privileged Set secondary container's Security Context privileged
+  ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
+  ## @param waitContainer.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param waitContainer.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param waitContainer.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: null
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+
 ## ServiceAccount configuration
 ##
 serviceAccount:
@@ -896,41 +981,9 @@ metrics:
     ##
     jobLabel: ""
 
-
 ## @section Database parameters
 ##
 
-## Bitnami PostgreSQL image
-## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
-## @param psqlImage.registry [default: REGISTRY_NAME] PostgreSQL client image registry
-## @param psqlImage.repository [default: REPOSITORY_NAME/supabase-postgres] PostgreSQL client image repository
-## @param psqlImage.digest PostgreSQL client image digest (overrides image tag)
-## @skip psqlImage.tag PostgreSQL client image tag (immutable tags are recommended)
-## @param psqlImage.pullPolicy PostgreSQL client image pull policy
-## @param psqlImage.pullSecrets PostgreSQL client image pull secrets
-## @param psqlImage.debug Enable PostgreSQL client image debug mode
-##
-psqlImage:
-  registry: docker.io
-  repository: bitnami/postgresql
-  tag: 16.3.0-debian-12-r8
-  digest: ""
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-  ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## Example:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
-  ## Set to true if you would like to see extra information on logs
-  ##
-  debug: false
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
