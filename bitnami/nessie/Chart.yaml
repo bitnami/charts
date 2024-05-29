@@ -1,0 +1,40 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Database
+  licenses: Apache-2.0
+  images: |
+    - name: nessie
+      image: docker.io/bitnami/nessie:0.83.2-debian-12-r0
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
+    - name: postgresql
+      image: docker.io/bitnami/postgresql:16.3.0-debian-12-r8
+apiVersion: v2
+appVersion: 0.83.2
+dependencies:
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 15.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: nessie is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/nessie/img/nessie-stack-220x234.png
+keywords:
+- nessie
+- graph
+- database
+maintainers:
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
+name: nessie
+sources:
+- https://github.com/bitnami/containers/tree/main/bitnami/nessie
+- https://github.com/nessie/nessie
+version: 0.1.0

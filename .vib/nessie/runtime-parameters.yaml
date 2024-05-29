@@ -1,0 +1,117 @@
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+containerPorts:
+  http: 6555
+  management: 8078
+usePasswordFile: true
+configOverrides:
+  quarkus:
+    log:
+      level: DEBUG
+secretConfigOverrides:
+  quarkus:
+    log:
+      file:
+        level: WARN
+replicaCount: 2
+service:
+  server:
+    type: LoadBalancer
+    ports:
+      http: 80
+  management:
+    type: ClusterIP
+    ports:
+      http: 8312
+metrics:
+  enabled: true
+extraDeploy:
+  - |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: nessie-add-data
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: nessie-job
+              # TODO: Change image name
+              image: docker.io/javsalgar/nessie-utils:0.83.2-debian-12-r0
+              command:
+                - /bin/bash
+              args:
+                - -ec
+                - |
+                  #!/bin/bash
+
+                  set -o errexit
+                  set -o nounset
+                  set -o pipefail
+
+                  # Set the endpoint URL
+                  host=nessie
+                  port={{ .Values.service.server.ports.http }}
+
+                  retry_while() {
+                    local -r cmd="${1:?cmd is missing}"
+                    local -r retries="${2:-12}"
+                    local -r sleep_time="${3:-5}"
+                    local return_value=1
+
+                    read -r -a command <<< "$cmd"
+                    for ((i = 1 ; i <= retries ; i+=1 )); do
+                        "${command[@]}" && return_value=0 && break
+                        sleep "$sleep_time"
+                    done
+                    return $return_value
+                  }
+
+                  nessie_ready() {
+                      # Test the TCP connection with a timeout
+                      if timeout 5 bash -c "</dev/tcp/$host/$port"; then
+                          return 0
+                      else
+                          return 1
+                      fi
+                  }
+
+                  echo "0" > /tmp/ready
+                  echo "Waiting for the Nessie instance"
+                  if ! retry_while "nessie_ready" 12 30; then
+                    echo "Could not connect to the Nessie instance"
+                    exit 1
+                  else
+                    echo "Nessie ready! Running job"
+                    java -jar /opt/bitnami/nessie-utils/nessie-cli/nessie-cli.jar -u http://$host:$port/api/v2 -c "CREATE TAG vib_test" --non-ansi
+                  fi
+              startupProbe:
+                exec:
+                  command:
+                    - sh
+                    - -c
+                    - |
+                      if [ $(cat /tmp/ready) = "1" ]; then
+                        exit 0
+                      else
+                        exit 1
+                      fi
+                initialDelaySeconds: 40
+                periodSeconds: 20
+                timeoutSeconds: 1
+                failureThreshold: 15
+                successThreshold: 1
+              securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+                  subPath: tmp-dir
+                - name: tmp
+                  mountPath: /.nessie
+                  subPath: app-tmp-dir
+          volumes:
+            - name: tmp
+              emptyDir: {}
