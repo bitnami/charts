@@ -69,6 +69,23 @@ func createPVC(ctx context.Context, c kubernetes.Interface, name, size string) e
 }
 
 func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, pvcName, kind string) error {
+	podSecurityContext := &v1.PodSecurityContext{
+		FSGroup:             &[]int64{1001}[0],
+		FSGroupChangePolicy: &[]v1.PodFSGroupChangePolicy{v1.FSGroupChangeAlways}[0],
+	}
+	containerSecurityContext := &v1.SecurityContext{
+		Privileged:               &[]bool{false}[0],
+		AllowPrivilegeEscalation: &[]bool{false}[0],
+		RunAsUser:                &[]int64{1001}[0],
+		RunAsNonRoot:             &[]bool{true}[0],
+		Capabilities: &v1.Capabilities{
+			Drop: []v1.Capability{"ALL"},
+		},
+		SeccompProfile: &v1.SeccompProfile{
+			Type: "RuntimeDefault",
+		},
+	}
+
 	args := []string{"-ec"}
 	switch kind {
 	case kindDownload:
@@ -95,7 +112,7 @@ cat /data/fid | xargs weed download -server ${MASTER_HOST}:${MASTER_PORT}
 			Template: v1.PodTemplateSpec{
 				Spec: v1.PodSpec{
 					RestartPolicy:   "Never",
-					SecurityContext: &v1.PodSecurityContext{},
+					SecurityContext: podSecurityContext,
 					Containers: []v1.Container{
 						{
 							Name:    "seaweedfs",
@@ -112,7 +129,7 @@ cat /data/fid | xargs weed download -server ${MASTER_HOST}:${MASTER_PORT}
 									Value: port,
 								},
 							},
-							SecurityContext: &v1.SecurityContext{},
+							SecurityContext: containerSecurityContext,
 							VolumeMounts: []v1.VolumeMount{
 								{
 									Name:      "data",

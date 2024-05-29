@@ -129,7 +129,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
             - secretRef:
+                {{- with .Values.trivy.existingEnvVarsSecret }}
+                name: {{ . }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.trivy" .) }}
+                {{- end }}
             {{- if .Values.trivy.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.trivy.extraEnvVarsCM "context" $) }}

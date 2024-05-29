@@ -1,8 +1,8 @@
 # Changelog
 
-## 19.2.0 (2024-05-28)
+## 19.1.1 (2024-05-28)
 
-* [bitnami/joomla] Enable PodDisruptionBudgets ([#26498](https://github.com/bitnami/charts/pull/26498))
+* [bitnami/joomla] Release 19.1.1 ([#26518](https://github.com/bitnami/charts/pull/26518))
 
 ## 19.1.0 (2024-05-21)
 
