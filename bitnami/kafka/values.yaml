@@ -2068,16 +2068,6 @@ metrics:
     ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Kafka
     ##
     groups: []
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param metrics.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param metrics.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metrics.pdb.minAvailable` and `metrics.pdb.maxUnavailable` are empty.
-  ##
-  pdb:
-    create: true
-    minAvailable: ""
-    maxUnavailable: ""
 
 ## @section Kafka provisioning parameters
 ##
