@@ -5,8 +5,6 @@ milvus:
   extraConfig:
     common:
       gracefulStopTimeout: 40
-etcd:
-  resourcesPreset: small
 
 proxy:
   enabled: true
