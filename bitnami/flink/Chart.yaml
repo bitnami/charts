@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: flink
-      image: docker.io/bitnami/flink:1.19.0-debian-12-r3
+      image: docker.io/bitnami/flink:1.19.0-debian-12-r5
 apiVersion: v2
 appVersion: 1.19.0
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: flink
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flink
-version: 1.1.1
+version: 1.2.1

@@ -286,30 +286,36 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `compactor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Compactor container(s)                                                                                                                                               | `[]`             |
 | `compactor.sidecars`                                          | Add additional sidecar containers to the Compactor pod(s)                                                                                                                                                                             | `[]`             |
 | `compactor.initContainers`                                    | Add additional init containers to the Compactor pod(s)                                                                                                                                                                                | `[]`             |
+| `compactor.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `compactor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
+| `compactor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `compactor.pdb.minAvailable` and `compactor.pdb.maxUnavailable` are empty.                                                                    | `""`             |
+| `compactor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                 | `true`           |
 
 ### Compactor Traffic Exposure Parameters
 
-| Name                                              | Description                                                      | Value       |
-| ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `compactor.service.type`                          | Compactor service type                                           | `ClusterIP` |
-| `compactor.service.ports.http`                    | Compactor HTTP service port                                      | `3200`      |
-| `compactor.service.ports.grpc`                    | Compactor GRPC service port                                      | `9095`      |
-| `compactor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `compactor.service.clusterIP`                     | Compactor service Cluster IP                                     | `""`        |
-| `compactor.service.loadBalancerIP`                | Compactor service Load Balancer IP                               | `""`        |
-| `compactor.service.loadBalancerSourceRanges`      | Compactor service Load Balancer sources                          | `[]`        |
-| `compactor.service.externalTrafficPolicy`         | Compactor service external traffic policy                        | `Cluster`   |
-| `compactor.service.annotations`                   | Additional custom annotations for Compactor service              | `{}`        |
-| `compactor.service.extraPorts`                    | Extra ports to expose in the Compactor service                   | `[]`        |
-| `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                              | Description                                                                                                             | Value       |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `compactor.service.type`                          | Compactor service type                                                                                                  | `ClusterIP` |
+| `compactor.service.ports.http`                    | Compactor HTTP service port                                                                                             | `3200`      |
+| `compactor.service.ports.grpc`                    | Compactor GRPC service port                                                                                             | `9095`      |
+| `compactor.service.nodePorts.http`                | Node port for HTTP                                                                                                      | `""`        |
+| `compactor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                        | `None`      |
+| `compactor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                             | `{}`        |
+| `compactor.service.clusterIP`                     | Compactor service Cluster IP                                                                                            | `""`        |
+| `compactor.service.loadBalancerIP`                | Compactor service Load Balancer IP                                                                                      | `""`        |
+| `compactor.service.loadBalancerSourceRanges`      | Compactor service Load Balancer sources                                                                                 | `[]`        |
+| `compactor.service.externalTrafficPolicy`         | Compactor service external traffic policy                                                                               | `Cluster`   |
+| `compactor.service.annotations`                   | Additional custom annotations for Compactor service                                                                     | `{}`        |
+| `compactor.service.extraPorts`                    | Extra ports to expose in the Compactor service                                                                          | `[]`        |
+| `compactor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                     | `true`      |
+| `compactor.networkPolicy.allowExternal`           | Don't require server label for connections                                                                              | `true`      |
+| `compactor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                         | `true`      |
+| `compactor.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `compactor.networkPolicy.allowExternal` is true.     | `true`      |
+| `compactor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                            | `[]`        |
+| `compactor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                            | `[]`        |
+| `compactor.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `compactor.networkPolicy.allowExternal` is true.           | `{}`        |
+| `compactor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true.     | `{}`        |
+| `compactor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `compactor.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Distributor Deployment Parameters
 
@@ -381,31 +387,37 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `distributor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Distributor container(s)                                                                                                                                                 | `[]`             |
 | `distributor.sidecars`                                          | Add additional sidecar containers to the Distributor pod(s)                                                                                                                                                                               | `[]`             |
 | `distributor.initContainers`                                    | Add additional init containers to the Distributor pod(s)                                                                                                                                                                                  | `[]`             |
+| `distributor.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                           | `true`           |
+| `distributor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                            | `""`             |
+| `distributor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `distributor.pdb.minAvailable` and `distributor.pdb.maxUnavailable` are empty.                                                                    | `""`             |
+| `distributor.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                     | `true`           |
 
 ### Distributor Traffic Exposure Parameters
 
-| Name                                                | Description                                                      | Value       |
-| --------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `distributor.service.type`                          | Distributor service type                                         | `ClusterIP` |
-| `distributor.service.ports.http`                    | Distributor HTTP service port                                    | `3200`      |
-| `distributor.service.ports.grpc`                    | Distributor GRPC service port                                    | `9095`      |
-| `distributor.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `distributor.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `distributor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `distributor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `distributor.service.clusterIP`                     | Distributor service Cluster IP                                   | `""`        |
-| `distributor.service.loadBalancerIP`                | Distributor service Load Balancer IP                             | `""`        |
-| `distributor.service.loadBalancerSourceRanges`      | Distributor service Load Balancer sources                        | `[]`        |
-| `distributor.service.externalTrafficPolicy`         | Distributor service external traffic policy                      | `Cluster`   |
-| `distributor.service.annotations`                   | Additional custom annotations for Distributor service            | `{}`        |
-| `distributor.service.extraPorts`                    | Extra ports to expose in the Distributor service                 | `[]`        |
-| `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                | Description                                                                                                               | Value       |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `distributor.service.type`                          | Distributor service type                                                                                                  | `ClusterIP` |
+| `distributor.service.ports.http`                    | Distributor HTTP service port                                                                                             | `3200`      |
+| `distributor.service.ports.grpc`                    | Distributor GRPC service port                                                                                             | `9095`      |
+| `distributor.service.nodePorts.http`                | Node port for HTTP                                                                                                        | `""`        |
+| `distributor.service.nodePorts.grpc`                | Node port for GRPC                                                                                                        | `""`        |
+| `distributor.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                          | `None`      |
+| `distributor.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                               | `{}`        |
+| `distributor.service.clusterIP`                     | Distributor service Cluster IP                                                                                            | `""`        |
+| `distributor.service.loadBalancerIP`                | Distributor service Load Balancer IP                                                                                      | `""`        |
+| `distributor.service.loadBalancerSourceRanges`      | Distributor service Load Balancer sources                                                                                 | `[]`        |
+| `distributor.service.externalTrafficPolicy`         | Distributor service external traffic policy                                                                               | `Cluster`   |
+| `distributor.service.annotations`                   | Additional custom annotations for Distributor service                                                                     | `{}`        |
+| `distributor.service.extraPorts`                    | Extra ports to expose in the Distributor service                                                                          | `[]`        |
+| `distributor.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                       | `true`      |
+| `distributor.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                | `true`      |
+| `distributor.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                           | `true`      |
+| `distributor.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `distributor.networkPolicy.allowExternal` is true.     | `true`      |
+| `distributor.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`        |
+| `distributor.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                              | `[]`        |
+| `distributor.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `distributor.networkPolicy.allowExternal` is true.           | `{}`        |
+| `distributor.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true.     | `{}`        |
+| `distributor.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `distributor.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Metrics Generator Deployment Parameters
 
@@ -478,30 +490,36 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `metricsGenerator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the metricsGenerator container(s)                                                                                                                                                      | `[]`             |
 | `metricsGenerator.sidecars`                                          | Add additional sidecar containers to the metricsGenerator pod(s)                                                                                                                                                                                    | `[]`             |
 | `metricsGenerator.initContainers`                                    | Add additional init containers to the metricsGenerator pod(s)                                                                                                                                                                                       | `[]`             |
+| `metricsGenerator.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                     | `true`           |
+| `metricsGenerator.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                      | `""`             |
+| `metricsGenerator.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metricsGenerator.pdb.minAvailable` and `metricsGenerator.pdb.maxUnavailable` are empty.                                                                    | `""`             |
+| `metricsGenerator.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                                               | `true`           |
 
 ### Metrics Generator Traffic Exposure Parameters
 
-| Name                                                     | Description                                                      | Value       |
-| -------------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `metricsGenerator.service.type`                          | metricsGenerator service type                                    | `ClusterIP` |
-| `metricsGenerator.service.ports.http`                    | metricsGenerator HTTP service port                               | `3200`      |
-| `metricsGenerator.service.ports.grpc`                    | metricsGenerator GRPC service port                               | `9095`      |
-| `metricsGenerator.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `metricsGenerator.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `metricsGenerator.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `metricsGenerator.service.clusterIP`                     | metricsGenerator service Cluster IP                              | `""`        |
-| `metricsGenerator.service.loadBalancerIP`                | metricsGenerator service Load Balancer IP                        | `""`        |
-| `metricsGenerator.service.loadBalancerSourceRanges`      | metricsGenerator service Load Balancer sources                   | `[]`        |
-| `metricsGenerator.service.externalTrafficPolicy`         | metricsGenerator service external traffic policy                 | `Cluster`   |
-| `metricsGenerator.service.annotations`                   | Additional custom annotations for metricsGenerator service       | `{}`        |
-| `metricsGenerator.service.extraPorts`                    | Extra ports to expose in the metricsGenerator service            | `[]`        |
-| `metricsGenerator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `metricsGenerator.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `metricsGenerator.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `metricsGenerator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `metricsGenerator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `metricsGenerator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `metricsGenerator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                     | Description                                                                                                                    | Value       |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `metricsGenerator.service.type`                          | metricsGenerator service type                                                                                                  | `ClusterIP` |
+| `metricsGenerator.service.ports.http`                    | metricsGenerator HTTP service port                                                                                             | `3200`      |
+| `metricsGenerator.service.ports.grpc`                    | metricsGenerator GRPC service port                                                                                             | `9095`      |
+| `metricsGenerator.service.nodePorts.http`                | Node port for HTTP                                                                                                             | `""`        |
+| `metricsGenerator.service.nodePorts.grpc`                | Node port for GRPC                                                                                                             | `""`        |
+| `metricsGenerator.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                               | `None`      |
+| `metricsGenerator.service.clusterIP`                     | metricsGenerator service Cluster IP                                                                                            | `""`        |
+| `metricsGenerator.service.loadBalancerIP`                | metricsGenerator service Load Balancer IP                                                                                      | `""`        |
+| `metricsGenerator.service.loadBalancerSourceRanges`      | metricsGenerator service Load Balancer sources                                                                                 | `[]`        |
+| `metricsGenerator.service.externalTrafficPolicy`         | metricsGenerator service external traffic policy                                                                               | `Cluster`   |
+| `metricsGenerator.service.annotations`                   | Additional custom annotations for metricsGenerator service                                                                     | `{}`        |
+| `metricsGenerator.service.extraPorts`                    | Extra ports to expose in the metricsGenerator service                                                                          | `[]`        |
+| `metricsGenerator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                            | `true`      |
+| `metricsGenerator.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                     | `true`      |
+| `metricsGenerator.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.     | `true`      |
+| `metricsGenerator.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                | `true`      |
+| `metricsGenerator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                   | `[]`        |
+| `metricsGenerator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                   | `[]`        |
+| `metricsGenerator.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.           | `{}`        |
+| `metricsGenerator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `metricsGenerator.networkPolicy.allowExternal` is true.     | `{}`        |
+| `metricsGenerator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `metricsGenerator.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Ingester Deployment Parameters
 
@@ -573,6 +591,10 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `ingester.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the ingester container(s)                                                                                                                                              | `[]`             |
 | `ingester.sidecars`                                          | Add additional sidecar containers to the Ingester pod(s)                                                                                                                                                                            | `[]`             |
 | `ingester.initContainers`                                    | Add additional init containers to the Ingester pod(s)                                                                                                                                                                               | `[]`             |
+| `ingester.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`           |
+| `ingester.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `""`             |
+| `ingester.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ingester.pdb.minAvailable` and `ingester.pdb.maxUnavailable` are empty.                                                                    | `""`             |
+| `ingester.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                               | `true`           |
 
 ### Ingester Persistence Parameters
 
@@ -589,28 +611,30 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 
 ### Ingester Traffic Exposure Parameters
 
-| Name                                             | Description                                                      | Value       |
-| ------------------------------------------------ | ---------------------------------------------------------------- | ----------- |
-| `ingester.service.type`                          | Ingester service type                                            | `ClusterIP` |
-| `ingester.service.ports.http`                    | Ingester HTTP service port                                       | `3200`      |
-| `ingester.service.ports.grpc`                    | Ingester GRPC service port                                       | `9095`      |
-| `ingester.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `ingester.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `ingester.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `ingester.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `ingester.service.clusterIP`                     | Ingester service Cluster IP                                      | `""`        |
-| `ingester.service.loadBalancerIP`                | Ingester service Load Balancer IP                                | `""`        |
-| `ingester.service.loadBalancerSourceRanges`      | Ingester service Load Balancer sources                           | `[]`        |
-| `ingester.service.externalTrafficPolicy`         | Ingester service external traffic policy                         | `Cluster`   |
-| `ingester.service.annotations`                   | Additional custom annotations for Ingester service               | `{}`        |
-| `ingester.service.extraPorts`                    | Extra ports to expose in the Ingester service                    | `[]`        |
-| `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                             | Description                                                                                                            | Value       |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `ingester.service.type`                          | Ingester service type                                                                                                  | `ClusterIP` |
+| `ingester.service.ports.http`                    | Ingester HTTP service port                                                                                             | `3200`      |
+| `ingester.service.ports.grpc`                    | Ingester GRPC service port                                                                                             | `9095`      |
+| `ingester.service.nodePorts.http`                | Node port for HTTP                                                                                                     | `""`        |
+| `ingester.service.nodePorts.grpc`                | Node port for GRPC                                                                                                     | `""`        |
+| `ingester.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                       | `None`      |
+| `ingester.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                            | `{}`        |
+| `ingester.service.clusterIP`                     | Ingester service Cluster IP                                                                                            | `""`        |
+| `ingester.service.loadBalancerIP`                | Ingester service Load Balancer IP                                                                                      | `""`        |
+| `ingester.service.loadBalancerSourceRanges`      | Ingester service Load Balancer sources                                                                                 | `[]`        |
+| `ingester.service.externalTrafficPolicy`         | Ingester service external traffic policy                                                                               | `Cluster`   |
+| `ingester.service.annotations`                   | Additional custom annotations for Ingester service                                                                     | `{}`        |
+| `ingester.service.extraPorts`                    | Extra ports to expose in the Ingester service                                                                          | `[]`        |
+| `ingester.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                    | `true`      |
+| `ingester.networkPolicy.allowExternal`           | Don't require server label for connections                                                                             | `true`      |
+| `ingester.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                        | `true`      |
+| `ingester.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `ingester.networkPolicy.allowExternal` is true.     | `true`      |
+| `ingester.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                           | `[]`        |
+| `ingester.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                           | `[]`        |
+| `ingester.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `ingester.networkPolicy.allowExternal` is true.           | `{}`        |
+| `ingester.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true.     | `{}`        |
+| `ingester.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `ingester.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Querier Deployment Parameters
 
@@ -682,31 +706,37 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `querier.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the querier container(s)                                                                                                                                             | `[]`             |
 | `querier.sidecars`                                          | Add additional sidecar containers to the Querier pod(s)                                                                                                                                                                           | `[]`             |
 | `querier.initContainers`                                    | Add additional init containers to the Querier pod(s)                                                                                                                                                                              | `[]`             |
+| `querier.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`           |
+| `querier.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`             |
+| `querier.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `querier.pdb.minAvailable` and `querier.pdb.maxUnavailable` are empty.                                                                    | `""`             |
+| `querier.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`           |
 
 ### Querier Traffic Exposure Parameters
 
-| Name                                            | Description                                                      | Value       |
-| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `querier.service.type`                          | Querier service type                                             | `ClusterIP` |
-| `querier.service.ports.http`                    | Querier HTTP service port                                        | `3200`      |
-| `querier.service.ports.grpc`                    | Querier GRPC service port                                        | `9095`      |
-| `querier.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `querier.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `querier.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `querier.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `querier.service.clusterIP`                     | Querier service Cluster IP                                       | `""`        |
-| `querier.service.loadBalancerIP`                | Querier service Load Balancer IP                                 | `""`        |
-| `querier.service.loadBalancerSourceRanges`      | Querier service Load Balancer sources                            | `[]`        |
-| `querier.service.externalTrafficPolicy`         | Querier service external traffic policy                          | `Cluster`   |
-| `querier.service.annotations`                   | Additional custom annotations for Querier service                | `{}`        |
-| `querier.service.extraPorts`                    | Extra ports to expose in the Querier service                     | `[]`        |
-| `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `querier.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                            | Description                                                                                                           | Value       |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `querier.service.type`                          | Querier service type                                                                                                  | `ClusterIP` |
+| `querier.service.ports.http`                    | Querier HTTP service port                                                                                             | `3200`      |
+| `querier.service.ports.grpc`                    | Querier GRPC service port                                                                                             | `9095`      |
+| `querier.service.nodePorts.http`                | Node port for HTTP                                                                                                    | `""`        |
+| `querier.service.nodePorts.grpc`                | Node port for GRPC                                                                                                    | `""`        |
+| `querier.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                      | `None`      |
+| `querier.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                           | `{}`        |
+| `querier.service.clusterIP`                     | Querier service Cluster IP                                                                                            | `""`        |
+| `querier.service.loadBalancerIP`                | Querier service Load Balancer IP                                                                                      | `""`        |
+| `querier.service.loadBalancerSourceRanges`      | Querier service Load Balancer sources                                                                                 | `[]`        |
+| `querier.service.externalTrafficPolicy`         | Querier service external traffic policy                                                                               | `Cluster`   |
+| `querier.service.annotations`                   | Additional custom annotations for Querier service                                                                     | `{}`        |
+| `querier.service.extraPorts`                    | Extra ports to expose in the Querier service                                                                          | `[]`        |
+| `querier.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                   | `true`      |
+| `querier.networkPolicy.allowExternal`           | Don't require server label for connections                                                                            | `true`      |
+| `querier.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                       | `true`      |
+| `querier.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `querier.networkPolicy.allowExternal` is true.     | `true`      |
+| `querier.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`        |
+| `querier.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`        |
+| `querier.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `querier.networkPolicy.allowExternal` is true.           | `{}`        |
+| `querier.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true.     | `{}`        |
+| `querier.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `querier.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Query Frontend Deployment Parameters
 
@@ -778,6 +808,10 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `queryFrontend.extraVolumeMounts`                                       | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)                                                                                                                                                               | `[]`                                  |
 | `queryFrontend.sidecars`                                                | Add additional sidecar containers to the queryFrontend pod(s)                                                                                                                                                                                             | `[]`                                  |
 | `queryFrontend.initContainers`                                          | Add additional init containers to the queryFrontend pod(s)                                                                                                                                                                                                | `[]`                                  |
+| `queryFrontend.pdb.create`                                              | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                           | `true`                                |
+| `queryFrontend.pdb.minAvailable`                                        | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                            | `""`                                  |
+| `queryFrontend.pdb.maxUnavailable`                                      | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryFrontend.pdb.minAvailable` and `queryFrontend.pdb.maxUnavailable` are empty.                                                                                | `""`                                  |
+| `queryFrontend.enableServiceLinks`                                      | Whether information about services should be injected into pod's environment variable                                                                                                                                                                     | `true`                                |
 | `queryFrontend.query.image.registry`                                    | Grafana Tempo Query image registry                                                                                                                                                                                                                        | `REGISTRY_NAME`                       |
 | `queryFrontend.query.image.repository`                                  | Grafana Tempo Query image repository                                                                                                                                                                                                                      | `REPOSITORY_NAME/grafana-tempo-query` |
 | `queryFrontend.query.image.digest`                                      | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                       | `""`                                  |
@@ -831,29 +865,31 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 
 ### Query Frontend Traffic Exposure Parameters
 
-| Name                                                  | Description                                                      | Value       |
-| ----------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `queryFrontend.service.type`                          | queryFrontend service type                                       | `ClusterIP` |
-| `queryFrontend.service.ports.http`                    | queryFrontend HTTP service port                                  | `3200`      |
-| `queryFrontend.service.ports.grpc`                    | queryFrontend GRPC service port                                  | `9095`      |
-| `queryFrontend.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `queryFrontend.service.nodePorts.grpc`                | Node port for GRPC                                               | `""`        |
-| `queryFrontend.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `queryFrontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `queryFrontend.service.clusterIP`                     | queryFrontend service Cluster IP                                 | `""`        |
-| `queryFrontend.service.loadBalancerIP`                | queryFrontend service Load Balancer IP                           | `""`        |
-| `queryFrontend.service.loadBalancerSourceRanges`      | queryFrontend service Load Balancer sources                      | `[]`        |
-| `queryFrontend.service.externalTrafficPolicy`         | queryFrontend service external traffic policy                    | `Cluster`   |
-| `queryFrontend.service.annotations`                   | Additional custom annotations for queryFrontend service          | `{}`        |
-| `queryFrontend.service.extraPorts`                    | Extra ports to expose in the queryFrontend service               | `[]`        |
-| `queryFrontend.service.headless.annotations`          | Annotations for the headless service.                            | `{}`        |
-| `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                                  | Description                                                                                                                 | Value       |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `queryFrontend.service.type`                          | queryFrontend service type                                                                                                  | `ClusterIP` |
+| `queryFrontend.service.ports.http`                    | queryFrontend HTTP service port                                                                                             | `3200`      |
+| `queryFrontend.service.ports.grpc`                    | queryFrontend GRPC service port                                                                                             | `9095`      |
+| `queryFrontend.service.nodePorts.http`                | Node port for HTTP                                                                                                          | `""`        |
+| `queryFrontend.service.nodePorts.grpc`                | Node port for GRPC                                                                                                          | `""`        |
+| `queryFrontend.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                            | `None`      |
+| `queryFrontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                 | `{}`        |
+| `queryFrontend.service.clusterIP`                     | queryFrontend service Cluster IP                                                                                            | `""`        |
+| `queryFrontend.service.loadBalancerIP`                | queryFrontend service Load Balancer IP                                                                                      | `""`        |
+| `queryFrontend.service.loadBalancerSourceRanges`      | queryFrontend service Load Balancer sources                                                                                 | `[]`        |
+| `queryFrontend.service.externalTrafficPolicy`         | queryFrontend service external traffic policy                                                                               | `Cluster`   |
+| `queryFrontend.service.annotations`                   | Additional custom annotations for queryFrontend service                                                                     | `{}`        |
+| `queryFrontend.service.extraPorts`                    | Extra ports to expose in the queryFrontend service                                                                          | `[]`        |
+| `queryFrontend.service.headless.annotations`          | Annotations for the headless service.                                                                                       | `{}`        |
+| `queryFrontend.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                         | `true`      |
+| `queryFrontend.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                  | `true`      |
+| `queryFrontend.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                             | `true`      |
+| `queryFrontend.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `queryFrontend.networkPolicy.allowExternal` is true.     | `true`      |
+| `queryFrontend.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                | `[]`        |
+| `queryFrontend.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                                | `[]`        |
+| `queryFrontend.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.           | `{}`        |
+| `queryFrontend.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true.     | `{}`        |
+| `queryFrontend.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `queryFrontend.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Vulture Deployment Parameters
 
@@ -932,29 +968,35 @@ The [Bitnami grafana-tempo](https://github.com/bitnami/containers/tree/main/bitn
 | `vulture.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Vulture container(s)                                                                                                                                             | `[]`                                    |
 | `vulture.sidecars`                                          | Add additional sidecar containers to the Vulture pod(s)                                                                                                                                                                           | `[]`                                    |
 | `vulture.initContainers`                                    | Add additional init containers to the Vulture pod(s)                                                                                                                                                                              | `[]`                                    |
+| `vulture.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                                  |
+| `vulture.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                                    |
+| `vulture.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `vulture.pdb.minAvailable` and `vulture.pdb.maxUnavailable` are empty.                                                                    | `""`                                    |
+| `vulture.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                                                                                                             | `true`                                  |
 
 ### Vulture Traffic Exposure Parameters
 
-| Name                                            | Description                                                      | Value       |
-| ----------------------------------------------- | ---------------------------------------------------------------- | ----------- |
-| `vulture.service.type`                          | Vulture service type                                             | `ClusterIP` |
-| `vulture.service.ports.http`                    | Vulture HTTP service port                                        | `3200`      |
-| `vulture.service.nodePorts.http`                | Node port for HTTP                                               | `""`        |
-| `vulture.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin | `None`      |
-| `vulture.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                      | `{}`        |
-| `vulture.service.clusterIP`                     | Vulture service Cluster IP                                       | `""`        |
-| `vulture.service.loadBalancerIP`                | Vulture service Load Balancer IP                                 | `""`        |
-| `vulture.service.loadBalancerSourceRanges`      | Vulture service Load Balancer sources                            | `[]`        |
-| `vulture.service.externalTrafficPolicy`         | Vulture service external traffic policy                          | `Cluster`   |
-| `vulture.service.annotations`                   | Additional custom annotations for Vulture service                | `{}`        |
-| `vulture.service.extraPorts`                    | Extra ports to expose in the Vulture service                     | `[]`        |
-| `vulture.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created              | `true`      |
-| `vulture.networkPolicy.allowExternal`           | Don't require server label for connections                       | `true`      |
-| `vulture.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.  | `true`      |
-| `vulture.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `vulture.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                     | `[]`        |
-| `vulture.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces           | `{}`        |
-| `vulture.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces       | `{}`        |
+| Name                                            | Description                                                                                                           | Value       |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `vulture.service.type`                          | Vulture service type                                                                                                  | `ClusterIP` |
+| `vulture.service.ports.http`                    | Vulture HTTP service port                                                                                             | `3200`      |
+| `vulture.service.nodePorts.http`                | Node port for HTTP                                                                                                    | `""`        |
+| `vulture.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                      | `None`      |
+| `vulture.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                           | `{}`        |
+| `vulture.service.clusterIP`                     | Vulture service Cluster IP                                                                                            | `""`        |
+| `vulture.service.loadBalancerIP`                | Vulture service Load Balancer IP                                                                                      | `""`        |
+| `vulture.service.loadBalancerSourceRanges`      | Vulture service Load Balancer sources                                                                                 | `[]`        |
+| `vulture.service.externalTrafficPolicy`         | Vulture service external traffic policy                                                                               | `Cluster`   |
+| `vulture.service.annotations`                   | Additional custom annotations for Vulture service                                                                     | `{}`        |
+| `vulture.service.extraPorts`                    | Extra ports to expose in the Vulture service                                                                          | `[]`        |
+| `vulture.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created                                                                   | `true`      |
+| `vulture.networkPolicy.allowExternal`           | Don't require server label for connections                                                                            | `true`      |
+| `vulture.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                       | `true`      |
+| `vulture.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `vulture.networkPolicy.allowExternal` is true.     | `true`      |
+| `vulture.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`        |
+| `vulture.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                                          | `[]`        |
+| `vulture.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `vulture.networkPolicy.allowExternal` is true.           | `{}`        |
+| `vulture.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces. Ignored if `vulture.networkPolicy.allowExternal` is true.     | `{}`        |
+| `vulture.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces. Ignored if `vulture.networkPolicy.allowExternal` is true. | `{}`        |
 
 ### Init Container Parameters
 

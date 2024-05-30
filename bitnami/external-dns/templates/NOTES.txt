@@ -11,3 +11,4 @@ To verify that external-dns has started, run:
 {{ include "external-dns.validateValues" . }}
 {{ include "external-dns.checkRollingTags" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image) "context" $) }}

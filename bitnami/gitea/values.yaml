@@ -68,7 +68,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/gitea
-  tag: 1.21.11-debian-12-r3
+  tag: 1.22.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -207,6 +207,12 @@ containerPorts:
 ##     containerPort: 9090
 ##
 extraContainerPorts: []
+## Enable OpenID Configurations
+## @param openid.enableSignIn Enable sign in with OpenID
+## @param openid.enableSignUp Enable sign up with OpenID
+openid:
+  enableSignIn: false
+  enableSignUp: false
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
@@ -371,13 +377,8 @@ startupProbe:
   failureThreshold: 5
   successThreshold: 1
 ## Configure extra options for liveness probe
-## Gitea core exposes / to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
-## case. For example, if the image value is overridden to an image containing a
-## module that alters that route, or an image that does not auto-install Gitea.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
-## @param livenessProbe.path Request path for livenessProbe
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -386,7 +387,6 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -394,7 +394,7 @@ livenessProbe:
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## Gitea core exposes / to unauthenticated requests, making it a good
-## default liveness and readiness path. However, that may not always be the
+## default startup and readiness path. However, that may not always be the
 ## case. For example, if the image value is overridden to an image containing a
 ## module that alters that route, or an image that does not auto-install Gitea.
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -732,7 +732,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

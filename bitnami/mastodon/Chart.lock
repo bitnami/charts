@@ -1,21 +1,21 @@
 dependencies:
 - name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.1.3
+  version: 19.4.0
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.2.5
+  version: 15.4.0
 - name: elasticsearch
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.0.1
+  version: 21.1.0
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.3.0
+  version: 14.6.0
 - name: apache
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.0.2
+  version: 11.0.6
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.19.1
-digest: sha256:53dfc1c1789da93e00c76c23edef6ce83589b68283b0449cd83508324df1c5de
-generated: "2024-04-26T05:43:03.663923487Z"
+  version: 2.19.3
+digest: sha256:f00a135fd3b56a3341d191aa5351648e5d58656e527fefec41ec0807ca166ed8
+generated: "2024-05-21T18:04:37.879578+02:00"

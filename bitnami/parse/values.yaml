@@ -86,7 +86,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/parse
-    tag: 7.0.0-debian-12-r2
+    tag: 7.0.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -229,6 +229,16 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param server.enableCloudCode Enable Parse Cloud Code
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/parse#how-to-deploy-your-cloud-functions-with-parse-cloud-code
   ##
@@ -513,7 +523,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/parse-dashboard
-    tag: 5.3.0-debian-12-r25
+    tag: 5.4.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -793,6 +803,16 @@ dashboard:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dashboard.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dashboard.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dashboard.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboard.pdb.minAvailable` and `dashboard.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param dashboard.forceOverwriteConfFile Overwrite config.json configuration file on each run (set to false if mounting a custom configuration file)
   ##
   forceOverwriteConfFile: true
@@ -1091,7 +1111,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

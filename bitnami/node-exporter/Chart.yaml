@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: node-exporter
-      image: docker.io/bitnami/node-exporter:1.8.0-debian-12-r2
+      image: docker.io/bitnami/node-exporter:1.8.1-debian-12-r0
 apiVersion: v2
-appVersion: 1.8.0
+appVersion: 1.8.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -28,4 +28,4 @@ maintainers:
 name: node-exporter
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 4.2.1
+version: 4.3.1

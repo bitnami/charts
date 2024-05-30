@@ -214,8 +214,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.livenessProbe.path }}
+            tcpSocket:
               port: {{ .Values.livenessProbe.port }}
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -256,7 +255,7 @@ spec:
               subPath: app-tmp-dir
             {{- if (include "apache.useHtdocs" .) }}
             - name: htdocs
-              mountPath: /app
+              mountPath: /opt/bitnami/apache/htdocs
             {{- end }}
             {{- if or (.Files.Glob "files/vhosts/*.conf") (.Values.vhostsConfigMap) }}
             - name: vhosts

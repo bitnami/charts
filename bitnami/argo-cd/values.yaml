@@ -65,7 +65,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.11.0-debian-12-r1
+  tag: 2.11.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -633,6 +633,16 @@ controller:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param controller.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param controller.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param controller.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Argo CD ApplicationSet controller parameters
 
 ## ApplicationSet controller
@@ -1124,6 +1134,16 @@ applicationSet:
       ## @param applicationSet.webhook.ingress.tls Ingress TLS configuration
       ##
       tls: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param applicationSet.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param applicationSet.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param applicationSet.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Argo CD notifications controller parameters
 
 ## notifications controller
@@ -1886,6 +1906,16 @@ notifications:
       ## @param notifications.bots.slack.extraEnvVarsSecret Name of existing Secret containing extra env vars for Argo CD Slack bot nodes
       ##
       extraEnvVarsSecret: ""
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param notifications.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param notifications.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param notifications.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `notifications.pdb.minAvailable` and `notifications.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Argo CD server Parameters
 
 ## Argo CD server configuration
@@ -2684,6 +2714,16 @@ server:
     ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Argo CD repo server Parameters
 
 ## Argo CD repository server configuration
@@ -3187,6 +3227,16 @@ repoServer:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param repoServer.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param repoServer.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param repoServer.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `repoServer.pdb.minAvailable` and `repoServer.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Dex Parameters
 
 ## Dex configuration
@@ -3205,7 +3255,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.39.1-debian-12-r4
+    tag: 2.39.1-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3710,6 +3760,16 @@ dex:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dex.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dex.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dex.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dex.pdb.minAvailable` and `dex.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Shared config for Argo CD components
 config:
   ## @param config.knownHosts [string] Known hosts to be added to the known hosts list by default. Check the values to see the default value
@@ -3893,7 +3953,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r20
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3955,7 +4015,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.2.4-debian-12-r14
+    tag: 7.2.5-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
