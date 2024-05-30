@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.6-debian-12-r8
+  tag: 2.7.6-debian-12-r10
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -443,6 +443,16 @@ influxdb:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param influxdb.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param influxdb.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param influxdb.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `influxdb.pdb.minAvailable` and `influxdb.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Service parameters
   ##
   service:
@@ -885,7 +895,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -924,6 +934,40 @@ backup:
   ## @param backup.retentionDays Retention time in days for backups (older backups are deleted)
   ##
   retentionDays: 10
+
+  ## Persistence parameters
+  ##
+  persistence:
+    ## @param backup.persistence.ownConfig Prefer independent own persistence parameters to configure the backup volume
+    ## When set to `false` (for backwards compatibility), the rest of the persistence parameters below will be ignored.
+    ## This parameter will be set to `true` and removed in a future release.
+    ##
+    ownConfig: false
+    ## @param backup.persistence.enabled Enable data persistence for backup volume
+    ##
+    enabled: true
+    ## @param backup.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## If defined, PVC must be created manually before volume will be bound
+    ## The value is evaluated as a template
+    ##
+    existingClaim: ""
+    ## @param backup.persistence.storageClass Specify the `storageClass` used to provision the volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ## set, choosing the default provisioner.
+    ##
+    storageClass: ""
+    ## @param backup.persistence.accessModes Access mode of data volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param backup.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param backup.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
   ## Cronjob configuration
   ## This cronjob is used to create InfluxDB&trade; backups
   ##
@@ -1060,7 +1104,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.476.0-debian-12-r0
+        tag: 0.477.0-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1114,7 +1158,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.60.0-debian-12-r2
+        tag: 2.61.0-debian-12-r0
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images

@@ -1,6 +1,6 @@
 {
   "newRelease": {
-    "application": "nginx",
+    "application": "apache",
     "name": "oatmeal"
   }
 }

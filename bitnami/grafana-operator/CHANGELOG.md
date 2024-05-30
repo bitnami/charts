@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.3.1 (2024-05-22)
+## 4.4.0 (2024-05-28)
 
-* [bitnami/grafana-operator] Use different liveness/readiness probes ([#26330](https://github.com/bitnami/charts/pulls/26330))
+* [bitnami/grafana-operator] Enable PodDisruptionBudgets ([#26476](https://github.com/bitnami/charts/pull/26476))
+
+## <small>4.3.2 (2024-05-26)</small>
+
+* [bitnami/grafana-operator] Release 4.3.2 (#26440) ([50f93a9](https://github.com/bitnami/charts/commit/50f93a9612b15234a69eb4b83e29381a4a327868)), closes [#26440](https://github.com/bitnami/charts/issues/26440)
+
+## <small>4.3.1 (2024-05-24)</small>
+
+* [bitnami/grafana-operator] Use different liveness/readiness probes (#26330) ([6fc05c7](https://github.com/bitnami/charts/commit/6fc05c74a7a363605861268951d110754c9ceede)), closes [#26330](https://github.com/bitnami/charts/issues/26330)
 
 ## 4.3.0 (2024-05-21)
 

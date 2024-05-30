@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.1 (2024-05-22)
+## 7.1.2 (2024-05-24)
 
-* [bitnami/jupyterhub] Use different liveness/readiness probes ([#26348](https://github.com/bitnami/charts/pull/26348))
+* [bitnami/jupyterhub] Remove sleep probes ([#26414](https://github.com/bitnami/charts/pull/26414))
+
+## <small>7.1.1 (2024-05-23)</small>
+
+* [bitnami/jupyterhub] Use different liveness/readiness probes (#26348) ([9268744](https://github.com/bitnami/charts/commit/9268744f8ad9474a22c2c263a303730aa7d8f0af)), closes [#26348](https://github.com/bitnami/charts/issues/26348)
 
 ## 7.1.0 (2024-05-21)
 

@@ -154,12 +154,6 @@ By setting the following parameter: `listeners.client.protocol=SSL` and `listene
 
 As result, we will be able to see in kafka-authorizer.log the events specific Subject: `[...] Principal = User:CN=kafka,OU=...,O=...,L=...,C=..,ST=... is [...]`.
 
-If you also enable exposing metrics using the Kafka exporter, and you are using `SSL` or `SASL_SSL` security protocols protocols, you need to mount the CA certificated used to sign the brokers certificates in the exporter so it can validate the Kafka brokers. To do so, create a secret containing the CA, and set the `metrics.certificatesSecret` parameter. As an alternative, you can skip TLS validation using extra flags:
-
-```console
-metrics.kafka.extraFlags={tls.insecure-skip-tls-verify: ""}
-```
-
 ### Accessing Kafka brokers from outside the cluster
 
 In order to access Kafka Brokers from outside the cluster, an additional listener and advertised listener must be configured. Additionally, a specific service per kafka pod will be created.
@@ -284,14 +278,8 @@ externalAccess:
 
 The chart can optionally start two metrics exporters:
 
-- Kafka exporter, to expose Kafka metrics. By default, it uses port 9308.
 - JMX exporter, to expose JMX metrics. By default, it uses port 5556.
-
-To create a separate Kafka exporter, use the parameter below:
-
-```text
-metrics.kafka.enabled: true
-```
+- Zookeeper exporter, to expose Zookeeper metrics. By default, it uses port 9141.
 
 To expose JMX metrics to Prometheus, use the parameter below:
 
@@ -464,6 +452,7 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                    |
 | `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                    |
 | `heapOpts`                            | Kafka Java Heap size                                                                                                                                                                                       | `-Xmx1024m -Xms1024m`   |
+| `brokerRackAssignment`                | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                                | `""`                    |
 | `interBrokerProtocolVersion`          | Override the setting 'inter.broker.protocol.version' during the ZK migration.                                                                                                                              | `""`                    |
 | `listeners.client.name`               | Name for the Kafka client listener                                                                                                                                                                         | `CLIENT`                |
 | `listeners.client.containerPort`      | Port for the Kafka client listener                                                                                                                                                                         | `9092`                  |
@@ -655,9 +644,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `controller.autoscaling.hpa.maxReplicas`             | Maximum number of Kafka Controller replicas                                                                                                                            | `""`                      |
 | `controller.autoscaling.hpa.targetCPU`               | Target CPU utilization percentage                                                                                                                                      | `""`                      |
 | `controller.autoscaling.hpa.targetMemory`            | Target Memory utilization percentage                                                                                                                                   | `""`                      |
-| `controller.pdb.create`                              | Deploy a pdb object for the Kafka pod                                                                                                                                  | `false`                   |
+| `controller.pdb.create`                              | Deploy a pdb object for the Kafka pod                                                                                                                                  | `true`                    |
 | `controller.pdb.minAvailable`                        | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
-| `controller.pdb.maxUnavailable`                      | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `1`                       |
+| `controller.pdb.maxUnavailable`                      | Maximum number/percentage of unavailable Kafka replicas                                                                                                                | `""`                      |
 | `controller.persistence.enabled`                     | Enable Kafka data persistence using PVC, note that ZooKeeper persistence is unaffected                                                                                 | `true`                    |
 | `controller.persistence.existingClaim`               | A manually managed Persistent Volume and Claim                                                                                                                         | `""`                      |
 | `controller.persistence.storageClass`                | PVC Storage Class for Kafka data volume                                                                                                                                | `""`                      |
@@ -762,9 +751,9 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 | `broker.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Kafka container(s)                                                                                                                                             | `[]`                  |
 | `broker.sidecars`                                          | Add additional sidecar containers to the Kafka pod(s)                                                                                                                                                                           | `[]`                  |
 | `broker.initContainers`                                    | Add additional Add init containers to the Kafka pod(s)                                                                                                                                                                          | `[]`                  |
-| `broker.pdb.create`                                        | Deploy a pdb object for the Kafka pod                                                                                                                                                                                           | `false`               |
+| `broker.pdb.create`                                        | Deploy a pdb object for the Kafka pod                                                                                                                                                                                           | `true`                |
 | `broker.pdb.minAvailable`                                  | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                                                         | `""`                  |
-| `broker.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                                                         | `1`                   |
+| `broker.pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                                                         | `""`                  |
 
 ### Experimental: Kafka Broker Autoscaling configuration
 

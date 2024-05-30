@@ -9,8 +9,6 @@ annotations:
       image: docker.io/bitnami/jmx-exporter:0.20.0-debian-12-r17
     - name: kafka
       image: docker.io/bitnami/kafka:3.7.0-debian-12-r6
-    - name: kafka-exporter
-      image: docker.io/bitnami/kafka-exporter:1.7.0-debian-12-r27
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.30.1-debian-12-r0
     - name: os-shell
@@ -42,4 +40,4 @@ maintainers:
 name: kafka
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kafka
-version: 29.0.0
+version: 29.1.2
