@@ -18,10 +18,17 @@ spec:
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable }}
   minAvailable: {{ .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable }}
   {{- end  }}
+<<<<<<< Updated upstream
   {{- if or .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable ( not .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable ) }}
   maxUnavailable: {{ .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels ) "context" . ) }}
+=======
+  {{- if or .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable (not .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable) }}
+  maxUnavailable: {{ .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable | default 1 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels) "context" .) }}
+>>>>>>> Stashed changes
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: %%COMPONENT_NAME%%
