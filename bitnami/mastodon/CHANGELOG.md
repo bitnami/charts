@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.0 (2024-05-28)
+## 6.2.1 (2024-05-30)
 
-* [bitnami/mastodon] Enable PodDisruptionBudgets ([#26508](https://github.com/bitnami/charts/pull/26508))
+* [bitnami/mastodon] Release 6.2.1 ([#26568](https://github.com/bitnami/charts/pull/26568))
+
+## 6.2.0 (2024-05-30)
+
+* [bitnami/mastodon] Enable PodDisruptionBudgets (#26508) ([0b2205a](https://github.com/bitnami/charts/commit/0b2205adbf2199c48a63cd016137fd3b1f4c88b3)), closes [#26508](https://github.com/bitnami/charts/issues/26508)
 
 ## <small>6.1.1 (2024-05-22)</small>
 
