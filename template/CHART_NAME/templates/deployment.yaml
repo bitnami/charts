@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.enabled }}
+  {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.enabled }}
   replicas: {{ .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
   {{- end }}
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}

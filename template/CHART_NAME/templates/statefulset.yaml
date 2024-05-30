@@ -15,8 +15,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels) "context" .) }}
