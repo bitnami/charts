@@ -88,7 +88,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.16.2-debian-12-r3
+    tag: 1.16.3-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -287,11 +287,11 @@ server:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node server.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -1496,11 +1496,11 @@ injector:
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param injector.pdb.create Enable/disable a Pod Disruption Budget creation
   ## @param injector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param injector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param injector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `injector.pdb.minAvailable` and `injector.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1791,7 +1791,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

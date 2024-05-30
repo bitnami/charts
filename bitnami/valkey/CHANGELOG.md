@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.2.1 (2024-05-24)
+## 0.3.0 (2024-05-30)
 
-* [binami/valkey] fix: wrong port set for sentinel setup ([#26393](https://github.com/bitnami/charts/pull/26393))
+* [bitnami/valkey] Enable PodDisruptionBudgets ([#26408](https://github.com/bitnami/charts/pull/26408))
+
+## <small>0.2.1 (2024-05-30)</small>
+
+* [bitnami/valkey] take global.valkey.password into account (#26454) ([149d1a0](https://github.com/bitnami/charts/commit/149d1a09a185e4f0127018a705f15336dfd190ec)), closes [#26454](https://github.com/bitnami/charts/issues/26454)
 
 ## 0.2.0 (2024-05-21)
 
