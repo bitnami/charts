@@ -139,6 +139,9 @@ spec:
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
+            {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}
