@@ -1525,10 +1525,12 @@ cassandra:
   ## Database credentials
   ## @param cassandra.dbUser.user Cassandra admin user
   ## @param cassandra.dbUser.password Password for `dbUser.user`. Randomly generated if empty
+  ## @param cassandra.dbUser.existingSecret Name of an existing secret containing the user password.
   ##
   dbUser:
     user: bn_jaeger
     password: ""
+    existingSecret: ""
   ## Cassandra service port
   ## @param cassandra.service.ports.cql Cassandra cql port
   service:

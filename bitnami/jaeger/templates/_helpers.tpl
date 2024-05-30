@@ -142,10 +142,10 @@ ref. https://github.com/jaegertracing/jaeger-operator/issues/1158
 Create the cassandra secret name
 */}}
 {{- define "jaeger.cassandra.secretName" -}}
-    {{- if not .Values.cassandra.enabled -}}
-        {{- .Values.externalDatabase.existingSecret -}}
+    {{- if (not .Values.cassandra.enabled) -}}
+        {{- tpl .Values.externalDatabase.existingSecret $ -}}
     {{- else -}}
-        {{- printf "%s-cassandra" (include "common.names.fullname" .) -}}
+        {{- default (printf "%s-cassandra" .Release.Name) .Values.cassandra.dbUser.existingSecret -}}
     {{- end -}}
 {{- end -}}
 
