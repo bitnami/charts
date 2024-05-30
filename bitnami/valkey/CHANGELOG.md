@@ -4,6 +4,10 @@
 
 * [bitnami/valkey] Enable PodDisruptionBudgets ([#26408](https://github.com/bitnami/charts/pull/26408))
 
+## <small>0.2.1 (2024-05-30)</small>
+
+* [bitnami/valkey] take global.valkey.password into account (#26454) ([149d1a0](https://github.com/bitnami/charts/commit/149d1a09a185e4f0127018a705f15336dfd190ec)), closes [#26454](https://github.com/bitnami/charts/issues/26454)
+
 ## 0.2.0 (2024-05-21)
 
 * [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c9e4e574725a09505d2d313fb93f1b4c0a)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
