@@ -1,0 +1,41 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+  images: |
+    - name: hubble-relay
+      image: docker.io/bitnami/hubble-relay:1.15.4-debian-12-r0
+    - name: hubble-ui
+      image: docker.io/bitnami/hubble-ui:0.13.0-debian-12-r0
+    - name: hubble-ui-backend
+      image: docker.io/bitnami/hubble-ui-backend:0.13.0-debian-12-r0
+apiVersion: v2
+appVersion: 1.15.5
+dependencies:
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Hubble is a fully distributed networking and security observability platform for cloud native workloads.
+home: https://bitnami.com
+icon: https://bitnami.com/assets/stacks/hubble/img/hubble-stack-220x234.png
+keywords:
+  - hubble
+  - cilium
+  - networking
+  - observability
+  - security
+maintainers:
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
+name: hubble
+sources:
+  - https://github.com/bitnami/charts/tree/main/bitnami/hubble
+  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-relay
+  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui
+  - https://github.com/bitnami/containers/tree/main/bitnami/hubble-ui-backend
+  - https://github.com/cilium/hubble
+version: 0.1.0

@@ -1,0 +1,61 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.ui.enabled .Values.ui.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ template "hubble.ui.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: ui
+  {{- if or .Values.ui.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.ui.ingress.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.ui.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.ui.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.ui.ingress.hostname }}
+    - host: {{ .Values.ui.ingress.hostname }}
+      http:
+        paths:
+          {{- if .Values.ui.ingress.extraPaths }}
+          {{- toYaml .Values.ui.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.ui.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ui.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "hubble.ui.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+    {{- end }}
+    {{- range .Values.ui.ingress.extraHosts }}
+    - host: {{ .name | quote }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "hubble.ui.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.ui.ingress.extraRules }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ui.ingress.extraRules "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.ui.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ui.ingress.annotations )) .Values.ui.ingress.selfSigned)) .Values.ui.ingress.extraTls }}
+  tls:
+    {{- if and .Values.ui.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ui.ingress.annotations )) .Values.ui.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.ui.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.ui.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.ui.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ui.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

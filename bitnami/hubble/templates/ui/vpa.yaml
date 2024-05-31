@@ -1,0 +1,45 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.ui.enabled (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.ui.autoscaling.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ template "hubble.ui.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: ui
+  {{- if or .Values.ui.autoscaling.vpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ui.autoscaling.vpa.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: ui
+      {{- with .Values.ui.autoscaling.vpa.controlledResources }}
+      controlledResources:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ui.autoscaling.vpa.maxAllowed }}
+      maxAllowed:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.ui.autoscaling.vpa.minAllowed }}
+      minAllowed:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  targetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ template "hubble.ui.fullname" . }}
+  {{- if .Values.ui.autoscaling.vpa.updatePolicy }}
+  updatePolicy:
+    {{- with .Values.ui.autoscaling.vpa.updatePolicy.updateMode }}
+    updateMode: {{ . }}
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,81 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.relay.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "hubble.relay.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: relay
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.relay.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: hubble
+      app.kubernetes.io/component: relay
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    {{- if .Values.relay.networkPolicy.allowExternalEgress }}
+    - {}
+    {{- else }}
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    {{- if .Values.relay.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.relay.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.relay.containerPorts.grpc }}
+        {{- if .Values.relay.enableGops }}
+        - port: {{ .Values.relay.containerPorts.gops }}
+        {{- end }}
+        {{- if .Values.relay.enablePprof }}
+        - port: {{ .Values.relay.containerPorts.pprof }}
+        {{- end }}
+        {{- if .Values.relay.metrics.enabled }}
+        - port: {{ .Values.relay.containerPorts.metrics }}
+        {{- end }}
+        {{- range .Values.relay.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
+      {{- if not .Values.relay.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+        {{- if .Values.relay.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.relay.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.relay.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.relay.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.relay.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.relay.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

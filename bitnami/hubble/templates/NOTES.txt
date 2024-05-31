@@ -1,0 +1,95 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+{{- if or (not .Values.serverPeers.host) (not .Values.serverPeers.port) -}}
+
+###################################################################################################
+### ERROR: You did not provide the Hubble Server peers host or port in your 'helm install' call ###
+###################################################################################################
+
+Complete your Hubble deployment by running:
+
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/hubble \
+    --set serverPeers.host=SERVER_PEERS_HOST,serverPeers.port=SERVER_PEERS_PORT
+
+Replacing "SERVER_PEERS_HOST" and "SERVER_PEERS_PORT" placeholders by the proper values of your Hubble Server peers
+
+{{- else -}}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+Hubble Relay can be accessed through the following URL from within the cluster:
+
+  {{ include "hubble.relay.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.relay.service.ports.grpc }} (gRPC)
+
+{{- if .Values.ui.enabled -}}
+
+Hubble UI can be accessed through the following URL from within the cluster:
+
+  {{ include "hubble.ui.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.ui.service.ports.http }} (HTTP)
+
+To access the Hubble UI from outside the cluster follow the steps below:
+
+{{- if .Values.ui.ingress.enabled }}
+
+1. Get the Hubble UI URL and associate the hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Hubble UI URL: http{{ if .Values.ui.ingress.tls }}s{{ end }}://{{ .Values.ui.ingress.hostname }}{{ .Values.ui.ingress.path }}"
+   echo "$CLUSTER_IP  {{ .Values.ui.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.ui.service.ports.http | toString }}
+
+1. Get the Hubble UI URL by running these commands:
+
+{{- if contains "NodePort" .Values.ui.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "hubble.ui.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Hubble UI URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.ui.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ include "hubble.ui.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ include "hubble.ui.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Hubble UI URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.ui.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.ui.service.type }}
+
+   kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "hubble.ui.fullname" . }} {{ .Values.ui.service.ports.http }}:{{ .Values.ui.service.ports.http }} &
+   echo "Hubble UI URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.ui.service.ports.http }}{{ end }}/"
+
+{{- end }}
+{{- end }}
+
+2. Open a browser and access Hubble UI using the obtained URL.
+
+{{- end }}
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.relay.image }}
+{{- include "common.warnings.rollingTag" .Values.ui.frontend.image }}
+{{- include "common.warnings.rollingTag" .Values.ui.backend.image }}
+{{- include "hubble.validateValues" . }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.relay.image .Values.ui.frontend.image .Values.ui.backend.image) "context" $) }}
+{{- end }}

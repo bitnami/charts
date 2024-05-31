@@ -1,0 +1,56 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.ui.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "hubble.ui.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: ui
+  {{- if or .Values.ui.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.ui.service.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.ui.service.type }}
+  {{- if and .Values.ui.service.clusterIP (eq .Values.ui.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.ui.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.ui.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.ui.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.ui.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.ui.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.ui.service.type "LoadBalancer") (eq .Values.ui.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.ui.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.ui.service.type "LoadBalancer") (not (empty .Values.ui.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.ui.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.ui.service.type "LoadBalancer") (not (empty .Values.ui.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.ui.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.ui.service.ports.http }}
+      targetPort: frontend
+      protocol: TCP
+      {{- if and (or (eq .Values.ui.service.type "NodePort") (eq .Values.ui.service.type "LoadBalancer")) (not (empty .Values.ui.service.nodePorts.http)) }}
+      nodePort: {{ .Values.ui.service.nodePorts.http }}
+      {{- else if eq .Values.ui.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.ui.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ui.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.ui.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: ui
+{{- end }}

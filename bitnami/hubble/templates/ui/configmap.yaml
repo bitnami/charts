@@ -1,0 +1,64 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.ui.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "%s-server-block" (include "hubble.ui.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: ui
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  server-block.conf: |-
+    server {
+      listen {{ .Values.ui.frontend.containerPorts.http }};
+  {{- if .Values.ui.frontend.enableIPv6 }}
+      listen [::]:{{ .Values.ui.frontend.containerPorts.http }};
+  {{- end }}
+      server_name _;
+
+      root /app;
+      index index.html;
+      client_max_body_size 1G;
+
+      location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        # CORS
+        add_header Access-Control-Allow-Methods "GET, POST, PUT, HEAD, DELETE, OPTIONS";
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Max-Age 1728000;
+        add_header Access-Control-Expose-Headers content-length,grpc-status,grpc-message;
+        add_header Access-Control-Allow-Headers range,keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout;
+        if ($request_method = OPTIONS) {
+          return 204;
+        }
+        # /CORS
+
+        location / {
+          try_files $uri $uri/ /index.html /index.html;
+        }
+
+        location /api {
+          proxy_http_version 1.1;
+          proxy_pass_request_headers on;
+          proxy_hide_header Access-Control-Allow-Origin;
+          proxy_pass http://127.0.0.1:{{ .Values.ui.backend.containerPorts.http }};
+        }
+
+        location /healthz {
+          access_log off;
+          add_header Content-Type text/plain;
+          return 200 'ok';
+        }
+      }
+    }
+{{- end }}

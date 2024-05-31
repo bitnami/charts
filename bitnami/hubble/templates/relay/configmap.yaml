@@ -1,0 +1,63 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
+Return the Hubbley Relay configuration.
+*/}}
+{{- define "hubble.relay.configuration" -}}
+{{- if .Values.relay.configuration }}
+{{- include "common.tplvalues.render" (dict "value" .Values.relay.configuration .) }}
+{{- else }}
+cluster-name: default
+peer-service: {{ printf "%s:%d" .Values.serverPeers.host (int .Values.serverPeers.port) | quote }}
+listen-address: {{ printf ":%d" (int .Values.relay.containerPorts.grpc) | quote }}
+{{- if .Values.relay.metrics.enabled }}
+metrics-listen-address: {{ printf ":%d" (int .Values.relay.containerPorts.metrics) | quote }}
+{{- end }}
+gops: {{ .Values.relay.enableGops }}
+{{- if .Values.relay.enableGops }}
+gops-port: {{ printf "%d" (int .Values.relay.containerPorts.gops) | quote }}
+{{- end }}
+pprof: {{ .Values.relay.enablePprof }}
+{{- if .Values.relay.enablePprof }}
+pprof-listen-address: "localhost"
+pprof-port: {{ printf "%d" (int .Values.relay.containerPorts.pprof) | quote }}
+{{- end }}
+{{- if .Values.serverPeers.tls.enabled }}
+tls-hubble-client-cert-file: /certs/server-peers/tls.crt
+tls-hubble-client-key-file: /certs/server-peers/tls.key
+tls-hubble-server-ca-files: /certs/server-peers/ca.crt
+{{- else }}
+disable-client-tls: true
+{{- end }}
+{{- if .Values.tls.enabled }}
+tls-relay-server-cert-file: /certs/relay/tls.crt
+tls-relay-server-key-file: /certs/relay/tls.key
+tls-relay-client-ca-files: /certs/relay/ca.crt
+{{- else }}
+disable-server-tls: true
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if not .Values.relay.existingConfigmap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "hubble.relay.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: relay
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  # Hubble relay configuration to be mounted at /etc/hubble-relay/config.yaml (hardcoded value)
+  # ref: https://github.com/cilium/cilium/blob/main/hubble-relay/cmd/root.go#L18
+  # ref: https://github.com/cilium/cilium/blob/main/hubble-relay/cmd/serve/serve.go
+  config.yaml: |
+{{- mergeOverwrite (include "hubble.relay.configuration" . | fromYaml) .Values.relay.overrideConfiguration | toYaml | nindent 4 }}
+{{- end }}

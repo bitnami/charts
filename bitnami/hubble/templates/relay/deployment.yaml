@@ -1,0 +1,255 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.serverPeers.host .Values.serverPeers.port }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "hubble.relay.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: relay
+  {{- if or .Values.relay.deploymentAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.relay.deploymentAnnotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.relay.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.relay.replicaCount }}
+  {{- end }}
+  {{- if .Values.relay.updateStrategy }}
+  strategy: {{- toYaml .Values.relay.updateStrategy | nindent 4 }}
+  {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.relay.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: hubble
+      app.kubernetes.io/component: relay
+  template:
+    metadata:
+      annotations:
+        {{- if not .Values.relay.existingConfigmap }}
+        checksum/config: {{ include (print $.Template.BasePath "/relay/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.relay.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.relay.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: hubble
+        app.kubernetes.io/component: relay
+    spec:
+      {{- include "hubble.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "hubble.relay.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.relay.automountServiceAccountToken }}
+      {{- if .Values.relay.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.relay.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.relay.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.relay.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        {{- if not (empty .Values.relay.podAffinityPreset) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.relay.podAffinityPreset "component" "relay" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.relay.podAntiAffinityPreset) }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.relay.podAntiAffinityPreset "component" "relay" "customLabels" $podLabels "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if not (empty .Values.relay.nodeAffinityPreset.type) }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.relay.nodeAffinityPreset.type "key" .Values.relay.nodeAffinityPreset.key "values" .Values.relay.nodeAffinityPreset.values) | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.relay.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.relay.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.relay.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.relay.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.relay.priorityClassName }}
+      priorityClassName: {{ .Values.relay.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.relay.schedulerName }}
+      schedulerName: {{ .Values.relay.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.relay.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.relay.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.relay.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.relay.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.relay.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.relay.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if .Values.relay.initContainers }}
+      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.relay.initContainers "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: relay
+          image: {{ template "hubble.relay.image" . }}
+          imagePullPolicy: {{ .Values.relay.image.pullPolicy }}
+          {{- if .Values.relay.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.relay.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          command:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.relay.command }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.relay.command "context" $) | nindent 12 }}
+          {{- else }}
+            - hubble-relay
+          {{- end }}
+          args:
+          {{- if .Values.diagnosticMode.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.relay.args }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.relay.args "context" $) | nindent 12 }}
+          {{- else }}
+            - serve
+            {{- if or .Values.relay.image.debug .Values.diagnosticMode.enabled }}
+            - --debug
+            {{- end }}
+          {{- end }}
+          {{- if .Values.relay.extraEnvVars }}
+          env: {{- include "common.tplvalues.render" (dict "value" .Values.relay.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if or .Values.relay.extraEnvVarsCM .Values.relay.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.relay.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.relay.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.relay.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.relay.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.relay.resources }}
+          resources: {{- toYaml .Values.relay.resources | nindent 12 }}
+          {{- else if ne .Values.relay.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.relay.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.relay.containerPorts.grpc }}
+            {{- if .Values.relay.enableGops }}
+            - name: gops
+              containerPort: {{ .Values.relay.containerPorts.gops }}
+            {{- end }}
+            {{- if .Values.relay.enablePprof }}
+            - name: pprof
+              containerPort: {{ .Values.relay.containerPorts.pprof }}
+            {{- end }}
+            {{- if .Values.relay.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.relay.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.relay.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.relay.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.relay.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.relay.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.relay.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.relay.livenessProbe "enabled") "context" $) | nindent 12 }}
+            grpc:
+              port: {{ .Values.relay.containerPorts.grpc }}
+          {{- end }}
+          {{- if .Values.relay.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.relay.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.relay.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.relay.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - grpc-health-probe
+                - -addr=127.0.0.1:{{ .Values.relay.containerPorts.grpc }}
+                {{- if .Values.tls.enabled }}
+                - -tls
+                - -tls-ca-cert=/certs/client/ca.crt
+                - -tls-client-cert={{ include "hubble.relay.fullname" . }}
+                - -tls-client-key=/certs/client/ca.crt
+                - -tls-server-name=/certs/client/ca.crt
+               {{- end }}
+          {{- end }}
+          {{- if .Values.relay.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.relay.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.relay.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.relay.startupProbe "enabled") "context" $) | nindent 12 }}
+            grpc:
+              port: {{ .Values.relay.containerPorts.grpc }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.relay.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.relay.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: config
+              mountPath: /etc/hubble-relay
+              readOnly: true
+            {{- if .Values.serverPeers.tls.enabled }}
+            - name: server-peers-cert
+              readOnly: true
+              mountPath: /certs/server-peers
+            {{- end }}
+            {{- if .Values.tls.enabled  }}
+            - name: relay-cert
+              readOnly: true
+              mountPath: /certs/relay
+            - name: client-cert
+              readOnly: true
+              mountPath: /certs/client
+            {{- end }}
+          {{- if .Values.relay.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.relay.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.relay.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.relay.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: {{ template "hubble.relay.configmapName" . }}
+            items:
+              - key: config.yaml
+                path: config.yaml
+        {{- if .Values.serverPeers.tls.enabled }}
+        - name: server-peers-cert
+          secret:
+            secretName: {{ template "hubble.serverPeers.tls.secretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        {{- end }}
+        {{- if .Values.tls.enabled }}
+        - name: relay-cert
+          secret:
+            secretName: {{ template "hubble.tls.relay.secretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        - name: client-cert
+          secret:
+            secretName: {{ template "hubble.tls.client.secretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        {{- end }}
+{{- end }}

@@ -1,0 +1,61 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/hubble"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/hubble"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "hubble/goss/goss.yaml",
+            "vars_file": "hubble/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-hubble-relay"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/hubble/cypress"
+            },
+            "endpoint": "lb-hubble-ui-http",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    }
+  }
+}

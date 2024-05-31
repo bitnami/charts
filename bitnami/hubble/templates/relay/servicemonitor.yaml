@@ -1,0 +1,48 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.relay.metrics.enabled .Values.relay.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "hubble.relay.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.relay.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.relay.metrics.serviceMonitor.labels .Values.commonLabels) "context" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: hubble
+    app.kubernetes.io/component: relay
+  {{- if or .Values.relay.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.relay.metrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.relay.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      {{- if .Values.relay.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.relay.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: tcp-metrics
+      path: "/metrics"
+      {{- if .Values.relay.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.relay.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.relay.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.relay.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.relay.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.relay.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.relay.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.relay.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.relay.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.relay.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}
