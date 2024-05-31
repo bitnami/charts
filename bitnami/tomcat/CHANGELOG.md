@@ -1,8 +1,12 @@
 # Changelog
 
+## 11.2.1 (2024-05-31)
+
+* [bitnami/tomcat] Release 11.2.1 ([#26572](https://github.com/bitnami/charts/pull/26572))
+
 ## 11.2.0 (2024-05-29)
 
-* [bitnami/tomcat] Enable PodDisruptionBudgets ([#26540](https://github.com/bitnami/charts/pull/26540))
+* [bitnami/tomcat] Enable PodDisruptionBudgets (#26540) ([a644ce0](https://github.com/bitnami/charts/commit/a644ce06c12cc478ad21eae2893145430ceeb3ee)), closes [#26540](https://github.com/bitnami/charts/issues/26540)
 
 ## <small>11.1.1 (2024-05-27)</small>
 
