@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.2.1 (2024-05-29)
+## 10.2.1 (2024-05-31)
 
 * [bitnami/redis-cluster] Fix podAnnotation prometheus.io/port ([#26483](https://github.com/bitnami/charts/pull/26483))
 
