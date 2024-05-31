@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.0 (2024-05-23)
+## 10.2.1 (2024-05-31)
 
-* [bitnami/redis-cluster] Enable PodDisruptionBudgets ([#26375](https://github.com/bitnami/charts/pull/26375))
+* [bitnami/redis-cluster] Template podAnnotation values ([#26583](https://github.com/bitnami/charts/pull/26583))
+
+## 10.2.0 (2024-05-24)
+
+* [bitnami/redis-cluster] Enable PodDisruptionBudgets (#26375) ([50431fd](https://github.com/bitnami/charts/commit/50431fde7aaf7a1946de384cb15dff13961ccfe9)), closes [#26375](https://github.com/bitnami/charts/issues/26375)
 
 ## 10.1.0 (2024-05-21)
 
