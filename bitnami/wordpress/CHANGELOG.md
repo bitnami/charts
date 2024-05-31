@@ -1,8 +1,12 @@
 # Changelog
 
+## 22.4.1 (2024-05-29)
+
+* [bitnami/wordpress] Release 22.4.1 ([#26552](https://github.com/bitnami/charts/pull/26552))
+
 ## 22.4.0 (2024-05-28)
 
-* [bitnami/wordpress] Enable PodDisruptionBudgets ([#26381](https://github.com/bitnami/charts/pull/26381))
+* [bitnami/wordpress] Enable PodDisruptionBudgets (#26381) ([0c0e657](https://github.com/bitnami/charts/commit/0c0e657f1f5b2ecc1d33a60ee09b57e12c0a5dc6)), closes [#26381](https://github.com/bitnami/charts/issues/26381)
 
 ## <small>22.3.1 (2024-05-24)</small>
 

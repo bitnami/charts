@@ -31,7 +31,7 @@ spec:
       annotations:
         checksum/configmap-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-envvars.yaml") . | sha256sum }}
         checksum/secret-env: {{ include (print $.Template.BasePath "/jobservice/jobservice-secret-envvars.yaml") . | sha256sum }}
-        checksum/secret-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-config-secret.yaml") . | sha256sum }}
+        checksum/configmap-config: {{ include (print $.Template.BasePath "/jobservice/jobservice-cm-config.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/jobservice/jobservice-secrets.yaml") . | sha256sum }}
         checksum/secret-core: {{ include (print $.Template.BasePath "/core/core-secret.yaml") . | sha256sum }}
         {{- if and .Values.internalTLS.enabled (not .Values.core.tls.existingSecret) }}
@@ -166,7 +166,11 @@ spec:
             - configMapRef:
                 name: {{ printf "%s-envvars" (include "harbor.jobservice" .) }}
             - secretRef:
+                {{- with .Values.jobservice.existingEnvVarsSecret }}
+                name: {{ . }}
+                {{- else }}
                 name: {{ printf "%s-envvars" (include "harbor.jobservice" .) }}
+                {{- end }}
             {{- if .Values.jobservice.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.jobservice.extraEnvVarsCM "context" $) }}
@@ -242,8 +246,8 @@ spec:
         - name: empty-dir
           emptyDir: {}
         - name: jobservice-config
-          secret:
-            secretName: {{ include "harbor.jobservice" . }}-config
+          configMap:
+            name: {{ include "harbor.jobservice" . }}-config
         - name: job-logs
           {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
           persistentVolumeClaim:

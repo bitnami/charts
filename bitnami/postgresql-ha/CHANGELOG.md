@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.1.2 (2024-05-24)
+## 14.1.3 (2024-05-29)
 
-* [bitnami/postgresql-ha] Fix livenessProbe for metrics ([#26399](https://github.com/bitnami/charts/pull/26399))
+* [bitnami/postgresql-ha] Release 14.1.3 ([#26545](https://github.com/bitnami/charts/pull/26545))
+
+## <small>14.1.2 (2024-05-24)</small>
+
+* [bitnami/postgresql-ha] Fix livenessProbe for metrics (#26399) ([7a8e1ef](https://github.com/bitnami/charts/commit/7a8e1ef28230ebc0b2c53cc12469ca21728c375c)), closes [#26399](https://github.com/bitnami/charts/issues/26399)
 
 ## <small>14.1.1 (2024-05-23)</small>
 
