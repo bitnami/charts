@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.2.2 (2024-05-30)
+## 9.3.0 (2024-05-31)
 
 * [bitnami/kube-prometheus] Add imagePullPolicy to Prometheus and Alertmanager ([#26553](https://github.com/bitnami/charts/pull/26553))
 
