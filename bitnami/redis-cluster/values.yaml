@@ -965,7 +965,7 @@ metrics:
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "9121"
+    prometheus.io/port: "{{ .Values.metrics.containerPorts.http }}"
   ## @param metrics.podLabels Additional labels for Metrics exporter pod
   ##
   podLabels: {}
