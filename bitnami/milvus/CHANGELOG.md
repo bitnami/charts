@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.1.0 (2024-05-29)
+## 8.1.1 (2024-05-31)
 
-* [bitnami/milvus] PDB review ([#25983](https://github.com/bitnami/charts/pull/25983))
+* [bitnami/milvus] Release 8.1.1 ([#26574](https://github.com/bitnami/charts/pull/26574))
+
+## 8.1.0 (2024-05-30)
+
+* [bitnami/milvus] PDB review (#25983) ([4e80463](https://github.com/bitnami/charts/commit/4e804630c3af64934e79fcacc5e1962750a0355f)), closes [#25983](https://github.com/bitnami/charts/issues/25983)
 
 ## 8.0.0 (2024-05-27)
 
