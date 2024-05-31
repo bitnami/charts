@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.1 (2024-05-31)
+## 11.2.2 (2024-05-31)
 
-* [bitnami/tomcat] Release 11.2.1 ([#26572](https://github.com/bitnami/charts/pull/26572))
+* [bitnami/tomcat] Release 11.2.2 ([#26576](https://github.com/bitnami/charts/pull/26576))
+
+## <small>11.2.1 (2024-05-31)</small>
+
+* [bitnami/tomcat] Release 11.2.1 (#26572) ([7936678](https://github.com/bitnami/charts/commit/793667814bb99abee54e9c7a60e305672477e6e9)), closes [#26572](https://github.com/bitnami/charts/issues/26572)
 
 ## 11.2.0 (2024-05-29)
 
