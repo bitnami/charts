@@ -219,7 +219,7 @@ rules:
     verbs:
       - '*'
   - apiGroups:
-      - kubeapps.com
+      - ""
     resources:
       - secrets
     verbs:
