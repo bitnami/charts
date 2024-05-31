@@ -12,13 +12,13 @@ annotations:
     - name: kubeapps-asset-syncer
       image: docker.io/bitnami/kubeapps-asset-syncer:2.10.0-debian-12-r4
     - name: kubeapps-dashboard
-      image: docker.io/bitnami/kubeapps-dashboard:2.10.0-debian-12-r4
+      image: docker.io/bitnami/kubeapps-dashboard:2.10.0-debian-12-r5
     - name: kubeapps-oci-catalog
       image: docker.io/bitnami/kubeapps-oci-catalog:2.10.0-debian-12-r4
     - name: kubeapps-pinniped-proxy
       image: docker.io/bitnami/kubeapps-pinniped-proxy:2.10.0-debian-12-r4
     - name: nginx
-      image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
+      image: docker.io/bitnami/nginx:1.26.1-debian-12-r0
     - name: oauth2-proxy
       image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r12
 apiVersion: v2
@@ -52,5 +52,4 @@ maintainers:
 name: kubeapps
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 15.1.1
-
+version: 15.1.2
