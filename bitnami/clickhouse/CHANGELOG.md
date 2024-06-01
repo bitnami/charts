@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.0 (2024-05-24)
+## 6.2.1 (2024-06-01)
 
-* [bitnami/clickhouse] Enable PodDisruptionBudgets ([#26422](https://github.com/bitnami/charts/pull/26422))
+* [bitnami/clickhouse] Release 6.2.1 ([#26592](https://github.com/bitnami/charts/pull/26592))
+
+## 6.2.0 (2024-05-28)
+
+* [bitnami/clickhouse] Enable PodDisruptionBudgets (#26422) ([f287417](https://github.com/bitnami/charts/commit/f2874179a9afeb0cc12edea67ab9b48391b7f61c)), closes [#26422](https://github.com/bitnami/charts/issues/26422)
 
 ## <small>6.1.1 (2024-05-23)</small>
 
