@@ -628,6 +628,7 @@ prometheus:
   ## @param prometheus.image.repository [default: REPOSITORY_NAME/prometheus] Prometheus image repository
   ## @skip prometheus.image.tag Prometheus image tag (immutable tags are recommended)
   ## @param prometheus.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param prometheus.image.pullPolicy Prometheus image pull policy
   ## @param prometheus.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
@@ -635,6 +636,7 @@ prometheus:
     repository: bitnami/prometheus
     tag: 2.52.0-debian-12-r2
     digest: ""
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1794,11 +1796,12 @@ alertmanager:
   ##
   enabled: true
   ## Bitnami Alertmanager image version
-  ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param alertmanager.image.registry [default: REGISTRY_NAME] Prometheus image registry
-  ## @param alertmanager.image.repository [default: REPOSITORY_NAME/alertmanager] Prometheus image repository
-  ## @skip alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
-  ## @param alertmanager.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## ref: https://hub.docker.com/r/bitnami/alertmanager/tags/
+  ## @param alertmanager.image.registry [default: REGISTRY_NAME] Alertmanager image registry
+  ## @param alertmanager.image.repository [default: REPOSITORY_NAME/alertmanager] Alertmanager image repository
+  ## @skip alertmanager.image.tag Alertmanager image tag (immutable tags are recommended)
+  ## @param alertmanager.image.digest Alertmanager image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param alertmanager.image.pullPolicy Alertmanager image pull policy
   ## @param alertmanager.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
@@ -1806,6 +1809,7 @@ alertmanager:
     repository: bitnami/alertmanager
     tag: 0.27.0-debian-12-r10
     digest: ""
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
