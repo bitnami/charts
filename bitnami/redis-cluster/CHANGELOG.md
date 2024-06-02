@@ -1,6 +1,6 @@
 # Changelog
 
-## 10.2.1 (2024-05-31)
+## 10.2.1 (2024-06-02)
 
 * [bitnami/redis-cluster] Template podAnnotation values ([#26583](https://github.com/bitnami/charts/pull/26583))
 
