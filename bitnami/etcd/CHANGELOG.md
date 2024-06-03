@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.1.2 (2024-05-29)
+## 10.2.0 (2024-06-03)
 
-* [bitnami/etcd] Release 10.1.2 ([#26555](https://github.com/bitnami/charts/pull/26555))
+* [bitnami/etcd] Non-manual chart upgrades ([#25655](https://github.com/bitnami/charts/pull/25655))
+
+## <small>10.1.2 (2024-05-29)</small>
+
+* [bitnami/etcd] Release 10.1.2 (#26555) ([f646374](https://github.com/bitnami/charts/commit/f6463741bd6d21d0b0330483f4961f0112680b97)), closes [#26555](https://github.com/bitnami/charts/issues/26555)
 
 ## <small>10.1.1 (2024-05-24)</small>
 
