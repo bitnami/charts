@@ -254,8 +254,9 @@ Return the volume-permissions init container
       export DATABASE_PASSWORD="$(< "/bitnami/nessie/secrets/database/QUARKUS_DATASOURCE_POSTGRESQL_PASSWORD")"
       {{- end }}
       info "Waiting for host $DATABASE_HOST"
+      export PGCONNECT_TIMEOUT="5"
       psql_is_ready() {
-          if ! PGCONNECT_TIMEOUT="5" PGPASSWORD="$DATABASE_PASSWORD" psql -U "$DATABASE_USER" -d "$DATABASE_NAME" -h "$DATABASE_HOST" -p "$DATABASE_PORT_NUMBER" -c "SELECT 1"; then
+          if ! echo "SELECT 1" | postgresql_execute "$DATABASE_NAME" "$DATABASE_USER" "$DATABASE_PASSWORD" "-h" "$DATABASE_HOST"; then
              return 1
           fi
           return 0
@@ -289,9 +290,6 @@ Return the volume-permissions init container
     - name: DATABASE_NAME
       value: {{ include "nessie.database.name" . | quote }}
   volumeMounts:
-    - name: empty-dir
-      mountPath: /tmp
-      subPath: tmp-dir
     {{- if .Values.usePasswordFile }}
     - name: database-password
       mountPath: /bitnami/nessie/secrets/database

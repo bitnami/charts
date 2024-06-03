@@ -52,5 +52,5 @@ To access nessie from outside the cluster follow the steps below:
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "common.warnings.rollingTag" .Values.waitContainer.image }}
 {{- include "nessie.validateValues" . }}
-{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.resources" (dict "sections" (list "" "volumePermissions" "waitContainer") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image .Values.waitContainer.image) "context" $) }}
