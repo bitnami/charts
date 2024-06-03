@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.1 (2024-05-28)
+## 15.7.0 (2024-06-03)
 
-* [bitnami/mongodb] Release 15.6.1 ([#26481](https://github.com/bitnami/charts/pull/26481))
+* [bitnami/mongodb] Add securityContext to generate-tls in replicaset ([#26606](https://github.com/bitnami/charts/pull/26606))
+
+## <small>15.6.1 (2024-05-28)</small>
+
+* [bitnami/mongodb] Release 15.6.1 (#26481) ([f4dbc07](https://github.com/bitnami/charts/commit/f4dbc07bf19489d2ce4156675c1cf7e291ad0385)), closes [#26481](https://github.com/bitnami/charts/issues/26481)
 
 ## 15.6.0 (2024-05-24)
 
