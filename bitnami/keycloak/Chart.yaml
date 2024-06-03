@@ -33,4 +33,4 @@ maintainers:
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 21.3.0
+version: 21.3.1

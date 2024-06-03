@@ -194,8 +194,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.filer.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.filer.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.filer.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.filer.customReadinessProbe }}

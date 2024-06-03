@@ -38,5 +38,6 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: seaweedfs
 sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 0.2.1
+version: 0.3.1
