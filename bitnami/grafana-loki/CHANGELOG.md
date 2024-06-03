@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.0 (2024-05-28)
+## 4.4.0 (2024-06-03)
 
-* [bitnami/grafana-loki] Enable PodDisruptionBudgets ([#26474](https://github.com/bitnami/charts/pull/26474))
+* [bitnami/grafana-loki] Remove unnecessary memcached image definitions ([#26600](https://github.com/bitnami/charts/pull/26600))
+
+## 4.3.0 (2024-05-29)
+
+* [bitnami/grafana-loki] Enable PodDisruptionBudgets (#26474) ([c03dcf6](https://github.com/bitnami/charts/commit/c03dcf6a0d4551fc2632041969f4e5c08c57ec3a)), closes [#26474](https://github.com/bitnami/charts/issues/26474)
 
 ## <small>4.2.1 (2024-05-23)</small>
 
