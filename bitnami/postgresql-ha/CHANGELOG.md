@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.1.3 (2024-05-29)
+## 14.2.0 (2024-06-03)
 
-* [bitnami/postgresql-ha] Release 14.1.3 ([#26545](https://github.com/bitnami/charts/pull/26545))
+* [bitnami/postgresql-ha] Enable PodDisruptionBudgets ([#26200](https://github.com/bitnami/charts/pull/26200))
+
+## <small>14.1.3 (2024-05-29)</small>
+
+* [bitnami/postgresql-ha] Release 14.1.3 (#26545) ([460e2b9](https://github.com/bitnami/charts/commit/460e2b9e29d2b8e8aa6d747db7414d6f4a5c33eb)), closes [#26545](https://github.com/bitnami/charts/issues/26545)
 
 ## <small>14.1.2 (2024-05-24)</small>
 
