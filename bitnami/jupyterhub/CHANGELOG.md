@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.2 (2024-05-24)
+## 7.1.3 (2024-06-03)
 
-* [bitnami/jupyterhub] Remove sleep probes ([#26414](https://github.com/bitnami/charts/pull/26414))
+* [bitnami/jupyterhub] Release 7.1.3 ([#26613](https://github.com/bitnami/charts/pull/26613))
+
+## <small>7.1.2 (2024-05-24)</small>
+
+* [bitnami/jupyterhub] Remove sleep probes (#26414) ([1b3cbb1](https://github.com/bitnami/charts/commit/1b3cbb1a43d803b70a76470a299ecc2068518e14)), closes [#26414](https://github.com/bitnami/charts/issues/26414)
 
 ## <small>7.1.1 (2024-05-23)</small>
 
