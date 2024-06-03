@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.3 (2024-05-31)
+## 1.2.3 (2024-06-03)
 
 * [bitnami/mlflow] Release 1.2.3 ([#26571](https://github.com/bitnami/charts/pull/26571))
 
