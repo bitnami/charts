@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -368,6 +368,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `web.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon web container(s)                                                                                                                                | `[]`             |
 | `web.sidecars`                                          | Add additional sidecar containers to the Mastodon web pod(s)                                                                                                                                                              | `[]`             |
 | `web.initContainers`                                    | Add additional init containers to the Mastodon web pod(s)                                                                                                                                                                 | `[]`             |
+| `web.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                           | `true`           |
+| `web.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                            | `""`             |
+| `web.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `web.pdb.minAvailable` and `web.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Mastodon Web Traffic Exposure Parameters
 
@@ -462,6 +465,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)                                                                                                                                    | `[]`             |
 | `sidekiq.sidecars`                                          | Add additional sidecar containers to the Mastodon sidekiq pod(s)                                                                                                                                                                  | `[]`             |
 | `sidekiq.initContainers`                                    | Add additional init containers to the Mastodon sidekiq pod(s)                                                                                                                                                                     | `[]`             |
+| `sidekiq.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`           |
+| `sidekiq.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`             |
+| `sidekiq.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `sidekiq.pdb.minAvailable` and `sidekiq.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `sidekiq.networkPolicy.enabled`                             | Enable creation of NetworkPolicy resources                                                                                                                                                                                        | `true`           |
 | `sidekiq.networkPolicy.allowExternal`                       | The Policy model to apply                                                                                                                                                                                                         | `true`           |
 | `sidekiq.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                   | `true`           |
@@ -541,6 +547,9 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `streaming.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon streaming container(s)                                                                                                                                      | `[]`             |
 | `streaming.sidecars`                                          | Add additional sidecar containers to the Mastodon streaming pod(s)                                                                                                                                                                    | `[]`             |
 | `streaming.initContainers`                                    | Add additional init containers to the Mastodon streaming pod(s)                                                                                                                                                                       | `[]`             |
+| `streaming.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `streaming.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
+| `streaming.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `streaming.pdb.minAvailable` and `streaming.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Mastodon Streaming Traffic Exposure Parameters
 
@@ -783,7 +792,6 @@ The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/m
 | `apache.service.loadBalancerIP` | Apache service LoadBalancer IP                                  | `""`                       |
 | `apache.service.ports.http`     | Apache service port                                             | `80`                       |
 | `apache.vhostsConfigMap`        | Name of the ConfigMap containing the Apache vhost configuration | `""`                       |
-| `apache.livenessProbe.path`     | Apache liveness probe path                                      | `/api/v1/streaming/health` |
 | `apache.readinessProbe.path`    | Apache readiness probe path                                     | `/api/v1/streaming/health` |
 | `apache.startupProbe.path`      | Apache startup probe path                                       | `/api/v1/streaming/health` |
 | `apache.ingress.enabled`        | Enable ingress                                                  | `false`                    |

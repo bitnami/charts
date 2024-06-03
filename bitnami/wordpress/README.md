@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -467,20 +467,20 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Other Parameters
 
-| Name                                          | Description                                                            | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------- | ------- |
-| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                    | `true`  |
-| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`    |
-| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `false` |
-| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                | `false` |
-| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled         | `1`     |
-| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable         | `""`    |
-| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                        | `false` |
-| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                   | `1`     |
-| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                   | `11`    |
-| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                      | `50`    |
-| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                   | `50`    |
+| Name                                          | Description                                                                                                                                    | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Enable creation of ServiceAccount for WordPress pod                                                                                            | `true`  |
+| `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                         | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                         | `false` |
+| `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                                                                           | `{}`    |
+| `pdb.create`                                  | Enable a Pod Disruption Budget creation                                                                                                        | `true`  |
+| `pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                 | `""`    |
+| `pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`    |
+| `autoscaling.enabled`                         | Enable Horizontal POD autoscaling for WordPress                                                                                                | `false` |
+| `autoscaling.minReplicas`                     | Minimum number of WordPress replicas                                                                                                           | `1`     |
+| `autoscaling.maxReplicas`                     | Maximum number of WordPress replicas                                                                                                           | `11`    |
+| `autoscaling.targetCPU`                       | Target CPU utilization percentage                                                                                                              | `50`    |
+| `autoscaling.targetMemory`                    | Target Memory utilization percentage                                                                                                           | `50`    |
 
 ### Metrics Parameters
 

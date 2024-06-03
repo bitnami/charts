@@ -128,8 +128,7 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.promtail.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.promtail.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.promtail.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /ready
+            tcpSocket:
               port: http
           {{- end }}
           {{- if .Values.promtail.customReadinessProbe }}

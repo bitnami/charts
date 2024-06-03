@@ -49,7 +49,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -387,6 +387,9 @@ As an alternative, you can make use of the preset configurations for pod affinit
 | `controller.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                            | `[]`                           |
 | `controller.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                  | `{}`                           |
 | `controller.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                           |
+| `controller.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`                         |
+| `controller.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`                           |
+| `controller.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.                                                                    | `""`                           |
 
 ### Webhook deployment parameters
 
@@ -478,6 +481,9 @@ As an alternative, you can make use of the preset configurations for pod affinit
 | `webhook.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                            | `[]`                                   |
 | `webhook.networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                                                  | `{}`                                   |
 | `webhook.networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                                              | `{}`                                   |
+| `webhook.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`                                 |
+| `webhook.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`                                   |
+| `webhook.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `webhook.pdb.minAvailable` and `webhook.pdb.maxUnavailable` are empty.                                                                          | `""`                                   |
 
 ### CAInjector deployment parameters
 
@@ -565,6 +571,9 @@ As an alternative, you can make use of the preset configurations for pod affinit
 | `cainjector.networkPolicy.allowExternalEgress`                 | Allow the pod to access any range of port and all destinations.                                                                                                                                                                                         | `true`                       |
 | `cainjector.networkPolicy.extraIngress`                        | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                            | `[]`                         |
 | `cainjector.networkPolicy.extraEgress`                         | Add extra ingress rules to the NetworkPolicy                                                                                                                                                                                                            | `[]`                         |
+| `cainjector.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                         | `true`                       |
+| `cainjector.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                          | `""`                         |
+| `cainjector.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `cainjector.pdb.minAvailable` and `cainjector.pdb.maxUnavailable` are empty.                                                                                    | `""`                         |
 
 ### Metrics Parameters
 

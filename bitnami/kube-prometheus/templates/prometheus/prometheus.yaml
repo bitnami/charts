@@ -51,6 +51,7 @@ spec:
     {{- end }}
   {{- if .Values.prometheus.image }}
   image: {{ template "kube-prometheus.prometheus.image" . }}
+  imagePullPolicy: {{ .Values.prometheus.image.pullPolicy }}
   {{- end }}
   {{- if .Values.prometheus.additionalArgs }}
   additionalArgs: {{- toYaml .Values.prometheus.additionalArgs | nindent 4 }}

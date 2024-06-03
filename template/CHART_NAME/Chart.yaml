@@ -24,10 +24,11 @@ keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - ...
 maintainers:
-  - name: VMware, Inc.
+  - name: Broadcom, Inc. All Rights Reserved.
     url: https://github.com/bitnami/charts
 name: %%CHART_NAME%%
 sources:
+  - https://github.com/bitnami/charts/tree/main/bitnami/%%IMAGE_NAME%%
   - https://github.com/bitnami/containers/tree/main/bitnami/%%IMAGE_NAME%%
   - %%UPSTREAM_PROJECT_SOURCE_CODE_URL%%
   - ...

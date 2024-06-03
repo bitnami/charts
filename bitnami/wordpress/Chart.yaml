@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r4
+      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r8
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r19
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
     - name: wordpress
-      image: docker.io/bitnami/wordpress:6.5.2-debian-12-r7
+      image: docker.io/bitnami/wordpress:6.5.3-debian-12-r6
 apiVersion: v2
-appVersion: 6.5.2
+appVersion: 6.5.3
 dependencies:
 - condition: memcached.enabled
   name: memcached
@@ -39,9 +39,9 @@ keywords:
 - web
 - wordpress
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: wordpress
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/wordpress
-version: 22.2.4
+version: 22.4.1

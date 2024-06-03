@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/flink
-  tag: 1.19.0-debian-12-r3
+  tag: 1.19.0-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -482,6 +482,15 @@ jobmanager:
   ## @param jobmanager.sidecars Add additional sidecar containers to the flink pods
   ##
   sidecars: []
+
+  ## @param jobmanager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param jobmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param jobmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section TaskManager deployment parameters
 ##
 taskmanager:
@@ -860,3 +869,11 @@ taskmanager:
   ## @param taskmanager.sidecars Add additional sidecar containers to the flink pods
   ##
   sidecars: []
+  ## @param taskmanager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param taskmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param taskmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""

@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -260,6 +260,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `jobmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                                 | `[]`             |
 | `jobmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                        | `[]`             |
 | `jobmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                                     | `[]`             |
+| `jobmanager.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `jobmanager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`             |
+| `jobmanager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                       | `""`             |
 
 ### TaskManager deployment parameters
 
@@ -361,6 +364,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `taskmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                                                                                                                                                                   | `[]`             |
 | `taskmanager.initContainers`                                    | Add additional init containers to the flink pods                                                                                                                                                                                          | `[]`             |
 | `taskmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                                                                                                                                                                       | `[]`             |
+| `taskmanager.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                           | `true`           |
+| `taskmanager.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                            | `""`             |
+| `taskmanager.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.                                                                         | `""`             |
 
 ## Upgrading
 

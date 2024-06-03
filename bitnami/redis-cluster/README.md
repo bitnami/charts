@@ -69,7 +69,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -308,7 +308,7 @@ These are the steps you will usually follow to back up and restore your Redis Cl
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring Redis Cluster deployments on Kubernetes](https://docs.bitnami.com/tutorials/backup-restore-data-redis-cluster-kubernetes/) for more information.
+Refer to our detailed [tutorial on backing up and restoring Redis Cluster deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-redis-cluster-kubernetes-index.html) for more information.
 
 ### NetworkPolicy
 
@@ -418,9 +418,10 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `podSecurityContext.supplementalGroups`                     | Set filesystem extra groups                                                                                                                                                                                                                           | `[]`                            |
 | `podSecurityContext.fsGroup`                                | Group ID for the pods                                                                                                                                                                                                                                 | `1001`                          |
 | `podSecurityContext.sysctls`                                | Set namespaced sysctls for the pods                                                                                                                                                                                                                   | `[]`                            |
-| `podDisruptionBudget`                                       | Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions                                                                                                                                       | `{}`                            |
-| `minAvailable`                                              | Min number of pods that must still be available after the eviction                                                                                                                                                                                    | `""`                            |
-| `maxUnavailable`                                            | Max number of pods that can be unavailable after the eviction                                                                                                                                                                                         | `""`                            |
+| `podDisruptionBudget`                                       | DEPRECATED please use pdb instead                                                                                                                                                                                                                     | `{}`                            |
+| `pdb.create`                                                | Created a PodDisruptionBudget                                                                                                                                                                                                                         | `true`                          |
+| `pdb.minAvailable`                                          | Min number of pods that must still be available after the eviction.                                                                                                                                                                                   | `""`                            |
+| `pdb.maxUnavailable`                                        | Max number of pods that can be unavailable after the eviction.                                                                                                                                                                                        | `""`                            |
 | `containerSecurityContext.enabled`                          | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`                          |
 | `containerSecurityContext.seLinuxOptions`                   | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                           |
 | `containerSecurityContext.runAsUser`                        | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`                          |
@@ -463,6 +464,7 @@ See [#15075](https://github.com/bitnami/charts/issues/15075)
 | `persistence.subPath`                                       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                                                                                                               | `""`                            |
 | `persistence.storageClass`                                  | Storage class of backing PVC                                                                                                                                                                                                                          | `""`                            |
 | `persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                                                                                                                                                   | `{}`                            |
+| `persistence.labels`                                        | Persistent Volume Claim labels                                                                                                                                                                                                                        | `{}`                            |
 | `persistence.accessModes`                                   | Persistent Volume Access Modes                                                                                                                                                                                                                        | `["ReadWriteOnce"]`             |
 | `persistence.size`                                          | Size of data volume                                                                                                                                                                                                                                   | `8Gi`                           |
 | `persistence.matchLabels`                                   | Persistent Volume selectors                                                                                                                                                                                                                           | `{}`                            |
@@ -757,7 +759,7 @@ This major version updates the Redis&reg; docker image version used from `6.0` t
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

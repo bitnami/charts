@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: keycloak
-      image: docker.io/bitnami/keycloak:24.0.3-debian-12-r3
+      image: docker.io/bitnami/keycloak:24.0.4-debian-12-r1
     - name: keycloak-config-cli
-      image: docker.io/bitnami/keycloak-config-cli:5.12.0-debian-12-r2
+      image: docker.io/bitnami/keycloak-config-cli:5.12.0-debian-12-r4
 apiVersion: v2
-appVersion: 24.0.3
+appVersion: 24.0.4
 dependencies:
 - condition: postgresql.enabled
   name: postgresql
@@ -28,9 +28,9 @@ keywords:
 - keycloak
 - access-management
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 21.1.1
+version: 21.3.1

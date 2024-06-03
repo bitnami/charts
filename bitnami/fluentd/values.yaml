@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.17.0-debian-12-r0
+  tag: 1.17.0-debian-12-r3
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -465,8 +465,7 @@ forwarder:
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param forwarder.livenessProbe.enabled Enable livenessProbe
-  ## @param forwarder.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param forwarder.livenessProbe.httpGet.port Port for livenessProbe
+  ## @param forwarder.livenessProbe.tcpSocket.port Port for livenessProbe
   ## @param forwarder.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param forwarder.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param forwarder.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -475,8 +474,7 @@ forwarder:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+    tcpSocket:
       port: http
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -1147,8 +1145,7 @@ aggregator:
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param aggregator.livenessProbe.enabled Enable livenessProbe
-  ## @param aggregator.livenessProbe.httpGet.path Request path for livenessProbe
-  ## @param aggregator.livenessProbe.httpGet.port Port for livenessProbe
+  ## @param aggregator.livenessProbe.tcpSocket.port Port for livenessProbe
   ## @param aggregator.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param aggregator.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param aggregator.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -1157,8 +1154,7 @@ aggregator:
   ##
   livenessProbe:
     enabled: true
-    httpGet:
-      path: /fluentd.healthcheck?json=%7B%22ping%22%3A+%22pong%22%7D
+    tcpSocket:
       port: http
     initialDelaySeconds: 60
     periodSeconds: 10
@@ -1449,6 +1445,16 @@ aggregator:
   ## @param aggregator.initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
   ##
   initScriptsSecret: ""
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param aggregator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param aggregator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param aggregator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `secondary.pdb.minAvailable` and `secondary.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## Prometheus Exporter / Metrics
 ##
 metrics:

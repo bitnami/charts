@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r3
+      image: docker.io/bitnami/apache-exporter:1.0.7-debian-12-r8
     - name: mediawiki
-      image: docker.io/bitnami/mediawiki:1.41.1-debian-12-r3
+      image: docker.io/bitnami/mediawiki:1.41.1-debian-12-r7
 apiVersion: v2
 appVersion: 1.41.1
 dependencies:
@@ -34,9 +34,9 @@ keywords:
 - application
 - php
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: mediawiki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
-version: 20.0.2
+version: 20.2.0

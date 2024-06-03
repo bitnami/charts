@@ -155,7 +155,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.14.5-debian-12-r2
+    tag: 0.14.5-debian-12-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -381,6 +381,16 @@ controller:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param controller.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param controller.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param controller.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `controller.pdb.minAvailable` and `controller.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -554,7 +564,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.14.5-debian-12-r3
+    tag: 0.14.5-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -931,7 +941,7 @@ speaker:
       ##
       registry: docker.io
       repository: bitnami/metallb-speaker
-      tag: 0.14.5-debian-12-r3
+      tag: 0.14.5-debian-12-r6
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []

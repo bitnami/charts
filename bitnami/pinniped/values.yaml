@@ -67,7 +67,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.29.0-debian-12-r2
+  tag: 0.30.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -397,6 +397,16 @@ concierge:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param concierge.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param concierge.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param concierge.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `concierge.pdb.minAvailable` and `concierge.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Concierge RBAC settings
   ##
   rbac:
@@ -816,6 +826,16 @@ supervisor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param supervisor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param supervisor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param supervisor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `supervisor.pdb.minAvailable` and `supervisor.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supervisor RBAC settings
   ##
   rbac:

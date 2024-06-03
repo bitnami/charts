@@ -106,8 +106,6 @@ The Operator will extend the Kubernetes API with the following objects: _Grafana
 
 > Note: As the operator automatically deploys Grafana installations, the Grafana Operator pods will require a ServiceAccount with privileges to create and destroy multiple Kubernetes objects. This may be problematic for Kubernetes clusters with strict role-based access policies.
 
-[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
-
 ## Prerequisites
 
 - Kubernetes 1.23+
@@ -135,7 +133,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -189,8 +187,6 @@ extraDeploy:
             - { key: app, operator: In, values: [grafana] }
 ```
 
-[Learn more about managing multiple Grafana instances and dashboards on Kubernetes with the Grafana Operator](https://docs.bitnami.com/tutorials/manage-multiple-grafana-operator).
-
 ## Parameters
 
 ### Global parameters
@@ -230,6 +226,9 @@ extraDeploy:
 | `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for Grafana Operator pods                                                                                                                                                       | `[]`                               |
 | `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)                                                                                                                                          | `[]`                               |
 | `operator.initContainers`                                    | Add additional init containers to the Grafana Operator pods                                                                                                                                                                         | `[]`                               |
+| `operator.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`                             |
+| `operator.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `""`                               |
+| `operator.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `operator.pdb.minAvailable` and `operator.pdb.maxUnavailable` are empty.                                                                    | `""`                               |
 | `operator.sidecars`                                          | Add additional sidecar containers to the Grafana Operator pods                                                                                                                                                                      | `[]`                               |
 | `operator.namespaceScope`                                    | If the operator should run in namespace-scope mode or not,                                                                                                                                                                          | `false`                            |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                                                                                                                     | `""`                               |
@@ -336,6 +335,7 @@ extraDeploy:
 | `grafana.image.pullPolicy`                                  | Grafana image pull policy                                                                                                                                                                                                         | `IfNotPresent`            |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                                                                                                                                        | `[]`                      |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                                                                                                                                                          | `{}`                      |
+| `grafana.podLabels`                                         | Additional pod labels to pods in the grafana deployment                                                                                                                                                                           | `{}`                      |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                                                                                                                                                      | `true`                    |
 | `grafana.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                | `Always`                  |
 | `grafana.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                    | `[]`                      |

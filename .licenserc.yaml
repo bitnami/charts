@@ -7,7 +7,7 @@ header:
   - comment: on-failure
     license:
       spdx-id: Apache-2.0
-      copyright-owner: VMware, Inc.
+      copyright-owner: Copyright Broadcom, Inc. All Rights Reserved.
 
       content: |
         {{- /*
@@ -26,7 +26,7 @@ header:
   - comment: on-failure
     license:
       spdx-id: Apache-2.0
-      copyright-owner: VMware, Inc.
+      copyright-owner: Copyright Broadcom, Inc. All Rights Reserved.
 
       content: |
         # Copyright Broadcom, Inc. All Rights Reserved.

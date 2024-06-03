@@ -64,7 +64,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 10.4.2-debian-12-r3
+  tag: 11.0.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -448,8 +448,6 @@ grafana:
   ## Grafana containers' liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
-  ## @param grafana.livenessProbe.path Path for livenessProbe
-  ## @param grafana.livenessProbe.scheme Scheme for livenessProbe
   ## @param grafana.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param grafana.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param grafana.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -458,8 +456,6 @@ grafana:
   ##
   livenessProbe:
     enabled: true
-    path: /api/health
-    scheme: HTTP
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
@@ -536,6 +532,11 @@ grafana:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param grafana.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param grafana.extraVolumes Additional volumes for the Grafana pod
   ## Example:
   ## extraVolumes:
@@ -578,6 +579,16 @@ grafana:
   ## @param grafana.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param grafana.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param grafana.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param grafana.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `grafana.pdb.minAvailable` and `grafana.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -692,6 +703,9 @@ networkPolicy:
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
   ##
   allowExternalEgress: true
+  ## @param networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `networkPolicy.allowExternal` is true.
+  ##
+  addExternalClientAccess: true
   ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
   ## e.g:
   ## extraIngress:
@@ -725,8 +739,14 @@ networkPolicy:
   ##                   - frontend
   ##
   extraEgress: []
-  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
-  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `networkPolicy.allowExternal` is true.
+  ## e.g:
+  ## ingressPodMatchLabels:
+  ##   my-client: "true"
+  #
+  ingressPodMatchLabels: {}
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces. Ignored if `networkPolicy.allowExternal` is true.
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
@@ -938,7 +958,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

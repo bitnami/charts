@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -230,6 +230,9 @@ The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/p
 | `concierge.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Concierge container(s)                                                                                                                                               | `[]`             |
 | `concierge.sidecars`                                          | Add additional sidecar containers to the Concierge pod(s)                                                                                                                                                                             | `[]`             |
 | `concierge.initContainers`                                    | Add additional init containers to the Concierge pod(s)                                                                                                                                                                                | `[]`             |
+| `concierge.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                       | `true`           |
+| `concierge.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                        | `""`             |
+| `concierge.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `concierge.pdb.minAvailable` and `concierge.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Concierge RBAC settings
 
@@ -350,6 +353,9 @@ The [Bitnami pinniped](https://github.com/bitnami/containers/tree/main/bitnami/p
 | `supervisor.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supervisor container(s)                                                                                                                                                | `[]`             |
 | `supervisor.sidecars`                                          | Add additional sidecar containers to the Supervisor pod(s)                                                                                                                                                                              | `[]`             |
 | `supervisor.initContainers`                                    | Add additional init containers to the Supervisor pod(s)                                                                                                                                                                                 | `[]`             |
+| `supervisor.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                         | `true`           |
+| `supervisor.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                          | `""`             |
+| `supervisor.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `supervisor.pdb.minAvailable` and `supervisor.pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Supervisor RBAC settings
 

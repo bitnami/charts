@@ -66,6 +66,7 @@ spec:
       {{- if .Values.ingester.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.ingester.enableServiceLinks }}
       initContainers:
         {{- if .Values.ingester.initContainers }}
           {{- include "common.tplvalues.render" (dict "value" .Values.ingester.initContainers "context" $) | nindent 8 }}
@@ -158,7 +159,8 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ingester.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingester.readinessProbe "enabled") "context" $) | nindent 12 }}
-            tcpSocket:
+            httpGet:
+              path: /ready
               port: http
           {{- end }}
           {{- if .Values.ingester.customStartupProbe }}

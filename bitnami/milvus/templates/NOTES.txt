@@ -117,3 +117,4 @@ Check the upstream Milvus documentation: https://milvus.io/docs
 
 {{- end }}
 {{- include "common.warnings.resources" (dict "sections" (list "attu" "dataCoord" "dataNode" "indexCoord" "indexNode" "initJob" "proxy" "queryCoord" "queryNode" "rootCoord" "waitContainer") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.milvus.image .Values.initJob.image .Values.attu.image .Values.waitContainer.image) "context" $) }}

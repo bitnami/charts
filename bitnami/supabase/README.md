@@ -52,7 +52,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -382,6 +382,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `auth.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supabase auth container(s)                                                                                                                                 | `[]`                     |
 | `auth.sidecars`                                          | Add additional sidecar containers to the Supabase auth pod(s)                                                                                                                                                               | `[]`                     |
 | `auth.initContainers`                                    | Add additional init containers to the Supabase auth pod(s)                                                                                                                                                                  | `[]`                     |
+| `auth.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                             | `true`                   |
+| `auth.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                              | `""`                     |
+| `auth.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `auth.pdb.minAvailable` and `auth.pdb.maxUnavailable` are empty.                                                                    | `""`                     |
 
 ### Supabase Auth Traffic Exposure Parameters
 
@@ -487,6 +490,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `meta.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supabase Postgres Meta container(s)                                                                                                                        | `[]`                                     |
 | `meta.sidecars`                                          | Add additional sidecar containers to the Supabase Postgres Meta pod(s)                                                                                                                                                      | `[]`                                     |
 | `meta.initContainers`                                    | Add additional init containers to the Supabase Postgres Meta pod(s)                                                                                                                                                         | `[]`                                     |
+| `meta.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                             | `true`                                   |
+| `meta.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                              | `""`                                     |
+| `meta.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `meta.pdb.minAvailable` and `meta.pdb.maxUnavailable` are empty.                                                                    | `""`                                     |
 
 ### Supabase Meta Traffic Exposure Parameters
 
@@ -595,6 +601,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `realtime.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supabase realtime container(s)                                                                                                                                     | `[]`                                |
 | `realtime.sidecars`                                          | Add additional sidecar containers to the Supabase realtime pod(s)                                                                                                                                                                   | `[]`                                |
 | `realtime.initContainers`                                    | Add additional init containers to the Supabase realtime pod(s)                                                                                                                                                                      | `[]`                                |
+| `realtime.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                     | `true`                              |
+| `realtime.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                      | `""`                                |
+| `realtime.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `realtime.pdb.minAvailable` and `realtime.pdb.maxUnavailable` are empty.                                                                    | `""`                                |
 
 ### Supabase Realtime Traffic Exposure Parameters
 
@@ -700,6 +709,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `rest.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supabase rest container(s)                                                                                                                                 | `[]`                        |
 | `rest.sidecars`                                          | Add additional sidecar containers to the Supabase rest pod(s)                                                                                                                                                               | `[]`                        |
 | `rest.initContainers`                                    | Add additional init containers to the Supabase rest pod(s)                                                                                                                                                                  | `[]`                        |
+| `rest.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                             | `true`                      |
+| `rest.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                              | `""`                        |
+| `rest.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rest.pdb.minAvailable` and `rest.pdb.maxUnavailable` are empty.                                                                    | `""`                        |
 
 ### Supabase Rest Traffic Exposure Parameters
 
@@ -805,6 +817,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `storage.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supabase storage container(s)                                                                                                                                    | `[]`                               |
 | `storage.sidecars`                                          | Add additional sidecar containers to the Supabase storage pod(s)                                                                                                                                                                  | `[]`                               |
 | `storage.initContainers`                                    | Add additional init containers to the Supabase storage pod(s)                                                                                                                                                                     | `[]`                               |
+| `storage.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `true`                             |
+| `storage.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                               |
+| `storage.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `storage.pdb.minAvailable` and `storage.pdb.maxUnavailable` are empty.                                                                    | `""`                               |
 
 ### Supabase Storage Traffic Exposure Parameters
 
@@ -926,6 +941,9 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `studio.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Supabase studio container(s)                                                                                                                                   | `[]`                              |
 | `studio.sidecars`                                          | Add additional sidecar containers to the Supabase studio pod(s)                                                                                                                                                                 | `[]`                              |
 | `studio.initContainers`                                    | Add additional init containers to the Supabase studio pod(s)                                                                                                                                                                    | `[]`                              |
+| `studio.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                 | `true`                            |
+| `studio.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                  | `""`                              |
+| `studio.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `studio.pdb.minAvailable` and `studio.pdb.maxUnavailable` are empty.                                                                    | `""`                              |
 
 ### Supabase Studio Traffic Exposure Parameters
 

@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/deepspeed
-  tag: 0.14.2-debian-12-r0
+  tag: 0.14.2-debian-12-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -543,6 +543,16 @@ client:
     ## @param client.persistence.annotations Persistent Volume annotations
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param client.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param client.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param client.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Worker Deployment Parameters
 ##
 worker:
@@ -1003,6 +1013,16 @@ worker:
     ## @param worker.persistence.annotations Persistent Volume annotations
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param worker.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param worker.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param worker.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ## @param gitImage.registry [default: REGISTRY_NAME] Git image registry
@@ -1015,7 +1035,7 @@ worker:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.44.0-debian-12-r3
+  tag: 2.45.1-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1042,7 +1062,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r21
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

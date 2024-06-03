@@ -175,6 +175,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "argocd.redis.secretName" . }}
                   key: {{ include "argocd.redis.secretPasswordKey" . }}
+            {{- else if .Values.externalRedis.enabled }}
+            - name: REDIS_PASSWORD
+              {{- if not ( eq "" .Values.externalRedis.password ) }}
+              value: {{ .Values.externalRedis.password }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.externalRedis.existingSecret }}
+                  key: {{ .Values.externalRedis.existingSecretPasswordKey }}
+              {{- end }}
             {{- end }}
             {{- if .Values.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraEnvVars "context" $) | nindent 12 }}
@@ -211,7 +221,7 @@ spec:
           {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /healthz?full=true
               port: {{ .Values.server.containerPorts.http }}
             initialDelaySeconds: {{ .Values.server.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.server.livenessProbe.periodSeconds }}

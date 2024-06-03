@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -272,6 +272,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Ghost container(s)                                                                                                                                   | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the Ghost pod                                                                                                                                                                | `[]`             |
 | `initContainers`                                    | Add additional init containers to the Ghost pods                                                                                                                                                                  | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `lifecycleHooks`                                    | Add lifecycle hooks to the Ghost deployment                                                                                                                                                                       | `{}`             |
 | `podLabels`                                         | Extra labels for Ghost pods                                                                                                                                                                                       | `{}`             |
 | `podAnnotations`                                    | Annotations for Ghost pods                                                                                                                                                                                        | `{}`             |
@@ -465,6 +468,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 21.0.0
+
+This major updates the MySQL subchart to its newest major, 11.0.0. For more information on this subchart's major, please refer to [Mysql upgrade notes](https://github.com/bitnami/charts/blob/main/bitnami/mysql/README.md#user-content-to-1100).
+
 ### To 20.0.0
 
 This major bump changes the following security defaults:
@@ -536,7 +543,7 @@ Please read the update notes carefully.
 
 ##### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

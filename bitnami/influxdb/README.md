@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -118,6 +118,10 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 The allowed extensions are `.sh`, and `.txt`.
 
+### Migrating InfluxDB 1.x data into 2.x format
+
+The [Bitnami InfluxDB&trade;](https://github.com/bitnami/containers/tree/main/bitnami/influxdb) image allows you to migrate your InfluxDB 1.x data into 2.x format by setting the `INFLUXDB_INIT_MODE=upgrade` environment variable, and mounting the InfluxDB 1.x data into the container (let the initialization logic know where it is located with the `INFLUXDB_INIT_V1_DIR` variable). Do not point `INFLUXDB_INIT_V1_DIR` into `INFLUXDB_VOLUME_DIR` (default: `/bitnami/influxdb`), or the upgrade process will fail.
+
 ### Setting Pod's affinity
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -128,6 +132,8 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 The data is persisted by default using PVC(s). You can disable the persistence setting the `persistence.enabled` parameter to `false`.
 A default `StorageClass` is needed in the Kubernetes cluster to dynamically provision the volumes. Specify another StorageClass in the `persistence.storageClass` or set `persistence.existingClaim` if you have already existing persistent volumes to use.
+
+If you would like to define persistence settings for a backup volume that differ from the persistence settings for the database volume, you may do so under the `backup.persistence` section of the configuration by setting `backup.persistence.ownConfig` to `true`. The backup volume will otherwise be defined using the `persistence` parameter section.
 
 ### Adjust permissions of persistent volume mountpoint
 
@@ -265,6 +271,9 @@ There are K8s distribution, such as OpenShift, where you can dynamically define 
 | `influxdb.customReadinessProbe`                              | Override default readiness probe                                                                                                                                                                                                                                     | `{}`                       |
 | `influxdb.sidecars`                                          | Add additional sidecar containers to the InfluxDB&trade; pod(s)                                                                                                                                                                                                      | `[]`                       |
 | `influxdb.initContainers`                                    | Add additional init containers to the InfluxDB&trade; pod(s)                                                                                                                                                                                                         | `[]`                       |
+| `influxdb.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                                                      | `true`                     |
+| `influxdb.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                                                       | `""`                       |
+| `influxdb.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `influxdb.pdb.minAvailable` and `influxdb.pdb.maxUnavailable` are empty.                                                                                                     | `""`                       |
 | `influxdb.service.type`                                      | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                                                                                                                                                                                  | `ClusterIP`                |
 | `influxdb.service.ports.http`                                | InfluxDB&trade; HTTP port                                                                                                                                                                                                                                            | `8086`                     |
 | `influxdb.service.ports.rpc`                                 | InfluxDB&trade; RPC port                                                                                                                                                                                                                                             | `8088`                     |
@@ -377,6 +386,13 @@ There are K8s distribution, such as OpenShift, where you can dynamically define 
 | `backup.enabled`                                                   | Enable InfluxDB&trade; backup                                                                                                                                                                                                       | `false`                            |
 | `backup.directory`                                                 | Directory where backups are stored                                                                                                                                                                                                  | `/backups`                         |
 | `backup.retentionDays`                                             | Retention time in days for backups (older backups are deleted)                                                                                                                                                                      | `10`                               |
+| `backup.persistence.ownConfig`                                     | Prefer independent own persistence parameters to configure the backup volume                                                                                                                                                        | `false`                            |
+| `backup.persistence.enabled`                                       | Enable data persistence for backup volume                                                                                                                                                                                           | `true`                             |
+| `backup.persistence.existingClaim`                                 | Use a existing PVC which must be created manually before bound                                                                                                                                                                      | `""`                               |
+| `backup.persistence.storageClass`                                  | Specify the `storageClass` used to provision the volume                                                                                                                                                                             | `""`                               |
+| `backup.persistence.accessModes`                                   | Access mode of data volume                                                                                                                                                                                                          | `["ReadWriteOnce"]`                |
+| `backup.persistence.size`                                          | Size of data volume                                                                                                                                                                                                                 | `8Gi`                              |
+| `backup.persistence.annotations`                                   | Persistent Volume Claim annotations                                                                                                                                                                                                 | `{}`                               |
 | `backup.cronjob.schedule`                                          | Schedule in Cron format to save snapshots                                                                                                                                                                                           | `0 2 * * *`                        |
 | `backup.cronjob.historyLimit`                                      | Number of successful finished jobs to retain                                                                                                                                                                                        | `1`                                |
 | `backup.cronjob.podAnnotations`                                    | Pod annotations                                                                                                                                                                                                                     | `{}`                               |
@@ -586,7 +602,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 #### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

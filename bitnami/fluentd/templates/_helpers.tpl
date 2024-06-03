@@ -57,7 +57,7 @@ Create the name of the aggregator service account to use
 {{- define "fluentd.checkRollingTags" -}}
 {{- if and (contains "bitnami/" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "-r\\d+$|sha256:")) }}
 WARNING: Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}), please note that it is strongly recommended to avoid using rolling tags in a production environment.
-+info https://docs.bitnami.com/tutorials/understand-rolling-tags-containers
++info https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html
 {{- end }}
 {{- end -}}
 

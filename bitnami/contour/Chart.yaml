@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+# Copyright Broadcom, Inc. All Rights Reserved.
 # SPDX-License-Identifier: APACHE-2.0
 
 annotations:
@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: contour
-      image: docker.io/bitnami/contour:1.28.3-debian-12-r2
+      image: docker.io/bitnami/contour:1.29.0-debian-12-r0
     - name: envoy
-      image: docker.io/bitnami/envoy:1.29.4-debian-12-r3
+      image: docker.io/bitnami/envoy:1.29.4-debian-12-r6
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.5-debian-12-r1
+      image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
 apiVersion: v2
-appVersion: 1.28.3
+appVersion: 1.29.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -27,9 +27,9 @@ keywords:
 - envoy
 - contour
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: contour
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/contour
-version: 17.0.9
+version: 18.1.1

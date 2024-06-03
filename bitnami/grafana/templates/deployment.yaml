@@ -77,6 +77,7 @@ spec:
       {{- if .Values.grafana.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.grafana.terminationGracePeriodSeconds }}
       {{- end }}
+      enableServiceLinks: {{ .Values.grafana.enableServiceLinks }}
       initContainers:
         {{- if .Values.volumePermissions.enabled }}
         - name: volume-permissions
@@ -246,10 +247,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.grafana.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.grafana.livenessProbe.path }}
+            tcpSocket:
               port: dashboard
-              scheme: {{ .Values.grafana.livenessProbe.scheme }}
             initialDelaySeconds: {{ .Values.grafana.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.grafana.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}

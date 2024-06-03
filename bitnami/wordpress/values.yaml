@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 6.5.2-debian-12-r7
+  tag: 6.5.3-debian-12-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -453,7 +453,7 @@ containerSecurityContext:
 ## Configure extra options for WordPress containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on WordPress containers
-## @skip livenessProbe.httpGet
+## @skip livenessProbe.tcpSocket
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -462,20 +462,8 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  httpGet:
-    path: /wp-admin/install.php
-    port: '{{ .Values.wordpressScheme }}'
-    scheme: '{{ .Values.wordpressScheme | upper }}'
-    ## If using an HTTPS-terminating load-balancer, the probes may need to behave
-    ## like the balancer to prevent HTTP 302 responses. According to the Kubernetes
-    ## docs, 302 should be considered "successful", but this issue on GitHub
-    ## (https://github.com/kubernetes/kubernetes/issues/47893) shows that it isn't.
-    ## E.g.
-    ## httpHeaders:
-    ## - name: X-Forwarded-Proto
-    ##   value: https
-    ##
-    httpHeaders: []
+  tcpSocket:
+    port: http
   initialDelaySeconds: 120
   periodSeconds: 10
   timeoutSeconds: 5
@@ -900,7 +888,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r19
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -962,11 +950,11 @@ serviceAccount:
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ## @param pdb.create Enable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## WordPress Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1003,7 +991,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.7-debian-12-r4
+    tag: 1.0.7-debian-12-r8
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

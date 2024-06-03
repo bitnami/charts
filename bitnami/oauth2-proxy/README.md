@@ -53,7 +53,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -262,9 +262,9 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 | `customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                              | `{}`             |
 | `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `nano`           |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`             |
-| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                                                                                                           | `false`          |
-| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `1`              |
-| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                                                                                                    | `""`             |
+| `pdb.create`                                        | Enable a Pod Disruption Budget creation                                                                                                                                                                           | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `podSecurityContext.enabled`                        | Enabled OAuth2 Proxy pods' Security Context                                                                                                                                                                       | `true`           |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                | `Always`         |
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                    | `[]`             |
@@ -320,6 +320,7 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 | `externalRedis.host`                      | External Redis&reg; server host                            | `""`   |
 | `externalRedis.password`                  | External Redis&reg; user password                          | `""`   |
 | `externalRedis.port`                      | External Redis&reg; server port                            | `6379` |
+| `externalRedis.databaseIndex`             | External Redis&reg; database index                         | `0`    |
 | `externalRedis.existingSecret`            | The name of an existing secret with Redis&reg; credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Key inside the existing secret with Redis&reg; credentials | `""`   |
 

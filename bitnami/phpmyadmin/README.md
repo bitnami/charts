@@ -51,7 +51,7 @@ Bitnami charts allow setting resource requests and limits for all containers ins
 
 To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.bitnami.com/tutorials/understand-rolling-tags-containers)
+### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -232,8 +232,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                | `6`              |
 | `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                | `1`              |
 | `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                                                                                              | `true`           |
-| `livenessProbe.httpGet.path`                        | Request path for livenessProbe                                                                                                                                                                                    | `/`              |
-| `livenessProbe.httpGet.port`                        | Port for livenessProbe                                                                                                                                                                                            | `http`           |
+| `livenessProbe.tcpSocket.port`                      | Port for livenessProbe                                                                                                                                                                                            | `http`           |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                           | `30`             |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                  | `10`             |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                 | `30`             |
@@ -266,6 +265,9 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for PhpMyAdmin pods                                                                                                                                           | `[]`             |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for PhpMyAdmin container(s)                                                                                                                              | `[]`             |
 | `initContainers`                                    | Add init containers to the PhpMyAdmin pods                                                                                                                                                                        | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 | `sidecars`                                          | Add sidecar containers to the PhpMyAdmin pods                                                                                                                                                                     | `[]`             |
 
 ### Traffic Exposure parameters
@@ -491,7 +493,7 @@ Please read the update notes carefully.
 
 ##### Useful links
 
-- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 

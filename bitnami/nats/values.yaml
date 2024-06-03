@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nats
-  tag: 2.10.14-debian-12-r0
+  tag: 2.10.16-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -785,7 +785,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nats-exporter
-    tag: 0.14.0-debian-12-r9
+    tag: 0.15.0-debian-12-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -920,7 +920,7 @@ persistence:
 pdb:
   ## @param pdb.create Enable/disable a Pod Disruption Budget creation
   ##
-  create: false
+  create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
   ##
   minAvailable: 1

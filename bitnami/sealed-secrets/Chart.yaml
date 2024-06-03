@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: sealed-secrets-controller
-      image: docker.io/bitnami/sealed-secrets-controller:0.26.2-debian-12-r1
+      image: docker.io/bitnami/sealed-secrets-controller:0.26.3-debian-12-r0
 apiVersion: v2
-appVersion: 0.26.2
+appVersion: 0.26.3
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -23,10 +23,10 @@ keywords:
 - sealed-secrets
 kubeVersion: '>=1.16.0-0'
 maintainers:
-- name: VMware, Inc.
+- name: Broadcom, Inc. All Rights Reserved.
   url: https://github.com/bitnami/charts
 name: sealed-secrets
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets
 - https://github.com/bitnami-labs/sealed-secrets
-version: 2.0.2
+version: 2.3.0

@@ -81,7 +81,7 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 There are five major technical requirements to add a new Helm chart to our catalog:
 
 - The chart should use Bitnami based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
-- Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/main/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
+- Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/main/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-production-ready-charts-index.html) guide.
 - Use an [OSI approved license](https://opensource.org/licenses) for all the software.
 - Every new Helm template must include a license header like the following:
 

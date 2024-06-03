@@ -6,57 +6,57 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-mimir
-      image: docker.io/bitnami/grafana-mimir:2.12.0-debian-12-r2
+      image: docker.io/bitnami/grafana-mimir:2.12.0-debian-12-r7
     - name: memcached
-      image: docker.io/bitnami/memcached:1.6.26-debian-12-r1
+      image: docker.io/bitnami/memcached:1.6.27-debian-12-r2
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.4-debian-12-r7
+      image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r18
+      image: docker.io/bitnami/os-shell:12-debian-12-r21
 apiVersion: v2
 appVersion: 2.12.0
 dependencies:
-  - condition: minio.enabled
-    name: minio
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 14.x.x
-  - alias: memcachedmetadata
-    condition: memcachedmetadata.enabled
-    name: memcached
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 7.x.x
-  - alias: memcachedindex
-    condition: memcachedindex.enabled
-    name: memcached
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 7.x.x
-  - alias: memcachedfrontend
-    condition: memcachedfrontend.enabled
-    name: memcached
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 7.x.x
-  - alias: memcachedchunks
-    condition: memcachedchunks.enabled
-    name: memcached
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 7.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 14.x.x
+- alias: memcachedmetadata
+  condition: memcachedmetadata.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 7.x.x
+- alias: memcachedindex
+  condition: memcachedindex.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 7.x.x
+- alias: memcachedfrontend
+  condition: memcachedfrontend.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 7.x.x
+- alias: memcachedchunks
+  condition: memcachedchunks.enabled
+  name: memcached
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 7.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Grafana Mimir is an open source, horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
 keywords:
-  - grafana
-  - tracing
-  - metrics
-  - infrastructure
+- grafana
+- tracing
+- metrics
+- infrastructure
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: grafana-mimir
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 1.0.3
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
+version: 1.1.1

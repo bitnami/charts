@@ -68,7 +68,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-dataflow
-    tag: 2.11.2-debian-12-r16
+    tag: 2.11.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -103,7 +103,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/spring-cloud-dataflow-composed-task-runner
-      tag: 2.11.2-debian-12-r13
+      tag: 2.11.3-debian-12-r1
       digest: ""
   ## Spring Cloud Dataflow Server configuration parameters
   ##
@@ -621,11 +621,11 @@ server:
   pdb:
     ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Dataflow Server Autoscaling parameters.
@@ -713,7 +713,7 @@ skipper:
   image:
     registry: docker.io
     repository: bitnami/spring-cloud-skipper
-    tag: 2.11.2-debian-12-r12
+    tag: 2.11.3-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1102,11 +1102,11 @@ skipper:
   pdb:
     ## @param skipper.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param skipper.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param skipper.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `skipper.pdb.minAvailable` and `skipper.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Skipper Autoscaling parameters.
@@ -1233,6 +1233,9 @@ deployer:
   ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
   imagePullPolicy: IfNotPresent
+  ## @param deployer.taskServiceAccountName Custom service account for scheduled tasks
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_service_account
+  taskServiceAccountName: ""
 ## @section RBAC parameters
 
 ## K8s Service Account.
@@ -1276,7 +1279,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/prometheus-rsocket-proxy
-    tag: 1.5.3-debian-12-r13
+    tag: 1.5.3-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1707,11 +1710,11 @@ metrics:
   pdb:
     ## @param metrics.pdb.create Enable/disable a Pod Disruption Budget creation
     ##
-    create: false
+    create: true
     ## @param metrics.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
     ##
-    minAvailable: 1
-    ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+    minAvailable: ""
+    ## @param metrics.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `metrics.pdb.minAvailable` and `metrics.pdb.maxUnavailable` are empty.
     ##
     maxUnavailable: ""
   ## Prometheus Rsocket Proxy Autoscaling parameters.
@@ -1746,7 +1749,7 @@ waitForBackends:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.30.0-debian-12-r0
+    tag: 1.30.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1828,7 +1831,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.11.7-debian-12-r12
+    tag: 10.11.8-debian-12-r0
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
