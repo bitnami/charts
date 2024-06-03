@@ -1,8 +1,24 @@
 # Changelog
 
-## 6.3.1 (2024-05-23)
+## 6.4.0 (2024-05-29)
 
-* [bitnami/argo-cd] fix: :bug: :ambulance: Remove non-existent image in replacedImages check ([#26371](https://github.com/bitnami/charts/pull/26371))
+* [bitnami/argo-cd] Enable PodDisruptionBudgets ([#26419](https://github.com/bitnami/charts/pull/26419))
+
+## <small>6.3.4 (2024-05-28)</small>
+
+* [bitnami/argo-cd] Define port for notifications probes (#26485) ([4500caf](https://github.com/bitnami/charts/commit/4500cafc0aab84295f85bd839978929e5dfc8773)), closes [#26485](https://github.com/bitnami/charts/issues/26485)
+
+## <small>6.3.3 (2024-05-24)</small>
+
+* [bitnami/argo-cd] Release 6.3.3 (#26415) ([e4f57d1](https://github.com/bitnami/charts/commit/e4f57d1a1a2c32bb471bb50d28f1241cbac421d3)), closes [#26415](https://github.com/bitnami/charts/issues/26415)
+
+## <small>6.3.2 (2024-05-24)</small>
+
+* [bitnami/argo-cd] Use different liveness/readiness probes (#26367) ([6416961](https://github.com/bitnami/charts/commit/641696157e9dcb47341bb68d04c62e7d49181312)), closes [#26367](https://github.com/bitnami/charts/issues/26367)
+
+## <small>6.3.1 (2024-05-23)</small>
+
+* [bitnami/argo-cd] fix: :bug: :ambulance: Remove non-existent image in replacedImages check (#26371) ([d635edc](https://github.com/bitnami/charts/commit/d635edc8fc38e1a6c24d0c538e1906dc1656de08)), closes [#26371](https://github.com/bitnami/charts/issues/26371)
 
 ## 6.3.0 (2024-05-21)
 

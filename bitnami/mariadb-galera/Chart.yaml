@@ -33,4 +33,4 @@ maintainers:
 name: mariadb-galera
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
-version: 13.1.0
+version: 13.2.0

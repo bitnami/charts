@@ -12,11 +12,11 @@ annotations:
     - name: prometheus-rsocket-proxy
       image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.3-debian-12-r15
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.11.3-debian-12-r0
+      image: docker.io/bitnami/spring-cloud-dataflow:2.11.3-debian-12-r1
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.3-debian-12-r0
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.11.3-debian-12-r1
     - name: spring-cloud-skipper
-      image: docker.io/bitnami/spring-cloud-skipper:2.11.3-debian-12-r0
+      image: docker.io/bitnami/spring-cloud-skipper:2.11.3-debian-12-r1
 apiVersion: v2
 appVersion: 2.11.3
 dependencies:
@@ -33,7 +33,7 @@ dependencies:
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 28.x.x
+  version: 29.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -53,5 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 28.1.2
-
+version: 29.0.1

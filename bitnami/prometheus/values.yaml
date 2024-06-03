@@ -279,12 +279,12 @@ alertmanager:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param alertmanager.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param alertmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param alertmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param alertmanager.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `alertmanager.pdb.minAvailable` and `alertmanager.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -675,7 +675,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.52.0-debian-12-r2
+    tag: 2.52.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -903,12 +903,12 @@ server:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param server.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param server.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `server.pdb.minAvailable` and `server.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
@@ -1069,7 +1069,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.35.0-debian-12-r4
+      tag: 0.35.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1677,7 +1677,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
