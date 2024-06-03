@@ -491,7 +491,7 @@ frontend:
   ## @param frontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `frontend.pdb.minAvailable` and `frontend.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: true
+    create: false
     minAvailable: ""
     maxUnavailable: ""
   ## Frontend service parameters
@@ -939,7 +939,7 @@ dashboard:
   ## @param dashboard.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboard.pdb.minAvailable` and `dashboard.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: true
+    create: false
     minAvailable: ""
     maxUnavailable: ""
   ## Dashboard service parameters
@@ -1339,7 +1339,7 @@ apprepository:
   ## @param apprepository.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `apprepository.pdb.minAvailable` and `apprepository.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: true
+    create: false
     minAvailable: ""
     maxUnavailable: ""
   ## Network Policies
@@ -2171,7 +2171,7 @@ kubeappsapis:
   ## @param kubeappsapis.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `kubeappsapis.pdb.minAvailable` and `kubeappsapis.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: true
+    create: false
     minAvailable: ""
     maxUnavailable: ""
   ## kubeappsapis service parameters
