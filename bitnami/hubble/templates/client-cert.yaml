@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  secretName: {{ printf "%s-client-crt" (include "common.names.fullname" .) }}
+  secretName: {{ template "hubble.tls.client.secretName" . }}
   commonName: {{ printf "%s-client" (include "common.names.fullname" .) }}
   issuerRef:
     name: {{ printf "%s-ca-issuer" (include "common.names.fullname" .) }}

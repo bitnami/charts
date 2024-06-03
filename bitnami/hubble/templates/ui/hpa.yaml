@@ -9,7 +9,9 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "hubble.ui.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.ui.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: hubble
     app.kubernetes.io/component: ui
   {{- if .Values.commonAnnotations }}
@@ -32,7 +34,7 @@ spec:
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.worker.autoscaling.hpa.targetMemory }}
+          averageUtilization: {{ .Values.ui.autoscaling.hpa.targetMemory }}
         {{- end }}
     {{- end }}
     {{- if .Values.ui.autoscaling.hpa.targetCPU }}
@@ -44,7 +46,7 @@ spec:
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.worker.autoscaling.hpa.targetCPU }}
+          averageUtilization: {{ .Values.ui.autoscaling.hpa.targetCPU }}
         {{- end }}
     {{- end }}
 {{- end }}

@@ -252,4 +252,7 @@ spec:
               - key: tls.key
                 path: tls.key
         {{- end }}
+        {{- if .Values.relay.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.relay.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

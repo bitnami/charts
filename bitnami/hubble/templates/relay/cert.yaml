@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  secretName: {{ printf "%s-crt" (include "hubble.relay.fullname" .) }}
+  secretName: {{ template "hubble.tls.relay.secretName" . }}
   commonName: {{ printf "%s.%s.svc.%s" (include "hubble.relay.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain }}
   issuerRef:
     name: {{ printf "%s-ca-issuer" (include "common.names.fullname" .) }}

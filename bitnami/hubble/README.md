@@ -2,7 +2,7 @@
 
 # Bitnami package for Hubble
 
-Hubble is a fully distributed networking and security observability platform for cloud native workloads.
+Hubble is a fully distributed networking and security observability platform for cloud native workloads built on top of Cilium and eBPF.
 
 [Overview of Hubble](https://github.com/cilium/hubble)
 

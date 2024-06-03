@@ -9,7 +9,9 @@ kind: Service
 metadata:
   name: {{ template "hubble.ui.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.ui.frontend.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: hubble
     app.kubernetes.io/component: ui
   {{- if or .Values.ui.service.annotations .Values.commonAnnotations }}
@@ -49,7 +51,7 @@ spec:
     {{- if .Values.ui.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ui.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.ui.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.ui.podLabels .Values.commonLabels $versionLabel) "context" .) | fromYaml }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: hubble
     app.kubernetes.io/component: ui

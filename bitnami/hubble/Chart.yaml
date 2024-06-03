@@ -19,7 +19,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: Hubble is a fully distributed networking and security observability platform for cloud native workloads.
+description: Hubble is a fully distributed networking and security observability platform for cloud native workloads built on top of Cilium and eBPF.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/hubble/img/hubble-stack-220x234.png
 keywords:

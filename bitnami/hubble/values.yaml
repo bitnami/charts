@@ -1230,9 +1230,6 @@ ui:
     ## @param ui.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## @param ui.ingress.apiVersion Force Ingress API version (automatically detected if not set)
-    ##
-    apiVersion: ""
     ## @param ui.ingress.hostname Default host for the ingress record
     ##
     hostname: hubble.local
