@@ -4,6 +4,10 @@
 
 * [bitnami/kubeapps] Enable PodDisruptionBudgets ([#26505](https://github.com/bitnami/charts/pull/26505))
 
+## <small>15.1.2 (2024-06-03)</small>
+
+* [bitnami/kubeapps] Release 15.1.2 ([#26573](https://github.com/bitnami/charts/pull/26573))
+
 ## <small>15.1.1 (2024-05-22)</small>
 
 * [bitnami/kubeapps] Use different liveness/readiness probes (#26171) ([22d3f7c](https://github.com/bitnami/charts/commit/22d3f7cdf241920536423f7f98b90053db84cfe2)), closes [#26171](https://github.com/bitnami/charts/issues/26171)

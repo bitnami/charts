@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.2 (2024-05-23)
+## 3.3.0 (2024-05-24)
 
-* [bitnami/appsmith] Use different liveness/readiness probes ([#26332](https://github.com/bitnami/charts/pull/26332))
+* [bitnami/appsmith] Enable PodDisruptionBudgets ([#26410](https://github.com/bitnami/charts/pull/26410))
+
+## <small>3.2.2 (2024-05-24)</small>
+
+* [bitnami/appsmith] Use different liveness/readiness probes (#26332) ([44384d7](https://github.com/bitnami/charts/commit/44384d7983caf52761a33745913eb8b48d4b8d51)), closes [#26332](https://github.com/bitnami/charts/issues/26332)
 
 ## <small>3.2.1 (2024-05-22)</small>
 
