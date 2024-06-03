@@ -5055,18 +5055,6 @@ memcachedchunks:
   ## @param memcachedchunks.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedchunks.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedchunks.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -5111,18 +5099,6 @@ memcachedfrontend:
   ## @param memcachedfrontend.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedfrontend.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedfrontend.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -5167,18 +5143,6 @@ memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
   enabled: false
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexqueries.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedindexqueries.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedindexqueries.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -5223,18 +5187,6 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.enabled Deploy memcached sub-chart
   ##
   enabled: false
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexwrites.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedindexwrites.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedindexwrites.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability
