@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.1.2 (2024-05-31)
+## 15.1.2 (2024-06-03)
 
 * [bitnami/kubeapps] Release 15.1.2 ([#26573](https://github.com/bitnami/charts/pull/26573))
 
