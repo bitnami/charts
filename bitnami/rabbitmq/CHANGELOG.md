@@ -3,6 +3,9 @@
 ## 14.4.0 (2024-05-29)
 
 * [bitnami/rabbitmq] Enable PodDisruptionBudgets ([#26222](https://github.com/bitnami/charts/pull/26222))
+## <small>14.3.2 (2024-06-01)</small>
+
+* [bitnami/rabbitmq] Release 14.3.2 ([#26589](https://github.com/bitnami/charts/pull/26589))
 
 ## <small>14.3.1 (2024-05-27)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.1.1 (2024-05-24)
+## 10.1.2 (2024-05-29)
 
-* [bitnami/etcd] Fix livenessProbe for ETCD with TLS ([#26407](https://github.com/bitnami/charts/pull/26407))
+* [bitnami/etcd] Release 10.1.2 ([#26555](https://github.com/bitnami/charts/pull/26555))
+
+## <small>10.1.1 (2024-05-24)</small>
+
+* [bitnami/etcd] Fix livenessProbe for ETCD with TLS (#26407) ([4dbf742](https://github.com/bitnami/charts/commit/4dbf74264d1e718328757a07dc4dd4b86ab5f6da)), closes [#26407](https://github.com/bitnami/charts/issues/26407)
 
 ## 10.1.0 (2024-05-21)
 

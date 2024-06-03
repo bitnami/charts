@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.4.1 (2024-05-22)
+## 3.5.0 (2024-05-28)
 
-* [bitnami/grafana-tempo] Use different liveness/readiness probes ([#26349](https://github.com/bitnami/charts/pull/26349))
+* [bitnami/grafana-tempo] Enable PodDisruptionBudgets ([#26484](https://github.com/bitnami/charts/pull/26484))
+
+## <small>3.4.1 (2024-05-23)</small>
+
+* [bitnami/grafana-tempo] Use different liveness/readiness probes (#26349) ([91203f6](https://github.com/bitnami/charts/commit/91203f64a401ca01afcd58bc7761380a931d7f25)), closes [#26349](https://github.com/bitnami/charts/issues/26349)
 
 ## 3.4.0 (2024-05-21)
 
