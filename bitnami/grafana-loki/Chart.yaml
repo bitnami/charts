@@ -7,8 +7,6 @@ annotations:
   images: |
     - name: grafana-loki
       image: docker.io/bitnami/grafana-loki:3.0.0-debian-12-r5
-    - name: memcached
-      image: docker.io/bitnami/memcached:1.6.27-debian-12-r2
     - name: nginx
       image: docker.io/bitnami/nginx:1.26.0-debian-12-r1
     - name: os-shell
