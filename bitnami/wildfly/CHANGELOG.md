@@ -1,8 +1,16 @@
 # Changelog
 
+## 20.2.2 (2024-05-31)
+
+* [bitnami/wildfly] Release 20.2.2 ([#26581](https://github.com/bitnami/charts/pull/26581))
+
+## <small>20.2.1 (2024-05-31)</small>
+
+* [bitnami/wildfly] Release 20.2.1 (#26575) ([8285f8e](https://github.com/bitnami/charts/commit/8285f8ead5b52be9255ea18b193b3d8357a9a3b1)), closes [#26575](https://github.com/bitnami/charts/issues/26575)
+
 ## 20.2.0 (2024-05-29)
 
-* [bitnami/wildfly] Enable PodDisruptionBudgets ([#26541](https://github.com/bitnami/charts/pull/26541))
+* [bitnami/wildfly] Enable PodDisruptionBudgets (#26541) ([1c14aec](https://github.com/bitnami/charts/commit/1c14aecb5d9b69a31a5ecd7397cf3a840207fd91)), closes [#26541](https://github.com/bitnami/charts/issues/26541)
 
 ## 20.1.0 (2024-05-21)
 

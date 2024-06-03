@@ -40,6 +40,9 @@ spec:
     - ports:
         - port: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
         - port: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
+        {{- range .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts }}
+        - port: {{ .containerPort }}
+        {{- end }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:

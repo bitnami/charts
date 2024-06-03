@@ -118,6 +118,13 @@ existingConfigmap: ""
 ## @param extraConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
 ##
 extraConfig: ""
+## @param extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka configuration file.
+##
+## E.g.
+## extraConfigYaml:
+##   default.replication.factor: 3
+##
+extraConfigYaml: {}
 ## @param secretConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
 ## This value will be stored in a secret.
 ##
@@ -499,6 +506,10 @@ controller:
   ## @param controller.extraConfig Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
   ##
   extraConfig: ""
+  ## @param controller.extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
+  ## If keys of extraConfigYaml are duplicated here, the value from controller.extraConfigYaml is taken.
+  ##
+  extraConfigYaml: {}
   ## @param controller.secretConfig Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
   ## This value will be stored in a secret.
   ##
@@ -953,6 +964,10 @@ broker:
   ## @param broker.extraConfig Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.
   ##
   extraConfig: ""
+  ## @param broker.extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka broker-only nodes configuration file.
+  ## If keys of extraConfigYaml are duplicated here, the value from broker.extraConfigYaml is taken.
+  ##
+  extraConfigYaml: {}
   ## @param broker.secretConfig Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.
   ## This value will be stored in a secret.
   ##
