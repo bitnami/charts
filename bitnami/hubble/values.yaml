@@ -280,7 +280,7 @@ relay:
   overrideConfiguration: {}
   ## @param relay.existingConfigmap The name of an existing ConfigMap with your custom configuration for Hubble Relay
   ##
-  existingConfigmap:
+  existingConfigmap: ""
   ## @param relay.enableGops Enable gops for Hubble Relay
   ##
   enableGops: false
