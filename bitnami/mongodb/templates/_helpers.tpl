@@ -222,7 +222,7 @@ Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mongodb.initdbScriptsCM" -}}
 {{- if .Values.initdbScriptsConfigMap -}}
-{{- printf "%s" .Values.initdbScriptsConfigMap -}}
+{{- printf "%s" (tpl .Values.initdbScriptsConfigMap $) -}}
 {{- else -}}
 {{- printf "%s-init-scripts" (include "mongodb.fullname" .) -}}
 {{- end -}}

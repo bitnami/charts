@@ -35,4 +35,4 @@ maintainers:
 name: metallb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metallb
-version: 6.1.7
+version: 6.3.0

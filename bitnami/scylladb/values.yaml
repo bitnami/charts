@@ -1,0 +1,1128 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+  ## Compatibility adaptations for Kubernetes platforms
+  ##
+  compatibility:
+    ## Compatibility adaptations for Openshift
+    ##
+    openshift:
+      ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
+      ##
+      adaptSecurityContext: auto
+## @section Common parameters
+##
+
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
+##
+kubeVersion: ""
+## @param commonLabels Labels to add to all deployed objects (sub-charts are not considered)
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+## @section Scylladb parameters
+##
+
+## Bitnami Scylladb image
+## ref: https://hub.docker.com/r/bitnami/scylladb/tags/
+## @param image.registry [default: REGISTRY_NAME] Scylladb image registry
+## @param image.repository [default: REPOSITORY_NAME/scylladb] Scylladb image repository
+## @skip image.tag Scylladb image tag (immutable tags are recommended)
+## @param image.digest Scylladb image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy image pull policy
+## @param image.pullSecrets Scylladb image pull secrets
+## @param image.debug Enable image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/scylladb
+  tag: 5.4.6-debian-12-r1
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+
+## Database credentials
+## @param dbUser.user Scylladb admin user
+## @param dbUser.forcePassword Force the user to provide a non
+## @param dbUser.password Password for `dbUser.user`. Randomly generated if empty
+## @param dbUser.existingSecret Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)
+##
+dbUser:
+  user: cassandra
+  forcePassword: false
+  password: ""
+  ## Use an existing secrets which already stores your password data.
+  ## for backwards compatibility, existingSecret can be a simple string,
+  ## referencing the secret by name.
+  ## existingSecret:
+  ##   ## Name of the existing secret
+  ##   ##
+  ##   name: mySecret
+  ##   ## Key mapping where <key> is the value which the deployment is expecting and
+  ##   ## <value> is the name of the key in the existing secret.
+  ##   ##
+  ##   keyMapping:
+  ##     scylladb-password: myScylladbPasswordKey
+  ##
+  existingSecret: ""
+## @param initDBConfigMap ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data
+##
+initDBConfigMap: ""
+## @param initDBSecret Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data
+##
+initDBSecret: ""
+## @param existingConfiguration ConfigMap with custom scylladb configuration files. This overrides any other Scylladb configuration set in the chart
+##
+existingConfiguration: ""
+## Cluster parameters
+## @param cluster.name Scylladb cluster name
+## @param cluster.seedCount Number of seed nodes
+## @param cluster.numTokens Number of tokens for each node
+## @param cluster.datacenter Datacenter name
+## @param cluster.rack Rack name
+## @param cluster.endpointSnitch Endpoint Snitch
+## @param cluster.extraSeeds For an external/second scylladb ring.
+## @param cluster.enableUDF Enable User defined functions
+##
+cluster:
+  name: scylladb
+  seedCount: 1
+  numTokens: 256
+  datacenter: dc1
+  rack: rack1
+  endpointSnitch: SimpleSnitch
+  ## eg:
+  ## extraSeeds:
+  ##   - hostname/IP
+  ##   - hostname/IP
+  ##
+  extraSeeds: []
+  enableUDF: false
+## JVM Settings
+## @param jvm.extraOpts Set the value for Java Virtual Machine extra options
+## @param jvm.maxHeapSize Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`
+## @param jvm.newHeapSize Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`
+##
+jvm:
+  extraOpts: ""
+  ## Memory settings: These are calculated automatically unless specified otherwise
+  ## To run on environments with little resources (<= 8GB), tune your heap settings:
+  ## - calculate 1/2 ram and cap to 1024MB
+  ## - calculate 1/4 ram and cap to 8192MB
+  ## - pick the max
+  ##
+  maxHeapSize: ""
+  ## newHeapSize:
+  ## A good guideline is 100 MB per CPU core.
+  ## - min(100 * num_cores, 1/4 * heap size)
+  ## ref: https://docs.datastax.com/en/archived/scylladb/2.0/scylladb/operations/ops_tune_jvm_c.html
+  ##
+  newHeapSize: ""
+## @param command Command for running the container (set to default if not set). Use array form
+##
+command: []
+## @param args Args for running the container (set to default if not set). Use array form
+##
+args: []
+## @param extraEnvVars Extra environment variables to be set on scylladb container
+## For example:
+##  - name: FOO
+##    value: BAR
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+##
+extraEnvVarsSecret: ""
+## @section Statefulset parameters
+##
+
+## @param replicaCount Number of Scylladb replicas
+##
+replicaCount: 1
+## @param updateStrategy.type updateStrategy for Scylladb statefulset
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+##
+updateStrategy:
+  type: RollingUpdate
+## @param nameResolutionThreshold Failure threshold for internal hostnames resolution
+##
+nameResolutionThreshold: 5
+## @param nameResolutionTimeout Timeout seconds between probes for internal hostnames resolution
+##
+nameResolutionTimeout: 5
+## @param automountServiceAccountToken Mount Service Account token in pod
+##
+automountServiceAccountToken: false
+## @param hostAliases Add deployment host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
+## @param podManagementPolicy StatefulSet pod management policy
+##
+podManagementPolicy: OrderedReady
+## @param priorityClassName Scylladb pods' priority.
+## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
+##
+priorityClassName: ""
+## @param podAnnotations Additional pod annotations
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+podAnnotations: {}
+## @param statefulsetLabels Labels for statefulset
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+statefulsetLabels: {}
+## @param statefulsetAnnotations Annotations for statefulset
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+statefulsetAnnotations: {}
+## @param podLabels Additional pod labels
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+##
+podLabels: {}
+## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAffinityPreset: ""
+## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+##
+podAntiAffinityPreset: soft
+## Node affinity preset
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+##
+nodeAffinityPreset:
+  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ##
+  type: ""
+  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  ##
+  key: ""
+  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+  ## E.g.
+  ## values:
+  ##   - e2e-az1
+  ##   - e2e-az2
+  ##
+  values: []
+## @param affinity Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## NOTE: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set
+##
+affinity: {}
+## @param nodeSelector Node labels for pod assignment
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+##
+nodeSelector: {}
+## @param tolerations Tolerations for pod assignment
+## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+## @param topologySpreadConstraints Topology Spread Constraints for pod assignment
+## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+## The value is evaluated as a template
+##
+topologySpreadConstraints: []
+## Pod security context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Scylladb pods' Security Context
+## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
+## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
+## @param podSecurityContext.supplementalGroups Set filesystem extra groups
+## @param podSecurityContext.fsGroup Set Scylladb pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
+  fsGroup: 1001
+## Configure Container Security Context (only main container)
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled Scylladb containers' Security Context
+## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+## @param containerSecurityContext.runAsUser Set Scylladb containers' Security Context runAsUser
+## @param containerSecurityContext.runAsGroup Set Scylladb containers' Security Context runAsGroup
+## @param containerSecurityContext.allowPrivilegeEscalation Set Scylladb containers' Security Context allowPrivilegeEscalation
+## @param containerSecurityContext.capabilities.drop Set Scylladb containers' Security Context capabilities to be dropped
+## @param containerSecurityContext.readOnlyRootFilesystem Set Scylladb containers' Security Context readOnlyRootFilesystem
+## @param containerSecurityContext.runAsNonRoot Set Scylladb containers' Security Context runAsNonRoot
+## @param containerSecurityContext.privileged Set container's Security Context privileged
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+##
+containerSecurityContext:
+  enabled: true
+  seLinuxOptions: {}
+  runAsUser: 1001
+  runAsGroup: 1001
+  runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
+  readOnlyRootFilesystem: true
+## Scylladb pods' resource requests and limits
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+## Minimum memory for development is 4GB and 2 CPU cores
+## Minimum memory for production is 8GB and 4 CPU cores
+## ref: http://docs.datastax.com/en/archived/scylladb/2.0/scylladb/architecture/architecturePlanningHardware_c.html
+##
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
+## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+##
+resourcesPreset: "large"
+## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+## Example:
+## resources:
+##   requests:
+##     cpu: 2
+##     memory: 512Mi
+##   limits:
+##     cpu: 3
+##     memory: 1024Mi
+##
+resources: {}
+## Configure extra options for Scylladb containers' liveness and readiness probes
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+## @param livenessProbe.enabled Enable livenessProbe
+## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+## @param livenessProbe.periodSeconds Period seconds for livenessProbe
+## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
+## @param livenessProbe.successThreshold Success threshold for livenessProbe
+##
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 100
+  periodSeconds: 30
+  timeoutSeconds: 30
+  successThreshold: 1
+  failureThreshold: 5
+## @param readinessProbe.enabled Enable readinessProbe
+## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+## @param readinessProbe.periodSeconds Period seconds for readinessProbe
+## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
+## @param readinessProbe.successThreshold Success threshold for readinessProbe
+##
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 60
+  periodSeconds: 10
+  timeoutSeconds: 30
+  successThreshold: 1
+  failureThreshold: 5
+## Configure extra options for startup probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+## @param startupProbe.enabled Enable startupProbe
+## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+## @param startupProbe.periodSeconds Period seconds for startupProbe
+## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
+## @param startupProbe.failureThreshold Failure threshold for startupProbe
+## @param startupProbe.successThreshold Success threshold for startupProbe
+##
+startupProbe:
+  enabled: false
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 60
+## @param customLivenessProbe Custom livenessProbe that overrides the default one
+##
+customLivenessProbe: {}
+## @param customReadinessProbe Custom readinessProbe that overrides the default one
+##
+customReadinessProbe: {}
+## @param customStartupProbe [object] Override default startup probe
+##
+customStartupProbe: {}
+## @param lifecycleHooks [object] Override default container hooks
+##
+lifecycleHooks: {}
+## @param schedulerName Alternative scheduler
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+##
+schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the Scylladb pod needs to terminate gracefully
+## ScyllaDB requires more time to have the node drained that's why we're setting a default value
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
+## @param extraVolumes Optionally specify extra list of additional volumes for scylladb container
+##
+extraVolumes: []
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for scylladb container
+##
+extraVolumeMounts: []
+## @param initContainers Add additional init containers to the scylladb pods
+##
+initContainers: []
+## @param sidecars Add additional sidecar containers to the scylladb pods
+##
+sidecars: []
+## Scylladb Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+##
+pdb:
+  ## @param pdb.create Enable/disable a Pod Disruption Budget creation
+  ##
+  create: true
+  ## @param pdb.minAvailable Mininimum number of pods that must still be available after the eviction
+  ##
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
+  ##
+  maxUnavailable: ""
+## @param hostNetwork Enable HOST Network
+## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+##
+hostNetwork: false
+## Scylladb container ports to open
+## If hostNetwork true: the hostPort is set identical to the containerPort
+## @param containerPorts.intra Intra Port on the Host and Container
+## @param containerPorts.tls TLS Port on the Host and Container
+## @param containerPorts.jmx JMX Port on the Host and Container
+## @param containerPorts.cql CQL Port on the Host and Container
+## @param containerPorts.cqlShard CQL Port (Shard) on the Host and Container
+## @param containerPorts.api REST API port on the Host and Container
+## @param containerPorts.metrics Metrics port on the Host and Container
+##
+containerPorts:
+  intra: 7000
+  tls: 7001
+  jmx: 7199
+  cql: 9042
+  cqlShard: 19042
+  api: 10000
+  metrics: 9180
+## @param extraContainerPorts Optionally specify extra list of additional ports for the container
+## e.g:
+## extraContainerPorts:
+##   - name: myservice
+##     containerPort: 9090
+##
+extraContainerPorts: []
+## Scylladb ports to be exposed as hostPort
+## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
+## @param hostPorts.intra Intra Port on the Host
+## @param hostPorts.tls TLS Port on the Host
+## @param hostPorts.jmx JMX Port on the Host
+## @param hostPorts.cql CQL Port on the Host
+## @param hostPorts.cqlShard CQL (Sharded) Port on the Host
+## @param hostPorts.api REST API Port on the Host
+## @param hostPorts.metrics Metrics Port on the Host
+##
+hostPorts:
+  intra: ""
+  tls: ""
+  jmx: ""
+  cql: ""
+  cqlShard: ""
+  api: ""
+  metrics: ""
+
+## @section JMX Proxy Deployment Parameters
+##
+jmxProxy:
+  ## @param jmxProxy.enabled Enable JMX Proxy sidecar
+  ##
+  enabled: true
+  ## @param jmxProxy.extraEnvVars Array with extra environment variables to add to JMX Proxy sidecar
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param jmxProxy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for JMX Proxy sidecar
+  ##
+  extraEnvVarsCM: ""
+  ## @param jmxProxy.extraEnvVarsSecret Name of existing Secret containing extra env vars for JMX Proxy sidecar
+  ##
+  extraEnvVarsSecret: ""
+  ## @param jmxProxy.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param jmxProxy.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## Configure extra options for JMX Proxy containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+  ## @param jmxProxy.livenessProbe.enabled Enable livenessProbe on JMX Proxy sidecar
+  ## @param jmxProxy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param jmxProxy.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param jmxProxy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param jmxProxy.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param jmxProxy.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param jmxProxy.readinessProbe.enabled Enable readinessProbe on JMX Proxy sidecar
+  ## @param jmxProxy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param jmxProxy.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param jmxProxy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param jmxProxy.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param jmxProxy.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 30
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param jmxProxy.startupProbe.enabled Enable startupProbe on JMX Proxy containers
+  ## @param jmxProxy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param jmxProxy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param jmxProxy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param jmxProxy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param jmxProxy.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param jmxProxy.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param jmxProxy.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param jmxProxy.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## JMX Proxy resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param jmxProxy.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if jmxProxy.resources is set (jmxProxy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param jmxProxy.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param jmxProxy.containerSecurityContext.enabled Enabled containers' Security Context
+  ## @param jmxProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param jmxProxy.containerSecurityContext.runAsUser Set containers' Security Context runAsUser
+  ## @param jmxProxy.containerSecurityContext.runAsGroup Set containers' Security Context runAsGroup
+  ## @param jmxProxy.containerSecurityContext.runAsNonRoot Set container's Security Context runAsNonRoot
+  ## @param jmxProxy.containerSecurityContext.privileged Set container's Security Context privileged
+  ## @param jmxProxy.containerSecurityContext.readOnlyRootFilesystem Set container's Security Context readOnlyRootFilesystem
+  ## @param jmxProxy.containerSecurityContext.allowPrivilegeEscalation Set container's Security Context allowPrivilegeEscalation
+  ## @param jmxProxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param jmxProxy.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
+  ##
+  containerSecurityContext:
+    enabled: true
+    seLinuxOptions: {}
+    runAsUser: 1001
+    runAsGroup: 1001
+    runAsNonRoot: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param jmxProxy.lifecycleHooks for the JMX Proxy container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param jmxProxy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the JMX Proxy container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param jmxProxy.extraContainerPorts Optionally specify extra list of additional ports for the container
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+
+## @section Autoscaling
+##
+autoscaling:
+  vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
+    enabled: false
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    maxAllowed: {}
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    ## @section VPA update policy
+    ##
+    updatePolicy:
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+  hpa:
+    ## @param autoscaling.hpa.annotations Annotations for HPA resource
+    ##
+    annotations: {}
+    ## @param autoscaling.hpa.enabled Enable HPA
+    ##
+    enabled: false
+    ## @param autoscaling.hpa.minReplicas Min replicas
+    ##
+    minReplicas: 1
+    ## @param autoscaling.hpa.maxReplicas Max replicas
+    ##
+    maxReplicas: 3
+    ## @param autoscaling.hpa.targetCPUUtilizationPercentage Target CPU utilization percentage
+    ##
+    targetCPUUtilizationPercentage: 75
+    ## @param autoscaling.hpa.targetMemoryUtilizationPercentage Target Memory utilization percentage
+    ##
+    targetMemoryUtilizationPercentage: ""
+    ## @param autoscaling.hpa.customRules Custom rules
+    ##
+    customRules: []
+    ## @param autoscaling.hpa.behavior HPA Behavior
+    ##
+    behavior: {}
+
+## @section RBAC parameters
+##
+
+## Scylladb pods ServiceAccount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Scylladb pods
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the scylladb.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.annotations Annotations for Scylladb Service Account
+  ##
+  annotations: {}
+  ## @param serviceAccount.automountServiceAccountToken Automount API credentials for a service account.
+  ##
+  automountServiceAccountToken: false
+## @section Traffic Exposure Parameters
+##
+
+## Scylladb service parameters
+##
+service:
+  ## @param service.type Scylladb service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.cql Scylladb service CQL Port
+  ## @param service.ports.cqlShard Scylladb service CQL Port (sharded)
+  ## @param service.ports.metrics Scylladb service metrics port
+  ##
+  ports:
+    cql: 9042
+    cqlShard: 19042
+    metrics: 8080
+  ## Node ports to expose
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+  ## @param service.nodePorts.cql Node port for CQL
+  ## @param service.nodePorts.cqlShard Node port for CQL (sharded)
+  ## @param service.nodePorts.metrics Node port for metrics
+  ##
+  nodePorts:
+    cql: ""
+    cqlShard: ""
+    metrics: ""
+  ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+  ##
+  extraPorts: []
+  ## @param service.loadBalancerIP LoadBalancerIP if service type is `LoadBalancer`
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.clusterIP Service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.externalTrafficPolicy Service external traffic policy
+  ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Provide any additional annotations which may be required.
+  ## This can be used to set the LoadBalancer service type to internal only.
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+  ##
+  annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+  ## Internal service properties
+  ##
+  internal:
+    ## @param service.internal.enabled Create a service per pod (this improves the cluster stability when scaling or performing upgrades)
+    ##
+    enabled: true
+    ## @param service.internal.labels Labels for the internal services.
+    ##
+    labels: {}
+    ## @param service.internal.annotations Annotations for the internal services.
+    ##
+    annotations: {}
+    ## @param service.internal.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+## Network Policies
+## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Specifies whether a NetworkPolicy should be created
+  ##
+  enabled: true
+  ## @param networkPolicy.allowExternal Don't require server label for connections
+  ## The Policy model to apply. When set to false, only pods with the correct
+  ## server label will have network access to the ports server is listening
+  ## on. When true, server will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
+  ##
+  allowExternalEgress: true
+  ## @param networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+  ## e.g:
+  ## extraIngress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     from:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  extraIngress: []
+  ## @param networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+  ## e.g:
+  ## extraEgress:
+  ##   - ports:
+  ##       - port: 1234
+  ##     to:
+  ##       - podSelector:
+  ##           - matchLabels:
+  ##               - role: frontend
+  ##       - podSelector:
+  ##           - matchExpressions:
+  ##               - key: role
+  ##                 operator: In
+  ##                 values:
+  ##                   - frontend
+  ##
+  extraEgress: []
+  ## @param networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+  ## @param networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+  ##
+  ingressNSMatchLabels: {}
+  ingressNSPodMatchLabels: {}
+## @section Persistence parameters
+##
+
+## Enable persistence using Persistent Volume Claims
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+##
+persistence:
+  ## @param persistence.enabled Enable Scylladb data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
+  ##
+  enabled: true
+  ## @param persistence.existingClaim Name of an existing PVC to use
+  ##
+  existingClaim: ""
+  ## @param persistence.storageClass PVC Storage Class for Scylladb data volume
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: ""
+  ## @param persistence.commitStorageClass PVC Storage Class for Scylladb Commit Log volume
+  ## Storage class to use with SCYLLADB_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/scylladb
+  ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  commitStorageClass: ""
+  ## @param persistence.annotations Persistent Volume Claim annotations
+  ##
+  annotations: {}
+  ## @param persistence.accessModes Persistent Volume Access Mode
+  ##
+  accessModes:
+    - ReadWriteOnce
+  ## @param persistence.mountPath The path the data volume will be mounted at
+  ##
+  mountPath: /bitnami/scylladb
+  ## @param persistence.size PVC Storage Request for Scylladb data volume
+  ##
+  size: 8Gi
+  commitLog:
+    ## @param persistence.commitLog.storageClass PVC Storage Class for Scylladb Commit Log volume
+    ## Storage class to use with SCYLLADB_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
+    ## ref: https://github.com/bitnami/containers/tree/main/bitnami/scylladb
+    ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param persistence.commitLog.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param persistence.commitLog.accessModes Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param persistence.commitLog.size PVC Storage Request for Scylladb data volume
+    ##
+    size: 2Gi
+    ## @param persistence.commitLog.mountPath The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/scylladb/commitlog' to enable a separate commit log volume
+    ##
+    # mountPath: /bitnami/scylladb/commitlog
+    mountPath: ""
+## @section Volume Permissions parameters
+##
+
+## Init containers parameters:
+## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume image repository
+  ## @skip volumePermissions.image.tag Init container volume image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume pull policy
+  ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r21
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param volumePermissions.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Init container Security Context
+  ## Note: the chown of the data folder is done to securityContext.runAsUser
+  ## and not the below volumePermissions.securityContext.runAsUser
+  ## @param volumePermissions.securityContext.seLinuxOptions [object,nullable] Set SELinux options in container
+  ## @param volumePermissions.securityContext.runAsUser User ID for the init container
+  ##
+  ## When runAsUser is set to special value "auto", init container will try to chwon the
+  ## data folder to autodetermined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ## "auto" is especially useful for OpenShift which has scc with dynamic userids (and 0 is not allowed).
+  ## You may want to use this volumePermissions.securityContext.runAsUser="auto" in combination with
+  ## pod securityContext.enabled=false and shmVolume.chmod.enabled=false
+  ##
+  securityContext:
+    seLinuxOptions: {}
+    runAsUser: 0
+## @section Metrics parameters
+##
+
+## Scylladb Prometheus exporter configuration
+##
+metrics:
+  ## @param metrics.enabled Start a side-car prometheus exporter
+  ##
+  enabled: false
+  ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "{{ .Values.containerPorts.metrics }}"
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled If `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ##
+    enabled: false
+    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+    ##
+    namespace: monitoring
+    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## interval: 10s
+    ##
+    interval: ""
+    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+    ## e.g:
+    ## scrapeTimeout: 10s
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+    ## e.g:
+    ## selector:
+    ##   prometheus: my-prometheus
+    ##
+    selector: {}
+    ## @param metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
+    ## @param metrics.serviceMonitor.labels Used to pass Labels that are required by the installed Prometheus Operator
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
+    ##
+    labels: {}
+
+## @section TLS/SSL parameters
+##
+## @param tls.internodeEncryption Set internode encryption
+## @param tls.clientEncryption Set client-server encryption
+## @param tls.existingSecret Existing secret that contains TLS certificates
+## @param tls.existingCASecret Existing secret that contains CA certificates
+## @param tls.certFilename The secret key from the existingSecret if 'cert' key different from the default (tls.crt)
+## @param tls.certKeyFilename The secret key from the existingSecret if 'key' key different from the default (tls.key)
+## @param tls.certCAFilename The secret key from the existingSecret if 'ca' key different from the default (ca.crt)
+##
+tls:
+  internodeEncryption: none
+  clientEncryption: false
+  existingSecret: ""
+  existingCASecret: ""
+  certFilename: tls.crt
+  certKeyFilename: tls.key
+  certCAFilename: ""
+  ## @param tls.autoGenerated.enabled Enable automatic generation of certificates for TLS
+  ## @param tls.autoGenerated.engine Mechanism to generate the certificates (allowed values: helm, cert-manager)
+  autoGenerated:
+    enabled: true
+    engine: helm
+    ## @param tls.autoGenerated.certManager.existingIssuer The name of an existing Issuer to use for generating the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.existingIssuerKind Existing Issuer kind, defaults to Issuer (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.keyAlgorithm Key algorithm for the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.keySize Key size for the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.duration Duration for the certificates (only for `cert-manager` engine)
+    ## @param tls.autoGenerated.certManager.renewBefore Renewal period for the certificates (only for `cert-manager` engine)
+    certManager:
+      existingIssuer: ""
+      existingIssuerKind: ""
+      keySize: 2048
+      keyAlgorithm: RSA
+      duration: 2160h
+      renewBefore: 360h
+
+## init-sysctl container parameters
+## used to perform sysctl operation to modify Kernel settings (needed sometimes to avoid warnings)
+##
+sysctl:
+  ## @param sysctl.enabled Enable init container to modify Kernel settings
+  ##
+  enabled: false
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param sysctl.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param sysctl.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip sysctl.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param sysctl.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param sysctl.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param sysctl.image.pullSecrets OS Shell + Utility image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r21
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param sysctl.sysctls [object] Map with sysctl settings to change. These are translated to sysctl -w <key> = <value>
+  ##
+  sysctls:
+    "fs.aio-max-nr": "30000000"
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param sysctl.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sysctl.resources is set (sysctl.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "nano"
+  ## @param sysctl.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}

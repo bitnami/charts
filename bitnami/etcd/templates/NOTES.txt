@@ -110,3 +110,4 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "etcd.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "disasterRecovery.cronjob" "" "volumePermissions") "context" $) }}
+{{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}

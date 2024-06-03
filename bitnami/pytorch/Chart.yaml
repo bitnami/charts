@@ -33,4 +33,4 @@ maintainers:
 name: pytorch
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 4.0.5
+version: 4.2.0

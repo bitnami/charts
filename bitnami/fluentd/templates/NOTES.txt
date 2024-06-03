@@ -54,3 +54,11 @@ In order to replicate the container startup scripts execute this command:
 {{- include "fluentd.validateValues" . }}
 {{- include "fluentd.checkRollingTags" . -}}
 {{- include "common.warnings.resources" (dict "sections" (list "aggregator" "forwarder") "context" $) }}
+{{- $imagesToCheck := (list .Values.image) }}
+{{- if .Values.forwarder.image.repository }}
+{{- $imagesToCheck = append $imagesToCheck .Values.forwarder.image }}
+{{- end }}
+{{- if .Values.aggregator.image.repository }}
+{{- $imagesToCheck = append $imagesToCheck .Values.aggregator.image }}
+{{- end }}
+{{- include "common.warnings.modifiedImages" (dict "images" $imagesToCheck "context" $) }}

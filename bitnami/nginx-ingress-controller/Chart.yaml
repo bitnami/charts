@@ -34,4 +34,4 @@ maintainers:
 name: nginx-ingress-controller
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
-version: 11.1.5
+version: 11.3.1

@@ -119,8 +119,10 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.applicationSet.livenessProbe.enabled }}
           livenessProbe:
-            tcpSocket:
-              port: probe
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
             initialDelaySeconds: {{ .Values.applicationSet.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.applicationSet.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.applicationSet.livenessProbe.timeoutSeconds }}
