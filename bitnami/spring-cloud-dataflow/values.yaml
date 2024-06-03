@@ -1233,6 +1233,9 @@ deployer:
   ## @param deployer.imagePullPolicy An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never
   ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_image_pull_policy
   imagePullPolicy: IfNotPresent
+  ## @param deployer.taskServiceAccountName Custom service account for scheduled tasks
+  ## ref: https://docs.spring.io/spring-cloud-dataflow/docs/current/reference/htmlsingle/#_service_account
+  taskServiceAccountName: ""
 ## @section RBAC parameters
 
 ## K8s Service Account.

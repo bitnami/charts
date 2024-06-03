@@ -559,6 +559,16 @@ client:
     ##             name: http
     ##
     extraRules: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param client.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param client.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param client.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `client.pdb.minAvailable` and `client.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Appsmith Backend Parameters
 ##
 ##
@@ -1149,6 +1159,16 @@ backend:
     ## @param backend.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param backend.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param backend.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param backend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `backend.pdb.minAvailable` and `backend.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Appsmith RTS Parameters
 ##
 ##
@@ -1503,6 +1523,16 @@ rts:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param rts.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param rts.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param rts.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rts.pdb.minAvailable` and `rts.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Init Container Parameters
 ##
 
