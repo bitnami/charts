@@ -1,18 +1,18 @@
 # Changelog
 
-## 2.2.1 (2024-05-21)
+## 2.2.1 (2024-06-03)
 
-* [bitnami/deepspeed] Release 2.2.1 ([#26305](https://github.com/bitnami/charts/pulls/26305))
+* [bitnami/deepspeed] Release 2.1.2 ([#26305](https://github.com/bitnami/charts/pull/26305))
 
-## <small>2.2.0 (2024-05-24)</small>
+## 2.2.0 (2024-05-30)
 
-* [bitnami/deepspeed] Enable PodDisruptionBudgets ([#26424](https://github.com/bitnami/charts/pull/26424))
+* [bitnami/deepspeed] Enable PodDisruptionBudgets (#26424) ([c5dd038](https://github.com/bitnami/charts/commit/c5dd038b10990d23a5e2cce04b1470843a8f737f)), closes [#26424](https://github.com/bitnami/charts/issues/26424)
 
 ## <small>2.1.1 (2024-05-21)</small>
 
 * [bitnami/deepspeed] Use different liveness/readiness probes (part 2) (#26168) ([a2bb3bd](https://github.com/bitnami/charts/commit/a2bb3bdb5f5e623d28591052fe377dd35aacd728)), closes [#26168](https://github.com/bitnami/charts/issues/26168)
 
-## </small>2.1.0 (2024-05-21)</small>
+## 2.1.0 (2024-05-21)
 
 * [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c9e4e574725a09505d2d313fb93f1b4c0a)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
 * [bitnami/deepspeed] feat: :sparkles: :lock: Add warning when original images are replaced (#26192) ([309aec1](https://github.com/bitnami/charts/commit/309aec1ef50ecd3281866feaae45e039a5b100c8)), closes [#26192](https://github.com/bitnami/charts/issues/26192)
