@@ -1,8 +1,16 @@
 # Changelog
 
+## 17.3.2 (2024-05-29)
+
+* [bitnami/nginx] Release 17.3.2 ([#26550](https://github.com/bitnami/charts/pull/26550))
+
+## <small>17.3.1 (2024-05-28)</small>
+
+* [bitnami/nginx] Release 17.3.1 (#26479) ([f66f7a4](https://github.com/bitnami/charts/commit/f66f7a44547d67f9ac8ee7357f502e545dbc9d58)), closes [#26479](https://github.com/bitnami/charts/issues/26479)
+
 ## 17.3.0 (2024-05-24)
 
-* [bitnami/nginx] PDB review ([#26159](https://github.com/bitnami/charts/pull/26159))
+* [bitnami/nginx] PDB review (#26159) ([d91aafc](https://github.com/bitnami/charts/commit/d91aafc4683280af35112449f4e5df81a21135c8)), closes [#26159](https://github.com/bitnami/charts/issues/26159)
 
 ## <small>17.2.1 (2024-05-24)</small>
 

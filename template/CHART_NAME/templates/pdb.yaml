@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.%%MAIN_OBJECT_BLOCK%%.pdb.create }}
+{{- if .Values.%%MAIN_OBJECT_BLOCK%%.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -18,10 +18,10 @@ spec:
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable }}
   minAvailable: {{ .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable }}
+  {{- if or .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable ( not .Values.%%MAIN_OBJECT_BLOCK%%.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.%%MAIN_OBJECT_BLOCK%%.pdb.maxUnavailable | default 1 }}
   {{- end  }}
-  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels) "context" .) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: %%COMPONENT_NAME%%

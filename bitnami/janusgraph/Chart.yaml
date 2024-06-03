@@ -35,6 +35,7 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: janusgraph
 sources:
+- https://github.com/bitnami/charts/tree/main/bitnami/janusgraph
 - https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
 - https://github.com/janusgraph/janusgraph
-version: 0.3.1
+version: 0.3.2

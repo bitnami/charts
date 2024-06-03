@@ -1,8 +1,16 @@
 # Changelog
 
-## 7.1.2 (2024-05-24)
+## 8.1.0 (2024-05-29)
 
-* [bitnami/milvus] Release 7.1.2 ([#26404](https://github.com/bitnami/charts/pull/26404))
+* [bitnami/milvus] PDB review ([#25983](https://github.com/bitnami/charts/pull/25983))
+
+## 8.0.0 (2024-05-27)
+
+* [bitnami/milvus] Update dependencies (#26445) ([e4dc085](https://github.com/bitnami/charts/commit/e4dc085dc62abade1fb18389831ad5a4ef41a75d)), closes [#26445](https://github.com/bitnami/charts/issues/26445)
+
+## <small>7.1.2 (2024-05-24)</small>
+
+* [bitnami/milvus] Release 7.1.2 (#26404) ([03fec67](https://github.com/bitnami/charts/commit/03fec6746043546d435b19c7b8da2b2507fc10e8)), closes [#26404](https://github.com/bitnami/charts/issues/26404)
 
 ## <small>7.1.1 (2024-05-22)</small>
 

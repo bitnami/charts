@@ -802,12 +802,12 @@ dataCoord:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dataCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param dataCoord.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param dataCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param dataCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param dataCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dataCoord.pdb.minAvailable` and `dataCoord.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Data Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1307,12 +1307,12 @@ rootCoord:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param rootCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param rootCoord.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param rootCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param rootCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param rootCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rootCoord.pdb.minAvailable` and `rootCoord.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Root Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1812,12 +1812,12 @@ queryCoord:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param queryCoord.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param queryCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param queryCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param queryCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryCoord.pdb.minAvailable` and `queryCoord.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Query Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2317,12 +2317,12 @@ indexCoord:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param indexCoord.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param indexCoord.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param indexCoord.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param indexCoord.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param indexCoord.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable.Defaults to `1` if both `queryCoord.pdb.minAvailable` and `queryCoord.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Index Coordinator Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2822,12 +2822,12 @@ dataNode:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dataNode.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param dataNode.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param dataNode.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param dataNode.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param dataNode.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dataNode.pdb.minAvailable` and `dataNode.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Data Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -3327,12 +3327,12 @@ queryNode:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryNode.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param queryNode.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param queryNode.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param queryNode.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param queryNode.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryNode.pdb.minAvailable` and `queryNode.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Query Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -3832,12 +3832,12 @@ indexNode:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param indexNode.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param indexNode.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param indexNode.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param indexNode.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param indexNode.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `indexNode.pdb.minAvailable` and `indexNode.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Index Node Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -4365,12 +4365,12 @@ proxy:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param proxy.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param proxy.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param proxy.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param proxy.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param proxy.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `proxy.pdb.minAvailable` and `proxy.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Proxy Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -4883,12 +4883,12 @@ attu:
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param attu.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param attu.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param attu.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ## @param attu.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param attu.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `attu.pdb.minAvailable` and `attu.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @section Attu Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
