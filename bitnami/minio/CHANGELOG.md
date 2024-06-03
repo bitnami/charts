@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.2 (2024-05-29)
+## 14.6.3 (2024-06-03)
 
-* [bitnami/minio] Release 14.6.2 ([#26522](https://github.com/bitnami/charts/pull/26522))
+* [bitnami/minio] fix: totalDrives calculation includes number of zones ([#26602](https://github.com/bitnami/charts/pull/26602))
+
+## <small>14.6.2 (2024-05-29)</small>
+
+* [bitnami/minio] Release 14.6.2 (#26522) ([096d86c](https://github.com/bitnami/charts/commit/096d86ccf56ec9c743dfeb883acc0e0933b90005)), closes [#26522](https://github.com/bitnami/charts/issues/26522)
 
 ## <small>14.6.1 (2024-05-28)</small>
 
