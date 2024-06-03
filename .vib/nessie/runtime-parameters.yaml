@@ -39,8 +39,7 @@ extraDeploy:
           restartPolicy: OnFailure
           containers:
             - name: nessie-job
-              # TODO: Change image name
-              image: docker.io/javsalgar/nessie-utils:0.83.2-debian-12-r0
+              image: docker.io/bitnami/nessie-utils:latest
               command:
                 - /bin/bash
               args:

@@ -113,8 +113,7 @@ javaOpts: ""
 ##
 image:
   registry: docker.io
-  # TODO: Change image
-  repository: javsalgar/nessie
+  repository: bitnami/nessie
   tag: 0.83.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
