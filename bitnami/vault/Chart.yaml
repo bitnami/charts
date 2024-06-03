@@ -35,4 +35,4 @@ maintainers:
 name: vault
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 1.4.1
+version: 1.4.2
