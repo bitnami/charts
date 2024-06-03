@@ -266,7 +266,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `relay.enablePprof`                                       | Enable pprof for Hubble Relay                                                                                                                                                                                                       | `false`                        |
 | `relay.command`                                           | Override default Hubble Relay container command (useful when using custom images)                                                                                                                                                   | `[]`                           |
 | `relay.args`                                              | Override default Hubble Relay container args (useful when using custom images)                                                                                                                                                      | `[]`                           |
-| `relay.automountServiceAccountToken`                      | Mount Service Account token in Hubble Relay pods                                                                                                                                                                                    | `false`                        |
+| `relay.automountServiceAccountToken`                      | Mount Service Account token in Hubble Relay pods                                                                                                                                                                                    | `true`                         |
 | `relay.hostAliases`                                       | Hubble Relay pods host aliases                                                                                                                                                                                                      | `[]`                           |
 | `relay.deploymentAnnotations`                             | Annotations for Hubble Relay deployment                                                                                                                                                                                             | `{}`                           |
 | `relay.podLabels`                                         | Extra labels for Hubble Relay pods                                                                                                                                                                                                  | `{}`                           |
@@ -313,32 +313,34 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Hubble Relay Traffic Exposure Parameters
 
-| Name                                          | Description                                                                             | Value          |
-| --------------------------------------------- | --------------------------------------------------------------------------------------- | -------------- |
-| `relay.service.type`                          | Hubble Relay service type                                                               | `LoadBalancer` |
-| `relay.service.ports.grpc`                    | Hubble Relay service gRPC port                                                          | `4245`         |
-| `relay.service.ports.pprof`                   | Hubble Relay service pprof port                                                         | `6062`         |
-| `relay.service.ports.gops`                    | Hubble Relay service gops port                                                          | `9893`         |
-| `relay.service.ports.metrics`                 | Hubble Relay service metrics port                                                       | `9966`         |
-| `relay.service.nodePorts.grpc`                | Node port for gRPC                                                                      | `""`           |
-| `relay.service.nodePorts.pprof`               | Node port for pprof                                                                     | `""`           |
-| `relay.service.nodePorts.gops`                | Node port for gops                                                                      | `""`           |
-| `relay.service.nodePorts.metrics`             | Node port for metrics                                                                   | `""`           |
-| `relay.service.clusterIP`                     | Hubble Relay service Cluster IP                                                         | `""`           |
-| `relay.service.loadBalancerIP`                | Hubble Relay service Load Balancer IP                                                   | `""`           |
-| `relay.service.loadBalancerSourceRanges`      | Hubble Relay service Load Balancer sources                                              | `[]`           |
-| `relay.service.externalTrafficPolicy`         | Hubble Relay service external traffic policy                                            | `Cluster`      |
-| `relay.service.annotations`                   | Additional custom annotations for Hubble Relay service                                  | `{}`           |
-| `relay.service.extraPorts`                    | Extra ports to expose in Hubble Relay service (normally used with the `sidecars` value) | `[]`           |
-| `relay.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                        | `None`         |
-| `relay.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                             | `{}`           |
-| `relay.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Hubble Relay                    | `true`         |
-| `relay.networkPolicy.allowExternal`           | Don't require server label for connections                                              | `true`         |
-| `relay.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                         | `true`         |
-| `relay.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                            | `[]`           |
-| `relay.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)      | `[]`           |
-| `relay.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                  | `{}`           |
-| `relay.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                              | `{}`           |
+| Name                                          | Description                                                                                                     | Value          |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------- |
+| `relay.service.type`                          | Hubble Relay service type                                                                                       | `LoadBalancer` |
+| `relay.service.ports.grpc`                    | Hubble Relay service gRPC port                                                                                  | `4245`         |
+| `relay.service.ports.pprof`                   | Hubble Relay service pprof port                                                                                 | `6062`         |
+| `relay.service.ports.gops`                    | Hubble Relay service gops port                                                                                  | `9893`         |
+| `relay.service.ports.metrics`                 | Hubble Relay service metrics port                                                                               | `9966`         |
+| `relay.service.nodePorts.grpc`                | Node port for gRPC                                                                                              | `""`           |
+| `relay.service.nodePorts.pprof`               | Node port for pprof                                                                                             | `""`           |
+| `relay.service.nodePorts.gops`                | Node port for gops                                                                                              | `""`           |
+| `relay.service.nodePorts.metrics`             | Node port for metrics                                                                                           | `""`           |
+| `relay.service.clusterIP`                     | Hubble Relay service Cluster IP                                                                                 | `""`           |
+| `relay.service.loadBalancerIP`                | Hubble Relay service Load Balancer IP                                                                           | `""`           |
+| `relay.service.loadBalancerSourceRanges`      | Hubble Relay service Load Balancer sources                                                                      | `[]`           |
+| `relay.service.externalTrafficPolicy`         | Hubble Relay service external traffic policy                                                                    | `Cluster`      |
+| `relay.service.annotations`                   | Additional custom annotations for Hubble Relay service                                                          | `{}`           |
+| `relay.service.extraPorts`                    | Extra ports to expose in Hubble Relay service (normally used with the `sidecars` value)                         | `[]`           |
+| `relay.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                | `None`         |
+| `relay.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                     | `{}`           |
+| `relay.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Hubble Relay                                            | `true`         |
+| `relay.networkPolicy.allowExternal`           | Don't require server label for connections                                                                      | `true`         |
+| `relay.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                 | `true`         |
+| `relay.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `relay.networkPolicy.allowExternal` is true. | `true`         |
+| `relay.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                    | `[]`           |
+| `relay.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                              | `[]`           |
+| `relay.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `relay.networkPolicy.allowExternal` is true.       | `{}`           |
+| `relay.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                          | `{}`           |
+| `relay.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                      | `{}`           |
 
 ### Hubble Relay Metrics Parameters
 
@@ -465,7 +467,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ui.podSecurityContext.sysctls`                                 | Set kernel settings using the sysctl interface for Hubble UI pods                                                                                                                                                                                     | `[]`                                |
 | `ui.podSecurityContext.supplementalGroups`                      | Set filesystem extra groups for Hubble UI pods                                                                                                                                                                                                        | `[]`                                |
 | `ui.podSecurityContext.fsGroup`                                 | Set fsGroup in Hubble UI pods' Security Context                                                                                                                                                                                                       | `1001`                              |
-| `ui.automountServiceAccountToken`                               | Mount Service Account token in Hubble UI pods                                                                                                                                                                                                         | `false`                             |
+| `ui.automountServiceAccountToken`                               | Mount Service Account token in Hubble UI pods                                                                                                                                                                                                         | `true`                              |
 | `ui.hostAliases`                                                | Hubble UI pods host aliases                                                                                                                                                                                                                           | `[]`                                |
 | `ui.deploymentAnnotations`                                      | Annotations for Hubble UI deployment                                                                                                                                                                                                                  | `{}`                                |
 | `ui.podLabels`                                                  | Extra labels for Hubble UI pods                                                                                                                                                                                                                       | `{}`                                |
@@ -522,7 +524,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ui.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ui.ingress.enabled`                       | Enable ingress record generation for Hubble UI                                                                                   | `false`                  |
 | `ui.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ui.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ui.ingress.hostname`                      | Default host for the ingress record                                                                                              | `hubble.local`           |
 | `ui.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ui.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
@@ -537,8 +538,10 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `ui.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Hubble UI                                                                | `true`                   |
 | `ui.networkPolicy.allowExternal`           | Don't require server label for connections                                                                                       | `true`                   |
 | `ui.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
+| `ui.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `ui.networkPolicy.allowExternal` is true.                     | `true`                   |
 | `ui.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                                     | `[]`                     |
 | `ui.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                               | `[]`                     |
+| `ui.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `ui.networkPolicy.allowExternal` is true.                           | `{}`                     |
 | `ui.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                                           | `{}`                     |
 | `ui.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                                       | `{}`                     |
 

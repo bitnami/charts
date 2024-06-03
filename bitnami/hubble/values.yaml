@@ -558,6 +558,9 @@ relay:
     ## @param relay.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param relay.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `relay.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param relay.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -591,6 +594,12 @@ relay:
     ##                   - frontend
     ##
     extraEgress: []
+    ## @param relay.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `relay.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
     ## @param relay.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param relay.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
@@ -1338,6 +1347,9 @@ ui:
     ## @param ui.networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param ui.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `ui.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param ui.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1371,6 +1383,12 @@ ui:
     ##                   - frontend
     ##
     extraEgress: []
+    ## @param ui.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `ui.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
     ## @param ui.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param ui.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
