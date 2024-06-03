@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.2.0 (2024-05-29)
+## 15.2.0 (2024-06-03)
 
 * [bitnami/kubeapps] Enable PodDisruptionBudgets ([#26505](https://github.com/bitnami/charts/pull/26505))
 
