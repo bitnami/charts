@@ -46,7 +46,7 @@ spec:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
         {{- if .Values.networkPolicy.addExternalClientAccess }}
         - podSelector:
-            matchLabels: 
+            matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
         {{- end }}
         {{- if .Values.networkPolicy.ingressPodMatchLabels }}
