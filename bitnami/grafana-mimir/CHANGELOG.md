@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.1 (2024-05-22)
+## 1.2.0 (2024-06-04)
 
-* [bitnami/grafana-mimir] Use different liveness/readiness probes ([#26350](https://github.com/bitnami/charts/pull/26350))
+* [bitnami/grafana-mimir] Enable PodDisruptionBudgets ([#26695](https://github.com/bitnami/charts/pull/26695))
+
+## <small>1.1.1 (2024-05-23)</small>
+
+* [bitnami/grafana-mimir] Use different liveness/readiness probes (#26350) ([e4cc957](https://github.com/bitnami/charts/commit/e4cc9575527835733af5b4647a5f45a80efebe23)), closes [#26350](https://github.com/bitnami/charts/issues/26350)
 
 ## 1.1.0 (2024-05-21)
 
