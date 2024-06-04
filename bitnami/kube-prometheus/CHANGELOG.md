@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.3.0 (2024-05-31)
+## 9.4.0 (2024-06-04)
 
-* [bitnami/kube-prometheus] Add imagePullPolicy to Prometheus and Alertmanager ([#26553](https://github.com/bitnami/charts/pull/26553))
+* [bitnami/kube-prometheus] Enable PodDisruptionBudgets ([#26700](https://github.com/bitnami/charts/pull/26700))
+
+## 9.3.0 (2024-06-01)
+
+* [bitnami/kube-prometheus] Add imagePullPolicy to Prometheus and Alertmanager (#26553) ([ed64806](https://github.com/bitnami/charts/commit/ed6480680baf06c61b99696f16243ae5795b1f9d)), closes [#26553](https://github.com/bitnami/charts/issues/26553)
 
 ## <small>9.2.1 (2024-05-23)</small>
 
