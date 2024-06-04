@@ -14,21 +14,21 @@ annotations:
 apiVersion: v2
 appVersion: 1.6.28
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Memcached is an high-performance, distributed memory object caching system, generic in nature, but intended for use in speeding up dynamic web applications by alleviating database load.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/memcached/img/memcached-stack-220x234.png
 keywords:
-- memcached
-- cache
+  - memcached
+  - cache
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: memcached
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/memcached
-version: 7.4.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/memcached
+version: 7.4.3

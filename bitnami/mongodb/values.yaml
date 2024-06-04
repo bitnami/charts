@@ -959,7 +959,7 @@ externalAccess:
     ##
     loadBalancerIPs: []
     ## @param externalAccess.service.publicNames Array of public names. The size should be equal to the number of replicas.
-    ## 
+    ##
     publicNames: []
     ## @param externalAccess.service.loadBalancerClass loadBalancerClass when service type is LoadBalancer
     # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class

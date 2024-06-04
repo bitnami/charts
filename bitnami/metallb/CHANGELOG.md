@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.0 (2024-05-28)
+## 6.3.1 (2024-06-04)
 
-* [bitnami/metallb] Enable PodDisruptionBudgets ([#26512](https://github.com/bitnami/charts/pull/26512))
+* [bitnami/metallb] Bump chart version ([#26647](https://github.com/bitnami/charts/pull/26647))
+
+## 6.3.0 (2024-05-30)
+
+* [bitnami/metallb] Enable PodDisruptionBudgets (#26512) ([b79841b](https://github.com/bitnami/charts/commit/b79841bb7cfaa5d9a2304d523da2a7893ab6d05a)), closes [#26512](https://github.com/bitnami/charts/issues/26512)
 
 ## <small>6.2.1 (2024-05-22)</small>
 

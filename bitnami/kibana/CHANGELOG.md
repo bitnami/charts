@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.0 (2024-05-28)
+## 11.2.1 (2024-06-04)
 
-* [bitnami/kibana] Enable PodDisruptionBudgets ([#26501](https://github.com/bitnami/charts/pull/26501))
+* [bitnami/kibana] Bump chart version ([#26639](https://github.com/bitnami/charts/pull/26639))
+
+## 11.2.0 (2024-06-03)
+
+* [bitnami/kibana] Enable PodDisruptionBudgets (#26501) ([de50ea0](https://github.com/bitnami/charts/commit/de50ea03da5d228dd5b185d89b77e3e657b553ea)), closes [#26501](https://github.com/bitnami/charts/issues/26501)
 
 ## 11.1.0 (2024-05-21)
 

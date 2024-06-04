@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.0 (2024-05-24)
+## 2.2.1 (2024-06-04)
 
-* [bitnami/deepspeed] Enable PodDisruptionBudgets ([#26424](https://github.com/bitnami/charts/pull/26424))
+* [bitnami/deepspeed] Bump chart version ([#26626](https://github.com/bitnami/charts/pull/26626))
+
+## 2.2.0 (2024-05-30)
+
+* [bitnami/deepspeed] Enable PodDisruptionBudgets (#26424) ([c5dd038](https://github.com/bitnami/charts/commit/c5dd038b10990d23a5e2cce04b1470843a8f737f)), closes [#26424](https://github.com/bitnami/charts/issues/26424)
 
 ## <small>2.1.1 (2024-05-21)</small>
 

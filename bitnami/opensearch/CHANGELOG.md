@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.2.1 (2024-06-04)
+
+* [bitnami/opensearch] Bump chart version ([#26658](https://github.com/bitnami/charts/pull/26658))
+
 ## 1.2.0 (2024-05-23)
 
-* [bitnami/opensearch] Enable PodDisruptionBudgets ([#26186](https://github.com/bitnami/charts/pull/26186))
+* [bitnami/opensearch] Enable PodDisruptionBudgets (#26186) ([1864e42](https://github.com/bitnami/charts/commit/1864e422e2ae317dacb7a6e542b96aeb82291493)), closes [#26186](https://github.com/bitnami/charts/issues/26186)
 
 ## 1.1.0 (2024-05-21)
 
