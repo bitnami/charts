@@ -88,12 +88,12 @@ configOverrides: {}
 ##
 secretConfigOverrides: {}
 
-## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for nessie
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Nessie
 ## NOTE: By providing a ConfigMap, other settings provided using values may be ignored.
 ##
 existingConfigmap: ""
 
-## @param existingSecret The name of an existing Secret with your custom sensitive configuration for nessie
+## @param existingSecret The name of an existing Secret with your custom sensitive configuration for Nessie
 ##
 existingSecret: ""
 
@@ -101,19 +101,19 @@ existingSecret: ""
 ##
 javaOpts: ""
 
-## Bitnami nessie image
-## ref: https://hub.docker.com/r/bitnami/nessie/tags/
-## @param image.registry [default: REGISTRY_NAME] nessie image registry
-## @param image.repository [default: REPOSITORY_NAME/nessie] nessie image repository
-## @skip image.tag nessie image tag (immutable tags are recommended)
-## @param image.digest nessie image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
-## @param image.pullPolicy nessie image pull policy
-## @param image.pullSecrets nessie image pull secrets
-## @param image.debug Enable nessie image debug mode
+## Bitnami Nessie image
+## ref: https://hub.docker.com/r/bitnami/Nessie/tags/
+## @param image.registry [default: REGISTRY_NAME] Nessie image registry
+## @param image.repository [default: REPOSITORY_NAME/Nessie] Nessie image repository
+## @skip image.tag Nessie image tag (immutable tags are recommended)
+## @param image.digest Nessie image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param image.pullPolicy Nessie image pull policy
+## @param image.pullSecrets Nessie image pull secrets
+## @param image.debug Enable Nessie image debug mode
 ##
 image:
   registry: docker.io
-  repository: bitnami/nessie
+  repository: bitnami/Nessie
   tag: 0.83.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
@@ -133,10 +133,10 @@ image:
   ##
   debug: false
 
-## @param replicaCount Number of nessie replicas to deploy
+## @param replicaCount Number of Nessie replicas to deploy
 ##
 replicaCount: 1
-## @param containerPorts.http nessie http server container port
+## @param containerPorts.http Nessie http server container port
 ## @param containerPorts.management management container port
 ##
 containerPorts:
@@ -164,9 +164,9 @@ usePasswordFile: true
 ## @param versionStoreType Set version store type. The chart natively supports JDBC_POSTGRESQL, ROCKSDB and IN_MEMORY. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.
 ##
 versionStoreType: JDBC_POSTGRESQL
-## Configure extra options for nessie containers' liveness and readiness probes
+## Configure extra options for Nessie containers' liveness and readiness probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on nessie containers
+## @param livenessProbe.enabled Enable livenessProbe on Nessie containers
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -180,7 +180,7 @@ livenessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
-## @param readinessProbe.enabled Enable readinessProbe on nessie containers
+## @param readinessProbe.enabled Enable readinessProbe on Nessie containers
 ## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
 ## @param readinessProbe.periodSeconds Period seconds for readinessProbe
 ## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
@@ -194,7 +194,7 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
-## @param startupProbe.enabled Enable startupProbe on nessie containers
+## @param startupProbe.enabled Enable startupProbe on Nessie containers
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -217,7 +217,7 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## nessie resource requests and limits
+## Nessie resource requests and limits
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
@@ -240,7 +240,7 @@ resourcesPreset: "medium"
 resources: {}
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enable security context for nessie pods
+## @param podSecurityContext.enabled Enable security context for Nessie pods
 ## @param podSecurityContext.fsGroupChangePolicy Set filesystem group change policy
 ## @param podSecurityContext.sysctls Set kernel settings using the sysctl interface
 ## @param podSecurityContext.supplementalGroups Set filesystem extra groups
@@ -254,10 +254,10 @@ podSecurityContext:
   fsGroup: 1001
 ## Configure Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled nessie container securityContext
+## @param containerSecurityContext.enabled Nessie container securityContext
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-## @param containerSecurityContext.runAsUser User ID for the nessie container
-## @param containerSecurityContext.runAsGroup Group ID for the nessie container
+## @param containerSecurityContext.runAsUser User ID for the Nessie container
+## @param containerSecurityContext.runAsGroup Group ID for the Nessie container
 ## @param containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
 ## @param containerSecurityContext.privileged Set secondary container's Security Context privileged
 ## @param containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
@@ -285,19 +285,19 @@ command: []
 ## @param args Override default container args (useful when using custom images)
 ##
 args: []
-## @param hostAliases nessie pods host aliases
+## @param hostAliases Nessie pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param annotations Annotations for nessie deployment/statefulset
+## @param annotations Annotations for Nessie deployment/statefulset
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 annotations: {}
-## @param podLabels Extra labels for nessie pods
+## @param podLabels Extra labels for Nessie pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 podLabels: {}
-## @param podAnnotations Annotations for nessie pods
+## @param podAnnotations Annotations for Nessie pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 ##
 podAnnotations: {}
@@ -336,7 +336,7 @@ nodeAffinityPreset:
   ##   - e2e-az2
   ##
   values: []
-## @param affinity Affinity for nessie pods assignment
+## @param affinity Affinity for Nessie pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
 ##
@@ -344,15 +344,15 @@ affinity: {}
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
-## @param nodeSelector Node labels for nessie pods assignment
+## @param nodeSelector Node labels for Nessie pods assignment
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
-## @param tolerations Tolerations for nessie pods assignment
+## @param tolerations Tolerations for Nessie pods assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
 tolerations: []
-## @param updateStrategy.type nessie strategy type
+## @param updateStrategy.type Nessie strategy type
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
 updateStrategy:
@@ -361,14 +361,14 @@ updateStrategy:
   ##
   type: RollingUpdate
 
-## @param priorityClassName nessie pods' priorityClassName
+## @param priorityClassName Nessie pods' priorityClassName
 ##
 priorityClassName: ""
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
 topologySpreadConstraints: []
-## @param schedulerName Name of the k8s scheduler (other than default) for nessie pods
+## @param schedulerName Name of the k8s scheduler (other than default) for Nessie pods
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
@@ -376,29 +376,29 @@ schedulerName: ""
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 ##
 terminationGracePeriodSeconds: ""
-## @param lifecycleHooks for the nessie container(s) to automate configuration before or after startup
+## @param lifecycleHooks for the Nessie container(s) to automate configuration before or after startup
 ##
 lifecycleHooks: {}
-## @param extraEnvVars Array with extra environment variables to add to nessie nodes
+## @param extraEnvVars Array with extra environment variables to add to Nessie nodes
 ## e.g:
 ## extraEnvVars:
 ##   - name: FOO
 ##     value: "bar"
 ##
 extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for nessie nodes
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Nessie nodes
 ##
 extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for nessie nodes
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Nessie nodes
 ##
 extraEnvVarsSecret: ""
-## @param extraVolumes Optionally specify extra list of additional volumes for the nessie pod(s)
+## @param extraVolumes Optionally specify extra list of additional volumes for the Nessie pod(s)
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the nessie container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Nessie container(s)
 ##
 extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the nessie pod(s)
+## @param sidecars Add additional sidecar containers to the Nessie pod(s)
 ## e.g:
 ## sidecars:
 ##   - name: your-image-name
@@ -409,7 +409,7 @@ extraVolumeMounts: []
 ##         containerPort: 1234
 ##
 sidecars: []
-## @param initContainers Add additional init containers to the nessie pod(s)
+## @param initContainers Add additional init containers to the Nessie pod(s)
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 ## e.g:
 ## initContainers:
@@ -468,14 +468,14 @@ autoscaling:
 ## @section Traffic Exposure Parameters
 ##
 
-## nessie service parameters
+## Nessie service parameters
 ##
 service:
   server:
-    ## @param service.server.type nessie service type
+    ## @param service.server.type Nessie service type
     ##
     type: LoadBalancer
-    ## @param service.server.ports.http nessie service http port
+    ## @param service.server.ports.http Nessie service http port
     ##
     ports:
       http: 19120
@@ -485,30 +485,30 @@ service:
     ##
     nodePorts:
       http: ""
-    ## @param service.server.clusterIP nessie service Cluster IP
+    ## @param service.server.clusterIP Nessie service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param service.server.loadBalancerIP nessie service Load Balancer IP
+    ## @param service.server.loadBalancerIP Nessie service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param service.server.loadBalancerSourceRanges nessie service Load Balancer sources
+    ## @param service.server.loadBalancerSourceRanges Nessie service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.server.externalTrafficPolicy nessie service external traffic policy
+    ## @param service.server.externalTrafficPolicy Nessie service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.server.annotations Additional custom annotations for nessie service
+    ## @param service.server.annotations Additional custom annotations for Nessie service
     ##
     annotations: {}
-    ## @param service.server.extraPorts Extra ports to expose in nessie service (normally used with the `sidecars` value)
+    ## @param service.server.extraPorts Extra ports to expose in Nessie service (normally used with the `sidecars` value)
     ##
     extraPorts: []
     ## @param service.server.sessionAffinity Control where client requests go, to the same pod or round-robin
@@ -523,10 +523,10 @@ service:
     ##
     sessionAffinityConfig: {}
   management:
-    ## @param service.management.type nessie service type
+    ## @param service.management.type Nessie service type
     ##
     type: ClusterIP
-    ## @param service.management.ports.http nessie service http port
+    ## @param service.management.ports.http Nessie service http port
     ##
     ports:
       http: 9000
@@ -536,30 +536,30 @@ service:
     ##
     nodePorts:
       http: ""
-    ## @param service.management.clusterIP nessie service Cluster IP
+    ## @param service.management.clusterIP Nessie service Cluster IP
     ## e.g.:
     ## clusterIP: None
     ##
     clusterIP: ""
-    ## @param service.management.loadBalancerIP nessie service Load Balancer IP
+    ## @param service.management.loadBalancerIP Nessie service Load Balancer IP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
-    ## @param service.management.loadBalancerSourceRanges nessie service Load Balancer sources
+    ## @param service.management.loadBalancerSourceRanges Nessie service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
     ##
     loadBalancerSourceRanges: []
-    ## @param service.management.externalTrafficPolicy nessie service external traffic policy
+    ## @param service.management.externalTrafficPolicy Nessie service external traffic policy
     ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param service.management.annotations Additional custom annotations for nessie service
+    ## @param service.management.annotations Additional custom annotations for Nessie service
     ##
     annotations: {}
-    ## @param service.management.extraPorts Extra ports to expose in nessie service (normally used with the `sidecars` value)
+    ## @param service.management.extraPorts Extra ports to expose in Nessie service (normally used with the `sidecars` value)
     ##
     extraPorts: []
     ## @param service.management.sessionAffinity Control where client requests go, to the same pod or round-robin
@@ -593,7 +593,7 @@ ingress:
   apiVersion: ""
   ## @param ingress.hostname Default host for the ingress resource
   ##
-  hostname: nessie.local
+  hostname: Nessie.local
   ## @param ingress.path The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
   path: /
@@ -643,8 +643,8 @@ ingress:
   ## see: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ## extraTls:
   ## - hosts:
-  ##     - nessie.local
-  ##   secretName: nessie.local-tls
+  ##     - Nessie.local
+  ##   secretName: Nessie.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
@@ -657,7 +657,7 @@ ingress:
   ## It is also possible to create and manage the certificates outside of this helm chart
   ## Please see README.md for more information
   ## e.g:
-  ## - name: nessie.local-tls
+  ## - name: Nessie.local-tls
   ##   key:
   ##   certificate:
   ##
@@ -675,13 +675,13 @@ ingress:
 ##
 persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
-  ## NOTE: nessie can be deployed without persistence because the storage will be located in a remote backend.
+  ## NOTE: Nessie can be deployed without persistence because the storage will be located in a remote backend.
   ## Enable when using BerkeleyBD or Lucene backends.
   ##
   enabled: true
   ## @param persistence.mountPath Path to mount the volume at.
   ##
-  mountPath: /bitnami/nessie/data
+  mountPath: /bitnami/Nessie/data
   ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
   ##
   subPath: ""
@@ -706,7 +706,7 @@ persistence:
   ## @param persistence.existingClaim The name of an existing PVC to use for persistence
   ##
   existingClaim: ""
-  ## @param persistence.selector Selector to match an existing Persistent Volume for nessie data PVC
+  ## @param persistence.selector Selector to match an existing Persistent Volume for Nessie data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
   ## selector:
@@ -743,7 +743,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -798,7 +798,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 16.3.0-debian-12-r8
+    tag: 16.3.0-debian-12-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -835,10 +835,10 @@ waitContainer:
   resources: {}
   ## Init container Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param waitContainer.containerSecurityContext.enabled nessie container securityContext
+  ## @param waitContainer.containerSecurityContext.enabled Nessie container securityContext
   ## @param waitContainer.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
-  ## @param waitContainer.containerSecurityContext.runAsUser User ID for the nessie container
-  ## @param waitContainer.containerSecurityContext.runAsGroup Group ID for the nessie container
+  ## @param waitContainer.containerSecurityContext.runAsUser User ID for the Nessie container
+  ## @param waitContainer.containerSecurityContext.runAsGroup Group ID for the Nessie container
   ## @param waitContainer.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param waitContainer.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param waitContainer.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
@@ -885,8 +885,8 @@ networkPolicy:
   ##
   enabled: true
   ## @param networkPolicy.allowExternal The Policy model to apply
-  ## When set to false, only pods with the correct client label will have network access to the ports nessie is
-  ## listening on. When true, nessie will accept connections from any source (with the correct destination port).
+  ## When set to false, only pods with the correct client label will have network access to the ports Nessie is
+  ## listening on. When true, Nessie will accept connections from any source (with the correct destination port).
   ##
   allowExternal: true
   ## @param networkPolicy.allowExternalEgress Allow the pod to access any range of port and all destinations.
@@ -997,9 +997,9 @@ metrics:
 postgresql:
   enabled: true
   auth:
-    username: bn_nessie
+    username: bn_Nessie
     password: ""
-    database: bitnami_nessie
+    database: bitnami_Nessie
     existingSecret: ""
   architecture: standalone
   primary:
@@ -1020,7 +1020,7 @@ externalDatabase:
   host: ""
   port: 5432
   user: postgres
-  database: nessie
+  database: Nessie
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: "db-password"

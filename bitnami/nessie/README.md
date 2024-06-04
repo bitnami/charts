@@ -1,24 +1,24 @@
-<!--- app-name: nessie -->
+<!--- app-name: Nessie -->
 
 # Bitnami package for Nessie
 
 Nessie is an open-source version control system for data lakes, enabling isolated data experimentation before committing changes.
 
-[Overview of Nessie](https://projectnessie.org/)
+[Overview of Nessie](https://projectNessie.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/nessie
+helm install my-release oci://registry-1.docker.io/bitnamicharts/Nessie
 ```
 
 Looking to use Nessie in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Introduction
 
-This chart bootstraps a [Nessie](https://github.com/bitnami/containers/tree/main/bitnami/nessie) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Nessie](https://github.com/bitnami/containers/tree/main/bitnami/Nessie) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
@@ -32,7 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nessie
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/Nessie
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -67,7 +67,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Nessie application properties
 
-The chart supports setting Nessie [application properties](https://github.com/projectnessie/nessie/blob/main/servers/quarkus-server/src/main/resources/application.properties) via two parameters:
+The chart supports setting Nessie [application properties](https://github.com/projectNessie/Nessie/blob/main/servers/quarkus-server/src/main/resources/application.properties) via two parameters:
 
 - `configOverrides`: Overrides non-sensitive application properties, such as `quarkus.micrometer.enabled`. Nested and plain YAML are supported.
 - `secretConfigOverrides`: Overrides sensitive applicatino properties, such as `quarkus.datasource.postgresql.password`. Nested and plain YAML are supported.
@@ -95,7 +95,7 @@ This chart natively supports the following version store methods:
 - RocksDB: Set `versionStoreType=ROCKSDB` and `persistence.enabled=true` for maintaining persistence between releases. Note that this will create a PVC that will be shared between all replicas of the Deployment.
 - In memory storage: Set `versionStoreType=IN_MEMORY`.
 
-It is possible to configure the rest of storage backends by using `configOverrides` and `secretConfigOverrides`, setting the proper [application properties](https://github.com/projectnessie/nessie/blob/main/servers/quarkus-server/src/main/resources/application.properties). In the following sections we show two examples:
+It is possible to configure the rest of storage backends by using `configOverrides` and `secretConfigOverrides`, setting the proper [application properties](https://github.com/projectNessie/Nessie/blob/main/servers/quarkus-server/src/main/resources/application.properties). In the following sections we show two examples:
 
 #### Using Bitnami MariaDB helm chart as version store
 
@@ -114,7 +114,7 @@ Then install the Nessie helm chart with the following values:
 versionStoreType: JDBC
 # This section goes to a ConfigMap
 configOverrides:
-  nessie.version.store.persist.jdbc.datasource: mariadb
+  Nessie.version.store.persist.jdbc.datasource: mariadb
   quarkus.datasource.mariadb.username: DB_USER
   quarkus.datasource.mariadb.jdbc.url: jdbc:mariadb://mariadb:3306/DB_DATABASE
 # This section goes to a Secret
@@ -155,7 +155,7 @@ Nessie allows authentication using an external OIDC provider. This can be config
 
 ```yaml
 configOverrides:
-  nessie.server.authentication.enabled: true
+  Nessie.server.authentication.enabled: true
   quarkus.oidc.auth-server-url: OIDC_SERVER_URL
 secretConfigOverrides:
   quarkus.oidc.credentials.secret: OIDC_SECRET
@@ -176,7 +176,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as nessie (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
+If additional containers are needed in the same pod as Nessie (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter.
 
 ```yaml
 sidecars:
@@ -303,17 +303,17 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `diagnosticMode.args`                               | Args to override all containers in the deployment                                                                                                                                                                    | `["infinity"]`           |
 | `configOverrides`                                   | Overwrite or add extra configuration options to the chart default                                                                                                                                                    | `{}`                     |
 | `secretConfigOverrides`                             | Overwrite or add extra configuration options to the chart default (these will be added in a secret)                                                                                                                  | `{}`                     |
-| `existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for nessie                                                                                                                                          | `""`                     |
-| `existingSecret`                                    | The name of an existing Secret with your custom sensitive configuration for nessie                                                                                                                                   | `""`                     |
+| `existingConfigmap`                                 | The name of an existing ConfigMap with your custom configuration for Nessie                                                                                                                                          | `""`                     |
+| `existingSecret`                                    | The name of an existing Secret with your custom sensitive configuration for Nessie                                                                                                                                   | `""`                     |
 | `javaOpts`                                          | Set extra Java Options when launching Nessie                                                                                                                                                                         | `""`                     |
-| `image.registry`                                    | nessie image registry                                                                                                                                                                                                | `REGISTRY_NAME`          |
-| `image.repository`                                  | nessie image repository                                                                                                                                                                                              | `REPOSITORY_NAME/nessie` |
-| `image.digest`                                      | nessie image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                    | `""`                     |
-| `image.pullPolicy`                                  | nessie image pull policy                                                                                                                                                                                             | `IfNotPresent`           |
-| `image.pullSecrets`                                 | nessie image pull secrets                                                                                                                                                                                            | `[]`                     |
-| `image.debug`                                       | Enable nessie image debug mode                                                                                                                                                                                       | `false`                  |
-| `replicaCount`                                      | Number of nessie replicas to deploy                                                                                                                                                                                  | `1`                      |
-| `containerPorts.http`                               | nessie http server container port                                                                                                                                                                                    | `19120`                  |
+| `image.registry`                                    | Nessie image registry                                                                                                                                                                                                | `REGISTRY_NAME`          |
+| `image.repository`                                  | Nessie image repository                                                                                                                                                                                              | `REPOSITORY_NAME/Nessie` |
+| `image.digest`                                      | Nessie image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                    | `""`                     |
+| `image.pullPolicy`                                  | Nessie image pull policy                                                                                                                                                                                             | `IfNotPresent`           |
+| `image.pullSecrets`                                 | Nessie image pull secrets                                                                                                                                                                                            | `[]`                     |
+| `image.debug`                                       | Enable Nessie image debug mode                                                                                                                                                                                       | `false`                  |
+| `replicaCount`                                      | Number of Nessie replicas to deploy                                                                                                                                                                                  | `1`                      |
+| `containerPorts.http`                               | Nessie http server container port                                                                                                                                                                                    | `19120`                  |
 | `containerPorts.management`                         | management container port                                                                                                                                                                                            | `9000`                   |
 | `extraContainerPorts`                               | Optionally specify extra list of additional container ports                                                                                                                                                          | `[]`                     |
 | `deploymentLabels`                                  | Add extra labels to the Deployment object                                                                                                                                                                            | `{}`                     |
@@ -321,19 +321,19 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `logLevel`                                          | Set application log level                                                                                                                                                                                            | `INFO`                   |
 | `usePasswordFile`                                   | Mount all sensitive information as files                                                                                                                                                                             | `true`                   |
 | `versionStoreType`                                  | Set version store type. The chart natively supports JDBC_POSTGRESQL, ROCKSDB and IN_MEMORY. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.                       | `JDBC_POSTGRESQL`        |
-| `livenessProbe.enabled`                             | Enable livenessProbe on nessie containers                                                                                                                                                                            | `true`                   |
+| `livenessProbe.enabled`                             | Enable livenessProbe on Nessie containers                                                                                                                                                                            | `true`                   |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                              | `10`                     |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                                                     | `10`                     |
 | `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                                                                                                    | `5`                      |
 | `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                                                                                                  | `5`                      |
 | `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                                                                                                  | `1`                      |
-| `readinessProbe.enabled`                            | Enable readinessProbe on nessie containers                                                                                                                                                                           | `true`                   |
+| `readinessProbe.enabled`                            | Enable readinessProbe on Nessie containers                                                                                                                                                                           | `true`                   |
 | `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                                                                                             | `10`                     |
 | `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                                                                                                    | `10`                     |
 | `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                                                                                                   | `5`                      |
 | `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                                                                                                 | `5`                      |
 | `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                                                                                                 | `1`                      |
-| `startupProbe.enabled`                              | Enable startupProbe on nessie containers                                                                                                                                                                             | `false`                  |
+| `startupProbe.enabled`                              | Enable startupProbe on Nessie containers                                                                                                                                                                             | `false`                  |
 | `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                               | `90`                     |
 | `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                      | `10`                     |
 | `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                     | `5`                      |
@@ -344,15 +344,15 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                   | `{}`                     |
 | `resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (secondary.resources is recommended for production). | `medium`                 |
 | `resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                    | `{}`                     |
-| `podSecurityContext.enabled`                        | Enable security context for nessie pods                                                                                                                                                                              | `true`                   |
+| `podSecurityContext.enabled`                        | Enable security context for Nessie pods                                                                                                                                                                              | `true`                   |
 | `podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                   | `Always`                 |
 | `podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                       | `[]`                     |
 | `podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                          | `[]`                     |
 | `podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                                                                                                                         | `1001`                   |
-| `containerSecurityContext.enabled`                  | nessie container securityContext                                                                                                                                                                                     | `true`                   |
+| `containerSecurityContext.enabled`                  | Nessie container securityContext                                                                                                                                                                                     | `true`                   |
 | `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                     | `nil`                    |
-| `containerSecurityContext.runAsUser`                | User ID for the nessie container                                                                                                                                                                                     | `1001`                   |
-| `containerSecurityContext.runAsGroup`               | Group ID for the nessie container                                                                                                                                                                                    | `1001`                   |
+| `containerSecurityContext.runAsUser`                | User ID for the Nessie container                                                                                                                                                                                     | `1001`                   |
+| `containerSecurityContext.runAsGroup`               | Group ID for the Nessie container                                                                                                                                                                                    | `1001`                   |
 | `containerSecurityContext.runAsNonRoot`             | Set secondary container's Security Context runAsNonRoot                                                                                                                                                              | `true`                   |
 | `containerSecurityContext.privileged`               | Set secondary container's Security Context privileged                                                                                                                                                                | `false`                  |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set secondary container's Security Context allowPrivilegeEscalation                                                                                                                                                  | `false`                  |
@@ -361,10 +361,10 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                     | `RuntimeDefault`         |
 | `command`                                           | Override default container command (useful when using custom images)                                                                                                                                                 | `[]`                     |
 | `args`                                              | Override default container args (useful when using custom images)                                                                                                                                                    | `[]`                     |
-| `hostAliases`                                       | nessie pods host aliases                                                                                                                                                                                             | `[]`                     |
-| `annotations`                                       | Annotations for nessie deployment/statefulset                                                                                                                                                                        | `{}`                     |
-| `podLabels`                                         | Extra labels for nessie pods                                                                                                                                                                                         | `{}`                     |
-| `podAnnotations`                                    | Annotations for nessie pods                                                                                                                                                                                          | `{}`                     |
+| `hostAliases`                                       | Nessie pods host aliases                                                                                                                                                                                             | `[]`                     |
+| `annotations`                                       | Annotations for Nessie deployment/statefulset                                                                                                                                                                        | `{}`                     |
+| `podLabels`                                         | Extra labels for Nessie pods                                                                                                                                                                                         | `{}`                     |
+| `podAnnotations`                                    | Annotations for Nessie pods                                                                                                                                                                                          | `{}`                     |
 | `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                                  | `""`                     |
 | `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                             | `soft`                   |
 | `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                      | `true`                   |
@@ -373,23 +373,23 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                                                                            | `""`                     |
 | `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                                                                                                                                                | `""`                     |
 | `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                                                                                                                                             | `[]`                     |
-| `affinity`                                          | Affinity for nessie pods assignment                                                                                                                                                                                  | `{}`                     |
+| `affinity`                                          | Affinity for Nessie pods assignment                                                                                                                                                                                  | `{}`                     |
 | `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                   | `false`                  |
-| `nodeSelector`                                      | Node labels for nessie pods assignment                                                                                                                                                                               | `{}`                     |
-| `tolerations`                                       | Tolerations for nessie pods assignment                                                                                                                                                                               | `[]`                     |
-| `updateStrategy.type`                               | nessie strategy type                                                                                                                                                                                                 | `RollingUpdate`          |
-| `priorityClassName`                                 | nessie pods' priorityClassName                                                                                                                                                                                       | `""`                     |
+| `nodeSelector`                                      | Node labels for Nessie pods assignment                                                                                                                                                                               | `{}`                     |
+| `tolerations`                                       | Tolerations for Nessie pods assignment                                                                                                                                                                               | `[]`                     |
+| `updateStrategy.type`                               | Nessie strategy type                                                                                                                                                                                                 | `RollingUpdate`          |
+| `priorityClassName`                                 | Nessie pods' priorityClassName                                                                                                                                                                                       | `""`                     |
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                                             | `[]`                     |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default) for nessie pods                                                                                                                                                       | `""`                     |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default) for Nessie pods                                                                                                                                                       | `""`                     |
 | `terminationGracePeriodSeconds`                     | Seconds Redmine pod needs to terminate gracefully                                                                                                                                                                    | `""`                     |
-| `lifecycleHooks`                                    | for the nessie container(s) to automate configuration before or after startup                                                                                                                                        | `{}`                     |
-| `extraEnvVars`                                      | Array with extra environment variables to add to nessie nodes                                                                                                                                                        | `[]`                     |
-| `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for nessie nodes                                                                                                                                                | `""`                     |
-| `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for nessie nodes                                                                                                                                                   | `""`                     |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for the nessie pod(s)                                                                                                                                            | `[]`                     |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the nessie container(s)                                                                                                                                 | `[]`                     |
-| `sidecars`                                          | Add additional sidecar containers to the nessie pod(s)                                                                                                                                                               | `[]`                     |
-| `initContainers`                                    | Add additional init containers to the nessie pod(s)                                                                                                                                                                  | `[]`                     |
+| `lifecycleHooks`                                    | for the Nessie container(s) to automate configuration before or after startup                                                                                                                                        | `{}`                     |
+| `extraEnvVars`                                      | Array with extra environment variables to add to Nessie nodes                                                                                                                                                        | `[]`                     |
+| `extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Nessie nodes                                                                                                                                                | `""`                     |
+| `extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Nessie nodes                                                                                                                                                   | `""`                     |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for the Nessie pod(s)                                                                                                                                            | `[]`                     |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Nessie container(s)                                                                                                                                 | `[]`                     |
+| `sidecars`                                          | Add additional sidecar containers to the Nessie pod(s)                                                                                                                                                               | `[]`                     |
+| `initContainers`                                    | Add additional init containers to the Nessie pod(s)                                                                                                                                                                  | `[]`                     |
 
 ### Autoscaling
 
@@ -416,33 +416,33 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 
 | Name                                          | Description                                                                                                                      | Value                    |
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.server.type`                         | nessie service type                                                                                                              | `LoadBalancer`           |
-| `service.server.ports.http`                   | nessie service http port                                                                                                         | `19120`                  |
+| `service.server.type`                         | Nessie service type                                                                                                              | `LoadBalancer`           |
+| `service.server.ports.http`                   | Nessie service http port                                                                                                         | `19120`                  |
 | `service.server.nodePorts.http`               | Node port for Gremlin                                                                                                            | `""`                     |
-| `service.server.clusterIP`                    | nessie service Cluster IP                                                                                                        | `""`                     |
-| `service.server.loadBalancerIP`               | nessie service Load Balancer IP                                                                                                  | `""`                     |
-| `service.server.loadBalancerSourceRanges`     | nessie service Load Balancer sources                                                                                             | `[]`                     |
-| `service.server.externalTrafficPolicy`        | nessie service external traffic policy                                                                                           | `Cluster`                |
-| `service.server.annotations`                  | Additional custom annotations for nessie service                                                                                 | `{}`                     |
-| `service.server.extraPorts`                   | Extra ports to expose in nessie service (normally used with the `sidecars` value)                                                | `[]`                     |
+| `service.server.clusterIP`                    | Nessie service Cluster IP                                                                                                        | `""`                     |
+| `service.server.loadBalancerIP`               | Nessie service Load Balancer IP                                                                                                  | `""`                     |
+| `service.server.loadBalancerSourceRanges`     | Nessie service Load Balancer sources                                                                                             | `[]`                     |
+| `service.server.externalTrafficPolicy`        | Nessie service external traffic policy                                                                                           | `Cluster`                |
+| `service.server.annotations`                  | Additional custom annotations for Nessie service                                                                                 | `{}`                     |
+| `service.server.extraPorts`                   | Extra ports to expose in Nessie service (normally used with the `sidecars` value)                                                | `[]`                     |
 | `service.server.sessionAffinity`              | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.server.sessionAffinityConfig`        | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.management.type`                     | nessie service type                                                                                                              | `ClusterIP`              |
-| `service.management.ports.http`               | nessie service http port                                                                                                         | `9000`                   |
+| `service.management.type`                     | Nessie service type                                                                                                              | `ClusterIP`              |
+| `service.management.ports.http`               | Nessie service http port                                                                                                         | `9000`                   |
 | `service.management.nodePorts.http`           | Node port for Gremlin                                                                                                            | `""`                     |
-| `service.management.clusterIP`                | nessie service Cluster IP                                                                                                        | `""`                     |
-| `service.management.loadBalancerIP`           | nessie service Load Balancer IP                                                                                                  | `""`                     |
-| `service.management.loadBalancerSourceRanges` | nessie service Load Balancer sources                                                                                             | `[]`                     |
-| `service.management.externalTrafficPolicy`    | nessie service external traffic policy                                                                                           | `Cluster`                |
-| `service.management.annotations`              | Additional custom annotations for nessie service                                                                                 | `{}`                     |
-| `service.management.extraPorts`               | Extra ports to expose in nessie service (normally used with the `sidecars` value)                                                | `[]`                     |
+| `service.management.clusterIP`                | Nessie service Cluster IP                                                                                                        | `""`                     |
+| `service.management.loadBalancerIP`           | Nessie service Load Balancer IP                                                                                                  | `""`                     |
+| `service.management.loadBalancerSourceRanges` | Nessie service Load Balancer sources                                                                                             | `[]`                     |
+| `service.management.externalTrafficPolicy`    | Nessie service external traffic policy                                                                                           | `Cluster`                |
+| `service.management.annotations`              | Additional custom annotations for Nessie service                                                                                 | `{}`                     |
+| `service.management.extraPorts`               | Extra ports to expose in Nessie service (normally used with the `sidecars` value)                                                | `[]`                     |
 | `service.management.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.management.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                             | Set to true to enable ingress record generation                                                                                  | `false`                  |
 | `ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
 | `ingress.pathType`                            | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                            | Default host for the ingress resource                                                                                            | `nessie.local`           |
+| `ingress.hostname`                            | Default host for the ingress resource                                                                                            | `Nessie.local`           |
 | `ingress.path`                                | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
 | `ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.ingressClassName`                    | Set the ingerssClassName on the ingress record for k8s 1.18+                                                                     | `""`                     |
@@ -459,14 +459,14 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | Name                         | Description                                                                                                                           | Value                  |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `persistence.enabled`        | Enable persistence using Persistent Volume Claims                                                                                     | `true`                 |
-| `persistence.mountPath`      | Path to mount the volume at.                                                                                                          | `/bitnami/nessie/data` |
+| `persistence.mountPath`      | Path to mount the volume at.                                                                                                          | `/bitnami/Nessie/data` |
 | `persistence.subPath`        | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                               | `""`                   |
 | `persistence.storageClass`   | Storage class of backing PVC                                                                                                          | `""`                   |
 | `persistence.annotations`    | Persistent Volume Claim annotations                                                                                                   | `{}`                   |
 | `persistence.accessModes`    | Persistent Volume Access Modes                                                                                                        | `["ReadWriteOnce"]`    |
 | `persistence.size`           | Size of data volume                                                                                                                   | `8Gi`                  |
 | `persistence.existingClaim`  | The name of an existing PVC to use for persistence                                                                                    | `""`                   |
-| `persistence.selector`       | Selector to match an existing Persistent Volume for nessie data PVC                                                                   | `{}`                   |
+| `persistence.selector`       | Selector to match an existing Persistent Volume for Nessie data PVC                                                                   | `{}`                   |
 | `persistence.dataSource`     | Custom PVC data source                                                                                                                | `{}`                   |
 | `persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                   |
 
@@ -491,10 +491,10 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `waitContainer.image.debug`                                       | Enable PostgreSQL client image debug mode                                                                                                                                                                                                             | `false`                             |
 | `waitContainer.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if waitContainer.resources is set (waitContainer.resources is recommended for production).         | `nano`                              |
 | `waitContainer.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                                |
-| `waitContainer.containerSecurityContext.enabled`                  | nessie container securityContext                                                                                                                                                                                                                      | `true`                              |
+| `waitContainer.containerSecurityContext.enabled`                  | Nessie container securityContext                                                                                                                                                                                                                      | `true`                              |
 | `waitContainer.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                               |
-| `waitContainer.containerSecurityContext.runAsUser`                | User ID for the nessie container                                                                                                                                                                                                                      | `1001`                              |
-| `waitContainer.containerSecurityContext.runAsGroup`               | Group ID for the nessie container                                                                                                                                                                                                                     | `1001`                              |
+| `waitContainer.containerSecurityContext.runAsUser`                | User ID for the Nessie container                                                                                                                                                                                                                      | `1001`                              |
+| `waitContainer.containerSecurityContext.runAsGroup`               | Group ID for the Nessie container                                                                                                                                                                                                                     | `1001`                              |
 | `waitContainer.containerSecurityContext.runAsNonRoot`             | Set secondary container's Security Context runAsNonRoot                                                                                                                                                                                               | `true`                              |
 | `waitContainer.containerSecurityContext.privileged`               | Set secondary container's Security Context privileged                                                                                                                                                                                                 | `false`                             |
 | `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set secondary container's Security Context allowPrivilegeEscalation                                                                                                                                                                                   | `false`                             |
@@ -541,9 +541,9 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | Name                                          | Description                                                             | Value            |
 | --------------------------------------------- | ----------------------------------------------------------------------- | ---------------- |
 | `postgresql.enabled`                          | Switch to enable or disable the PostgreSQL helm chart                   | `true`           |
-| `postgresql.auth.username`                    | Name for a custom user to create                                        | `bn_nessie`      |
+| `postgresql.auth.username`                    | Name for a custom user to create                                        | `bn_Nessie`      |
 | `postgresql.auth.password`                    | Password for the custom user to create                                  | `""`             |
-| `postgresql.auth.database`                    | Name for a custom database to create                                    | `bitnami_nessie` |
+| `postgresql.auth.database`                    | Name for a custom database to create                                    | `bitnami_Nessie` |
 | `postgresql.auth.existingSecret`              | Name of existing secret to use for PostgreSQL credentials               | `""`             |
 | `postgresql.architecture`                     | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`     |
 | `postgresql.primary.service.ports.postgresql` | PostgreSQL service port                                                 | `5432`           |
@@ -551,7 +551,7 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `externalDatabase.port`                       | Database port number                                                    | `5432`           |
 | `externalDatabase.user`                       | Non-root username                                                       | `postgres`       |
 | `externalDatabase.password`                   | Password for the non-root username                                      | `""`             |
-| `externalDatabase.database`                   | Database name                                                           | `nessie`         |
+| `externalDatabase.database`                   | Database name                                                           | `Nessie`         |
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials | `""`             |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials      | `db-password`    |
 
@@ -559,7 +559,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-    oci://REGISTRY_NAME/REPOSITORY_NAME/nessie
+    oci://REGISTRY_NAME/REPOSITORY_NAME/Nessie
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
@@ -568,11 +568,11 @@ helm install my-release \
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nessie
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/Nessie
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
-> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/nessie/values.yaml)
+> **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/template/Nessie/values.yaml)
 
 ## Troubleshooting
 
