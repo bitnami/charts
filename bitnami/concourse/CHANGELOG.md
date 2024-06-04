@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.1 (2024-05-22)
+## 4.2.2 (2024-06-04)
 
-* [bitnami/concourse] Use different liveness/readiness probes ([#26340](https://github.com/bitnami/charts/pull/26340))
+* [bitnami/concourse] Enable PodDisruptionBudgets ([#26688](https://github.com/bitnami/charts/pull/26688))
+
+## <small>4.2.1 (2024-05-23)</small>
+
+* [bitnami/concourse] Use different liveness/readiness probes (#26340) ([04467b6](https://github.com/bitnami/charts/commit/04467b6969709579e43317c63ade2d3a96f79bfc)), closes [#26340](https://github.com/bitnami/charts/issues/26340)
 
 ## 4.2.0 (2024-05-21)
 
