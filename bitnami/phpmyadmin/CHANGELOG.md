@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.2.1 (2024-06-04)
+
+* [bitnami/phpmyadmin] Fix typo in deployment.yaml template ([#26616](https://github.com/bitnami/charts/pull/26616))
+
 ## 16.2.0 (2024-05-29)
 
-* [bitnami/phpmyadmin] Enable PodDisruptionBudgets ([#26528](https://github.com/bitnami/charts/pull/26528))
+* [bitnami/phpmyadmin] Enable PodDisruptionBudgets (#26528) ([9f90a31](https://github.com/bitnami/charts/commit/9f90a31561545ecacbc62f5c8fe9343b85fbc846)), closes [#26528](https://github.com/bitnami/charts/issues/26528)
 
 ## 16.1.0 (2024-05-21)
 

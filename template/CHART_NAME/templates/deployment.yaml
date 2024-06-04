@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.enabled }}
+  {{- if not .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.hpa.enabled }}
   replicas: {{ .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
   {{- end }}
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
@@ -136,6 +136,9 @@ spec:
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.http }}
             - name: https
               containerPort: {{ .Values.%%MAIN_OBJECT_BLOCK%%.containerPorts.https }}
+            {{- if .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.extraContainerPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.%%MAIN_OBJECT_BLOCK%%.customLivenessProbe "context" $) | nindent 12 }}

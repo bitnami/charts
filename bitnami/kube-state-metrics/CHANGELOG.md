@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.0 (2024-05-28)
+## 4.2.1 (2024-06-04)
 
-* [bitnami/kube-state-metrics] Enable PodDisruptionBudgets ([#26502](https://github.com/bitnami/charts/pull/26502))
+* [bitnami/kube-state-metrics] Bump chart version ([#26640](https://github.com/bitnami/charts/pull/26640))
+
+## 4.2.0 (2024-05-29)
+
+* [bitnami/kube-state-metrics] Enable PodDisruptionBudgets (#26502) ([bc61176](https://github.com/bitnami/charts/commit/bc61176fbcfc6ccc4a0a31f8ffa52dfaa8075867)), closes [#26502](https://github.com/bitnami/charts/issues/26502)
 
 ## <small>4.1.1 (2024-05-21)</small>
 

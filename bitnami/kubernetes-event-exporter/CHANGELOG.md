@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.0 (2024-05-24)
+## 3.2.1 (2024-06-04)
 
-* [bitnami/kubernetes-event-exporter] Add PDB ([#26145](https://github.com/bitnami/charts/pull/26145))
+* [bitnami/kubernetes-event-exporter] Bump chart version ([#26642](https://github.com/bitnami/charts/pull/26642))
+
+## 3.2.0 (2024-05-27)
+
+* [bitnami/kubernetes-event-exporter] Add PDB (#26145) ([4d8363a](https://github.com/bitnami/charts/commit/4d8363ab7e4d4c3eba2aa166018d097f9ae14d45)), closes [#26145](https://github.com/bitnami/charts/issues/26145)
 
 ## <small>3.1.1 (2024-05-23)</small>
 

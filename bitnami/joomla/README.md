@@ -1,5 +1,5 @@
 <!--- app-name: Joomla! -->
-
+<!-- markdownlint-disable-next-line MD026 -->
 # Bitnami package for Joomla!
 
 Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
@@ -171,6 +171,9 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 | `extraVolumes`                                      | Array of extra volumes to be added to the deployment (evaluated as template). Requires setting `extraVolumeMounts`                                                                                                | `[]`                     |
 | `extraVolumeMounts`                                 | Array of extra volume mounts to be added to the container (evaluated as template). Normally used with `extraVolumes`                                                                                              | `[]`                     |
 | `initContainers`                                    | Add additional init containers to the pod (evaluated as a template)                                                                                                                                               | `[]`                     |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`                   |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`                     |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`                     |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                     |
 | `existingSecret`                                    | Name of a secret with the application password                                                                                                                                                                    | `""`                     |
 | `smtpHost`                                          | SMTP host                                                                                                                                                                                                         | `""`                     |
