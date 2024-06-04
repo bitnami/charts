@@ -1173,7 +1173,7 @@ pdb:
   create: true
   ## @param pdb.minAvailable Minimum number/percentage of pods that must still be available after the eviction
   ##
-  minAvailable: 1
+  minAvailable: ""
   ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable after the eviction
   ##
   maxUnavailable: ""
