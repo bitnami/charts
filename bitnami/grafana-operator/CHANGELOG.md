@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.1 (2024-06-04)
+## 4.4.2 (2024-06-04)
 
-* [bitnami/grafana-operator] Bump chart version ([#26634](https://github.com/bitnami/charts/pull/26634))
+* [bitnami/grafana-operator] Release 4.4.2 ([#26714](https://github.com/bitnami/charts/pull/26714))
+
+## <small>4.4.1 (2024-06-04)</small>
+
+* [bitnami/grafana-operator] Bump chart version (#26634) ([7db5c88](https://github.com/bitnami/charts/commit/7db5c88fae416e432d011c85cd7e44abef1590e4)), closes [#26634](https://github.com/bitnami/charts/issues/26634)
 
 ## 4.4.0 (2024-05-29)
 
