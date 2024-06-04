@@ -333,7 +333,7 @@ tracking:
   ##
   pdb:
     create: false
-    minAvailable: "1"
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
