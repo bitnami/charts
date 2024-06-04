@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.0 (2024-05-28)
+## 20.2.1 (2024-06-04)
 
-* [bitnami/mediawiki] Enable PodDisruptionBudgets ([#26510](https://github.com/bitnami/charts/pull/26510))
+* [bitnami/mediawiki] Fix typo in deployment.yaml template ([#26615](https://github.com/bitnami/charts/pull/26615))
+
+## 20.2.0 (2024-06-03)
+
+* [bitnami/mediawiki] Enable PodDisruptionBudgets (#26510) ([610f625](https://github.com/bitnami/charts/commit/610f62562ba92ba853b037ad9e8e04de7c947790)), closes [#26510](https://github.com/bitnami/charts/issues/26510)
 
 ## 20.1.0 (2024-05-21)
 

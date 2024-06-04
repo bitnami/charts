@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.1 (2024-05-31)
+## 18.2.2 (2024-06-04)
 
-* [bitnami/phpbb] Release 18.2.1 ([#26588](https://github.com/bitnami/charts/pull/26588))
+* [bitnami/phpbb] Fix typo in deployment.yaml template ([#26617](https://github.com/bitnami/charts/pull/26617))
+
+## <small>18.2.1 (2024-06-01)</small>
+
+* [bitnami/phpbb] Release 18.2.1 (#26588) ([0185820](https://github.com/bitnami/charts/commit/0185820b772ca40d96b6394343f8838fc9d20120)), closes [#26588](https://github.com/bitnami/charts/issues/26588)
 
 ## 18.2.0 (2024-05-29)
 

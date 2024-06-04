@@ -1,8 +1,12 @@
 # Changelog
 
-## 17.3.3 (2024-06-04)
+## 17.3.4 (2024-06-04)
 
 * [bitnami/nginx] Allowing for customize dnsPolicy and dnsConfig for nginx ([#26619](https://github.com/bitnami/charts/pull/26619))
+
+## <small>17.3.3 (2024-06-04)</small>
+
+* [bitnami/nginx] Bump chart version ([#26655](https://github.com/bitnami/charts/pull/26655))
 
 ## <small>17.3.2 (2024-05-29)</small>
 

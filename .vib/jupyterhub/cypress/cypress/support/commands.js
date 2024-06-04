@@ -26,7 +26,7 @@ Cypress.Commands.add(
     cy.get('#login_submit').click();
     // The authentication is not completed until the page is rendered
     // Accessing the for the first time may take extra-time: "Your server is starting up"
-    cy.contains('Launcher', {timeout: 60000});
+    cy.contains('Launcher', {timeout: 120000});
   }
 );
 
