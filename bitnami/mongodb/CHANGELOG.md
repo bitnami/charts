@@ -1,12 +1,12 @@
 # Changelog
 
-## 15.7.0 (2024-06-03)
+## 15.7.0 (2024-06-04)
 
 * [bitnami/mongodb] Add securityContext to generate-tls in replicaset ([#26606](https://github.com/bitnami/charts/pull/26606))
 
 ## <small>15.6.3 (2024-06-04)</small>
 
-* [bitnami/mongodb] Bump chart version ([#26650](https://github.com/bitnami/charts/pull/26650))
+* [bitnami/mongodb] Bump chart version (#26650) ([8a4412d](https://github.com/bitnami/charts/commit/8a4412df8904d90daefe8ac8a5345270867d329f)), closes [#26650](https://github.com/bitnami/charts/issues/26650)
 
 ## <small>15.6.2 (2024-06-04)</small>
 
