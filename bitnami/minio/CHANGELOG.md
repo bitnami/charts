@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.3 (2024-06-04)
+## 14.6.4 (2024-06-04)
 
-* [bitnami/minio] Bump chart version ([#26649](https://github.com/bitnami/charts/pull/26649))
+* [bitnami/minio] Enable PodDisruptionBudgets ([#26705](https://github.com/bitnami/charts/pull/26705))
+
+## <small>14.6.3 (2024-06-04)</small>
+
+* [bitnami/minio] Bump chart version (#26649) ([89d3360](https://github.com/bitnami/charts/commit/89d336016b52703fa83758abb29e73d93beeca50)), closes [#26649](https://github.com/bitnami/charts/issues/26649)
 
 ## <small>14.6.2 (2024-05-29)</small>
 
