@@ -6,7 +6,7 @@
 
 ## <small>17.3.3 (2024-06-04)</small>
 
-* [bitnami/nginx] Bump chart version ([#26655](https://github.com/bitnami/charts/pull/26655))
+* [bitnami/nginx] Bump chart version (#26655) ([c3312fc](https://github.com/bitnami/charts/commit/c3312fc310c58870c8ad2f738724af25243ef2ba)), closes [#26655](https://github.com/bitnami/charts/issues/26655)
 
 ## <small>17.3.2 (2024-05-29)</small>
 
