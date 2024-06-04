@@ -1,8 +1,13 @@
 # Changelog
 
-## 18.2.1 (2024-05-27)
+## 18.3.0 (2024-06-04)
 
-* [bitnami/airflow] Fix Airflow k8s config generation in the initContainer and filesystem writability ([#26341](https://github.com/bitnami/charts/pull/26341))
+* [bitnami/airflow] Enable PodDisruptionBudgets ([#26684](https://github.com/bitnami/charts/pull/26684))
+
+## <small>18.2.1 (2024-05-30)</small>
+
+* [bitnami/airflow] feat: :sparkles: :lock: Add warning when original images are replaced (#26172) ([7e78942](https://github.com/bitnami/charts/commit/7e78942907eef861e3b06c23be93c32037aca391)), closes [#26172](https://github.com/bitnami/charts/issues/26172)
+* [bitnami/airflow] Fix Airflow k8s config generation in the initContainer and filesystem writability  ([b21c6f4](https://github.com/bitnami/charts/commit/b21c6f4ad75320fa613d6f9d0523d696ae241959)), closes [#26341](https://github.com/bitnami/charts/issues/26341)
 
 ## 18.2.0 (2024-05-21)
 
