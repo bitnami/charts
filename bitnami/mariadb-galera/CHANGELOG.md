@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.0 (2024-05-23)
+## 13.2.1 (2024-06-04)
 
-* [bitnami/mariadb-galera] PDB review ([#25979](https://github.com/bitnami/charts/pull/25979))
+* [bitnami/mariadb-galera] Bump chart version ([#26645](https://github.com/bitnami/charts/pull/26645))
+
+## 13.2.0 (2024-05-24)
+
+* [bitnami/mariadb-galera] PDB review (#25979) ([5460c86](https://github.com/bitnami/charts/commit/5460c86d499110f4263171fbb579d005a574f7a6)), closes [#25979](https://github.com/bitnami/charts/issues/25979)
 
 ## 13.1.0 (2024-05-21)
 

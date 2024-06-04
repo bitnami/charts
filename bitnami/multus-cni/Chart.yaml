@@ -10,23 +10,23 @@ annotations:
 apiVersion: v2
 appVersion: 4.0.2
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Multus is a CNI plugin for Kubernetes clusters. Written in Go, features adding multiple network interfaces to pods.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/multus-cni/img/multus-cni-stack-220x234.png
 keywords:
-- multus-cni
-- cni
-- kubernetes
-- networking
+  - multus-cni
+  - cni
+  - kubernetes
+  - networking
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: multus-cni
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
-version: 2.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
+version: 2.1.1

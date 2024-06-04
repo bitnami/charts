@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: configurable-http-proxy
-      image: docker.io/bitnami/configurable-http-proxy:4.6.1-debian-12-r16
+      image: docker.io/bitnami/configurable-http-proxy:4.6.1-debian-12-r25
     - name: jupyter-base-notebook
-      image: docker.io/bitnami/jupyter-base-notebook:4.1.5-debian-12-r5
+      image: docker.io/bitnami/jupyter-base-notebook:5.0.0-debian-12-r0
     - name: jupyterhub
-      image: docker.io/bitnami/jupyterhub:4.1.5-debian-12-r5
+      image: docker.io/bitnami/jupyterhub:4.1.5-debian-12-r6
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
 appVersion: 4.1.5
 dependencies:
@@ -37,4 +37,4 @@ maintainers:
 name: jupyterhub
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
-version: 7.1.2
+version: 7.1.4
