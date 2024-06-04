@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.0 (2024-05-30)
+## 15.7.0 (2024-06-04)
 
-* [bitnami/thanos] Receive, ruler & storegateway statefulsets persistentVolumeClaimRetentionPolicy support ([#25676](https://github.com/bitnami/charts/pull/25676))
+* [bitnami/thanos] Enable PodDisruptionBudgets ([#26709](https://github.com/bitnami/charts/pull/26709))
+
+## 15.6.0 (2024-05-31)
+
+* [bitnami/thanos] Receive, ruler & storegateway statefulsets persistentVolumeClaimRetentionPolicy sup ([c955b0e](https://github.com/bitnami/charts/commit/c955b0e811cdaf59a836e20288f58cf99256db52)), closes [#25676](https://github.com/bitnami/charts/issues/25676)
 
 ## <small>15.5.1 (2024-05-28)</small>
 
