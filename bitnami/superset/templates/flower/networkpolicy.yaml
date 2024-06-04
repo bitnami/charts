@@ -1,0 +1,88 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.flower.enabled .Values.flower.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ printf "%s-flower" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: celery-flower
+    app.kubernetes.io/part-of: superset
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.flower.podLabels .Values.commonLabels ) "context" . ) }}
+  podSelector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/component: celery-flower
+      app.kubernetes.io/part-of: superset
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    {{- if .Values.flower.networkPolicy.allowExternalEgress }}
+    - {}
+    {{- else }}
+    - ports:
+        # Allow dns resolution
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to Redis and Posgresql
+    - ports:
+        - port: {{ include "superset.redis.port" . }}
+          {{- if .Values.redis.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: redis
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    - ports:
+        - port: {{ include "superset.postgresql.port" . }}
+          {{- if .Values.postgresql.enabled }}
+          to:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/name: postgresql
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+          {{- end }}
+    {{- if .Values.flower.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.flower.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.flower.containerPorts.flower }}
+      {{- if not .Values.flower.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
+        - podSelector:
+            matchLabels:
+              {{ printf "%s-flower" (include "common.names.fullname" .) }}-client: "true"
+        {{- if .Values.flower.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.flower.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.flower.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.flower.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+    {{- if .Values.flower.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.flower.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

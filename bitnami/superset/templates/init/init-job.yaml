@@ -1,0 +1,122 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.init.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-init" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: superset
+    app.kubernetes.io/component: init
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.init.jobAnnotations "context" $ ) | nindent 4 }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  backoffLimit: {{ .Values.init.backoffLimit }}
+  template:
+    metadata:
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.init.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/part-of: superset
+        app.kubernetes.io/component: init
+      {{- if .Values.init.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.init.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- include "superset.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: OnFailure
+      {{- if .Values.init.podSecurityContext.enabled }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.init.podSecurityContext "context" $) | nindent 8 }}
+      {{- end }}
+      automountServiceAccountToken: {{ .Values.init.automountServiceAccountToken }}
+      {{- if .Values.init.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.init.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.waitForDB.enabled }}
+        {{- include "superset.initContainers.waitForDB" . | nindent 8}}
+        {{- end }}
+        {{- if .Values.waitForRedis.enabled }}
+        {{- include "superset.initContainers.waitForRedis" . | nindent 8}}
+        {{- end }}
+        {{- if .Values.init.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.init.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: superset-init
+          image: {{ template "superset.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.init.containerSecurityContext.enabled }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.init.containerSecurityContext "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.init.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.init.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.init.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.init.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "superset.configure.common" . | nindent 12 }}
+            {{- include "superset.configure.database" . | nindent 12 }}
+            {{- include "superset.configure.redis" . | nindent 12 }}
+            - name: SUPERSET_ROLE
+              value: "init"
+            - name: SUPERSET_USERNAME
+              value: {{ .Values.auth.username | quote }}
+            - name: SUPERSET_EMAIL
+              value: {{ .Values.auth.email | quote }}
+            - name: SUPERSET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "superset.secretName" . }}
+                  key: superset-password
+            - name: SUPERSET_LOAD_EXAMPLES
+              value: {{ ternary "true" "false" .Values.loadExamples | quote }}
+            {{- if .Values.init.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.init.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.init.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.init.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.init.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.init.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.init.resources }}
+          resources: {{- toYaml .Values.init.resources | nindent 12 }}
+          {{- else if ne .Values.init.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.init.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/superset/superset_home
+              subPath: superset-home
+          {{- if .Values.init.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.init.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- if .Values.init.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.init.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+      {{- if .Values.init.extraVolumes }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.init.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
+{{- end }}

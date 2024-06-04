@@ -1,0 +1,14 @@
+# Copyright Broadcom, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+http:
+  http://superset-web:{{ .Vars.web.service.ports.http }}/health:
+    status: 200
+file:
+  /opt/bitnami/superset/superset_config.py:
+    mode: "0644"
+    filetype: file
+    exists: true
+  /opt/bitnami/superset/superset_home:
+    filetype: directory
+    exists: true
