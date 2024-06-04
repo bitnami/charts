@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.0 (2024-05-24)
+## 1.3.1 (2024-06-04)
 
-* [bitnami/cert-manager] Enable PodDisruptionBudgets ([#26421](https://github.com/bitnami/charts/pull/26421))
+* [bitnami/cert-manager] Bump chart version ([#26623](https://github.com/bitnami/charts/pull/26623))
+
+## 1.3.0 (2024-05-27)
+
+* [bitnami/cert-manager] Enable PodDisruptionBudgets (#26421) ([0b20366](https://github.com/bitnami/charts/commit/0b20366ba83014a429ca7e8313da38335f89c845)), closes [#26421](https://github.com/bitnami/charts/issues/26421)
 
 ## <small>1.2.1 (2024-05-23)</small>
 

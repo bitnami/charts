@@ -10,25 +10,25 @@ annotations:
 apiVersion: v2
 appVersion: 1.7.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kubernetes-event-exporter/img/kubernetes-event-exporter-stack-220x234.png
 keywords:
-- alerting
-- event exporting
-- events
-- kubernetes events
-- monitoring
-- observability
+  - alerting
+  - event exporting
+  - events
+  - kubernetes events
+  - monitoring
+  - observability
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: kubernetes-event-exporter
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/kubernetes-event-exporter
-version: 3.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/kubernetes-event-exporter
+version: 3.2.1

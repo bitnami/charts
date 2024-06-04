@@ -16,28 +16,28 @@ annotations:
 apiVersion: v2
 appVersion: 16.3.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: This PostgreSQL cluster solution includes the PostgreSQL replication manager, an open-source tool for managing replication and failover on PostgreSQL clusters.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
-- postgresql
-- repmgr
-- pgpool
-- postgres
-- database
-- sql
-- replication
-- cluster
-- high availability
+  - postgresql
+  - repmgr
+  - pgpool
+  - postgres
+  - database
+  - sql
+  - replication
+  - cluster
+  - high availability
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: postgresql-ha
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
-version: 14.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha
+version: 14.2.1
