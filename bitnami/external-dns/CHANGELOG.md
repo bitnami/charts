@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.5.2 (2024-05-24)
+## 7.5.3 (2024-06-04)
 
-* [bitnami/external-dns] Use different liveness/readiness probes ([#26317](https://github.com/bitnami/charts/pull/26317))
+* [bitnami/external-dns] Bump chart version ([#26629](https://github.com/bitnami/charts/pull/26629))
+
+## <small>7.5.2 (2024-05-24)</small>
+
+* [bitnami/external-dns] Use different liveness/readiness probes (#26317) ([465cecf](https://github.com/bitnami/charts/commit/465cecf3e3c6023ac32c7b552b86ba6cfd7a31ce)), closes [#26317](https://github.com/bitnami/charts/issues/26317)
 
 ## <small>7.5.1 (2024-05-22)</small>
 
