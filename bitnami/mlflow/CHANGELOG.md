@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.3.1 (2024-06-04)
+
+* [bitnami/mlflow] Enable PodDisruptionBudgets ([#26706](https://github.com/bitnami/charts/pull/26706))
+
 ## 1.3.0 (2024-06-04)
 
-* [bitnami/mlflow] feat: Allow database dialects of external database to be configured ([#25965](https://github.com/bitnami/charts/pull/25965))
+* [bitnami/mlflow] feat: Allow database dialects of external database to be configured (#25965) ([6e2e370](https://github.com/bitnami/charts/commit/6e2e37046ed6d20c3142a202db43a0ee459b177e)), closes [#25965](https://github.com/bitnami/charts/issues/25965) [#25964](https://github.com/bitnami/charts/issues/25964)
 
 ## <small>1.2.3 (2024-06-04)</small>
 
