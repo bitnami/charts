@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.1 (2024-05-22)
+## 3.2.0 (2024-06-04)
 
-* [bitnami/apisix] Use different liveness/readiness probes ([#26337](https://github.com/bitnami/charts/pull/26337))
+* [bitnami/apisix] Enable PodDisruptionBudgets ([#26711](https://github.com/bitnami/charts/pull/26711))
+
+## <small>3.1.1 (2024-05-23)</small>
+
+* [bitnami/apisix] Use different liveness/readiness probes (#26337) ([b9e533c](https://github.com/bitnami/charts/commit/b9e533cb5bc8ee31882457136c00e4d253941797)), closes [#26337](https://github.com/bitnami/charts/issues/26337)
 
 ## 3.1.0 (2024-05-21)
 
