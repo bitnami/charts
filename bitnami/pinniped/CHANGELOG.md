@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.0 (2024-05-29)
+## 2.2.1 (2024-06-04)
 
-* [bitnami/pinniped] Enable PodDisruptionBudgets ([#26529](https://github.com/bitnami/charts/pull/26529))
+* [bitnami/pinniped] Bump chart version ([#26659](https://github.com/bitnami/charts/pull/26659))
+
+## 2.2.0 (2024-05-30)
+
+* [bitnami/pinniped] Enable PodDisruptionBudgets (#26529) ([cd1f2d0](https://github.com/bitnami/charts/commit/cd1f2d035be17553589034a3e7d59b52fc970b29)), closes [#26529](https://github.com/bitnami/charts/issues/26529)
 
 ## <small>2.1.1 (2024-05-23)</small>
 

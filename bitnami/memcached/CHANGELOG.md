@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.2 (2024-05-31)
+## 7.4.3 (2024-06-04)
 
-* [bitnami/memcached] Release 7.4.2 ([#26584](https://github.com/bitnami/charts/pull/26584))
+* [bitnami/memcached] Bump chart version ([#26646](https://github.com/bitnami/charts/pull/26646))
+
+## <small>7.4.2 (2024-05-31)</small>
+
+* [bitnami/memcached] Release 7.4.2 (#26584) ([9d343ad](https://github.com/bitnami/charts/commit/9d343ad0972259a2970334c5236e4d13ea2fc701)), closes [#26584](https://github.com/bitnami/charts/issues/26584)
 
 ## <small>7.4.1 (2024-05-22)</small>
 

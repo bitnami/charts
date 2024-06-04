@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.0 (2024-05-22)
+## 18.2.1 (2024-06-04)
 
-* [bitnami/mariadb] PDB review ([#25978](https://github.com/bitnami/charts/pull/25978))
+* [bitnami/mariadb] Bump chart version ([#26644](https://github.com/bitnami/charts/pull/26644))
+
+## 18.2.0 (2024-05-24)
+
+* [bitnami/mariadb] PDB review (#25978) ([d8286f1](https://github.com/bitnami/charts/commit/d8286f18bbeb0909f95be790b92e29489adc6f5d)), closes [#25978](https://github.com/bitnami/charts/issues/25978)
 
 ## 18.1.0 (2024-05-21)
 

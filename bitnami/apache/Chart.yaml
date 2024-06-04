@@ -14,25 +14,25 @@ annotations:
 apiVersion: v2
 appVersion: 2.4.59
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 keywords:
-- apache
-- http
-- https
-- www
-- web
-- reverse proxy
+  - apache
+  - http
+  - https
+  - www
+  - web
+  - reverse proxy
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: apache
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 11.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/apache
+version: 11.1.2
