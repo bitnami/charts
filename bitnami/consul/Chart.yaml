@@ -32,4 +32,4 @@ maintainers:
 name: consul
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/consul
-version: 11.2.1
+version: 11.3.0
