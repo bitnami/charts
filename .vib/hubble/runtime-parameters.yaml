@@ -42,7 +42,7 @@ relay:
       - name: http
         containerPort: 4244
     command:
-      - hubble-relay
+      - hubble
     args:
       - TODO
 serverPeers:
