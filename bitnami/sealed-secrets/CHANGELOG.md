@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.0 (2024-05-24)
+## 2.3.1 (2024-06-04)
 
-* [bitnami/sealed-secrets] Enable PodDisruptionBudgets ([#26378](https://github.com/bitnami/charts/pull/26378))
+* [bitnami/sealed-secrets] Bump chart version ([#26668](https://github.com/bitnami/charts/pull/26668))
+
+## 2.3.0 (2024-05-27)
+
+* [bitnami/sealed-secrets] Enable PodDisruptionBudgets (#26378) ([9718414](https://github.com/bitnami/charts/commit/9718414495d34ec451c4730b64ebdd22b9d5d698)), closes [#26378](https://github.com/bitnami/charts/issues/26378)
 
 ## <small>2.2.2 (2024-05-23)</small>
 

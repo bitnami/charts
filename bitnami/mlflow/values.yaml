@@ -1330,6 +1330,7 @@ postgresql:
           PGPASSWORD=$POSTGRES_POSTGRES_PASSWORD psql -U postgres <<< "ALTER DATABASE {{ include "mlflow.v0.database-auth.name" . }} OWNER TO {{ .Values.auth.username }}"
 ## @section External PostgreSQL configuration
 ## All of these values are only used when postgresql.enabled is set to false
+## @param externalDatabase.dialectDriver Database Dialect(+Driver)
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
 ## @param externalDatabase.user Non-root username
@@ -1340,6 +1341,7 @@ postgresql:
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##
 externalDatabase:
+  dialectDriver: "postgresql"
   host: ""
   port: 5432
   user: postgres

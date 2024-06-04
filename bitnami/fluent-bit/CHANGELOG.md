@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.2 (2024-05-26)
+## 2.2.3 (2024-06-04)
 
-* [bitnami/fluent-bit] Release 2.2.2 ([#26442](https://github.com/bitnami/charts/pull/26442))
+* [bitnami/fluent-bit] Bump chart version ([#26631](https://github.com/bitnami/charts/pull/26631))
+
+## <small>2.2.2 (2024-05-27)</small>
+
+* [bitnami/fluent-bit] Release 2.2.2 (#26442) ([d966419](https://github.com/bitnami/charts/commit/d9664199abc3f0b025546b05686b1e1daff07341)), closes [#26442](https://github.com/bitnami/charts/issues/26442)
 
 ## <small>2.2.1 (2024-05-24)</small>
 
