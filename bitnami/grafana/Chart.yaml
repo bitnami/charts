@@ -12,23 +12,23 @@ annotations:
 apiVersion: v2
 appVersion: 11.0.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
-- analytics
-- monitoring
-- metrics
-- logs
+  - analytics
+  - monitoring
+  - metrics
+  - logs
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: grafana
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/grafana
-version: 11.3.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/grafana
+version: 11.3.1

@@ -4,6 +4,10 @@
 
 * [bitnami/rabbitmq-cluster-operator] Remove operator metrics endpoint … ([#26601](https://github.com/bitnami/charts/pull/26601))
 
+## <small>4.3.2 (2024-06-04)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Bump chart version ([#26665](https://github.com/bitnami/charts/pull/26665))
+
 ## <small>4.3.1 (2024-05-24)</small>
 
 * [bitnami/rabbitmq-cluster-operator] Use different liveness/readiness probes (#26346) ([76b2afc](https://github.com/bitnami/charts/commit/76b2afcedf58526b6a77c3f1816cc2fca2cd7ed3)), closes [#26346](https://github.com/bitnami/charts/issues/26346)

@@ -1,8 +1,12 @@
 # Changelog
 
+## 14.2.1 (2024-06-04)
+
+* [bitnami/postgresql-ha] Bump chart version ([#26661](https://github.com/bitnami/charts/pull/26661))
+
 ## 14.2.0 (2024-06-03)
 
-* [bitnami/postgresql-ha] Enable PodDisruptionBudgets ([#26200](https://github.com/bitnami/charts/pull/26200))
+* [bitnami/postgresql-ha] Enable PodDisruptionBudgets (#26200) ([f9566f3](https://github.com/bitnami/charts/commit/f9566f39a9fc443c2f228434efb2c94e24e2e980)), closes [#26200](https://github.com/bitnami/charts/issues/26200)
 
 ## <small>14.1.3 (2024-05-29)</small>
 

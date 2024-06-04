@@ -472,6 +472,16 @@ query:
   ## @param query.initContainers Add additional init containers to the jaeger pods
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param query.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param query.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param query.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `query.pdb.minAvailable` and `query.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param query.sidecars Add additional sidecar containers to the jaeger pods
   ##
   sidecars: []
@@ -895,6 +905,16 @@ collector:
   ## @param collector.initContainers Add additional init containers to the jaeger pods
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param collector.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param collector.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param collector.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `collector.pdb.minAvailable` and `collector.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param collector.sidecars Add additional sidecar containers to the jaeger pods
   ##
   sidecars: []
@@ -1300,6 +1320,16 @@ agent:
   ## @param agent.initContainers Add additional init containers to the jaeger pods
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param agent.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param agent.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param agent.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `agent.pdb.minAvailable` and `agent.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param agent.sidecars Add additional sidecar containers to the jaeger pods
   ##
   sidecars: []

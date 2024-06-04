@@ -16,24 +16,24 @@ annotations:
 apiVersion: v2
 appVersion: 2.9.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
 keywords:
-- rabbitmq
-- operator
-- infrastructure
-- message queue
-- AMQP
+  - rabbitmq
+  - operator
+  - infrastructure
+  - message queue
+  - AMQP
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator

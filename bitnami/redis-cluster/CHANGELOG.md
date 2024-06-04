@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.1 (2024-06-02)
+## 10.2.2 (2024-06-04)
 
-* [bitnami/redis-cluster] Template podAnnotation values ([#26583](https://github.com/bitnami/charts/pull/26583))
+* [bitnami/redis-cluster] Bump chart version ([#26667](https://github.com/bitnami/charts/pull/26667))
+
+## <small>10.2.1 (2024-06-03)</small>
+
+* [bitnami/redis-cluster] Template podAnnotation values (#26583) ([711dbcd](https://github.com/bitnami/charts/commit/711dbcd66e69cf150c23a2a8a47a012e94fb0b29)), closes [#26583](https://github.com/bitnami/charts/issues/26583)
 
 ## 10.2.0 (2024-05-24)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.0 (2024-05-28)
+## 4.4.1 (2024-06-04)
 
-* [bitnami/node-exporter] Enable PodDisruptionBudgets ([#26514](https://github.com/bitnami/charts/pull/26514))
+* [bitnami/node-exporter] Bump chart version ([#26657](https://github.com/bitnami/charts/pull/26657))
+
+## 4.4.0 (2024-06-03)
+
+* [bitnami/node-exporter] Enable PodDisruptionBudgets (#26514) ([fb7e20f](https://github.com/bitnami/charts/commit/fb7e20f2f30885636b4ede13cbb88c13ebe63731)), closes [#26514](https://github.com/bitnami/charts/issues/26514)
 
 ## <small>4.3.1 (2024-05-22)</small>
 

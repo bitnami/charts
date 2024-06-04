@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.0 (2024-05-28)
+## 13.4.1 (2024-06-04)
 
-* [bitnami/jenkins] Enable PodDisruptionBudgets ([#26497](https://github.com/bitnami/charts/pull/26497))
+* [bitnami/jenkins] Bump chart version ([#26637](https://github.com/bitnami/charts/pull/26637))
+
+## 13.4.0 (2024-05-29)
+
+* [bitnami/jenkins] Enable PodDisruptionBudgets (#26497) ([a2f987a](https://github.com/bitnami/charts/commit/a2f987a700f1d0a652533f2d5517c04541d1e46f)), closes [#26497](https://github.com/bitnami/charts/issues/26497)
 
 ## 13.3.0 (2024-05-21)
 
