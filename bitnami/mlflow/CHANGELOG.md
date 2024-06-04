@@ -1,12 +1,12 @@
 # Changelog
 
-## 1.3.0 (2024-05-29)
+## 1.3.0 (2024-06-04)
 
 * [bitnami/mlflow] feat: Allow database dialects of external database to be configured ([#25965](https://github.com/bitnami/charts/pull/25965))
 
-## <small>1.2.3 (2024-06-03)</small>
+## <small>1.2.3 (2024-06-04)</small>
 
-* [bitnami/mlflow] fix always image warning ([#26472](https://github.com/bitnami/charts/pull/26472))
+* [bitnami/mlflow] fix always image warning (#26472) ([0b7d009](https://github.com/bitnami/charts/commit/0b7d009b3736199f12a708b946d7e90b2383ce94)), closes [#26472](https://github.com/bitnami/charts/issues/26472)
 
 ## <small>1.2.2 (2024-05-28)</small>
 
@@ -16,11 +16,11 @@
 
 * [bitnami/mlflow] Use different liveness/readiness pending probes (part 2) (#26417) ([3b0ef3f](https://github.com/bitnami/charts/commit/3b0ef3fcf23d150b1ebbe03ab3ac9bf5f5b1d245)), closes [#26417](https://github.com/bitnami/charts/issues/26417)
 
-## <small>1.2.0 (2024-05-23)</small>
+## 1.2.0 (2024-05-23)
 
 * [bitnami/mlflow] Use different liveness/readiness probes (#26322) ([5260087](https://github.com/bitnami/charts/commit/526008760457f8a9170be51d8ee644c20cc70a53)), closes [#26322](https://github.com/bitnami/charts/issues/26322)
 
-## <small>1.1.0 (2024-05-21)</small>
+## 1.1.0 (2024-05-21)
 
 * [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c9e4e574725a09505d2d313fb93f1b4c0a)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
 * [bitnami/mlflow] feat: :sparkles: :lock: Add warning when original images are replaced (#26246) ([088bec4](https://github.com/bitnami/charts/commit/088bec4290a029bb5a64d0e9129e301d6c3587c0)), closes [#26246](https://github.com/bitnami/charts/issues/26246)
@@ -61,7 +61,7 @@
 
 * [bitnami/mlflow] Release 1.0.1 (#24810) ([9cce363](https://github.com/bitnami/charts/commit/9cce3639e2b6a82367736aeb7979c0608c32a6bb)), closes [#24810](https://github.com/bitnami/charts/issues/24810)
 
-## <small>1.0.0 (2024-04-01)</small>
+## 1.0.0 (2024-04-01)
 
 * [bitnami/mlflow] feat!: :lock: :boom: Improve security defaults (#24685) ([fa87094](https://github.com/bitnami/charts/commit/fa870944016f48200fc2e849b05a242b4d3e3c77)), closes [#24685](https://github.com/bitnami/charts/issues/24685)
 * [bitnami/several] Fix comment mentioning Keycloak (#24661) ([641c546](https://github.com/bitnami/charts/commit/641c5468069de826c12d1e7c825807cf68b4ee96)), closes [#24661](https://github.com/bitnami/charts/issues/24661)
@@ -71,7 +71,7 @@
 * [bitnami/*] Reorder Chart sections (#24455) ([0cf4048](https://github.com/bitnami/charts/commit/0cf4048e8743f70a9753d460655bd030cbff6824)), closes [#24455](https://github.com/bitnami/charts/issues/24455)
 * [bitnami/mlflow] Remove string constraint from NetworkPolicy extraIngress/extraEgress (#24514) ([28ab779](https://github.com/bitnami/charts/commit/28ab779a5c4d4d6249b130e98c571ede0bf08abb)), closes [#24514](https://github.com/bitnami/charts/issues/24514)
 
-## <small>0.11.0 (2024-03-06)</small>
+## 0.11.0 (2024-03-06)
 
 * [bitnami/mlflow] feat: :sparkles: :lock: Add automatic adaptation for Openshift restricted-v2 SCC (# ([9524e65](https://github.com/bitnami/charts/commit/9524e65afce9055f739a65079bd3e5ebc55b45d9)), closes [#24123](https://github.com/bitnami/charts/issues/24123)
 
@@ -87,15 +87,15 @@
 
 * [bitnami/mlflow] fix: allowed minAvailable to be percentage, updated schema (#23555) ([d2e8689](https://github.com/bitnami/charts/commit/d2e8689147536e574b1e0645292661fa0889ad0b)), closes [#23555](https://github.com/bitnami/charts/issues/23555)
 
-## <small>0.10.0 (2024-02-20)</<small>small>
+## 0.10.0 (2024-02-20)
 
 * [bitnami/*] Bump all versions (#23602) ([b70ee2a](https://github.com/bitnami/charts/commit/b70ee2a30e4dc256bf0ac52928fb2fa7a70f049b)), closes [#23602](https://github.com/bitnami/charts/issues/23602)
 
-## <small>0.9.0 (2024-02-15)</small>
+## 0.9.0 (2024-02-15)
 
 * [bitnami/mlflow] feat: :sparkles: :lock: Add resource preset support (#23490) ([9e744fe](https://github.com/bitnami/charts/commit/9e744fe7c7a83ca575a9ae17b121364e3a85f246)), closes [#23490](https://github.com/bitnami/charts/issues/23490)
 
-##<small> 0.8.0 (2024-02-14)</small>
+## 0.8.0 (2024-02-14)
 
 * [bitnami/mlflow] feat: :lock: Enable networkPolicy (#22893) ([1cc6b81](https://github.com/bitnami/charts/commit/1cc6b811793b463489b052919382a74d276ce419)), closes [#22893](https://github.com/bitnami/charts/issues/22893)
 
@@ -127,7 +127,7 @@
 
 * [bitnami/mlflow] Release 0.7.1 updating components versions (#22781) ([fd98d09](https://github.com/bitnami/charts/commit/fd98d09053a56d3ce0b1d902051794cbf8cd6253)), closes [#22781](https://github.com/bitnami/charts/issues/22781)
 
-## <small>0.7.0 (2024-01-26)</small>
+## 0.7.0 (2024-01-26)
 
 * [bitnami/mlflow] feat: 🔒 make S3 secret optional (#22699) ([50c0de9](https://github.com/bitnami/charts/commit/50c0de916e9caf185c5da93c51055d2640877d00)), closes [#22699](https://github.com/bitnami/charts/issues/22699)
 
@@ -136,7 +136,7 @@
 * [bitnami/*] Move documentation sections from docs.bitnami.com back to the README (#22203) ([7564f36](https://github.com/bitnami/charts/commit/7564f36ca1e95ff30ee686652b7ab8690561a707)), closes [#22203](https://github.com/bitnami/charts/issues/22203)
 * [bitnami/mlflow] fix: :bug: Set seLinuxOptions to null for Openshift compatibility (#22627) ([832b8f3](https://github.com/bitnami/charts/commit/832b8f396146837c23a751acde068c3415fb94af)), closes [#22627](https://github.com/bitnami/charts/issues/22627)
 
-## <small>0.6.0 (2024-01-22)</small>
+## 0.6.0 (2024-01-22)
 
 * [bitnami/mlflow] fix: :lock: Move service-account token auto-mount to pod declaration (#22436) ([fa7cfb5](https://github.com/bitnami/charts/commit/fa7cfb5a4e5fe6b8f643be8d7d230b77d046b80e)), closes [#22436](https://github.com/bitnami/charts/issues/22436)
 
@@ -144,7 +144,7 @@
 
 * [bitnami/mlflow] Release 0.5.1 updating components versions (#22310) ([1452875](https://github.com/bitnami/charts/commit/1452875bc661cff6f5685f9deaf2b1416067ea84)), closes [#22310](https://github.com/bitnami/charts/issues/22310)
 
-## <small>0.5.0 (2024-01-16)</small>
+## 0.5.0 (2024-01-16)
 
 * [bitnami/mlflow] fix: :lock: Improve podSecurityContext and containerSecurityContext with essential  ([b84eaea](https://github.com/bitnami/charts/commit/b84eaeae7a43fdad2f3cbd2abe0f00efdc7fe42d)), closes [#22158](https://github.com/bitnami/charts/issues/22158)
 
@@ -157,7 +157,7 @@
 * [bitnami/*] Fix ref links (in comments) (#21822) ([e4fa296](https://github.com/bitnami/charts/commit/e4fa296106b225cf8c82445727c675c7c725e380)), closes [#21822](https://github.com/bitnami/charts/issues/21822)
 * [bitnami/mlflow] Release 0.4.1 updating components versions (#22011) ([aae74d6](https://github.com/bitnami/charts/commit/aae74d620a7ab69c4b299a3c99b4b40c20bfd200)), closes [#22011](https://github.com/bitnami/charts/issues/22011)
 
-## <small>0.4.0 (2024-01-08)</small>
+## 0.4.0 (2024-01-08)
 
 * [bitnami/*] Update copyright: Year and company (#21815) ([6c4bf75](https://github.com/bitnami/charts/commit/6c4bf75dec58fc7c9aee9f089777b1a858c17d5b)), closes [#21815](https://github.com/bitnami/charts/issues/21815)
 * update hpa.yaml (#21475) ([98682cb](https://github.com/bitnami/charts/commit/98682cbede977aacc009c06c66d7290a187b03df)), closes [#21475](https://github.com/bitnami/charts/issues/21475)
@@ -178,7 +178,7 @@
 
 * [bitnami/mlflow] Fix run.initContainers render (#21433) ([e315cae](https://github.com/bitnami/charts/commit/e315cae73a311402e24da94a871c8d30d2535857)), closes [#21433](https://github.com/bitnami/charts/issues/21433)
 
-## <small>0.3.0 (2023-11-29)</small>
+## 0.3.0 (2023-11-29)
 
 * MLflow --no-serve-artifacts (#20895) ([1650469](https://github.com/bitnami/charts/commit/16504691c26020ecb16ebb22b3770dc851482a91)), closes [#20895](https://github.com/bitnami/charts/issues/20895)
 
@@ -216,7 +216,7 @@
 
 * [bitnami/mlflow] fixes invalid references to containerSecurityContext in _helpers.tpl (#20537) ([1fd9339](https://github.com/bitnami/charts/commit/1fd9339e822994dce818163709b5b1d1368f80f4)), closes [#20537](https://github.com/bitnami/charts/issues/20537)
 
-## <small>0.2.0 (2023-11-06)</small>
+## 0.2.0 (2023-11-06)
 
 * [bitnami/mlflow] feat: :sparkles: Add support for PSA restricted policy (#20505) ([357e7e5](https://github.com/bitnami/charts/commit/357e7e518931fcc274868f994d76f4f62850328c)), closes [#20505](https://github.com/bitnami/charts/issues/20505)
 
@@ -247,6 +247,6 @@
 
 * [bitnami/mlflow] Release 0.1.1 (#20248) ([5e454c9](https://github.com/bitnami/charts/commit/5e454c9d52f7d46bcf8523f34e738dcedac340da)), closes [#20248](https://github.com/bitnami/charts/issues/20248)
 
-## <small>0.1.0 (2023-10-16)</small>
+## 0.1.0 (2023-10-16)
 
 * [bitnami/mlflow] feat: 🎉 Add chart (#20069) ([be9324e](https://github.com/bitnami/charts/commit/be9324e370ff99b45942b2a6567d72789eb329aa)), closes [#20069](https://github.com/bitnami/charts/issues/20069)
