@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.2 (2024-05-28)
+## 0.3.3 (2024-06-04)
 
-* [bitnami/janusgraph] Add chart source URL to sources list ([#26493](https://github.com/bitnami/charts/pull/26493))
+* [bitnami/janusgraph] Enable PodDisruptionBudgets ([#26697](https://github.com/bitnami/charts/pull/26697))
+
+## <small>0.3.2 (2024-05-28)</small>
+
+* [bitnami/janusgraph] Add chart source URL to sources list (#26493) ([65e4f64](https://github.com/bitnami/charts/commit/65e4f64beaeeb76a48fbd1454815b4228b47213f)), closes [#26493](https://github.com/bitnami/charts/issues/26493)
 
 ## <small>0.3.1 (2024-05-23)</small>
 
