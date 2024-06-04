@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.2.1 (2024-06-04)
+
+* [bitnami/pytorch] Bump chart version ([#26663](https://github.com/bitnami/charts/pull/26663))
+
 ## 4.2.0 (2024-05-29)
 
-* [bitnami/pytorch] Enable PodDisruptionBudgets ([#26532](https://github.com/bitnami/charts/pull/26532))
+* [bitnami/pytorch] Enable PodDisruptionBudgets (#26532) ([e2f930e](https://github.com/bitnami/charts/commit/e2f930eb1c4f7c021b21dc6ec6477bb9dc08a40a)), closes [#26532](https://github.com/bitnami/charts/issues/26532)
 
 ## 4.1.0 (2024-05-21)
 

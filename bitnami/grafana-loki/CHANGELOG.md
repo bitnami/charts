@@ -1,8 +1,16 @@
 # Changelog
 
+## 4.5.1 (2024-06-03)
+
+* [bitnami/grafana-loki] Release 4.5.1 ([#26614](https://github.com/bitnami/charts/pull/26614))
+
+## 4.5.0 (2024-06-03)
+
+* [bitnami/grafana-loki] Don't enforce version label when it's not needed (#26603) ([9977979](https://github.com/bitnami/charts/commit/997797921113437cb0df2aeb59ee2607f03f804c)), closes [#26603](https://github.com/bitnami/charts/issues/26603)
+
 ## 4.4.0 (2024-06-03)
 
-* [bitnami/grafana-loki] Remove unnecessary memcached image definitions ([#26600](https://github.com/bitnami/charts/pull/26600))
+* [bitnami/grafana-loki] Remove unnecessary memcached image definitions (#26600) ([cd90285](https://github.com/bitnami/charts/commit/cd90285f16d16d9f704aa6260faeac86cc15c529)), closes [#26600](https://github.com/bitnami/charts/issues/26600)
 
 ## 4.3.0 (2024-05-29)
 

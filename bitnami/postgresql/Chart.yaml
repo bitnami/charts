@@ -14,25 +14,25 @@ annotations:
 apiVersion: v2
 appVersion: 16.3.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: PostgreSQL (Postgres) is an open source object-relational database known for reliability and data integrity. ACID-compliant, it supports foreign keys, joins, views, triggers and stored procedures.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
 keywords:
-- postgresql
-- postgres
-- database
-- sql
-- replication
-- cluster
+  - postgresql
+  - postgres
+  - database
+  - sql
+  - replication
+  - cluster
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: postgresql
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 15.5.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
+version: 15.5.2
