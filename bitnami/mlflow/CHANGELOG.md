@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.1 (2024-06-04)
+## 1.3.2 (2024-06-04)
 
-* [bitnami/mlflow] Fix missing '-' option in the liveness execution command ([#26526](https://github.com/bitnami/charts/pull/26526))
+* [bitnami/mlflow] Release 1.2.3 ([#26571](https://github.com/bitnami/charts/pull/26571))
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/mlflow] Fix missing '-' option in the liveness execution command (#26526) ([e0d5dd1](https://github.com/bitnami/charts/commit/e0d5dd144e9ac10903e72f51f3adbbeabd976126)), closes [#26526](https://github.com/bitnami/charts/issues/26526)
 
 ## 1.3.0 (2024-06-04)
 
