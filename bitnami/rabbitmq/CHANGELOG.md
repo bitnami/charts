@@ -1,8 +1,16 @@
 # Changelog
 
-## 14.3.1 (2024-05-24)
+## 14.3.3 (2024-06-04)
 
-* [bitnami/rabbitmq] Pass service.extraPorts to the headless service ([#26136](https://github.com/bitnami/charts/pull/26136))
+* [bitnami/rabbitmq] Bump chart version ([#26664](https://github.com/bitnami/charts/pull/26664))
+
+## <small>14.3.2 (2024-06-01)</small>
+
+* [bitnami/rabbitmq] Release 14.3.2 (#26589) ([9c11377](https://github.com/bitnami/charts/commit/9c113773f3b8120f62b683cab62fc4ca75f89484)), closes [#26589](https://github.com/bitnami/charts/issues/26589)
+
+## <small>14.3.1 (2024-05-27)</small>
+
+* fix: pass service.extraPorts to the headless service (#26136) ([346eddf](https://github.com/bitnami/charts/commit/346eddfa97253f7a390a68e05ea78c2f604f0b65)), closes [#26136](https://github.com/bitnami/charts/issues/26136)
 
 ## 14.3.0 (2024-05-22)
 

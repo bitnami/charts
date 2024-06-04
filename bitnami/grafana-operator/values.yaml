@@ -106,6 +106,16 @@ operator:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param operator.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param operator.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param operator.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `operator.pdb.minAvailable` and `operator.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param operator.sidecars [array] Add additional sidecar containers to the Grafana Operator pods
   ## e.g:
   ## sidecars:

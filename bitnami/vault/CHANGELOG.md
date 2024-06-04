@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.4.0 (2024-05-23)
+## 1.4.2 (2024-06-04)
 
-* [bitnami/vault] Enable PodDisruptionBudgets ([#26383](https://github.com/bitnami/charts/pull/26383))
+* [bitnami/vault] Bump chart version ([#26672](https://github.com/bitnami/charts/pull/26672))
+
+## <small>1.4.1 (2024-05-30)</small>
+
+* [bitnami/vault] Release 1.4.1 (#26557) ([5271fa0](https://github.com/bitnami/charts/commit/5271fa03b5ac44955cb59ef684cb336f8a5720d1)), closes [#26557](https://github.com/bitnami/charts/issues/26557)
+
+## 1.4.0 (2024-05-24)
+
+* [bitnami/vault] Enable PodDisruptionBudgets (#26383) ([e94387a](https://github.com/bitnami/charts/commit/e94387a3f24d5a4f920b31dbe83997e3a524be2e)), closes [#26383](https://github.com/bitnami/charts/issues/26383)
 
 ## 1.3.0 (2024-05-21)
 

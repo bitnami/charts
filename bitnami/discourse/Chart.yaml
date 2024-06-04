@@ -41,4 +41,4 @@ maintainers:
 name: discourse
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/discourse
-version: 13.1.0
+version: 13.2.0

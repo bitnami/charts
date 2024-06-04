@@ -10,22 +10,22 @@ annotations:
 apiVersion: v2
 appVersion: 4.2.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles to be set for Kubernetes workloads.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kiam/img/kiam-stack-220x234.png
 keywords:
-- aws
-- iam
-- security
+  - aws
+  - iam
+  - security
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: kiam
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/kiam
-version: 2.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/kiam
+version: 2.2.1

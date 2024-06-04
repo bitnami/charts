@@ -4,6 +4,10 @@
 
 * [bitnami/spark] Enable PodDisruptionBudgets ([#26536](https://github.com/bitnami/charts/pull/26536))
 
+## <small>9.1.1 (2024-06-04)</small>
+
+* [bitnami/spark] Bump chart version ([#26669](https://github.com/bitnami/charts/pull/26669))
+
 ## 9.1.0 (2024-05-21)
 
 * [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c9e4e574725a09505d2d313fb93f1b4c0a)), closes [#25359](https://github.com/bitnami/charts/issues/25359)

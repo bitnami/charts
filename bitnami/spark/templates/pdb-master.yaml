@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.worker.pdb.create }}
+{{- if .Values.master.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -15,13 +15,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.worker.pdb.minAvailable }}
-  minAvailable: {{ .Values.worker.pdb.minAvailable }}
+  {{- if .Values.master.pdb.minAvailable }}
+  minAvailable: {{ .Values.master.pdb.minAvailable }}
   {{- end  }}
-  {{- if or .Values.worker.pdb.maxUnavailable ( not .Values.worker.pdb.minAvailable ) }}
-  maxUnavailable: {{ .Values.worker.pdb.maxUnavailable | default 1 }}
+  {{- if or .Values.master.pdb.maxUnavailable ( not .Values.master.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.master.pdb.maxUnavailable | default 1 }}
   {{- end  }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: master

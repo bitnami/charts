@@ -1,8 +1,8 @@
 # Changelog
 
-## 11.3.1 (2024-05-24)
+## 11.3.2 (2024-06-04)
 
-* [bitnami/nginx-ingress-controller] Use different liveness/readiness pending probe ([#26412](https://github.com/bitnami/charts/pull/26412))
+* [bitnami/nginx-ingress-controller] Bump chart version ([#26656](https://github.com/bitnami/charts/pull/26656))
 
 ## 11.3.0 (2024-05-24)
 

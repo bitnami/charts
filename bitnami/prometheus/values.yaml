@@ -675,7 +675,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.52.0-debian-12-r2
+    tag: 2.52.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1069,7 +1069,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.35.0-debian-12-r4
+      tag: 0.35.1-debian-12-r0
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -1677,7 +1677,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

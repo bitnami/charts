@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.2.1 (2024-05-23)
+## 1.3.1 (2024-06-04)
 
-* [bitnami/flink] Use different liveness/readiness probes ([#26316](https://github.com/bitnami/charts/pull/26316))
+* [bitnami/flink] Bump chart version ([#26630](https://github.com/bitnami/charts/pull/26630))
+
+## 1.3.0 (2024-06-03)
+
+* [bitnami/flink] Enable PodDisruptionBudgets (#26429) ([a0514ba](https://github.com/bitnami/charts/commit/a0514ba575c8fbe7cd0f730deb976c1788464e40)), closes [#26429](https://github.com/bitnami/charts/issues/26429)
+
+## <small>1.2.1 (2024-05-23)</small>
+
+* [bitnami/flink] Use different liveness/readiness probes (#26316) ([bb44040](https://github.com/bitnami/charts/commit/bb44040e2fb9a1da7317bf4af97e2bb6c5e0162e)), closes [#26316](https://github.com/bitnami/charts/issues/26316)
 
 ## 1.2.0 (2024-05-21)
 

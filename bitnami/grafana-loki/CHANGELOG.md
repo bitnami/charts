@@ -1,8 +1,24 @@
 # Changelog
 
-## 4.2.1 (2024-05-22)
+## 4.5.1 (2024-06-03)
 
-* [bitnami/grafana-loki] Use different liveness/readiness probes ([#26351](https://github.com/bitnami/charts/pull/26351))
+* [bitnami/grafana-loki] Release 4.5.1 ([#26614](https://github.com/bitnami/charts/pull/26614))
+
+## 4.5.0 (2024-06-03)
+
+* [bitnami/grafana-loki] Don't enforce version label when it's not needed (#26603) ([9977979](https://github.com/bitnami/charts/commit/997797921113437cb0df2aeb59ee2607f03f804c)), closes [#26603](https://github.com/bitnami/charts/issues/26603)
+
+## 4.4.0 (2024-06-03)
+
+* [bitnami/grafana-loki] Remove unnecessary memcached image definitions (#26600) ([cd90285](https://github.com/bitnami/charts/commit/cd90285f16d16d9f704aa6260faeac86cc15c529)), closes [#26600](https://github.com/bitnami/charts/issues/26600)
+
+## 4.3.0 (2024-05-29)
+
+* [bitnami/grafana-loki] Enable PodDisruptionBudgets (#26474) ([c03dcf6](https://github.com/bitnami/charts/commit/c03dcf6a0d4551fc2632041969f4e5c08c57ec3a)), closes [#26474](https://github.com/bitnami/charts/issues/26474)
+
+## <small>4.2.1 (2024-05-23)</small>
+
+* [bitnami/grafana-loki] Use different liveness/readiness probes (#26351) ([3dbb011](https://github.com/bitnami/charts/commit/3dbb0111f588082f064a4e8236466924a9b82f80)), closes [#26351](https://github.com/bitnami/charts/issues/26351)
 
 ## 4.2.0 (2024-05-21)
 

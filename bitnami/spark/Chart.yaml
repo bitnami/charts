@@ -10,20 +10,20 @@ annotations:
 apiVersion: v2
 appVersion: 3.5.1
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Apache Spark is a high-performance engine for large-scale computing tasks, such as data processing, machine learning and real-time data streaming. It includes APIs for Java, Python, Scala and R.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/spark/img/spark-stack-220x234.png
 keywords:
-- apache
-- spark
+  - apache
+  - spark
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: spark
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spark

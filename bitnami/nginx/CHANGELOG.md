@@ -1,8 +1,16 @@
 # Changelog
 
-## 17.3.1 (2024-05-28)
+## 17.3.3 (2024-06-04)
 
-* [bitnami/nginx] Release 17.3.1 ([#26479](https://github.com/bitnami/charts/pull/26479))
+* [bitnami/nginx] Bump chart version ([#26655](https://github.com/bitnami/charts/pull/26655))
+
+## <small>17.3.2 (2024-05-29)</small>
+
+* [bitnami/nginx] Release 17.3.2 (#26550) ([97e4026](https://github.com/bitnami/charts/commit/97e402656704fb842affdfa69ee18b7e98e6b8e9)), closes [#26550](https://github.com/bitnami/charts/issues/26550)
+
+## <small>17.3.1 (2024-05-28)</small>
+
+* [bitnami/nginx] Release 17.3.1 (#26479) ([f66f7a4](https://github.com/bitnami/charts/commit/f66f7a44547d67f9ac8ee7357f502e545dbc9d58)), closes [#26479](https://github.com/bitnami/charts/issues/26479)
 
 ## 17.3.0 (2024-05-24)
 

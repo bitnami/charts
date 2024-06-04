@@ -14,26 +14,25 @@ annotations:
 apiVersion: v2
 appVersion: 0.14.2
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: DeepSpeed is deep learning software suite for empowering ChatGPT-like model training. Features dense or sparse model inference, high throughput and high compression.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/deepspeed/img/deepspeed-stack-220x234.png
 keywords:
-- deepspeed
-- pytorch
-- python
-- machine
-- learning
+  - deepspeed
+  - pytorch
+  - python
+  - machine
+  - learning
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: deepspeed
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/deepspeed
-- https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 2.1.1
-
+  - https://github.com/bitnami/charts/tree/main/bitnami/deepspeed
+  - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
+version: 2.2.1

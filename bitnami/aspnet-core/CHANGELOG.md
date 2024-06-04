@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.1.1 (2024-05-29)
+## 6.1.2 (2024-06-04)
 
-* [bitnami/aspnet-core] Release 6.1.1 ([#26523](https://github.com/bitnami/charts/pull/26523))
+* [bitnami/aspnet-core] Bump chart version ([#26621](https://github.com/bitnami/charts/pull/26621))
+
+## <small>6.1.1 (2024-05-29)</small>
+
+* [bitnami/aspnet-core] Release 6.1.1 (#26523) ([951ed7e](https://github.com/bitnami/charts/commit/951ed7ea3bf6a77a1d8ba1ae08a0ff6a92e1d4e9)), closes [#26523](https://github.com/bitnami/charts/issues/26523)
 
 ## 6.1.0 (2024-05-21)
 
