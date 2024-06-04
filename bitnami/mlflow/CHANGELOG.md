@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.2.2 (2024-05-28)
+## 1.3.0 (2024-06-04)
 
-* [bitnami/mlflow] Add chart source URL to sources list ([#26495](https://github.com/bitnami/charts/pull/26495))
+* [bitnami/mlflow] feat: Allow database dialects of external database to be configured ([#25965](https://github.com/bitnami/charts/pull/25965))
+
+## <small>1.2.3 (2024-06-04)</small>
+
+* [bitnami/mlflow] fix always image warning (#26472) ([0b7d009](https://github.com/bitnami/charts/commit/0b7d009b3736199f12a708b946d7e90b2383ce94)), closes [#26472](https://github.com/bitnami/charts/issues/26472)
+
+## <small>1.2.2 (2024-05-28)</small>
+
+* [bitnami/mlflow] Add chart source URL to sources list (#26495) ([b1f8a0c](https://github.com/bitnami/charts/commit/b1f8a0ce113b6fc8bb32df54c9b9c11f79ae8b5e)), closes [#26495](https://github.com/bitnami/charts/issues/26495)
 
 ## <small>1.2.1 (2024-05-28)</small>
 

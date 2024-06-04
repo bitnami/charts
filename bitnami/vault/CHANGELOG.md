@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.1 (2024-05-30)
+## 1.4.2 (2024-06-04)
 
-* [bitnami/vault] Release 1.4.1 ([#26557](https://github.com/bitnami/charts/pull/26557))
+* [bitnami/vault] Bump chart version ([#26672](https://github.com/bitnami/charts/pull/26672))
+
+## <small>1.4.1 (2024-05-30)</small>
+
+* [bitnami/vault] Release 1.4.1 (#26557) ([5271fa0](https://github.com/bitnami/charts/commit/5271fa03b5ac44955cb59ef684cb336f8a5720d1)), closes [#26557](https://github.com/bitnami/charts/issues/26557)
 
 ## 1.4.0 (2024-05-24)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.5.1 (2024-05-29)
+## 15.5.2 (2024-06-04)
 
-* [bitnami/postgresql] Release 15.5.1 ([#26546](https://github.com/bitnami/charts/pull/26546))
+* [bitnami/postgresql] Bump chart version ([#26660](https://github.com/bitnami/charts/pull/26660))
+
+## <small>15.5.1 (2024-05-29)</small>
+
+* [bitnami/postgresql] Release 15.5.1 (#26546) ([99f0841](https://github.com/bitnami/charts/commit/99f08414ce828db081402ba37cf48c0ad2624fee)), closes [#26546](https://github.com/bitnami/charts/issues/26546)
 
 ## 15.5.0 (2024-05-29)
 

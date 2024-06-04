@@ -12,26 +12,26 @@ annotations:
 apiVersion: v2
 appVersion: 1.10.1
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: NGINX Ingress Controller is an Ingress controller that manages external access to HTTP services in a Kubernetes cluster using NGINX.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
 keywords:
-- ingress
-- nginx
-- http
-- web
-- www
-- reverse proxy
+  - ingress
+  - nginx
+  - http
+  - web
+  - www
+  - reverse proxy
 kubeVersion: '>= 1.20.0-0'
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: nginx-ingress-controller
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
-version: 11.3.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
+version: 11.3.2

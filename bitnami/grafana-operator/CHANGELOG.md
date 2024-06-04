@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.0 (2024-05-28)
+## 4.4.1 (2024-06-04)
 
-* [bitnami/grafana-operator] Enable PodDisruptionBudgets ([#26476](https://github.com/bitnami/charts/pull/26476))
+* [bitnami/grafana-operator] Bump chart version ([#26634](https://github.com/bitnami/charts/pull/26634))
+
+## 4.4.0 (2024-05-29)
+
+* [bitnami/grafana-operator] Enable PodDisruptionBudgets (#26476) ([2cf771d](https://github.com/bitnami/charts/commit/2cf771d70c04a720db3b5cbbd0be65d0fd7f0bd3)), closes [#26476](https://github.com/bitnami/charts/issues/26476)
 
 ## <small>4.3.2 (2024-05-26)</small>
 
