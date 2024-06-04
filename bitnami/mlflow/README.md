@@ -416,6 +416,7 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 | Name                                         | Description                                                             | Value         |
 | -------------------------------------------- | ----------------------------------------------------------------------- | ------------- |
+| `externalDatabase.dialectDriver`             | Database Dialect(+Driver)                                               | `postgresql`  |
 | `externalDatabase.host`                      | Database host                                                           | `""`          |
 | `externalDatabase.port`                      | Database port number                                                    | `5432`        |
 | `externalDatabase.user`                      | Non-root username                                                       | `postgres`    |
