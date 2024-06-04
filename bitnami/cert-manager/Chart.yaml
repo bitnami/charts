@@ -16,23 +16,23 @@ annotations:
 apiVersion: v2
 appVersion: 1.14.5
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/cert-manager/img/cert-manager-stack-220x234.png
 keywords:
-- go
-- security
-- tls
-- certificate
+  - go
+  - security
+  - tls
+  - certificate
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: cert-manager
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
-version: 1.3.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
+version: 1.3.1
