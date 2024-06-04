@@ -16,23 +16,23 @@ annotations:
 apiVersion: v2
 appVersion: 1.16.3
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Vault is a tool for securely managing and accessing secrets using a unified interface. Features secure storage, dynamic secrets, data encryption and revocation.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/vault/img/vault-stack-220x234.png
 keywords:
-- security
-- secrets
-- injection
-- vault
+  - security
+  - secrets
+  - injection
+  - vault
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: vault
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 1.4.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/vault
+version: 1.4.2
