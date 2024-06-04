@@ -668,7 +668,7 @@ web:
     ## @param web.pdb.minAvailable Minimum number / percentage of Concourse worker pods that should remain scheduled
     ## @param web.pdb.maxUnavailable Maximum number/percentage of Concourse worker pods that may be made unavailable
     ##
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## @param web.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
