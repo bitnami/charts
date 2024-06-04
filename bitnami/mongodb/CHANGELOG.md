@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.2 (2024-06-03)
+## 15.6.3 (2024-06-04)
 
-* [bitnami/mongodb] Remove UTF-8 chars ([#26607](https://github.com/bitnami/charts/pull/26607))
+* [bitnami/mongodb] Bump chart version ([#26650](https://github.com/bitnami/charts/pull/26650))
+
+## <small>15.6.2 (2024-06-04)</small>
+
+* [bitnami/mongodb] Remove UTF-8 chars (#26607) ([9ab3365](https://github.com/bitnami/charts/commit/9ab33654ca45ee82d27088578308068e493c43cd)), closes [#26607](https://github.com/bitnami/charts/issues/26607)
 
 ## <small>15.6.1 (2024-05-28)</small>
 
