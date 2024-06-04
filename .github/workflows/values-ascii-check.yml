@@ -27,7 +27,7 @@ jobs:
           # This request doesn't consume API calls.
           curl -Lkso $TEMP_FILE $DIFF_URL
           files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
-          values_files="$(echo "$files_changed" | grep -v "values.yaml" | grep -o ".*\.yaml$" | sort | uniq || true)"
+          values_files="$(echo "$files_changed" | grep -o ".*values\.yaml$" | sort | uniq || true)"
           # Create an empty file, useful when the PR changes ignored files
           touch "${TEMP_OUTPUT}"
           grep -nHP "[\x80-\xFF]" "${values_files[@]}" | sort -u > ${TEMP_OUTPUT} || true
