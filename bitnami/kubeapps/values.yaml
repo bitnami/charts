@@ -484,6 +484,16 @@ frontend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param frontend.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param frontend.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param frontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `frontend.pdb.minAvailable` and `frontend.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: false
+    minAvailable: ""
+    maxUnavailable: ""
   ## Frontend service parameters
   ##
   service:
@@ -922,6 +932,16 @@ dashboard:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dashboard.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dashboard.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dashboard.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `dashboard.pdb.minAvailable` and `dashboard.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: false
+    minAvailable: ""
+    maxUnavailable: ""
   ## Dashboard service parameters
   ##
   service:
@@ -1312,6 +1332,16 @@ apprepository:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param apprepository.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param apprepository.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param apprepository.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `apprepository.pdb.minAvailable` and `apprepository.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: false
+    minAvailable: ""
+    maxUnavailable: ""
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -2134,6 +2164,16 @@ kubeappsapis:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param kubeappsapis.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param kubeappsapis.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param kubeappsapis.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `kubeappsapis.pdb.minAvailable` and `kubeappsapis.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: false
+    minAvailable: ""
+    maxUnavailable: ""
   ## kubeappsapis service parameters
   ##
   service:
