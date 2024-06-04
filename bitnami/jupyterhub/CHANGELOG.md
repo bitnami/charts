@@ -6,7 +6,7 @@
 
 ## <small>7.1.3 (2024-06-03)</small>
 
-* [bitnami/jupyterhub] Release 7.1.3 ([#26613](https://github.com/bitnami/charts/pull/26613))
+* [bitnami/jupyterhub] Release 7.1.3 (#26613) ([a71f50d](https://github.com/bitnami/charts/commit/a71f50ddad518d1ca53fd7b0bbef0c6f8e1c04f1)), closes [#26613](https://github.com/bitnami/charts/issues/26613)
 
 ## <small>7.1.2 (2024-05-24)</small>
 
