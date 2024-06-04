@@ -38,4 +38,4 @@ sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/nessie
 - https://github.com/bitnami/containers/tree/main/bitnami/nessie
 - https://github.com/nessie/nessie
-version: 0.1.0
+version: 0.1.1
