@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.4 (2024-05-28)
+## 6.4.0 (2024-05-29)
 
-* [bitnami/argo-cd] Define port for notifications probes ([#26485](https://github.com/bitnami/charts/pull/26485))
+* [bitnami/argo-cd] Enable PodDisruptionBudgets ([#26419](https://github.com/bitnami/charts/pull/26419))
+
+## <small>6.3.4 (2024-05-28)</small>
+
+* [bitnami/argo-cd] Define port for notifications probes (#26485) ([4500caf](https://github.com/bitnami/charts/commit/4500cafc0aab84295f85bd839978929e5dfc8773)), closes [#26485](https://github.com/bitnami/charts/issues/26485)
 
 ## <small>6.3.3 (2024-05-24)</small>
 

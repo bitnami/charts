@@ -38,4 +38,4 @@ maintainers:
 name: prestashop
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/prestashop
-version: 21.1.0
+version: 21.2.0

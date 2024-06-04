@@ -1,8 +1,12 @@
 # Changelog
 
+## 19.1.0 (2024-05-28)
+
+* [bitnami/schema-registry] Enable PodDisruptionBudgets ([#26377](https://github.com/bitnami/charts/pull/26377))
+
 ## 19.0.0 (2024-05-27)
 
-* [bitnami/schema-registry] Update dependencies ([#26446](https://github.com/bitnami/charts/pull/26446))
+* [bitnami/schema-registry] Update dependencies (#26446) ([6db614b](https://github.com/bitnami/charts/commit/6db614bb44e95947764e4de7c2e0803a0123cc84)), closes [#26446](https://github.com/bitnami/charts/issues/26446)
 
 ## <small>18.1.3 (2024-05-26)</small>
 

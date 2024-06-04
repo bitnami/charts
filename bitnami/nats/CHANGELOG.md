@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.2 (2024-05-23)
+## 8.2.3 (2024-06-04)
 
-* [bitnami/nats] Use different liveness/readiness probes ([#26320](https://github.com/bitnami/charts/pull/26320))
+* [bitnami/nats] Bump chart version ([#26654](https://github.com/bitnami/charts/pull/26654))
+
+## <small>8.2.2 (2024-05-23)</small>
+
+* [bitnami/nats] Use different liveness/readiness probes (#26320) ([fc72025](https://github.com/bitnami/charts/commit/fc7202546f5fc871165c218126f6fc568361f7fe)), closes [#26320](https://github.com/bitnami/charts/issues/26320)
 
 ## <small>8.2.1 (2024-05-22)</small>
 

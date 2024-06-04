@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.2.3 (2024-05-29)
+## 1.3.0 (2024-06-04)
 
-* [bitnami/mlflow] Fix missing '-' option in the liveness execution command ([#26526](https://github.com/bitnami/charts/pull/26526))
+* [bitnami/mlflow] feat: Allow database dialects of external database to be configured ([#25965](https://github.com/bitnami/charts/pull/25965))
+
+## <small>1.2.3 (2024-06-04)</small>
+
+* [bitnami/mlflow] fix always image warning (#26472) ([0b7d009](https://github.com/bitnami/charts/commit/0b7d009b3736199f12a708b946d7e90b2383ce94)), closes [#26472](https://github.com/bitnami/charts/issues/26472)
 
 ## <small>1.2.2 (2024-05-28)</small>
 

@@ -36,10 +36,10 @@ spec:
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- if .Values.redis.podAnnotations }}
-        {{- toYaml .Values.redis.podAnnotations | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.redis.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
       hostNetwork: {{ .Values.redis.hostNetwork }}

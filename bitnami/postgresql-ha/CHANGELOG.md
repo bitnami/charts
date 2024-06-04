@@ -1,8 +1,20 @@
 # Changelog
 
-## 14.1.2 (2024-05-24)
+## 14.2.1 (2024-06-04)
 
-* [bitnami/postgresql-ha] Fix livenessProbe for metrics ([#26399](https://github.com/bitnami/charts/pull/26399))
+* [bitnami/postgresql-ha] Bump chart version ([#26661](https://github.com/bitnami/charts/pull/26661))
+
+## 14.2.0 (2024-06-03)
+
+* [bitnami/postgresql-ha] Enable PodDisruptionBudgets (#26200) ([f9566f3](https://github.com/bitnami/charts/commit/f9566f39a9fc443c2f228434efb2c94e24e2e980)), closes [#26200](https://github.com/bitnami/charts/issues/26200)
+
+## <small>14.1.3 (2024-05-29)</small>
+
+* [bitnami/postgresql-ha] Release 14.1.3 (#26545) ([460e2b9](https://github.com/bitnami/charts/commit/460e2b9e29d2b8e8aa6d747db7414d6f4a5c33eb)), closes [#26545](https://github.com/bitnami/charts/issues/26545)
+
+## <small>14.1.2 (2024-05-24)</small>
+
+* [bitnami/postgresql-ha] Fix livenessProbe for metrics (#26399) ([7a8e1ef](https://github.com/bitnami/charts/commit/7a8e1ef28230ebc0b2c53cc12469ca21728c375c)), closes [#26399](https://github.com/bitnami/charts/issues/26399)
 
 ## <small>14.1.1 (2024-05-23)</small>
 

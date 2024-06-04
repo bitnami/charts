@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.0 (2024-05-23)
+## 13.4.1 (2024-06-04)
 
-* [bitnami/zookeeper] Enable PodDisruptionBudgets ([#26382](https://github.com/bitnami/charts/pull/26382))
+* [bitnami/zookeeper] Bump chart version ([#26675](https://github.com/bitnami/charts/pull/26675))
+
+## 13.4.0 (2024-05-24)
+
+* [bitnami/zookeeper] Enable PodDisruptionBudgets (#26382) ([8809f55](https://github.com/bitnami/charts/commit/8809f554cf1a91afbc002b453bc17c6dd705e9ab)), closes [#26382](https://github.com/bitnami/charts/issues/26382)
 
 ## 13.3.0 (2024-05-21)
 

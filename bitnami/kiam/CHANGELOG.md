@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.1.1 (2024-05-23)
+## 2.2.1 (2024-06-04)
 
-* [bitnami/kiam] Use different liveness/readiness probes ([#26370](https://github.com/bitnami/charts/pull/26370))
+* [bitnami/kiam] Bump chart version ([#26638](https://github.com/bitnami/charts/pull/26638))
+
+## 2.2.0 (2024-05-29)
+
+* [bitnami/kiam] Enable PodDisruptionBudgets (#26500) ([00f157a](https://github.com/bitnami/charts/commit/00f157a60b3c18df462a2d0bd16762614edb7400)), closes [#26500](https://github.com/bitnami/charts/issues/26500)
+
+## <small>2.1.1 (2024-05-23)</small>
+
+* [bitnami/kiam] Use different liveness/readiness probes (#26370) ([ef14a50](https://github.com/bitnami/charts/commit/ef14a506d8116ece0a140790725dcaa5abc4696b)), closes [#26370](https://github.com/bitnami/charts/issues/26370)
 
 ## 2.1.0 (2024-05-21)
 
