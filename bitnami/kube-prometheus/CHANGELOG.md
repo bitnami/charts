@@ -1,12 +1,12 @@
 # Changelog
 
-## 9.4.0 (2024-06-04)
+## 9.4.0 (2024-06-05)
 
-* [bitnami/kube-prometheus] Enable PodDisruptionBudgets ([#26700](https://github.com/bitnami/charts/pull/26700))
+* [bitnami/kube-prometheus] Enable PodDisruptionBudgets (part 2) ([#26700](https://github.com/bitnami/charts/pull/26700))
 
 ## <small>9.3.1 (2024-06-05)</small>
 
-* [bitnami/kube-prometheus] Release 9.3.1 ([#26749](https://github.com/bitnami/charts/pull/26749))
+* [bitnami/kube-prometheus] Release 9.3.1 (#26749) ([4b4247e](https://github.com/bitnami/charts/commit/4b4247e600914e7ca4f89e01cd97e8b4ee5a56a9)), closes [#26749](https://github.com/bitnami/charts/issues/26749)
 
 ## 9.3.0 (2024-06-01)
 
