@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.6.4 (2024-06-05)
+## 14.6.5 (2024-06-05)
 
-* [bitnami/minio] Release 14.6.4 ([#26741](https://github.com/bitnami/charts/pull/26741))
+* [bitnami/minio] Align PodDisruptionBudgets with templates ([#26705](https://github.com/bitnami/charts/pull/26705))
+
+## <small>14.6.4 (2024-06-05)</small>
+
+* [bitnami/minio] Release 14.6.4 (#26741) ([f8c8635](https://github.com/bitnami/charts/commit/f8c8635ec24d47e31a33cc488eb391bb745dca1d)), closes [#26741](https://github.com/bitnami/charts/issues/26741)
 
 ## <small>14.6.3 (2024-06-04)</small>
 
