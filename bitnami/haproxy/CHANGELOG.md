@@ -4,6 +4,10 @@
 
 * [bitnami/haproxy] Enable PodDisruptionBudgets ([#26696](https://github.com/bitnami/charts/pull/26696))
 
+## 1.3.2 (2024-06-05)
+
+* [bitnami/haproxy] Release 1.3.2 ([#26728](https://github.com/bitnami/charts/pull/26728))
+
 ## <small>1.3.1 (2024-06-04)</small>
 
 * [bitnami/haproxy] Bump chart version (#26635) ([c5606bd](https://github.com/bitnami/charts/commit/c5606bde7ea0a8dadf941a44870a3cd4d23c6cff)), closes [#26635](https://github.com/bitnami/charts/issues/26635)

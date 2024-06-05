@@ -520,7 +520,7 @@ hub:
   ## @param hub.pdb.maxUnavailable Set maximum available hub instances
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: ""
   ## @section Hub RBAC parameters
@@ -976,7 +976,7 @@ proxy:
   pdb:
     ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
     ##
-    create: false
+    create: true
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable: ""
@@ -1579,7 +1579,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 5.0.0-debian-12-r0
+    tag: 4.1.5-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
