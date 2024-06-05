@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.6 (2024-06-05)
+## 0.1.7 (2024-06-05)
 
-* [bitnami/scylladb] Bump chart version ([#26802](https://github.com/bitnami/charts/pull/26802))
+* [bitnami/scylladb] Bump chart version ([#26860](https://github.com/bitnami/charts/pull/26860))
+
+## <small>0.1.6 (2024-06-05)</small>
+
+* [bitnami/scylladb] Bump chart version (#26802) ([c3ae1ae](https://github.com/bitnami/charts/commit/c3ae1ae9b97d8fc3beea4285a440fc53cd1f82af)), closes [#26802](https://github.com/bitnami/charts/issues/26802)
 
 ## <small>0.1.5 (2024-05-29)</small>
 
