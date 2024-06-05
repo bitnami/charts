@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.2 (2024-06-04)
+## 2.3.3 (2024-06-05)
 
 * [bitnami/flux] Enable PodDisruptionBudgets ([#26694](https://github.com/bitnami/charts/pull/26694))
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/flux] Release 2.3.2 ([#26725](https://github.com/bitnami/charts/pull/26725))
 
 ## <small>2.3.1 (2024-06-04)</small>
 
