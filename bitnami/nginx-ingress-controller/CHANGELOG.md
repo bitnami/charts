@@ -1,8 +1,13 @@
 # Changelog
 
-## 11.3.2 (2024-06-04)
+## 11.3.3 (2024-06-05)
 
-* [bitnami/nginx-ingress-controller] Bump chart version ([#26656](https://github.com/bitnami/charts/pull/26656))
+* [bitnami/nginx-ingress-controller] Release 11.3.3 ([#26743](https://github.com/bitnami/charts/pull/26743))
+
+## <small>11.3.2 (2024-06-04)</small>
+
+* [bitnami/nginx-ingress-controller] Bump chart version (#26656) ([3f5d0b1](https://github.com/bitnami/charts/commit/3f5d0b1ae2e757ae0072e950d3c28a0f3ea3742b)), closes [#26656](https://github.com/bitnami/charts/issues/26656)
+* [bitnami/nginx-ingress-controller] Use different liveness/readiness pending probe (#26412) ([8f502b0](https://github.com/bitnami/charts/commit/8f502b0671981ee3bfdf9c000c5154868b079beb)), closes [#26412](https://github.com/bitnami/charts/issues/26412)
 
 ## 11.3.0 (2024-05-24)
 

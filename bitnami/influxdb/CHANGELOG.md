@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.3 (2024-06-04)
+## 6.3.4 (2024-06-05)
 
-* [bitnami/influxdb] Bump chart version ([#26636](https://github.com/bitnami/charts/pull/26636))
+* [bitnami/influxdb] Release 6.3.4 ([#26733](https://github.com/bitnami/charts/pull/26733))
+
+## <small>6.3.3 (2024-06-04)</small>
+
+* [bitnami/influxdb] Bump chart version (#26636) ([e3280d3](https://github.com/bitnami/charts/commit/e3280d3efcd3822a9d575e8e4f27ef8015ef97d7)), closes [#26636](https://github.com/bitnami/charts/issues/26636)
 
 ## <small>6.3.2 (2024-05-30)</small>
 

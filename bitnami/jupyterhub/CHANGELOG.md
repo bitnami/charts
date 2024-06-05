@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.1.4 (2024-06-04)
+## 7.1.5 (2024-06-05)
 
-* [bitnami/jupyterhub] Remove UTF-8 chars ([#26608](https://github.com/bitnami/charts/pull/26608))
+* [bitnami/jupyterhub] Release 7.1.5 ([#26718](https://github.com/bitnami/charts/pull/26718))
+
+## <small>7.1.4 (2024-06-04)</small>
+
+* [bitnami/jupyterhub] Remove UTF-8 chars (#26608) ([59c0745](https://github.com/bitnami/charts/commit/59c074567e5164962341c84a11fd305a21294faa)), closes [#26608](https://github.com/bitnami/charts/issues/26608)
 
 ## <small>7.1.3 (2024-06-03)</small>
 

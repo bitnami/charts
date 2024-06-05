@@ -1,8 +1,14 @@
 # Changelog
 
+<<<<<<< HEAD
 ## 10.1.4 (2024-06-04)
 
 * [bitnami/etcd] Enable PodDisruptionBudgets ([#26692](https://github.com/bitnami/charts/pull/26692))
+=======
+## 10.1.4 (2024-06-05)
+
+* [bitnami/etcd] Release 10.1.4 ([#26723](https://github.com/bitnami/charts/pull/26723))
+>>>>>>> upstream/main
 
 ## <small>10.1.3 (2024-06-04)</small>
 
