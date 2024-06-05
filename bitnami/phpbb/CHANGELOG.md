@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.3 (2024-06-05)
+## 18.2.4 (2024-06-05)
 
-* [bitnami/phpbb] Bump chart version ([#26796](https://github.com/bitnami/charts/pull/26796))
+* [bitnami/phpbb] Bump chart version ([#26854](https://github.com/bitnami/charts/pull/26854))
+
+## <small>18.2.3 (2024-06-05)</small>
+
+* [bitnami/phpbb] Bump chart version (#26796) ([d1da169](https://github.com/bitnami/charts/commit/d1da16983feae1ccdbe628cfebaf1b3e528f426a)), closes [#26796](https://github.com/bitnami/charts/issues/26796)
 
 ## <small>18.2.2 (2024-06-04)</small>
 

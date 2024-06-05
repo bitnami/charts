@@ -460,6 +460,16 @@ master:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Spark worker parameters
 ##
 
@@ -816,6 +826,16 @@ worker:
   ##         containerPort: 1234
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param worker.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param worker.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param worker.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `worker.pdb.minAvailable` and `worker.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Autoscaling parameters
   ## @param worker.autoscaling.enabled Enable replica autoscaling depending on CPU
   ## @param worker.autoscaling.minReplicas Minimum number of worker replicas

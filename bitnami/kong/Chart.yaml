@@ -45,4 +45,4 @@ maintainers:
 name: kong
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 12.1.4
+version: 12.1.5
