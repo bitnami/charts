@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.2 (2024-06-04)
+## 4.3.3 (2024-06-05)
 
-* [bitnami/rabbitmq-cluster-operator] Bump chart version ([#26665](https://github.com/bitnami/charts/pull/26665))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.3 ([#26752](https://github.com/bitnami/charts/pull/26752))
+
+## <small>4.3.2 (2024-06-04)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Bump chart version (#26665) ([0d1b4ab](https://github.com/bitnami/charts/commit/0d1b4ab706e604d91f0754e00cff63a1c0aa50d1)), closes [#26665](https://github.com/bitnami/charts/issues/26665)
 
 ## <small>4.3.1 (2024-05-24)</small>
 
