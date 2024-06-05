@@ -1,8 +1,12 @@
 # Changelog
 
+## 5.3.1 (2024-06-05)
+
+* [bitnami/oauth2-proxy] Release 5.3.1 ([#26746](https://github.com/bitnami/charts/pull/26746))
+
 ## 5.3.0 (2024-05-27)
 
-* [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex ([#26439](https://github.com/bitnami/charts/pull/26439))
+* [bitnami/oauth2-proxy] Add field externalRedis.databaseIndex (#26439) ([43a38d4](https://github.com/bitnami/charts/commit/43a38d47397e7af81002f0adda65ea266c7369a9)), closes [#26439](https://github.com/bitnami/charts/issues/26439)
 
 ## 5.2.0 (2024-05-24)
 

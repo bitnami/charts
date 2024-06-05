@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.1 (2024-06-04)
+## 4.2.2 (2024-06-05)
 
-* [bitnami/kube-state-metrics] Bump chart version ([#26640](https://github.com/bitnami/charts/pull/26640))
+* [bitnami/kube-state-metrics] Release 4.2.2 ([#26736](https://github.com/bitnami/charts/pull/26736))
+
+## <small>4.2.1 (2024-06-04)</small>
+
+* [bitnami/kube-state-metrics] Bump chart version (#26640) ([3dd2c7c](https://github.com/bitnami/charts/commit/3dd2c7cf1f35ca87640c337a8f5fda4edc60cb3d)), closes [#26640](https://github.com/bitnami/charts/issues/26640)
 
 ## 4.2.0 (2024-05-29)
 

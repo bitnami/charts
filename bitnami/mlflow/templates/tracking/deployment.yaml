@@ -218,7 +218,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - f
+                - -f
                 - mlflow.server
           {{- end }}
           {{- if .Values.tracking.customReadinessProbe }}
