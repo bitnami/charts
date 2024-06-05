@@ -6,31 +6,31 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: keycloak
-      image: docker.io/bitnami/keycloak:24.0.4-debian-12-r1
+      image: docker.io/bitnami/keycloak:24.0.5-debian-12-r0
     - name: keycloak-config-cli
-      image: docker.io/bitnami/keycloak-config-cli:5.12.0-debian-12-r4
+      image: docker.io/bitnami/keycloak-config-cli:5.12.0-debian-12-r5
 apiVersion: v2
-appVersion: 24.0.4
+appVersion: 24.0.5
 dependencies:
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Keycloak is a high performance Java-based identity and access management solution. It lets developers add an authentication layer to their applications with minimum effort.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/keycloak/img/keycloak-stack-220x234.png
 keywords:
-- keycloak
-- access-management
+  - keycloak
+  - access-management
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: keycloak
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 21.3.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
+version: 21.3.3

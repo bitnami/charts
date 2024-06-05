@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.1.1 (2024-05-22)
+## 1.1.3 (2024-06-05)
 
-* [bitnami/grafana-mimir] Use different liveness/readiness probes ([#26350](https://github.com/bitnami/charts/pull/26350))
+* [bitnami/grafana-mimir] Bump chart version ([#26774](https://github.com/bitnami/charts/pull/26774))
+
+## <small>1.1.2 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Release 1.1.2 (#26731) ([db18447](https://github.com/bitnami/charts/commit/db18447898bafcfaf031c4d04940b9cdca29c4f6)), closes [#26731](https://github.com/bitnami/charts/issues/26731)
+
+## <small>1.1.1 (2024-05-23)</small>
+
+* [bitnami/grafana-mimir] Use different liveness/readiness probes (#26350) ([e4cc957](https://github.com/bitnami/charts/commit/e4cc9575527835733af5b4647a5f45a80efebe23)), closes [#26350](https://github.com/bitnami/charts/issues/26350)
 
 ## 1.1.0 (2024-05-21)
 
