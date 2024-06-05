@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.2 (2024-06-05)
+## 3.3.3 (2024-06-05)
 
-* [bitnami/appsmith] Release 3.3.2 ([#26813](https://github.com/bitnami/charts/pull/26813))
+* [bitnami/appsmith] Bump chart version ([#26820](https://github.com/bitnami/charts/pull/26820))
+
+## <small>3.3.2 (2024-06-05)</small>
+
+* [bitnami/appsmith] Release 3.3.2 (#26813) ([bdadb29](https://github.com/bitnami/charts/commit/bdadb29000813c97e0de13211fea29a799d18ad2)), closes [#26813](https://github.com/bitnami/charts/issues/26813)
 
 ## <small>3.3.1 (2024-06-05)</small>
 
