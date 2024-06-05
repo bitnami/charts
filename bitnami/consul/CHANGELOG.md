@@ -4,6 +4,10 @@
 
 * [bitnami/consul] Enable PodDisruptionBudgets ([#26689](https://github.com/bitnami/charts/pull/26689))
 
+## 11.2.2 (2024-06-05)
+
+* [bitnami/consul] Release 11.2.2 ([#26722](https://github.com/bitnami/charts/pull/26722))
+
 ## <small>11.2.1 (2024-06-04)</small>
 
 * [bitnami/consul] Bump chart version (#26624) ([4114a4b](https://github.com/bitnami/charts/commit/4114a4bde5d9c392d9ac46d9d20a91f705f9e344)), closes [#26624](https://github.com/bitnami/charts/issues/26624)
