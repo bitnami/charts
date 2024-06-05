@@ -8,31 +8,31 @@ annotations:
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r22
     - name: vault
-      image: docker.io/bitnami/vault:1.16.3-debian-12-r0
+      image: docker.io/bitnami/vault:1.16.3-debian-12-r1
     - name: vault-csi-provider
-      image: docker.io/bitnami/vault-csi-provider:1.4.2-debian-12-r6
+      image: docker.io/bitnami/vault-csi-provider:1.4.2-debian-12-r7
     - name: vault-k8s
-      image: docker.io/bitnami/vault-k8s:1.4.1-debian-12-r5
+      image: docker.io/bitnami/vault-k8s:1.4.1-debian-12-r6
 apiVersion: v2
 appVersion: 1.16.3
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Vault is a tool for securely managing and accessing secrets using a unified interface. Features secure storage, dynamic secrets, data encryption and revocation.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/vault/img/vault-stack-220x234.png
 keywords:
-  - security
-  - secrets
-  - injection
-  - vault
+- security
+- secrets
+- injection
+- vault
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: vault
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/vault
-version: 1.4.2
+- https://github.com/bitnami/charts/tree/main/bitnami/vault
+version: 1.4.3

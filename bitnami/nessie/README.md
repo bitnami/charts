@@ -1,4 +1,4 @@
-<!--- app-name: nessie -->
+<!--- app-name: Nessie -->
 
 # Bitnami package for Nessie
 
