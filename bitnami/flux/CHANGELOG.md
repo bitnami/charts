@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.1 (2024-06-04)
+## 2.3.2 (2024-06-05)
 
-* [bitnami/flux] Bump chart version ([#26632](https://github.com/bitnami/charts/pull/26632))
+* [bitnami/flux] Release 2.3.2 ([#26725](https://github.com/bitnami/charts/pull/26725))
+
+## <small>2.3.1 (2024-06-04)</small>
+
+* [bitnami/flux] Bump chart version (#26632) ([1b8fd97](https://github.com/bitnami/charts/commit/1b8fd97a13c1017a896191b930041ce8d0659b9d)), closes [#26632](https://github.com/bitnami/charts/issues/26632)
 
 ## 2.3.0 (2024-05-21)
 
