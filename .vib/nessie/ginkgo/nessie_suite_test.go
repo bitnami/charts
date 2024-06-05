@@ -64,7 +64,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, stmt str
 						{
 							Name: "nessie",
 							// TODO: Change image
-							Image:           "docker.io/javsalgar/nessie-utils:0.83.2-debian-12-r0",
+							Image:           "docker.io/bitnami/nessie-utils:latest",
 							Command:         []string{"java", "-jar", "/opt/bitnami/nessie-utils/nessie-cli/nessie-cli.jar", "-u", fmt.Sprintf("http://%s:%s/api/v2", dplName, port), "-c", stmt, "--non-ansi"},
 							SecurityContext: securityContext,
 						},
