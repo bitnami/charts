@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.5.1 (2024-06-05)
+## 3.5.2 (2024-06-05)
 
-* [bitnami/grafana-tempo] Bump chart version ([#26775](https://github.com/bitnami/charts/pull/26775))
+* [bitnami/grafana-tempo] Bump chart version ([#26833](https://github.com/bitnami/charts/pull/26833))
+
+## <small>3.5.1 (2024-06-05)</small>
+
+* [bitnami/grafana-tempo] Bump chart version (#26775) ([39ce37d](https://github.com/bitnami/charts/commit/39ce37d01180666c368ebb05c5c90b7327376af8)), closes [#26775](https://github.com/bitnami/charts/issues/26775)
 
 ## 3.5.0 (2024-05-29)
 
