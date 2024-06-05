@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.4.1 (2024-06-05)
+
+* [bitnami/harbor] Bump chart version ([#26776](https://github.com/bitnami/charts/pull/26776))
+
 ## 21.4.0 (2024-05-29)
 
-* [bitnami/harbor] Enable PodDisruptionBudgets ([#26486](https://github.com/bitnami/charts/pull/26486))
+* [bitnami/harbor] Enable PodDisruptionBudgets (#26486) ([d2059bc](https://github.com/bitnami/charts/commit/d2059bcd52084408e1aac1ed748756fbd0cfeee1)), closes [#26486](https://github.com/bitnami/charts/issues/26486)
 
 ## 21.3.0 (2024-05-29)
 

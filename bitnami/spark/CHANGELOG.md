@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.1.1 (2024-06-04)
+## 9.2.0 (2024-06-04)
 
-* [bitnami/spark] Bump chart version ([#26669](https://github.com/bitnami/charts/pull/26669))
+* [bitnami/spark] Enable PodDisruptionBudgets ([#26536](https://github.com/bitnami/charts/pull/26536))
+
+## <small>9.1.1 (2024-06-04)</small>
+
+* [bitnami/spark] Bump chart version (#26669) ([484cd76](https://github.com/bitnami/charts/commit/484cd761e8b4d7cf597c74af4f065d40b6cce7c9)), closes [#26669](https://github.com/bitnami/charts/issues/26669)
 
 ## 9.1.0 (2024-05-21)
 

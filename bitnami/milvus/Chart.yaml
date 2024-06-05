@@ -16,36 +16,36 @@ annotations:
 apiVersion: v2
 appVersion: 2.4.4
 dependencies:
-- name: etcd
-  repository: oci://registry-1.docker.io/bitnamicharts
-  condition: etcd.enabled
-  version: 10.x.x
-- condition: kafka.enabled
-  name: kafka
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 29.x.x
-- condition: minio.enabled
-  name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: etcd
+    repository: oci://registry-1.docker.io/bitnamicharts
+    condition: etcd.enabled
+    version: 10.x.x
+  - condition: kafka.enabled
+    name: kafka
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 29.x.x
+  - condition: minio.enabled
+    name: minio
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 14.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/milvus/img/milvus-stack-220x234.png
 keywords:
-- milvus
-- ai
-- database
-- infrastructure
-- attu
+  - milvus
+  - ai
+  - database
+  - infrastructure
+  - attu
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: milvus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 8.1.1
+version: 8.1.2

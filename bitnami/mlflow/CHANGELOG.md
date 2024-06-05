@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.2 (2024-06-04)
+## 1.3.3 (2024-06-05)
 
-* [bitnami/mlflow] Release 1.3.2 ([#26571](https://github.com/bitnami/charts/pull/26571))
+* [bitnami/mlflow] Bump chart version ([#26790](https://github.com/bitnami/charts/pull/26790))
+
+## <small>1.3.2 (2024-06-04)</small>
+
+* [bitnami/mlflow] Release 1.3.2 (#26571) ([cd67157](https://github.com/bitnami/charts/commit/cd67157cf8ce156e779046b1eb9404ce903deda7)), closes [#26571](https://github.com/bitnami/charts/issues/26571)
 
 ## <small>1.3.1 (2024-06-04)</small>
 
