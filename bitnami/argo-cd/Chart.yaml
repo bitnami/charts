@@ -39,4 +39,4 @@ maintainers:
 name: argo-cd
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
-version: 6.4.2
+version: 6.4.3
