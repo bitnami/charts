@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.1 (2024-06-05)
+## 2.3.2 (2024-06-05)
 
-* [bitnami/jaeger] Release 2.3.1 ([#26735](https://github.com/bitnami/charts/pull/26735))
+* [bitnami/jaeger] Bump chart version ([#26777](https://github.com/bitnami/charts/pull/26777))
+
+## <small>2.3.1 (2024-06-05)</small>
+
+* [bitnami/jaeger] Release 2.3.1 (#26735) ([d0f5e2e](https://github.com/bitnami/charts/commit/d0f5e2e0f99d2508cae0cf7dee09c165295650b9)), closes [#26735](https://github.com/bitnami/charts/issues/26735)
 
 ## 2.3.0 (2024-06-03)
 
