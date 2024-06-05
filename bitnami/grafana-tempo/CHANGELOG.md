@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.5.0 (2024-05-28)
+## 3.5.1 (2024-06-05)
 
-* [bitnami/grafana-tempo] Enable PodDisruptionBudgets ([#26484](https://github.com/bitnami/charts/pull/26484))
+* [bitnami/grafana-tempo] Release 3.5.1 ([#26742](https://github.com/bitnami/charts/pull/26742))
+
+## 3.5.0 (2024-05-29)
+
+* [bitnami/grafana-tempo] Enable PodDisruptionBudgets (#26484) ([d637d7c](https://github.com/bitnami/charts/commit/d637d7c723a58b7426721a549b8a81625e7b110a)), closes [#26484](https://github.com/bitnami/charts/issues/26484)
 
 ## <small>3.4.1 (2024-05-23)</small>
 
