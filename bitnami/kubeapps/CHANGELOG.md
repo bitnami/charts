@@ -2,7 +2,7 @@
 
 ## 15.3.0 (2024-06-05)
 
-* [bitnami/kubeapps] Enable PodDisruptionBudgets ([#26701](https://github.com/bitnami/charts/pull/26701))
+* [bitnami/kubeapps] Enable PodDisruptionBudgets (part 2) ([#26701](https://github.com/bitnami/charts/pull/26701))
 
 ## 15.2.0 (2024-06-04)
 
