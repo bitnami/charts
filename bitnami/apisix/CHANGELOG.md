@@ -1,12 +1,12 @@
 # Changelog
 
-## 3.2.0 (2024-06-04)
+## 3.2.0 (2024-06-05)
 
 * [bitnami/apisix] Enable PodDisruptionBudgets ([#26711](https://github.com/bitnami/charts/pull/26711))
 
-## 3.1.3 (2024-06-05)
+## <small>3.1.3 (2024-06-05)</small>
 
-* [bitnami/apisix] Bump chart version ([#26819](https://github.com/bitnami/charts/pull/26819))
+* [bitnami/apisix] Bump chart version (#26819) ([a68d34d](https://github.com/bitnami/charts/commit/a68d34d6314f9f2de578969146e62b33f42dc4a0)), closes [#26819](https://github.com/bitnami/charts/issues/26819)
 
 ## <small>3.1.2 (2024-06-05)</small>
 
