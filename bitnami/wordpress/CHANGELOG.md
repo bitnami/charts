@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.4 (2024-06-05)
+## 22.4.5 (2024-06-05)
 
-* [bitnami/wordpress] Bump chart version ([#26868](https://github.com/bitnami/charts/pull/26868))
+* [bitnami/wordpress] Release 22.4.5 ([#26877](https://github.com/bitnami/charts/pull/26877))
+
+## <small>22.4.4 (2024-06-05)</small>
+
+* [bitnami/wordpress] Bump chart version (#26868) ([ace691a](https://github.com/bitnami/charts/commit/ace691a13e2b46943bcefd12a0417c83db2743e7)), closes [#26868](https://github.com/bitnami/charts/issues/26868)
 
 ## <small>22.4.3 (2024-06-05)</small>
 
