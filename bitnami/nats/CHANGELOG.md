@@ -2,7 +2,7 @@
 
 ## 8.2.5 (2024-06-05)
 
-* [bitnami/nats] Enable PodDisruptionBudgets ([#26707](https://github.com/bitnami/charts/pull/26707))
+* [bitnami/nats] Align PodDisruptionBudgets with templates ([#26707](https://github.com/bitnami/charts/pull/26707))
 
 ## <small>8.2.4 (2024-06-05)</small>
 
