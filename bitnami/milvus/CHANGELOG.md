@@ -2,7 +2,7 @@
 
 ## 8.1.2 (2024-06-05)
 
-* [bitnami/milvus] Release 8.1.1 ([#26748](https://github.com/bitnami/charts/pull/26748))
+* [bitnami/milvus] Release 8.1.2 ([#26748](https://github.com/bitnami/charts/pull/26748))
 
 ## <small>8.1.1 (2024-06-05)</small>
 
