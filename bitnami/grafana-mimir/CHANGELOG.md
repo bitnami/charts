@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.3 (2024-06-05)
+## 1.1.4 (2024-06-05)
 
-* [bitnami/grafana-mimir] Bump chart version ([#26774](https://github.com/bitnami/charts/pull/26774))
+* [bitnami/grafana-mimir] Bump chart version ([#26832](https://github.com/bitnami/charts/pull/26832))
+
+## <small>1.1.3 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Bump chart version (#26774) ([ec0b18c](https://github.com/bitnami/charts/commit/ec0b18c968060db292a7c3abe4b658005e16e002)), closes [#26774](https://github.com/bitnami/charts/issues/26774)
 
 ## <small>1.1.2 (2024-06-05)</small>
 
