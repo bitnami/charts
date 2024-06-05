@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.2 (2024-06-05)
+## 0.3.3 (2024-06-05)
 
-* [bitnami/valkey] Bump chart version ([#26809](https://github.com/bitnami/charts/pull/26809))
+* [bitnami/valkey] Bump chart version ([#26867](https://github.com/bitnami/charts/pull/26867))
+
+## <small>0.3.2 (2024-06-05)</small>
+
+* [bitnami/valkey] Bump chart version (#26809) ([2cd462e](https://github.com/bitnami/charts/commit/2cd462eb8596b64b2bc578a905d92b8a7d38f89c)), closes [#26809](https://github.com/bitnami/charts/issues/26809)
 
 ## <small>0.3.1 (2024-05-30)</small>
 
