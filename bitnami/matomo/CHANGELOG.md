@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.3.1 (2024-06-05)
+## 7.3.2 (2024-06-05)
 
-* [bitnami/matomo] Bump chart version ([#26787](https://github.com/bitnami/charts/pull/26787))
+* [bitnami/matomo] Bump chart version ([#26845](https://github.com/bitnami/charts/pull/26845))
+
+## <small>7.3.1 (2024-06-05)</small>
+
+* [bitnami/matomo] Bump chart version (#26787) ([80a779a](https://github.com/bitnami/charts/commit/80a779a1453015715a29f4f88fcb437cbeec9a26)), closes [#26787](https://github.com/bitnami/charts/issues/26787)
 
 ## 7.3.0 (2024-05-29)
 
