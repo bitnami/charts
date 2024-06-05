@@ -14,30 +14,30 @@ annotations:
 apiVersion: v2
 appVersion: 10.2.6
 dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Drupal is one of the most versatile open source content management systems in the world. It is pre-configured with the Ctools and Views modules, Drush and Let's Encrypt auto-configuration support.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/drupal/img/drupal-stack-220x234.png
 keywords:
-- drupal
-- cms
-- blog
-- http
-- web
-- application
-- php
+  - drupal
+  - cms
+  - blog
+  - http
+  - web
+  - application
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: drupal
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/drupal
-version: 18.21.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/drupal
+version: 18.21.2

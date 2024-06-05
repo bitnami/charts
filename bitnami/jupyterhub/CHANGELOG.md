@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.1.4 (2024-06-04)
+## 7.2.1 (2024-06-05)
 
-* [bitnami/jupyterhub] Remove UTF-8 chars ([#26608](https://github.com/bitnami/charts/pull/26608))
+* [bitnami/jupyterhub] Bump chart version ([#26780](https://github.com/bitnami/charts/pull/26780))
+
+## 7.2.0 (2024-06-05)
+
+* [bitnami/jupyterhub] Enable PodDisruptionBudgets (#26710) ([9f35c24](https://github.com/bitnami/charts/commit/9f35c24bcf21e3f70bc1884ea9e81b4ab7d4bc81)), closes [#26710](https://github.com/bitnami/charts/issues/26710)
+
+## <small>7.1.5 (2024-06-05)</small>
+
+* [bitnami/jupyterhub] Release 7.1.5 (#26718) ([11a0884](https://github.com/bitnami/charts/commit/11a0884a4e5ec03469768f271cfd7255fbc62159)), closes [#26718](https://github.com/bitnami/charts/issues/26718)
+
+## <small>7.1.4 (2024-06-04)</small>
+
+* [bitnami/jupyterhub] Remove UTF-8 chars (#26608) ([59c0745](https://github.com/bitnami/charts/commit/59c074567e5164962341c84a11fd305a21294faa)), closes [#26608](https://github.com/bitnami/charts/issues/26608)
 
 ## <small>7.1.3 (2024-06-03)</small>
 

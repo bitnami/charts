@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: grafana-loki
-      image: docker.io/bitnami/grafana-loki:3.0.0-debian-12-r5
+      image: docker.io/bitnami/grafana-loki:3.0.0-debian-12-r6
     - name: nginx
       image: docker.io/bitnami/nginx:1.26.1-debian-12-r0
     - name: os-shell
@@ -16,43 +16,43 @@ annotations:
 apiVersion: v2
 appVersion: 3.0.0
 dependencies:
-- alias: memcachedchunks
-  condition: memcachedchunks.enabled
-  name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.x.x
-- alias: memcachedfrontend
-  condition: memcachedfrontend.enabled
-  name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.x.x
-- alias: memcachedindexqueries
-  condition: memcachedindexqueries.enabled
-  name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.x.x
-- alias: memcachedindexwrites
-  condition: memcachedindexwrites.enabled
-  name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - alias: memcachedchunks
+    condition: memcachedchunks.enabled
+    name: memcached
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 7.x.x
+  - alias: memcachedfrontend
+    condition: memcachedfrontend.enabled
+    name: memcached
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 7.x.x
+  - alias: memcachedindexqueries
+    condition: memcachedindexqueries.enabled
+    name: memcached
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 7.x.x
+  - alias: memcachedindexwrites
+    condition: memcachedindexwrites.enabled
+    name: memcached
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 7.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
 keywords:
-- grafana
-- tracing
-- metrics
-- infrastructure
+  - grafana
+  - tracing
+  - metrics
+  - infrastructure
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: grafana-loki
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
-version: 4.5.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
+version: 4.5.3

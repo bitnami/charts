@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.1.1 (2024-06-04)
+## 2.1.2 (2024-06-05)
 
-* [bitnami/multus-cni] Bump chart version ([#26652](https://github.com/bitnami/charts/pull/26652))
+* [bitnami/multus-cni] Release 2.1.2 ([#26744](https://github.com/bitnami/charts/pull/26744))
+
+## <small>2.1.1 (2024-06-04)</small>
+
+* [bitnami/multus-cni] Bump chart version (#26652) ([0cc9fc4](https://github.com/bitnami/charts/commit/0cc9fc4124ed0b05158149082689e5a394dc791d)), closes [#26652](https://github.com/bitnami/charts/issues/26652)
 
 ## 2.1.0 (2024-05-21)
 

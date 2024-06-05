@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.6.0 (2024-05-30)
+## 15.6.2 (2024-06-05)
 
-* [bitnami/thanos] Receive, ruler & storegateway statefulsets persistentVolumeClaimRetentionPolicy support ([#25676](https://github.com/bitnami/charts/pull/25676))
+* [bitnami/thanos] Bump chart version ([#26808](https://github.com/bitnami/charts/pull/26808))
+
+## <small>15.6.1 (2024-06-05)</small>
+
+* [bitnami/thanos] Release 15.6.1 (#26755) ([4e3585e](https://github.com/bitnami/charts/commit/4e3585ebd0dbfff61e13c12a529522fa094f8ada)), closes [#26755](https://github.com/bitnami/charts/issues/26755)
+
+## 15.6.0 (2024-05-31)
+
+* [bitnami/thanos] Receive, ruler & storegateway statefulsets persistentVolumeClaimRetentionPolicy sup ([c955b0e](https://github.com/bitnami/charts/commit/c955b0e811cdaf59a836e20288f58cf99256db52)), closes [#25676](https://github.com/bitnami/charts/issues/25676)
 
 ## <small>15.5.1 (2024-05-28)</small>
 

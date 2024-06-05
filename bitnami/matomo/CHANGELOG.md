@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.3.0 (2024-05-28)
+## 7.3.1 (2024-06-05)
 
-* [bitnami/matomo] Enable PodDisruptionBudgets ([#26509](https://github.com/bitnami/charts/pull/26509))
+* [bitnami/matomo] Bump chart version ([#26787](https://github.com/bitnami/charts/pull/26787))
+
+## 7.3.0 (2024-05-29)
+
+* [bitnami/matomo] Enable PodDisruptionBudgets (#26509) ([5cc452c](https://github.com/bitnami/charts/commit/5cc452c700d93c97c5f0474b1923c0db080a9e6e)), closes [#26509](https://github.com/bitnami/charts/issues/26509)
 
 ## 7.2.0 (2024-05-21)
 

@@ -14,27 +14,27 @@ annotations:
 apiVersion: v2
 appVersion: 3.3.12
 dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
 keywords:
-- phpbb
-- forum
-- http
-- php
+  - phpbb
+  - forum
+  - http
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: phpbb
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/phpbb
-version: 18.2.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/phpbb
+version: 18.2.3
