@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.2.1 (2024-06-05)
+## 15.2.2 (2024-06-05)
 
-* [bitnami/kubeapps] Bump chart version ([#26784](https://github.com/bitnami/charts/pull/26784))
+* [bitnami/kubeapps] Fix permissions for apprepositories issue 5323 tanzu ([#26814](https://github.com/bitnami/charts/pull/26814))
+
+## <small>15.2.1 (2024-06-05)</small>
+
+* [bitnami/kubeapps] Bump chart version (#26784) ([30ed241](https://github.com/bitnami/charts/commit/30ed241740bd6dab47af5ec3ebfbae0fc2aa4970)), closes [#26784](https://github.com/bitnami/charts/issues/26784)
 
 ## 15.2.0 (2024-06-04)
 
