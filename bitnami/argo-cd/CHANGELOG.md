@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.4.0 (2024-05-29)
+## 6.4.2 (2024-06-05)
 
-* [bitnami/argo-cd] Enable PodDisruptionBudgets ([#26419](https://github.com/bitnami/charts/pull/26419))
+* [bitnami/argo-cd] Bump chart version ([#26763](https://github.com/bitnami/charts/pull/26763))
+
+## <small>6.4.1 (2024-06-05)</small>
+
+* [bitnami/argo-cd] Release 6.4.1 (#26720) ([834b448](https://github.com/bitnami/charts/commit/834b4487c5e0d2356625ecc2923ee02865b41fb0)), closes [#26720](https://github.com/bitnami/charts/issues/26720)
+
+## 6.4.0 (2024-05-30)
+
+* [bitnami/argo-cd] Enable PodDisruptionBudgets (#26419) ([c2b50f2](https://github.com/bitnami/charts/commit/c2b50f25b5a553fe180784947091673093757a81)), closes [#26419](https://github.com/bitnami/charts/issues/26419)
 
 ## <small>6.3.4 (2024-05-28)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.1.3 (2024-05-31)
+## 12.1.4 (2024-06-05)
 
-* [bitnami/kong] Release 12.1.3 ([#26587](https://github.com/bitnami/charts/pull/26587))
+* [bitnami/kong] Bump chart version ([#26783](https://github.com/bitnami/charts/pull/26783))
+
+## <small>12.1.3 (2024-05-31)</small>
+
+* [bitnami/kong] Release 12.1.3 (#26587) ([1e4a6ee](https://github.com/bitnami/charts/commit/1e4a6eed352ba6c6bc3f5e3b718f5c747c53af4b)), closes [#26587](https://github.com/bitnami/charts/issues/26587)
 
 ## <small>12.1.2 (2024-05-28)</small>
 

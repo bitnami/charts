@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.3.0 (2024-05-28)
+## 2.3.2 (2024-06-05)
 
-* [bitnami/gitea] Enable PodDisruptionBudgets ([#26433](https://github.com/bitnami/charts/pull/26433))
+* [bitnami/gitea] Bump chart version ([#26772](https://github.com/bitnami/charts/pull/26772))
+
+## <small>2.3.1 (2024-06-05)</small>
+
+* [bitnami/gitea] Release 2.3.1 (#26727) ([05a43bd](https://github.com/bitnami/charts/commit/05a43bd2116fefd64e7796ea9036bfb99ba0983c)), closes [#26727](https://github.com/bitnami/charts/issues/26727)
+
+## 2.3.0 (2024-06-03)
+
+* [bitnami/gitea] Enable PodDisruptionBudgets (#26433) ([4b3877b](https://github.com/bitnami/charts/commit/4b3877b03c181c7b77386f4f327568fc93093a55)), closes [#26433](https://github.com/bitnami/charts/issues/26433)
 
 ## <small>2.2.1 (2024-05-27)</small>
 

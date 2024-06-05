@@ -1,8 +1,12 @@
 # Changelog
 
-## 26.2.0 (2024-05-23)
+## 26.2.1 (2024-06-05)
 
-* [bitnami/odoo] Enable PodDisruptionBudgets ([#26177](https://github.com/bitnami/charts/pull/26177))
+* [bitnami/odoo] Bump chart version ([#26793](https://github.com/bitnami/charts/pull/26793))
+
+## 26.2.0 (2024-05-24)
+
+* [bitnami/odoo] Enable PodDisruptionBudgets (#26177) ([56c8c6a](https://github.com/bitnami/charts/commit/56c8c6a2c992b3cefe1d7630237dd49e295df801)), closes [#26177](https://github.com/bitnami/charts/issues/26177)
 
 ## 26.1.0 (2024-05-21)
 

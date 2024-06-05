@@ -12,28 +12,28 @@ annotations:
 apiVersion: v2
 appVersion: 5.1.1
 dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Joomla! is an award winning open source CMS platform for building websites and applications. It includes page caching, page compression and Let's Encrypt auto-configuration support.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/joomla/img/joomla-stack-220x234.png
 keywords:
-- joomla
-- cms
-- blog
-- http
-- php
+  - joomla
+  - cms
+  - blog
+  - http
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: joomla
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/joomla
-version: 19.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/joomla
+version: 19.2.1

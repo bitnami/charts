@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.1.5 (2024-05-29)
+## 0.1.6 (2024-06-05)
 
-* [bitnami/scylladb] Enable PodDisruptionBudgets ([#26533](https://github.com/bitnami/charts/pull/26533))
+* [bitnami/scylladb] Bump chart version ([#26802](https://github.com/bitnami/charts/pull/26802))
+
+## <small>0.1.5 (2024-05-29)</small>
+
+* [bitnami/scylladb] Enable PodDisruptionBudgets (#26533) ([6e834a0](https://github.com/bitnami/charts/commit/6e834a0a5c00f82cff1c5ffdff2fb717c887ba12)), closes [#26533](https://github.com/bitnami/charts/issues/26533)
 
 ## <small>0.1.4 (2024-05-24)</small>
 
