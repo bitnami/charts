@@ -1,12 +1,12 @@
 # Changelog
 
-## 15.7.0 (2024-06-04)
+## 15.7.0 (2024-06-05)
 
 * [bitnami/thanos] Enable PodDisruptionBudgets ([#26709](https://github.com/bitnami/charts/pull/26709))
 
-## 15.6.1 (2024-06-05)
+## <small>15.6.1 (2024-06-05)</small>
 
-* [bitnami/thanos] Release 15.6.1 ([#26755](https://github.com/bitnami/charts/pull/26755))
+* [bitnami/thanos] Release 15.6.1 (#26755) ([4e3585e](https://github.com/bitnami/charts/commit/4e3585ebd0dbfff61e13c12a529522fa094f8ada)), closes [#26755](https://github.com/bitnami/charts/issues/26755)
 
 ## 15.6.0 (2024-05-31)
 
