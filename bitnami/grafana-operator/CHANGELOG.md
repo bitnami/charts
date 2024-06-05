@@ -2,7 +2,7 @@
 
 ## 4.4.4 (2024-06-05)
 
-* [bitnami/grafana-operator] Wrong content of grafanacontactpoints.integreatly.org.yaml ([#26871](https://github.com/bitnami/charts/pull/26871))
+* [bitnami/grafana-operator] Update content of grafanacontactpoints.integreatly.org.yaml ([#26871](https://github.com/bitnami/charts/pull/26871))
 
 ## <small>4.4.3 (2024-06-05)</small>
 
