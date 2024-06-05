@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.2.1 (2024-06-05)
+## 29.2.2 (2024-06-05)
 
-* [bitnami/kafka] Bump chart version ([#26781](https://github.com/bitnami/charts/pull/26781))
+* [bitnami/kafka] Bump chart version ([#26839](https://github.com/bitnami/charts/pull/26839))
+
+## <small>29.2.1 (2024-06-05)</small>
+
+* [bitnami/kafka] Bump chart version (#26781) ([66f65f6](https://github.com/bitnami/charts/commit/66f65f6e5a20c7e8423b51606b051b472b4729c1)), closes [#26781](https://github.com/bitnami/charts/issues/26781)
 
 ## 29.2.0 (2024-05-30)
 
