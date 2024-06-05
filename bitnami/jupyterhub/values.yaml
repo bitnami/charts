@@ -520,7 +520,7 @@ hub:
   ## @param hub.pdb.maxUnavailable Set maximum available hub instances
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: ""
   ## @section Hub RBAC parameters
@@ -976,7 +976,7 @@ proxy:
   pdb:
     ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
     ##
-    create: false
+    create: true
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable: ""

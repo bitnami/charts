@@ -16,27 +16,27 @@ annotations:
 apiVersion: v2
 appVersion: 2.11.2
 dependencies:
-- condition: redis.enabled
-  name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: redis.enabled
+    name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/argo-cd/img/argo-cd-stack-220x234.png
 keywords:
-- Continuous delivery
-- Continuous deployment
-- Devops
-- Kubernetes
+  - Continuous delivery
+  - Continuous deployment
+  - Devops
+  - Kubernetes
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: argo-cd
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
-version: 6.4.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
+version: 6.4.2

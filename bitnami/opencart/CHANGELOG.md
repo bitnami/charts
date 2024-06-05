@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.1 (2024-06-04)
+## 18.2.2 (2024-06-05)
 
-* [bitnami/opencart] Fix typo in deployment.yaml template ([#26680](https://github.com/bitnami/charts/pull/26680))
+* [bitnami/opencart] Bump chart version ([#26794](https://github.com/bitnami/charts/pull/26794))
+
+## <small>18.2.1 (2024-06-04)</small>
+
+* [bitnami/opencart] Fix typo in deployment.yaml template (#26680) ([bd3efec](https://github.com/bitnami/charts/commit/bd3efec1b83a9ded44da5b10e5ec9eb1586c859a)), closes [#26680](https://github.com/bitnami/charts/issues/26680)
 
 ## 18.2.0 (2024-05-29)
 
