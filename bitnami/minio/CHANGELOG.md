@@ -1,8 +1,8 @@
 # Changelog
 
-## 14.6.4 (2024-06-04)
+## 14.6.4 (2024-06-05)
 
-* [bitnami/minio] Enable PodDisruptionBudgets ([#26705](https://github.com/bitnami/charts/pull/26705))
+* [bitnami/minio] Release 14.6.4 ([#26741](https://github.com/bitnami/charts/pull/26741))
 
 ## <small>14.6.3 (2024-06-04)</small>
 

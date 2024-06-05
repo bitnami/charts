@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.1 (2024-06-04)
+## 1.1.2 (2024-06-05)
 
-* [bitnami/whereabouts] Bump chart version ([#26673](https://github.com/bitnami/charts/pull/26673))
+* [bitnami/whereabouts] Release 1.1.2 ([#26757](https://github.com/bitnami/charts/pull/26757))
+
+## <small>1.1.1 (2024-06-04)</small>
+
+* [bitnami/whereabouts] Bump chart version (#26673) ([02c7581](https://github.com/bitnami/charts/commit/02c7581e027023b7e3ddf01c58d178f3e2da806a)), closes [#26673](https://github.com/bitnami/charts/issues/26673)
 
 ## 1.1.0 (2024-05-21)
 
