@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.3 (2024-06-05)
+## 1.4.0 (2024-06-05)
 
-* [bitnami/mlflow] Bump chart version ([#26790](https://github.com/bitnami/charts/pull/26790))
+* [bitnami/mlflow] Align PodDisruptionBudgets with templates ([#26706](https://github.com/bitnami/charts/pull/26706))
+
+## <small>1.3.3 (2024-06-05)</small>
+
+* [bitnami/mlflow] Bump chart version (#26790) ([c8e65b0](https://github.com/bitnami/charts/commit/c8e65b02bb411a40468790386cf6c6eebba8ecf8)), closes [#26790](https://github.com/bitnami/charts/issues/26790)
 
 ## <small>1.3.2 (2024-06-04)</small>
 
