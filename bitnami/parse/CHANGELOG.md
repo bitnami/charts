@@ -1,8 +1,12 @@
 # Changelog
 
-## 23.2.1 (2024-06-05)
+## 23.2.2 (2024-06-05)
 
-* [bitnami/parse] Bump chart version ([#26795](https://github.com/bitnami/charts/pull/26795))
+* [bitnami/parse] Bump chart version ([#26853](https://github.com/bitnami/charts/pull/26853))
+
+## <small>23.2.1 (2024-06-05)</small>
+
+* [bitnami/parse] Bump chart version (#26795) ([cbf752a](https://github.com/bitnami/charts/commit/cbf752a9b656224e972c54b4e7897607642a5903)), closes [#26795](https://github.com/bitnami/charts/issues/26795)
 
 ## 23.2.0 (2024-05-30)
 
