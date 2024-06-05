@@ -12,26 +12,26 @@ annotations:
 apiVersion: v2
 appVersion: 1.57.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
-- condition: cassandra.enabled
-  name: cassandra
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
+  - condition: cassandra.enabled
+    name: cassandra
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 11.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
 keywords:
-- jaeger
-- tracing
-- monitoring
+  - jaeger
+  - tracing
+  - monitoring
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: jaeger
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/jaeger
-version: 2.3.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+version: 2.3.2
