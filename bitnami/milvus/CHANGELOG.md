@@ -6,13 +6,13 @@
 
 ## <small>8.1.1 (2024-06-05)</small>
 
-* [bitnami/milvus] Bump chart version ([#26789](https://github.com/bitnami/charts/pull/26789))
+* [bitnami/milvus] Bump chart version (#26789) ([c846ba9](https://github.com/bitnami/charts/commit/c846ba9c85b488e2b952613e4ead90dd7d6ae131)), closes [#26789](https://github.com/bitnami/charts/issues/26789)
 
-## <small>8.1.0 (2024-05-30)</small>
+## 8.1.0 (2024-05-30)
 
 * [bitnami/milvus] PDB review (#25983) ([4e80463](https://github.com/bitnami/charts/commit/4e804630c3af64934e79fcacc5e1962750a0355f)), closes [#25983](https://github.com/bitnami/charts/issues/25983)
 
-## <small>8.0.0 (2024-05-27)</small>
+## 8.0.0 (2024-05-27)
 
 * [bitnami/milvus] Update dependencies (#26445) ([e4dc085](https://github.com/bitnami/charts/commit/e4dc085dc62abade1fb18389831ad5a4ef41a75d)), closes [#26445](https://github.com/bitnami/charts/issues/26445)
 
