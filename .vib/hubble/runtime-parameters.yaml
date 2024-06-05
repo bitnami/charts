@@ -42,9 +42,18 @@ relay:
       - name: http
         containerPort: 4244
     command:
-      - hubble
+      - cilium-agent
     args:
-      - TODO
+      - --lib-dir
+      - /opt/bitnami/cilium/var/lib
+      - --state-dir
+      - /opt/bitnami/cilium/var/run
+      - --enable-hubble
+      - --hubble-listen-address
+      - ":4244"
+      - --hubble-disable-tls
+      - --hubble-socket-path
+      - /opt/bitnami/cilium/var/run/hubble.sock
 serverPeers:
   host: localhost
   port: 4244
