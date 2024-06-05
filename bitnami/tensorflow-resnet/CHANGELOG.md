@@ -1,8 +1,12 @@
 # Changelog
 
+## 4.2.1 (2024-06-04)
+
+* [bitnami/tensorflow-resnet] Bump chart version ([#26670](https://github.com/bitnami/charts/pull/26670))
+
 ## 4.2.0 (2024-05-29)
 
-* [bitnami/tensorflow-resnet] Enable PodDisruptionBudgets ([#26539](https://github.com/bitnami/charts/pull/26539))
+* [bitnami/tensorflow-resnet] Enable PodDisruptionBudgets (#26539) ([b09c374](https://github.com/bitnami/charts/commit/b09c3747e303560ac37e8fea330d88cbce419fd6)), closes [#26539](https://github.com/bitnami/charts/issues/26539)
 
 ## <small>4.1.1 (2024-05-24)</small>
 

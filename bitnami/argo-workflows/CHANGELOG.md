@@ -4,6 +4,10 @@
 
 * [bitnami/argo-workflows] Enable PodDisruptionBudgets ([#26595](https://github.com/bitnami/charts/pull/26595))
 
+## 9.0.2 (2024-06-04)
+
+* [bitnami/argo-workflows] Release 9.0.2 ([#26719](https://github.com/bitnami/charts/pull/26719))
+
 ## <small>9.0.1 (2024-05-27)</small>
 
 * [bitnami/argo-workflows] Release 9.0.1 (#26456) ([8f899a8](https://github.com/bitnami/charts/commit/8f899a80be1f6462a77f27e01ee93e7f0cef529e)), closes [#26456](https://github.com/bitnami/charts/issues/26456)

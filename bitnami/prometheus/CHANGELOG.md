@@ -1,8 +1,16 @@
 # Changelog
 
-## 1.3.2 (2024-05-30)
+## 1.3.4 (2024-06-05)
 
-* [bitnami/prometheus] Release 1.3.2 ([#26569](https://github.com/bitnami/charts/pull/26569))
+* [bitnami/prometheus] Release 1.3.4 ([#26750](https://github.com/bitnami/charts/pull/26750))
+
+## <small>1.3.3 (2024-06-04)</small>
+
+* [bitnami/prometheus] Bump chart version (#26662) ([85af9c8](https://github.com/bitnami/charts/commit/85af9c8e645767977d8e2c8f639ecd4812119b93)), closes [#26662](https://github.com/bitnami/charts/issues/26662)
+
+## <small>1.3.2 (2024-05-30)</small>
+
+* [bitnami/prometheus] Release 1.3.2 (#26569) ([aea5efe](https://github.com/bitnami/charts/commit/aea5efe2a561a277fd335f94fbe59ab6b65cdca5)), closes [#26569](https://github.com/bitnami/charts/issues/26569)
 
 ## <small>1.3.1 (2024-05-28)</small>
 

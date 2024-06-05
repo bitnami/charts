@@ -1,8 +1,12 @@
 # Changelog
 
+## 19.5.1 (2024-06-04)
+
+* [bitnami/redis] Bump chart version ([#26666](https://github.com/bitnami/charts/pull/26666))
+
 ## 19.5.0 (2024-05-23)
 
-* [bitnami/redis] Enable PodDisruptionBudgets ([#26355](https://github.com/bitnami/charts/pull/26355))
+* [bitnami/redis] Enable PodDisruptionBudgets (#26355) ([4890ba6](https://github.com/bitnami/charts/commit/4890ba68ed15915ec223612c599208d1c8fb4812)), closes [#26355](https://github.com/bitnami/charts/issues/26355)
 
 ## 19.4.0 (2024-05-21)
 

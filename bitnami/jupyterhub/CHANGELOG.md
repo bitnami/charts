@@ -1,8 +1,20 @@
 # Changelog
 
-## 7.1.2 (2024-05-24)
+## 7.1.5 (2024-06-05)
 
-* [bitnami/jupyterhub] Remove sleep probes ([#26414](https://github.com/bitnami/charts/pull/26414))
+* [bitnami/jupyterhub] Release 7.1.5 ([#26718](https://github.com/bitnami/charts/pull/26718))
+
+## <small>7.1.4 (2024-06-04)</small>
+
+* [bitnami/jupyterhub] Remove UTF-8 chars (#26608) ([59c0745](https://github.com/bitnami/charts/commit/59c074567e5164962341c84a11fd305a21294faa)), closes [#26608](https://github.com/bitnami/charts/issues/26608)
+
+## <small>7.1.3 (2024-06-03)</small>
+
+* [bitnami/jupyterhub] Release 7.1.3 (#26613) ([a71f50d](https://github.com/bitnami/charts/commit/a71f50ddad518d1ca53fd7b0bbef0c6f8e1c04f1)), closes [#26613](https://github.com/bitnami/charts/issues/26613)
+
+## <small>7.1.2 (2024-05-24)</small>
+
+* [bitnami/jupyterhub] Remove sleep probes (#26414) ([1b3cbb1](https://github.com/bitnami/charts/commit/1b3cbb1a43d803b70a76470a299ecc2068518e14)), closes [#26414](https://github.com/bitnami/charts/issues/26414)
 
 ## <small>7.1.1 (2024-05-23)</small>
 
