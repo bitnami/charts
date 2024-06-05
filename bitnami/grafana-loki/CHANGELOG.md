@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.3 (2024-06-05)
+## 4.5.4 (2024-06-05)
 
-* [bitnami/grafana-loki] Bump chart version ([#26773](https://github.com/bitnami/charts/pull/26773))
+* [bitnami/grafana-loki] Bump chart version ([#26831](https://github.com/bitnami/charts/pull/26831))
+
+## <small>4.5.3 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Bump chart version (#26773) ([ba92179](https://github.com/bitnami/charts/commit/ba92179375b1b68a9751c463e3ba58dceb485aee)), closes [#26773](https://github.com/bitnami/charts/issues/26773)
 
 ## <small>4.5.2 (2024-06-05)</small>
 
