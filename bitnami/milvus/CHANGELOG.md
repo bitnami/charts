@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.1.1 (2024-06-05)
+## 8.1.2 (2024-06-05)
 
-* [bitnami/milvus] Bump chart version ([#26789](https://github.com/bitnami/charts/pull/26789))
+* [bitnami/milvus] Bump chart version ([#26847](https://github.com/bitnami/charts/pull/26847))
+
+## <small>8.1.1 (2024-06-05)</small>
+
+* [bitnami/milvus] Bump chart version (#26789) ([c846ba9](https://github.com/bitnami/charts/commit/c846ba9c85b488e2b952613e4ead90dd7d6ae131)), closes [#26789](https://github.com/bitnami/charts/issues/26789)
 
 ## 8.1.0 (2024-05-30)
 
