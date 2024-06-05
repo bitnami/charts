@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.2 (2024-06-05)
+## 4.2.3 (2024-06-05)
 
-* [bitnami/concourse] Bump chart version ([#26766](https://github.com/bitnami/charts/pull/26766))
+* [bitnami/concourse] Bump chart version ([#26824](https://github.com/bitnami/charts/pull/26824))
+
+## <small>4.2.2 (2024-06-05)</small>
+
+* [bitnami/concourse] Bump chart version (#26766) ([5413c17](https://github.com/bitnami/charts/commit/5413c1784a303f46c590b14cb9ad3663e1618747)), closes [#26766](https://github.com/bitnami/charts/issues/26766)
 
 ## <small>4.2.1 (2024-05-23)</small>
 
