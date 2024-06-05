@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.1 (2024-06-04)
+## 16.2.2 (2024-06-05)
 
-* [bitnami/phpmyadmin] Fix typo in deployment.yaml template ([#26616](https://github.com/bitnami/charts/pull/26616))
+* [bitnami/phpmyadmin] Bump chart version ([#26797](https://github.com/bitnami/charts/pull/26797))
+
+## <small>16.2.1 (2024-06-04)</small>
+
+* [bitnami/phpmyadmin] Fix typo in deployment.yaml template (#26616) ([9fc8caa](https://github.com/bitnami/charts/commit/9fc8caad32e839bf42dd3a63b943b1d8ed5f3ff0)), closes [#26616](https://github.com/bitnami/charts/issues/26616)
 
 ## 16.2.0 (2024-05-29)
 
