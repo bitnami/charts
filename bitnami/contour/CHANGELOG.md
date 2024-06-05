@@ -1,12 +1,12 @@
 # Changelog
 
-## 18.2.0 (2024-06-04)
+## 18.2.0 (2024-06-05)
 
 * [bitnami/contour] Enable PodDisruptionBudgets ([#26690](https://github.com/bitnami/charts/pull/26690))
 
-## 18.1.3 (2024-06-05)
+## <small>18.1.3 (2024-06-05)</small>
 
-* [bitnami/contour] Release 18.1.3 ([#26726](https://github.com/bitnami/charts/pull/26726))
+* [bitnami/contour] Release 18.1.3 (#26726) ([9de7bb1](https://github.com/bitnami/charts/commit/9de7bb15e394bda4f2e4aa5ddaeaf464a2016d69)), closes [#26726](https://github.com/bitnami/charts/issues/26726)
 
 ## <small>18.1.2 (2024-06-04)</small>
 
