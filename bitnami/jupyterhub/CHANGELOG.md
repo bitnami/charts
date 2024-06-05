@@ -1,12 +1,12 @@
 # Changelog
 
-## 7.2.0 (2024-06-04)
+## 7.2.0 (2024-06-05)
 
 * [bitnami/jupyterhub] Enable PodDisruptionBudgets ([#26710](https://github.com/bitnami/charts/pull/26710))
 
 ## <small>7.1.5 (2024-06-05)</small>
 
-* [bitnami/jupyterhub] Release 7.1.5 ([#26718](https://github.com/bitnami/charts/pull/26718))
+* [bitnami/jupyterhub] Release 7.1.5 (#26718) ([11a0884](https://github.com/bitnami/charts/commit/11a0884a4e5ec03469768f271cfd7255fbc62159)), closes [#26718](https://github.com/bitnami/charts/issues/26718)
 
 ## <small>7.1.4 (2024-06-04)</small>
 
