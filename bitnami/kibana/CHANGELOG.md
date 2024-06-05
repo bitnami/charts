@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.1 (2024-06-04)
+## 11.2.2 (2024-06-05)
 
-* [bitnami/kibana] Bump chart version ([#26639](https://github.com/bitnami/charts/pull/26639))
+* [bitnami/kibana] Release 11.2.2 ([#26878](https://github.com/bitnami/charts/pull/26878))
+
+## <small>11.2.1 (2024-06-04)</small>
+
+* [bitnami/kibana] Bump chart version (#26639) ([cc1b630](https://github.com/bitnami/charts/commit/cc1b630cabdfa605ce7c0ad80efaa9ac2fbe6111)), closes [#26639](https://github.com/bitnami/charts/issues/26639)
 
 ## 11.2.0 (2024-06-03)
 
