@@ -39,4 +39,4 @@ maintainers:
 name: matomo
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/matomo
-version: 7.3.1
+version: 7.3.2

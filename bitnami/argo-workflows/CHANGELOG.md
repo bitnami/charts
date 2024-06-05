@@ -1,8 +1,12 @@
 # Changelog
 
+## 9.1.1 (2024-06-05)
+
+* [bitnami/argo-workflows] Bump chart version ([#26822](https://github.com/bitnami/charts/pull/26822))
+
 ## 9.1.0 (2024-06-05)
 
-* [bitnami/argo-workflows] Enable PodDisruptionBudgets ([#26595](https://github.com/bitnami/charts/pull/26595))
+* [bitnami/argo-workflows] Enable PodDisruptionBudgets (#26595) ([4a87ecd](https://github.com/bitnami/charts/commit/4a87ecd4fc9fd817655426839843a65f8eda47e5)), closes [#26595](https://github.com/bitnami/charts/issues/26595)
 
 ## <small>9.0.3 (2024-06-05)</small>
 

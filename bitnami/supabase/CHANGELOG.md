@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.1 (2024-06-05)
+## 5.2.2 (2024-06-05)
 
-* [bitnami/supabase] Bump chart version ([#26807](https://github.com/bitnami/charts/pull/26807))
+* [bitnami/supabase] Bump chart version ([#26865](https://github.com/bitnami/charts/pull/26865))
+
+## <small>5.2.1 (2024-06-05)</small>
+
+* [bitnami/supabase] Bump chart version (#26807) ([0df7816](https://github.com/bitnami/charts/commit/0df7816d58c07c14b089f9ac2eebfc6cd2d48026)), closes [#26807](https://github.com/bitnami/charts/issues/26807)
 
 ## 5.2.0 (2024-05-29)
 

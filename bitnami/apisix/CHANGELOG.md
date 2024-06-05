@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.1.2 (2024-06-05)
+## 3.1.3 (2024-06-05)
 
-* [bitnami/apisix] Bump chart version ([#26761](https://github.com/bitnami/charts/pull/26761))
+* [bitnami/apisix] Bump chart version ([#26819](https://github.com/bitnami/charts/pull/26819))
+
+## <small>3.1.2 (2024-06-05)</small>
+
+* [bitnami/apisix] Bump chart version (#26761) ([85c6bf2](https://github.com/bitnami/charts/commit/85c6bf23151bdd8fc4a651152959fb05fed024ec)), closes [#26761](https://github.com/bitnami/charts/issues/26761)
 
 ## <small>3.1.1 (2024-05-23)</small>
 
