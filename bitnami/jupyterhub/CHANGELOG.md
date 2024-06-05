@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.5 (2024-06-04)
+## 7.1.5 (2024-06-05)
 
 * [bitnami/jupyterhub] Release 7.1.5 ([#26718](https://github.com/bitnami/charts/pull/26718))
 
