@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.0 (2024-05-28)
+## 18.2.1 (2024-06-04)
 
-* [bitnami/opencart] Enable PodDisruptionBudgets ([#26515](https://github.com/bitnami/charts/pull/26515))
+* [bitnami/opencart] Fix typo in deployment.yaml template ([#26680](https://github.com/bitnami/charts/pull/26680))
+
+## 18.2.0 (2024-05-29)
+
+* [bitnami/opencart] Enable PodDisruptionBudgets (#26515) ([3bf8516](https://github.com/bitnami/charts/commit/3bf85160388c9d177c0b2fa002f36752debb826d)), closes [#26515](https://github.com/bitnami/charts/issues/26515)
 
 ## 18.1.0 (2024-05-21)
 

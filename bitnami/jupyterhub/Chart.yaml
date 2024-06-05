@@ -8,7 +8,7 @@ annotations:
     - name: configurable-http-proxy
       image: docker.io/bitnami/configurable-http-proxy:4.6.1-debian-12-r25
     - name: jupyter-base-notebook
-      image: docker.io/bitnami/jupyter-base-notebook:5.0.0-debian-12-r0
+      image: docker.io/bitnami/jupyter-base-notebook:4.1.5-debian-12-r6
     - name: jupyterhub
       image: docker.io/bitnami/jupyterhub:4.1.5-debian-12-r6
     - name: os-shell
