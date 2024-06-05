@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.3.4 (2024-06-05)
+## 1.4.0 (2024-06-05)
 
 * [bitnami/mlflow] Align PodDisruptionBudgets with templates ([#26706](https://github.com/bitnami/charts/pull/26706))
 
