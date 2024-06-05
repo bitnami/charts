@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.3.0 (2024-06-04)
+## 9.3.2 (2024-06-05)
 
-* [bitnami/solr] Enable PodDisruptionBudgets ([#26708](https://github.com/bitnami/charts/pull/26708))
+* [bitnami/solr] Bump chart version ([#26862](https://github.com/bitnami/charts/pull/26862))
+
+## <small>9.3.1 (2024-06-05)</small>
+
+* [bitnami/solr] Bump chart version (#26804) ([f647d19](https://github.com/bitnami/charts/commit/f647d196e2c9a980324b3cd28d4ac69ae8086092)), closes [#26804](https://github.com/bitnami/charts/issues/26804)
+
+## 9.3.0 (2024-06-05)
+
+* [bitnami/solr] Enable PodDisruptionBudgets (#26708) ([e5877b7](https://github.com/bitnami/charts/commit/e5877b74133f0770e3352efe4309cc4779fbb037)), closes [#26708](https://github.com/bitnami/charts/issues/26708)
 
 ## <small>9.2.2 (2024-05-30)</small>
 
