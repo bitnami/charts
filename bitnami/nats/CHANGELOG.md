@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.3 (2024-06-04)
+## 8.2.4 (2024-06-05)
 
-* [bitnami/nats] Bump chart version ([#26654](https://github.com/bitnami/charts/pull/26654))
+* [bitnami/nats] Release 8.2.4 ([#26745](https://github.com/bitnami/charts/pull/26745))
+
+## <small>8.2.3 (2024-06-04)</small>
+
+* [bitnami/nats] Bump chart version (#26654) ([68a9a8d](https://github.com/bitnami/charts/commit/68a9a8d748c0235451b71b9f610440838bbf8de2)), closes [#26654](https://github.com/bitnami/charts/issues/26654)
 
 ## <small>8.2.2 (2024-05-23)</small>
 

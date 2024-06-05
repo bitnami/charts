@@ -4,6 +4,10 @@
 
 * [bitnami/kuberay] Enable PodDisruptionBudgets ([#26702](https://github.com/bitnami/charts/pull/26702))
 
+## 1.1.3 (2024-06-05)
+
+* [bitnami/kuberay] Release 1.1.3 ([#26737](https://github.com/bitnami/charts/pull/26737))
+
 ## <small>1.1.2 (2024-06-04)</small>
 
 * [bitnami/kuberay] Bump chart version (#26641) ([2f9071b](https://github.com/bitnami/charts/commit/2f9071b8fd86a5e6abcf6a91c2701abcc5edaabb)), closes [#26641](https://github.com/bitnami/charts/issues/26641)

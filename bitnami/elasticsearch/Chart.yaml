@@ -14,24 +14,24 @@ annotations:
 apiVersion: v2
 appVersion: 8.13.4
 dependencies:
-- condition: global.kibanaEnabled
-  name: kibana
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: global.kibanaEnabled
+    name: kibana
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 11.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/elasticsearch/img/elasticsearch-stack-220x234.png
 keywords:
-- elasticsearch
+  - elasticsearch
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: elasticsearch
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 21.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
+version: 21.1.2

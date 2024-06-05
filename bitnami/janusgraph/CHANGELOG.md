@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.3.2 (2024-05-28)
+## 0.3.4 (2024-06-05)
 
-* [bitnami/janusgraph] Add chart source URL to sources list ([#26493](https://github.com/bitnami/charts/pull/26493))
+* [bitnami/janusgraph] Bump chart version ([#26836](https://github.com/bitnami/charts/pull/26836))
+
+## <small>0.3.3 (2024-06-05)</small>
+
+* [bitnami/janusgraph] Bump chart version (#26778) ([88021da](https://github.com/bitnami/charts/commit/88021dac6241b2b98c35deed036f845d8b747ebf)), closes [#26778](https://github.com/bitnami/charts/issues/26778)
+
+## <small>0.3.2 (2024-05-28)</small>
+
+* [bitnami/janusgraph] Add chart source URL to sources list (#26493) ([65e4f64](https://github.com/bitnami/charts/commit/65e4f64beaeeb76a48fbd1454815b4228b47213f)), closes [#26493](https://github.com/bitnami/charts/issues/26493)
 
 ## <small>0.3.1 (2024-05-23)</small>
 
