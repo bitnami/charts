@@ -4,6 +4,10 @@
 
 * [bitnami/contour] Enable PodDisruptionBudgets ([#26690](https://github.com/bitnami/charts/pull/26690))
 
+## 18.1.3 (2024-06-05)
+
+* [bitnami/contour] Release 18.1.3 ([#26726](https://github.com/bitnami/charts/pull/26726))
+
 ## <small>18.1.2 (2024-06-04)</small>
 
 * [bitnami/contour] Bump chart version (#26625) ([d25f2e3](https://github.com/bitnami/charts/commit/d25f2e3c56d17d3032ac828c2979f0f7dd9e78ed)), closes [#26625](https://github.com/bitnami/charts/issues/26625)
