@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.2 (2024-06-05)
+## 7.2.3 (2024-06-05)
 
-* [bitnami/jupyterhub] Bump chart version ([#26838](https://github.com/bitnami/charts/pull/26838))
+* [bitnami/jupyterhub] Release 7.2.3 ([#26873](https://github.com/bitnami/charts/pull/26873))
+
+## <small>7.2.2 (2024-06-05)</small>
+
+* [bitnami/jupyterhub] Bump chart version (#26838) ([07bf243](https://github.com/bitnami/charts/commit/07bf243e82e864bdc067d3fe41ecb0e6b5b93657)), closes [#26838](https://github.com/bitnami/charts/issues/26838)
 
 ## <small>7.2.1 (2024-06-05)</small>
 
