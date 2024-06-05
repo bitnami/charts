@@ -12,33 +12,33 @@ annotations:
 apiVersion: v2
 appVersion: 3.2.2
 dependencies:
-- condition: redis.enabled
-  name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.X.X
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.X.X
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: redis.enabled
+    name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.X.X
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.X.X
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
 keywords:
-- community
-- forum
+  - community
+  - forum
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
-- email: username.taken@gmail.com
-  name: paulczar
-- email: preteluca@gmail.com
-  name: lucaprete
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
+  - email: username.taken@gmail.com
+    name: paulczar
+  - email: preteluca@gmail.com
+    name: lucaprete
 name: discourse
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/discourse
-version: 13.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/discourse
+version: 13.2.1

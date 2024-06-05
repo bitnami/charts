@@ -14,34 +14,34 @@ annotations:
 apiVersion: v2
 appVersion: 6.5.3
 dependencies:
-- condition: memcached.enabled
-  name: memcached
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 7.x.x
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: memcached.enabled
+    name: memcached
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 7.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/wordpress/img/wordpress-stack-220x234.png
 keywords:
-- application
-- blog
-- cms
-- http
-- php
-- web
-- wordpress
+  - application
+  - blog
+  - cms
+  - http
+  - php
+  - web
+  - wordpress
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: wordpress
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/wordpress
-version: 22.4.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/wordpress
+version: 22.4.3
