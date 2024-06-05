@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.3.0 (2024-05-24)
+## 3.3.1 (2024-06-05)
 
-* [bitnami/appsmith] Enable PodDisruptionBudgets ([#26410](https://github.com/bitnami/charts/pull/26410))
+* [bitnami/appsmith] Bump chart version ([#26762](https://github.com/bitnami/charts/pull/26762))
+
+## 3.3.0 (2024-06-03)
+
+* [bitnami/appsmith] Enable PodDisruptionBudgets (#26410) ([fc66381](https://github.com/bitnami/charts/commit/fc66381315382c4d51cd617840c5d606c9940f48)), closes [#26410](https://github.com/bitnami/charts/issues/26410)
 
 ## <small>3.2.2 (2024-05-24)</small>
 
