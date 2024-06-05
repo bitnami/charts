@@ -54,10 +54,6 @@ kubeVersion: ""
 ## @param watchReleaseNamespace Watch only namepsace used for the release
 ##
 watchReleaseNamespace: false
-## @param useDaemonset Use ExternalDNS in Daemonset mode
-## If set to false, Deployment will be used.
-##
-useDaemonset: false
 ## @section external-dns parameters
 ##
 
@@ -88,9 +84,6 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
-## @param revisionHistoryLimit sets number of replicaset to keep in k8s
-##
-revisionHistoryLimit: 10
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -125,7 +118,7 @@ provider: aws
 initContainers: []
 ## DNS-Pod services
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
-## @param dnsPolicy Specifies the DNS policy for the external-dns deployment or daemonset
+## @param dnsPolicy Specifies the DNS policy for the external-dns deployment
 ## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
 ## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
@@ -855,9 +848,6 @@ schedulerName: ""
 ## The value is evaluated as a template
 ##
 topologySpreadConstraints: []
-## @param replicaCount Desired number of ExternalDNS replicas
-##
-replicaCount: 1
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
@@ -1205,11 +1195,6 @@ extraVolumes: []
 ## @param extraVolumeMounts A list of volume mounts to be added to the pod
 ##
 extraVolumeMounts: []
-## Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-## @param podDisruptionBudget DEPRECATED podDisruptionBudget will be removed in a future release. Please use pdb instead
-## 
-podDisruptionBudget: {}
 ## @param pdb.create Enable/disable a Pod Disruption Budget creation
 ## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.
@@ -1261,11 +1246,13 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
-    ## DEPRECATED metrics.serviceMonitor.additionalLabels will be removed in a future release - Please use metrics.serviceMonitor.labels instead
     ## @param metrics.serviceMonitor.labels Used to pass Labels that are required by the installed Prometheus Operator
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
+    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ##
+    annotations: {}
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
