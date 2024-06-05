@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.2 (2024-06-05)
+## 21.1.3 (2024-06-05)
 
-* [bitnami/elasticsearch] Bump chart version ([#26828](https://github.com/bitnami/charts/pull/26828))
+* [bitnami/elasticsearch] Release 21.1.3 ([#26875](https://github.com/bitnami/charts/pull/26875))
+
+## <small>21.1.2 (2024-06-05)</small>
+
+* [bitnami/elasticsearch] Bump chart version (#26828) ([23b61db](https://github.com/bitnami/charts/commit/23b61db9bdefedd35c92ba4de7dc3ef436badc0b)), closes [#26828](https://github.com/bitnami/charts/issues/26828)
 
 ## <small>21.1.1 (2024-06-05)</small>
 
