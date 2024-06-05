@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.1 (2024-06-04)
+## 11.3.2 (2024-06-05)
 
-* [bitnami/grafana] Bump chart version ([#26633](https://github.com/bitnami/charts/pull/26633))
+* [bitnami/grafana] Release 11.3.2 ([#26730](https://github.com/bitnami/charts/pull/26730))
+
+## <small>11.3.1 (2024-06-04)</small>
+
+* [bitnami/grafana] Bump chart version (#26633) ([edb0698](https://github.com/bitnami/charts/commit/edb0698e60a7564cb57f1aa07ab456d0943a0427)), closes [#26633](https://github.com/bitnami/charts/issues/26633)
 
 ## 11.3.0 (2024-05-29)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.1 (2024-06-04)
+## 1.3.2 (2024-06-04)
 
-* [bitnami/cert-manager] Bump chart version ([#26623](https://github.com/bitnami/charts/pull/26623))
+* [bitnami/cert-manager] Release 1.3.2 ([#26721](https://github.com/bitnami/charts/pull/26721))
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/cert-manager] Bump chart version (#26623) ([b16ae3f](https://github.com/bitnami/charts/commit/b16ae3f7e195e1b5f53fdc2bf75fecac26181819)), closes [#26623](https://github.com/bitnami/charts/issues/26623)
 
 ## 1.3.0 (2024-05-27)
 

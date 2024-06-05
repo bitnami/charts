@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.1 (2024-06-04)
+## 2.3.2 (2024-06-05)
 
-* [bitnami/sealed-secrets] Bump chart version ([#26668](https://github.com/bitnami/charts/pull/26668))
+* [bitnami/sealed-secrets] Release 2.3.2 ([#26754](https://github.com/bitnami/charts/pull/26754))
+
+## <small>2.3.1 (2024-06-04)</small>
+
+* [bitnami/sealed-secrets] Bump chart version (#26668) ([828804e](https://github.com/bitnami/charts/commit/828804e18c995b7c1b26126db5b55fa09f3e44e3)), closes [#26668](https://github.com/bitnami/charts/issues/26668)
 
 ## 2.3.0 (2024-05-27)
 

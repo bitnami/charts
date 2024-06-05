@@ -1,8 +1,9 @@
 # Changelog
 
-## 7.2.2 (2024-06-04)
+## 7.2.2 (2024-06-05)
 
-* [bitnami/metrics-server] Enable PodDisruptionBudgets ([#26704](https://github.com/bitnami/charts/pull/26704))
+* [bitnami/metrics-server] Release 7.2.2 ([#26740](https://github.com/bitnami/charts/pull/26740))
+
 
 ## <small>7.2.1 (2024-06-04)</small>
 
