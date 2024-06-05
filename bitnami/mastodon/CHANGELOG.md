@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.2 (2024-06-05)
+## 6.2.3 (2024-06-05)
 
-* [bitnami/mastodon] Bump chart version ([#26786](https://github.com/bitnami/charts/pull/26786))
+* [bitnami/mastodon] Bump chart version ([#26844](https://github.com/bitnami/charts/pull/26844))
+
+## <small>6.2.2 (2024-06-05)</small>
+
+* [bitnami/mastodon] Bump chart version (#26786) ([f5653a0](https://github.com/bitnami/charts/commit/f5653a0878f5a474cd6c56dd81a90238208f5629)), closes [#26786](https://github.com/bitnami/charts/issues/26786)
 
 ## <small>6.2.1 (2024-05-30)</small>
 
