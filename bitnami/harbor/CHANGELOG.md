@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.4.1 (2024-06-05)
+## 21.4.2 (2024-06-05)
 
-* [bitnami/harbor] Bump chart version ([#26776](https://github.com/bitnami/charts/pull/26776))
+* [bitnami/harbor] Bump chart version ([#26834](https://github.com/bitnami/charts/pull/26834))
+
+## <small>21.4.1 (2024-06-05)</small>
+
+* [bitnami/harbor] Bump chart version (#26776) ([2bcc2bf](https://github.com/bitnami/charts/commit/2bcc2bf0b963647eefd0578994f7fecdfaaca027)), closes [#26776](https://github.com/bitnami/charts/issues/26776)
 
 ## 21.4.0 (2024-05-29)
 
