@@ -14,25 +14,25 @@ annotations:
 apiVersion: v2
 appVersion: 24.5.1
 dependencies:
-- condition: zookeeper.enabled
-  name: zookeeper
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 13.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: ClickHouse is an open-source column-oriented OLAP database management system. Use it to boost your database performance while providing linear scalability and hardware efficiency.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/clickhouse/img/clickhouse-stack-220x234.png
 keywords:
-- database
-- sharding
+  - database
+  - sharding
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: clickhouse
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/clickhouse
-version: 6.2.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/clickhouse
+version: 6.2.2
