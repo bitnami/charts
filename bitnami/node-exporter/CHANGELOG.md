@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.4.1 (2024-06-04)
+## 4.4.2 (2024-06-05)
 
-* [bitnami/node-exporter] Bump chart version ([#26657](https://github.com/bitnami/charts/pull/26657))
+* [bitnami/node-exporter] Release 4.4.2 ([#26747](https://github.com/bitnami/charts/pull/26747))
+
+## <small>4.4.1 (2024-06-04)</small>
+
+* [bitnami/node-exporter] Bump chart version (#26657) ([8a50a40](https://github.com/bitnami/charts/commit/8a50a4084b2639ef1ca78266cb32cd371f7a518f)), closes [#26657](https://github.com/bitnami/charts/issues/26657)
 
 ## 4.4.0 (2024-06-03)
 

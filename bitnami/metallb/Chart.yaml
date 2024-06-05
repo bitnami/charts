@@ -6,33 +6,33 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: metallb-controller
-      image: docker.io/bitnami/metallb-controller:0.14.5-debian-12-r5
+      image: docker.io/bitnami/metallb-controller:0.14.5-debian-12-r6
     - name: metallb-speaker
-      image: docker.io/bitnami/metallb-speaker:0.14.5-debian-12-r6
+      image: docker.io/bitnami/metallb-speaker:0.14.5-debian-12-r7
 apiVersion: v2
 appVersion: 0.14.5
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/metallb-speaker/img/metallb-speaker-stack-220x234.png
 keywords:
-  - load-balancer
-  - balancer
-  - lb
-  - bgp
-  - arp
-  - vrrp
-  - vip
+- load-balancer
+- balancer
+- lb
+- bgp
+- arp
+- vrrp
+- vip
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: metallb
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/metallb
-version: 6.3.1
+- https://github.com/bitnami/charts/tree/main/bitnami/metallb
+version: 6.3.2

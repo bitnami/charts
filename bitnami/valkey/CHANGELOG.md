@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.3.1 (2024-05-30)
+## 0.3.3 (2024-06-05)
 
-* [binami/valkey] fix: wrong port set for sentinel setup ([#26393](https://github.com/bitnami/charts/pull/26393))
+* [bitnami/valkey] Bump chart version ([#26867](https://github.com/bitnami/charts/pull/26867))
+
+## <small>0.3.2 (2024-06-05)</small>
+
+* [bitnami/valkey] Bump chart version (#26809) ([2cd462e](https://github.com/bitnami/charts/commit/2cd462eb8596b64b2bc578a905d92b8a7d38f89c)), closes [#26809](https://github.com/bitnami/charts/issues/26809)
+
+## <small>0.3.1 (2024-05-30)</small>
+
+* [binami/valkey] fix: wrong port set for sentinel setup (#26393) ([1440310](https://github.com/bitnami/charts/commit/144031048dec77e257b9746a6e6c2a95389c7aa4)), closes [#26393](https://github.com/bitnami/charts/issues/26393)
+
+## 0.3.0 (2024-05-30)
+
+* [bitnami/valkey] Enable PodDisruptionBudgets (#26408) ([4329401](https://github.com/bitnami/charts/commit/4329401ca72452d5fd8aca478fcb82a7ed6a0daa)), closes [#26408](https://github.com/bitnami/charts/issues/26408)
 
 ## <small>0.2.1 (2024-05-30)</small>
 
