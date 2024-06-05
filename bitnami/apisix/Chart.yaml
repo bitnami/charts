@@ -16,33 +16,33 @@ annotations:
 apiVersion: v2
 appVersion: 3.9.1
 dependencies:
-- name: etcd
-  repository: oci://registry-1.docker.io/bitnamicharts
-  condition: etcd.enabled
-  version: 10.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: etcd
+    repository: oci://registry-1.docker.io/bitnamicharts
+    condition: etcd.enabled
+    version: 10.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Apache APISIX is high-performance, real-time API Gateway. Features load balancing, dynamic upstream, canary release, circuit breaking, authentication, observability, amongst others.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/apisix/img/apisix-stack-220x234.png
 keywords:
-- apisix
-- ingress
-- openresty
-- controller
-- http
-- web
-- www
-- reverse proxy
+  - apisix
+  - ingress
+  - openresty
+  - controller
+  - http
+  - web
+  - www
+  - reverse proxy
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: apisix
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/apisix
-- https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
-- https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
+  - https://github.com/bitnami/charts/tree/main/bitnami/apisix
+  - https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
+  - https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
 version: 3.2.0
