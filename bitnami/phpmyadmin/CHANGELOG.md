@@ -1,8 +1,12 @@
 # Changelog
 
-## 16.2.2 (2024-06-05)
+## 16.2.3 (2024-06-05)
 
-* [bitnami/phpmyadmin] Bump chart version ([#26797](https://github.com/bitnami/charts/pull/26797))
+* [bitnami/phpmyadmin] Bump chart version ([#26855](https://github.com/bitnami/charts/pull/26855))
+
+## <small>16.2.2 (2024-06-05)</small>
+
+* [bitnami/phpmyadmin] Bump chart version (#26797) ([85bb88c](https://github.com/bitnami/charts/commit/85bb88c4ee8e7a9ba25328c82d932e90417be39e)), closes [#26797](https://github.com/bitnami/charts/issues/26797)
 
 ## <small>16.2.1 (2024-06-04)</small>
 
