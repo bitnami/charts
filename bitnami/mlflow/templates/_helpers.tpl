@@ -393,6 +393,17 @@ Return the PostgreSQL Hostname
 {{- end -}}
 
 {{/*
+Return the Database Dialect(+Driver)
+*/}}
+{{- define "mlflow.v0.database.dialectDriver" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- print "postgresql" -}}
+{{- else -}}
+    {{- print .Values.externalDatabase.dialectDriver -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the PostgreSQL Hostname
 */}}
 {{- define "mlflow.v0.database.host" -}}
@@ -499,7 +510,7 @@ Retrieve the URI of the database
 Retrieve the URI of the auth database
 */}}
 {{- define "mlflow.v0.database-auth.uri" -}}
-{{- printf "postgresql://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database-auth.name" .) -}}
+{{- printf "%s://%s:$(MLFLOW_DATABASE_PASSWORD)@%s:%v/%s" (include "mlflow.v0.database.dialectDriver" .) (include "mlflow.v0.database.user" .) (include "mlflow.v0.database.host" .) (include "mlflow.v0.database.port" .) (include "mlflow.v0.database-auth.name" .) -}}
 {{- end -}}
 
 {{/*

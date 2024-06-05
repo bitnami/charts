@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.0 (2024-05-28)
+## 2.3.1 (2024-06-05)
 
-* [bitnami/jaeger] Enable PodDisruptionBudgets ([#26494](https://github.com/bitnami/charts/pull/26494))
+* [bitnami/jaeger] Release 2.3.1 ([#26735](https://github.com/bitnami/charts/pull/26735))
+
+## 2.3.0 (2024-06-03)
+
+* [bitnami/jaeger] Enable PodDisruptionBudgets (#26494) ([c8a1142](https://github.com/bitnami/charts/commit/c8a11426b11314f84b5f44154ab696292b2052e4)), closes [#26494](https://github.com/bitnami/charts/issues/26494)
 
 ## <small>2.2.1 (2024-05-22)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.21.0 (2024-05-24)
+## 18.21.1 (2024-06-04)
 
-* [bitnami/drupal] Enable PodDisruptionBudgets ([#26428](https://github.com/bitnami/charts/pull/26428))
+* [bitnami/drupal] Fix typo in deployment.yaml template ([#26679](https://github.com/bitnami/charts/pull/26679))
+
+## 18.21.0 (2024-06-03)
+
+* [bitnami/drupal] Enable PodDisruptionBudgets (#26428) ([1e4ac4c](https://github.com/bitnami/charts/commit/1e4ac4c1c282b929665b92709291af2ace17d5f0)), closes [#26428](https://github.com/bitnami/charts/issues/26428)
 
 ## 18.1.0 (2024-05-21)
 

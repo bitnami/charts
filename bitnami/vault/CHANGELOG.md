@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.4.3 (2024-06-04)
+## 1.4.3 (2024-06-05)
 
-* [bitnami/vault] fix injector ([#26611](https://github.com/bitnami/charts/pull/26611))
+* [bitnami/vault] Release 1.4.3 ([#26756](https://github.com/bitnami/charts/pull/26756))
 
 ## <small>1.4.2 (2024-06-04)</small>
 
