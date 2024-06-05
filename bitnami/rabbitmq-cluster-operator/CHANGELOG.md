@@ -1,8 +1,8 @@
 # Changelog
 
-## 4.4.0 (2024-06-04)
+## 4.3.3 (2024-06-05)
 
-* [bitnami/rabbitmq-cluster-operator] Remove operator metrics endpoint … ([#26601](https://github.com/bitnami/charts/pull/26601))
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.3 ([#26752](https://github.com/bitnami/charts/pull/26752))
 
 ## <small>4.3.2 (2024-06-04)</small>
 

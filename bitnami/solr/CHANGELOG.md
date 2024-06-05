@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.2 (2024-05-30)
+## 9.3.0 (2024-06-04)
 
-* [bitnami/solr] Release 9.2.2 ([#26558](https://github.com/bitnami/charts/pull/26558))
+* [bitnami/solr] Enable PodDisruptionBudgets ([#26708](https://github.com/bitnami/charts/pull/26708))
+
+## <small>9.2.2 (2024-05-30)</small>
+
+* [bitnami/solr] Release 9.2.2 (#26558) ([be4358b](https://github.com/bitnami/charts/commit/be4358b13e35b10026d6ee31efdda58ea864633c)), closes [#26558](https://github.com/bitnami/charts/issues/26558)
 
 ## <small>9.2.1 (2024-05-22)</small>
 
