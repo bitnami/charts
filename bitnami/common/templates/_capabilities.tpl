@@ -173,7 +173,7 @@ Returns true if PodSecurityPolicy is supported
 */}}
 {{- define "common.capabilities.psp.supported" -}}
 {{- $kubeVersion := include "common.capabilities.kubeVersion" . -}}
-{{- if and (not (empty $kubeVersion)) (semverCompare "<1.25-0" $kubeVersion) -}}
+{{- if or (empty $kubeVersion) (semverCompare "<1.25-0" $kubeVersion) -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -183,7 +183,7 @@ Returns true if AdmissionConfiguration is supported
 */}}
 {{- define "common.capabilities.admissionConfiguration.supported" -}}
 {{- $kubeVersion := include "common.capabilities.kubeVersion" . -}}
-{{- if and (not (empty $kubeVersion)) (not (semverCompare "<1.23-0" $kubeVersion)) -}}
+{{- if or (empty $kubeVersion) (not (semverCompare "<1.23-0" $kubeVersion)) -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
