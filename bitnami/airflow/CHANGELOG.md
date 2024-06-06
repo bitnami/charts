@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.5 (2024-06-06)
+## 18.3.0 (2024-06-06)
 
-* [bitnami/airflow] Release 18.2.5 ([#26934](https://github.com/bitnami/charts/pull/26934))
+* [bitnami/airflow] Enable PodDisruptionBudgets ([#26684](https://github.com/bitnami/charts/pull/26684))
+
+## <small>18.2.5 (2024-06-06)</small>
+
+* [bitnami/airflow] Release 18.2.5 (#26934) ([2d07d06](https://github.com/bitnami/charts/commit/2d07d06365b747a97ba7098f2b9d7add42eef5bb)), closes [#26934](https://github.com/bitnami/charts/issues/26934)
 
 ## <small>18.2.4 (2024-06-06)</small>
 

@@ -465,8 +465,8 @@ web:
   ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow web replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Web Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -800,8 +800,8 @@ scheduler:
   ## @param scheduler.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow scheduler replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Scheduler Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -1145,8 +1145,8 @@ worker:
   ## @param worker.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow worker replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
