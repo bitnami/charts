@@ -12,32 +12,32 @@ annotations:
 apiVersion: v2
 appVersion: 3.67.0
 dependencies:
-  - condition: mariadb.enabled
-    name: mariadb
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - seaweedfs-database
-    version: 18.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: mariadb.enabled
+  name: mariadb
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - seaweedfs-database
+  version: 18.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: SeaweedFS is a simple and highly scalable distributed file system.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/seaweedfs/img/seaweedfs-stack-220x234.png
 keywords:
-  - seaweedfs
-  - storage
-  - blob-storage
-  - file-storage
-  - object-storage
-  - s3
+- seaweedfs
+- storage
+- blob-storage
+- file-storage
+- object-storage
+- s3
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: seaweedfs
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
-  - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 0.3.4
+- https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
+- https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
+version: 0.3.5
