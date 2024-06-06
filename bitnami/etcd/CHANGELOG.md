@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.1.3 (2024-06-04)
+## 10.2.0 (2024-06-05)
 
-* [bitnami/etcd] Bump chart version ([#26628](https://github.com/bitnami/charts/pull/26628))
+* [bitnami/etcd] Non-manual chart upgrades ([#25655](https://github.com/bitnami/charts/pull/25655))
+
+## <small>10.1.4 (2024-06-05)</small>
+
+* [bitnami/etcd] Release 10.1.4 (#26723) ([21a4c55](https://github.com/bitnami/charts/commit/21a4c55475238e7e2cccc922b0b5463aba26fefd)), closes [#26723](https://github.com/bitnami/charts/issues/26723)
+
+## <small>10.1.3 (2024-06-04)</small>
+
+* [bitnami/etcd] Bump chart version (#26628) ([86ade26](https://github.com/bitnami/charts/commit/86ade2624082951d3e618a389293618a10e433d4)), closes [#26628](https://github.com/bitnami/charts/issues/26628)
 
 ## <small>10.1.2 (2024-05-29)</small>
 

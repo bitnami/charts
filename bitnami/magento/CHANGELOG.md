@@ -1,8 +1,16 @@
 # Changelog
 
-## 27.2.0 (2024-05-28)
+## 27.2.2 (2024-06-05)
 
-* [bitnami/magento] Enable PodDisruptionBudgets ([#26507](https://github.com/bitnami/charts/pull/26507))
+* [bitnami/magento] Bump chart version ([#26843](https://github.com/bitnami/charts/pull/26843))
+
+## <small>27.2.1 (2024-06-05)</small>
+
+* [bitnami/magento] Bump chart version (#26785) ([02fe0e1](https://github.com/bitnami/charts/commit/02fe0e1634b38812081f0b82b09078a3f9097b23)), closes [#26785](https://github.com/bitnami/charts/issues/26785)
+
+## 27.2.0 (2024-05-29)
+
+* [bitnami/magento] Enable PodDisruptionBudgets (#26507) ([8352e06](https://github.com/bitnami/charts/commit/8352e065fa0e51e78ec32fd527e3f8a2170d5834)), closes [#26507](https://github.com/bitnami/charts/issues/26507)
 
 ## 27.1.0 (2024-05-21)
 

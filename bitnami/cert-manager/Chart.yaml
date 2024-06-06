@@ -6,33 +6,33 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: acmesolver
-      image: docker.io/bitnami/acmesolver:1.14.5-debian-12-r5
+      image: docker.io/bitnami/acmesolver:1.14.5-debian-12-r6
     - name: cainjector
-      image: docker.io/bitnami/cainjector:1.14.5-debian-12-r3
+      image: docker.io/bitnami/cainjector:1.14.5-debian-12-r4
     - name: cert-manager
-      image: docker.io/bitnami/cert-manager:1.14.5-debian-12-r4
+      image: docker.io/bitnami/cert-manager:1.14.5-debian-12-r5
     - name: cert-manager-webhook
-      image: docker.io/bitnami/cert-manager-webhook:1.14.5-debian-12-r3
+      image: docker.io/bitnami/cert-manager-webhook:1.14.5-debian-12-r4
 apiVersion: v2
 appVersion: 1.14.5
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: cert-manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/cert-manager/img/cert-manager-stack-220x234.png
 keywords:
-  - go
-  - security
-  - tls
-  - certificate
+- go
+- security
+- tls
+- certificate
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: cert-manager
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
-version: 1.3.1
+- https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
+version: 1.3.2

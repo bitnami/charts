@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.1 (2024-06-04)
+## 13.4.2 (2024-06-05)
 
-* [bitnami/zookeeper] Bump chart version ([#26675](https://github.com/bitnami/charts/pull/26675))
+* [bitnami/zookeeper] Release 13.4.2 ([#26874](https://github.com/bitnami/charts/pull/26874))
+
+## <small>13.4.1 (2024-06-04)</small>
+
+* [bitnami/zookeeper] Bump chart version (#26675) ([a04a619](https://github.com/bitnami/charts/commit/a04a619420db3ac872e225b0709889b588ecf886)), closes [#26675](https://github.com/bitnami/charts/issues/26675)
 
 ## 13.4.0 (2024-05-24)
 

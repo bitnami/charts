@@ -75,7 +75,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.5.7-debian-12-r0
+    tag: 3.5.7-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -289,9 +289,9 @@ server:
   ## @param server.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: 1
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Run the argo server in "secure" mode.
   ## Ref: https://argoproj.github.io/argo-workflows/tls/
   ## @param server.secure Run Argo server in secure mode
@@ -563,7 +563,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.5.7-debian-12-r0
+    tag: 3.5.7-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -857,9 +857,9 @@ controller:
   ## @param controller.pdb.maxUnavailable Sets the max number of pods unavailable for the Pod Disruption Budget
   ##
   pdb:
-    enabled: false
-    minAvailable: 1
-    maxUnavailable: 1
+    enabled: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Controller Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -1117,7 +1117,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.5.7-debian-12-r0
+    tag: 3.5.7-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
