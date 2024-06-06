@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.3 (2024-06-06)
+## 1.4.4 (2024-06-06)
 
-* [bitnami/mlflow] Release 1.4.3 ([#26987](https://github.com/bitnami/charts/pull/26987))
+* [bitnami/mlflow] Release 1.4.4 ([#27035](https://github.com/bitnami/charts/pull/27035))
+
+## <small>1.4.3 (2024-06-06)</small>
+
+* [bitnami/mlflow] Release 1.4.3 (#26987) ([2f07b57](https://github.com/bitnami/charts/commit/2f07b57791e3651cd60d9e98a0d4bef31f633ad6)), closes [#26987](https://github.com/bitnami/charts/issues/26987)
 
 ## <small>1.4.2 (2024-06-06)</small>
 
