@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.3 (2024-06-05)
+## 21.1.4 (2024-06-06)
 
-* [bitnami/ghost] Bump chart version ([#26829](https://github.com/bitnami/charts/pull/26829))
+* [bitnami/ghost] Release 21.1.4 ([#26885](https://github.com/bitnami/charts/pull/26885))
+
+## <small>21.1.3 (2024-06-05)</small>
+
+* [bitnami/ghost] Bump chart version (#26829) ([f0d0d90](https://github.com/bitnami/charts/commit/f0d0d902d45c7339642a7c60322fdf2d2401fbef)), closes [#26829](https://github.com/bitnami/charts/issues/26829)
 
 ## <small>21.1.2 (2024-06-05)</small>
 

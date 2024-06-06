@@ -36,5 +36,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: jupyterhub
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
-version: 7.2.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
+version: 7.2.4

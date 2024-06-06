@@ -44,4 +44,4 @@ sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/mlflow
   - https://github.com/bitnami/containers/tree/main/bitnami/mlflow
   - https://github.com/mlflow/mlflow
-version: 1.4.1
+version: 1.4.2

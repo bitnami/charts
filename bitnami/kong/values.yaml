@@ -283,7 +283,7 @@ autoscaling:
 ## @param pdb.maxUnavailable Maximum unavailable Kong replicas (expressed in percentage)
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: "50%"
 ## @section Kong Container Parameters

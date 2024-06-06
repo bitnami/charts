@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.3 (2024-06-04)
+## 7.4.4 (2024-06-04)
 
-* [bitnami/memcached] Bump chart version ([#26646](https://github.com/bitnami/charts/pull/26646))
+* [bitnami/memcached] Enable PodDisruptionBudgets ([#26703](https://github.com/bitnami/charts/pull/26703))
+
+## <small>7.4.3 (2024-06-04)</small>
+
+* [bitnami/memcached] Bump chart version (#26646) ([466704c](https://github.com/bitnami/charts/commit/466704cfdc681cb9cce81225e7e59c1e0bb7a0d0)), closes [#26646](https://github.com/bitnami/charts/issues/26646)
 
 ## <small>7.4.2 (2024-05-31)</small>
 

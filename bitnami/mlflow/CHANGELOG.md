@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.1 (2024-06-05)
+## 1.4.2 (2024-06-06)
 
-* [bitnami/mlflow] Bump chart version ([#26848](https://github.com/bitnami/charts/pull/26848))
+* [bitnami/mlflow] Fix tests definition and remove legacy code from PDBs ([#26895](https://github.com/bitnami/charts/pull/26895))
+
+## <small>1.4.1 (2024-06-05)</small>
+
+* [bitnami/mlflow] Bump chart version (#26848) ([c01d8ed](https://github.com/bitnami/charts/commit/c01d8edce57340a0f0b2a386ad2480162f7249f4)), closes [#26848](https://github.com/bitnami/charts/issues/26848)
 
 ## 1.4.0 (2024-06-05)
 
