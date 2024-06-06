@@ -6,7 +6,7 @@
 
 ## <small>1.1.5 (2024-06-06)</small>
 
-* [bitnami/grafana-mimir] Release 1.1.5 ([#26903](https://github.com/bitnami/charts/pull/26903))
+* [bitnami/grafana-mimir] Release 1.1.5 (#26903) ([f95bb0a](https://github.com/bitnami/charts/commit/f95bb0a5db396db1e896923a9a20a409504ef167)), closes [#26903](https://github.com/bitnami/charts/issues/26903)
 
 ## <small>1.1.4 (2024-06-05)</small>
 
