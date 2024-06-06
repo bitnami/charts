@@ -6,7 +6,7 @@
 
 ## <small>15.2.2 (2024-06-05)</small>
 
-* [bitnami/kubeapps] Bump chart version ([#26842](https://github.com/bitnami/charts/pull/26842))
+* [bitnami/kubeapps] Bump chart version (#26842) ([16d5b78](https://github.com/bitnami/charts/commit/16d5b784039a37ca643ac685c56d87373b1edaf7)), closes [#26842](https://github.com/bitnami/charts/issues/26842)
 
 ## <small>15.2.1 (2024-06-05)</small>
 
