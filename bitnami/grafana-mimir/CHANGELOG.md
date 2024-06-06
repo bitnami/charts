@@ -6,7 +6,7 @@
 
 ## <small>1.1.4 (2024-06-05)</small>
 
-* [bitnami/grafana-mimir] Bump chart version ([#26832](https://github.com/bitnami/charts/pull/26832))
+* [bitnami/grafana-mimir] Bump chart version (#26832) ([61841c6](https://github.com/bitnami/charts/commit/61841c6a1d2e94214c4ccca1303b6009ef3bbe66)), closes [#26832](https://github.com/bitnami/charts/issues/26832)
 
 ## <small>1.1.3 (2024-06-05)</small>
 
