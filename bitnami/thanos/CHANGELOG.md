@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.7.2 (2024-06-05)
+## 15.7.2 (2024-06-06)
 
 * [bitnami/thanos] add service monitor labels ([#26880](https://github.com/bitnami/charts/pull/26880))
 
