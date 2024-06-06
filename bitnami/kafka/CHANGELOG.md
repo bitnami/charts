@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.2.3 (2024-06-06)
+## 29.2.4 (2024-06-06)
 
-* [bitnami/kafka] Release 29.2.3 ([#26896](https://github.com/bitnami/charts/pull/26896))
+* [bitnami/kafka] Release 29.2.4 ([#26966](https://github.com/bitnami/charts/pull/26966))
+
+## <small>29.2.3 (2024-06-06)</small>
+
+* [bitnami/kafka] Release 29.2.3 (#26896) ([0c5dfee](https://github.com/bitnami/charts/commit/0c5dfee96cce662656202789a23e5208e4da7c0d)), closes [#26896](https://github.com/bitnami/charts/issues/26896)
 
 ## <small>29.2.2 (2024-06-05)</small>
 
