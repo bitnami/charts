@@ -1,8 +1,17 @@
 # Changelog
 
-## 18.2.1 (2024-05-27)
+## 18.2.3 (2024-06-05)
 
-* [bitnami/airflow] Fix Airflow k8s config generation in the initContainer and filesystem writability ([#26341](https://github.com/bitnami/charts/pull/26341))
+* [bitnami/airflow] Bump chart version ([#26818](https://github.com/bitnami/charts/pull/26818))
+
+## <small>18.2.2 (2024-06-05)</small>
+
+* [bitnami/airflow] Bump chart version (#26760) ([96556e4](https://github.com/bitnami/charts/commit/96556e4ba1f5f72b6092ab7895235c2ba1fb9a13)), closes [#26760](https://github.com/bitnami/charts/issues/26760)
+
+## <small>18.2.1 (2024-05-30)</small>
+
+* [bitnami/airflow] feat: :sparkles: :lock: Add warning when original images are replaced (#26172) ([7e78942](https://github.com/bitnami/charts/commit/7e78942907eef861e3b06c23be93c32037aca391)), closes [#26172](https://github.com/bitnami/charts/issues/26172)
+* [bitnami/airflow] Fix Airflow k8s config generation in the initContainer and filesystem writability  ([b21c6f4](https://github.com/bitnami/charts/commit/b21c6f4ad75320fa613d6f9d0523d696ae241959)), closes [#26341](https://github.com/bitnami/charts/issues/26341)
 
 ## 18.2.0 (2024-05-21)
 

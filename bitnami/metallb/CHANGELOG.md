@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.1 (2024-06-04)
+## 6.3.2 (2024-06-05)
 
-* [bitnami/metallb] Bump chart version ([#26647](https://github.com/bitnami/charts/pull/26647))
+* [bitnami/metallb] Release 6.3.2 ([#26739](https://github.com/bitnami/charts/pull/26739))
+
+## <small>6.3.1 (2024-06-04)</small>
+
+* [bitnami/metallb] Bump chart version (#26647) ([21fe6dc](https://github.com/bitnami/charts/commit/21fe6dc1b5b4129e998d715250ce8275093668aa)), closes [#26647](https://github.com/bitnami/charts/issues/26647)
 
 ## 6.3.0 (2024-05-30)
 

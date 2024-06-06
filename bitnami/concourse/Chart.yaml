@@ -12,29 +12,29 @@ annotations:
 apiVersion: v2
 appVersion: 7.11.2
 dependencies:
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.X.X
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.X.X
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Concourse is an automation system written in Go. It is most commonly used for CI/CD, and is built to scale to any kind of automation pipeline, from simple to complex.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/concourse/img/concourse-stack-220x234.png
 keywords:
-- concourse
-- ci
-- cd
-- http
-- web
-- application
+  - concourse
+  - ci
+  - cd
+  - http
+  - web
+  - application
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: concourse
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/concourse
-version: 4.2.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/concourse
+version: 4.2.4

@@ -20,13 +20,13 @@ for (const command of ['click']) {
 Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
-    cy.visit('/hub/login');
+    cy.visit('/');
     cy.get('#username_input').type(username);
     cy.get('#password_input').type(password);
     cy.get('#login_submit').click();
     // The authentication is not completed until the page is rendered
     // Accessing the for the first time may take extra-time: "Your server is starting up"
-    cy.contains('Launcher', {timeout: 120000});
+    cy.contains('Launcher', {timeout: 60000});
   }
 );
 

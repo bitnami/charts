@@ -1,12 +1,12 @@
 dependencies:
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.0.6
+  version: 18.2.1
 - name: elasticsearch
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.0.7
+  version: 21.1.0
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.19.3
-digest: sha256:3c878613ef90a2b37261fbb87f97e4940958328b5a32e9e2e31412108939a662
-generated: "2024-05-21T14:05:00.844644991+02:00"
+digest: sha256:013c85dcf42bab68e7e37e98eeeb2142330b84ff4d8a5fc6b27c5f3c0f4b1c8b
+generated: "2024-06-05T15:04:35.350343+02:00"

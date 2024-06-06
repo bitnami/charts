@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.21.0 (2024-05-24)
+## 18.21.3 (2024-06-05)
 
-* [bitnami/drupal] Enable PodDisruptionBudgets ([#26428](https://github.com/bitnami/charts/pull/26428))
+* [bitnami/drupal] Bump chart version ([#26826](https://github.com/bitnami/charts/pull/26826))
+
+## <small>18.21.2 (2024-06-05)</small>
+
+* [bitnami/drupal] Bump chart version (#26768) ([01766d5](https://github.com/bitnami/charts/commit/01766d58adf0c0e3f6e0ac3cb1dd6e5c06639953)), closes [#26768](https://github.com/bitnami/charts/issues/26768)
+
+## <small>18.21.1 (2024-06-04)</small>
+
+* [bitnami/drupal] Fix typo in deployment.yaml template (#26679) ([5d83a69](https://github.com/bitnami/charts/commit/5d83a69dd3168a476a8edb9ea2d85c23b97cea13)), closes [#26679](https://github.com/bitnami/charts/issues/26679)
+
+## 18.21.0 (2024-06-03)
+
+* [bitnami/drupal] Enable PodDisruptionBudgets (#26428) ([1e4ac4c](https://github.com/bitnami/charts/commit/1e4ac4c1c282b929665b92709291af2ace17d5f0)), closes [#26428](https://github.com/bitnami/charts/issues/26428)
 
 ## 18.1.0 (2024-05-21)
 
