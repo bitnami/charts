@@ -369,8 +369,8 @@ customReadinessProbe: {}
 ## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
 ##
 pdb:
-  create: false
-  minAvailable: 1
+  create: true
+  minAvailable: ""
   maxUnavailable: ""
 ## ASP.NET Core Autoscaling parameters.
 ## @param autoscaling.enabled Enable autoscaling for ASP.NET Core
