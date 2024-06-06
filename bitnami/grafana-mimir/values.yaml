@@ -747,8 +747,8 @@ alertmanager:
   ## @param alertmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## BlockStorage config for alertmanager pods
   ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
@@ -1173,8 +1173,8 @@ compactor:
   ## @param compactor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Distributor Deployment Parameters
 ##
@@ -1549,8 +1549,8 @@ distributor:
   ## @param distributor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Gateway Deployment Parameters
 ##
@@ -2048,8 +2048,8 @@ gateway:
   ## @param gateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Ingester Deployment Parameters
 ##
@@ -2464,8 +2464,8 @@ ingester:
   ## @param ingester.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 # @section overrides-exporter Deployment Parameters
 ##
@@ -2843,8 +2843,8 @@ overridesExporter:
   ## @param overridesExporter.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Querier Deployment Parameters
 ##
@@ -3219,8 +3219,8 @@ querier:
   ## @param querier.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Query Frontend Deployment Parameters
 ##
@@ -3595,8 +3595,8 @@ queryFrontend:
   ## @param queryFrontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 # @section query-scheduler Deployment Parameters
 ##
@@ -3974,8 +3974,8 @@ queryScheduler:
   ## @param queryScheduler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Store Gateway Deployment Parameters
 ##
@@ -4393,8 +4393,8 @@ storeGateway:
   ## @param storeGateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## @section Ruler Deployment Parameters
 ##
@@ -4806,8 +4806,8 @@ ruler:
   ## @param ruler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## BlockStorage config for ruler pods
   ## ref: https://grafana.com/docs/mimir/latest/operators-guide/configure/reference-configuration-parameters/#alertmanager_storage
