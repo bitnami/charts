@@ -6,29 +6,29 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: nats
-      image: docker.io/bitnami/nats:2.10.16-debian-12-r0
+      image: docker.io/bitnami/nats:2.10.16-debian-12-r1
     - name: nats-exporter
-      image: docker.io/bitnami/nats-exporter:0.15.0-debian-12-r4
+      image: docker.io/bitnami/nats-exporter:0.15.0-debian-12-r5
 apiVersion: v2
 appVersion: 2.10.16
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: NATS is an open source, lightweight and high-performance messaging system. It is ideal for distributed systems and supports modern cloud architectures and pub-sub, request-reply and queuing models.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/nats/img/nats-stack-220x234.png
 keywords:
-  - nats
-  - messaging
-  - addressing
-  - discovery
+- nats
+- messaging
+- addressing
+- discovery
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: nats
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/nats
-version: 8.2.3
+- https://github.com/bitnami/charts/tree/main/bitnami/nats
+version: 8.2.5

@@ -6,32 +6,32 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: odoo
-      image: docker.io/bitnami/odoo:17.0.20240505-debian-12-r1
+      image: docker.io/bitnami/odoo:17.0.20240605-debian-12-r0
 apiVersion: v2
-appVersion: 17.0.20240505
+appVersion: 17.0.20240605
 dependencies:
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Odoo is an open source ERP and CRM platform, formerly known as OpenERP, that can connect a wide variety of business operations such as sales, supply chain, finance, and project management.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/odoo/img/odoo-stack-220x234.png
 keywords:
-- odoo
-- crm
-- www
-- http
-- web
+  - odoo
+  - crm
+  - www
+  - http
+  - web
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: odoo
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/odoo
-version: 26.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/odoo
+version: 26.2.3

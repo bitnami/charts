@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.5.3 (2024-06-04)
+## 7.5.4 (2024-06-05)
 
-* [bitnami/external-dns] Bump chart version ([#26629](https://github.com/bitnami/charts/pull/26629))
+* [bitnami/external-dns] Release 7.5.4 ([#26724](https://github.com/bitnami/charts/pull/26724))
+
+## <small>7.5.3 (2024-06-04)</small>
+
+* [bitnami/external-dns] Bump chart version (#26629) ([aba7563](https://github.com/bitnami/charts/commit/aba75631498b41c20034d7486431447527b75acd)), closes [#26629](https://github.com/bitnami/charts/issues/26629)
 
 ## <small>7.5.2 (2024-05-24)</small>
 
