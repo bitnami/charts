@@ -14,34 +14,34 @@ annotations:
 apiVersion: v2
 appVersion: 2.13.1
 dependencies:
-- condition: minio.enabled
-  name: minio
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 14.x.x
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: minio.enabled
+    name: minio
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 14.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: MLflow is an open-source platform designed to manage the end-to-end machine learning lifecycle. It allows you to track experiments, package code into reproducible runs, and share and deploy models.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mlflow/img/mlflow-stack-220x234.png
 keywords:
-- mlflow
-- models
-- python
-- machine
-- learning
+  - mlflow
+  - models
+  - python
+  - machine
+  - learning
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: mlflow
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/mlflow
-- https://github.com/bitnami/containers/tree/main/bitnami/mlflow
-- https://github.com/mlflow/mlflow
-version: 1.3.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/mlflow
+  - https://github.com/bitnami/containers/tree/main/bitnami/mlflow
+  - https://github.com/mlflow/mlflow
+version: 1.4.1

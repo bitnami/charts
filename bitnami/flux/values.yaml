@@ -326,7 +326,7 @@ kustomizeController:
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -841,7 +841,7 @@ helmController:
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1358,7 +1358,7 @@ sourceController:
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1974,7 +1974,7 @@ notificationController:
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -2597,7 +2597,7 @@ imageAutomationController:
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -3112,7 +3112,7 @@ imageReflectorController:
   ##
   pdb:
     create: true
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/

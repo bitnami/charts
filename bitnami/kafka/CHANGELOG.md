@@ -1,12 +1,20 @@
 # Changelog
 
+## 29.2.2 (2024-06-05)
+
+* [bitnami/kafka] Bump chart version ([#26839](https://github.com/bitnami/charts/pull/26839))
+
+## <small>29.2.1 (2024-06-05)</small>
+
+* [bitnami/kafka] Bump chart version (#26781) ([66f65f6](https://github.com/bitnami/charts/commit/66f65f6e5a20c7e8423b51606b051b472b4729c1)), closes [#26781](https://github.com/bitnami/charts/issues/26781)
+
 ## 29.2.0 (2024-05-30)
 
-* [bitnami/kafka] Add support for helm parameter maps for kafka config, closes ([#25646](https://github.com/bitnami/charts/issues/25646))
+* [bitnami/kafka] #25646 Use parameter map for kafka config (#26342) ([4a023a2](https://github.com/bitnami/charts/commit/4a023a27e2bae7ea8779b667bc1e9a00cba925e1)), closes [#25646](https://github.com/bitnami/charts/issues/25646) [#26342](https://github.com/bitnami/charts/issues/26342)
 
-## 29.1.2 (2024-05-29)
+## <small>29.1.2 (2024-05-29)</small>
 
-* [bitnami/kafka] PDB review ([#25938](https://github.com/bitnami/charts/pull/25938))
+* [bitnami/kafka] PDB review (#25938) ([568aafa](https://github.com/bitnami/charts/commit/568aafa1de85759ea2d90d2915970eefaa36dffd)), closes [#25938](https://github.com/bitnami/charts/issues/25938)
 
 ## <small>29.1.1 (2024-05-28)</small>
 
