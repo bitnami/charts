@@ -6,7 +6,7 @@
 
 ## <small>0.3.4 (2024-06-05)</small>
 
-* [bitnami/janusgraph] Bump chart version ([#26836](https://github.com/bitnami/charts/pull/26836))
+* [bitnami/janusgraph] Bump chart version (#26836) ([fad1148](https://github.com/bitnami/charts/commit/fad114830abbd0ab2319b046a73017707e457a88)), closes [#26836](https://github.com/bitnami/charts/issues/26836)
 
 ## <small>0.3.3 (2024-06-05)</small>
 
