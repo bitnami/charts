@@ -639,8 +639,8 @@ contour:
   ## @param contour.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 
 ## @section Envoy parameters
@@ -661,7 +661,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.29.4-debian-12-r6
+    tag: 1.29.5-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1305,8 +1305,8 @@ envoy:
   ## @param envoy.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 
 ## @section Default backend parameters
@@ -1330,7 +1330,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.26.1-debian-12-r0
+    tag: 1.27.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1664,8 +1664,8 @@ defaultBackend:
   ## @param defaultBackend.pdb.maxUnavailable Maximum number/percentage of Default backend pods that should remain scheduled
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
 ## Ingress parameters
 ##

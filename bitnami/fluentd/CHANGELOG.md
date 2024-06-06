@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.5.1 (2024-05-28)
+## 6.5.2 (2024-06-06)
 
-* [bitnami/fluentd] fix: :bug: Only check replaced images when set ([#26506](https://github.com/bitnami/charts/pull/26506))
+* [bitnami/fluentd] Release 6.5.2 ([#26924](https://github.com/bitnami/charts/pull/26924))
+
+## <small>6.5.1 (2024-05-30)</small>
+
+* [bitnami/fluentd] fix: :bug: Only check replaced images when set (#26506) ([eb7104d](https://github.com/bitnami/charts/commit/eb7104dd964583eb0ee964cdbd90dad5e000159b)), closes [#26506](https://github.com/bitnami/charts/issues/26506)
 
 ## 6.5.0 (2024-05-28)
 

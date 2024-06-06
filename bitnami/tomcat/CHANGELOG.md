@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.3 (2024-06-04)
+## 11.2.4 (2024-06-06)
 
-* [bitnami/tomcat] Bump chart version ([#26671](https://github.com/bitnami/charts/pull/26671))
+* [bitnami/tomcat] Release 11.2.4 ([#27024](https://github.com/bitnami/charts/pull/27024))
+
+## <small>11.2.3 (2024-06-04)</small>
+
+* [bitnami/tomcat] Bump chart version (#26671) ([daf53ea](https://github.com/bitnami/charts/commit/daf53eac64898da0ee2908aa2e76095813ed0e14)), closes [#26671](https://github.com/bitnami/charts/issues/26671)
 
 ## <small>11.2.2 (2024-05-31)</small>
 

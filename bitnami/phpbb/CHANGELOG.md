@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.2.2 (2024-06-04)
+## 18.2.5 (2024-06-06)
 
-* [bitnami/phpbb] Fix typo in deployment.yaml template ([#26617](https://github.com/bitnami/charts/pull/26617))
+* [bitnami/phpbb] Release 18.2.5 ([#27003](https://github.com/bitnami/charts/pull/27003))
+
+## <small>18.2.4 (2024-06-05)</small>
+
+* [bitnami/phpbb] Bump chart version (#26854) ([3f343a4](https://github.com/bitnami/charts/commit/3f343a45116779c943d90bcc65e3204a90c0b7e1)), closes [#26854](https://github.com/bitnami/charts/issues/26854)
+
+## <small>18.2.3 (2024-06-05)</small>
+
+* [bitnami/phpbb] Bump chart version (#26796) ([d1da169](https://github.com/bitnami/charts/commit/d1da16983feae1ccdbe628cfebaf1b3e528f426a)), closes [#26796](https://github.com/bitnami/charts/issues/26796)
+
+## <small>18.2.2 (2024-06-04)</small>
+
+* [bitnami/phpbb] Fix typo in deployment.yaml template (#26617) ([03adfa5](https://github.com/bitnami/charts/commit/03adfa5055cdc1901dbabef8ebd6083dbde26cb2)), closes [#26617](https://github.com/bitnami/charts/issues/26617)
 
 ## <small>18.2.1 (2024-06-01)</small>
 

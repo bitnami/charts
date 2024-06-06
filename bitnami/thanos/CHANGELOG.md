@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.6.1 (2024-06-05)
+## 15.7.2 (2024-06-06)
 
-* [bitnami/thanos] Release 15.6.1 ([#26755](https://github.com/bitnami/charts/pull/26755))
+* [bitnami/thanos] Release 15.7.2 ([#27020](https://github.com/bitnami/charts/pull/27020))
+
+## <small>15.7.1 (2024-06-05)</small>
+
+* [bitnami/thanos] Bump chart version (#26866) ([9f31b0e](https://github.com/bitnami/charts/commit/9f31b0e1c3dfd3d8a4f32e31e89f87a72a65f29b)), closes [#26866](https://github.com/bitnami/charts/issues/26866)
+
+## 15.7.0 (2024-06-05)
+
+* [bitnami/thanos] Enable PodDisruptionBudgets (#26709) ([4796dad](https://github.com/bitnami/charts/commit/4796dad161af678c5dbdf04d3ae9d137f9f20ba3)), closes [#26709](https://github.com/bitnami/charts/issues/26709)
+
+## <small>15.6.2 (2024-06-05)</small>
+
+* [bitnami/thanos] Bump chart version (#26808) ([f0b10e8](https://github.com/bitnami/charts/commit/f0b10e83d908b2df59907182615b48ca80b70264)), closes [#26808](https://github.com/bitnami/charts/issues/26808)
+
+## <small>15.6.1 (2024-06-05)</small>
+
+* [bitnami/thanos] Release 15.6.1 (#26755) ([4e3585e](https://github.com/bitnami/charts/commit/4e3585ebd0dbfff61e13c12a529522fa094f8ada)), closes [#26755](https://github.com/bitnami/charts/issues/26755)
 
 ## 15.6.0 (2024-05-31)
 

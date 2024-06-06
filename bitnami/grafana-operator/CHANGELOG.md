@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.4.3 (2024-06-05)
+## 4.4.5 (2024-06-06)
 
-* [bitnami/grafana-operator] Release 4.4.3 ([#26729](https://github.com/bitnami/charts/pull/26729))
+* [bitnami/grafana-operator] Release 4.4.5 ([#26957](https://github.com/bitnami/charts/pull/26957))
+
+## <small>4.4.4 (2024-06-05)</small>
+
+* [bitnami/grafana-operator] Update content of grafanacontactpoints.integreatly.org.yaml (#26871) ([9d0f5e8](https://github.com/bitnami/charts/commit/9d0f5e8afdaf53fc9188b6ad56f70795442544a2)), closes [#26871](https://github.com/bitnami/charts/issues/26871)
+
+## <small>4.4.3 (2024-06-05)</small>
+
+* [bitnami/grafana-operator] Release 4.4.3 (#26729) ([2006fd0](https://github.com/bitnami/charts/commit/2006fd01f9161764e60efe7b79aa5f4dce7c9409)), closes [#26729](https://github.com/bitnami/charts/issues/26729)
 
 ## <small>4.4.2 (2024-06-04)</small>
 

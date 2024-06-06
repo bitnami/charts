@@ -40,4 +40,4 @@ name: seaweedfs
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/seawwedfs
 - https://github.com/bitnami/containers/tree/main/bitnami/seaweedfs
-version: 0.3.2
+version: 0.3.5

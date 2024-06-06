@@ -1,8 +1,20 @@
 # Changelog
 
-## 1.3.2 (2024-06-05)
+## 2.0.1 (2024-06-06)
 
-* [bitnami/haproxy] Release 1.3.2 ([#26728](https://github.com/bitnami/charts/pull/26728))
+* [bitnami/haproxy] Release 2.0.1 ([#26960](https://github.com/bitnami/charts/pull/26960))
+
+## 2.0.0 (2024-06-05)
+
+* [bitnami/haproxy] Release 2.0.0 (#26812) ([ffc9fa6](https://github.com/bitnami/charts/commit/ffc9fa68b99a8465b83beabcd5ed828146693cce)), closes [#26812](https://github.com/bitnami/charts/issues/26812)
+
+## 1.4.0 (2024-06-05)
+
+* [bitnami/haproxy] Enable PodDisruptionBudgets (#26696) ([ba21fce](https://github.com/bitnami/charts/commit/ba21fcee507ce2cbf27c078b0d617ecbdfec98ff)), closes [#26696](https://github.com/bitnami/charts/issues/26696)
+
+## <small>1.3.2 (2024-06-05)</small>
+
+* [bitnami/haproxy] Release 1.3.2 (#26728) ([460da70](https://github.com/bitnami/charts/commit/460da705601a4877312e4bda9c4f9ec6d861e2ab)), closes [#26728](https://github.com/bitnami/charts/issues/26728)
 
 ## <small>1.3.1 (2024-06-04)</small>
 

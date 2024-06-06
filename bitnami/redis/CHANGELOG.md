@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.5.1 (2024-06-04)
+## 19.5.2 (2024-06-06)
 
-* [bitnami/redis] Bump chart version ([#26666](https://github.com/bitnami/charts/pull/26666))
+* [bitnami/redis] Release 19.5.2 ([#27012](https://github.com/bitnami/charts/pull/27012))
+
+## <small>19.5.1 (2024-06-04)</small>
+
+* [bitnami/redis] Bump chart version (#26666) ([01a2ef5](https://github.com/bitnami/charts/commit/01a2ef5c1354a3b93065bed9f5b4f41845114506)), closes [#26666](https://github.com/bitnami/charts/issues/26666)
 
 ## 19.5.0 (2024-05-23)
 
