@@ -20,31 +20,31 @@ annotations:
 apiVersion: v2
 appVersion: 2.9.1
 dependencies:
-- condition: redis.enabled
-  name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.x.x
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: redis.enabled
+    name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Apache Airflow is a tool to express and execute workflows as directed acyclic graphs (DAGs). It includes utilities to schedule tasks, monitor task progress and handle task dependencies.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/airflow/img/airflow-stack-220x234.png
 keywords:
-- apache
-- airflow
-- workflow
-- dag
+  - apache
+  - airflow
+  - workflow
+  - dag
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: airflow
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 18.2.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/airflow
+version: 18.2.3

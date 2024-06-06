@@ -1,8 +1,16 @@
 # Changelog
 
-## 9.3.1 (2024-06-05)
+## 9.3.3 (2024-06-05)
 
-* [bitnami/kube-prometheus] Release 9.3.1 ([#26749](https://github.com/bitnami/charts/pull/26749))
+* [bitnami/kube-prometheus] Bump chart version ([#26857](https://github.com/bitnami/charts/pull/26857))
+
+## <small>9.3.2 (2024-06-05)</small>
+
+* [bitnami/kube-prometheus] Bump chart version (#26799) ([77f0f79](https://github.com/bitnami/charts/commit/77f0f79df8c04433af3c50c8db9bfa5bb8091b2c)), closes [#26799](https://github.com/bitnami/charts/issues/26799)
+
+## <small>9.3.1 (2024-06-05)</small>
+
+* [bitnami/kube-prometheus] Release 9.3.1 (#26749) ([4b4247e](https://github.com/bitnami/charts/commit/4b4247e600914e7ca4f89e01cd97e8b4ee5a56a9)), closes [#26749](https://github.com/bitnami/charts/issues/26749)
 
 ## 9.3.0 (2024-06-01)
 

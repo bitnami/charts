@@ -1,9 +1,5 @@
 # Changelog
 
-## 10.1.5 (2024-06-05)
-
-* [bitnami/etcd] Align PodDisruptionBudgets with templates ([#26692](https://github.com/bitnami/charts/pull/26692))
-
 ## <small>10.1.4 (2024-06-05)</small>
 
 * [bitnami/etcd] Release 10.1.4 (#26723) ([21a4c55](https://github.com/bitnami/charts/commit/21a4c55475238e7e2cccc922b0b5463aba26fefd)), closes [#26723](https://github.com/bitnami/charts/issues/26723)
