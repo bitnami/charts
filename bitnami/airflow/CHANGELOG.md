@@ -6,7 +6,7 @@
 
 ## <small>18.2.4 (2024-06-06)</small>
 
-* [bitnami/airflow] Release 18.2.4 ([#26922](https://github.com/bitnami/charts/pull/26922))
+* [bitnami/airflow] Release 18.2.4 (#26922) ([7180ee8](https://github.com/bitnami/charts/commit/7180ee89f51ce66715e6ec2e018bdff21cb0ead8)), closes [#26922](https://github.com/bitnami/charts/issues/26922)
 
 ## <small>18.2.3 (2024-06-05)</small>
 
