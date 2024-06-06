@@ -1,8 +1,12 @@
 # Changelog
 
-## 9.2.0 (2024-06-04)
+## 9.2.1 (2024-06-06)
 
-* [bitnami/spark] Enable PodDisruptionBudgets ([#26536](https://github.com/bitnami/charts/pull/26536))
+* [bitnami/spark] Release 9.2.1 ([#26921](https://github.com/bitnami/charts/pull/26921))
+
+## 9.2.0 (2024-06-05)
+
+* [bitnami/spark] Enable PodDisruptionBudgets (#26536) ([8b090f2](https://github.com/bitnami/charts/commit/8b090f2591afe979c746d463c14cd2355e3f3d7f)), closes [#26536](https://github.com/bitnami/charts/issues/26536)
 
 ## <small>9.1.1 (2024-06-04)</small>
 
