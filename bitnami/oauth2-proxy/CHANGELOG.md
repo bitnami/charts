@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.3.2 (2024-06-05)
+## 5.3.3 (2024-06-05)
 
-* [bitnami/oauth2-proxy] Bump chart version ([#26792](https://github.com/bitnami/charts/pull/26792))
+* [bitnami/oauth2-proxy] Bump chart version ([#26850](https://github.com/bitnami/charts/pull/26850))
+
+## <small>5.3.2 (2024-06-05)</small>
+
+* [bitnami/oauth2-proxy] Bump chart version (#26792) ([3199b02](https://github.com/bitnami/charts/commit/3199b025f38b3b7e2e0e4c9995bbf6f114519ea5)), closes [#26792](https://github.com/bitnami/charts/issues/26792)
 
 ## <small>5.3.1 (2024-06-05)</small>
 

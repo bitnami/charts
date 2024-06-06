@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.2 (2024-06-05)
+## 18.2.3 (2024-06-05)
 
-* [bitnami/opencart] Bump chart version ([#26794](https://github.com/bitnami/charts/pull/26794))
+* [bitnami/opencart] Bump chart version ([#26852](https://github.com/bitnami/charts/pull/26852))
+
+## <small>18.2.2 (2024-06-05)</small>
+
+* [bitnami/opencart] Bump chart version (#26794) ([14fcea7](https://github.com/bitnami/charts/commit/14fcea7d8e097a841d3eafbecacb9bcd981bc812)), closes [#26794](https://github.com/bitnami/charts/issues/26794)
 
 ## <small>18.2.1 (2024-06-04)</small>
 

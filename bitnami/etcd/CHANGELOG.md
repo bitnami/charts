@@ -1,8 +1,16 @@
 # Changelog
 
-## 10.1.4 (2024-06-05)
+## 10.2.1 (2024-06-06)
 
-* [bitnami/etcd] Release 10.1.4 ([#26723](https://github.com/bitnami/charts/pull/26723))
+* [bitnami/etcd] Align PodDisruptionBudgets with templates ([#26692](https://github.com/bitnami/charts/pull/26692))
+
+## 10.2.0 (2024-06-06)
+
+* [bitnami/etcd] Non-manual chart upgrades (#25655) ([74000ba](https://github.com/bitnami/charts/commit/74000ba366b23ca6ca4d6f2730bf6d22d9404689)), closes [#25655](https://github.com/bitnami/charts/issues/25655)
+
+## <small>10.1.4 (2024-06-05)</small>
+
+* [bitnami/etcd] Release 10.1.4 (#26723) ([21a4c55](https://github.com/bitnami/charts/commit/21a4c55475238e7e2cccc922b0b5463aba26fefd)), closes [#26723](https://github.com/bitnami/charts/issues/26723)
 
 ## <small>10.1.3 (2024-06-04)</small>
 

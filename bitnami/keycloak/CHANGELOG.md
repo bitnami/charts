@@ -1,8 +1,16 @@
 # Changelog
 
-## 21.3.3 (2024-06-05)
+## 21.4.0 (2024-06-06)
 
-* [bitnami/keycloak] Bump chart version ([#26782](https://github.com/bitnami/charts/pull/26782))
+* [bitnami/keycloak] Enable PodDisruptionBudgets ([#26698](https://github.com/bitnami/charts/pull/26698))
+
+## <small>21.3.4 (2024-06-05)</small>
+
+* [bitnami/keycloak] Bump chart version (#26840) ([3a6cf28](https://github.com/bitnami/charts/commit/3a6cf284b4a629a321b3c6db0605230c5366c093)), closes [#26840](https://github.com/bitnami/charts/issues/26840)
+
+## <small>21.3.3 (2024-06-05)</small>
+
+* [bitnami/keycloak] Bump chart version (#26782) ([80cd32d](https://github.com/bitnami/charts/commit/80cd32d8c7cd97e4648a2ae750fffc75dd526beb)), closes [#26782](https://github.com/bitnami/charts/issues/26782)
 
 ## <small>21.3.2 (2024-06-04)</small>
 

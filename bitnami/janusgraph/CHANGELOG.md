@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.3.3 (2024-06-05)
+## 0.3.5 (2024-06-06)
 
-* [bitnami/janusgraph] Bump chart version ([#26778](https://github.com/bitnami/charts/pull/26778))
+* [bitnami/janusgraph] Enable PodDisruptionBudgets ([#26697](https://github.com/bitnami/charts/pull/26697))
+
+## <small>0.3.4 (2024-06-05)</small>
+
+* [bitnami/janusgraph] Bump chart version (#26836) ([fad1148](https://github.com/bitnami/charts/commit/fad114830abbd0ab2319b046a73017707e457a88)), closes [#26836](https://github.com/bitnami/charts/issues/26836)
+
+## <small>0.3.3 (2024-06-05)</small>
+
+* [bitnami/janusgraph] Bump chart version (#26778) ([88021da](https://github.com/bitnami/charts/commit/88021dac6241b2b98c35deed036f845d8b747ebf)), closes [#26778](https://github.com/bitnami/charts/issues/26778)
 
 ## <small>0.3.2 (2024-05-28)</small>
 

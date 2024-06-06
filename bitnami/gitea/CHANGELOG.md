@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.2 (2024-06-05)
+## 2.3.3 (2024-06-05)
 
-* [bitnami/gitea] Bump chart version ([#26772](https://github.com/bitnami/charts/pull/26772))
+* [bitnami/gitea] Bump chart version ([#26830](https://github.com/bitnami/charts/pull/26830))
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/gitea] Bump chart version (#26772) ([9cf1e1c](https://github.com/bitnami/charts/commit/9cf1e1cebc78b6a7ed5e304ca0bacb5c01f0a40c)), closes [#26772](https://github.com/bitnami/charts/issues/26772)
 
 ## <small>2.3.1 (2024-06-05)</small>
 

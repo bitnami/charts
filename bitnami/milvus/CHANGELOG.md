@@ -1,8 +1,16 @@
 # Changelog
 
-## 8.1.1 (2024-06-05)
+## 8.2.0 (2024-06-06)
 
-* [bitnami/milvus] Bump chart version ([#26789](https://github.com/bitnami/charts/pull/26789))
+* [bitnami/milvus] feat: config external kafka tls client certs setting… ([#26118](https://github.com/bitnami/charts/pull/26118))
+
+## <small>8.1.2 (2024-06-05)</small>
+
+* [bitnami/milvus] Bump chart version (#26847) ([8f68730](https://github.com/bitnami/charts/commit/8f687301d02eaa93e9420f7bbcf5b47e25b6bf97)), closes [#26847](https://github.com/bitnami/charts/issues/26847)
+
+## <small>8.1.1 (2024-06-05)</small>
+
+* [bitnami/milvus] Bump chart version (#26789) ([c846ba9](https://github.com/bitnami/charts/commit/c846ba9c85b488e2b952613e4ead90dd7d6ae131)), closes [#26789](https://github.com/bitnami/charts/issues/26789)
 
 ## 8.1.0 (2024-05-30)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.2 (2024-06-05)
+## 20.2.3 (2024-06-05)
 
-* [bitnami/mediawiki] Bump chart version ([#26788](https://github.com/bitnami/charts/pull/26788))
+* [bitnami/mediawiki] Bump chart version ([#26846](https://github.com/bitnami/charts/pull/26846))
+
+## <small>20.2.2 (2024-06-05)</small>
+
+* [bitnami/mediawiki] Bump chart version (#26788) ([4a0fd9f](https://github.com/bitnami/charts/commit/4a0fd9fa9a286ef05ac986bcba833c083cc4d6b1)), closes [#26788](https://github.com/bitnami/charts/issues/26788)
 
 ## <small>20.2.1 (2024-06-04)</small>
 

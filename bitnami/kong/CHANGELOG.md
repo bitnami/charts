@@ -1,8 +1,16 @@
 # Changelog
 
-## 12.1.4 (2024-06-05)
+## 12.2.0 (2024-06-05)
 
-* [bitnami/kong] Bump chart version ([#26783](https://github.com/bitnami/charts/pull/26783))
+* [bitnami/kong] Enable PodDisruptionBudgets ([#26699](https://github.com/bitnami/charts/pull/26699))
+
+## <small>12.1.5 (2024-06-05)</small>
+
+* [bitnami/kong] Bump chart version (#26841) ([8d3928b](https://github.com/bitnami/charts/commit/8d3928b66f2579b2dc45d62653b6b303f9ad0098)), closes [#26841](https://github.com/bitnami/charts/issues/26841)
+
+## <small>12.1.4 (2024-06-05)</small>
+
+* [bitnami/kong] Bump chart version (#26783) ([a647110](https://github.com/bitnami/charts/commit/a647110f654f9f2e450388aa7d423b19a6352ff1)), closes [#26783](https://github.com/bitnami/charts/issues/26783)
 
 ## <small>12.1.3 (2024-05-31)</small>
 

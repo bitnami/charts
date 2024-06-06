@@ -420,7 +420,7 @@ autoscaling:
 pdb:
   create: true
   minAvailable: ""
-  maxUnavailable: 1
+  maxUnavailable: ""
 ## @section Traffic Exposure parameters
 service:
   ## @param service.type Kubernetes Service type

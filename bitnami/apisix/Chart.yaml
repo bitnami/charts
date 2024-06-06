@@ -45,4 +45,4 @@ sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/apisix
   - https://github.com/bitnami/charts/tree/main/bitnami/apisix-dashboard
   - https://github.com/bitnami/charts/tree/main/bitnami/apisix-ingress-controller
-version: 3.1.2
+version: 3.2.0

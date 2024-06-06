@@ -2,7 +2,7 @@
 
 ## 3.5.2 (2024-06-05)
 
-* [bitnami/grafana-tempo] Release 3.5.2 ([#26815](https://github.com/bitnami/charts/pull/26815))
+* [bitnami/grafana-tempo] Bump chart version ([#26833](https://github.com/bitnami/charts/pull/26833))
 
 ## <small>3.5.1 (2024-06-05)</small>
 
