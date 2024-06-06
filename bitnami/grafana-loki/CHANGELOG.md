@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.5 (2024-06-06)
+## 4.5.6 (2024-06-06)
 
-* [bitnami/grafana-loki] Release 4.5.5 ([#26901](https://github.com/bitnami/charts/pull/26901))
+* [bitnami/grafana-loki] Release 4.5.6 ([#26955](https://github.com/bitnami/charts/pull/26955))
+
+## <small>4.5.5 (2024-06-06)</small>
+
+* [bitnami/grafana-loki] Release 4.5.5 (#26901) ([9c7dce4](https://github.com/bitnami/charts/commit/9c7dce4fea0bf4270852698c896ecc0ceb438e35)), closes [#26901](https://github.com/bitnami/charts/issues/26901)
 
 ## <small>4.5.4 (2024-06-05)</small>
 
