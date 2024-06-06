@@ -1,11 +1,11 @@
 # Source: https://raw.githubusercontent.com/vmware-tanzu/pinniped/v{version}/deploy/concierge/authentication.concierge.pinniped.dev_webhookauthenticators.yaml
-# Version: 0.30.0
+# Version: 0.31.0
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.15.0
   name: webhookauthenticators.authentication.concierge.pinniped.dev
 spec:
   group: authentication.concierge.pinniped.dev
