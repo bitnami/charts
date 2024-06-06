@@ -1,8 +1,12 @@
 # Changelog
 
-## 27.2.2 (2024-06-05)
+## 27.2.3 (2024-06-06)
 
-* [bitnami/magento] Bump chart version ([#26843](https://github.com/bitnami/charts/pull/26843))
+* [bitnami/magento] Release 27.2.3 ([#26905](https://github.com/bitnami/charts/pull/26905))
+
+## <small>27.2.2 (2024-06-05)</small>
+
+* [bitnami/magento] Bump chart version (#26843) ([b286b5a](https://github.com/bitnami/charts/commit/b286b5afa35b01760496df6d350c8e5a2232b479)), closes [#26843](https://github.com/bitnami/charts/issues/26843)
 
 ## <small>27.2.1 (2024-06-05)</small>
 
