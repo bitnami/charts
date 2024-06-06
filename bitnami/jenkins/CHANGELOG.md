@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.1 (2024-06-04)
+## 13.4.2 (2024-06-06)
 
-* [bitnami/jenkins] Bump chart version ([#26637](https://github.com/bitnami/charts/pull/26637))
+* [bitnami/jenkins] Release 13.4.2 ([#26925](https://github.com/bitnami/charts/pull/26925))
+
+## <small>13.4.1 (2024-06-04)</small>
+
+* [bitnami/jenkins] Bump chart version (#26637) ([b2f0344](https://github.com/bitnami/charts/commit/b2f034450ecfbaa8022fa9816990e10ead5a689d)), closes [#26637](https://github.com/bitnami/charts/issues/26637)
 
 ## 13.4.0 (2024-05-29)
 
