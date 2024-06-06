@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.0 (2024-06-05)
+## 11.3.1 (2024-06-06)
 
-* [bitnami/consul] Enable PodDisruptionBudgets ([#26689](https://github.com/bitnami/charts/pull/26689))
+* [bitnami/consul] Release 11.3.1 ([#26941](https://github.com/bitnami/charts/pull/26941))
+
+## 11.3.0 (2024-06-06)
+
+* [bitnami/consul] Enable PodDisruptionBudgets (#26689) ([3f55468](https://github.com/bitnami/charts/commit/3f5546820886f3aa43203eb6cd88b59f0bb62f08)), closes [#26689](https://github.com/bitnami/charts/issues/26689)
 
 ## <small>11.2.2 (2024-06-05)</small>
 
