@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.2.1 (2024-06-06)
+
+* [bitnami/elasticsearch] Release 21.2.1 ([#26946](https://github.com/bitnami/charts/pull/26946))
+
 ## 21.2.0 (2024-06-06)
 
-* [bitnami/elasticsearch] Enable PodDisruptionBudgets ([#26691](https://github.com/bitnami/charts/pull/26691))
+* [bitnami/elasticsearch] Enable PodDisruptionBudgets (#26691) ([60d3793](https://github.com/bitnami/charts/commit/60d3793e6145e6b7335343711e4c86bf942e1dd9)), closes [#26691](https://github.com/bitnami/charts/issues/26691)
 
 ## <small>21.1.3 (2024-06-05)</small>
 
