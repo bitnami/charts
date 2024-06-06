@@ -12,6 +12,7 @@ before(() => {
 });
 
 it('allows uploading data', () => {
+  cy.get('[data-test-subj="skipWelcomeScreen"]').click();
   cy.get('[data-test-subj="uploadFile"]').click();
   cy.get('[type=file]').selectFile(
     'cypress/fixtures/test-data-to-import.ndjson',
