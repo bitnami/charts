@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.1 (2024-06-04)
+## 2.2.2 (2024-06-06)
 
-* [bitnami/deepspeed] Bump chart version ([#26626](https://github.com/bitnami/charts/pull/26626))
+* [bitnami/deepspeed] Release 2.2.2 ([#26889](https://github.com/bitnami/charts/pull/26889))
+
+## <small>2.2.1 (2024-06-04)</small>
+
+* [bitnami/deepspeed] Bump chart version (#26626) ([2b853bf](https://github.com/bitnami/charts/commit/2b853bf70babd73afbdca88ed4b617eaa6e23a21)), closes [#26626](https://github.com/bitnami/charts/issues/26626)
 
 ## 2.2.0 (2024-05-30)
 
