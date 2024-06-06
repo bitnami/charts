@@ -2,7 +2,7 @@
 
 ## 2.20.1 (2024-06-06)
 
-* [bitnami/chart] remove trailing spaces from imagePullSecrets rendering ([#26882](https://github.com/bitnami/charts/pull/26882))
+* [bitnami/common] remove trailing spaces from imagePullSecrets rendering ([#26882](https://github.com/bitnami/charts/pull/26882))
 
 ## 2.20.0 (2024-06-05)
 
