@@ -2,7 +2,7 @@
 
 ## 5.2.3 (2024-06-06)
 
-* [bitnami/sonarqube] Release 5.0.4 ([#26099](https://github.com/bitnami/charts/pull/26099))
+* [bitnami/sonarqube] Release 5.2.3 ([#26099](https://github.com/bitnami/charts/pull/26099))
 
 ## <small>5.2.2 (2024-06-05)</small>
 
