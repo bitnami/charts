@@ -1,8 +1,14 @@
 # Changelog
 
+## 2.20.1 (2024-06-06)
+
+* [bitnami/chart] remove trailing spaces from imagePullSecrets rendering ([#26882](https://github.com/bitnami/charts/pull/26882))
+
 ## 2.20.0 (2024-06-05)
 
-* [bitnami/common] Capabilities to return latest apiVersion if kubeVersion is undefined ([#26758](https://github.com/bitnami/charts/pull/26758))
+* [bitnami/*] ci: :construction_worker: Add tag and changelog support (#25359) ([91c707c](https://github.com/bitnami/charts/commit/91c707c9e4e574725a09505d2d313fb93f1b4c0a)), closes [#25359](https://github.com/bitnami/charts/issues/25359)
+* [bitnami/common] Capabilities to return latest apiVersion if kubeVersion is undefined (#26758) ([6582c32](https://github.com/bitnami/charts/commit/6582c3237b772af9cb379f7eaceddb2d64b507f0)), closes [#26758](https://github.com/bitnami/charts/issues/26758)
+* [bitnami/common] docs: :memo: Add changelog ([23349c9](https://github.com/bitnami/charts/commit/23349c99b70313f3e19ebcf9d3e0c154836b2cc0))
 
 ## <small>2.19.3 (2024-05-20)</small>
 
