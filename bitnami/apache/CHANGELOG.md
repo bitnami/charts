@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.2.1 (2024-06-06)
+## 11.2.2 (2024-06-06)
 
-* [bitnami/apache] Release 11.2.1 ([#26892](https://github.com/bitnami/charts/pull/26892))
+* [bitnami/apache] Release 11.2.2 ([#26930](https://github.com/bitnami/charts/pull/26930))
+
+## <small>11.2.1 (2024-06-06)</small>
+
+* [bitnami/apache] Release 11.2.1 (#26892) ([2683439](https://github.com/bitnami/charts/commit/268343990705c2fd3e0536d311d2a615e2ab20fe)), closes [#26892](https://github.com/bitnami/charts/issues/26892)
 
 ## 11.2.0 (2024-06-06)
 
