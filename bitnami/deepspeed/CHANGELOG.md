@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.2.2 (2024-06-06)
+## 2.2.3 (2024-06-06)
 
-* [bitnami/deepspeed] Release 2.2.2 ([#26886](https://github.com/bitnami/charts/pull/26886))
+* [bitnami/deepspeed] Release 2.2.3 ([#26944](https://github.com/bitnami/charts/pull/26944))
+
+## <small>2.2.2 (2024-06-06)</small>
+
+* [bitnami/deepspeed] Release 2.2.2 (#26886) ([b2cde8b](https://github.com/bitnami/charts/commit/b2cde8bc87440ef495d78a6c5b869c15d3c6cc71)), closes [#26886](https://github.com/bitnami/charts/issues/26886)
 
 ## <small>2.2.1 (2024-06-04)</small>
 
