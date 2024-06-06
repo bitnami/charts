@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.5 (2024-06-06)
+## 0.3.6 (2024-06-06)
 
-* [bitnami/janusgraph] Enable PodDisruptionBudgets ([#26697](https://github.com/bitnami/charts/pull/26697))
+* [bitnami/janusgraph] Release 0.3.6 ([#26894](https://github.com/bitnami/charts/pull/26894))
+
+## <small>0.3.5 (2024-06-06)</small>
+
+* [bitnami/janusgraph] Enable PodDisruptionBudgets (#26697) ([0742dc2](https://github.com/bitnami/charts/commit/0742dc22742d22d19411d888ecf1b6f281cb691e)), closes [#26697](https://github.com/bitnami/charts/issues/26697)
 
 ## <small>0.3.4 (2024-06-05)</small>
 
