@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.4.4 (2024-06-04)
+## 7.4.5 (2024-06-06)
 
-* [bitnami/memcached] Enable PodDisruptionBudgets ([#26703](https://github.com/bitnami/charts/pull/26703))
+* [bitnami/memcached] Release 7.4.5 ([#26981](https://github.com/bitnami/charts/pull/26981))
+
+## <small>7.4.4 (2024-06-06)</small>
+
+* [bitnami/memcached] Align PodDisruptionBudgets with templates (#26703) ([760dc65](https://github.com/bitnami/charts/commit/760dc656e1e2dafe68ca7025a1d3538e16fd18f1)), closes [#26703](https://github.com/bitnami/charts/issues/26703)
 
 ## <small>7.4.3 (2024-06-04)</small>
 
