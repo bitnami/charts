@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.3 (2024-06-05)
+## 7.2.4 (2024-06-06)
 
-* [bitnami/metrics-server] Align PodDisruptionBudgets with templates ([#26704](https://github.com/bitnami/charts/pull/26704))
+* [bitnami/metrics-server] Release 7.2.4 ([#26983](https://github.com/bitnami/charts/pull/26983))
+
+## <small>7.2.3 (2024-06-05)</small>
+
+* [bitnami/metrics-server] Align PodDisruptionBudgets with templates (#26704) ([df341f6](https://github.com/bitnami/charts/commit/df341f67ae1609f47517aa107da921f9d2575fb0)), closes [#26704](https://github.com/bitnami/charts/issues/26704)
 
 ## <small>7.2.2 (2024-06-05)</small>
 
