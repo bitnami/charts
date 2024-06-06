@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.1 (2024-06-04)
+## 1.3.2 (2024-06-06)
 
-* [bitnami/flink] Bump chart version ([#26630](https://github.com/bitnami/charts/pull/26630))
+* [bitnami/flink] Release 1.3.2 ([#26898](https://github.com/bitnami/charts/pull/26898))
+
+## <small>1.3.1 (2024-06-04)</small>
+
+* [bitnami/flink] Bump chart version (#26630) ([ae25bb7](https://github.com/bitnami/charts/commit/ae25bb7fad5896ff76afbf00f94c89a1fdcbefed)), closes [#26630](https://github.com/bitnami/charts/issues/26630)
 
 ## 1.3.0 (2024-06-03)
 

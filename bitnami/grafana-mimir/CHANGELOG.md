@@ -4,6 +4,10 @@
 
 * [bitnami/grafana-mimir] Enable PodDisruptionBudgets ([#26695](https://github.com/bitnami/charts/pull/26695))
 
+## <small>1.1.5 (2024-06-06)</small>
+
+* [bitnami/grafana-mimir] Release 1.1.5 ([#26903](https://github.com/bitnami/charts/pull/26903))
+
 ## <small>1.1.4 (2024-06-05)</small>
 
 * [bitnami/grafana-mimir] Bump chart version (#26832) ([61841c6](https://github.com/bitnami/charts/commit/61841c6a1d2e94214c4ccca1303b6009ef3bbe66)), closes [#26832](https://github.com/bitnami/charts/issues/26832)

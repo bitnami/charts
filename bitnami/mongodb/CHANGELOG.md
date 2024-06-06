@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.6.3 (2024-06-04)
+## 15.6.4 (2024-06-06)
 
-* [bitnami/mongodb] Bump chart version ([#26650](https://github.com/bitnami/charts/pull/26650))
+* [bitnami/mongodb] Release 15.6.4 ([#26907](https://github.com/bitnami/charts/pull/26907))
+
+## <small>15.6.3 (2024-06-04)</small>
+
+* [bitnami/mongodb] Bump chart version (#26650) ([8a4412d](https://github.com/bitnami/charts/commit/8a4412df8904d90daefe8ac8a5345270867d329f)), closes [#26650](https://github.com/bitnami/charts/issues/26650)
 
 ## <small>15.6.2 (2024-06-04)</small>
 
