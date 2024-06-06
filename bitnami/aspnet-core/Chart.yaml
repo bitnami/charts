@@ -14,21 +14,21 @@ annotations:
 apiVersion: v2
 appVersion: 8.0.6
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: ASP.NET Core is an open-source framework for web application development created by Microsoft. It runs on both the full .NET Framework, on Windows, and the cross-platform .NET Core.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/aspnet-core/img/aspnet-core-stack-220x234.png
 keywords:
-- asp.net
-- dotnet
+  - asp.net
+  - dotnet
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: aspnet-core
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
-version: 6.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/aspnet-core
+version: 6.2.0

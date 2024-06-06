@@ -1,8 +1,20 @@
 # Changelog
 
-## 18.1.1 (2024-05-22)
+## 18.2.0 (2024-06-05)
 
-* [bitnami/contour] Use different liveness/readiness probes ([#26339](https://github.com/bitnami/charts/pull/26339))
+* [bitnami/contour] Enable PodDisruptionBudgets ([#26690](https://github.com/bitnami/charts/pull/26690))
+
+## <small>18.1.3 (2024-06-05)</small>
+
+* [bitnami/contour] Release 18.1.3 (#26726) ([9de7bb1](https://github.com/bitnami/charts/commit/9de7bb15e394bda4f2e4aa5ddaeaf464a2016d69)), closes [#26726](https://github.com/bitnami/charts/issues/26726)
+
+## <small>18.1.2 (2024-06-04)</small>
+
+* [bitnami/contour] Bump chart version (#26625) ([d25f2e3](https://github.com/bitnami/charts/commit/d25f2e3c56d17d3032ac828c2979f0f7dd9e78ed)), closes [#26625](https://github.com/bitnami/charts/issues/26625)
+
+## <small>18.1.1 (2024-05-22)</small>
+
+* [bitnami/contour] Use different liveness/readiness probes (#26339) ([bf5de2c](https://github.com/bitnami/charts/commit/bf5de2c0b24e068ff01f4e7a0d16a64c7ff09e95)), closes [#26339](https://github.com/bitnami/charts/issues/26339)
 
 ## 18.1.0 (2024-05-21)
 

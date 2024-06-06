@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.2.0 (2024-05-24)
+## 16.2.2 (2024-06-04)
 
-* [bitnami/dokuwiki] Enable PodDisruptionBudgets ([#26426](https://github.com/bitnami/charts/pull/26426))
+* [bitnami/dokuwiki] Fix typo in deployment.yaml template ([#26678](https://github.com/bitnami/charts/pull/26678))
+
+## <small>16.2.1 (2024-06-04)</small>
+
+* [bitnami/dokuwiki] Bump chart version (#26627) ([64ab63c](https://github.com/bitnami/charts/commit/64ab63cc2305887ba762cee47f84bda22494db4c)), closes [#26627](https://github.com/bitnami/charts/issues/26627)
+
+## 16.2.0 (2024-05-27)
+
+* [bitnami/dokuwiki] Enable PodDisruptionBudgets (#26426) ([1edae69](https://github.com/bitnami/charts/commit/1edae697a3b3e3416fb860eed2097735b77ecf8a)), closes [#26426](https://github.com/bitnami/charts/issues/26426)
 
 ## 16.1.0 (2024-05-21)
 

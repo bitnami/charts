@@ -77,7 +77,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.1.5-debian-12-r5
+    tag: 4.1.5-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -520,7 +520,7 @@ hub:
   ## @param hub.pdb.maxUnavailable Set maximum available hub instances
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: ""
   ## @section Hub RBAC parameters
@@ -701,7 +701,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.1-debian-12-r16
+    tag: 4.6.1-debian-12-r25
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -976,7 +976,7 @@ proxy:
   pdb:
     ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
     ##
-    create: false
+    create: true
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable: ""
@@ -1579,7 +1579,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.1.5-debian-12-r5
+    tag: 4.1.5-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1609,7 +1609,7 @@ singleuser:
   ##
   command: []
   ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods
-  ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
+  ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
   ##
   extraEnvVars: []
   ## @param singleuser.containerPorts.http Single User container port
@@ -1819,7 +1819,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r21
+  tag: 12-debian-12-r22
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kiam
-      image: docker.io/bitnami/kiam:4.2.0-debian-12-r29
+      image: docker.io/bitnami/kiam:4.2.0-debian-12-r30
 apiVersion: v2
 appVersion: 4.2.0
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: kiam
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kiam
-version: 2.2.0
+version: 2.2.2

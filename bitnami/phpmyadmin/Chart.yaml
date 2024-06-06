@@ -12,28 +12,28 @@ annotations:
 apiVersion: v2
 appVersion: 5.2.1
 dependencies:
-- condition: db.bundleTestDB
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - phpmyadmin-database
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: db.bundleTestDB
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - phpmyadmin-database
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: phpMyAdmin is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. phpMyAdmin supports a wide range of operations on MySQL and MariaDB.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/phpmyadmin/img/phpmyadmin-stack-220x234.png
 keywords:
-- mariadb
-- mysql
-- phpmyadmin
+  - mariadb
+  - mysql
+  - phpmyadmin
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: phpmyadmin
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/phpmyadmin
-version: 16.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/phpmyadmin
+version: 16.2.3

@@ -12,32 +12,32 @@ annotations:
 apiVersion: v2
 appVersion: 5.83.0
 dependencies:
-- condition: mysql.enabled
-  name: mysql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - ghost-database
-  version: 11.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mysql.enabled
+    name: mysql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - ghost-database
+    version: 11.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Ghost is an open source publishing platform designed to create blogs, magazines, and news sites. It includes a simple markdown editor with preview, theming, and SEO built-in to simplify editing.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
 keywords:
-- ghost
-- blog
-- http
-- web
-- application
-- nodejs
-- javascript
+  - ghost
+  - blog
+  - http
+  - web
+  - application
+  - nodejs
+  - javascript
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: ghost
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/ghost
-version: 21.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/ghost
+version: 21.1.3

@@ -447,11 +447,11 @@ postgresql:
   ## Pod disruption budget configuration
   ## @param postgresql.pdb.create Specifies whether to create a Pod disruption budget for PostgreSQL with Repmgr
   ## @param postgresql.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param postgresql.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param postgresql.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `postgresql.pdb.minAvailable` and `postgresql.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## PostgreSQL configuration parameters
   ## @param postgresql.username PostgreSQL username
@@ -954,11 +954,11 @@ witness:
   ## Pod disruption budget configuration
   ## @param witness.pdb.create Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr
   ## @param witness.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param witness.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param witness.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `witness.pdb.minAvailable` and `witness.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param witness.upgradeRepmgrExtension Upgrade repmgr extension in the database
   ##
@@ -1462,11 +1462,11 @@ pgpool:
   ## Pod disruption budget configuration
   ## @param pgpool.pdb.create Specifies whether a Pod disruption budget should be created for Pgpool pods
   ## @param pgpool.pdb.minAvailable Minimum number / percentage of pods that should remain scheduled
-  ## @param pgpool.pdb.maxUnavailable Maximum number / percentage of pods that may be made unavailable
+  ## @param pgpool.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pgpool.pdb.minAvailable` and `pgpool.pdb.maxUnavailable` are empty.
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param pgpool.updateStrategy Strategy used to replace old Pods by new ones
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy

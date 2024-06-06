@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.3 (2024-05-30)
+## 8.2.4 (2024-06-04)
 
-* [bitnami/mongodb-sharded] Fix mongos livenessProbe ([#26566](https://github.com/bitnami/charts/pull/26566))
+* [bitnami/mongodb-sharded] Bump chart version ([#26651](https://github.com/bitnami/charts/pull/26651))
+
+## <small>8.2.3 (2024-05-31)</small>
+
+* [bitnami/mongodb-sharded] Fix mongos livenessProbe (#26566) ([274aecb](https://github.com/bitnami/charts/commit/274aecb28ebecabbe5c7eaeb9fa7695af3d5b89f)), closes [#26566](https://github.com/bitnami/charts/issues/26566)
 
 ## <small>8.2.2 (2024-05-28)</small>
 
