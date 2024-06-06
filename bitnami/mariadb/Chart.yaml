@@ -6,32 +6,32 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: mariadb
-      image: docker.io/bitnami/mariadb:11.3.2-debian-12-r5
+      image: docker.io/bitnami/mariadb:11.3.2-debian-12-r6
     - name: mysqld-exporter
-      image: docker.io/bitnami/mysqld-exporter:0.15.1-debian-12-r16
+      image: docker.io/bitnami/mysqld-exporter:0.15.1-debian-12-r17
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
 appVersion: 11.3.2
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: MariaDB is an open source, community-developed SQL database server that is widely in use around the world due to its enterprise features, flexibility, and collaboration with leading tech firms.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mariadb/img/mariadb-stack-220x234.png
 keywords:
-  - mariadb
-  - mysql
-  - database
-  - sql
-  - prometheus
+- mariadb
+- mysql
+- database
+- sql
+- prometheus
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: mariadb
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/mariadb
-version: 18.2.1
+- https://github.com/bitnami/charts/tree/main/bitnami/mariadb
+version: 18.2.2
