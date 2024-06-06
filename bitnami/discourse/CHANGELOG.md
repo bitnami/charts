@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.2.2 (2024-06-05)
+## 13.2.3 (2024-06-06)
 
-* [bitnami/discourse] Bump chart version ([#26825](https://github.com/bitnami/charts/pull/26825))
+* [bitnami/discourse] Release 13.2.3 ([#26923](https://github.com/bitnami/charts/pull/26923))
+
+## <small>13.2.2 (2024-06-05)</small>
+
+* [bitnami/discourse] Bump chart version (#26825) ([b6ab645](https://github.com/bitnami/charts/commit/b6ab645721eb7f3dea446f32dc6ebe23f03051cd)), closes [#26825](https://github.com/bitnami/charts/issues/26825)
 
 ## <small>13.2.1 (2024-06-05)</small>
 
