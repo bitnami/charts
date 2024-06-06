@@ -1,8 +1,12 @@
 # Changelog
 
-## 11.3.0 (2024-06-04)
+## 11.3.1 (2024-06-06)
 
-* [bitnami/cassandra] Enable PodDisruptionBudgets ([#26687](https://github.com/bitnami/charts/pull/26687))
+* [bitnami/cassandra] Release 11.3.1 ([#26940](https://github.com/bitnami/charts/pull/26940))
+
+## 11.3.0 (2024-06-05)
+
+* [bitnami/cassandra] Enable PodDisruptionBudgets (#26687) ([70cc69f](https://github.com/bitnami/charts/commit/70cc69f7216348eb03e34b47d096dc60e82770b3)), closes [#26687](https://github.com/bitnami/charts/issues/26687)
 
 ## <small>11.2.1 (2024-06-04)</small>
 
