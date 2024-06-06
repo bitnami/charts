@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.2 (2024-06-06)
+## 1.4.3 (2024-06-06)
 
-* [bitnami/mlflow] Fix tests definition and remove legacy code from PDBs ([#26895](https://github.com/bitnami/charts/pull/26895))
+* [bitnami/mlflow] Release 1.4.3 ([#26987](https://github.com/bitnami/charts/pull/26987))
+
+## <small>1.4.2 (2024-06-06)</small>
+
+* [bitnami/mlflow] Fix tests definition and remove legacy code from PDBs (#26895) ([00bd196](https://github.com/bitnami/charts/commit/00bd196165d80375faff351e6920cac6736ebcd2)), closes [#26895](https://github.com/bitnami/charts/issues/26895)
 
 ## <small>1.4.1 (2024-06-05)</small>
 
