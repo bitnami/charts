@@ -358,7 +358,7 @@ podAntiAffinityPreset: soft
 ##
 pdb:
   create: true
-  minAvailable: 1
+  minAvailable: ""
   maxUnavailable: ""
 ## Node affinity preset
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
