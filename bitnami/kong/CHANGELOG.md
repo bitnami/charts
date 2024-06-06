@@ -1,8 +1,12 @@
 # Changelog
 
-## 12.2.0 (2024-06-05)
+## 12.2.1 (2024-06-06)
 
-* [bitnami/kong] Enable PodDisruptionBudgets ([#26699](https://github.com/bitnami/charts/pull/26699))
+* [bitnami/kong] Release 12.2.1 ([#26970](https://github.com/bitnami/charts/pull/26970))
+
+## 12.2.0 (2024-06-06)
+
+* [bitnami/kong] Enable PodDisruptionBudgets (#26699) ([7361954](https://github.com/bitnami/charts/commit/7361954763b8602aedf7345f133874ab4eea6ac2)), closes [#26699](https://github.com/bitnami/charts/issues/26699)
 
 ## <small>12.1.5 (2024-06-05)</small>
 
