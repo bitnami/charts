@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.3.3 (2024-06-04)
+## 14.4.0 (2024-06-04)
 
-* [bitnami/rabbitmq] Bump chart version ([#26664](https://github.com/bitnami/charts/pull/26664))
+* [bitnami/rabbitmq] Enable PodDisruptionBudgets ([#26222](https://github.com/bitnami/charts/pull/26222))
+
+## <small>14.3.3 (2024-06-04)</small>
+
+* [bitnami/rabbitmq] Bump chart version (#26664) ([95ffecb](https://github.com/bitnami/charts/commit/95ffecbeb93eae95ead8a2c67a77776ba8c9c87d)), closes [#26664](https://github.com/bitnami/charts/issues/26664)
 
 ## <small>14.3.2 (2024-06-01)</small>
 
