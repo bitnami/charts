@@ -747,7 +747,7 @@ ingress:
 ## @param pdb.maxUnavailable Maximum unavailable Fluent Bit replicas (expressed in percentage)
 ##
 pdb:
-  create: false
+  create: true
   minAvailable: ""
   maxUnavailable: "50%"
 ## Prometheus metrics
