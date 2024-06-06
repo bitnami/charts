@@ -20,8 +20,8 @@ spec:
   {{- if .Values.tracking.pdb.minAvailable }}
   minAvailable: {{ .Values.tracking.pdb.minAvailable }}
   {{- end  }}
-  {{- if .Values.tracking.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.tracking.pdb.maxUnavailable }}
+  {{- if or .Values.tracking.pdb.maxUnavailable ( not .Values.tracking.pdb.minAvailable ) }}
+  maxUnavailable: {{ .Values.tracking.pdb.maxUnavailable | default 1 }}
   {{- end  }}
   {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.tracking.podLabels .Values.commonLabels) "context" .) | fromYaml }}
   selector:

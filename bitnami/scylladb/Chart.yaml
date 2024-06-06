@@ -12,22 +12,22 @@ annotations:
 apiVersion: v2
 appVersion: 5.4.6
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: ScyllaDB is an open-source, distributed NoSQL wide-column data store. Written in C++, it is designed for high throughput and low latency, compatible with Apache Cassandra.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/scylladb/img/scylladb-stack-220x234.png
 keywords:
-- scylladb
-- database
-- nosql
+  - scylladb
+  - database
+  - nosql
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: scylladb
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/scylladb
-version: 0.1.5
+  - https://github.com/bitnami/charts/tree/main/bitnami/scylladb
+version: 0.1.7

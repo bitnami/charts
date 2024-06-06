@@ -10,28 +10,28 @@ annotations:
 apiVersion: v2
 appVersion: 7.6.1
 dependencies:
-- condition: kafka.enabled
-  name: kafka
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 29.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: kafka.enabled
+    name: kafka
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 29.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Confluent Schema Registry provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/schema-registry/img/schema-registry-stack-220x234.png
 keywords:
-- schema-registry
-- confluent
-- kafka
-- zookeeper
-- streaming
+  - schema-registry
+  - confluent
+  - kafka
+  - zookeeper
+  - streaming
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: schema-registry
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 19.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
+version: 19.1.2

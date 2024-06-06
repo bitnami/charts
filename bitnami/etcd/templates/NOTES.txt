@@ -109,13 +109,5 @@ To connect to your etcd server from outside the cluster execute the following co
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "etcd.validateValues" . }}
-{{- $requiredPassword := list -}}
-{{- $secretName := include "etcd.secretName" . -}}
-{{- if and (or .Values.auth.rbac.create .Values.auth.rbac.enabled) (not .Values.auth.rbac.existingSecret) -}}
-  {{- $requiredEtcdPassword := dict "valueKey" "auth.rbac.rootPassword" "secret" $secretName "field" "etcd-root-password" -}}
-  {{- $requiredPassword = append $requiredPassword $requiredEtcdPassword -}}
-{{- end -}}
-{{- $requiredEtcdPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPassword "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredEtcdPasswordErrors) "context" $) -}}
 {{- include "common.warnings.resources" (dict "sections" (list "disasterRecovery.cronjob" "" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.volumePermissions.image) "context" $) }}
