@@ -11,7 +11,11 @@ it('allows adding a project and a quality gate', () => {
   cy.visit('/projects');
   // Step 1: Create a project
   cy.fixture('projects').then((projects) => {
-    cy.get('#project-creation-menu-trigger').click();
+    cy.get('body').then(($body) => {
+      if ($body.find('#project-creation-menu-trigger')) {
+        cy.get('#project-creation-menu-trigger').click();
+      }
+    });
     cy.get('[href="/projects/create?mode=manual"]').click();
     cy.get('#project-name').type(`${projects.newProject.name} ${random}`);
     cy.get('[type="submit"]').contains('Next').click();
