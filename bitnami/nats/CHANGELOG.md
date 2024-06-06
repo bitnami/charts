@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.5 (2024-06-05)
+## 8.2.6 (2024-06-06)
 
-* [bitnami/nats] Align PodDisruptionBudgets with templates ([#26707](https://github.com/bitnami/charts/pull/26707))
+* [bitnami/nats] Release 8.2.6 ([#26990](https://github.com/bitnami/charts/pull/26990))
+
+## <small>8.2.5 (2024-06-06)</small>
+
+* [bitnami/nats] Align PodDisruptionBudgets with templates (#26707) ([db78a05](https://github.com/bitnami/charts/commit/db78a056f96576ac2ec4b85ac78fbf85a40630d4)), closes [#26707](https://github.com/bitnami/charts/issues/26707)
 
 ## <small>8.2.4 (2024-06-05)</small>
 
