@@ -1,8 +1,12 @@
 # Changelog
 
-## 28.2.2 (2024-06-05)
+## 28.2.3 (2024-06-06)
 
-* [bitnami/redmine] Bump chart version ([#26858](https://github.com/bitnami/charts/pull/26858))
+* [bitnami/redmine] Release 28.2.3 ([#27011](https://github.com/bitnami/charts/pull/27011))
+
+## <small>28.2.2 (2024-06-05)</small>
+
+* [bitnami/redmine] Bump chart version (#26858) ([28a494a](https://github.com/bitnami/charts/commit/28a494a3e666d1ff9bd6fe3ecca921ea041dc1e8)), closes [#26858](https://github.com/bitnami/charts/issues/26858)
 
 ## <small>28.2.1 (2024-06-05)</small>
 

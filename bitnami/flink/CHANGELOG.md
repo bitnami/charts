@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.2 (2024-06-06)
+## 1.3.3 (2024-06-06)
 
-* [bitnami/flink] Release 1.3.2 ([#26898](https://github.com/bitnami/charts/pull/26898))
+* [bitnami/flink] Release 1.3.3 ([#26950](https://github.com/bitnami/charts/pull/26950))
+
+## <small>1.3.2 (2024-06-06)</small>
+
+* [bitnami/flink] Release 1.3.2 (#26898) ([63273f2](https://github.com/bitnami/charts/commit/63273f25a3329be9f570ba31327dc7d6f3bc29b6)), closes [#26898](https://github.com/bitnami/charts/issues/26898)
 
 ## <small>1.3.1 (2024-06-04)</small>
 

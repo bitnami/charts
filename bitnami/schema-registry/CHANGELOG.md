@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.1.2 (2024-06-05)
+## 19.1.3 (2024-06-06)
 
-* [bitnami/schema-registry] Bump chart version ([#26859](https://github.com/bitnami/charts/pull/26859))
+* [bitnami/schema-registry] Release 19.1.3 ([#27015](https://github.com/bitnami/charts/pull/27015))
+
+## <small>19.1.2 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26859) ([cc07701](https://github.com/bitnami/charts/commit/cc07701f428b486e8c4f35fae719e1a513ee56ef)), closes [#26859](https://github.com/bitnami/charts/issues/26859)
 
 ## <small>19.1.1 (2024-06-05)</small>
 

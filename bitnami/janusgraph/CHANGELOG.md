@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.6 (2024-06-06)
+## 0.3.7 (2024-06-06)
 
-* [bitnami/janusgraph] Release 0.3.6 ([#26894](https://github.com/bitnami/charts/pull/26894))
+* [bitnami/janusgraph] Release 0.3.7 ([#26963](https://github.com/bitnami/charts/pull/26963))
+
+## <small>0.3.6 (2024-06-06)</small>
+
+* [bitnami/janusgraph] Release 0.3.6 (#26894) ([b684e36](https://github.com/bitnami/charts/commit/b684e368fbfba2a7987e094a3fd2ee7d844fb303)), closes [#26894](https://github.com/bitnami/charts/issues/26894)
 
 ## <small>0.3.5 (2024-06-06)</small>
 

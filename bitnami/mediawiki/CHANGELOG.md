@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.4 (2024-06-06)
+## 20.2.5 (2024-06-06)
 
-* [bitnami/mediawiki] Release 20.2.4 ([#26906](https://github.com/bitnami/charts/pull/26906))
+* [bitnami/mediawiki] Release 20.2.5 ([#26979](https://github.com/bitnami/charts/pull/26979))
+
+## <small>20.2.4 (2024-06-06)</small>
+
+* [bitnami/mediawiki] Release 20.2.4 (#26906) ([ee182f2](https://github.com/bitnami/charts/commit/ee182f2b932b6f88c1928e3c3292797bb8453df1)), closes [#26906](https://github.com/bitnami/charts/issues/26906)
 
 ## <small>20.2.3 (2024-06-05)</small>
 

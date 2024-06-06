@@ -1,8 +1,5 @@
 # Changelog
 
-## 18.3.0 (2024-06-06)
-
-* [bitnami/airflow] Enable PodDisruptionBudgets ([#26684](https://github.com/bitnami/charts/pull/26684))
 
 ## <small>18.2.4 (2024-06-06)</small>
 

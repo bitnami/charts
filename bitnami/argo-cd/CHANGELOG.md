@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.4.4 (2024-06-06)
+## 6.4.5 (2024-06-06)
 
-* [bitnami/argo-cd] Release 6.4.4 ([#26883](https://github.com/bitnami/charts/pull/26883))
+* [bitnami/argo-cd] Release 6.4.5 ([#26938](https://github.com/bitnami/charts/pull/26938))
+
+## <small>6.4.4 (2024-06-06)</small>
+
+* [bitnami/argo-cd] Release 6.4.4 (#26883) ([e8de061](https://github.com/bitnami/charts/commit/e8de0612539c6b0e4b1bad432378cd2a5a5767cb)), closes [#26883](https://github.com/bitnami/charts/issues/26883)
 
 ## <small>6.4.3 (2024-06-05)</small>
 
