@@ -14,29 +14,29 @@ annotations:
 apiVersion: v2
 appVersion: 1.26.0
 dependencies:
-  - condition: redis.enabled
-    name: redis
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 19.x.x
-  - condition: mongodb.enabled
-    name: mongodb
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 15.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 19.x.x
+- condition: mongodb.enabled
+  name: mongodb
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 15.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Appsmith is an open source platform for building and maintaining internal tools, such as custom dashboards, admin panels or CRUD apps.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/appsmith/img/appsmith-stack-220x234.png
 keywords:
-  - development
-  - dashboards
+- development
+- dashboards
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: appsmith
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 3.3.3
+- https://github.com/bitnami/charts/tree/main/bitnami/appsmith
+version: 3.3.4
