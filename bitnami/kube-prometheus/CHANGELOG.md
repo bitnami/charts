@@ -6,7 +6,7 @@
 
 ## <small>9.3.3 (2024-06-05)</small>
 
-* [bitnami/kube-prometheus] Bump chart version ([#26857](https://github.com/bitnami/charts/pull/26857))
+* [bitnami/kube-prometheus] Bump chart version (#26857) ([12075c6](https://github.com/bitnami/charts/commit/12075c61aa7fd641337d67943dabb235e5c6e789)), closes [#26857](https://github.com/bitnami/charts/issues/26857)
 
 ## <small>9.3.2 (2024-06-05)</small>
 
