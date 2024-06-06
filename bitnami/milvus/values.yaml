@@ -5318,6 +5318,29 @@ externalKafka:
     existingSecret: ""
     existingSecretPasswordKey: "kafka-root-password"
     enabledMechanisms: "PLAIN"
+  ## External kafka TLS connection configuration
+  ##
+  tls:
+    ## @param externalKafka.tls.enabled Enable TLS for kafka client connections.
+    ##
+    enabled: false
+    ## @param externalKafka.tls.existingSecret Name of the existing secret containing the TLS certificates for external kafka client communications.
+    ##
+    existingSecret: ""
+    ## @param externalKafka.tls.cert The secret key from the existingSecret if 'cert' key different from the default (tls.crt)
+    ##
+    cert: tls.crt
+    ## @param externalKafka.tls.key The secret key from the existingSecret if 'key' key different from the default (tls.key)
+    ##
+    key: tls.key
+    ## @param externalKafka.tls.caCert The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)
+    ##
+    caCert: ca.crt
+    ## @param externalKafka.tls.keyPassword Password to access the password-protected PEM key if necessary.
+    ##
+    keyPassword: ""
+
+
 ## @section etcd sub-chart parameters
 ##
 etcd:
