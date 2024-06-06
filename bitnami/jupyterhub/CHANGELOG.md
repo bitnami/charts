@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.2.4 (2024-06-06)
+## 7.2.5 (2024-06-06)
 
-* Draft: [bitnami/jupyterhub] Fix security context render in user pod ([#26917](https://github.com/bitnami/charts/pull/26917))
+* [bitnami/jupyterhub] Release 7.2.5 ([#26965](https://github.com/bitnami/charts/pull/26965))
+
+## <small>7.2.4 (2024-06-06)</small>
+
+* [bitnami/jupyterhub] Fix security context render in user pod (#26917) ([7a37bc2](https://github.com/bitnami/charts/commit/7a37bc29a3103c74b0f0f0b8bf9f71a70135dbe4)), closes [#26917](https://github.com/bitnami/charts/issues/26917)
 
 ## <small>7.2.3 (2024-06-05)</small>
 
