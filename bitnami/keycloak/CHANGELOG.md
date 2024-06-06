@@ -1,8 +1,12 @@
 # Changelog
 
+## 21.4.1 (2024-06-06)
+
+* [bitnami/keycloak] Release 21.4.1 ([#26967](https://github.com/bitnami/charts/pull/26967))
+
 ## 21.4.0 (2024-06-06)
 
-* [bitnami/keycloak] Enable PodDisruptionBudgets ([#26698](https://github.com/bitnami/charts/pull/26698))
+* [bitnami/keycloak] Enable PodDisruptionBudgets (#26698) ([503099e](https://github.com/bitnami/charts/commit/503099eea8bc4abee20e571f90a5ce85c2ed7788)), closes [#26698](https://github.com/bitnami/charts/issues/26698)
 
 ## <small>21.3.4 (2024-06-05)</small>
 
