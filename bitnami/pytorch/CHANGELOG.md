@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.2.1 (2024-06-04)
+## 4.2.2 (2024-06-06)
 
-* [bitnami/pytorch] Bump chart version ([#26663](https://github.com/bitnami/charts/pull/26663))
+* [bitnami/pytorch] Release 4.2.2 ([#26887](https://github.com/bitnami/charts/pull/26887))
+
+## <small>4.2.1 (2024-06-04)</small>
+
+* [bitnami/pytorch] Bump chart version (#26663) ([b241339](https://github.com/bitnami/charts/commit/b241339c152e88fce46b8e2ce01cc4dde9ec919a)), closes [#26663](https://github.com/bitnami/charts/issues/26663)
 
 ## 4.2.0 (2024-05-29)
 

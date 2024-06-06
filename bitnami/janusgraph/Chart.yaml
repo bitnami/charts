@@ -6,36 +6,36 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: janusgraph
-      image: docker.io/bitnami/janusgraph:1.0.0-debian-12-r4
+      image: docker.io/bitnami/janusgraph:1.0.0-debian-12-r5
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:0.20.0-debian-12-r17
+      image: docker.io/bitnami/jmx-exporter:0.20.0-debian-12-r18
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
 appVersion: 1.0.0
 dependencies:
-  - condition: storage.cassandra.enabled
-    name: cassandra
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 11.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: storage.cassandra.enabled
+  name: cassandra
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 11.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: JanusGraph is a scalable graph database optimized for storing and querying graphs containing hundreds of billions of vertices and edges distributed across a multi-machine cluster.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/janusgraph/img/janusgraph-stack-220x234.png
 keywords:
-  - janusgraph
-  - graph
-  - database
+- janusgraph
+- graph
+- database
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: janusgraph
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/janusgraph
-  - https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
-  - https://github.com/janusgraph/janusgraph
-version: 0.3.4
+- https://github.com/bitnami/charts/tree/main/bitnami/janusgraph
+- https://github.com/bitnami/containers/tree/main/bitnami/janusgraph
+- https://github.com/janusgraph/janusgraph
+version: 0.3.6

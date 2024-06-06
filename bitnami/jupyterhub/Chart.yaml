@@ -10,30 +10,30 @@ annotations:
     - name: jupyter-base-notebook
       image: docker.io/bitnami/jupyter-base-notebook:4.1.5-debian-12-r6
     - name: jupyterhub
-      image: docker.io/bitnami/jupyterhub:4.1.5-debian-12-r6
+      image: docker.io/bitnami/jupyterhub:4.1.5-debian-12-r7
     - name: os-shell
       image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
 appVersion: 4.1.5
 dependencies:
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 15.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 15.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: JupyterHub brings the power of notebooks to groups of users. It gives users access to computational environments and resources without burdening the users with installation and maintenance tasks.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/jupyterhub/img/jupyterhub-stack-220x234.png
 keywords:
-  - python
-  - scientific
+- python
+- scientific
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: jupyterhub
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
