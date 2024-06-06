@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.3 (2024-06-05)
+## 2.3.4 (2024-06-06)
 
-* [bitnami/flux] Align PodDisruptionBudgets with templates ([#26694](https://github.com/bitnami/charts/pull/26694))
+* [bitnami/flux] Release 2.3.4 ([#26956](https://github.com/bitnami/charts/pull/26956))
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/flux] Align PodDisruptionBudgets with templates (#26694) ([328d102](https://github.com/bitnami/charts/commit/328d102cf4a18663989cf3b56c90c85319b30844)), closes [#26694](https://github.com/bitnami/charts/issues/26694)
 
 ## <small>2.3.2 (2024-06-05)</small>
 
