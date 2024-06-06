@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.4 (2024-06-05)
+## 0.3.5 (2024-06-06)
 
-* [bitnami/seaweedfs] Bump chart version ([#26861](https://github.com/bitnami/charts/pull/26861))
+* [bitnami/seaweedfs] Release 0.3.5 ([#27016](https://github.com/bitnami/charts/pull/27016))
+
+## <small>0.3.4 (2024-06-05)</small>
+
+* [bitnami/seaweedfs] Bump chart version (#26861) ([335d6c9](https://github.com/bitnami/charts/commit/335d6c921ab539585d8908c56498591f6f7ace0f)), closes [#26861](https://github.com/bitnami/charts/issues/26861)
 
 ## <small>0.3.3 (2024-06-05)</small>
 
