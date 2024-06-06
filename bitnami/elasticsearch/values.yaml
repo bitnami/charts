@@ -476,8 +476,8 @@ master:
   ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param master.nameOverride String to partially override elasticsearch.master.fullname
   ##
@@ -873,8 +873,8 @@ data:
   ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param data.nameOverride String to partially override elasticsearch.data.fullname
   ##
@@ -1267,8 +1267,8 @@ coordinating:
   ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param coordinating.nameOverride String to partially override elasticsearch.coordinating.fullname
   ##
@@ -1624,8 +1624,8 @@ ingest:
   ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## @param ingest.nameOverride String to partially override elasticsearch.ingest.fullname
   ##
