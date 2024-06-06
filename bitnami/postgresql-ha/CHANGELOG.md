@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.1 (2024-06-04)
+## 14.2.2 (2024-06-06)
 
-* [bitnami/postgresql-ha] Bump chart version ([#26661](https://github.com/bitnami/charts/pull/26661))
+* [bitnami/postgresql-ha] Release 14.2.2 ([#26888](https://github.com/bitnami/charts/pull/26888))
+
+## <small>14.2.1 (2024-06-04)</small>
+
+* [bitnami/postgresql-ha] Bump chart version (#26661) ([46ef6a0](https://github.com/bitnami/charts/commit/46ef6a0369cfaa4c0fc089366b9ec3a3e0ba9114)), closes [#26661](https://github.com/bitnami/charts/issues/26661)
 
 ## 14.2.0 (2024-06-03)
 
