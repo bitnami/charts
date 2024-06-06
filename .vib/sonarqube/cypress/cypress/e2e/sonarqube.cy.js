@@ -8,13 +8,12 @@ import { random } from '../support/utils';
 
 it('allows adding a project and a quality gate', () => {
   cy.login();
-  cy.visit('/admin/projects_management');
-
+  cy.visit('/projects');
   // Step 1: Create a project
   cy.fixture('projects').then((projects) => {
-    cy.contains('Create Project').click();
+    cy.get('#project-creation-menu-trigger').click();
+    cy.get('[href="/projects/create?mode=manual"]').click();
     cy.get('#project-name').type(`${projects.newProject.name} ${random}`);
-    cy.get('#project-key').type(`${projects.newProject.key}${random}`);
     cy.get('[type="submit"]').contains('Next').click();
     cy.get('span').contains('Use the global setting').click();
     cy.get('[type="submit"]').contains('Create').click();
