@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.2.1 (2024-06-06)
+
+* [bitnami/grafana-mimir] Release 1.2.1 ([#26954](https://github.com/bitnami/charts/pull/26954))
+
 ## 1.2.0 (2024-06-06)
 
-* [bitnami/grafana-mimir] Enable PodDisruptionBudgets ([#26695](https://github.com/bitnami/charts/pull/26695))
+* [bitnami/grafana-mimir] Enable PodDisruptionBudgets (#26695) ([bae36af](https://github.com/bitnami/charts/commit/bae36afa871eb80138dcbcc12ebbc663038108b3)), closes [#26695](https://github.com/bitnami/charts/issues/26695)
 
 ## <small>1.1.5 (2024-06-06)</small>
 
