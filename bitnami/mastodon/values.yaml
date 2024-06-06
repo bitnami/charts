@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mastodon
-  tag: 4.2.8-debian-12-r10
+  tag: 4.2.9-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -473,6 +473,16 @@ web:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param web.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param web.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param web.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `web.pdb.minAvailable` and `web.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Mastodon Web Traffic Exposure Parameters
   ##
   service:
@@ -822,6 +832,16 @@ sidekiq:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param sidekiq.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param sidekiq.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param sidekiq.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `sidekiq.pdb.minAvailable` and `sidekiq.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Network Policy configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -1122,6 +1142,16 @@ streaming:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param streaming.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param streaming.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param streaming.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `streaming.pdb.minAvailable` and `streaming.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Mastodon Streaming Traffic Exposure Parameters
   ##
   service:
@@ -1556,7 +1586,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1845,10 +1875,6 @@ apache:
   # We need to change the liveness probe to use the Mastodon streaming health checkpoint
   # We use the streaming because it is the last service to be initialized together with
   # sidekiq
-  ## @param apache.livenessProbe.path Apache liveness probe path
-  ##
-  livenessProbe:
-    path: "/api/v1/streaming/health"
   ## @param apache.readinessProbe.path Apache readiness probe path
   ##
   readinessProbe:

@@ -6,35 +6,35 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: gitea
-      image: docker.io/bitnami/gitea:1.21.11-debian-12-r4
+      image: docker.io/bitnami/gitea:1.22.0-debian-12-r1
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
-appVersion: 1.21.11
+appVersion: 1.22.0
 dependencies:
-- condition: postgresql.enabled
-  name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 15.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 15.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/gitea/img/gitea-stack-220x234.png
 keywords:
-- gitea
-- analytics
-- http
-- web
-- application
-- php
+  - gitea
+  - analytics
+  - http
+  - web
+  - application
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: gitea
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/gitea
-version: 2.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/gitea
+version: 2.3.3

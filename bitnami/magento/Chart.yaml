@@ -18,34 +18,34 @@ annotations:
 apiVersion: v2
 appVersion: 2.4.7
 dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - magento-database
-  version: 18.x.x
-- condition: elasticsearch.enabled
-  name: elasticsearch
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 21.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - magento-database
+    version: 18.x.x
+  - condition: elasticsearch.enabled
+    name: elasticsearch
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 21.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
 keywords:
-- magento
-- e-commerce
-- http
-- web
-- php
+  - magento
+  - e-commerce
+  - http
+  - web
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: magento
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 27.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/magento
+version: 27.2.2

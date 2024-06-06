@@ -6,33 +6,33 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r12
+      image: docker.io/bitnami/oauth2-proxy:7.6.0-debian-12-r13
 apiVersion: v2
 appVersion: 7.6.0
 dependencies:
-- condition: redis.enabled
-  name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 19.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: redis.enabled
+    name: redis
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 19.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/oauth2-proxy/img/oauth2-proxy-stack-220x234.png
 keywords:
-- kubernetes
-- oauth
-- oauth2
-- authentication
-- google
-- github
+  - kubernetes
+  - oauth
+  - oauth2
+  - authentication
+  - google
+  - github
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: oauth2-proxy
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
-version: 5.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
+version: 5.3.3

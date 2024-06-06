@@ -698,6 +698,16 @@ auth:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param auth.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param auth.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param auth.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `auth.pdb.minAvailable` and `auth.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supabase Auth Traffic Exposure Parameters
   ##
   service:
@@ -1100,6 +1110,16 @@ meta:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param meta.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param meta.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param meta.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `meta.pdb.minAvailable` and `meta.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supabase Meta Traffic Exposure Parameters
   ##
   service:
@@ -1518,6 +1538,16 @@ realtime:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param realtime.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param realtime.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param realtime.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `realtime.pdb.minAvailable` and `realtime.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supabase Realtime Traffic Exposure Parameters
   ##
   service:
@@ -1918,6 +1948,16 @@ rest:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param rest.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param rest.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param rest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `rest.pdb.minAvailable` and `rest.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supabase Rest Traffic Exposure Parameters
   ##
   service:
@@ -2324,6 +2364,16 @@ storage:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param storage.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param storage.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param storage.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `storage.pdb.minAvailable` and `storage.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supabase Storage Traffic Exposure Parameters
   ##
   service:
@@ -2775,6 +2825,16 @@ studio:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param studio.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param studio.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param studio.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `studio.pdb.minAvailable` and `studio.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Supabase Studio Traffic Exposure Parameters
   ##
   service:

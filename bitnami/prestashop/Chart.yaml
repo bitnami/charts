@@ -14,28 +14,28 @@ annotations:
 apiVersion: v2
 appVersion: 8.1.6
 dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: PrestaShop is a powerful open source eCommerce platform used by over 250,000 online storefronts worldwide. It is easily customizable, responsive, and includes powerful tools to drive online sales.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/prestashop/img/prestashop-stack-220x234.png
 keywords:
-- prestashop
-- e-commerce
-- http
-- web
-- php
+  - prestashop
+  - e-commerce
+  - http
+  - web
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: prestashop
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/prestashop
-version: 21.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/prestashop
+version: 21.2.2

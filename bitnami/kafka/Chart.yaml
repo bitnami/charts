@@ -9,8 +9,6 @@ annotations:
       image: docker.io/bitnami/jmx-exporter:0.20.0-debian-12-r17
     - name: kafka
       image: docker.io/bitnami/kafka:3.7.0-debian-12-r6
-    - name: kafka-exporter
-      image: docker.io/bitnami/kafka-exporter:1.7.0-debian-12-r27
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.30.1-debian-12-r0
     - name: os-shell
@@ -18,28 +16,28 @@ annotations:
 apiVersion: v2
 appVersion: 3.7.0
 dependencies:
-- condition: zookeeper.enabled
-  name: zookeeper
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: zookeeper.enabled
+    name: zookeeper
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 13.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
 keywords:
-- kafka
-- zookeeper
-- streaming
-- producer
-- consumer
+  - kafka
+  - zookeeper
+  - streaming
+  - producer
+  - consumer
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: kafka
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/kafka
-version: 28.3.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/kafka
+version: 29.2.2

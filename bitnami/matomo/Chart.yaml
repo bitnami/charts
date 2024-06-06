@@ -14,29 +14,29 @@ annotations:
 apiVersion: v2
 appVersion: 5.0.3
 dependencies:
-- condition: mariadb.enabled
-  name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.x.x
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - condition: mariadb.enabled
+    name: mariadb
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 18.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/matomo/img/matomo-stack-220x234.png
 keywords:
-- matomo
-- analytics
-- http
-- web
-- application
-- php
+  - matomo
+  - analytics
+  - http
+  - web
+  - application
+  - php
 maintainers:
-- name: Broadcom, Inc. All Rights Reserved.
-  url: https://github.com/bitnami/charts
+  - name: Broadcom, Inc. All Rights Reserved.
+    url: https://github.com/bitnami/charts
 name: matomo
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/matomo
-version: 7.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/matomo
+version: 7.3.2

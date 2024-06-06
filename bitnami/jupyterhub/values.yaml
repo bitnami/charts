@@ -77,7 +77,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.1.5-debian-12-r5
+    tag: 4.1.5-debian-12-r7
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -520,7 +520,7 @@ hub:
   ## @param hub.pdb.maxUnavailable Set maximum available hub instances
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
     maxUnavailable: ""
   ## @section Hub RBAC parameters
@@ -701,7 +701,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.1-debian-12-r16
+    tag: 4.6.1-debian-12-r25
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -976,7 +976,7 @@ proxy:
   pdb:
     ## @param proxy.pdb.create Deploy Proxy PodDisruptionBudget
     ##
-    create: false
+    create: true
     ## @param proxy.pdb.minAvailable Set minimum available proxy instances
     ##
     minAvailable: ""
@@ -1358,48 +1358,6 @@ imagePuller:
   ## @param imagePuller.extraEnvVarsSecret Name of existing Secret containing extra env vars
   ##
   extraEnvVarsSecret: ""
-  ## @param imagePuller.livenessProbe.enabled Enable livenessProbe on ImagePuller containers
-  ## @param imagePuller.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param imagePuller.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param imagePuller.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param imagePuller.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param imagePuller.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 1
-    periodSeconds: 10
-    failureThreshold: 30
-    timeoutSeconds: 3
-    successThreshold: 1
-  ## @param imagePuller.readinessProbe.enabled Enable readinessProbe on ImagePuller containers
-  ## @param imagePuller.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param imagePuller.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param imagePuller.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param imagePuller.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param imagePuller.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 1
-    periodSeconds: 10
-    failureThreshold: 30
-    timeoutSeconds: 3
-    successThreshold: 1
-  ## @param imagePuller.startupProbe.enabled Enable startupProbe on ImagePuller containers
-  ## @param imagePuller.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param imagePuller.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param imagePuller.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param imagePuller.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param imagePuller.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 1
-    periodSeconds: 10
-    failureThreshold: 30
-    timeoutSeconds: 3
-    successThreshold: 1
   ## @param imagePuller.customStartupProbe Override default startup probe
   ##
   customStartupProbe: {}
@@ -1621,7 +1579,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.1.5-debian-12-r5
+    tag: 4.1.5-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1651,7 +1609,7 @@ singleuser:
   ##
   command: []
   ## @param singleuser.extraEnvVars Extra environment variables that should be set for the user pods
-  ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
+  ## ref: https://zero-to-jupyterhub.readthedocs.io/en/latest/resources/reference.html#singleuser-extraenv
   ##
   extraEnvVars: []
   ## @param singleuser.containerPorts.http Single User container port
@@ -1861,7 +1819,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r21
+  tag: 12-debian-12-r22
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
