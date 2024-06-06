@@ -6,7 +6,7 @@
 
 ## <small>18.2.3 (2024-06-05)</small>
 
-* [bitnami/airflow] Bump chart version ([#26818](https://github.com/bitnami/charts/pull/26818))
+* [bitnami/airflow] Bump chart version (#26818) ([d9021ee](https://github.com/bitnami/charts/commit/d9021ee2d83fb84139ba460181b0ec46519a56d6)), closes [#26818](https://github.com/bitnami/charts/issues/26818)
 
 ## <small>18.2.2 (2024-06-05)</small>
 
