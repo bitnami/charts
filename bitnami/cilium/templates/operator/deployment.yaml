@@ -182,6 +182,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            # Required for gops
             - name: empty-dir
               mountPath: /.config
               subPath: local-config-dir

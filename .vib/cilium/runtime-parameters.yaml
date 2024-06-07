@@ -16,5 +16,17 @@ agent:
   serviceAccount:
     create: true
     automountServiceAccountToken: true
+  metrics:
+    enabled: true
+operator:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+    runAsGroup: 1002
+  metrics:
+    enabled: true
 rbac:
   create: true
