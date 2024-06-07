@@ -372,15 +372,17 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Cilium Agent Network Policies Parameters
 
-| Name                                          | Description                                                                        | Value  |
-| --------------------------------------------- | ---------------------------------------------------------------------------------- | ------ |
-| `agent.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Cilium Agent               | `true` |
-| `agent.networkPolicy.allowExternal`           | Don't require server label for connections                                         | `true` |
-| `agent.networkPolicy.allowExternalEgress`     | Allow the Cilium Agent pods to access any range of port and all destinations.      | `true` |
-| `agent.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                       | `[]`   |
-| `agent.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true) | `[]`   |
-| `agent.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                             | `{}`   |
-| `agent.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                         | `{}`   |
+| Name                                          | Description                                                                                                     | Value  |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------ |
+| `agent.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Cilium Agent                                            | `true` |
+| `agent.networkPolicy.allowExternal`           | Don't require server label for connections                                                                      | `true` |
+| `agent.networkPolicy.allowExternalEgress`     | Allow the Cilium Agent pods to access any range of port and all destinations.                                   | `true` |
+| `agent.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `agent.networkPolicy.allowExternal` is true. | `true` |
+| `agent.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                    | `[]`   |
+| `agent.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                              | `[]`   |
+| `agent.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `agent.networkPolicy.allowExternal` is true.       | `{}`   |
+| `agent.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                          | `{}`   |
+| `agent.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                      | `{}`   |
 
 ### Cilium Agent Metrics Parameters
 
@@ -501,15 +503,17 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Cilium Operator Network Policies Parameters
 
-| Name                                             | Description                                                                        | Value  |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------- | ------ |
-| `operator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Cilium Operator            | `true` |
-| `operator.networkPolicy.allowExternal`           | Don't require server label for connections                                         | `true` |
-| `operator.networkPolicy.allowExternalEgress`     | Allow the Cilium Operator pods to access any range of port and all destinations.   | `true` |
-| `operator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                       | `[]`   |
-| `operator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true) | `[]`   |
-| `operator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                             | `{}`   |
-| `operator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                         | `{}`   |
+| Name                                             | Description                                                                                                        | Value  |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------ |
+| `operator.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Cilium Operator                                            | `true` |
+| `operator.networkPolicy.allowExternal`           | Don't require server label for connections                                                                         | `true` |
+| `operator.networkPolicy.allowExternalEgress`     | Allow the Cilium Operator pods to access any range of port and all destinations.                                   | `true` |
+| `operator.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `operator.networkPolicy.allowExternal` is true. | `true` |
+| `operator.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                       | `[]`   |
+| `operator.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                                 | `[]`   |
+| `operator.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `operator.networkPolicy.allowExternal` is true.       | `{}`   |
+| `operator.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                             | `{}`   |
+| `operator.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                         | `{}`   |
 
 ### Cilium Operator Metrics Parameters
 

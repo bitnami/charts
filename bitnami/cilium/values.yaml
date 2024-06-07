@@ -812,6 +812,9 @@ agent:
     ## @param agent.networkPolicy.allowExternalEgress Allow the Cilium Agent pods to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param agent.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `agent.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param agent.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -845,6 +848,12 @@ agent:
     ##                   - frontend
     ##
     extraEgress: []
+    ## @param agent.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `agent.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
     ## @param agent.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param agent.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
@@ -1272,6 +1281,9 @@ operator:
     ## @param operator.networkPolicy.allowExternalEgress Allow the Cilium Operator pods to access any range of port and all destinations.
     ##
     allowExternalEgress: true
+    ## @param operator.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `operator.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
     ## @param operator.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
     ## e.g:
     ## extraIngress:
@@ -1305,6 +1317,12 @@ operator:
     ##                   - frontend
     ##
     extraEgress: []
+    ## @param operator.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `operator.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
     ## @param operator.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
     ## @param operator.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
     ##
