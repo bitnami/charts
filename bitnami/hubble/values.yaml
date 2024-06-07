@@ -481,7 +481,7 @@ relay:
   service:
     ## @param relay.service.type Hubble Relay service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
     ## @param relay.service.ports.grpc Hubble Relay service gRPC port
     ## @param relay.service.ports.pprof Hubble Relay service pprof port
     ## @param relay.service.ports.gops Hubble Relay service gops port
