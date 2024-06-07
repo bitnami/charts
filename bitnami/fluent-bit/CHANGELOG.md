@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.3.0 (2024-06-04)
+## 2.3.1 (2024-06-07)
 
-* [bitnami/fluent-bit] Enable PodDisruptionBudgets ([#26693](https://github.com/bitnami/charts/pull/26693))
+* [bitnami/fluent-bit] Release 2.3.1 ([#26949](https://github.com/bitnami/charts/pull/26949))
+
+## 2.3.0 (2024-06-06)
+
+* [bitnami/fluent-bit] Enable PodDisruptionBudgets (#26693) ([a746ed1](https://github.com/bitnami/charts/commit/a746ed1b65609c31ca517a6851c4b13668df016d)), closes [#26693](https://github.com/bitnami/charts/issues/26693)
 
 ## <small>2.2.3 (2024-06-04)</small>
 
