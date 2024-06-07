@@ -66,7 +66,7 @@ hubble-socket-path: "/opt/bitnami/cilium/var/run/hubble.sock"
 hubble-export-file-max-size-mb: "10"
 hubble-export-file-max-backups: "5"
 hubble-listen-address: {{ printf ":%d" (int .Values.agent.containerPorts.hubblePeer) | quote }}
-hubble-disable-tls: {{ ternary "true" "false" .Values.tls.enabled | quote }}
+hubble-disable-tls: {{ ternary "false" "true" .Values.tls.enabled | quote }}
 {{- if .Values.tls.enabled }}
 hubble-tls-cert-file: /certs/hubble/tls.crt
 hubble-tls-key-file: /certs/hubble/tls.key
