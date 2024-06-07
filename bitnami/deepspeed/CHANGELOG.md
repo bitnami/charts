@@ -2,7 +2,7 @@
 
 ## 2.2.4 (2024-06-07)
 
-* [bitnami/deepspeed] Release 2.2.2 ([#26889](https://github.com/bitnami/charts/pull/26889))
+* [bitnami/deepspeed] Release 2.2.4 ([#26889](https://github.com/bitnami/charts/pull/26889))
 
 ## <small>2.2.3 (2024-06-06)</small>
 
