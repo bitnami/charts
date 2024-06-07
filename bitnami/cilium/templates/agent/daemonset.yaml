@@ -82,8 +82,8 @@ spec:
         {{- if .Values.agent.cniPlugin.install }}
           {{- include "cilium.agent.initContainers.installCniPlugin" . | nindent 8 }}
         {{- end }}
-        {{- if .Values.agent.initContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
+        {{- if .Values.agent.extraInitContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraInitContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: cilium-agent
@@ -216,23 +216,23 @@ spec:
             {{- end }}
             - name: cilium-run
               mountPath: /opt/bitnami/cilium/var/run
-            - name: hostCniBin
+            - name: host-cni-bin
               mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
-            - name: hostCniConf
+            - name: host-cni-conf
               mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNINetDir }}
             {{- if .Values.agent.bpf.autoMount }}
             - name: bpf-maps
               mountPath: {{ .Values.agent.bpf.hostRoot }}
               mountPropagation: HostToContainer
             {{- end }}
-            - name: hostLibModules
+            - name: host-lib-modules
               mountPath: /lib/modules
               readOnly: true
-            - name: hostProcSysNet
+            - name: host-proc-sys-net
               mountPath: /host/proc/sys/net
-            - name: hostProcSysKernel
+            - name: host-proc-sys-kernel
               mountPath: /host/proc/sys/kernel
-            - name: hostXtablesLock
+            - name: host-xtables-lock
               mountPath: /run/xtables.lock
             {{- if .Values.tls.enabled  }}
             - name: hubble-cert
@@ -270,40 +270,40 @@ spec:
             type: DirectoryOrCreate
         {{- end }}
         # To install cilium CNI plugin in the host
-        - name: hostCniBin
+        - name: host-cni-bin
           hostPath:
             path: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
             type: DirectoryOrCreate
         # To install cilium CNI plugin configuration in the host
-        - name: hostCniConf
+        - name: host-cni-conf
           hostPath:
             path: {{ .Values.agent.cniPlugin.hostCNINetDir }}
             type: DirectoryOrCreate
         # To mount cgroup2 filesystem on the host
         {{- if .Values.agent.cgroup2.autoMount }}
-        - name: hostProc
+        - name: host-proc
           hostPath:
             path: /proc
             type: Directory
         {{- end }}
-        - name: hostCgroupRoot
+        - name: host-cgroup-root
           hostPath:
             path: {{ .Values.agent.cgroup2.hostRoot }}
             type: DirectoryOrCreate
         # To load host kernel modules
-        - name: hostLibModules
+        - name: host-lib-modules
           hostPath:
             path: /lib/modules
-        - name: hostProcSysNet
+        - name: host-proc-sys-net
           hostPath:
             path: /proc/sys/net
             type: Directory
-        - name: hostProcSysKernel
+        - name: host-proc-sys-kernel
           hostPath:
             path: /proc/sys/kernel
             type: Directory
         # To access iptables concurrently with other processes (e.g. kube-proxy)
-        - name: hostXtablesLock
+        - name: host-xtables-lock
           hostPath:
             path: /run/xtables.lock
             type: FileOrCreate

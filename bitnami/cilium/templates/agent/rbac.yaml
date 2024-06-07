@@ -43,7 +43,6 @@ rules:
   - get
   - list
   - watch
-{{- if and .Values.hubble.enabled .Values.hubble.dropEventEmitter.enabled }}
 - apiGroups:
   - ""
   resources:
@@ -51,8 +50,6 @@ rules:
   verbs:
   - create
   - patch
-{{- end }}
-{{- if .Values.annotateK8sNode }}
 - apiGroups:
   - ""
   resources:
@@ -60,8 +57,6 @@ rules:
   verbs:
   # To annotate the k8s node with Cilium's metadata
   - patch
-{{- end }}
-{{- if .Values.l2announcements.enabled }}
 - apiGroups:
   - coordination.k8s.io
   resources:
@@ -72,7 +67,6 @@ rules:
   - update
   - list
   - delete
-{{- end }}
 - apiGroups:
   - apiextensions.k8s.io
   resources:

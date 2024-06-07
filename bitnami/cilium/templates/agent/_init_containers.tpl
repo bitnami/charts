@@ -10,13 +10,13 @@ Returns an init-container that generate the Cilium configuration
 - name: build-config
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-  {{- if .Values.agent.initContainerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.agent.initContainers.buildConfig.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.buildConfig.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.agent.initContainerResources }}
-  resources: {{- toYaml .Values.agent.initContainerResources | nindent 4 }}
-  {{- else if ne .Values.agent.initContainerResourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainerResourcesPreset) | nindent 4 }}
+  {{- if .Values.agent.initContainers.buildConfig.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.buildConfig.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.buildConfig.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.buildConfig.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - cilium-dbg
@@ -50,13 +50,13 @@ Returns an init-container that installs Cilium CNI plugin in the host
 - name: install-cni-plugin
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-  {{- if .Values.agent.initContainerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.agent.initContainers.installCniPlugin.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.buildConfig.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.agent.initContainerResources }}
-  resources: {{- toYaml .Values.agent.initContainerResources | nindent 4 }}
-  {{- else if ne .Values.agent.initContainerResourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainerResourcesPreset) | nindent 4 }}
+  {{- if .Values.agent.initContainers.installCniPlugin.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.installCniPlugin.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.installCniPlugin.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.installCniPlugin.resourcesPreset) | nindent 4 }}
   {{- end }}
   args:
     - /opt/bitnami/scripts/cilium/install-cni-plugin.sh
@@ -65,7 +65,7 @@ Returns an init-container that installs Cilium CNI plugin in the host
     - name: HOST_CNI_BIN_DIR
       value: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
   volumeMounts:
-    - name: hostCniBin
+    - name: host-cni-bin
       mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
 {{- end -}}
 
@@ -76,17 +76,13 @@ Returns an init-container that mount bpf fs in the host
 - name: host-mount-bpf
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-  {{- if .Values.agent.initContainerSecurityContext.enabled }}
-  # Force running as a privileged container since bidirectional mount propagation
-  # requires it
-  {{- $securityContex := .Values.agent.initContainerSecurityContext | merge (dict "privileged" true) }}
-  {{- $securityContex := unset $securityContex "seLinuxOptions" }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $securityContex "context" $) | nindent 4 }}
+  {{- if .Values.agent.initContainers.mountBpf.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.mountBpf.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.agent.initContainerResources }}
-  resources: {{- toYaml .Values.agent.initContainerResources | nindent 4 }}
-  {{- else if ne .Values.agent.initContainerResourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainerResourcesPreset) | nindent 4 }}
+  {{- if .Values.agent.initContainers.mountBpf.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.mountBpf.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.mountBpf.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.mountBpf.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -109,13 +105,13 @@ Returns an init-container that mount cgroup2 filesystem in the host
 - name: host-mount-cgroup2
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-  {{- if .Values.agent.initContainerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.agent.initContainers.mountCgroup2.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.mountCgroup2.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.agent.initContainerResources }}
-  resources: {{- toYaml .Values.agent.initContainerResources | nindent 4 }}
-  {{- else if ne .Values.agent.initContainerResourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainerResourcesPreset) | nindent 4 }}
+  {{- if .Values.agent.initContainers.mountCgroup2.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.mountCgroup2.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.mountCgroup2.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.mountCgroup2.resourcesPreset) | nindent 4 }}
   {{- end }}
   args:
     - /opt/bitnami/scripts/cilium/mount-cgroup2.sh
@@ -125,9 +121,9 @@ Returns an init-container that mount cgroup2 filesystem in the host
     - name: HOST_CNI_BIN_DIR
       value: {{ .Values.agent.cniPlugin.hostCNIBinDir }}
   volumeMounts:
-    - name: hostCniBin
+    - name: host-cni-bin
       mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
-    - name: hostProc
+    - name: host-proc
       mountPath: /host/proc
 {{- end -}}
 
@@ -138,13 +134,13 @@ Returns an init-container that cleans up the Cilium state
 - name: clean-state
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-  {{- if .Values.agent.initContainerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.agent.initContainers.cleanState.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.cleanState.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.agent.initContainerResources }}
-  resources: {{- toYaml .Values.agent.initContainerResources | nindent 4 }}
-  {{- else if ne .Values.agent.initContainerResourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainerResourcesPreset) | nindent 4 }}
+  {{- if .Values.agent.initContainers.cleanState.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.cleanState.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.cleanState.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.cleanState.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
   command:
@@ -186,7 +182,7 @@ Returns an init-container that cleans up the Cilium state
     {{- end }}
     - name: cilium-run
       mountPath: /opt/bitnami/cilium/var/run
-    - name: hostCgroupRoot
+    - name: host-cgroup-root
       mountPath: {{ .Values.agent.cgroup2.hostRoot }}
       mountPropagation: HostToContainer
 {{- end -}}
@@ -198,13 +194,13 @@ Returns an init-container that waits for kube-proxy to be ready
 - name: wait-for-kube-proxy
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-  {{- if .Values.agent.initContainerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.agent.initContainers.waitForKubeProxy.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.waitForKubeProxy.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
-  {{- if .Values.agent.initContainerResources }}
-  resources: {{- toYaml .Values.agent.initContainerResources | nindent 4 }}
-  {{- else if ne .Values.agent.initContainerResourcesPreset "none" }}
-  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainerResourcesPreset) | nindent 4 }}
+  {{- if .Values.agent.initContainers.waitForKubeProxy.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.waitForKubeProxy.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.waitForKubeProxy.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.waitForKubeProxy.resourcesPreset) | nindent 4 }}
   {{- end }}
   args:
     - /opt/bitnami/scripts/cilium/wait-for-kube-proxy.sh

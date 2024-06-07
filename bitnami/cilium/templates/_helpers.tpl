@@ -131,7 +131,6 @@ Compile all warnings into a single message.
 */}}
 {{- define "cilium.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "cilium.validateValues.agent.routingMode" .) -}}
 {{- $messages := append $messages (include "cilium.validateValues.kvstore" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}

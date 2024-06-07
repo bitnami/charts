@@ -136,7 +136,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/cilium
-    tag: 1.15.5-debian-12-r2
+    tag: 1.15.5-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -239,23 +239,6 @@ agent:
   ##     memory: 1024Mi
   ##
   resources: {}
-  ## Cilium Agent init containers resource requests and limits
-  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  ## @param agent.initContainerResourcesPreset Set Cilium Agent container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
-  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  ##
-  initContainerResourcesPreset: "nano"
-  ## @param agent.initContainerResources Set Cilium Agent container init containers requests and limits for different resources like CPU or memory (essential for production workloads)
-  ## Example:
-  ## initContainerResources:
-  ##   requests:
-  ##     cpu: 2
-  ##     memory: 512Mi
-  ##   limits:
-  ##     cpu: 3
-  ##     memory: 1024Mi
-  ##
-  initContainerResources: {}
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param agent.podSecurityContext.enabled Enable Cilium Agent pods' Security Context
@@ -309,42 +292,6 @@ agent:
       - FOWNER
       - SETGID
       - SETUID
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-  ## Configure init-containers Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param agent.initContainerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
-  ## @param agent.initContainerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
-  ## @param agent.initContainerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
-  ## @param agent.initContainerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
-  ## @param agent.initContainerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
-  ##
-  initContainerSecurityContext:
-    enabled: true
-    seLinuxOptions:
-      level: 's0'
-      type: 'spc_t'
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    readOnlyRootFilesystem: true
-    privileged: false
-    allowPrivilegeEscalation: false
-    capabilities:
-      add:
-      - NET_ADMIN
-      - SYS_ADMIN
-      - SYS_CHROOT
-      - SYS_MODULE
-      - SYS_PTRACE
-      - SYS_RESOURCE
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
@@ -480,16 +427,332 @@ agent:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param agent.initContainers Add additional init containers to the Cilium Agent pods
+  ## @param agent.extraInitContainers Add additional init containers to the Cilium Agent pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
-  ## initContainers:
+  ## extraInitContainers:
   ##  - name: your-image-name
   ##    image: your-image
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: []
+  extraInitContainers: []
+  ## Default init Containers
+  ##
+  initContainers:
+    ## Cilium Agent "build-config" init container
+    ## Used to generate the Cilium configuration
+    ##
+    buildConfig:
+      ## Configure "build-config" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.buildConfig.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions: {}
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          add: []
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "build-config" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.buildConfig.resourcesPreset Set Cilium Agent "build-config" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.buildConfig.resources Set Cilium Agent "build-config" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
+    ## Cilium Agent "install-cni-plugin" init container
+    ## Used to install the Cilium CNI plugin in the host
+    ##
+    installCniPlugin:
+      ## Configure "install-cni-plugin" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.installCniPlugin.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions:
+          level: 's0'
+          type: 'spc_t'
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_CHROOT
+          - SYS_MODULE
+          - SYS_PTRACE
+          - SYS_RESOURCE
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "install-cni-plugin" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.installCniPlugin.resourcesPreset Set Cilium Agent "install-cni-plugin" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.installCniPlugin.resources Set Cilium Agent "install-cni-plugin" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
+    ## Cilium Agent "host-mount-bpf" init container
+    ## Used to mount bpf fs in the host
+    ##
+    mountBpf:
+      ## Configure "host-mount-bpf" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.mountBpf.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions: {}
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
+        readOnlyRootFilesystem: true
+        privileged: true
+        allowPrivilegeEscalation: true
+        capabilities:
+          add: []
+          drop: []
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "host-mount-bpf" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.mountBpf.resourcesPreset Set Cilium Agent "host-mount-bpf" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.mountBpf.resources Set Cilium Agent "host-mount-bpf" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
+    ## Cilium Agent "host-mount-cgroup2" init container
+    ## Used to mount cgroup2 filesystem in the host
+    ##
+    mountCgroup2:
+      ## Configure "host-mount-cgroup2" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.mountCgroup2.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions:
+          level: 's0'
+          type: 'spc_t'
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - SYS_ADMIN
+          - SYS_CHROOT
+          - SYS_PTRACE
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "host-mount-cgroup2" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.mountCgroup2.resourcesPreset Set Cilium Agent "host-mount-cgroup2" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.mountCgroup2.resources Set Cilium Agent "host-mount-cgroup2" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
+    ## Cilium Agent "clean-state" init container
+    ## Used to cleans up the Cilium state
+    ##
+    cleanState:
+      ## Configure "clean-state" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.cleanState.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.cleanState.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.cleanState.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.cleanState.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.cleanState.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions:
+          level: 's0'
+          type: 'spc_t'
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          add:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_MODULE
+          - SYS_RESOURCE
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "clean-state" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.cleanState.resourcesPreset Set Cilium Agent "clean-state" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.cleanState.resources Set Cilium Agent "clean-state" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
+    ## Cilium Agent "wait-for-kube-proxy" init container
+    ## Used to waits for kube-proxy to be ready
+    ##
+    waitForKubeProxy:
+      ## Configure "wait-for-kube-proxy" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.waitForKubeProxy.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions: {}
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
+        readOnlyRootFilesystem: true
+        privileged: true
+        allowPrivilegeEscalation: true
+        capabilities:
+          add: []
+          drop: []
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "wait-for-kube-proxy" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.waitForKubeProxy.resourcesPreset Set Cilium Agent "wait-for-kube-proxy" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.waitForKubeProxy.resources Set Cilium Agent "wait-for-kube-proxy" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
   ## Cilium Agent ServiceAccount configuration
   ##
   serviceAccount:
@@ -921,16 +1184,16 @@ operator:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param operator.initContainers Add additional init containers to the Cilium Operator pods
+  ## @param operator.extraInitContainers Add additional init containers to the Cilium Operator pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
-  ## initContainers:
+  ## extraInitContainers:
   ##  - name: your-image-name
   ##    image: your-image
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: []
+  extraInitContainers: []
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param operator.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1117,7 +1380,7 @@ operator:
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
-  create: false
+  create: true
   ## @param rbac.rules Custom RBAC rules to set
   ## e.g:
   ## rules:
