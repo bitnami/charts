@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.1.6 (2024-06-06)
+## 21.1.7 (2024-06-07)
 
-* [bitnami/ghost] Release 21.1.6 ([#27041](https://github.com/bitnami/charts/pull/27041))
+* [bitnami/ghost] Release 21.1.7 ([#27060](https://github.com/bitnami/charts/pull/27060))
+
+## <small>21.1.6 (2024-06-06)</small>
+
+* [bitnami/ghost] Release 21.1.6 (#27041) ([1c56328](https://github.com/bitnami/charts/commit/1c563284b6b4a69ead1043377f9c10e2ffbfc571)), closes [#27041](https://github.com/bitnami/charts/issues/27041)
 
 ## <small>21.1.5 (2024-06-06)</small>
 
