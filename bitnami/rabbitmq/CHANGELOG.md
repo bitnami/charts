@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.4.1 (2024-06-06)
+## 14.4.2 (2024-06-07)
 
-* [bitnami/rabbitmq] Release 14.4.1 ([#27010](https://github.com/bitnami/charts/pull/27010))
+* align ulimitNofiles default value on containerd's runc runtime defaul… ([#27052](https://github.com/bitnami/charts/pull/27052))
+
+## <small>14.4.1 (2024-06-06)</small>
+
+* [bitnami/rabbitmq] Release 14.4.1 (#27010) ([1769eb5](https://github.com/bitnami/charts/commit/1769eb5722a47299d4e5b1051e5ad3826861d9ff)), closes [#27010](https://github.com/bitnami/charts/issues/27010)
 
 ## 14.4.0 (2024-06-06)
 
