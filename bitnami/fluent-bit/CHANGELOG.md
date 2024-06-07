@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.3.1 (2024-06-06)
+## 2.3.1 (2024-06-07)
 
 * [bitnami/fluent-bit] Release 2.3.1 ([#26949](https://github.com/bitnami/charts/pull/26949))
 
