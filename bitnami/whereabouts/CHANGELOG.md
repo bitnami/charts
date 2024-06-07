@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.2 (2024-06-05)
+## 1.1.3 (2024-06-06)
 
-* [bitnami/whereabouts] Release 1.1.2 ([#26757](https://github.com/bitnami/charts/pull/26757))
+* [bitnami/whereabouts] Release 1.1.3 ([#27026](https://github.com/bitnami/charts/pull/27026))
+
+## <small>1.1.2 (2024-06-05)</small>
+
+* [bitnami/whereabouts] Release 1.1.2 (#26757) ([06991a2](https://github.com/bitnami/charts/commit/06991a2c4cc5e285fa58532edb169a0992f767ef)), closes [#26757](https://github.com/bitnami/charts/issues/26757)
 
 ## <small>1.1.1 (2024-06-04)</small>
 

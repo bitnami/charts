@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.3.4 (2024-06-05)
+## 6.3.5 (2024-06-06)
 
-* [bitnami/influxdb] Release 6.3.4 ([#26733](https://github.com/bitnami/charts/pull/26733))
+* [bitnami/influxdb] Release 6.3.5 ([#26962](https://github.com/bitnami/charts/pull/26962))
+
+## <small>6.3.4 (2024-06-05)</small>
+
+* [bitnami/influxdb] Release 6.3.4 (#26733) ([23fcbaa](https://github.com/bitnami/charts/commit/23fcbaaaa75e6d6eb237cea30071663ebcf08869)), closes [#26733](https://github.com/bitnami/charts/issues/26733)
 
 ## <small>6.3.3 (2024-06-04)</small>
 

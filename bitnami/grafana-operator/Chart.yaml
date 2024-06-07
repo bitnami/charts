@@ -30,4 +30,4 @@ maintainers:
 name: grafana-operator
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-operator
-version: 4.4.4
+version: 4.4.5

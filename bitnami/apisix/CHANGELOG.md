@@ -1,8 +1,16 @@
 # Changelog
 
-## 3.2.0 (2024-06-05)
+## 3.2.2 (2024-06-06)
 
-* [bitnami/apisix] Enable PodDisruptionBudgets ([#26711](https://github.com/bitnami/charts/pull/26711))
+* [bitnami/apisix] Release 3.2.2 ([#26936](https://github.com/bitnami/charts/pull/26936))
+
+## <small>3.2.1 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.1 (#26891) ([50be215](https://github.com/bitnami/charts/commit/50be215d066511e6181ee874e51c5496a1b7a72c)), closes [#26891](https://github.com/bitnami/charts/issues/26891)
+
+## 3.2.0 (2024-06-06)
+
+* [bitnami/apisix] Enable PodDisruptionBudgets (#26711) ([72db65f](https://github.com/bitnami/charts/commit/72db65ff343d7522b8836bc2f112c43588c83912)), closes [#26711](https://github.com/bitnami/charts/issues/26711)
 
 ## <small>3.1.3 (2024-06-05)</small>
 
