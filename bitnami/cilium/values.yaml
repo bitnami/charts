@@ -102,12 +102,20 @@ tls:
       renewBefore: 360h
   ## @param tls.ca CA certificate for TLS. Ignored if `tls.existingCASecret` is set
   ## @param tls.existingCASecret The name of an existing Secret containing the CA certificate for TLS
-  ## @param tls.hubble.cert Hubble certificate for TLS. Ignored if `tls.hubble.existingSecret` is set
-  ## @param tls.hubble.key Hubble key for TLS. Ignored if `tls.hubble.existingSecret` is set
+  ## @param tls.hubble.cert TLS certificate for Hubble. Ignored if `tls.hubble.existingSecret` is set
+  ## @param tls.hubble.key TLS key for Hubble. Ignored if `tls.hubble.existingSecret` is set
   ## @param tls.hubble.existingSecret The name of an existing Secret containing the Hubble certificates for TLS
+  ## @param tls.client.cert TLS certificate for Hubble client(s). Ignored if `tls.client.existingSecret` is set
+  ## @param tls.client.key TLS key for Hubble client(s). Ignored if `tls.client.existingSecret` is set
+  ## @param tls.client.existingSecret The name of an existing Secret containing the Hubble client(s) certificates for TLS
+  ##
   ca: ""
   existingCASecret: ""
   hubble:
+    cert: ""
+    key: ""
+    existingSecret: ""
+  client:
     cert: ""
     key: ""
     existingSecret: ""

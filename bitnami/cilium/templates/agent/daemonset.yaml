@@ -235,9 +235,6 @@ spec:
             - name: hostXtablesLock
               mountPath: /run/xtables.lock
             {{- if .Values.tls.enabled  }}
-            - name: ca-cert
-              readOnly: true
-              mountPath: /certs/ca
             - name: hubble-cert
               readOnly: true
               mountPath: /certs/hubble
@@ -311,16 +308,12 @@ spec:
             path: /run/xtables.lock
             type: FileOrCreate
         {{- if .Values.tls.enabled  }}
-        - name: ca-cert
-          secret:
-            secretName: {{ template "cilium.tls.caSecretName" . }}
-            items:
-              - key: tls.crt
-                path: tls.crt
         - name: hubble-cert
           secret:
             secretName: {{ template "cilium.tls.hubble.secretName" . }}
             items:
+              - key: ca.crt
+                path: ca.crt
               - key: tls.crt
                 path: tls.crt
               - key: tls.key
