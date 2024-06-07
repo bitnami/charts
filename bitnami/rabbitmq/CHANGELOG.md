@@ -2,7 +2,71 @@
 
 ## 14.4.2 (2024-06-07)
 
-* [bitnami/rabbitmq] Align ulimitNofiles default value on containerd's runc runtime default ulimit -n value ([#27052](https://github.com/bitnami/charts/pull/27052))
+* [bitnami/rabbitmq] Align  default value on 's NAME:
+   runc - Open Container Initiative runtime
+
+runc is a command line client for running applications packaged according to
+the Open Container Initiative (OCI) format and is a compliant implementation of the
+Open Container Initiative specification.
+
+runc integrates well with existing process supervisors to provide a production
+container runtime environment for applications. It can be used with your
+existing process monitoring tools and the container will be spawned as a
+direct child of the process supervisor.
+
+Containers are configured using bundles. A bundle for a container is a directory
+that includes a specification file named "config.json" and a root filesystem.
+The root filesystem contains the contents of the container.
+
+To start a new instance of a container:
+
+    # runc run [ -b bundle ] <container-id>
+
+Where "<container-id>" is your name for the instance of the container that you
+are starting. The name you provide for the container instance must be unique on
+your host. Providing the bundle directory using "-b" is optional. The default
+value for "bundle" is the current directory.
+
+USAGE:
+   runc [global options] command [command options] [arguments...]
+
+VERSION:
+   1.1.12
+commit: v1.1.12-0-g51d5e94
+spec: 1.0.2-dev
+go: go1.21.10
+libseccomp: 2.5.3
+
+COMMANDS:
+   checkpoint  checkpoint a running container
+   create      create a container
+   delete      delete any resources held by the container often used with detached container
+   events      display container events such as OOM notifications, cpu, memory, and IO usage statistics
+   exec        execute new process inside the container
+   kill        kill sends the specified signal (default: SIGTERM) to the container's init process
+   list        lists containers started by runc with the given root
+   pause       pause suspends all processes inside the container
+   ps          ps displays the processes running inside a container
+   restore     restore a container from a previous checkpoint
+   resume      resumes all processes that have been previously paused
+   run         create and run a container
+   spec        create a new specification file
+   start       executes the user defined process in a created container
+   state       output the state of a container
+   update      update container resource constraints
+   features    show the enabled features
+   help, h     Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --debug             enable debug logging
+   --log value         set the log file to write runc logs to (default is '/dev/stderr')
+   --log-format value  set the log format ('text' (default), or 'json') (default: "text")
+   --root value        root directory for storage of container state (this should be located in tmpfs) (default: "/run/user/1001/runc")
+   --criu value        path to the criu binary used for checkpoint and restore (default: "criu")
+   --systemd-cgroup    enable systemd cgroup support, expects cgroupsPath to be of form "slice:prefix:name" for e.g. "system.slice:runc:434234"
+   --rootless value    ignore cgroup permission errors ('true', 'false', or 'auto') (default: "auto")
+   --help, -h          show help
+   --version, -v       print the version runtime default 65536 value ([#27052](https://github.com/bitnami/charts/pull/27052))
 
 ## <small>14.4.1 (2024-06-06)</small>
 
