@@ -2,7 +2,7 @@
 
 ## 15.3.2 (2024-06-07)
 
-* [bitnami/kubeapps] Release 15.2.3 ([#26904](https://github.com/bitnami/charts/pull/26904))
+* [bitnami/kubeapps] Release 15.3.2 ([#26904](https://github.com/bitnami/charts/pull/26904))
 
 ## <small>15.3.1 (2024-06-06)</small>
 
