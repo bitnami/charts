@@ -618,9 +618,9 @@ agent:
         seLinuxOptions:
           level: 's0'
           type: 'spc_t'
-        runAsUser: 1001
-        runAsGroup: 1001
-        runAsNonRoot: true
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
         readOnlyRootFilesystem: true
         privileged: false
         allowPrivilegeEscalation: false
