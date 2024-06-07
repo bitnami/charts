@@ -275,7 +275,7 @@ agent:
     runAsUser: 0
     runAsGroup: 0
     runAsNonRoot: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
