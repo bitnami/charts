@@ -44,6 +44,7 @@ monitor-aggregation: medium
 monitor-aggregation-interval: "5s"
 monitor-aggregation-flags: all
 # BPF configuration
+bpf-root: /sys/fs/bpf
 preallocate-bpf-maps: "false"
 # CNI configuration
 cni-exclusive: "true"
@@ -56,6 +57,9 @@ operator-api-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.ap
 disable-endpoint-crd: "false"
 skip-crd-creation: "false"
 identity-allocation-mode: crd
+ipam: "cluster-pool"
+cluster-pool-ipv4-cidr: "10.0.0.0/8"
+cluster-pool-ipv4-mask-size: "24"
 # Hubble configuration
 enable-hubble: "true"
 hubble-socket-path: "/opt/bitnami/cilium/var/run/hubble.sock"

@@ -252,7 +252,7 @@ agent:
     fsGroupChangePolicy: Always
     sysctls: []
     supplementalGroups: []
-    fsGroup: 1001
+    fsGroup: 0
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param agent.containerSecurityContext.enabled Enabled Cilium Agent container' Security Context
@@ -272,26 +272,28 @@ agent:
     seLinuxOptions:
       level: 's0'
       type: 'spc_t'
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    readOnlyRootFilesystem: true
+    runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    readOnlyRootFilesystem: false
     privileged: false
     allowPrivilegeEscalation: false
     capabilities:
       add:
+      - BPF
       - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
       - KILL
       - NET_ADMIN
       - NET_RAW
       - IPC_LOCK
-      - SYS_MODULE
-      - SYS_ADMIN
-      - SYS_RESOURCE
-      - DAC_OVERRIDE
-      - FOWNER
+      - PERFMON
       - SETGID
       - SETUID
+      - SYS_ADMIN
+      - SYS_MODULE
+      - SYS_RESOURCE
       drop: ["ALL"]
     seccompProfile:
       type: "RuntimeDefault"
@@ -512,9 +514,9 @@ agent:
         seLinuxOptions:
           level: 's0'
           type: 'spc_t'
-        runAsUser: 1001
-        runAsGroup: 1001
-        runAsNonRoot: true
+        runAsUser: 0
+        runAsGroup: 0
+        runAsNonRoot: false
         readOnlyRootFilesystem: true
         privileged: false
         allowPrivilegeEscalation: false
@@ -615,21 +617,16 @@ agent:
       ##
       containerSecurityContext:
         enabled: true
-        seLinuxOptions:
-          level: 's0'
-          type: 'spc_t'
+        seLinuxOptions: {}
         runAsUser: 0
         runAsGroup: 0
         runAsNonRoot: false
         readOnlyRootFilesystem: true
-        privileged: false
-        allowPrivilegeEscalation: false
+        privileged: true
+        allowPrivilegeEscalation: true
         capabilities:
-          add:
-          - SYS_ADMIN
-          - SYS_CHROOT
-          - SYS_PTRACE
-          drop: ["ALL"]
+          add: []
+          drop: []
         seccompProfile:
           type: "RuntimeDefault"
       ## Cilium Agent "host-mount-cgroup2" init container resource requests and limits

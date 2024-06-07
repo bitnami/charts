@@ -27,6 +27,13 @@ spec:
   template:
     metadata:
       annotations:
+        {{- if semverCompare "<1.30-0" (include "common.capabilities.kubeVersion" .) }}
+        container.apparmor.security.beta.kubernetes.io/cilium-agent: "unconfined"
+        container.apparmor.security.beta.kubernetes.io/clean-state: "unconfined"
+        {{- if .Values.agent.cgroup2.autoMount }}
+        container.apparmor.security.beta.kubernetes.io/host-mount-cgroup2: "unconfined"
+        {{- end }}
+        {{- end }}
         {{- if not .Values.existingConfigmap }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
@@ -170,6 +177,7 @@ spec:
           {{- else if .Values.agent.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
+              host: localhost
               port: health
           {{- end }}
           {{- if .Values.agent.customReadinessProbe }}
@@ -177,6 +185,7 @@ spec:
           {{- else if .Values.agent.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
+              host: localhost
               path: /healthz
               port: health
               scheme: HTTP
@@ -189,6 +198,7 @@ spec:
           {{- else if .Values.agent.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.agent.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
+              host: localhost
               port: health
           {{- end }}
           {{- end }}

@@ -8,10 +8,11 @@ agent:
     install: true
     hostCNIBinDir: /home/kubernetes/bin
     hostCNINetDir: /etc/cni/net.d
-  priorityClassName: ""
   containerSecurityContext:
     enabled: true
-    runAsUser: 1002
+    allowPrivilegeEscalation: true
+    privileged: true
+  priorityClassName: ""
   serviceAccount:
     create: true
     automountServiceAccountToken: true

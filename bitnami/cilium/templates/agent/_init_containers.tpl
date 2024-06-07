@@ -51,7 +51,7 @@ Returns an init-container that installs Cilium CNI plugin in the host
   image: {{ include "cilium.agent.image" . }}
   imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
   {{- if .Values.agent.initContainers.installCniPlugin.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.buildConfig.containerSecurityContext "context" $) | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.installCniPlugin.containerSecurityContext "context" $) | nindent 4 }}
   {{- end }}
   {{- if .Values.agent.initContainers.installCniPlugin.resources }}
   resources: {{- toYaml .Values.agent.initContainers.installCniPlugin.resources | nindent 4 }}
@@ -142,7 +142,6 @@ Returns an init-container that cleans up the Cilium state
   {{- else if ne .Values.agent.initContainers.cleanState.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.cleanState.resourcesPreset) | nindent 4 }}
   {{- end }}
-  command:
   command:
     - bash
   args:
