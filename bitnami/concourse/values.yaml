@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.11.2-debian-12-r12
+  tag: 7.11.2-debian-12-r13
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -668,7 +668,7 @@ web:
     ## @param web.pdb.minAvailable Minimum number / percentage of Concourse worker pods that should remain scheduled
     ## @param web.pdb.maxUnavailable Maximum number/percentage of Concourse worker pods that may be made unavailable
     ##
-    minAvailable: 1
+    minAvailable: ""
     maxUnavailable: ""
   ## @param web.psp.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
   ##
@@ -1407,7 +1407,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -35,4 +35,4 @@ maintainers:
 name: apache
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 11.2.1
+version: 11.2.2

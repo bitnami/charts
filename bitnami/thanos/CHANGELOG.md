@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.1 (2024-06-05)
+## 15.7.2 (2024-06-06)
 
-* [bitnami/thanos] Bump chart version ([#26866](https://github.com/bitnami/charts/pull/26866))
+* [bitnami/thanos] Release 15.7.2 ([#27020](https://github.com/bitnami/charts/pull/27020))
+
+## <small>15.7.1 (2024-06-05)</small>
+
+* [bitnami/thanos] Bump chart version (#26866) ([9f31b0e](https://github.com/bitnami/charts/commit/9f31b0e1c3dfd3d8a4f32e31e89f87a72a65f29b)), closes [#26866](https://github.com/bitnami/charts/issues/26866)
 
 ## 15.7.0 (2024-06-05)
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.1 (2024-06-06)
+## 3.2.2 (2024-06-06)
 
-* [bitnami/apisix] Release 3.2.1 ([#26891](https://github.com/bitnami/charts/pull/26891))
+* [bitnami/apisix] Release 3.2.2 ([#26936](https://github.com/bitnami/charts/pull/26936))
+
+## <small>3.2.1 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.1 (#26891) ([50be215](https://github.com/bitnami/charts/commit/50be215d066511e6181ee874e51c5496a1b7a72c)), closes [#26891](https://github.com/bitnami/charts/issues/26891)
 
 ## 3.2.0 (2024-06-06)
 

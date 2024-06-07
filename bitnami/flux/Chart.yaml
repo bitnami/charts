@@ -8,13 +8,13 @@ annotations:
     - name: fluxcd-helm-controller
       image: docker.io/bitnami/fluxcd-helm-controller:1.0.1-debian-12-r2
     - name: fluxcd-image-automation-controller
-      image: docker.io/bitnami/fluxcd-image-automation-controller:0.38.0-debian-12-r3
+      image: docker.io/bitnami/fluxcd-image-automation-controller:0.38.0-debian-12-r4
     - name: fluxcd-image-reflector-controller
-      image: docker.io/bitnami/fluxcd-image-reflector-controller:0.32.0-debian-12-r3
+      image: docker.io/bitnami/fluxcd-image-reflector-controller:0.32.0-debian-12-r4
     - name: fluxcd-kustomize-controller
-      image: docker.io/bitnami/fluxcd-kustomize-controller:1.3.0-debian-12-r3
+      image: docker.io/bitnami/fluxcd-kustomize-controller:1.3.0-debian-12-r4
     - name: fluxcd-notification-controller
-      image: docker.io/bitnami/fluxcd-notification-controller:1.3.0-debian-12-r3
+      image: docker.io/bitnami/fluxcd-notification-controller:1.3.0-debian-12-r4
     - name: fluxcd-source-controller
       image: docker.io/bitnami/fluxcd-source-controller:1.3.0-debian-12-r5
     - name: os-shell
@@ -43,4 +43,4 @@ maintainers:
 name: flux
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flux
-version: 2.3.3
+version: 2.3.4
