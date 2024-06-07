@@ -1,8 +1,32 @@
 # Changelog
 
-## 1.1.1 (2024-05-22)
+## 1.2.1 (2024-06-06)
 
-* [bitnami/grafana-mimir] Use different liveness/readiness probes ([#26350](https://github.com/bitnami/charts/pull/26350))
+* [bitnami/grafana-mimir] Release 1.2.1 ([#26954](https://github.com/bitnami/charts/pull/26954))
+
+## 1.2.0 (2024-06-06)
+
+* [bitnami/grafana-mimir] Enable PodDisruptionBudgets (#26695) ([bae36af](https://github.com/bitnami/charts/commit/bae36afa871eb80138dcbcc12ebbc663038108b3)), closes [#26695](https://github.com/bitnami/charts/issues/26695)
+
+## <small>1.1.5 (2024-06-06)</small>
+
+* [bitnami/grafana-mimir] Release 1.1.5 (#26903) ([f95bb0a](https://github.com/bitnami/charts/commit/f95bb0a5db396db1e896923a9a20a409504ef167)), closes [#26903](https://github.com/bitnami/charts/issues/26903)
+
+## <small>1.1.4 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Bump chart version (#26832) ([61841c6](https://github.com/bitnami/charts/commit/61841c6a1d2e94214c4ccca1303b6009ef3bbe66)), closes [#26832](https://github.com/bitnami/charts/issues/26832)
+
+## <small>1.1.3 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Bump chart version (#26774) ([ec0b18c](https://github.com/bitnami/charts/commit/ec0b18c968060db292a7c3abe4b658005e16e002)), closes [#26774](https://github.com/bitnami/charts/issues/26774)
+
+## <small>1.1.2 (2024-06-05)</small>
+
+* [bitnami/grafana-mimir] Release 1.1.2 (#26731) ([db18447](https://github.com/bitnami/charts/commit/db18447898bafcfaf031c4d04940b9cdca29c4f6)), closes [#26731](https://github.com/bitnami/charts/issues/26731)
+
+## <small>1.1.1 (2024-05-23)</small>
+
+* [bitnami/grafana-mimir] Use different liveness/readiness probes (#26350) ([e4cc957](https://github.com/bitnami/charts/commit/e4cc9575527835733af5b4647a5f45a80efebe23)), closes [#26350](https://github.com/bitnami/charts/issues/26350)
 
 ## 1.1.0 (2024-05-21)
 

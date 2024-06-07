@@ -215,14 +215,11 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.tracking.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.tracking.livenessProbe "enabled") "context" $) | nindent 12 }}
-            {{- if .Values.tracking.auth.enabled }}
-            tcpSocket:
-              port: {{ include "mlflow.v0.tracking.portName" . }}
-            {{- else }}
-            httpGet:
-              path: /
-              port: {{ include "mlflow.v0.tracking.portName" . }}
-            {{- end }}
+            exec:
+              command:
+                - pgrep
+                - -f
+                - mlflow.server
           {{- end }}
           {{- if .Values.tracking.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.customReadinessProbe "context" $) | nindent 12 }}

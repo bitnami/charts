@@ -1,8 +1,36 @@
 # Changelog
 
-## 3.2.1 (2024-05-22)
+## 3.3.5 (2024-06-06)
 
-* [bitnami/appsmith] Release 3.2.1 ([#26335](https://github.com/bitnami/charts/pull/26335))
+* [bitnami/appsmith] Release 3.3.5 ([#26935](https://github.com/bitnami/charts/pull/26935))
+
+## <small>3.3.4 (2024-06-06)</small>
+
+* [bitnami/appsmith] Release 3.3.4 (#26890) ([432ed22](https://github.com/bitnami/charts/commit/432ed22573422b16638f9c3e6bf5a623f3a0c52e)), closes [#26890](https://github.com/bitnami/charts/issues/26890)
+
+## <small>3.3.3 (2024-06-05)</small>
+
+* [bitnami/appsmith] Bump chart version (#26820) ([0e03766](https://github.com/bitnami/charts/commit/0e037668b5067f0fe8aee42ee7970a862edc93a9)), closes [#26820](https://github.com/bitnami/charts/issues/26820)
+
+## <small>3.3.2 (2024-06-05)</small>
+
+* [bitnami/appsmith] Release 3.3.2 (#26813) ([bdadb29](https://github.com/bitnami/charts/commit/bdadb29000813c97e0de13211fea29a799d18ad2)), closes [#26813](https://github.com/bitnami/charts/issues/26813)
+
+## <small>3.3.1 (2024-06-05)</small>
+
+* [bitnami/appsmith] Bump chart version (#26762) ([aad49d4](https://github.com/bitnami/charts/commit/aad49d465f802301cb0529bb42243a451e62a20b)), closes [#26762](https://github.com/bitnami/charts/issues/26762)
+
+## 3.3.0 (2024-06-03)
+
+* [bitnami/appsmith] Enable PodDisruptionBudgets (#26410) ([fc66381](https://github.com/bitnami/charts/commit/fc66381315382c4d51cd617840c5d606c9940f48)), closes [#26410](https://github.com/bitnami/charts/issues/26410)
+
+## <small>3.2.2 (2024-05-24)</small>
+
+* [bitnami/appsmith] Use different liveness/readiness probes (#26332) ([44384d7](https://github.com/bitnami/charts/commit/44384d7983caf52761a33745913eb8b48d4b8d51)), closes [#26332](https://github.com/bitnami/charts/issues/26332)
+
+## <small>3.2.1 (2024-05-22)</small>
+
+* [bitnami/appsmith] Release 3.2.1 (#26335) ([091403e](https://github.com/bitnami/charts/commit/091403e4e8ee633aedc047c9fe713c7215152e71)), closes [#26335](https://github.com/bitnami/charts/issues/26335)
 
 ## 3.2.0 (2024-05-21)
 

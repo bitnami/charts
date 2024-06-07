@@ -98,9 +98,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.notifications.livenessProbe.enabled }}
           livenessProbe:
-            httpGet:
+            tcpSocket:
               port: metrics
-              path: /metrics
             initialDelaySeconds: {{ .Values.notifications.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.notifications.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.notifications.livenessProbe.timeoutSeconds }}

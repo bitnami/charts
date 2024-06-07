@@ -1,5 +1,5 @@
 # Source: https://raw.githubusercontent.com/argoproj/argo-workflows/v{version}/manifests/base/crds/minimal/argoproj.io_clusterworkflowtemplates.yaml
-# Version: 3.5.6
+# Version: 3.5.7
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:

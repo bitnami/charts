@@ -1,8 +1,36 @@
 # Changelog
 
-## 15.5.2 (2024-05-22)
+## 15.6.5 (2024-06-06)
 
-* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap ([#26324](https://github.com/bitnami/charts/pull/26324))
+* [bitnami/mongodb] Release 15.6.5 ([#26988](https://github.com/bitnami/charts/pull/26988))
+
+## <small>15.6.4 (2024-06-06)</small>
+
+* [bitnami/mongodb] Release 15.6.4 (#26907) ([0fbcf92](https://github.com/bitnami/charts/commit/0fbcf926bb04ce00021013314b511324cd96056e)), closes [#26907](https://github.com/bitnami/charts/issues/26907)
+
+## <small>15.6.3 (2024-06-04)</small>
+
+* [bitnami/mongodb] Bump chart version (#26650) ([8a4412d](https://github.com/bitnami/charts/commit/8a4412df8904d90daefe8ac8a5345270867d329f)), closes [#26650](https://github.com/bitnami/charts/issues/26650)
+
+## <small>15.6.2 (2024-06-04)</small>
+
+* [bitnami/mongodb] Remove UTF-8 chars (#26607) ([9ab3365](https://github.com/bitnami/charts/commit/9ab33654ca45ee82d27088578308068e493c43cd)), closes [#26607](https://github.com/bitnami/charts/issues/26607)
+
+## <small>15.6.1 (2024-05-28)</small>
+
+* [bitnami/mongodb] Release 15.6.1 (#26481) ([f4dbc07](https://github.com/bitnami/charts/commit/f4dbc07bf19489d2ce4156675c1cf7e291ad0385)), closes [#26481](https://github.com/bitnami/charts/issues/26481)
+
+## 15.6.0 (2024-05-24)
+
+* [bitnami/mongodb] PDB review (#26154) ([a4ecaf9](https://github.com/bitnami/charts/commit/a4ecaf9ed62fe573de17ce95d9ec090d3b1bde88)), closes [#26154](https://github.com/bitnami/charts/issues/26154)
+
+## <small>15.5.3 (2024-05-24)</small>
+
+* [bitnami/mongodb]Add "or" condition between .Values.auth.existingSecret and .Values.auth.rootPasswor ([5f2204f](https://github.com/bitnami/charts/commit/5f2204f02bdd65fa5514dc0158797d0c3d85b635)), closes [#25944](https://github.com/bitnami/charts/issues/25944) [#25885](https://github.com/bitnami/charts/issues/25885)
+
+## <small>15.5.2 (2024-05-22)</small>
+
+* [bitnami/mongodb] Allow templating for initdbScriptsConfigMap (#26324) ([dc5fe4b](https://github.com/bitnami/charts/commit/dc5fe4b8240dc1c935280a541e0133426a4f349b)), closes [#26324](https://github.com/bitnami/charts/issues/26324)
 
 ## <small>15.5.1 (2024-05-21)</small>
 

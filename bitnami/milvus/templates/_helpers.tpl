@@ -772,7 +772,7 @@ Init container definition for waiting for the database to be ready
 
       echo "Connection success"
       exit 0
-  {{- if and .Values.externalEtcd.tls.enabled (not (empty .Values.externalEtcd.tls.existingSecret)) }}
+  {{- if and .Values.externalEtcd.tls.enabled .Values.externalEtcd.tls.existingSecret }}
   volumeMounts:
     - name: etcd-client-certs
       mountPath: /bitnami/milvus/conf/cert/etcd/client
@@ -990,22 +990,41 @@ Init container definition for waiting for the database to be ready
       cp -r /opt/bitnami/milvus/configs/. /bitnami/milvus/rendered-conf
       # Build final milvus.yaml with the sections of the different files
       find /bitnami/milvus/conf -type f -name *.yaml -print0 | sort -z | xargs -0 yq eval-all '. as $item ireduce ({}; . * $item )' /bitnami/milvus/rendered-conf/milvus.yaml > /bitnami/milvus/rendered-conf/pre-render-config_00.yaml
+
+      # Kafka settings
       {{- if (include "milvus.kafka.deployed" .context) }}
       # HACK: In order to enable Kafka we need to remove all Pulsar settings from the configuration file
       # https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml#L110
       yq 'del(.pulsar)' /bitnami/milvus/rendered-conf/pre-render-config_00.yaml > /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
-      yq e -i '.common.security.tlsMode = {{ .context.Values.proxy.tls.mode }}' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
-      {{- if ne (int .context.Values.proxy.tls.mode) 0 }}
-      yq e -i '.tls.serverPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.cert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
-      yq e -i '.tls.serverKeyPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.key }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
-      {{- if eq (int .context.Values.proxy.tls.mode) 2 }}
-      yq e -i '.tls.caPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      # Kafka TLS settings
+      {{- if and (not .context.Values.kafka.enabled) .context.Values.externalKafka.tls.enabled .context.Values.externalKafka.tls.existingSecret }}
+      yq e -i '.kafka.ssl.enabled = true' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      {{- if and .context.Values.externalKafka.tls.cert .context.Values.externalKafka.tls.key }}
+      yq e -i '.kafka.ssl.tlsCert = "/opt/bitnami/milvus/configs/cert/kafka/client/{{ .context.Values.externalKafka.tls.cert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      yq e -i '.kafka.ssl.tlsKey = "/opt/bitnami/milvus/configs/cert/kafka/client/{{ .context.Values.externalKafka.tls.key }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      {{- end }}
+      {{- if .context.Values.externalKafka.tls.caCert }}
+      yq e -i '.kafka.ssl.tlsCaCert = "/opt/bitnami/milvus/configs/cert/kafka/client/{{ .context.Values.externalKafka.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
+      {{- end }}
+      {{- if .context.Values.externalKafka.tls.keyPassword }}
+      yq e -i '.kafka.ssl.tlsKeyPassword = "{{ .context.Values.externalKafka.tls.keyPassword }}"' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
       {{- end }}
       {{- else }}
       mv /bitnami/milvus/rendered-conf/pre-render-config_00.yaml /bitnami/milvus/rendered-conf/pre-render-config_01.yaml
       {{- end }}
-      render-template /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/milvus.yaml
+
+      # Milvus server TLS settings
+      yq e '.common.security.tlsMode = {{ .context.Values.proxy.tls.mode }}' /bitnami/milvus/rendered-conf/pre-render-config_01.yaml > /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      {{- if ne (int .context.Values.proxy.tls.mode) 0 }}
+      yq e -i '.tls.serverPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.cert }}"' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      yq e -i '.tls.serverKeyPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.key }}"' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      {{- if eq (int .context.Values.proxy.tls.mode) 2 }}
+      yq e -i '.tls.caPemPath = "/opt/bitnami/milvus/configs/cert/milvus/{{ .context.Values.proxy.tls.caCert }}"' /bitnami/milvus/rendered-conf/pre-render-config_02.yaml
+      {{- end }}
+      {{- end }}
+
+      render-template /bitnami/milvus/rendered-conf/pre-render-config_02.yaml > /bitnami/milvus/rendered-conf/milvus.yaml
       rm /bitnami/milvus/rendered-conf/pre-render-config*
       chmod 644 /bitnami/milvus/rendered-conf/milvus.yaml
   env:

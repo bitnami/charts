@@ -201,16 +201,25 @@ podSecurityContext:
   ##     value: "10000"
   ##
   sysctls: []
-## @param podDisruptionBudget Limits the number of pods of the replicated application that are down simultaneously from voluntary disruptions
+## @param podDisruptionBudget DEPRECATED please use pdb instead
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions
 ##
 podDisruptionBudget: {}
-## @param minAvailable Min number of pods that must still be available after the eviction
+## Pod Disruption Budget configuration
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 ##
-minAvailable: ""
-## @param maxUnavailable Max number of pods that can be unavailable after the eviction
-##
-maxUnavailable: ""
+pdb:
+  ## @param pdb.create Created a PodDisruptionBudget
+  ##
+  create: true
+  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction.
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
+  ##
+  minAvailable: ""
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction.
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
+  ##
+  maxUnavailable: ""
 ## Containers Security Context
 ## @param containerSecurityContext.enabled Enabled containers' Security Context
 ## @param containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in container
@@ -420,7 +429,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -909,7 +918,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.59.0-debian-12-r6
+    tag: 1.60.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1115,7 +1124,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r21
+  tag: 12-debian-12-r22
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
