@@ -139,30 +139,6 @@ Return PostgreSQL postgres user password
 {{- end -}}
 
 {{/*
-Return true if PostgreSQL postgres user password has been provided
-*/}}
-{{- define "postgresql-ha.postgresqlPasswordProvided" -}}
-{{- if .Values.global -}}
-    {{- if .Values.global.postgresql -}}
-        {{- if .Values.global.postgresql.postgresPassword -}}
-            {{- true -}}
-        {{- end -}}
-        {{- if .Values.postgresql.postgresPassword -}}
-            {{- true -}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.postgresql.postgresPassword -}}
-            {{- true -}}
-        {{- end -}}
-    {{- end -}}
-{{- else -}}
-    {{- if .Values.postgresql.postgresPassword -}}
-      {{- true -}}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return the PostgreSQL password
 */}}
 {{- define "postgresql-ha.postgresqlPassword" -}}
