@@ -2,7 +2,7 @@
 
 ## 14.4.2 (2024-06-07)
 
-* align ulimitNofiles default value on containerd's runc runtime defaul… ([#27052](https://github.com/bitnami/charts/pull/27052))
+* [bitnami/rabbitmq] Align ulimitNofiles default value on containerd's runc runtime default ulimit -n value ([#27052](https://github.com/bitnami/charts/pull/27052))
 
 ## <small>14.4.1 (2024-06-06)</small>
 
