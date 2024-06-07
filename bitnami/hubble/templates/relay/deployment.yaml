@@ -167,9 +167,9 @@ spec:
                 {{- if .Values.tls.enabled }}
                 - -tls
                 - -tls-ca-cert=/certs/client/ca.crt
-                - -tls-client-cert={{ include "hubble.relay.fullname" . }}
-                - -tls-client-key=/certs/client/ca.crt
-                - -tls-server-name=/certs/client/ca.crt
+                - -tls-client-cert=/certs/client/tls.crt
+                - -tls-client-key=/certs/client/tls.key
+                - -tls-server-name={{ include "hubble.relay.fullname" . }}
                {{- end }}
           {{- end }}
           {{- if .Values.relay.customStartupProbe }}
