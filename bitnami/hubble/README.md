@@ -313,34 +313,34 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Hubble Relay Traffic Exposure Parameters
 
-| Name                                          | Description                                                                                                     | Value          |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | -------------- |
-| `relay.service.type`                          | Hubble Relay service type                                                                                       | `LoadBalancer` |
-| `relay.service.ports.grpc`                    | Hubble Relay service gRPC port                                                                                  | `4245`         |
-| `relay.service.ports.pprof`                   | Hubble Relay service pprof port                                                                                 | `6062`         |
-| `relay.service.ports.gops`                    | Hubble Relay service gops port                                                                                  | `9893`         |
-| `relay.service.ports.metrics`                 | Hubble Relay service metrics port                                                                               | `9966`         |
-| `relay.service.nodePorts.grpc`                | Node port for gRPC                                                                                              | `""`           |
-| `relay.service.nodePorts.pprof`               | Node port for pprof                                                                                             | `""`           |
-| `relay.service.nodePorts.gops`                | Node port for gops                                                                                              | `""`           |
-| `relay.service.nodePorts.metrics`             | Node port for metrics                                                                                           | `""`           |
-| `relay.service.clusterIP`                     | Hubble Relay service Cluster IP                                                                                 | `""`           |
-| `relay.service.loadBalancerIP`                | Hubble Relay service Load Balancer IP                                                                           | `""`           |
-| `relay.service.loadBalancerSourceRanges`      | Hubble Relay service Load Balancer sources                                                                      | `[]`           |
-| `relay.service.externalTrafficPolicy`         | Hubble Relay service external traffic policy                                                                    | `Cluster`      |
-| `relay.service.annotations`                   | Additional custom annotations for Hubble Relay service                                                          | `{}`           |
-| `relay.service.extraPorts`                    | Extra ports to expose in Hubble Relay service (normally used with the `sidecars` value)                         | `[]`           |
-| `relay.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                | `None`         |
-| `relay.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                     | `{}`           |
-| `relay.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Hubble Relay                                            | `true`         |
-| `relay.networkPolicy.allowExternal`           | Don't require server label for connections                                                                      | `true`         |
-| `relay.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                 | `true`         |
-| `relay.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `relay.networkPolicy.allowExternal` is true. | `true`         |
-| `relay.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                    | `[]`           |
-| `relay.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                              | `[]`           |
-| `relay.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `relay.networkPolicy.allowExternal` is true.       | `{}`           |
-| `relay.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                          | `{}`           |
-| `relay.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                      | `{}`           |
+| Name                                          | Description                                                                                                     | Value       |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------- |
+| `relay.service.type`                          | Hubble Relay service type                                                                                       | `ClusterIP` |
+| `relay.service.ports.grpc`                    | Hubble Relay service gRPC port                                                                                  | `4245`      |
+| `relay.service.ports.pprof`                   | Hubble Relay service pprof port                                                                                 | `6062`      |
+| `relay.service.ports.gops`                    | Hubble Relay service gops port                                                                                  | `9893`      |
+| `relay.service.ports.metrics`                 | Hubble Relay service metrics port                                                                               | `9966`      |
+| `relay.service.nodePorts.grpc`                | Node port for gRPC                                                                                              | `""`        |
+| `relay.service.nodePorts.pprof`               | Node port for pprof                                                                                             | `""`        |
+| `relay.service.nodePorts.gops`                | Node port for gops                                                                                              | `""`        |
+| `relay.service.nodePorts.metrics`             | Node port for metrics                                                                                           | `""`        |
+| `relay.service.clusterIP`                     | Hubble Relay service Cluster IP                                                                                 | `""`        |
+| `relay.service.loadBalancerIP`                | Hubble Relay service Load Balancer IP                                                                           | `""`        |
+| `relay.service.loadBalancerSourceRanges`      | Hubble Relay service Load Balancer sources                                                                      | `[]`        |
+| `relay.service.externalTrafficPolicy`         | Hubble Relay service external traffic policy                                                                    | `Cluster`   |
+| `relay.service.annotations`                   | Additional custom annotations for Hubble Relay service                                                          | `{}`        |
+| `relay.service.extraPorts`                    | Extra ports to expose in Hubble Relay service (normally used with the `sidecars` value)                         | `[]`        |
+| `relay.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                | `None`      |
+| `relay.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                     | `{}`        |
+| `relay.networkPolicy.enabled`                 | Specifies whether a NetworkPolicy should be created for Hubble Relay                                            | `true`      |
+| `relay.networkPolicy.allowExternal`           | Don't require server label for connections                                                                      | `true`      |
+| `relay.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                 | `true`      |
+| `relay.networkPolicy.addExternalClientAccess` | Allow access from pods with client label set to "true". Ignored if `relay.networkPolicy.allowExternal` is true. | `true`      |
+| `relay.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                                    | `[]`        |
+| `relay.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)                              | `[]`        |
+| `relay.networkPolicy.ingressPodMatchLabels`   | Labels to match to allow traffic from other pods. Ignored if `relay.networkPolicy.allowExternal` is true.       | `{}`        |
+| `relay.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                          | `{}`        |
+| `relay.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                                      | `{}`        |
 
 ### Hubble Relay Metrics Parameters
 
