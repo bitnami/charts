@@ -1,8 +1,12 @@
 # Changelog
 
-## 5.2.2 (2024-06-05)
+## 5.2.3 (2024-06-07)
 
-* [bitnami/sonarqube] Bump chart version ([#26863](https://github.com/bitnami/charts/pull/26863))
+* [bitnami/sonarqube] Release 5.2.3 ([#27046](https://github.com/bitnami/charts/pull/27046))
+
+## <small>5.2.2 (2024-06-05)</small>
+
+* [bitnami/sonarqube] Bump chart version (#26863) ([edba41f](https://github.com/bitnami/charts/commit/edba41f563fc29f86f7aa9de1248f07b9361ddd1)), closes [#26863](https://github.com/bitnami/charts/issues/26863)
 
 ## <small>5.2.1 (2024-06-05)</small>
 
