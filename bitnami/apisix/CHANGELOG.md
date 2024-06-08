@@ -1,8 +1,12 @@
 # Changelog
 
-## 3.2.2 (2024-06-06)
+## 3.2.3 (2024-06-08)
 
-* [bitnami/apisix] Release 3.2.2 ([#26936](https://github.com/bitnami/charts/pull/26936))
+* [bitnami/apisix] Fixes to support running Apisix in standalone mode ([#27062](https://github.com/bitnami/charts/pull/27062))
+
+## <small>3.2.2 (2024-06-06)</small>
+
+* [bitnami/apisix] Release 3.2.2 (#26936) ([b67410a](https://github.com/bitnami/charts/commit/b67410a9a295dd0ee8b81369acfe29dbfe3e5d50)), closes [#26936](https://github.com/bitnami/charts/issues/26936)
 
 ## <small>3.2.1 (2024-06-06)</small>
 
