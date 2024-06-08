@@ -4,6 +4,38 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{/*
+Returns an init-container that copies some dirs to an empty dir volume to make them writable
+*/}}
+{{- define "cilium.agent.initContainers.prepareWriteDirs" -}}
+- name: prepare-write-dirs
+  image: {{ include "cilium.agent.image" . }}
+  imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+  {{- if .Values.agent.initContainers.prepareWriteDirs.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.agent.initContainers.prepareWriteDirs.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.agent.initContainers.prepareWriteDirs.resources }}
+  resources: {{- toYaml .Values.agent.initContainers.prepareWriteDirs.resources | nindent 4 }}
+  {{- else if ne .Values.agent.initContainers.prepareWriteDirs.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.agent.initContainers.prepareWriteDirs.resourcesPreset) | nindent 4 }}
+  {{- end }}
+  command:
+    - /bin/bash
+  args:
+    - -ec
+    - |
+      . /opt/bitnami/scripts/liblog.sh
+
+      info "Copying writable dirs to empty dir"
+      # In order to not break the application functionality we need to make some
+      # directories writable, so we need to copy it to an empty dir volume
+      cp -r --preserve=mode /opt/bitnami/cilium/var/lib/bpf /emptydir/bpf-lib-dir
+      info "Copy operation completed"
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /emptydir
+{{- end -}}
+
+{{/*
 Returns an init-container that generate the Cilium configuration
 */}}
 {{- define "cilium.agent.initContainers.buildConfig" -}}
@@ -89,8 +121,6 @@ Returns an init-container that mount bpf fs in the host
   args:
     - -ec
     - |
-      #!/bin/bash
-
       mount | grep "{{ .Values.agent.bpf.hostRoot }} type bpf" || mount -t bpf bpf {{ .Values.agent.bpf.hostRoot }}
   volumeMounts:
     - name: bpf-maps
@@ -147,8 +177,6 @@ Returns an init-container that cleans up the Cilium state
   args:
     - -ec
     - |
-      #!/bin/bash
-
       if [[ "$CLEAN_CILIUM_BPF_STATE" = "true" ]]; then
           cilium-dbg post-uninstall-cleanup -f --bpf-state
       fi

@@ -75,6 +75,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.agent.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
+        {{- include "cilium.agent.initContainers.prepareWriteDirs" . | nindent 8}}
         {{- include "cilium.agent.initContainers.buildConfig" . | nindent 8 }}
         {{- if .Values.agent.cgroup2.autoMount }}
           {{- include "cilium.agent.initContainers.mountCgroup2" . | nindent 8 }}

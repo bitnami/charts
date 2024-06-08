@@ -442,6 +442,55 @@ agent:
   ## Default init Containers
   ##
   initContainers:
+    ## Cilium Agent "prepare-write-dirs" init container
+    ## Used to copy some dirs to an empty dir volume to make them writable
+    ##
+    prepareWriteDirs:
+      ## Configure "prepare-write-dirs" init-container Security Context
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.enabled Enabled Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Cilium Agent init-containers
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.runAsUser Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.runAsGroup Set runAsUser in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.privileged Set privileged in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Cilium Agent init-containers' Security Context
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.capabilities.add List of capabilities to be added in Cilium Agent init-containers
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Cilium Agent init-containers
+      ## @param agent.initContainers.prepareWriteDirs.containerSecurityContext.seccompProfile.type Set seccomp profile in Cilium Agent init-containers
+      ##
+      containerSecurityContext:
+        enabled: true
+        seLinuxOptions: {}
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        privileged: false
+        allowPrivilegeEscalation: false
+        capabilities:
+          add: []
+          drop: ["ALL"]
+        seccompProfile:
+          type: "RuntimeDefault"
+      ## Cilium Agent "prepare-write-dirs" init container resource requests and limits
+      ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+      ## @param agent.initContainers.prepareWriteDirs.resourcesPreset Set Cilium Agent "prepare-write-dirs" init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if agent.resources is set (agent.initContainerResources is recommended for production).
+      ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+      ##
+      resourcesPreset: "nano"
+      ## @param agent.initContainers.prepareWriteDirs.resources Set Cilium Agent "prepare-write-dirs" init container requests and limits for different resources like CPU or memory (essential for production workloads)
+      ## Example:
+      ## initContainerResources:
+      ##   requests:
+      ##     cpu: 2
+      ##     memory: 512Mi
+      ##   limits:
+      ##     cpu: 3
+      ##     memory: 1024Mi
+      ##
+      resources: {}
     ## Cilium Agent "build-config" init container
     ## Used to generate the Cilium configuration
     ##
