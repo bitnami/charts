@@ -12,8 +12,10 @@ ref: https://docs.cilium.io/en/stable/network/kubernetes/configuration/
 {{- include "common.tplvalues.render" (dict "value" .Values.configuration .) }}
 {{- else }}
 debug: {{ ternary "true" "false" (or .Values.agent.image.debug .Values.operator.image.debug .Values.diagnosticMode.enabled) | quote }}
+certificates-directory: /certs
 lib-dir: /opt/bitnami/cilium/var/lib
 state-dir: /opt/bitnami/cilium/var/run
+socket-path: /opt/bitnami/cilium/var/run/cilium.sock
 # Name & ID of the cluster
 cluster-name: default
 cluster-id: "0"

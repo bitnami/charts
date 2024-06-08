@@ -219,6 +219,9 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/cilium/conf
               subPath: config-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/cilium/var/lib/bpf
+              subPath: bpf-lib-dir
             {{- if or .Values.etcd.enabled .Values.externalKvstore.enabled }}
             - name: etcd-config
               mountPath: /opt/bitnami/cilium/var/lib/etcd
