@@ -353,6 +353,7 @@ Init container definition for waiting for the database to be ready
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
+    {{- if .context.Values.controlPlane.enabled }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -363,6 +364,7 @@ Init container definition for waiting for the database to be ready
         secretKeyRef:
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
@@ -560,6 +562,7 @@ Render configuration for the dashboard and ingress-controller components
   env:
     - name: BITNAMI_DEBUG
       value: {{ ternary "true" "false" (or .context.Values.image.debug .context.Values.diagnosticMode.enabled) | quote }}
+    {{- if .context.Values.controlPlane.enabled }}
     - name: APISIX_ADMIN_API_TOKEN
       valueFrom:
         secretKeyRef:
@@ -570,6 +573,7 @@ Render configuration for the dashboard and ingress-controller components
         secretKeyRef:
           name: {{ include "apisix.control-plane.secretName" .context }}
           key: {{ include "apisix.control-plane.viewerTokenKey" .context }}
+    {{- end }}
     {{- if (include "apisix.etcd.authEnabled" .context) }}
     - name: APISIX_ETCD_USER
       value: {{ include "apisix.etcd.user" .context }}
