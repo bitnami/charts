@@ -67,7 +67,6 @@ spec:
       schedulerName: {{ .Values.trivy.schedulerName }}
       {{- end }}
       serviceAccountName: {{ include "harbor.trivy.serviceAccountName" . }}
-      {{- end }}
       {{- if .Values.trivy.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.trivy.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
