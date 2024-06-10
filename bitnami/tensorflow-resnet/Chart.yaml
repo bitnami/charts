@@ -6,31 +6,31 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: tensorflow-resnet
-      image: docker.io/bitnami/tensorflow-resnet:2.16.1-debian-12-r3
+      image: docker.io/bitnami/tensorflow-resnet:2.16.1-debian-12-r4
     - name: tensorflow-serving
-      image: docker.io/bitnami/tensorflow-serving:2.16.1-debian-12-r3
+      image: docker.io/bitnami/tensorflow-serving:2.16.1-debian-12-r4
 apiVersion: v2
 appVersion: 2.16.1
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 keywords:
-  - tensorflow
-  - serving
-  - resnet
-  - machine
-  - learning
-  - library
+- tensorflow
+- serving
+- resnet
+- machine
+- learning
+- library
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: tensorflow-resnet
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 4.2.1
+- https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
+version: 4.2.3

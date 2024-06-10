@@ -1,8 +1,20 @@
 # Changelog
 
-## 5.2.0 (2024-05-29)
+## 5.2.3 (2024-06-07)
 
-* [bitnami/sonarqube] Enable PodDisruptionBudgets ([#26535](https://github.com/bitnami/charts/pull/26535))
+* [bitnami/sonarqube] Release 5.2.3 ([#27046](https://github.com/bitnami/charts/pull/27046))
+
+## <small>5.2.2 (2024-06-05)</small>
+
+* [bitnami/sonarqube] Bump chart version (#26863) ([edba41f](https://github.com/bitnami/charts/commit/edba41f563fc29f86f7aa9de1248f07b9361ddd1)), closes [#26863](https://github.com/bitnami/charts/issues/26863)
+
+## <small>5.2.1 (2024-06-05)</small>
+
+* [bitnami/sonarqube] Bump chart version (#26805) ([eebef62](https://github.com/bitnami/charts/commit/eebef62c0f72fe3c6ea77f3c79c371415e52514e)), closes [#26805](https://github.com/bitnami/charts/issues/26805)
+
+## 5.2.0 (2024-05-30)
+
+* [bitnami/sonarqube] Enable PodDisruptionBudgets (#26535) ([7146a83](https://github.com/bitnami/charts/commit/7146a83372b9b690ccea3cf7fd77910042a96c08)), closes [#26535](https://github.com/bitnami/charts/issues/26535)
 
 ## 5.1.0 (2024-05-21)
 

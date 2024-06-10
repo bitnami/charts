@@ -1,8 +1,16 @@
 # Changelog
 
-## 16.2.1 (2024-06-04)
+## 16.2.3 (2024-06-06)
 
-* [bitnami/dokuwiki] Bump chart version ([#26627](https://github.com/bitnami/charts/pull/26627))
+* [bitnami/dokuwiki] Release 16.2.3 ([#26947](https://github.com/bitnami/charts/pull/26947))
+
+## <small>16.2.2 (2024-06-04)</small>
+
+* [bitnami/dokuwiki] Fix typo in deployment.yaml template (#26678) ([481a103](https://github.com/bitnami/charts/commit/481a10354381ae43b4c48988f8371bef693fe55a)), closes [#26678](https://github.com/bitnami/charts/issues/26678)
+
+## <small>16.2.1 (2024-06-04)</small>
+
+* [bitnami/dokuwiki] Bump chart version (#26627) ([64ab63c](https://github.com/bitnami/charts/commit/64ab63cc2305887ba762cee47f84bda22494db4c)), closes [#26627](https://github.com/bitnami/charts/issues/26627)
 
 ## 16.2.0 (2024-05-27)
 

@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.2.1 (2024-06-04)
+## 2.2.3 (2024-06-06)
 
-* [bitnami/kiam] Bump chart version ([#26638](https://github.com/bitnami/charts/pull/26638))
+* [bitnami/kiam] Release 2.2.3 ([#26971](https://github.com/bitnami/charts/pull/26971))
+
+## <small>2.2.2 (2024-06-05)</small>
+
+* [bitnami/kiam] Release 2.2.2 (#26734) ([16d7be0](https://github.com/bitnami/charts/commit/16d7be0d2c9eac7692e29360fade811bce8de1f0)), closes [#26734](https://github.com/bitnami/charts/issues/26734)
+
+## <small>2.2.1 (2024-06-04)</small>
+
+* [bitnami/kiam] Bump chart version (#26638) ([3c501b6](https://github.com/bitnami/charts/commit/3c501b6f194ea225c9c43fee7ccde4d0fb392bfb)), closes [#26638](https://github.com/bitnami/charts/issues/26638)
 
 ## 2.2.0 (2024-05-29)
 

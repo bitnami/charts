@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.3 (2024-06-04)
+## 20.2.4 (2024-06-06)
 
-* [bitnami/wildfly] Bump chart version ([#26674](https://github.com/bitnami/charts/pull/26674))
+* [bitnami/wildfly] Release 20.2.4 ([#27027](https://github.com/bitnami/charts/pull/27027))
+
+## <small>20.2.3 (2024-06-04)</small>
+
+* [bitnami/wildfly] Bump chart version (#26674) ([8e9c772](https://github.com/bitnami/charts/commit/8e9c772d830c5db49903736cbce24f8dc1f7b865)), closes [#26674](https://github.com/bitnami/charts/issues/26674)
 
 ## <small>20.2.2 (2024-05-31)</small>
 

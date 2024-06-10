@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.3.1 (2024-06-04)
+## 2.3.4 (2024-06-06)
 
-* [bitnami/flux] Bump chart version ([#26632](https://github.com/bitnami/charts/pull/26632))
+* [bitnami/flux] Release 2.3.4 ([#26956](https://github.com/bitnami/charts/pull/26956))
+
+## <small>2.3.3 (2024-06-05)</small>
+
+* [bitnami/flux] Align PodDisruptionBudgets with templates (#26694) ([328d102](https://github.com/bitnami/charts/commit/328d102cf4a18663989cf3b56c90c85319b30844)), closes [#26694](https://github.com/bitnami/charts/issues/26694)
+
+## <small>2.3.2 (2024-06-05)</small>
+
+* [bitnami/flux] Release 2.3.2 (#26725) ([53a66af](https://github.com/bitnami/charts/commit/53a66af5a59dbbd365c4d458f1ad5a95a62e5266)), closes [#26725](https://github.com/bitnami/charts/issues/26725)
+
+## <small>2.3.1 (2024-06-04)</small>
+
+* [bitnami/flux] Bump chart version (#26632) ([1b8fd97](https://github.com/bitnami/charts/commit/1b8fd97a13c1017a896191b930041ce8d0659b9d)), closes [#26632](https://github.com/bitnami/charts/issues/26632)
 
 ## 2.3.0 (2024-05-21)
 

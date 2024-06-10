@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.2.1 (2024-06-04)
+## 2.2.3 (2024-06-06)
 
-* [bitnami/pinniped] Bump chart version ([#26659](https://github.com/bitnami/charts/pull/26659))
+* [bitnami/pinniped] Release 2.2.3 ([#26999](https://github.com/bitnami/charts/pull/26999))
+
+## <small>2.2.2 (2024-06-05)</small>
+
+* [bitnami/pinniped] Release 2.2.2 (#26751) ([50cc02f](https://github.com/bitnami/charts/commit/50cc02f29b3121b4708a501cacfc20b2fc03a923)), closes [#26751](https://github.com/bitnami/charts/issues/26751)
+
+## <small>2.2.1 (2024-06-04)</small>
+
+* [bitnami/pinniped] Bump chart version (#26659) ([ae7cb32](https://github.com/bitnami/charts/commit/ae7cb329c94ec9ea245dd1dab4bf25772fb09575)), closes [#26659](https://github.com/bitnami/charts/issues/26659)
 
 ## 2.2.0 (2024-05-30)
 

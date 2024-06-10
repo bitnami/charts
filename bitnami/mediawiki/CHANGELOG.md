@@ -1,8 +1,24 @@
 # Changelog
 
-## 20.2.1 (2024-06-04)
+## 20.2.5 (2024-06-06)
 
-* [bitnami/mediawiki] Fix typo in deployment.yaml template ([#26615](https://github.com/bitnami/charts/pull/26615))
+* [bitnami/mediawiki] Release 20.2.5 ([#26979](https://github.com/bitnami/charts/pull/26979))
+
+## <small>20.2.4 (2024-06-06)</small>
+
+* [bitnami/mediawiki] Release 20.2.4 (#26906) ([ee182f2](https://github.com/bitnami/charts/commit/ee182f2b932b6f88c1928e3c3292797bb8453df1)), closes [#26906](https://github.com/bitnami/charts/issues/26906)
+
+## <small>20.2.3 (2024-06-05)</small>
+
+* [bitnami/mediawiki] Bump chart version (#26846) ([3c9b7f5](https://github.com/bitnami/charts/commit/3c9b7f5bf2c7cc3c361bdf1e578c72e6c43cc350)), closes [#26846](https://github.com/bitnami/charts/issues/26846)
+
+## <small>20.2.2 (2024-06-05)</small>
+
+* [bitnami/mediawiki] Bump chart version (#26788) ([4a0fd9f](https://github.com/bitnami/charts/commit/4a0fd9fa9a286ef05ac986bcba833c083cc4d6b1)), closes [#26788](https://github.com/bitnami/charts/issues/26788)
+
+## <small>20.2.1 (2024-06-04)</small>
+
+* [bitnami/mediawiki] Fix typo in deployment.yaml template (#26615) ([a85830c](https://github.com/bitnami/charts/commit/a85830c8272724e1ce6b293aa0f550ee65ea905b)), closes [#26615](https://github.com/bitnami/charts/issues/26615)
 
 ## 20.2.0 (2024-06-03)
 
