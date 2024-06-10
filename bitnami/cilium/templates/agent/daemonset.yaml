@@ -75,23 +75,23 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.agent.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- include "cilium.agent.initContainers.prepareWriteDirs" . | nindent 8}}
-        {{- include "cilium.agent.initContainers.buildConfig" . | nindent 8 }}
+        {{- include "cilium.agent.defaultInitContainers.prepareWriteDirs" . | nindent 8}}
+        {{- include "cilium.agent.defaultInitContainers.buildConfig" . | nindent 8 }}
         {{- if .Values.agent.cgroup2.autoMount }}
-          {{- include "cilium.agent.initContainers.mountCgroup2" . | nindent 8 }}
+          {{- include "cilium.agent.defaultInitContainers.mountCgroup2" . | nindent 8 }}
         {{- end }}
         {{- if .Values.agent.bpf.autoMount }}
-          {{- include "cilium.agent.initContainers.mountBpf" . | nindent 8 }}
+          {{- include "cilium.agent.defaultInitContainers.mountBpf" . | nindent 8 }}
         {{- end }}
-        {{- include "cilium.agent.initContainers.cleanState" . | nindent 8 }}
+        {{- include "cilium.agent.defaultInitContainers.cleanState" . | nindent 8 }}
         {{- if .Values.agent.waitForKubeProxy }}
-          {{- include "cilium.agent.initContainers.waitForKubeProxy" . | nindent 8 }}
+          {{- include "cilium.agent.defaultInitContainers.waitForKubeProxy" . | nindent 8 }}
         {{- end }}
         {{- if .Values.agent.cniPlugin.install }}
-          {{- include "cilium.agent.initContainers.installCniPlugin" . | nindent 8 }}
+          {{- include "cilium.agent.defaultInitContainers.installCniPlugin" . | nindent 8 }}
         {{- end }}
-        {{- if .Values.agent.extraInitContainers }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.agent.extraInitContainers "context" $) | nindent 8 }}
+        {{- if .Values.agent.initContainers }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.agent.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: cilium-agent
@@ -161,8 +161,6 @@ spec:
           ports:
             - name: health
               containerPort: {{ .Values.agent.containerPorts.health }}
-            - name: gops
-              containerPort: {{ .Values.agent.containerPorts.gops }}
             {{- if .Values.agent.enablePprof }}
             - name: pprof
               containerPort: {{ .Values.agent.containerPorts.pprof }}
@@ -172,6 +170,8 @@ spec:
             {{- if .Values.agent.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.agent.containerPorts.metrics }}
+            {{- end }}
+            {{- if .Values.agent.hubbleMetrics.enabled }}
             - name: hubble-metrics
               containerPort: {{ .Values.agent.containerPorts.hubbleMetrics }}
             {{- end }}

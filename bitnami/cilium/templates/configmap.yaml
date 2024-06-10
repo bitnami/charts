@@ -37,15 +37,19 @@ enable-ipv6: "false"
 routing-mode: "tunnel"
 tunnel-protocol: "vxlan"
 tunnel-port: "8472"
-# Health checking, Gops and Pprof
+# Health checking and Pprof
 enable-endpoint-health-checking: "true"
 enable-health-checking: "true"
 agent-health-port: {{ printf "%d" (int .Values.agent.containerPorts.health) | quote }}
-gops-port: {{ printf "%d" (int .Values.agent.containerPorts.gops) | quote }}
 pprof: {{ ternary "true" "false" .Values.agent.enablePprof | quote }}
 {{- if .Values.agent.enablePprof }}
 pprof-address: "localhost"
 pprof-port: {{ printf "%d" (int .Values.agent.containerPorts.pprof) | quote }}
+{{- end }}
+operator-pprof: {{ ternary "true" "false" .Values.operator.enablePprof | quote }}
+{{- if .Values.operator.enablePprof }}
+operator-pprof-address: "localhost"
+operator-pprof-port: {{ printf "%d" (int .Values.operator.containerPorts.pprof) | quote }}
 {{- end }}
 # Monitor aggregation
 monitor-aggregation: medium
@@ -80,14 +84,16 @@ hubble-tls-cert-file: /certs/hubble/tls.crt
 hubble-tls-key-file: /certs/hubble/tls.key
 hubble-tls-client-ca-files: /certs/hubble/ca.crt
 {{- end }}
-{{- if or .Values.agent.metrics.enabled .Values.operator.metrics.enabled }}
+{{- if or .Values.agent.metrics.enabled .Values.agent.hubbleMetrics.enabled .Values.operator.metrics.enabled }}
 # Prometheus metrics
 enable-metrics: "true"
 {{- if .Values.agent.metrics.enabled }}
 prometheus-serve-addr: {{ printf ":%d" (int .Values.agent.containerPorts.metrics) | quote }}
-hubble-metrics-server: {{ printf ":%d" (int .Values.agent.containerPorts.hubbleMetrics) | quote }}
 controllerGroupMetrics: all
 metrics: ~
+{{- end }}
+{{- if .Values.agent.hubbleMetrics.enabled }}
+hubble-metrics-server: {{ printf ":%d" (int .Values.agent.containerPorts.hubbleMetrics) | quote }}
 hubble-metrics: ~
 {{- end }}
 {{- if .Values.operator.metrics.enabled }}

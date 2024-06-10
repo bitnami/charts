@@ -1,0 +1,51 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.agent.hubbleMetrics.enabled .Values.agent.hubbleMetrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ printf "%s-hubble" (include "cilium.agent.fullname" .) }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.agent.hubbleMetrics.serviceMonitor.namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.agent.hubbleMetrics.serviceMonitor.labels .Values.commonLabels) "context" .) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/part-of: cilium
+    app.kubernetes.io/component: hubble
+  {{- if or .Values.agent.hubbleMetrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.agent.hubbleMetrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  jobLabel: {{ .Values.agent.hubbleMetrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: cilium
+      app.kubernetes.io/component: hubble
+      prometheus.io/scrape: "true"
+      {{- if .Values.agent.hubbleMetrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.agent.hubbleMetrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: tcp-hubble-metrics
+      path: "/metrics"
+      {{- if .Values.agent.hubbleMetrics.serviceMonitor.interval }}
+      interval: {{ .Values.agent.hubbleMetrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.agent.hubbleMetrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.agent.hubbleMetrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.agent.hubbleMetrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.agent.hubbleMetrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.agent.hubbleMetrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.hubbleMetrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.agent.hubbleMetrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.hubbleMetrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

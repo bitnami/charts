@@ -3,29 +3,29 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.operator.metrics.enabled }}
+{{- if .Values.agent.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ printf "%s-metrics" (include "cilium.operator.fullname" .) }}
+  name: {{ printf "%s-metrics" (include "cilium.agent.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
-    app.kubernetes.io/component: operator
+    app.kubernetes.io/component: agent
     prometheus.io/scrape: "true"
-  {{- if or .Values.operator.metrics.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.operator.metrics.service.annotations .Values.commonAnnotations) "context" .) }}
+  {{- if or .Values.agent.metrics.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.agent.metrics.service.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   ports:
     - name: tcp-metrics
-      port: {{ .Values.operator.metrics.service.port }}
+      port: {{ .Values.agent.metrics.service.port }}
       targetPort: metrics
       protocol: TCP
-  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.operator.podLabels .Values.commonLabels) "context" .) | fromYaml }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.agent.podLabels .Values.commonLabels) "context" .) | fromYaml }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
-    app.kubernetes.io/component: operator
+    app.kubernetes.io/component: agent
 {{- end }}

@@ -37,6 +37,7 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: cilium
 sources:
+  - https://github.com/bitnami/charts/tree/main/bitnami/cilium
   - https://github.com/bitnami/containers/tree/main/bitnami/cilium
   - https://github.com/bitnami/containers/tree/main/bitnami/cilium-operator
 version: 0.1.0

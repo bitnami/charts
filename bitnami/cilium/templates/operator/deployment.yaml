@@ -43,7 +43,7 @@ spec:
       {{- include "cilium.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "cilium.operator.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.operator.automountServiceAccountToken }}
-      {{- if .Values.hostNetwork }}
+      {{- if .Values.operator.hostNetwork }}
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
@@ -73,6 +73,12 @@ spec:
       {{- end }}
       {{- if .Values.operator.priorityClassName }}
       priorityClassName: {{ .Values.operator.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.operator.schedulerName }}
+      schedulerName: {{ .Values.operator.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.operator.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.operator.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.operator.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.operator.podSecurityContext "context" $) | nindent 8 }}
@@ -142,6 +148,10 @@ spec:
           ports:
             - name: api
               containerPort: {{ .Values.operator.containerPorts.api }}
+            {{- if .Values.operator.enablePprof }}
+            - name: pprof
+              containerPort: {{ .Values.operator.containerPorts.pprof }}
+            {{- end }}
             {{- if .Values.operator.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.operator.containerPorts.metrics }}

@@ -34,17 +34,29 @@ spec:
           protocol: UDP
         - port: 53
           protocol: TCP
+        # Allow access to kube-apiserver
+        {{- range $port := .Values.agent.networkPolicy.kubeAPIServerPorts }}
+        - port: {{ $port }}
+        {{- end }}
+    {{- if or .Values.etcd.enabled .Values.externalKvstore.enabled }}
+    # Allow outbound connections to key-value store
+    - ports:
+        - port: {{ include "cilium.kvstore.port" . }}
+          protocol: TCP
+      {{- if .Values.etcd.enabled }}
+      to:  
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: etcd
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- end }}
+    {{- end }}
     {{- if .Values.agent.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.agent.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}
     {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.agent.containerPorts.health }}
-        - port: {{ .Values.agent.containerPorts.gops }}
-        {{- if .Values.agent.enablePprof }}
-        - port: {{ .Values.agent.containerPorts.pprof }}
-        {{- end }}
         - port: {{ .Values.agent.containerPorts.hubblePeer }}
         {{- if .Values.agent.metrics.enabled }}
         - port: {{ .Values.agent.containerPorts.metrics }}

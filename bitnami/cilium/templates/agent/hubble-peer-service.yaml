@@ -6,16 +6,18 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "cilium.agent.fullname" . }}
+  name: {{ printf "%s-hubble-peer" (include "cilium.agent.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
-    app.kubernetes.io/component: agent
+    app.kubernetes.io/component: hubble
   {{- if or .Values.agent.service.annotations .Values.commonAnnotations }}
   {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.agent.service.annotations .Values.commonAnnotations) "context" .) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  # There's no reason to support LoadBalancer nor NodePort (and their associated customizations)
+  # given Hubble Peer service is only used for Hubble Relay to connect to Hubble Peer servers internally.
   type: ClusterIP
   {{- if .Values.agent.service.clusterIP }}
   clusterIP: {{ .Values.agent.service.clusterIP }}
@@ -26,16 +28,6 @@ spec:
       port: {{ .Values.agent.service.ports.hubblePeer }}
       targetPort: hubble-peer
       protocol: TCP
-    {{- if .Values.agent.metrics.enabled }}
-    - name: tcp-metrics
-      port: {{ .Values.agent.service.ports.metrics }}
-      targetPort: metrics
-      protocol: TCP
-    - name: tcp-hubble-metrics
-      port: {{ .Values.agent.service.ports.hubbleMetrics }}
-      targetPort: hubble-metrics
-      protocol: TCP
-    {{- end }}
     {{- if .Values.agent.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

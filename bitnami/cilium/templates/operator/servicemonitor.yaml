@@ -23,6 +23,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: cilium
       app.kubernetes.io/component: operator
+      prometheus.io/scrape: "true"
       {{- if .Values.operator.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.operator.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}

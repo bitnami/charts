@@ -8,25 +8,32 @@ agent:
     install: true
     hostCNIBinDir: /home/kubernetes/bin
     hostCNINetDir: /etc/cni/net.d
+  enablePprof: true
   containerSecurityContext:
     enabled: true
     runAsUser: 0
     allowPrivilegeEscalation: true
     privileged: true
+  containerPorts:
+    health: 9879
+    pprof: 6060
+    hubblePeer: 4244
+    metrics: 9962
+    hubbleMetrics: 9965
   priorityClassName: ""
   serviceAccount:
     create: true
     automountServiceAccountToken: true
+  service:
+    ports:
+      hubblePeer: 4244
+      metrics: 9962
+      hubbleMetrics: 9965
   metrics:
     enabled: true
+  hubbleMetrics:
+    enabled: true
 operator:
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1002
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1002
-    runAsGroup: 1002
   metrics:
     enabled: true
 rbac:

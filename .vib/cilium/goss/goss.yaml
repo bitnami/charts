@@ -16,6 +16,33 @@ command:
     stdout:
     - /serviceaccount.*name.*{{ .Env.BITNAMI_APP_NAME }}/
   {{ end }}
+http:
+  http://127.0.0.1:{{ .Vars.agent.containerPorts.health }}/healthz:
+    status: 200
+  {{ if .Vars.agent.metrics.enabled }}
+  http://127.0.0.1:{{ .Vars.agent.containerPorts.metrics }}/metrics:
+    status: 200
+  http://cilium-agent-metrics:{{ .Vars.agent.service.ports.metrics }}/metrics:
+    status: 200
+  {{ end }}
+  {{ if .Vars.agent.hubbleMetrics.enabled }}
+  http://127.0.0.1:{{ .Vars.agent.containerPorts.hubbleMetrics }}/metrics:
+    status: 200
+  http://cilium-agent-hubble-metrics:{{ .Vars.agent.service.ports.hubbleMetrics }}/metrics:
+    status: 200
+  {{ end }}
+addr:
+  tcp://127.0.0.1:{{ .Vars.agent.containerPorts.hubblePeer }}:
+    reachable: true
+    timeout: 500
+  tcp://cilium-agent-hubble-peer:{{ .Vars.agent.service.ports.hubblePeer}}:
+    reachable: true
+    timeout: 500
+  {{ if .Vars.agent.enablePprof }}
+  tcp://127.0.0.1:{{ .Vars.agent.containerPorts.pprof }}:
+    reachable: true
+    timeout: 500
+  {{ end }}
 file:
   # Sockets should be created
   /opt/bitnami/cilium/var/run/cilium.sock:

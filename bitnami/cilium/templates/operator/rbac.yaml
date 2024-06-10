@@ -3,11 +3,11 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create }}
+{{- if .Values.operator.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "cilium.operator.fullname" . }}
+  name: {{ template "cilium.operator.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: operator
@@ -209,11 +209,14 @@ rules:
   - create
   - get
   - update
+  {{- if .Values.operator.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.operator.rbac.rules "context" $ ) | nindent 2 }}
+  {{- end }}
 ---
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "cilium.operator.fullname" . }}
+  name: {{ template "cilium.operator.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
     app.kubernetes.io/component: operator
@@ -223,7 +226,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "cilium.operator.fullname" . }}
+  name: {{ template "cilium.operator.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "cilium.operator.serviceAccountName" . }}

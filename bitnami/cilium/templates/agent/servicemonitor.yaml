@@ -23,55 +23,12 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: cilium
       app.kubernetes.io/component: agent
+      prometheus.io/scrape: "true"
       {{- if .Values.agent.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.agent.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
   endpoints:
     - port: tcp-metrics
-      path: "/metrics"
-      {{- if .Values.agent.metrics.serviceMonitor.interval }}
-      interval: {{ .Values.agent.metrics.serviceMonitor.interval }}
-      {{- end }}
-      {{- if .Values.agent.metrics.serviceMonitor.scrapeTimeout }}
-      scrapeTimeout: {{ .Values.agent.metrics.serviceMonitor.scrapeTimeout }}
-      {{- end }}
-      {{- if .Values.agent.metrics.serviceMonitor.honorLabels }}
-      honorLabels: {{ .Values.agent.metrics.serviceMonitor.honorLabels }}
-      {{- end }}
-      {{- if .Values.agent.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if .Values.agent.metrics.serviceMonitor.relabelings }}
-      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.agent.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
-      {{- end }}
-  namespaceSelector:
-    matchNames:
-    - {{ include "common.names.namespace" . | quote }}
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: {{ printf "%s-hubble" (include "cilium.agent.fullname" .) }}
-  namespace: {{ default (include "common.names.namespace" .) .Values.agent.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := include "common.tplvalues.merge" (dict "values" (list .Values.agent.metrics.serviceMonitor.labels .Values.commonLabels) "context" .) }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/part-of: cilium
-    app.kubernetes.io/component: agent
-  {{- if or .Values.agent.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" (dict "values" (list .Values.agent.metrics.serviceMonitor.annotations .Values.commonAnnotations) "context" .) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
-  {{- end }}
-spec:
-  jobLabel: {{ .Values.agent.metrics.serviceMonitor.jobLabel | quote }}
-  selector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/part-of: cilium
-      app.kubernetes.io/component: agent
-      {{- if .Values.agent.metrics.serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.agent.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
-      {{- end }}
-  endpoints:
-    - port: tcp-hubble-metrics
       path: "/metrics"
       {{- if .Values.agent.metrics.serviceMonitor.interval }}
       interval: {{ .Values.agent.metrics.serviceMonitor.interval }}

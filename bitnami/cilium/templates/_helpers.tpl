@@ -18,6 +18,20 @@ Return the proper Cilium Operator fullname
 {{- end -}}
 
 {{/*
+Return the proper Cilium Agent fullname (with namespace)
+*/}}
+{{- define "cilium.agent.fullname.namespace" -}}
+{{- printf "%s-agent" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Cilium Operator fullname (with namespace)
+*/}}
+{{- define "cilium.operator.fullname.namespace" -}}
+{{- printf "%s-operator" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Cilium key-value store fullname
 */}}
 {{- define "cilium.kvstore.fullname" -}}
@@ -123,6 +137,17 @@ Return the key-value store endpoints
     {{- range $endpoint := .Values.externalKvstore.endpoints -}}
         {{- printf "- http://%s" $endpoint -}}
     {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the key-value store port
+*/}}
+{{- define "cilium.kvstore.port" -}}
+{{- if .Values.etcd.enabled -}}
+    {{- printf "%d" int .Values.etcd.service.ports.client -}}
+{{- else if .Values.externalKvstore.enabled -}}
+    {{- print "2379" -}}
 {{- end -}}
 {{- end -}}
 
