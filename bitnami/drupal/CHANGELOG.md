@@ -1,8 +1,16 @@
 # Changelog
 
-## 18.21.3 (2024-06-05)
+## 18.21.5 (2024-06-06)
 
-* [bitnami/drupal] Bump chart version ([#26826](https://github.com/bitnami/charts/pull/26826))
+* [bitnami/drupal] Release 18.21.5 ([#26945](https://github.com/bitnami/charts/pull/26945))
+
+## <small>18.21.4 (2024-06-06)</small>
+
+* [bitnami/drupal] Release 18.21.4 (#26884) ([ad57d57](https://github.com/bitnami/charts/commit/ad57d571a069edbc036d121a91dd340c6dfeca98)), closes [#26884](https://github.com/bitnami/charts/issues/26884)
+
+## <small>18.21.3 (2024-06-05)</small>
+
+* [bitnami/drupal] Bump chart version (#26826) ([d043062](https://github.com/bitnami/charts/commit/d04306223932c525c0df2b5b0f742366f5606e73)), closes [#26826](https://github.com/bitnami/charts/issues/26826)
 
 ## <small>18.21.2 (2024-06-05)</small>
 

@@ -64,7 +64,7 @@ spec:
   {{- end }}
   ingress:
     - ports:
-        - port: {{ .Values.injector.service.ports.https }}
+        - port: {{ .Values.injector.containerPorts.https }}
       {{- if not .Values.injector.networkPolicy.allowExternal }}
       from:
         - podSelector:

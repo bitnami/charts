@@ -1,8 +1,8 @@
 # Changelog
 
-## 2.20.1 (2024-06-06)
+## 2.20.1 (2024-06-07)
 
-* [bitnami/common] remove trailing spaces from imagePullSecrets rendering ([#26882](https://github.com/bitnami/charts/pull/26882))
+* [bitnami/common] improve renderSecurityContext ([#27053](https://github.com/bitnami/charts/pull/27053))
 
 ## 2.20.0 (2024-06-05)
 

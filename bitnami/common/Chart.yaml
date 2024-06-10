@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
 apiVersion: v2
 # Please make sure that version and appVersion are always the same.
-appVersion: 2.20.0
+appVersion: 2.20.1
 description: A Library Helm Chart for grouping common logic between bitnami charts. This chart is not deployable by itself.
 home: https://bitnami.com
 icon: https://bitnami.com/downloads/logos/bitnami-mark.png

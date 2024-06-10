@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.2 (2024-06-05)
+## 14.2.3 (2024-06-07)
 
-* [bitnami/ejbca] Bump chart version ([#26827](https://github.com/bitnami/charts/pull/26827))
+* [bitnami/ejbca] Release 14.2.3 ([#27057](https://github.com/bitnami/charts/pull/27057))
+
+## <small>14.2.2 (2024-06-05)</small>
+
+* [bitnami/ejbca] Bump chart version (#26827) ([02e3a9e](https://github.com/bitnami/charts/commit/02e3a9e1aa95950946320b37b9eeed31117b7f6f)), closes [#26827](https://github.com/bitnami/charts/issues/26827)
 
 ## <small>14.2.1 (2024-06-05)</small>
 

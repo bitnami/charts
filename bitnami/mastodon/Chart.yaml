@@ -12,41 +12,41 @@ annotations:
 apiVersion: v2
 appVersion: 4.2.9
 dependencies:
-  - condition: redis.enabled
-    name: redis
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 19.x.x
-  - condition: postgresql.enabled
-    name: postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 15.x.x
-  - condition: elasticsearch.enabled
-    name: elasticsearch
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 21.x.x
-  - condition: minio.enabled
-    name: minio
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 14.x.x
-  - condition: apache.enabled
-    name: apache
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 11.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: redis.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 19.x.x
+- condition: postgresql.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 15.x.x
+- condition: elasticsearch.enabled
+  name: elasticsearch
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 21.x.x
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 14.x.x
+- condition: apache.enabled
+  name: apache
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 11.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Mastodon is self-hosted social network server based on ActivityPub. Written in Ruby, features real-time updates, multimedia attachments and no vendor lock-in.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mastodon/img/mastodon-stack-220x234.png
 keywords:
-  - development
-  - dashboards
+- development
+- dashboards
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: mastodon
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/mastodon
-version: 6.2.3
+- https://github.com/bitnami/charts/tree/main/bitnami/mastodon
+version: 6.2.4

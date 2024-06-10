@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.3 (2024-06-05)
+## 6.2.4 (2024-06-06)
 
-* [bitnami/clickhouse] Bump chart version ([#26823](https://github.com/bitnami/charts/pull/26823))
+* [bitnami/clickhouse] Release 6.2.4 ([#26937](https://github.com/bitnami/charts/pull/26937))
+
+## <small>6.2.3 (2024-06-05)</small>
+
+* [bitnami/clickhouse] Bump chart version (#26823) ([7ad12ad](https://github.com/bitnami/charts/commit/7ad12ada5314dda8790976f9951a59d224b8095e)), closes [#26823](https://github.com/bitnami/charts/issues/26823)
 
 ## <small>6.2.2 (2024-06-05)</small>
 

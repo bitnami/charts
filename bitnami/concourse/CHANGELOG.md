@@ -1,8 +1,16 @@
 # Changelog
 
-## 4.2.3 (2024-06-05)
+## 4.2.5 (2024-06-06)
 
-* [bitnami/concourse] Bump chart version ([#26824](https://github.com/bitnami/charts/pull/26824))
+* [bitnami/concourse] Release 4.2.5 ([#26931](https://github.com/bitnami/charts/pull/26931))
+
+## <small>4.2.4 (2024-06-06)</small>
+
+* [bitnami/concourse] Align PodDisruptionBudgets with templates (#26688) ([5fb555f](https://github.com/bitnami/charts/commit/5fb555f85c804d48e3cbf0ccf5f0d8dd278dbdcc)), closes [#26688](https://github.com/bitnami/charts/issues/26688)
+
+## <small>4.2.3 (2024-06-05)</small>
+
+* [bitnami/concourse] Bump chart version (#26824) ([2ab9b50](https://github.com/bitnami/charts/commit/2ab9b509e77e27dc5af7537da764f7c1612e8015)), closes [#26824](https://github.com/bitnami/charts/issues/26824)
 
 ## <small>4.2.2 (2024-06-05)</small>
 
