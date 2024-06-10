@@ -40,7 +40,7 @@
             "vars_file": "cilium/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "ds-cilium"
+                "workload": "ds-cilium-agent"
               }
             }
           }
