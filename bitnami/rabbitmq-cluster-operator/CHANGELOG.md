@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.3.5 (2024-06-06)
+## 4.3.6 (2024-06-10)
 
-* [bitnami/rabbitmq-cluster-operator] Release 4.3.5 ([#27008](https://github.com/bitnami/charts/pull/27008))
+* [bitnami/rabbitmq-cluster-operator] Fix cert-manager injection when existing secret is used ([#26521](https://github.com/bitnami/charts/pull/26521))
+
+## <small>4.3.5 (2024-06-06)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.5 (#27008) ([3c86e62](https://github.com/bitnami/charts/commit/3c86e621a23bc1082de077463ac1c997c2d59a61)), closes [#27008](https://github.com/bitnami/charts/issues/27008)
 
 ## <small>4.3.4 (2024-06-05)</small>
 
