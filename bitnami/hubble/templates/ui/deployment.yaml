@@ -175,16 +175,14 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ui.backend.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ui.backend.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ui.backend.livenessProbe "enabled") "context" $) | nindent 12 }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: {{ .Values.ui.backend.containerPorts.http }}
           {{- end }}
-          # TODO: use a different probe for readiness
+          # TODO: use a different probe for readiness once https://github.com/cilium/hubble-ui/issues/853 is solved
           {{- if .Values.ui.backend.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ui.backend.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ui.backend.readinessProbe.enabled }}
-            httpGet:
-              path: /healthz
+            tcpSocket:
               port: {{ .Values.ui.backend.containerPorts.http }}
           {{- end }}
           {{- if .Values.ui.backend.customStartupProbe }}
