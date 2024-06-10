@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.4 (2024-06-04)
+## 8.2.5 (2024-06-06)
 
-* [bitnami/mongodb-sharded] Bump chart version ([#26651](https://github.com/bitnami/charts/pull/26651))
+* [bitnami/mongodb-sharded] Release 8.2.5 ([#26986](https://github.com/bitnami/charts/pull/26986))
+
+## <small>8.2.4 (2024-06-04)</small>
+
+* [bitnami/mongodb-sharded] Bump chart version (#26651) ([36e571f](https://github.com/bitnami/charts/commit/36e571fecd941a118f5605ba0ab9280cd4f67977)), closes [#26651](https://github.com/bitnami/charts/issues/26651)
 
 ## <small>8.2.3 (2024-05-31)</small>
 

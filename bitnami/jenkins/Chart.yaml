@@ -6,33 +6,33 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jenkins
-      image: docker.io/bitnami/jenkins:2.452.1-debian-12-r1
+      image: docker.io/bitnami/jenkins:2.452.1-debian-12-r2
     - name: jenkins-agent
       image: docker.io/bitnami/jenkins-agent:0.3248.0-debian-12-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
 apiVersion: v2
 appVersion: 2.452.1
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Jenkins is an open source Continuous Integration and Continuous Delivery (CI/CD) server designed to automate the building, testing, and deploying of any software project.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/jenkins/img/jenkins-stack-220x234.png
 keywords:
-  - jenkins
-  - ci
-  - cd
-  - http
-  - web
-  - application
+- jenkins
+- ci
+- cd
+- http
+- web
+- application
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: jenkins
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/jenkins
-version: 13.4.1
+- https://github.com/bitnami/charts/tree/main/bitnami/jenkins
+version: 13.4.3

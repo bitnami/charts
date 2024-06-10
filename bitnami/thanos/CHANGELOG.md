@@ -2,7 +2,7 @@
 
 ## 15.7.2 (2024-06-06)
 
-* [bitnami/thanos] add service monitor labels ([#26880](https://github.com/bitnami/charts/pull/26880))
+* [bitnami/thanos] Release 15.7.2 ([#27020](https://github.com/bitnami/charts/pull/27020))
 
 ## <small>15.7.1 (2024-06-05)</small>
 
