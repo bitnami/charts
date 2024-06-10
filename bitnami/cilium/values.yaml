@@ -271,6 +271,9 @@ agent:
   ##
   containerSecurityContext:
     enabled: true
+    ## Running with spc_t type (designed for privileged operations, check capabilities)
+    ## since the container is not executed as a privileged container by default. This
+    ## should prevent issues with SELinux policies.
     seLinuxOptions:
       level: 's0'
       type: 'spc_t'
@@ -557,6 +560,9 @@ agent:
       ##
       containerSecurityContext:
         enabled: true
+        ## Running with spc_t type (designed for privileged operations, check capabilities)
+        ## since the container is not executed as a privileged container by default. This
+        ## should prevent issues with SELinux policies.
         seLinuxOptions:
           level: 's0'
           type: 'spc_t'
@@ -712,6 +718,9 @@ agent:
       ##
       containerSecurityContext:
         enabled: true
+        ## Running with spc_t type (designed for privileged operations, check capabilities)
+        ## since the container is not executed as a privileged container by default. This
+        ## should prevent issues with SELinux policies.
         seLinuxOptions:
           level: 's0'
           type: 'spc_t'

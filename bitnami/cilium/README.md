@@ -63,6 +63,12 @@ externalKvstorehost.endpoints[0]=external-kvstore-host-0:2379
 externalKvstorehost.endpoints[1]=external-kvstore-host-1:2379
 ```
 
+### Cilium CNI plugin
+
+Please also note the chart installs the Cilium CNI plugin on the Kubernetes nodes by default. If you want to disable this behavior, set the `agent.cniPlugin.install` parameter to `false`.
+
+It's also necessary to know the paths where the CNI binary and configuration files are located in your Kubernetes nodes. The chart assumes that the CNI binary is located in the `/opt/cni/bin` directory and the CNI configuration files are located in the `/etc/cni/net.d` directory. You can customize these paths using the `agent.cniPlugin.hostCNIBinDir` and `agent.cniPlugin.hostCNINetDir` parameters.
+
 ### TLS secrets
 
 TLS support can be enabled in the chart by setting the `tls.enabled` parameter to `true`.
