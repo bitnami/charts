@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.0.2 (2024-06-07)
+## 18.0.3 (2024-06-10)
 
-* [bitnami/nginx] fix: Revert back use of http port instead of https ([#27040](https://github.com/bitnami/charts/pull/27040))
+* [bitnami/nginx] Release 18.0.3 ([#27083](https://github.com/bitnami/charts/pull/27083))
+
+## <small>18.0.2 (2024-06-10)</small>
+
+* [bitnami/nginx] fix: Revert back use of http port instead of https (#27040) ([1d65098](https://github.com/bitnami/charts/commit/1d65098a6e509a3a2987eb02a3a59bb1f6f8845e)), closes [#27040](https://github.com/bitnami/charts/issues/27040) [#20934](https://github.com/bitnami/charts/issues/20934)
 
 ## <small>18.0.1 (2024-06-06)</small>
 
