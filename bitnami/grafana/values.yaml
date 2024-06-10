@@ -64,7 +64,7 @@ commonAnnotations: {}
 image:
   registry: docker.io
   repository: bitnami/grafana
-  tag: 11.0.0-debian-12-r0
+  tag: 11.0.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -579,6 +579,16 @@ grafana:
   ## @param grafana.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param grafana.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param grafana.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param grafana.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `grafana.pdb.minAvailable` and `grafana.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
 ## @section Persistence parameters
 
 ## Enable persistence using Persistent Volume Claims
@@ -948,7 +958,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
