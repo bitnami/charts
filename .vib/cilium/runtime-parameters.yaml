@@ -10,6 +10,7 @@ agent:
     hostCNINetDir: /etc/cni/net.d
   containerSecurityContext:
     enabled: true
+    runAsUser: 0
     allowPrivilegeEscalation: true
     privileged: true
   priorityClassName: ""

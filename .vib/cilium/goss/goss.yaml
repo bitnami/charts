@@ -16,9 +16,32 @@ command:
     stdout:
     - /serviceaccount.*name.*{{ .Env.BITNAMI_APP_NAME }}/
   {{ end }}
-# Cilium CNI configuration files should be present in the host
 file:
+  # Sockets should be created
+  /opt/bitnami/cilium/var/run/cilium.sock:
+    exists: true
+    filetype: socket
+    mode: '0660'
+  /opt/bitnami/cilium/var/run/hubble.sock:
+    exists: true
+    filetype: socket
+    mode: '0660'
+  # Hubble certs are present
+  /certs/hubble/ca.crt:
+    exists: true
+    filetype: symlink
+  /certs/hubble/tls.crt:
+    exists: true
+    filetype: symlink
+  /certs/hubble/tls.key:
+    exists: true
+    filetype: symlink
+  # Cilium CNI configuration files should be present in the host
   /host{{ .Vars.agent.cniPlugin.hostCNINetDir }}/05-cilium.conflist:
     exists: true
     filetype: file
-    mode: '0600'
+    mode: '0644'
+  # BPF fs should be mounted
+  /sys/fs/bpf:
+    exists: true
+    filetype: directory
