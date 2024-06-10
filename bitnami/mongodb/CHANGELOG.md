@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.6.1 (2024-05-28)
+## 15.6.5 (2024-06-06)
 
-* [bitnami/mongodb] Release 15.6.1 ([#26481](https://github.com/bitnami/charts/pull/26481))
+* [bitnami/mongodb] Release 15.6.5 ([#26988](https://github.com/bitnami/charts/pull/26988))
+
+## <small>15.6.4 (2024-06-06)</small>
+
+* [bitnami/mongodb] Release 15.6.4 (#26907) ([0fbcf92](https://github.com/bitnami/charts/commit/0fbcf926bb04ce00021013314b511324cd96056e)), closes [#26907](https://github.com/bitnami/charts/issues/26907)
+
+## <small>15.6.3 (2024-06-04)</small>
+
+* [bitnami/mongodb] Bump chart version (#26650) ([8a4412d](https://github.com/bitnami/charts/commit/8a4412df8904d90daefe8ac8a5345270867d329f)), closes [#26650](https://github.com/bitnami/charts/issues/26650)
+
+## <small>15.6.2 (2024-06-04)</small>
+
+* [bitnami/mongodb] Remove UTF-8 chars (#26607) ([9ab3365](https://github.com/bitnami/charts/commit/9ab33654ca45ee82d27088578308068e493c43cd)), closes [#26607](https://github.com/bitnami/charts/issues/26607)
+
+## <small>15.6.1 (2024-05-28)</small>
+
+* [bitnami/mongodb] Release 15.6.1 (#26481) ([f4dbc07](https://github.com/bitnami/charts/commit/f4dbc07bf19489d2ce4156675c1cf7e291ad0385)), closes [#26481](https://github.com/bitnami/charts/issues/26481)
 
 ## 15.6.0 (2024-05-24)
 

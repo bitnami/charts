@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.1.0 (2024-05-24)
+## 11.1.2 (2024-06-06)
 
-* [bitnami/mysql] PDB review ([#26157](https://github.com/bitnami/charts/pull/26157))
+* [bitnami/mysql] Release 11.1.2 ([#26991](https://github.com/bitnami/charts/pull/26991))
+
+## <small>11.1.1 (2024-06-04)</small>
+
+* [bitnami/mysql] Bump chart version (#26653) ([8604604](https://github.com/bitnami/charts/commit/86046046a56beb874dab65feaebcb3588317e123)), closes [#26653](https://github.com/bitnami/charts/issues/26653)
+
+## 11.1.0 (2024-05-27)
+
+* [bitnami/mysql] PDB review (#26157) ([ab85628](https://github.com/bitnami/charts/commit/ab85628bdf5104a06ce7b1949c7d3eade6030078)), closes [#26157](https://github.com/bitnami/charts/issues/26157)
 
 ## 11.0.0 (2024-05-23)
 
