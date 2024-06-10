@@ -1,8 +1,12 @@
 # Changelog
 
-## 20.2.4 (2024-06-06)
+## 20.2.5 (2024-06-10)
 
-* [bitnami/wildfly] Release 20.2.4 ([#27027](https://github.com/bitnami/charts/pull/27027))
+* [bitnami/wildfly] Fix ingress annotations ([#25958](https://github.com/bitnami/charts/pull/25958))
+
+## <small>20.2.4 (2024-06-06)</small>
+
+* [bitnami/wildfly] Release 20.2.4 (#27027) ([3d2cb80](https://github.com/bitnami/charts/commit/3d2cb807f24429619535bad3dc3bf3c8949e9022)), closes [#27027](https://github.com/bitnami/charts/issues/27027)
 
 ## <small>20.2.3 (2024-06-04)</small>
 
