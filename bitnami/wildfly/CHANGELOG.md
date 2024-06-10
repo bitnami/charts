@@ -1,8 +1,24 @@
 # Changelog
 
-## 20.1.1 (2024-05-24)
+## 20.2.4 (2024-06-06)
 
-* [bitnami/wildfly] Fix ingress annotations ([#25958](https://github.com/bitnami/charts/pull/25958))
+* [bitnami/wildfly] Release 20.2.4 ([#27027](https://github.com/bitnami/charts/pull/27027))
+
+## <small>20.2.3 (2024-06-04)</small>
+
+* [bitnami/wildfly] Bump chart version (#26674) ([8e9c772](https://github.com/bitnami/charts/commit/8e9c772d830c5db49903736cbce24f8dc1f7b865)), closes [#26674](https://github.com/bitnami/charts/issues/26674)
+
+## <small>20.2.2 (2024-05-31)</small>
+
+* [bitnami/wildfly] Release 20.2.2 (#26581) ([136b0ff](https://github.com/bitnami/charts/commit/136b0ff03f57cd15f9ed30fd05ab625d089506c5)), closes [#26581](https://github.com/bitnami/charts/issues/26581)
+
+## <small>20.2.1 (2024-05-31)</small>
+
+* [bitnami/wildfly] Release 20.2.1 (#26575) ([8285f8e](https://github.com/bitnami/charts/commit/8285f8ead5b52be9255ea18b193b3d8357a9a3b1)), closes [#26575](https://github.com/bitnami/charts/issues/26575)
+
+## 20.2.0 (2024-05-29)
+
+* [bitnami/wildfly] Enable PodDisruptionBudgets (#26541) ([1c14aec](https://github.com/bitnami/charts/commit/1c14aecb5d9b69a31a5ecd7397cf3a840207fd91)), closes [#26541](https://github.com/bitnami/charts/issues/26541)
 
 ## 20.1.0 (2024-05-21)
 

@@ -1,8 +1,25 @@
 # Changelog
 
-## 11.3.0 (2024-05-23)
+## 11.3.5 (2024-06-06)
 
-* [bitnami/nginx-ingress-controller] Enable PodDisruptionBudgets ([#26160](https://github.com/bitnami/charts/pull/26160))
+* [bitnami/nginx-ingress-controller] Release 11.3.5 ([#26995](https://github.com/bitnami/charts/pull/26995))
+
+## <small>11.3.4 (2024-06-06)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.3.4 (#26909) ([ccf9e4a](https://github.com/bitnami/charts/commit/ccf9e4a7fa4a781aecb84bf9411c488a04374c6a)), closes [#26909](https://github.com/bitnami/charts/issues/26909)
+
+## <small>11.3.3 (2024-06-05)</small>
+
+* [bitnami/nginx-ingress-controller] Release 11.3.3 (#26743) ([ecdda82](https://github.com/bitnami/charts/commit/ecdda82d9712ab3fe2fe8a8e5dbb026b361ecff9)), closes [#26743](https://github.com/bitnami/charts/issues/26743)
+
+## <small>11.3.2 (2024-06-04)</small>
+
+* [bitnami/nginx-ingress-controller] Bump chart version (#26656) ([3f5d0b1](https://github.com/bitnami/charts/commit/3f5d0b1ae2e757ae0072e950d3c28a0f3ea3742b)), closes [#26656](https://github.com/bitnami/charts/issues/26656)
+* [bitnami/nginx-ingress-controller] Use different liveness/readiness pending probe (#26412) ([8f502b0](https://github.com/bitnami/charts/commit/8f502b0671981ee3bfdf9c000c5154868b079beb)), closes [#26412](https://github.com/bitnami/charts/issues/26412)
+
+## 11.3.0 (2024-05-24)
+
+* [bitnami/nginx-ingress-controller] Enable PodDisruptionBudgets (#26160) ([923b570](https://github.com/bitnami/charts/commit/923b5701f21060df0ee5b17b0c2f706f9337efb3)), closes [#26160](https://github.com/bitnami/charts/issues/26160)
 
 ## <small>11.2.1 (2024-05-22)</small>
 

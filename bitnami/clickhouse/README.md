@@ -343,56 +343,59 @@ The [Bitnami ClickHouse](https://github.com/bitnami/containers/tree/main/bitnami
 
 ### ClickHouse keeper configuration parameters
 
-| Name                            | Description                                                                                                              | Value                   |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `keeper.enabled`                | Deploy ClickHouse keeper. Support is experimental.                                                                       | `false`                 |
-| `defaultConfigurationOverrides` | Default configuration overrides (evaluated as a template)                                                                | `""`                    |
-| `existingOverridesConfigmap`    | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                    |
-| `extraOverrides`                | Extra configuration overrides (evaluated as a template) apart from the default                                           | `""`                    |
-| `extraOverridesConfigmap`       | The name of an existing ConfigMap with extra configuration for ClickHouse                                                | `""`                    |
-| `extraOverridesSecret`          | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                    |
-| `usersExtraOverrides`           | Users extra configuration overrides (evaluated as a template) apart from the default                                     | `""`                    |
-| `usersExtraOverridesConfigmap`  | The name of an existing ConfigMap with users extra configuration for ClickHouse                                          | `""`                    |
-| `usersExtraOverridesSecret`     | The name of an existing ConfigMap with your custom users configuration for ClickHouse                                    | `""`                    |
-| `initdbScripts`                 | Dictionary of initdb scripts                                                                                             | `{}`                    |
-| `initdbScriptsSecret`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                      | `""`                    |
-| `startdbScripts`                | Dictionary of startdb scripts                                                                                            | `{}`                    |
-| `startdbScriptsSecret`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                    | `""`                    |
-| `command`                       | Override default container command (useful when using custom images)                                                     | `["/scripts/setup.sh"]` |
-| `args`                          | Override default container args (useful when using custom images)                                                        | `[]`                    |
-| `automountServiceAccountToken`  | Mount Service Account token in pod                                                                                       | `false`                 |
-| `hostAliases`                   | ClickHouse pods host aliases                                                                                             | `[]`                    |
-| `podLabels`                     | Extra labels for ClickHouse pods                                                                                         | `{}`                    |
-| `podAnnotations`                | Annotations for ClickHouse pods                                                                                          | `{}`                    |
-| `podAffinityPreset`             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                    |
-| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                  |
-| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                    |
-| `nodeAffinityPreset.key`        | Node label key to match. Ignored if `affinity` is set                                                                    | `""`                    |
-| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set                                                                 | `[]`                    |
-| `affinity`                      | Affinity for ClickHouse pods assignment                                                                                  | `{}`                    |
-| `nodeSelector`                  | Node labels for ClickHouse pods assignment                                                                               | `{}`                    |
-| `tolerations`                   | Tolerations for ClickHouse pods assignment                                                                               | `[]`                    |
-| `updateStrategy.type`           | ClickHouse statefulset strategy type                                                                                     | `RollingUpdate`         |
-| `podManagementPolicy`           | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                       | `Parallel`              |
-| `priorityClassName`             | ClickHouse pods' priorityClassName                                                                                       | `""`                    |
-| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                    |
-| `schedulerName`                 | Name of the k8s scheduler (other than default) for ClickHouse pods                                                       | `""`                    |
-| `terminationGracePeriodSeconds` | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                    |
-| `lifecycleHooks`                | for the ClickHouse container(s) to automate configuration before or after startup                                        | `{}`                    |
-| `extraEnvVars`                  | Array with extra environment variables to add to ClickHouse nodes                                                        | `[]`                    |
-| `extraEnvVarsCM`                | Name of existing ConfigMap containing extra env vars for ClickHouse nodes                                                | `""`                    |
-| `extraEnvVarsSecret`            | Name of existing Secret containing extra env vars for ClickHouse nodes                                                   | `""`                    |
-| `extraVolumes`                  | Optionally specify extra list of additional volumes for the ClickHouse pod(s)                                            | `[]`                    |
-| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the ClickHouse container(s)                                 | `[]`                    |
-| `extraVolumeClaimTemplates`     | Optionally specify extra list of additional volumeClaimTemplates for the ClickHouse container(s)                         | `[]`                    |
-| `sidecars`                      | Add additional sidecar containers to the ClickHouse pod(s)                                                               | `[]`                    |
-| `initContainers`                | Add additional init containers to the ClickHouse pod(s)                                                                  | `[]`                    |
-| `tls.enabled`                   | Enable TLS traffic support                                                                                               | `false`                 |
-| `tls.autoGenerated`             | Generate automatically self-signed TLS certificates                                                                      | `false`                 |
-| `tls.certificatesSecret`        | Name of an existing secret that contains the certificates                                                                | `""`                    |
-| `tls.certFilename`              | Certificate filename                                                                                                     | `""`                    |
-| `tls.certKeyFilename`           | Certificate key filename                                                                                                 | `""`                    |
-| `tls.certCAFilename`            | CA Certificate filename                                                                                                  | `""`                    |
+| Name                            | Description                                                                                                                                    | Value                   |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `keeper.enabled`                | Deploy ClickHouse keeper. Support is experimental.                                                                                             | `false`                 |
+| `defaultConfigurationOverrides` | Default configuration overrides (evaluated as a template)                                                                                      | `""`                    |
+| `existingOverridesConfigmap`    | The name of an existing ConfigMap with your custom configuration for ClickHouse                                                                | `""`                    |
+| `extraOverrides`                | Extra configuration overrides (evaluated as a template) apart from the default                                                                 | `""`                    |
+| `extraOverridesConfigmap`       | The name of an existing ConfigMap with extra configuration for ClickHouse                                                                      | `""`                    |
+| `extraOverridesSecret`          | The name of an existing ConfigMap with your custom configuration for ClickHouse                                                                | `""`                    |
+| `usersExtraOverrides`           | Users extra configuration overrides (evaluated as a template) apart from the default                                                           | `""`                    |
+| `usersExtraOverridesConfigmap`  | The name of an existing ConfigMap with users extra configuration for ClickHouse                                                                | `""`                    |
+| `usersExtraOverridesSecret`     | The name of an existing ConfigMap with your custom users configuration for ClickHouse                                                          | `""`                    |
+| `initdbScripts`                 | Dictionary of initdb scripts                                                                                                                   | `{}`                    |
+| `initdbScriptsSecret`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                            | `""`                    |
+| `startdbScripts`                | Dictionary of startdb scripts                                                                                                                  | `{}`                    |
+| `startdbScriptsSecret`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                          | `""`                    |
+| `command`                       | Override default container command (useful when using custom images)                                                                           | `["/scripts/setup.sh"]` |
+| `args`                          | Override default container args (useful when using custom images)                                                                              | `[]`                    |
+| `automountServiceAccountToken`  | Mount Service Account token in pod                                                                                                             | `false`                 |
+| `hostAliases`                   | ClickHouse pods host aliases                                                                                                                   | `[]`                    |
+| `podLabels`                     | Extra labels for ClickHouse pods                                                                                                               | `{}`                    |
+| `podAnnotations`                | Annotations for ClickHouse pods                                                                                                                | `{}`                    |
+| `podAffinityPreset`             | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                            | `""`                    |
+| `podAntiAffinityPreset`         | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `soft`                  |
+| `nodeAffinityPreset.type`       | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                      | `""`                    |
+| `nodeAffinityPreset.key`        | Node label key to match. Ignored if `affinity` is set                                                                                          | `""`                    |
+| `nodeAffinityPreset.values`     | Node label values to match. Ignored if `affinity` is set                                                                                       | `[]`                    |
+| `affinity`                      | Affinity for ClickHouse pods assignment                                                                                                        | `{}`                    |
+| `nodeSelector`                  | Node labels for ClickHouse pods assignment                                                                                                     | `{}`                    |
+| `tolerations`                   | Tolerations for ClickHouse pods assignment                                                                                                     | `[]`                    |
+| `updateStrategy.type`           | ClickHouse statefulset strategy type                                                                                                           | `RollingUpdate`         |
+| `podManagementPolicy`           | Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join                                             | `Parallel`              |
+| `priorityClassName`             | ClickHouse pods' priorityClassName                                                                                                             | `""`                    |
+| `topologySpreadConstraints`     | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                       | `[]`                    |
+| `schedulerName`                 | Name of the k8s scheduler (other than default) for ClickHouse pods                                                                             | `""`                    |
+| `terminationGracePeriodSeconds` | Seconds Redmine pod needs to terminate gracefully                                                                                              | `""`                    |
+| `lifecycleHooks`                | for the ClickHouse container(s) to automate configuration before or after startup                                                              | `{}`                    |
+| `extraEnvVars`                  | Array with extra environment variables to add to ClickHouse nodes                                                                              | `[]`                    |
+| `extraEnvVarsCM`                | Name of existing ConfigMap containing extra env vars for ClickHouse nodes                                                                      | `""`                    |
+| `extraEnvVarsSecret`            | Name of existing Secret containing extra env vars for ClickHouse nodes                                                                         | `""`                    |
+| `extraVolumes`                  | Optionally specify extra list of additional volumes for the ClickHouse pod(s)                                                                  | `[]`                    |
+| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the ClickHouse container(s)                                                       | `[]`                    |
+| `extraVolumeClaimTemplates`     | Optionally specify extra list of additional volumeClaimTemplates for the ClickHouse container(s)                                               | `[]`                    |
+| `sidecars`                      | Add additional sidecar containers to the ClickHouse pod(s)                                                                                     | `[]`                    |
+| `initContainers`                | Add additional init containers to the ClickHouse pod(s)                                                                                        | `[]`                    |
+| `pdb.create`                    | Enable/disable a Pod Disruption Budget creation                                                                                                | `true`                  |
+| `pdb.minAvailable`              | Minimum number/percentage of pods that should remain scheduled                                                                                 | `""`                    |
+| `pdb.maxUnavailable`            | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty. | `""`                    |
+| `tls.enabled`                   | Enable TLS traffic support                                                                                                                     | `false`                 |
+| `tls.autoGenerated`             | Generate automatically self-signed TLS certificates                                                                                            | `false`                 |
+| `tls.certificatesSecret`        | Name of an existing secret that contains the certificates                                                                                      | `""`                    |
+| `tls.certFilename`              | Certificate filename                                                                                                                           | `""`                    |
+| `tls.certKeyFilename`           | Certificate key filename                                                                                                                       | `""`                    |
+| `tls.certCAFilename`            | CA Certificate filename                                                                                                                        | `""`                    |
 
 ### Traffic Exposure Parameters
 
