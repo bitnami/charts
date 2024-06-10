@@ -41,6 +41,10 @@ spec:
   ingress:
     - ports:
         - port: {{ .Values.agent.containerPorts.health }}
+        - port: {{ .Values.agent.containerPorts.gops }}
+        {{- if .Values.agent.enablePprof }}
+        - port: {{ .Values.agent.containerPorts.pprof }}
+        {{- end }}
         - port: {{ .Values.agent.containerPorts.hubblePeer }}
         {{- if .Values.agent.metrics.enabled }}
         - port: {{ .Values.agent.containerPorts.metrics }}

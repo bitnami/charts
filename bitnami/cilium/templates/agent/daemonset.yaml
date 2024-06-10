@@ -161,6 +161,12 @@ spec:
           ports:
             - name: health
               containerPort: {{ .Values.agent.containerPorts.health }}
+            - name: gops
+              containerPort: {{ .Values.agent.containerPorts.gops }}
+            {{- if .Values.agent.enablePprof }}
+            - name: pprof
+              containerPort: {{ .Values.agent.containerPorts.pprof }}
+            {{- end }}
             - name: hubble-peer
               containerPort: {{ .Values.agent.containerPorts.hubblePeer }}
             {{- if .Values.agent.metrics.enabled }}
@@ -217,6 +223,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /.config
+              subPath: gops-config-dir
             - name: empty-dir
               mountPath: /opt/bitnami/cilium/conf
               subPath: config-dir

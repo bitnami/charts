@@ -182,10 +182,9 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            # Required for gops
             - name: empty-dir
               mountPath: /.config
-              subPath: local-config-dir
+              subPath: gops-config-dir
             - name: config
               mountPath: /opt/bitnami/cilium-operator/conf
               readOnly: true

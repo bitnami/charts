@@ -153,14 +153,18 @@ agent:
     pullSecrets: []
     debug: false
   ## @param agent.containerPorts.health Cilium Agent health container port
-  ## @param agent.containerPorts.metrics Cilium Agent metrics container port
+  ## @param agent.containerPorts.pprof Cilium Agent pprof container port
+  ## @param agent.containerPorts.gops Cilium Agent gops container port
   ## @param agent.containerPorts.hubblePeer Cilium Agent Hubble peer service container port
+  ## @param agent.containerPorts.metrics Cilium Agent metrics container port
   ## @param agent.containerPorts.hubbleMetrics Cilium Agent Hubble metrics container port
   ##
   containerPorts:
     health: 9879
-    metrics: 9962
+    gops: 9890
+    pprof: 6060
     hubblePeer: 4244
+    metrics: 9962
     hubbleMetrics: 9965
   ## @param agent.extraContainerPorts Optionally specify extra list of additional ports for Cilium Agent containers
   ## e.g:
@@ -319,6 +323,9 @@ agent:
     uninstall: false
     hostCNIBinDir: /opt/cni/bin
     hostCNINetDir: /etc/cni/net.d
+  ## @param agent.enablePprof Enable pprof for Cilium Agent
+  ##
+  enablePprof: false
   ## @param agent.command Override default Cilium Agent container command (useful when using custom images)
   ##
   command: []
