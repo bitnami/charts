@@ -1,8 +1,40 @@
 # Changelog
 
-## 4.3.0 (2024-05-24)
+## 4.5.6 (2024-06-06)
 
-* [bitnami/grafana-loki] Allow disabling enableServiceLinks ([#25858](https://github.com/bitnami/charts/pull/25858))
+* [bitnami/grafana-loki] Release 4.5.6 ([#26955](https://github.com/bitnami/charts/pull/26955))
+
+## <small>4.5.5 (2024-06-06)</small>
+
+* [bitnami/grafana-loki] Release 4.5.5 (#26901) ([9c7dce4](https://github.com/bitnami/charts/commit/9c7dce4fea0bf4270852698c896ecc0ceb438e35)), closes [#26901](https://github.com/bitnami/charts/issues/26901)
+
+## <small>4.5.4 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Bump chart version (#26831) ([5ecf902](https://github.com/bitnami/charts/commit/5ecf902a335d328cfeba4f614dd52bfd5d9e897b)), closes [#26831](https://github.com/bitnami/charts/issues/26831)
+
+## <small>4.5.3 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Bump chart version (#26773) ([ba92179](https://github.com/bitnami/charts/commit/ba92179375b1b68a9751c463e3ba58dceb485aee)), closes [#26773](https://github.com/bitnami/charts/issues/26773)
+
+## <small>4.5.2 (2024-06-05)</small>
+
+* [bitnami/grafana-loki] Release 4.5.2 (#26732) ([b7caa72](https://github.com/bitnami/charts/commit/b7caa72f037078e277c3a7970301852f057f85c7)), closes [#26732](https://github.com/bitnami/charts/issues/26732)
+
+## <small>4.5.1 (2024-06-03)</small>
+
+* [bitnami/grafana-loki] Release 4.5.1 (#26614) ([e0a510e](https://github.com/bitnami/charts/commit/e0a510ebf68a8e3d0b296e771f2637212d09ad23)), closes [#26614](https://github.com/bitnami/charts/issues/26614)
+
+## 4.5.0 (2024-06-03)
+
+* [bitnami/grafana-loki] Don't enforce version label when it's not needed (#26603) ([9977979](https://github.com/bitnami/charts/commit/997797921113437cb0df2aeb59ee2607f03f804c)), closes [#26603](https://github.com/bitnami/charts/issues/26603)
+
+## 4.4.0 (2024-06-03)
+
+* [bitnami/grafana-loki] Remove unnecessary memcached image definitions (#26600) ([cd90285](https://github.com/bitnami/charts/commit/cd90285f16d16d9f704aa6260faeac86cc15c529)), closes [#26600](https://github.com/bitnami/charts/issues/26600)
+
+## 4.3.0 (2024-05-29)
+
+* [bitnami/grafana-loki] Enable PodDisruptionBudgets (#26474) ([c03dcf6](https://github.com/bitnami/charts/commit/c03dcf6a0d4551fc2632041969f4e5c08c57ec3a)), closes [#26474](https://github.com/bitnami/charts/issues/26474)
 
 ## <small>4.2.1 (2024-05-23)</small>
 

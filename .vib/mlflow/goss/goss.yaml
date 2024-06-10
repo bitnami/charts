@@ -30,12 +30,12 @@ http:
     status: 401
     timeout: 10000
   # Authenticated
-  http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}:
+  http://mlflow-tracking:{{ .Vars.tracking.service.ports.http }}/:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
     password: {{ .Vars.tracking.auth.password  }}
     timeout: 10000
-  http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}:
+  http://127.0.0.1:{{ .Vars.tracking.containerPorts.http }}/:
     status: 200
     username: {{ .Vars.tracking.auth.username }}
     password: {{ .Vars.tracking.auth.password  }}

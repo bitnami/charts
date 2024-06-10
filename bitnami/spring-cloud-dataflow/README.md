@@ -522,6 +522,7 @@ As an alternative, you can use the preset configurations for pod affinity, pod a
 | `deployer.secretRefs`                         | Streaming applications secretRefs                                                                                                                                                                                                   | `[]`           |
 | `deployer.entryPointStyle`                    | An entry point style affects how application properties are passed to the container to be deployed. Allowed values: exec (default), shell, boot                                                                                     | `exec`         |
 | `deployer.imagePullPolicy`                    | An image pull policy defines when a Docker image should be pulled to the local registry. Allowed values: IfNotPresent (default), Always, Never                                                                                      | `IfNotPresent` |
+| `deployer.taskServiceAccountName`             | Custom service account for scheduled tasks                                                                                                                                                                                          | `""`           |
 
 ### RBAC parameters
 
@@ -770,6 +771,10 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 29.0.0
+
+This major updates the Kafka subchart to its newest major, 29.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2900).
 
 ### To 28.0.0
 

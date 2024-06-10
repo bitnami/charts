@@ -1,8 +1,36 @@
 # Changelog
 
-## 4.3.1 (2024-05-22)
+## 4.4.5 (2024-06-06)
 
-* [bitnami/grafana-operator] Use different liveness/readiness probes ([#26330](https://github.com/bitnami/charts/pulls/26330))
+* [bitnami/grafana-operator] Release 4.4.5 ([#26957](https://github.com/bitnami/charts/pull/26957))
+
+## <small>4.4.4 (2024-06-05)</small>
+
+* [bitnami/grafana-operator] Update content of grafanacontactpoints.integreatly.org.yaml (#26871) ([9d0f5e8](https://github.com/bitnami/charts/commit/9d0f5e8afdaf53fc9188b6ad56f70795442544a2)), closes [#26871](https://github.com/bitnami/charts/issues/26871)
+
+## <small>4.4.3 (2024-06-05)</small>
+
+* [bitnami/grafana-operator] Release 4.4.3 (#26729) ([2006fd0](https://github.com/bitnami/charts/commit/2006fd01f9161764e60efe7b79aa5f4dce7c9409)), closes [#26729](https://github.com/bitnami/charts/issues/26729)
+
+## <small>4.4.2 (2024-06-04)</small>
+
+* [bitnami/grafana-operator] Release 4.4.2 (#26714) ([3c4a705](https://github.com/bitnami/charts/commit/3c4a705b9f13946a5866f1371e4bfa40f72ebc3d)), closes [#26714](https://github.com/bitnami/charts/issues/26714)
+
+## <small>4.4.1 (2024-06-04)</small>
+
+* [bitnami/grafana-operator] Bump chart version (#26634) ([7db5c88](https://github.com/bitnami/charts/commit/7db5c88fae416e432d011c85cd7e44abef1590e4)), closes [#26634](https://github.com/bitnami/charts/issues/26634)
+
+## 4.4.0 (2024-05-29)
+
+* [bitnami/grafana-operator] Enable PodDisruptionBudgets (#26476) ([2cf771d](https://github.com/bitnami/charts/commit/2cf771d70c04a720db3b5cbbd0be65d0fd7f0bd3)), closes [#26476](https://github.com/bitnami/charts/issues/26476)
+
+## <small>4.3.2 (2024-05-26)</small>
+
+* [bitnami/grafana-operator] Release 4.3.2 (#26440) ([50f93a9](https://github.com/bitnami/charts/commit/50f93a9612b15234a69eb4b83e29381a4a327868)), closes [#26440](https://github.com/bitnami/charts/issues/26440)
+
+## <small>4.3.1 (2024-05-24)</small>
+
+* [bitnami/grafana-operator] Use different liveness/readiness probes (#26330) ([6fc05c7](https://github.com/bitnami/charts/commit/6fc05c74a7a363605861268951d110754c9ceede)), closes [#26330](https://github.com/bitnami/charts/issues/26330)
 
 ## 4.3.0 (2024-05-21)
 

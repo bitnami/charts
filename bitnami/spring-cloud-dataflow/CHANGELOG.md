@@ -1,8 +1,32 @@
 # Changelog
 
-## 28.2.1 (2024-05-24)
+## 29.0.5 (2024-06-06)
 
-* [bitnami/spring-cloud-dataflow] Release 28.2.1 ([#26401](https://github.com/bitnami/charts/pull/26401))
+* [bitnami/spring-cloud-dataflow] Release 29.0.5 ([#27022](https://github.com/bitnami/charts/pull/27022))
+
+## <small>29.0.4 (2024-06-05)</small>
+
+* [bitnami/spring-cloud-dataflow] Bump chart version (#26864) ([467c823](https://github.com/bitnami/charts/commit/467c8235570a499f9699df63b311e6cf7a548f7a)), closes [#26864](https://github.com/bitnami/charts/issues/26864)
+
+## <small>29.0.3 (2024-06-05)</small>
+
+* [bitnami/spring-cloud-dataflow] Bump chart version (#26806) ([3067abd](https://github.com/bitnami/charts/commit/3067abd374e6ac22275b1d5472a117b0e147c466)), closes [#26806](https://github.com/bitnami/charts/issues/26806)
+
+## <small>29.0.2 (2024-06-03)</small>
+
+* [bitnami/spring-cloud-dataflow] Support taskServiceAccountName (#26450) ([a09c51b](https://github.com/bitnami/charts/commit/a09c51b4c47259e29ebed72202c37111f5032764)), closes [#26450](https://github.com/bitnami/charts/issues/26450)
+
+## <small>29.0.1 (2024-05-27)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 29.0.1 (#26457) ([e0b6418](https://github.com/bitnami/charts/commit/e0b641821fa1d5bdf74fb33dfa94dd31ebcfa6c8)), closes [#26457](https://github.com/bitnami/charts/issues/26457)
+
+## 29.0.0 (2024-05-27)
+
+* [bitnami/spring-cloud-dataflow] Update dependencies (#26447) ([bcee3af](https://github.com/bitnami/charts/commit/bcee3af2f98ae31eb5b38b225546026f77c89783)), closes [#26447](https://github.com/bitnami/charts/issues/26447)
+
+## <small>28.2.1 (2024-05-24)</small>
+
+* [bitnami/spring-cloud-dataflow] Release 28.2.1 (#26401) ([1e7935e](https://github.com/bitnami/charts/commit/1e7935ebff49fd6108ce08a4b6e8e70c797a1e42)), closes [#26401](https://github.com/bitnami/charts/issues/26401)
 
 ## 28.2.0 (2024-05-24)
 

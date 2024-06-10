@@ -1,8 +1,28 @@
 # Changelog
 
-## 6.3.2 (2024-05-23)
+## 6.5.3 (2024-06-06)
 
-* [bitnami/fluentd] Use different liveness/readiness probes (part 2) ([#26358](https://github.com/bitnami/charts/pull/26358))
+* [bitnami/fluentd] Release 6.5.3 ([#27037](https://github.com/bitnami/charts/pull/27037))
+
+## <small>6.5.2 (2024-06-06)</small>
+
+* [bitnami/fluentd] Release 6.5.2 (#26924) ([ed8623b](https://github.com/bitnami/charts/commit/ed8623b380d5712c3a15d907dcaec5e0ba7f21ee)), closes [#26924](https://github.com/bitnami/charts/issues/26924)
+
+## <small>6.5.1 (2024-05-30)</small>
+
+* [bitnami/fluentd] fix: :bug: Only check replaced images when set (#26506) ([eb7104d](https://github.com/bitnami/charts/commit/eb7104dd964583eb0ee964cdbd90dad5e000159b)), closes [#26506](https://github.com/bitnami/charts/issues/26506)
+
+## 6.5.0 (2024-05-28)
+
+* [bitnami/fluentd] add extra gems extensions volume on forwarders (#26489) ([64c2708](https://github.com/bitnami/charts/commit/64c27084c6f03dc505a30ad77852a38c46ddf1f5)), closes [#26489](https://github.com/bitnami/charts/issues/26489)
+
+## 6.4.0 (2024-05-27)
+
+* [bitnami/fluentd] Enable PodDisruptionBudgets (#26431) ([195c490](https://github.com/bitnami/charts/commit/195c4900ab98bded8a57a3b00c0aad8fe473c721)), closes [#26431](https://github.com/bitnami/charts/issues/26431)
+
+## <small>6.3.2 (2024-05-23)</small>
+
+* [bitnami/fluentd] Use different liveness/readiness probes (part 2) (#26358) ([14d5e15](https://github.com/bitnami/charts/commit/14d5e15087bbef59ea6354249b28ee537d9c7278)), closes [#26358](https://github.com/bitnami/charts/issues/26358)
 
 ## <small>6.3.1 (2024-05-22)</small>
 
