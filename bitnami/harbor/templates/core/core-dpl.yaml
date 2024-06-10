@@ -42,7 +42,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.core.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ .Values.core.serviceAccount.automountServiceAccountToken }}
       {{- if .Values.core.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.core.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -69,9 +69,7 @@ spec:
       {{- if .Values.core.schedulerName }}
       schedulerName: {{ .Values.core.schedulerName }}
       {{- end }}
-      {{- if .Values.core.serviceAccountName }}
-      serviceAccountName: {{ .Values.core.serviceAccountName }}
-      {{- end }}
+      serviceAccountName: {{ include "harbor.core.serviceAccountName" . }}
       {{- if .Values.core.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.core.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}

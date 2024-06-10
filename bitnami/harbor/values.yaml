@@ -838,12 +838,22 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
-  ## @param nginx.serviceAccountName Set the service account name for the NGINX pods
-  ## 
-  serviceAccountName: ""
-  ## @param nginx.automountServiceAccountToken Mount Service Account token in pod
+  ## Harbor Nginx ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param nginx.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param nginx.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param nginx.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param nginx.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## @param nginx.hostAliases NGINX pods host aliases
   ##
   hostAliases: []
@@ -1288,12 +1298,22 @@ portal:
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
-  ## @param portal.serviceAccountName Set the service account name for the Harbor Portal pods
-  ## 
-  serviceAccountName: ""
-  ## @param portal.automountServiceAccountToken Automount service account token
+  ## Harbor Portal ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param portal.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param portal.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param portal.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param portal.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Portal service configuration
   ##
   service:
@@ -1703,12 +1723,22 @@ core:
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
-  ## @param core.serviceAccountName Set the service account name for the Harbor Core pods
-  ## 
-  serviceAccountName: ""
-  ## @param core.automountServiceAccountToken Automount service account token
+  ## Harbor Core ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param core.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param core.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param core.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param core.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Core service configuration
   ##
   service:
@@ -2090,12 +2120,22 @@ jobservice:
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
-  ## @param jobservice.serviceAccountName Set the service account name for the Harbor Jobservice pods
-  ## 
-  serviceAccountName: ""
-  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ## Harbor Jobservice ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param jobservice.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param jobservice.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param jobservice.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param jobservice.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Harbor Jobservice service configuration
   ##
   service:
@@ -2348,12 +2388,22 @@ registry:
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
-  ## @param registry.serviceAccountName Set the service account name for the Registry pods
-  ## 
-  serviceAccountName: ""
-  ## @param registry.automountServiceAccountToken Automount service account token
+  ## Harbor Registry ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param registry.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param registry.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param registry.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param registry.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
   ##
@@ -3086,12 +3136,22 @@ trivy:
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
-  ## @param trivy.serviceAccountName Set the service account name for the Trivy pods
-  ## 
-  serviceAccountName: ""
-  ## @param trivy.automountServiceAccountToken Automount service account token
+  ## Trivy ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param trivy.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param trivy.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param trivy.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param trivy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Trivy service configuration
   ##
   service:
@@ -3388,10 +3448,6 @@ exporter:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
-  ## @param exporter.serviceAccountName Name of the serviceAccountName for Harbor Exporter pods
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  serviceAccountName: ""
   ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
@@ -3426,9 +3482,22 @@ exporter:
   ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
-  ## @param exporter.automountServiceAccountToken Automount service account token
+  ## Harbor Exporter ServiceAccount configuration
   ##
-  automountServiceAccountToken: false
+  serviceAccount:
+    ## @param exporter.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: false
+    ## @param exporter.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param exporter.serviceAccount.automountServiceAccountToken Automount service account token
+    ##
+    automountServiceAccountToken: false
+    ## @param exporter.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
   ## Exporter service configuration
   ##
   service:
