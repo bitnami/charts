@@ -1,0 +1,36 @@
+name: '[Index] Sync bitnami/charts index.yaml to Cloudflare'
+
+on:
+  push:
+    branches:
+    - index
+
+# Remove all permissions by default
+permissions: {}
+
+jobs:
+  deploy:
+    name: Sync bitnami/charts index.yaml to Cloudflare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@master
+    - name: Upload to Cloudflare using a BCOM upload proxy
+      env:
+        CLOUDFLARE_CLIENT_ID: ${{ secrets.CLOUDFLARE_CLIENT_ID }}
+        CLOUDFLARE_CLIENT_SECRET: ${{ secrets.CLOUDFLARE_CLIENT_SECRET }}
+        CLOUDFLARE_USER_AUTH: ${{ secrets.CLOUDFLARE_USER_AUTH }}
+      run: |
+        export TOKEN=$(curl -s --location 'https://api-espstg.broadcom.com/auth/oauth/v2/token' \
+        --data-urlencode "client_id=${CLOUDFLARE_CLIENT_ID}" \
+        --data-urlencode "client_secret=${CLOUDFLARE_CLIENT_SECRET}" \
+        --data-urlencode 'grant_type=client_credentials' | jq .access_token -r )
+
+
+        curl --location --request PUT 'https://api-espstg.broadcom.com/crushftp/fileUpload' \
+        --header "userAuth: Basic ${CLOUDFLARE_USER_AUTH}" \
+        --header 'filePath: /index.yaml' \
+        --header 'Content-Type: text/yaml' \
+        --header "Authorization: Bearer $TOKEN" \
+        --upload-file binami/index.yaml
