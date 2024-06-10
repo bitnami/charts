@@ -1,6 +1,6 @@
 # Changelog
 
-## 9.4.2 (2024-06-10)
+## 9.5.0 (2024-06-10)
 
 * [bitnami/kube-prometheus] Add keepDroppedTargets parameter kube-prometheus configuration ([#26409](https://github.com/bitnami/charts/pull/26409))
 
