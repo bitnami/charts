@@ -228,7 +228,7 @@ jobs:
           helm dep build ${chart}
           image_list="$(yq '.annotations.images' "${chart}/Chart.yaml" | yq '[ .[] | .image | sub("^[^/]+/", "")] ] | tojson')"
           for dependency in "${chart}/charts/"*.tgz; do
-            if [[ -f "$dependency" ]] && [[ -s "$dependency" ]]; then
+            if [[ -s "$dependency" ]]; then
               chart_yaml_file="$(tar -tzf "$dependency" | grep -E "^[^/]+/Chart.yaml$")"
               if [[ -n "${chart_yaml_file}" ]]; then
                 dependency_image_list="$(tar -xzO -f "$dependency" "$chart_yaml_file" | yq '.annotations.images' | yq '[ .[] | .image | sub("^[^/]+/", "") ] | tojson')"
