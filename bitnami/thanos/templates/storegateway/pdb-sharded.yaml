@@ -28,8 +28,8 @@ spec:
   {{- if $.Values.storegateway.pdb.minAvailable }}
   minAvailable: {{ $.Values.storegateway.pdb.minAvailable }}
   {{- end }}
-  {{- if $.Values.storegateway.pdb.maxUnavailable }}
-  maxUnavailable: {{ $.Values.storegateway.pdb.maxUnavailable }}
+  {{- if or $.Values.storegateway.pdb.maxUnavailable ( not $.Values.storegateway.pdb.minAvailable ) }}
+  maxUnavailable: {{ $.Values.storegateway.pdb.maxUnavailable | default 1 }}
   {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.storegateway.podLabels $.Values.commonLabels ) "context" $ ) }}
   selector:

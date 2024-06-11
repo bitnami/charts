@@ -1,8 +1,40 @@
 # Changelog
 
-## 21.0.1 (2024-05-27)
+## 21.1.7 (2024-06-07)
 
-* [bitnami/ghost] Release 21.0.1 ([#26455](https://github.com/bitnami/charts/pull/26455))
+* [bitnami/ghost] Release 21.1.7 ([#27060](https://github.com/bitnami/charts/pull/27060))
+
+## <small>21.1.6 (2024-06-06)</small>
+
+* [bitnami/ghost] Release 21.1.6 (#27041) ([1c56328](https://github.com/bitnami/charts/commit/1c563284b6b4a69ead1043377f9c10e2ffbfc571)), closes [#27041](https://github.com/bitnami/charts/issues/27041)
+
+## <small>21.1.5 (2024-06-06)</small>
+
+* [bitnami/ghost] Release 21.1.5 (#26953) ([71ac752](https://github.com/bitnami/charts/commit/71ac7522351333ae075f48085ef33090f9cd1972)), closes [#26953](https://github.com/bitnami/charts/issues/26953)
+
+## <small>21.1.4 (2024-06-06)</small>
+
+* [bitnami/ghost] Release 21.1.4 (#26885) ([48b32d5](https://github.com/bitnami/charts/commit/48b32d57066f89a242f7c1cb270b5e1f7b2b9238)), closes [#26885](https://github.com/bitnami/charts/issues/26885)
+
+## <small>21.1.3 (2024-06-05)</small>
+
+* [bitnami/ghost] Bump chart version (#26829) ([f0d0d90](https://github.com/bitnami/charts/commit/f0d0d902d45c7339642a7c60322fdf2d2401fbef)), closes [#26829](https://github.com/bitnami/charts/issues/26829)
+
+## <small>21.1.2 (2024-06-05)</small>
+
+* [bitnami/ghost] Bump chart version (#26771) ([c85becd](https://github.com/bitnami/charts/commit/c85becdce07330cc5cdc2a118876dee68beaf1c6)), closes [#26771](https://github.com/bitnami/charts/issues/26771)
+
+## <small>21.1.1 (2024-05-31)</small>
+
+* [bitnami/ghost] Release 21.1.1 (#26586) ([7a5a451](https://github.com/bitnami/charts/commit/7a5a4513e0eac2f7606938e759167de0a5f46fd2)), closes [#26586](https://github.com/bitnami/charts/issues/26586)
+
+## 21.1.0 (2024-05-29)
+
+* [bitnami/ghost] Enable PodDisruptionBudgets (#26432) ([e7ca9a7](https://github.com/bitnami/charts/commit/e7ca9a735b93abdc146610152a85c1ca0c7a9d83)), closes [#26432](https://github.com/bitnami/charts/issues/26432)
+
+## <small>21.0.1 (2024-05-27)</small>
+
+* [bitnami/ghost] Release 21.0.1 (#26455) ([36352c8](https://github.com/bitnami/charts/commit/36352c82518a445588661a7f5143bafc31a80c11)), closes [#26455](https://github.com/bitnami/charts/issues/26455)
 
 ## 21.0.0 (2024-05-27)
 

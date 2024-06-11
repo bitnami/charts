@@ -372,6 +372,9 @@ As an alternative, this chart supports using an initContainer to change the owne
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the SonarQube&trade; container(s)                                                                                                                    | `[]`             |
 | `sidecars`                                          | Add additional sidecar containers to the SonarQube&trade; pod(s)                                                                                                                                                  | `[]`             |
 | `initContainers`                                    | Add additional init containers to the SonarQube&trade; pod(s)                                                                                                                                                     | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                   | `true`           |
+| `pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                    | `""`             |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `pdb.minAvailable` and `pdb.maxUnavailable` are empty.                                                                    | `""`             |
 
 ### Traffic Exposure Parameters
 

@@ -81,7 +81,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 3.0.0-debian-12-r5
+    tag: 3.0.0-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -543,6 +543,16 @@ compactor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param compactor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param compactor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param compactor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `compactor.pdb.minAvailable` and `compactor.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -582,6 +592,11 @@ compactor:
     ## @param compactor.persistence.dataSource PVC data source
     ##
     dataSource: {}
+  ## @param compactor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Compactor Traffic Exposure Parameters
   ##
 
@@ -723,7 +738,7 @@ gateway:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.26.0-debian-12-r1
+    tag: 1.27.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -982,6 +997,16 @@ gateway:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param gateway.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param gateway.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param gateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `gateway.pdb.minAvailable` and `gateway.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @param gateway.initContainers Add additional init containers to the Gateway pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -992,6 +1017,11 @@ gateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param gateway.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Gateway Traffic Exposure Parameters
   ##
 
@@ -1451,6 +1481,21 @@ indexGateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param indexGateway.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param indexGateway.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param indexGateway.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param indexGateway.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `indexGateway.pdb.minAvailable` and `indexGateway.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section index-gateway Persistence Parameters
   ##
 
@@ -1853,6 +1898,21 @@ distributor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param distributor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param distributor.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param distributor.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param distributor.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `distributor.pdb.minAvailable` and `distributor.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Distributor Traffic Exposure Parameters
   ##
 
@@ -2220,6 +2280,21 @@ ingester:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingester.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ingester.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ingester.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ingester.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ingester.pdb.minAvailable` and `ingester.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Ingester Persistence Parameters
   ##
 
@@ -2626,6 +2701,21 @@ querier:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param querier.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param querier.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param querier.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param querier.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `querier.pdb.minAvailable` and `querier.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Querier Persistence Parameters
   ##
 
@@ -3028,6 +3118,21 @@ queryFrontend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param queryFrontend.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param queryFrontend.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param queryFrontend.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param queryFrontend.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryFrontend.pdb.minAvailable` and `queryFrontend.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Query Frontend Traffic Exposure Parameters
   ##
 
@@ -3400,6 +3505,21 @@ queryScheduler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param queryScheduler.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param queryScheduler.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param queryScheduler.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param queryScheduler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `queryScheduler.pdb.minAvailable` and `queryScheduler.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Query Scheduler Traffic Exposure Parameters
   ##
 
@@ -3770,6 +3890,21 @@ ruler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ruler.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ruler.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ruler.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ruler.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `ruler.pdb.minAvailable` and `ruler.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section Ruler Persistence Parameters
   ##
 
@@ -4175,6 +4310,21 @@ tableManager:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param tableManager.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param tableManager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param tableManager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param tableManager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `tableManager.pdb.minAvailable` and `tableManager.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
   ## @section table-manager Traffic Exposure Parameters
   ##
 
@@ -4317,7 +4467,7 @@ promtail:
   image:
     registry: docker.io
     repository: bitnami/promtail
-    tag: 3.0.0-debian-12-r5
+    tag: 3.0.0-debian-12-r6
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4571,6 +4721,11 @@ promtail:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param promtail.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param promtail.configuration [string] Promtail configuration
   ##
   configuration: |
@@ -4833,7 +4988,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -4955,18 +5110,6 @@ memcachedchunks:
   ## @param memcachedchunks.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedchunks.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedchunks.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
   nameOverride: ""
@@ -5011,18 +5154,6 @@ memcachedfrontend:
   ## @param memcachedfrontend.enabled Deploy memcached sub-chart
   ##
   enabled: true
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedfrontend.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedfrontend.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -5067,18 +5198,6 @@ memcachedindexqueries:
   ## @param memcachedindexqueries.enabled Deploy memcached sub-chart
   ##
   enabled: false
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexqueries.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedindexqueries.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedindexqueries.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
   architecture: high-availability
@@ -5123,18 +5242,6 @@ memcachedindexwrites:
   ## @param memcachedindexwrites.enabled Deploy memcached sub-chart
   ##
   enabled: false
-  ## Bitnami Memcached image version
-  ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexwrites.image.registry [default: REGISTRY_NAME] Memcached image registry
-  ## @param memcachedindexwrites.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
-  ## @skip memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
-  ## @param memcachedindexwrites.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/memcached
-    tag: 1.6.27-debian-12-r2
-    digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##
   architecture: high-availability

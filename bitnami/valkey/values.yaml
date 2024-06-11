@@ -100,7 +100,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/valkey
-  tag: 7.2.5-debian-12-r4
+  tag: 7.2.5-debian-12-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -614,6 +614,17 @@ master:
     ## @param master.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `master.pdb.minAvailable` and `master.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+
 ## @section Valkey replicas configuration parameters
 ##
 replica:
@@ -1113,6 +1124,17 @@ replica:
     ## @param replica.serviceAccount.annotations Additional custom annotations for the ServiceAccount
     ##
     annotations: {}
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param replica.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param replica.pdb.minAvailable [object] Minimum number/percentage of pods that should remain scheduled
+  ## @param replica.pdb.maxUnavailable [object] Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `replica.pdb.minAvailable` and `replica.pdb.maxUnavailable` are empty.
+  ##
+  pdb:
+    create: true
+    minAvailable: ""
+    maxUnavailable: ""
+
 ## @section Valkey Sentinel configuration parameters
 ##
 
@@ -1135,7 +1157,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/valkey-sentinel
-    tag: 7.2.5-debian-12-r3
+    tag: 7.2.5-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1572,19 +1594,11 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-## Valkey Pod Disruption Budget configuration
+## Redis&reg; Pod Disruption Budget configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+## @param pdb DEPRECATED Please use `master.pdb` and `replica.pdb` values instead
 ##
-pdb:
-  ## @param pdb.create Specifies whether a PodDisruptionBudget should be created
-  ##
-  create: false
-  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction
-  ##
-  minAvailable: 1
-  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
-  ##
-  maxUnavailable: ""
+pdb: {}
 ## TLS configuration
 ##
 tls:
@@ -1630,7 +1644,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.59.0-debian-12-r6
+    tag: 1.60.0-debian-12-r1
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1996,7 +2010,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2052,7 +2066,7 @@ kubectl:
   image:
     registry: docker.io
     repository: bitnami/kubectl
-    tag: 1.30.1-debian-12-r0
+    tag: 1.30.1-debian-12-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

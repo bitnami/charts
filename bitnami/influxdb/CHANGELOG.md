@@ -1,8 +1,33 @@
 # Changelog
 
-## 6.2.1 (2024-05-28)
+## 6.3.5 (2024-06-06)
 
-* [bitnami/influxdb] Release 6.2.1 ([#26511](https://github.com/bitnami/charts/pull/26511))
+* [bitnami/influxdb] Release 6.3.5 ([#26962](https://github.com/bitnami/charts/pull/26962))
+
+## <small>6.3.4 (2024-06-05)</small>
+
+* [bitnami/influxdb] Release 6.3.4 (#26733) ([23fcbaa](https://github.com/bitnami/charts/commit/23fcbaaaa75e6d6eb237cea30071663ebcf08869)), closes [#26733](https://github.com/bitnami/charts/issues/26733)
+
+## <small>6.3.3 (2024-06-04)</small>
+
+* [bitnami/influxdb] Bump chart version (#26636) ([e3280d3](https://github.com/bitnami/charts/commit/e3280d3efcd3822a9d575e8e4f27ef8015ef97d7)), closes [#26636](https://github.com/bitnami/charts/issues/26636)
+
+## <small>6.3.2 (2024-05-30)</small>
+
+* [bitnami/influxdb] Release 6.3.2 (#26564) ([ffe032e](https://github.com/bitnami/charts/commit/ffe032eaeb07cd1d6194ce384e57d4ea321dfe91)), closes [#26564](https://github.com/bitnami/charts/issues/26564)
+* [bitnami/influxdb] Update docs (#26560) ([f51e2c4](https://github.com/bitnami/charts/commit/f51e2c4cbe452716ceb8059eb1fd4baf4b7632da)), closes [#26560](https://github.com/bitnami/charts/issues/26560)
+
+## <small>6.3.1 (2024-05-29)</small>
+
+* [bitnami/influxdb] Release 6.3.1 (#26549) ([cb8be5b](https://github.com/bitnami/charts/commit/cb8be5b6770c4bfb0feb5f0b5cfb14b2e7de8cbe)), closes [#26549](https://github.com/bitnami/charts/issues/26549)
+
+## 6.3.0 (2024-05-29)
+
+* [bitnami/influxdb] Enable PodDisruptionBudgets (#26491) ([1b1fbd9](https://github.com/bitnami/charts/commit/1b1fbd9e66a7c10cb6baef80a1a7ef0520edc9a3)), closes [#26491](https://github.com/bitnami/charts/issues/26491)
+
+## <small>6.2.1 (2024-05-28)</small>
+
+* [bitnami/influxdb] Release 6.2.1 (#26511) ([b5b3bfc](https://github.com/bitnami/charts/commit/b5b3bfc36967ed57c72266dc7fda45e863035eeb)), closes [#26511](https://github.com/bitnami/charts/issues/26511)
 
 ## 6.2.0 (2024-05-27)
 

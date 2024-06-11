@@ -87,7 +87,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.7.0-debian-12-r6
+  tag: 3.7.0-debian-12-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -118,6 +118,13 @@ existingConfigmap: ""
 ## @param extraConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
 ##
 extraConfig: ""
+## @param extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka configuration file.
+##
+## E.g.
+## extraConfigYaml:
+##   default.replication.factor: 3
+##
+extraConfigYaml: {}
 ## @param secretConfig Additional configuration to be appended at the end of the generated Kafka configuration file.
 ## This value will be stored in a secret.
 ##
@@ -499,6 +506,10 @@ controller:
   ## @param controller.extraConfig Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
   ##
   extraConfig: ""
+  ## @param controller.extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
+  ## If keys of extraConfigYaml are duplicated here, the value from controller.extraConfigYaml is taken.
+  ##
+  extraConfigYaml: {}
   ## @param controller.secretConfig Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.
   ## This value will be stored in a secret.
   ##
@@ -845,9 +856,9 @@ controller:
   ## @param controller.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
-    maxUnavailable: 1
+    maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
@@ -953,6 +964,10 @@ broker:
   ## @param broker.extraConfig Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.
   ##
   extraConfig: ""
+  ## @param broker.extraConfigYaml Additional configuration in yaml format to be appended at the end of the generated Kafka broker-only nodes configuration file.
+  ## If keys of extraConfigYaml are duplicated here, the value from broker.extraConfigYaml is taken.
+  ##
+  extraConfigYaml: {}
   ## @param broker.secretConfig Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.
   ## This value will be stored in a secret.
   ##
@@ -1255,9 +1270,9 @@ broker:
   ## @param broker.pdb.maxUnavailable Maximum number/percentage of unavailable Kafka replicas
   ##
   pdb:
-    create: false
+    create: true
     minAvailable: ""
-    maxUnavailable: 1
+    maxUnavailable: ""
   ## @section Experimental: Kafka Broker Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
@@ -1493,7 +1508,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.30.1-debian-12-r0
+      tag: 1.30.1-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1803,7 +1818,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1897,7 +1912,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.20.0-debian-12-r17
+      tag: 0.20.0-debian-12-r18
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2068,6 +2083,7 @@ metrics:
     ## @param metrics.prometheusRule.groups Prometheus Rule Groups for Kafka
     ##
     groups: []
+
 ## @section Kafka provisioning parameters
 ##
 

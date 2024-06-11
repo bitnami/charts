@@ -128,7 +128,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r21
+    tag: 12-debian-12-r22
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -193,7 +193,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.9.1-debian-12-r4
+    tag: 2.9.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -465,8 +465,8 @@ web:
   ## @param web.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow web replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Web Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -538,7 +538,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.9.1-debian-12-r5
+    tag: 2.9.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -800,8 +800,8 @@ scheduler:
   ## @param scheduler.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow scheduler replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Scheduler Network Policies
   ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
@@ -873,7 +873,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.9.1-debian-12-r2
+    tag: 2.9.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1145,8 +1145,8 @@ worker:
   ## @param worker.pdb.maxUnavailable Maximum number/percentage of unavailable Airflow worker replicas
   ##
   pdb:
-    create: false
-    minAvailable: 1
+    create: true
+    minAvailable: ""
     maxUnavailable: ""
   ## Enable HorizontalPodAutoscaler for worker pods
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
@@ -1234,7 +1234,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.45.1-debian-12-r0
+    tag: 2.45.2-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1614,7 +1614,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-12-r34
+    tag: 0.20220314.0-debian-12-r35
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
