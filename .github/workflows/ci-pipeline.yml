@@ -89,340 +89,42 @@ jobs:
             } else {
               core.warning(message);
             }
-  update-pr:
+  check-kubescore:
     runs-on: ubuntu-latest
-    needs: [get-chart]
-    name: Automatically update README, CRDs and CHANGELOG
-    permissions:
-      contents: write
-    outputs:
-      result: ${{ steps.update-pr.outputs.result }}
-    if: needs.get-chart.outputs.result == 'ok'
-    steps:
-      - name: Checkout bitnami/charts
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
-        with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
-          token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          path: charts
-      - name: Clone upstream bitnami/charts repository
-        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
-        with:
-          path: upstream-charts
-      - name: Setup git configuration
-        run: |
-          cd $GITHUB_WORKSPACE/charts
-          git config user.name "Bitnami Containers"
-          git config user.email "bitnami-bot@vmware.com"
-      # In order to avoid doing a full clone (which would fetch the index branch), we
-      # unshallow the clone only using the main branch. We need to get the tags to
-      # regenerate the changelog too
-      - name: Unshallow main branch and get tags
-        run: |
-          cd $GITHUB_WORKSPACE/upstream-charts
-          git fetch origin main --unshallow
-          git fetch --tags
-      - name: Install conventional-changelog-cli
-        run: npm install -g conventional-changelog-cli
-      - id: generate-changelog
-        name: Generate changelog
-        env:
-          CHART: ${{ needs.get-chart.outputs.chart }}
-        run: |
-          cd $GITHUB_WORKSPACE/upstream-charts
-          # The generator needs the file to exist
-          chart_version="$(yq e '.version' $GITHUB_WORKSPACE/charts/bitnami/${CHART}/Chart.yaml)"
-          changelog_file="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md"
-          changelog_tmp="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md.tmp"
-          touch "$changelog_file"
-          npx conventional-changelog-cli -i ${changelog_file} -s -t ${CHART}/ -r 0 --commit-path bitnami/${CHART}
-          # The tool uses short sha to generate commit links. Sometimes, Github does not offer links with the short sha, so we change all commit links to use the full sha instead
-          for short_sha in $(grep -Eo "/commit/[a-z0-9]+" ${changelog_file} | awk -F/ '{print $3}'); do
-            long_sha="$(git rev-list @ | grep "^$short_sha" | head -n 1)";
-            sed -i "s%/commit/$short_sha%/commit/$long_sha%g" ${changelog_file};
-          done
-          cd $GITHUB_WORKSPACE/charts
-          # Remove unreleased section (includes all intermediate commits in the branch) and create future entry based on PR title
-          # The unreleased section looks like this "## (YYYY-MM-DD)" whereas a released section looks like this "## 0.0.1 (YYYY-MM-DD)"
-          # So we only need to find a released section to start printing in the awk script below
-          awk '/^##[^(]*[0-9]/ {flag=1} flag {print}' ${changelog_file} > ${changelog_tmp}
-          # Remove extra newlines so the changelog file passes the markdown linter
-          sed -i -E -e '/^$/d' ${changelog_tmp} && sed -i -E -e 's/(##.*)/\n\1\n/g' ${changelog_tmp}
-          # Include h1 heading and add entry for the current version. There is no tag for the current version (this will be created once merged), so we need to manually add it.
-          # We know the final squashed commit title, which will be the PR title. We cannot add a link to the commit in the main branch because it has not been
-          # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
-          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${{ github.event.pull_request.title }} ([#${{ github.event.number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}))\n" > ${changelog_file}
-          cat ${changelog_tmp} >> ${changelog_file}
-          rm ${changelog_tmp}
-          if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
-            git add "bitnami/${CHART}/CHANGELOG.md" && git commit -m "Update CHANGELOG.md" --signoff
-          fi
-      - name: Install readme-generator-for-helm
-        if: needs.get-chart.outputs.values-updated == 'true'
-        run: npm install -g @bitnami/readme-generator-for-helm
-      - id: update-readme
-        name: 'Update README'
-        if: needs.get-chart.outputs.values-updated == 'true'
-        env:
-          CHART: ${{ needs.get-chart.outputs.chart }}
-        run: |
-            exit_code=0
-            cd $GITHUB_WORKSPACE/charts
-            echo "Validating README.md for bitnami/${CHART}"
-            # Validating *.registry parameters
-            while read line; do
-              echo "$line" | grep --quiet "\[default: \(REGISTRY_NAME\|\"\"\)\]" || exit_code=$?
-            done < <(grep "@param\s\+[A-Za-z\.]\+\.registry\s\+" "bitnami/${CHART}/values.yaml")
-            if [[ $exit_code -ne 0 ]]; then
-              echo "error=Please ensure all *.registry params include the [default: REGISTRY_NAME] modifier in the chart bitnami/${CHART}/values.yaml file"
-              exit "$exit_code"
-            fi
-            # Validating *.repository parameters
-            while read line; do
-              param=$(echo "$line" | awk '{print $3}')
-              # Checking if it's a image's registry-related param
-              registry_param=$(echo ${param} | sed 's/\.repository/\.registry/g')
-              grep --quiet "@param\s\+${registry_param}" "bitnami/${CHART}/values.yaml" && ( echo "$line" | grep --quiet "\[default: \(REPOSITORY_NAME/.*\|\"\"\)\]" || exit_code=$? )
-            done < <(grep "@param\s\+[A-Za-z\.]\+\.repository\s\+" "bitnami/${CHART}/values.yaml")
-            if [[ $exit_code -ne 0 ]]; then
-              echo "error=Please ensure all *.repository params include the [default: REPOSITORY_NAME] modifier the in the chart bitnami/${CHART}/values.yaml file"
-              exit "$exit_code"
-            fi
-            # Validating *.tag parameters
-            ! grep --quiet "@param\s\+[A-Za-z\.]\+\.tag\s\+" "bitnami/${CHART}/values.yaml" || exit_code=$?
-            if [[ $exit_code -ne 0 ]]; then
-              echo "error=Please ensure all *.tag params are skipped (@skip) in the bitnami/${CHART}/values.yaml file"
-              exit "$exit_code"
-            fi
-            echo "Updating README.md for bitnami/${CHART}"
-            readme-generator --values "bitnami/${CHART}/values.yaml" --readme "bitnami/${CHART}/README.md" --schema "/tmp/schema.json"
-            # Commit all changes, if any
-            if git status -s | grep "bitnami/${CHART}"; then
-              git add "bitnami/${CHART}" && git commit -m "Update README.md with readme-generator-for-helm" --signoff
-            fi
-      - id: update-crds
-        name: 'Update CRDs'
-        # To avoid malicious executions, only PRs performed by the bitnami-bot will perform the CRDs update
-        if: github.event.pull_request.user.login == 'bitnami-bot'
-        env:
-          CHART: ${{ needs.get-chart.outputs.chart }}
-        run: |
-          # Updating CRDs stored at 'bitnami/$CHART/crds' and 'bitnami/$CHART/templates/crds'
-          cd $GITHUB_WORKSPACE/charts
-          mapfile -t crd_files < <(find "bitnami/${CHART}/crds" "bitnami/${CHART}/templates/crds" -name "*.yaml" -o -name "*.yml" 2>/dev/null || true)
-          for file in "${crd_files[@]}"; do
-            # Automatically update CRDs that use the '# Source' header
-            source_url_tpl="$(head -n 1 $file | grep -E "^# ?Source: ?" | sed -E 's|^# ?Source: ?||' || true)"
-            if [[ -n "$source_url_tpl" ]]; then
-              # Validate the second line of the CRD file includes the version of the CRD
-              crd_version="$(head -n 2 $file | tail -n 1 | grep -E "^# ?Version: ?" | sed -E 's|^# ?Version: ?||' || true)"
-              if [[ -z "$crd_version" ]]; then
-                echo "error=CRD file '${file}' does not include the '#Version: <version> header'"
-                exit 1
-              fi
-              # Additional headers may be used for extra features
-              # Conditional - Adds a conditional {{if}}/{{end}} to the downloaded upstream CRD
-              # VersionOf - Name of a subcomponent, its version will be used for CRD tracking instead of the main component version
-              # UseKustomize - If set to true, uses Kustomize to render the CRDs
-              # RequiresFilter - If set to true, uses yq to filter resources having 'kind: CustomResourceDefinition', useful when using 'install.yaml' file as upstream source
-              continue=true
-              line_n=2
-              extra_headers=""
-              CONDITIONAL=""
-              SUBCOMPONENT=""
-              USE_KUSTOMIZE=""
-              REQUIRES_FILTER=""
-              while [ "$continue" = true ]; do
-                line_n=$((line_n+1))
-                line="$(head -n $line_n $file | tail -n 1)"
-                if [[ $line =~ ^#\ ?[a-zA-Z]+:\ ? ]]; then
-                  if [[ $line =~ ^#\ ?Conditional:\ ? ]]; then
-                    CONDITIONAL="$(echo $line | sed -E 's|^# ?Conditional: ?||')"
-                    CONDITIONAL="{{- if ${CONDITIONAL} }}\n"
-                  elif [[ $line =~ ^#\ ?VersionOf:\ ? ]]; then
-                    SUBCOMPONENT="$(echo $line | sed -E 's|^# ?VersionOf: ?||')"
-                  elif [[ $line =~ ^#\ ?UseKustomize:\ ? ]]; then
-                    USE_KUSTOMIZE="$(echo $line | sed -E 's|^# ?UseKustomize: ?||' || true)"
-                  elif [[ $line =~ ^#\ ?RequiresFilter:\ ? ]]; then
-                    REQUIRES_FILTER="$(echo $line | sed -E 's|^# ?RequiresFilter: ?||' || true)"
-                  else
-                    echo "error=Header ${line} not recognized'"
-                    exit 1
-                  fi
-                  extra_headers="${extra_headers}${line}\n"
-                else
-                  continue=false
-                fi
-              done
-              # Obtain the version of the subcomponent if provided, otherwise use the main component version
-              if [[ -n "$SUBCOMPONENT" ]]; then
-                APP_VERSION="$(cat bitnami/${CHART}/Chart.yaml | grep -E "image: \S+${SUBCOMPONENT}:" | sed -E "s|.*${SUBCOMPONENT}:([0-9\.]+)-.*|\1|")"
-              else
-                APP_VERSION="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
-              fi
-              # Replace version placeholder, if present
-              source_url=$(echo "$source_url_tpl" | sed "s/{version}/${APP_VERSION}/")
-              # If the application version is newer, automatically update the CRD file
-              if [[ "$APP_VERSION" != "$crd_version" || "$skip_version" = true ]]; then
-                if [[ "$USE_KUSTOMIZE" = "true" ]]; then
-                  kubectl kustomize "$source_url" > $file
-                else
-                  curl -Lks --fail -o $file "$source_url"
-                fi
-                if [[ "$REQUIRES_FILTER" = "true" ]]; then
-                  yq -i e '. | select(.kind == "CustomResourceDefinition") | ... head_comment=""' $file
-                fi
-                sed -i "1s|^|# Source: ${source_url_tpl}\n# Version: ${APP_VERSION}\n${extra_headers}${CONDITIONAL}|" $file
-                if [[ -n "$CONDITIONAL" ]]; then
-                  echo -E "{{- end }}" >> $file
-                fi
-                echo "info=CRD file '${file}' automatically updated using source '$source_url'"
-              fi
-            else
-              echo "info=CRD file '$file' does not contain the '#Source' header. Skipping..."
-            fi
-          done
-          # Commit all changes, if any
-          if git status -s | grep "bitnami/${CHART}"; then
-            git add "bitnami/${CHART}" && git commit -m "Update CRDs automatically" --signoff
-          fi
-      - id: update-pr
-        name: Push changes
-        run: |
-          cd $GITHUB_WORKSPACE/charts
-          # Push all the new commits, if any
-          if [[ $(git cherry -v) ]]; then
-            git push
-            echo "result=ok" >> $GITHUB_OUTPUT
-          else
-            echo "result=skip" >> $GITHUB_OUTPUT
-          fi
-  vib-verify:
-    runs-on: ubuntu-latest
-    needs: [get-chart, update-pr]
-    permissions:
-      contents: read
-    # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
-    # -> The 'Get modified charts' job suceededs AND
-    # -> The 'Update PR' job did not push any new changes AND
-    #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
-    #    ---> the PR already contains the 'verify' label )
-    if: |
-      needs.get-chart.outputs.result == 'ok' &&
-      needs.update-pr.outputs.result == 'skip' &&
-      (
-        contains(github.event.pull_request.labels.*.name, 'verify') || (github.event.action == 'labeled' && github.event.label.name == 'verify')
-      )
-    name: VIB Verify
     steps:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
-        name: Checkout Repository
+        name: Checkout 'main' branch
         with:
+          path: charts-main
+          repository: bitnami/charts
+          fetch-depth: 1
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        name: Checkout PR branch
+        with:
+          path: charts-pr
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - id: log-chart-info
-        name: Get chart version and app version
+      - id: get-chart-main-score
+        uses: addnab/docker-run-action@v3
+        name: Check chart kubescape score
         env:
           CHART: ${{ needs.get-chart.outputs.chart }}
-        run: |
-          # Log chart info
-          chart_version="$(yq e '.version' bitnami/${CHART}/Chart.yaml)"
-          app_version="$(yq e '.appVersion' bitnami/${CHART}/Chart.yaml)"
-          echo "Chart: ${CHART} ChartVersion: ${chart_version} AppVersion: ${app_version}"
-      - id: get-asset-vib-config
-        name: Get asset-specific configuration for VIB action
-        run: |
-          config_file=".vib/${{ needs.get-chart.outputs.chart }}/vib-action.config"
-
-          # Supported configuration customizations and default values
-          verification_mode="PARALLEL"
-
-          if [[ -f $config_file ]]; then
-            verification_mode="$(cat $config_file | grep 'verification-mode' | cut -d'=' -f2)"
-          fi
-          runtime_parameters_file=""
-          if [[ -f ".vib/${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml" ]]; then
-            # The path is relative to the .vib folder
-            runtime_parameters_file="${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml"
-          fi
-          echo "verification_mode=${verification_mode}" >> $GITHUB_OUTPUT
-          echo "runtime_parameters_file=${runtime_parameters_file}" >> $GITHUB_OUTPUT
-      - uses: vmware-labs/vmware-image-builder-action@v0
-        name: Verify ${{ needs.get-chart.outputs.chart }}
         with:
-          pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
-          verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
-          runtime-parameters-file: ${{ steps.get-asset-vib-config.outputs.runtime_parameters_file }}
+          image: miruiz145/kubescape:test
+          options: -v charts-main:/charts -v /tmp:/out
+          run: |
+            /opt/bitnami/scripts/kubescape/entrypoint.sh score -o /out/main.json /charts/bitnami/${CHART}
+      - id: get-chart-pr-score
+        uses: addnab/docker-run-action@v3
+        name: Check chart kubescape score
         env:
-          CSP_API_URL: https://console.cloud.vmware.com
-          CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
-          VIB_PUBLIC_URL: https://cp.bromelia.vmware.com
-          # Target-Platform used by default
-          VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}
-          # Alternative Target-Platform to be used in case of incompatibilities
-          VIB_ENV_ALTERNATIVE_TARGET_PLATFORM: ${{ secrets.VIB_ENV_ALTERNATIVE_TARGET_PLATFORM }}
-  auto-pr-review:
-    runs-on: ubuntu-latest
-    needs: vib-verify
-    name: Reviewal for automated PRs
-    permissions:
-      pull-requests: write
-    # Job to be run only when the triage for automated PRs did as well,
-    # not taking into account whether 'VIB Verify' succeeded
-    if: |
-      always() &&
-      contains(github.event.pull_request.labels.*.name, 'auto-merge') &&
-      github.event.pull_request.user.login == 'bitnami-bot'
-    steps:
-      # Approve the CI's PR if the 'VIB Verify' job succeeded
-      # Approved by the 'github-actions' user; a PR can't be approved by its author
-      - name: PR approval
-        if: ${{ needs.vib-verify.result == 'success' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+          CHART: ${{ needs.get-chart.outputs.chart }}
         with:
-          result-encoding: string
-          retries: 3
-          script: |
-            github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-              event: 'APPROVE',
-            });
-      - name: Merge
-        id: merge
-        if: ${{ needs.vib-verify.result == 'success' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-        with:
-          result-encoding: string
-          retries: 3
-          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          script: |
-            github.rest.pulls.merge({
-              pull_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              merge_method: 'squash'
-            })
-      # If the CI did not succeed ('VIB Verify' failed or skipped),
-      # post a comment on the PR and assign a maintainer agent to review it
-      - name: Manual review required
-        if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
-        env:
-          BODY: |
-            There has been an error during the automated release process. Manual revision is now required.
-            Please check the related [action_run#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.
-        with:
-          retries: 3
-          # Necessary to trigger support workflows
-          github-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
-          script: |
-            const {BODY} = process.env
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `${BODY}`
-            })
+          image: miruiz145/kubescape:test
+          options: -v charts-pr:/charts -v /tmp:/out
+          run: |
+            /opt/bitnami/scripts/kubescape/entrypoint.sh score -o /out/pr.json /charts/bitnami/${CHART}
+      - id: debug-cat-files
+        run: |
+          cat /tmp/main.json
+          cat /tmp/pr.json
