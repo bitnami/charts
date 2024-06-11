@@ -224,13 +224,13 @@ jobs:
           # Get chart and app version
           chart_version="$(yq e '.version' "${chart}/Chart.yaml")"
           app_version="$(yq e '.appVersion' "${chart}/Chart.yaml")"
-          # Get image list
+          # Get image list (removing the registry)
           helm dep build ${chart}
-          image_list="$(yq '.annotations.images' "${chart}/Chart.yaml" | yq '[ .[] | .image ] | tojson')"
+          image_list="$(yq '.annotations.images' "${chart}/Chart.yaml" | yq '[ .[] | .image | sub("^[^/]+/", "")] ] | tojson')"
           for dependency in "${chart}/charts/"*.tgz; do
             chart_yaml_file="$(tar -tzf "$dependency" | grep -E "^[^/]+/Chart.yaml$")"
             if [[ -n "${chart_yaml_file}" ]]; then
-              dependency_image_list="$(tar -xzO -f "$dependency" "$chart_yaml_file" | yq '.annotations.images' | yq '[ .[] | .image ] | tojson')"
+              dependency_image_list="$(tar -xzO -f "$dependency" "$chart_yaml_file" | yq '.annotations.images' | yq '[ .[] | .image | sub("^[^/]+/", "") ] | tojson')"
               image_list="$(jq -c --null-input --argjson arr1 "$image_list" --argjson arr2 "$dependency_image_list" '$arr1 + $arr2 | unique')"
             fi
           done
