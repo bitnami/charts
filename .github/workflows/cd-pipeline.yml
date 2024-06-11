@@ -226,7 +226,7 @@ jobs:
           app_version="$(yq e '.appVersion' "${chart}/Chart.yaml")"
           # Get image list (removing the registry)
           helm dep build ${chart}
-          image_list="$(yq '.annotations.images' "${chart}/Chart.yaml" | yq '[ .[] | .image | sub("^[^/]+/", "")] ] | tojson')"
+          image_list="$(yq '.annotations.images' "${chart}/Chart.yaml" | yq '[ .[] | .image | sub("^[^/]+/", "") ] | tojson')"
           for dependency in "${chart}/charts/"*.tgz; do
             if [[ -s "$dependency" ]]; then
               # Analyse all 'Chart.yaml' files in dependencies
