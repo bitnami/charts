@@ -1,8 +1,20 @@
 # Changelog
 
-## 9.3.3 (2024-06-05)
+## 9.5.0 (2024-06-10)
 
-* [bitnami/kube-prometheus] Bump chart version ([#26857](https://github.com/bitnami/charts/pull/26857))
+* [bitnami/kube-prometheus] Add keepDroppedTargets parameter kube-prometheus configuration ([#26409](https://github.com/bitnami/charts/pull/26409))
+
+## <small>9.4.1 (2024-06-06)</small>
+
+* [bitnami/kube-prometheus] Release 9.4.1 (#27007) ([40c13fe](https://github.com/bitnami/charts/commit/40c13fe226aafbd7c200274871005f4eb36b00c7)), closes [#27007](https://github.com/bitnami/charts/issues/27007)
+
+## 9.4.0 (2024-06-06)
+
+* [bitnami/kube-prometheus] Enable PodDisruptionBudgets (part 2) (#26700) ([2b1b982](https://github.com/bitnami/charts/commit/2b1b98268f24a059ecf745fbe6a9c7ed9b742a2e)), closes [#26700](https://github.com/bitnami/charts/issues/26700)
+
+## <small>9.3.3 (2024-06-05)</small>
+
+* [bitnami/kube-prometheus] Bump chart version (#26857) ([12075c6](https://github.com/bitnami/charts/commit/12075c61aa7fd641337d67943dabb235e5c6e789)), closes [#26857](https://github.com/bitnami/charts/issues/26857)
 
 ## <small>9.3.2 (2024-06-05)</small>
 

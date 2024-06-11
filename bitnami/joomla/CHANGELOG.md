@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.2.2 (2024-06-05)
+## 19.2.3 (2024-06-06)
 
-* [bitnami/joomla] Bump chart version ([#26837](https://github.com/bitnami/charts/pull/26837))
+* [bitnami/joomla] Release 19.2.3 ([#26964](https://github.com/bitnami/charts/pull/26964))
+
+## <small>19.2.2 (2024-06-05)</small>
+
+* [bitnami/joomla] Bump chart version (#26837) ([d0fb273](https://github.com/bitnami/charts/commit/d0fb27398af90d73186a4e1687cac2aee42afb4a)), closes [#26837](https://github.com/bitnami/charts/issues/26837)
 
 ## <small>19.2.1 (2024-06-05)</small>
 

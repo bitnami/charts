@@ -6,30 +6,30 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:12-debian-12-r21
+      image: docker.io/bitnami/os-shell:12-debian-12-r22
     - name: redis-cluster
       image: docker.io/bitnami/redis-cluster:7.2.5-debian-12-r0
     - name: redis-exporter
-      image: docker.io/bitnami/redis-exporter:1.59.0-debian-12-r6
+      image: docker.io/bitnami/redis-exporter:1.60.0-debian-12-r1
 apiVersion: v2
 appVersion: 7.2.5
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Redis(R) is an open source, scalable, distributed in-memory cache for applications. It can be used to store and serve data in the form of strings, hashes, lists, sets and sorted sets.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/redis/img/redis-stack-220x234.png
 keywords:
-  - redis
-  - keyvalue
-  - database
+- redis
+- keyvalue
+- database
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: redis-cluster
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
-version: 10.2.2
+- https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
+version: 10.2.3

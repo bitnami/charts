@@ -1,8 +1,20 @@
 # Changelog
 
-## 11.1.2 (2024-06-04)
+## 11.2.2 (2024-06-06)
 
-* [bitnami/apache] Bump chart version ([#26620](https://github.com/bitnami/charts/pull/26620))
+* [bitnami/apache] Release 11.2.2 ([#26930](https://github.com/bitnami/charts/pull/26930))
+
+## <small>11.2.1 (2024-06-06)</small>
+
+* [bitnami/apache] Release 11.2.1 (#26892) ([2683439](https://github.com/bitnami/charts/commit/268343990705c2fd3e0536d311d2a615e2ab20fe)), closes [#26892](https://github.com/bitnami/charts/issues/26892)
+
+## 11.2.0 (2024-06-06)
+
+* [bitnami/apache] Enable PodDisruptionBudgets (#26685) ([db20e2d](https://github.com/bitnami/charts/commit/db20e2dc4e18186af1c4d056587a37da06d9b1b0)), closes [#26685](https://github.com/bitnami/charts/issues/26685)
+
+## <small>11.1.2 (2024-06-04)</small>
+
+* [bitnami/apache] Bump chart version (#26620) ([9bae7f7](https://github.com/bitnami/charts/commit/9bae7f7b76c811851721f4bb3de1df8da6151502)), closes [#26620](https://github.com/bitnami/charts/issues/26620)
 
 ## <small>11.1.1 (2024-05-29)</small>
 

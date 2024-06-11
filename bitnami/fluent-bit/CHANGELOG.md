@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.2.3 (2024-06-04)
+## 2.3.2 (2024-06-07)
 
-* [bitnami/fluent-bit] Bump chart version ([#26631](https://github.com/bitnami/charts/pull/26631))
+* [bitnami/fluent-bit] Release 2.3.2 ([#27061](https://github.com/bitnami/charts/pull/27061))
+
+## <small>2.3.1 (2024-06-07)</small>
+
+* [bitnami/fluent-bit] Release 2.3.1 (#26949) ([62fdaac](https://github.com/bitnami/charts/commit/62fdaacb7d41f4ce8ec98688374eb8eeef31f099)), closes [#26949](https://github.com/bitnami/charts/issues/26949)
+
+## 2.3.0 (2024-06-06)
+
+* [bitnami/fluent-bit] Enable PodDisruptionBudgets (#26693) ([a746ed1](https://github.com/bitnami/charts/commit/a746ed1b65609c31ca517a6851c4b13668df016d)), closes [#26693](https://github.com/bitnami/charts/issues/26693)
+
+## <small>2.2.3 (2024-06-04)</small>
+
+* [bitnami/fluent-bit] Bump chart version (#26631) ([3119749](https://github.com/bitnami/charts/commit/311974914d758451d8ed6a7754b3bff61e1633f0)), closes [#26631](https://github.com/bitnami/charts/issues/26631)
 
 ## <small>2.2.2 (2024-05-27)</small>
 

@@ -1,8 +1,12 @@
 # Changelog
 
-## 10.2.2 (2024-06-04)
+## 10.2.3 (2024-06-06)
 
-* [bitnami/redis-cluster] Bump chart version ([#26667](https://github.com/bitnami/charts/pull/26667))
+* [bitnami/redis-cluster] Release 10.2.3 ([#27014](https://github.com/bitnami/charts/pull/27014))
+
+## <small>10.2.2 (2024-06-04)</small>
+
+* [bitnami/redis-cluster] Bump chart version (#26667) ([aa5e27b](https://github.com/bitnami/charts/commit/aa5e27b02e0051213112e31ccc6e4d5ea4f1e466)), closes [#26667](https://github.com/bitnami/charts/issues/26667)
 
 ## <small>10.2.1 (2024-06-03)</small>
 

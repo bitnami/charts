@@ -1,8 +1,24 @@
 # Changelog
 
-## 18.2.3 (2024-06-05)
+## 18.3.1 (2024-06-10)
 
-* [bitnami/airflow] Bump chart version ([#26818](https://github.com/bitnami/charts/pull/26818))
+* [bitnami/airflow] Release 18.3.1 ([#27075](https://github.com/bitnami/charts/pull/27075))
+
+## 18.3.0 (2024-06-06)
+
+* [bitnami/airflow] Enable PodDisruptionBudgets (#26684) ([1534ce6](https://github.com/bitnami/charts/commit/1534ce69aa2b96d6c4e0d2b374a8ad77669e954c)), closes [#26684](https://github.com/bitnami/charts/issues/26684)
+
+## <small>18.2.5 (2024-06-06)</small>
+
+* [bitnami/airflow] Release 18.2.5 (#26934) ([2d07d06](https://github.com/bitnami/charts/commit/2d07d06365b747a97ba7098f2b9d7add42eef5bb)), closes [#26934](https://github.com/bitnami/charts/issues/26934)
+
+## <small>18.2.4 (2024-06-06)</small>
+
+* [bitnami/airflow] Release 18.2.4 (#26922) ([7180ee8](https://github.com/bitnami/charts/commit/7180ee89f51ce66715e6ec2e018bdff21cb0ead8)), closes [#26922](https://github.com/bitnami/charts/issues/26922)
+
+## <small>18.2.3 (2024-06-05)</small>
+
+* [bitnami/airflow] Bump chart version (#26818) ([d9021ee](https://github.com/bitnami/charts/commit/d9021ee2d83fb84139ba460181b0ec46519a56d6)), closes [#26818](https://github.com/bitnami/charts/issues/26818)
 
 ## <small>18.2.2 (2024-06-05)</small>
 

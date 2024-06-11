@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.1 (2024-06-04)
+## 18.2.2 (2024-06-06)
 
-* [bitnami/mariadb] Bump chart version ([#26644](https://github.com/bitnami/charts/pull/26644))
+* [bitnami/mariadb] Release 18.2.2 ([#26977](https://github.com/bitnami/charts/pull/26977))
+
+## <small>18.2.1 (2024-06-04)</small>
+
+* [bitnami/mariadb] Bump chart version (#26644) ([1cf51a6](https://github.com/bitnami/charts/commit/1cf51a65b4c7753ade78015e301b378cf490979e)), closes [#26644](https://github.com/bitnami/charts/issues/26644)
 
 ## 18.2.0 (2024-05-24)
 

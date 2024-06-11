@@ -1,8 +1,20 @@
 # Changelog
 
-## 23.2.2 (2024-06-05)
+## 23.2.5 (2024-06-06)
 
-* [bitnami/parse] Bump chart version ([#26853](https://github.com/bitnami/charts/pull/26853))
+* [bitnami/parse] Release 23.2.5 ([#27001](https://github.com/bitnami/charts/pull/27001))
+
+## <small>23.2.4 (2024-06-06)</small>
+
+* [bitnami/parse] Release 23.2.4 (#26911) ([a10d27e](https://github.com/bitnami/charts/commit/a10d27e2e448c308d7ff96bf4548fa811537f407)), closes [#26911](https://github.com/bitnami/charts/issues/26911)
+
+## <small>23.2.3 (2024-06-06)</small>
+
+* [bitnami/parse] Release 23.2.3 (#26893) ([f575d40](https://github.com/bitnami/charts/commit/f575d40a4c50fa621b9ea511e9d4892394b28ea8)), closes [#26893](https://github.com/bitnami/charts/issues/26893)
+
+## <small>23.2.2 (2024-06-05)</small>
+
+* [bitnami/parse] Bump chart version (#26853) ([9e7dafb](https://github.com/bitnami/charts/commit/9e7dafb5f95a0dc6778e21aa7664ad04b62f4e3e)), closes [#26853](https://github.com/bitnami/charts/issues/26853)
 
 ## <small>23.2.1 (2024-06-05)</small>
 

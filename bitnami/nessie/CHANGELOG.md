@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.1.2 (2024-06-04)
+## 0.1.4 (2024-06-10)
 
-* [bitnami/nessie] Release 0.1.2 ([#26717](https://github.com/bitnami/charts/pull/26717))
+* [bitnami/nessie] Release 0.1.4 ([#27078](https://github.com/bitnami/charts/pull/27078))
+
+## <small>0.1.3 (2024-06-06)</small>
+
+* [bitnami/nessie] Release 0.1.2 (#26717) ([e37e901](https://github.com/bitnami/charts/commit/e37e901db99a91932d03129e136643e5072417df)), closes [#26717](https://github.com/bitnami/charts/issues/26717)
+* [bitnami/nessie] Release 0.1.3 (#26996) ([06c9536](https://github.com/bitnami/charts/commit/06c95361634f1500479e433d529c9a4e224c09fc)), closes [#26996](https://github.com/bitnami/charts/issues/26996)
 
 ## <small>0.1.1 (2024-06-04)</small>
 

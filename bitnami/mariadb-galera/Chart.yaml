@@ -6,31 +6,31 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: mariadb-galera
-      image: docker.io/bitnami/mariadb-galera:11.3.2-debian-12-r3
+      image: docker.io/bitnami/mariadb-galera:11.3.2-debian-12-r4
     - name: mysqld-exporter
-      image: docker.io/bitnami/mysqld-exporter:0.15.1-debian-12-r16
+      image: docker.io/bitnami/mysqld-exporter:0.15.1-debian-12-r17
 apiVersion: v2
 appVersion: 11.3.2
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: MariaDB Galera is a multi-primary database cluster solution for synchronous replication and high availability.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mariadb-galera/img/mariadb-galera-stack-220x234.png
 keywords:
-  - mariadb
-  - mysql
-  - database
-  - sql
-  - prometheus
-  - galera
+- mariadb
+- mysql
+- database
+- sql
+- prometheus
+- galera
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: mariadb-galera
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
-version: 13.2.1
+- https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
+version: 13.2.3

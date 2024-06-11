@@ -12,27 +12,27 @@ annotations:
 apiVersion: v2
 appVersion: 0.35.1
 dependencies:
-  - condition: minio.enabled
-    name: minio
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 14.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: minio.enabled
+  name: minio
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 14.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/thanos/img/thanos-stack-220x234.png
 keywords:
-  - analytics
-  - monitoring
-  - prometheus
-  - thanos
+- analytics
+- monitoring
+- prometheus
+- thanos
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: thanos
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/thanos
-version: 15.7.2
+version: 15.7.4

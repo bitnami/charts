@@ -1,8 +1,20 @@
 # Changelog
 
-## 15.2.2 (2024-06-05)
+## 15.3.2 (2024-06-07)
 
-* [bitnami/kubeapps] Bump chart version ([#26842](https://github.com/bitnami/charts/pull/26842))
+* [bitnami/kubeapps] Release 15.3.2 ([#26904](https://github.com/bitnami/charts/pull/26904))
+
+## <small>15.3.1 (2024-06-06)</small>
+
+* [bitnami/kubeapps] Release 15.3.1 (#26974) ([042ec4d](https://github.com/bitnami/charts/commit/042ec4db43b95bfc57d366ae1300c03c6fd677ac)), closes [#26974](https://github.com/bitnami/charts/issues/26974)
+
+## 15.3.0 (2024-06-06)
+
+* [bitnami/kubeapps] Enable PodDisruptionBudgets (part 2) (#26701) ([f4e8688](https://github.com/bitnami/charts/commit/f4e868898b61b2de7c367d23135209c9e92dd021)), closes [#26701](https://github.com/bitnami/charts/issues/26701)
+
+## <small>15.2.2 (2024-06-05)</small>
+
+* [bitnami/kubeapps] Bump chart version (#26842) ([16d5b78](https://github.com/bitnami/charts/commit/16d5b784039a37ca643ac685c56d87373b1edaf7)), closes [#26842](https://github.com/bitnami/charts/issues/26842)
 
 ## <small>15.2.1 (2024-06-05)</small>
 
