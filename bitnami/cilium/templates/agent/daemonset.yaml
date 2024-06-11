@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
 kind: DaemonSet
 metadata:
   name: {{ template "cilium.agent.fullname" . }}

@@ -9,7 +9,7 @@ ref: https://docs.cilium.io/en/stable/network/kubernetes/configuration/
 */}}
 {{- define "cilium.configuration" -}}
 {{- if .Values.configuration }}
-{{- include "common.tplvalues.render" (dict "value" .Values.configuration .) }}
+{{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" .) }}
 {{- else }}
 debug: {{ ternary "true" "false" (or .Values.agent.image.debug .Values.operator.image.debug .Values.diagnosticMode.enabled) | quote }}
 certificates-directory: /certs
@@ -121,5 +121,10 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-data: {{- mergeOverwrite (include "cilium.configuration" . | fromYaml) .Values.overrideConfiguration | toYaml | nindent 2 }}
+{{- $configuration := include "cilium.configuration" . | fromYaml -}}
+{{- if .Values.overrideConfiguration }}
+{{- $overrideConfiguration := include "common.tplvalues.render" (dict "value" .Values.overrideConfiguration "context" .) | fromYaml }}
+{{- $configuration = mergeOverwrite $configuration $overrideConfiguration }}
+{{- end }}
+data: {{- $configuration | toYaml | nindent 2 }}
 {{- end }}

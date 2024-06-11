@@ -805,7 +805,28 @@ agent:
       ##     memory: 1024Mi
       ##
       resources: {}
-
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param agent.autoscaling.vpa.enabled Enable VPA for Cilium Agent
+    ## @param agent.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param agent.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param agent.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param agent.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param agent.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
   ## @section Cilium Agent RBAC configuration
   ##
   serviceAccount:
@@ -1359,11 +1380,11 @@ operator:
   ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
   ##
   autoscaling:
-    ## @param operator.autoscaling.vpa.enabled Enable VPA
+    ## @param operator.autoscaling.vpa.enabled Enable VPA for Cilium Operator
     ## @param operator.autoscaling.vpa.annotations Annotations for VPA resource
-    ## @param operator.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
-    ## @param operator.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
-    ## @param operator.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+    ## @param operator.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param operator.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param operator.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
     ##
     vpa:
       enabled: false

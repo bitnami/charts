@@ -19,7 +19,7 @@ metadata:
 spec:
   resourcePolicy:
     containerPolicies:
-    - containerName: operator
+    - containerName: cilium-operator
       {{- with .Values.operator.autoscaling.vpa.controlledResources }}
       controlledResources:
         {{- toYaml . | nindent 8 }}
