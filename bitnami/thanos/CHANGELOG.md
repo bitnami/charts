@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.4 (2024-06-11)
+## 15.7.5 (2024-06-11)
 
-* [bitnami/thanos] Fix sharded storegateway cache configs ([#26490](https://github.com/bitnami/charts/pull/26490))
+* [bitnami/thanos] only deploy networkPolicy when component is enabled ([#27070](https://github.com/bitnami/charts/pull/27070))
+
+## <small>15.7.4 (2024-06-11)</small>
+
+* [bitnami/thanos] Fix sharded storegateway cache configs (#26490) ([54afe30](https://github.com/bitnami/charts/commit/54afe30e41e8f5ec81b8bd0c7e523a9d218bded3)), closes [#26490](https://github.com/bitnami/charts/issues/26490)
 
 ## <small>15.7.3 (2024-06-10)</small>
 

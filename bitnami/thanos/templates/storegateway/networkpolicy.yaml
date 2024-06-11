@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.storegateway.networkPolicy.enabled }}
+{{- if and .Values.storegateway.enabled .Values.storegateway.networkPolicy.enabled }}
 kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
