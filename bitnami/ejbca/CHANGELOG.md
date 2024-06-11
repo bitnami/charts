@@ -1,8 +1,20 @@
 # Changelog
 
-## 14.2.0 (2024-05-24)
+## 14.2.3 (2024-06-07)
 
-* [bitnami/ejbca] Enable PodDisruptionBudgets ([#26427](https://github.com/bitnami/charts/pull/26427))
+* [bitnami/ejbca] Release 14.2.3 ([#27057](https://github.com/bitnami/charts/pull/27057))
+
+## <small>14.2.2 (2024-06-05)</small>
+
+* [bitnami/ejbca] Bump chart version (#26827) ([02e3a9e](https://github.com/bitnami/charts/commit/02e3a9e1aa95950946320b37b9eeed31117b7f6f)), closes [#26827](https://github.com/bitnami/charts/issues/26827)
+
+## <small>14.2.1 (2024-06-05)</small>
+
+* [bitnami/ejbca] Bump chart version (#26769) ([b08646e](https://github.com/bitnami/charts/commit/b08646eec1628986812a282bb380322b2cc81686)), closes [#26769](https://github.com/bitnami/charts/issues/26769)
+
+## 14.2.0 (2024-05-27)
+
+* [bitnami/ejbca] Enable PodDisruptionBudgets (#26427) ([23f140f](https://github.com/bitnami/charts/commit/23f140fb6d332799279386c2c403cbb2ec580cd4)), closes [#26427](https://github.com/bitnami/charts/issues/26427)
 
 ## 14.1.0 (2024-05-21)
 

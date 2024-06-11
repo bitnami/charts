@@ -6,35 +6,35 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: rabbitmq
-      image: docker.io/bitnami/rabbitmq:3.13.2-debian-12-r4
+      image: docker.io/bitnami/rabbitmq:3.13.3-debian-12-r0
     - name: rabbitmq-cluster-operator
-      image: docker.io/bitnami/rabbitmq-cluster-operator:2.9.0-debian-12-r1
+      image: docker.io/bitnami/rabbitmq-cluster-operator:2.9.0-debian-12-r2
     - name: rmq-default-credential-updater
-      image: docker.io/bitnami/rmq-default-credential-updater:1.0.4-debian-12-r20
+      image: docker.io/bitnami/rmq-default-credential-updater:1.0.4-debian-12-r21
     - name: rmq-messaging-topology-operator
-      image: docker.io/bitnami/rmq-messaging-topology-operator:1.14.1-debian-12-r1
+      image: docker.io/bitnami/rmq-messaging-topology-operator:1.14.1-debian-12-r2
 apiVersion: v2
 appVersion: 2.9.0
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
 keywords:
-  - rabbitmq
-  - operator
-  - infrastructure
-  - message queue
-  - AMQP
+- rabbitmq
+- operator
+- infrastructure
+- message queue
+- AMQP
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
-version: 4.3.2
+- https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
+version: 4.3.6

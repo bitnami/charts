@@ -1,8 +1,24 @@
 # Changelog
 
-## 21.2.0 (2024-05-29)
+## 21.2.4 (2024-06-06)
 
-* [bitnami/prestashop] Enable PodDisruptionBudgets ([#26531](https://github.com/bitnami/charts/pull/26531))
+* [bitnami/prestashop] Release 21.2.4 ([#27004](https://github.com/bitnami/charts/pull/27004))
+
+## <small>21.2.3 (2024-06-06)</small>
+
+* [bitnami/prestashop] Release 21.2.3 (#26915) ([a1de48a](https://github.com/bitnami/charts/commit/a1de48a44f7d2e729520d9ece66b86c854fef6af)), closes [#26915](https://github.com/bitnami/charts/issues/26915)
+
+## <small>21.2.2 (2024-06-05)</small>
+
+* [bitnami/prestashop] Bump chart version (#26856) ([4822668](https://github.com/bitnami/charts/commit/48226687c36fb97115aeb5f811490850db6d33ce)), closes [#26856](https://github.com/bitnami/charts/issues/26856)
+
+## <small>21.2.1 (2024-06-05)</small>
+
+* [bitnami/prestashop] Bump chart version (#26798) ([2fe39f7](https://github.com/bitnami/charts/commit/2fe39f77a8f05cd022ef7cf1b1ed92cb703d6d70)), closes [#26798](https://github.com/bitnami/charts/issues/26798)
+
+## 21.2.0 (2024-05-30)
+
+* [bitnami/prestashop] Enable PodDisruptionBudgets (#26531) ([1bd0e73](https://github.com/bitnami/charts/commit/1bd0e73d525f29b6833b92de8f0236d731898f51)), closes [#26531](https://github.com/bitnami/charts/issues/26531)
 
 ## 21.1.0 (2024-05-21)
 

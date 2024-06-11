@@ -1,8 +1,20 @@
 # Changelog
 
+## 5.2.3 (2024-06-06)
+
+* [bitnami/supabase] Release 5.2.3 ([#26933](https://github.com/bitnami/charts/pull/26933))
+
+## <small>5.2.2 (2024-06-05)</small>
+
+* [bitnami/supabase] Bump chart version (#26865) ([25c9831](https://github.com/bitnami/charts/commit/25c9831661ec87a094c392d5d2158c4f32669cdf)), closes [#26865](https://github.com/bitnami/charts/issues/26865)
+
+## <small>5.2.1 (2024-06-05)</small>
+
+* [bitnami/supabase] Bump chart version (#26807) ([0df7816](https://github.com/bitnami/charts/commit/0df7816d58c07c14b089f9ac2eebfc6cd2d48026)), closes [#26807](https://github.com/bitnami/charts/issues/26807)
+
 ## 5.2.0 (2024-05-29)
 
-* [bitnami/supabase] Enable PodDisruptionBudgets ([#26537](https://github.com/bitnami/charts/pull/26537))
+* [bitnami/supabase] Enable PodDisruptionBudgets (#26537) ([74fad57](https://github.com/bitnami/charts/commit/74fad57a97b89fea6c0577624f0ef71cce59acf7)), closes [#26537](https://github.com/bitnami/charts/issues/26537)
 
 ## <small>5.1.1 (2024-05-22)</small>
 

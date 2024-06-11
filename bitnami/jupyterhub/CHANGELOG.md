@@ -1,8 +1,36 @@
 # Changelog
 
-## 7.1.4 (2024-06-04)
+## 7.2.5 (2024-06-06)
 
-* [bitnami/jupyterhub] Remove UTF-8 chars ([#26608](https://github.com/bitnami/charts/pull/26608))
+* [bitnami/jupyterhub] Release 7.2.5 ([#26965](https://github.com/bitnami/charts/pull/26965))
+
+## <small>7.2.4 (2024-06-06)</small>
+
+* [bitnami/jupyterhub] Fix security context render in user pod (#26917) ([7a37bc2](https://github.com/bitnami/charts/commit/7a37bc29a3103c74b0f0f0b8bf9f71a70135dbe4)), closes [#26917](https://github.com/bitnami/charts/issues/26917)
+
+## <small>7.2.3 (2024-06-05)</small>
+
+* [bitnami/jupyterhub] Release 7.2.3 (#26873) ([5eb5cc3](https://github.com/bitnami/charts/commit/5eb5cc32b49eeada470b098840d8144875332df9)), closes [#26873](https://github.com/bitnami/charts/issues/26873)
+
+## <small>7.2.2 (2024-06-05)</small>
+
+* [bitnami/jupyterhub] Bump chart version (#26838) ([07bf243](https://github.com/bitnami/charts/commit/07bf243e82e864bdc067d3fe41ecb0e6b5b93657)), closes [#26838](https://github.com/bitnami/charts/issues/26838)
+
+## <small>7.2.1 (2024-06-05)</small>
+
+* [bitnami/jupyterhub] Bump chart version (#26780) ([f324f8c](https://github.com/bitnami/charts/commit/f324f8cfe314d92be576b8e5e32b60b6e208d91d)), closes [#26780](https://github.com/bitnami/charts/issues/26780)
+
+## 7.2.0 (2024-06-05)
+
+* [bitnami/jupyterhub] Enable PodDisruptionBudgets (#26710) ([9f35c24](https://github.com/bitnami/charts/commit/9f35c24bcf21e3f70bc1884ea9e81b4ab7d4bc81)), closes [#26710](https://github.com/bitnami/charts/issues/26710)
+
+## <small>7.1.5 (2024-06-05)</small>
+
+* [bitnami/jupyterhub] Release 7.1.5 (#26718) ([11a0884](https://github.com/bitnami/charts/commit/11a0884a4e5ec03469768f271cfd7255fbc62159)), closes [#26718](https://github.com/bitnami/charts/issues/26718)
+
+## <small>7.1.4 (2024-06-04)</small>
+
+* [bitnami/jupyterhub] Remove UTF-8 chars (#26608) ([59c0745](https://github.com/bitnami/charts/commit/59c074567e5164962341c84a11fd305a21294faa)), closes [#26608](https://github.com/bitnami/charts/issues/26608)
 
 ## <small>7.1.3 (2024-06-03)</small>
 

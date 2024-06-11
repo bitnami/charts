@@ -1,8 +1,20 @@
 # Changelog
 
-## 28.2.0 (2024-05-23)
+## 28.2.3 (2024-06-06)
 
-* [bitnami/redmine] Enable PodDisruptionBudgets ([#26376](https://github.com/bitnami/charts/pull/26376))
+* [bitnami/redmine] Release 28.2.3 ([#27011](https://github.com/bitnami/charts/pull/27011))
+
+## <small>28.2.2 (2024-06-05)</small>
+
+* [bitnami/redmine] Bump chart version (#26858) ([28a494a](https://github.com/bitnami/charts/commit/28a494a3e666d1ff9bd6fe3ecca921ea041dc1e8)), closes [#26858](https://github.com/bitnami/charts/issues/26858)
+
+## <small>28.2.1 (2024-06-05)</small>
+
+* [bitnami/redmine] Bump chart version (#26800) ([11bf83c](https://github.com/bitnami/charts/commit/11bf83caa900b9861b310ff80644b80b7eef04e6)), closes [#26800](https://github.com/bitnami/charts/issues/26800)
+
+## 28.2.0 (2024-05-24)
+
+* [bitnami/redmine] Enable PodDisruptionBudgets (#26376) ([4ffd3fd](https://github.com/bitnami/charts/commit/4ffd3fd91c2e9db900400b9c9e1ff45957922211)), closes [#26376](https://github.com/bitnami/charts/issues/26376)
 
 ## 28.1.0 (2024-05-21)
 

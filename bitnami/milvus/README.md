@@ -1752,6 +1752,12 @@ wrj2wDbCDCFmfqnSJ+dKI3vFLlEz44sAV8jX/kd4Y6ZTQhlLbYc=
 | `externalKafka.sasl.existingSecret`            | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords") | `""`                  |
 | `externalKafka.sasl.existingSecretPasswordKey` | Name of the secret key containing the Kafka client user password                                                   | `kafka-root-password` |
 | `externalKafka.sasl.enabledMechanisms`         | Kafka enabled SASL mechanisms                                                                                      | `PLAIN`               |
+| `externalKafka.tls.enabled`                    | Enable TLS for kafka client connections.                                                                           | `false`               |
+| `externalKafka.tls.existingSecret`             | Name of the existing secret containing the TLS certificates for external kafka client communications.              | `""`                  |
+| `externalKafka.tls.cert`                       | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)                          | `tls.crt`             |
+| `externalKafka.tls.key`                        | The secret key from the existingSecret if 'key' key different from the default (tls.key)                           | `tls.key`             |
+| `externalKafka.tls.caCert`                     | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)                         | `ca.crt`              |
+| `externalKafka.tls.keyPassword`                | Password to access the password-protected PEM key if necessary.                                                    | `""`                  |
 
 ### etcd sub-chart parameters
 

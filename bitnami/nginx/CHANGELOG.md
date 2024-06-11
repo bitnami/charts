@@ -1,8 +1,24 @@
 # Changelog
 
-## 17.4.0 (2024-06-05)
+## 18.1.0 (2024-06-11)
 
 * [bitnami/nginx] Allowing for customize dnsPolicy and dnsConfig for nginx ([#26619](https://github.com/bitnami/charts/pull/26619))
+
+## 18.0.3 (2024-06-10)
+
+* [bitnami/nginx] Release 18.0.3 ([#27083](https://github.com/bitnami/charts/pull/27083))
+
+## <small>18.0.2 (2024-06-10)</small>
+
+* [bitnami/nginx] fix: Revert back use of http port instead of https (#27040) ([1d65098](https://github.com/bitnami/charts/commit/1d65098a6e509a3a2987eb02a3a59bb1f6f8845e)), closes [#27040](https://github.com/bitnami/charts/issues/27040) [#20934](https://github.com/bitnami/charts/issues/20934)
+
+## <small>18.0.1 (2024-06-06)</small>
+
+* [bitnami/nginx] Release 18.0.1 (#26994) ([e7ac90f](https://github.com/bitnami/charts/commit/e7ac90f7546236f32e0b6079a5440181b98bacbb)), closes [#26994](https://github.com/bitnami/charts/issues/26994)
+
+## 18.0.0 (2024-06-06)
+
+* [bitnami/nginx] Release 18.0.0 (#26900) ([1376775](https://github.com/bitnami/charts/commit/13767752224484c11411638ce944a0e2c0fc9871)), closes [#26900](https://github.com/bitnami/charts/issues/26900)
 
 ## <small>17.3.3 (2024-06-04)</small>
 

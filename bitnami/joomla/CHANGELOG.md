@@ -1,8 +1,20 @@
 # Changelog
 
-## 19.2.0 (2024-05-29)
+## 19.2.3 (2024-06-06)
 
-* [bitnami/joomla] Enable PodDisruptionBudgets ([#26498](https://github.com/bitnami/charts/pull/26498))
+* [bitnami/joomla] Release 19.2.3 ([#26964](https://github.com/bitnami/charts/pull/26964))
+
+## <small>19.2.2 (2024-06-05)</small>
+
+* [bitnami/joomla] Bump chart version (#26837) ([d0fb273](https://github.com/bitnami/charts/commit/d0fb27398af90d73186a4e1687cac2aee42afb4a)), closes [#26837](https://github.com/bitnami/charts/issues/26837)
+
+## <small>19.2.1 (2024-06-05)</small>
+
+* [bitnami/joomla] Bump chart version (#26779) ([863bf83](https://github.com/bitnami/charts/commit/863bf8306bb30f212222b05003cab55f20bcb2a0)), closes [#26779](https://github.com/bitnami/charts/issues/26779)
+
+## 19.2.0 (2024-05-30)
+
+* [bitnami/joomla] Enable PodDisruptionBudgets (#26498) ([1a2abfe](https://github.com/bitnami/charts/commit/1a2abfea3c23519c3d202049cf5a4cb893df253c)), closes [#26498](https://github.com/bitnami/charts/issues/26498)
 
 ## <small>19.1.1 (2024-05-28)</small>
 

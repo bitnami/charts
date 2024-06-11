@@ -1,8 +1,16 @@
 # Changelog
 
-## 6.2.2 (2024-06-04)
+## 6.2.4 (2024-06-06)
 
-* [bitnami/logstash] Bump chart version ([#26643](https://github.com/bitnami/charts/pull/26643))
+* [bitnami/logstash] Release 6.2.4 ([#26976](https://github.com/bitnami/charts/pull/26976))
+
+## <small>6.2.3 (2024-06-05)</small>
+
+* [bitnami/logstash] Release 6.2.3 (#26876) ([6fc7bdc](https://github.com/bitnami/charts/commit/6fc7bdcb0b026bdc31c03db07aad1d26d19da3ac)), closes [#26876](https://github.com/bitnami/charts/issues/26876)
+
+## <small>6.2.2 (2024-06-04)</small>
+
+* [bitnami/logstash] Bump chart version (#26643) ([13d1fde](https://github.com/bitnami/charts/commit/13d1fded62b03d215410e5aeea46b74a794ccaf5)), closes [#26643](https://github.com/bitnami/charts/issues/26643)
 
 ## <small>6.2.1 (2024-05-29)</small>
 

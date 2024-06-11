@@ -6,30 +6,30 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kuberay-apiserver
-      image: docker.io/bitnami/kuberay-apiserver:1.1.1-debian-12-r2
+      image: docker.io/bitnami/kuberay-apiserver:1.1.1-debian-12-r3
     - name: kuberay-operator
-      image: docker.io/bitnami/kuberay-operator:1.1.1-debian-12-r2
+      image: docker.io/bitnami/kuberay-operator:1.1.1-debian-12-r3
     - name: ray
-      image: docker.io/bitnami/ray:2.22.0-debian-12-r0
+      image: docker.io/bitnami/ray:2.24.0-debian-12-r0
 apiVersion: v2
 appVersion: 1.1.1
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: KubeRay is a Kubernetes operator for deploying and management of Ray applications on Kubernetes using CustomResourceDefinitions.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kuberay/img/kuberay-stack-220x234.png
 keywords:
-  - ray
-  - machine-learning
-  - kuberay
+- ray
+- machine-learning
+- kuberay
 maintainers:
-  - name: Broadcom, Inc. All Rights Reserved.
-    url: https://github.com/bitnami/charts
+- name: Broadcom, Inc. All Rights Reserved.
+  url: https://github.com/bitnami/charts
 name: kuberay
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/kuberay
-version: 1.1.2
+- https://github.com/bitnami/charts/tree/main/bitnami/kuberay
+version: 1.2.1

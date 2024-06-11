@@ -1,8 +1,24 @@
 # Changelog
 
-## 4.3.2 (2024-06-04)
+## 4.3.6 (2024-06-10)
 
-* [bitnami/rabbitmq-cluster-operator] Bump chart version ([#26665](https://github.com/bitnami/charts/pull/26665))
+* [bitnami/rabbitmq-cluster-operator] Fix cert-manager injection when existing secret is used ([#26521](https://github.com/bitnami/charts/pull/26521))
+
+## <small>4.3.5 (2024-06-06)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.5 (#27008) ([3c86e62](https://github.com/bitnami/charts/commit/3c86e621a23bc1082de077463ac1c997c2d59a61)), closes [#27008](https://github.com/bitnami/charts/issues/27008)
+
+## <small>4.3.4 (2024-06-05)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Remove operator metrics endpoint … (#26601) ([0cf6ecc](https://github.com/bitnami/charts/commit/0cf6ecca656619a2bb8516a351ba780a7ea093d5)), closes [#26601](https://github.com/bitnami/charts/issues/26601) [#25743](https://github.com/bitnami/charts/issues/25743)
+
+## <small>4.3.3 (2024-06-05)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Release 4.3.3 (#26752) ([0b9b047](https://github.com/bitnami/charts/commit/0b9b047beefd57a7cbaa47145c7acb79508fce49)), closes [#26752](https://github.com/bitnami/charts/issues/26752)
+
+## <small>4.3.2 (2024-06-04)</small>
+
+* [bitnami/rabbitmq-cluster-operator] Bump chart version (#26665) ([0d1b4ab](https://github.com/bitnami/charts/commit/0d1b4ab706e604d91f0754e00cff63a1c0aa50d1)), closes [#26665](https://github.com/bitnami/charts/issues/26665)
 
 ## <small>4.3.1 (2024-05-24)</small>
 

@@ -1,8 +1,32 @@
 # Changelog
 
-## 22.4.2 (2024-05-30)
+## 22.4.8 (2024-06-07)
 
-* [bitnami/wordpress] Fix issue #26133 ([#26551](https://github.com/bitnami/charts/pull/26551))
+* [bitnami/wordpress] Release 22.4.8 ([#27055](https://github.com/bitnami/charts/pull/27055))
+
+## <small>22.4.7 (2024-06-06)</small>
+
+* [bitnami/wordpress] Release 22.4.7 (#27034) ([299fea6](https://github.com/bitnami/charts/commit/299fea6125b71d65ea58ada51c6c86cd0407a4ad)), closes [#27034](https://github.com/bitnami/charts/issues/27034)
+
+## <small>22.4.6 (2024-06-06)</small>
+
+* [bitnami/wordpress] Release 22.4.6 (#27028) ([d4ae64c](https://github.com/bitnami/charts/commit/d4ae64c2f4687f55dce620e0ca5347a50c746856)), closes [#27028](https://github.com/bitnami/charts/issues/27028)
+
+## <small>22.4.5 (2024-06-05)</small>
+
+* [bitnami/wordpress] Release 22.4.5 (#26877) ([17e5abb](https://github.com/bitnami/charts/commit/17e5abb1a6f89d3458e18d33ab61f201436352b4)), closes [#26877](https://github.com/bitnami/charts/issues/26877)
+
+## <small>22.4.4 (2024-06-05)</small>
+
+* [bitnami/wordpress] Bump chart version (#26868) ([ace691a](https://github.com/bitnami/charts/commit/ace691a13e2b46943bcefd12a0417c83db2743e7)), closes [#26868](https://github.com/bitnami/charts/issues/26868)
+
+## <small>22.4.3 (2024-06-05)</small>
+
+* [bitnami/wordpress] Bump chart version (#26810) ([bd50eab](https://github.com/bitnami/charts/commit/bd50eaba314f106fa1a41f2f5541e964e664f276)), closes [#26810](https://github.com/bitnami/charts/issues/26810)
+
+## <small>22.4.2 (2024-06-03)</small>
+
+* [bitnami/wordpress] Fix issue #26133 (#26551) ([55dcb0a](https://github.com/bitnami/charts/commit/55dcb0af793299e3a06a52cdd774475ab94040a7)), closes [#26133](https://github.com/bitnami/charts/issues/26133) [#26551](https://github.com/bitnami/charts/issues/26551) [#26133](https://github.com/bitnami/charts/issues/26133)
 
 ## <small>22.4.1 (2024-05-29)</small>
 

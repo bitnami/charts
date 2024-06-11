@@ -34,4 +34,4 @@ maintainers:
 name: schema-registry
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 19.1.0
+version: 19.1.3

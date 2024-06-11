@@ -1,8 +1,20 @@
 # Changelog
 
-## 19.1.0 (2024-05-28)
+## 19.1.3 (2024-06-06)
 
-* [bitnami/schema-registry] Enable PodDisruptionBudgets ([#26377](https://github.com/bitnami/charts/pull/26377))
+* [bitnami/schema-registry] Release 19.1.3 ([#27015](https://github.com/bitnami/charts/pull/27015))
+
+## <small>19.1.2 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26859) ([cc07701](https://github.com/bitnami/charts/commit/cc07701f428b486e8c4f35fae719e1a513ee56ef)), closes [#26859](https://github.com/bitnami/charts/issues/26859)
+
+## <small>19.1.1 (2024-06-05)</small>
+
+* [bitnami/schema-registry] Bump chart version (#26801) ([90a1ef0](https://github.com/bitnami/charts/commit/90a1ef0fbe9545af302d682ac2b51adc3e6a9be9)), closes [#26801](https://github.com/bitnami/charts/issues/26801)
+
+## 19.1.0 (2024-05-29)
+
+* [bitnami/schema-registry] Enable PodDisruptionBudgets (#26377) ([5337d8a](https://github.com/bitnami/charts/commit/5337d8ab354416b64a55994f5a2f838cea83f083)), closes [#26377](https://github.com/bitnami/charts/issues/26377)
 
 ## 19.0.0 (2024-05-27)
 

@@ -1,8 +1,24 @@
 # Changelog
 
-## 13.2.0 (2024-05-24)
+## 13.2.4 (2024-06-06)
 
-* [bitnami/discourse] Enable PodDisruptionBudgets ([#26425](https://github.com/bitnami/charts/pull/26425))
+* [bitnami/discourse] Release 13.2.4 ([#27038](https://github.com/bitnami/charts/pull/27038))
+
+## <small>13.2.3 (2024-06-06)</small>
+
+* [bitnami/discourse] Release 13.2.3 (#26923) ([ee49396](https://github.com/bitnami/charts/commit/ee49396b6a329b8fcca26bf2bf6ae22309b8ad24)), closes [#26923](https://github.com/bitnami/charts/issues/26923)
+
+## <small>13.2.2 (2024-06-05)</small>
+
+* [bitnami/discourse] Bump chart version (#26825) ([b6ab645](https://github.com/bitnami/charts/commit/b6ab645721eb7f3dea446f32dc6ebe23f03051cd)), closes [#26825](https://github.com/bitnami/charts/issues/26825)
+
+## <small>13.2.1 (2024-06-05)</small>
+
+* [bitnami/discourse] Bump chart version (#26767) ([e841b7c](https://github.com/bitnami/charts/commit/e841b7c9aafd711a3e6f425905e00a019949791b)), closes [#26767](https://github.com/bitnami/charts/issues/26767)
+
+## 13.2.0 (2024-05-30)
+
+* [bitnami/discourse] Enable PodDisruptionBudgets (#26425) ([b5de08f](https://github.com/bitnami/charts/commit/b5de08fa965b07a74fd2611cfc4e3a962463f6b5)), closes [#26425](https://github.com/bitnami/charts/issues/26425)
 
 ## 13.1.0 (2024-05-21)
 
