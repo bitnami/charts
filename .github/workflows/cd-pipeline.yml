@@ -113,6 +113,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PUBLISH_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PUBLISH_SECRET_ACCESS_KEY }}
           AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_PUBLISH_ROLE_ARN }}
+          AWS_MAX_ATTEMPTS: 3
           AWS_DEFAULT_REGION: us-east-1
         run: |
           # Configure AWS account
@@ -192,17 +193,95 @@ jobs:
             git tag ${CHART}/${chart_version}
             git push --tags
           fi
+  push-promotion:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs:
+      - get-chart
+      - update-index
+    name: Push Promotion files
+    if: ${{ needs.get-chart.outputs.result == 'ok' }}
+    steps:
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+        with:
+          path: charts
+      - name: Install helm
+        run: |
+          HELM_TARBALL="helm-v3.8.1-linux-amd64.tar.gz"
+          curl -SsLfO "https://get.helm.sh/${HELM_TARBALL}" && sudo tar xf "$HELM_TARBALL" --strip-components 1 -C /usr/local/bin
+      - env:
+          CHART_NAME: ${{ needs.get-chart.outputs.chart }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_PROMOTION_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_PROMOTION_SECRET_ACCESS_KEY }}
+          AWS_PROMOTION_BUCKET: ${{ secrets.AWS_PROMOTION_BUCKET }}
+          AWS_MAX_ATTEMPTS: 3
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          #!/bin/bash
+          chart="bitnami/${CHART_NAME}"
+          cd charts
+          # Get chart and app version
+          chart_version="$(yq e '.version' "${chart}/Chart.yaml")"
+          app_version="$(yq e '.appVersion' "${chart}/Chart.yaml")"
+          # Get image list
+          helm dep build ${chart}
+          image_list="$(yq '.annotations.images' "${chart}/Chart.yaml" | yq '[ .[] | .image ] | tojson')"
+          for dependency in "${chart}/charts/"*.tgz; do
+            chart_yaml_file="$(tar -tzf "$dependency" | grep -E "^[^/]+/Chart.yaml$")"
+            if [[ -n "${chart_yaml_file}" ]]; then
+              dependency_image_list="$(tar -xzO -f "$dependency" "$chart_yaml_file" | yq '.annotations.images' | yq '[ .[] | .image ] | tojson')"
+              image_list="$(jq -c --null-input --argjson arr1 "$image_list" --argjson arr2 "$dependency_image_list" '$arr1 + $arr2 | unique')"
+            fi
+          done
+          # Build JSON files
+          release_date="$(date -u +"%Y/%m/%d")"
+          file_prefix="$(date -u +"%s%3N-${CHART_NAME}-${app_version}")"
+          json_template=$(cat << "EOF"
+          {
+            "platform_id": $platform_id,
+            "application": $app,
+            "external_id": "\($app):\($chart_version)",
+            "version": $app_version,
+            "bundled_os_version": $bundled_os_version,
+            "properties": {
+                "chart_url": "https://charts.bitnami.com/bitnami/\($app)-\($chart_version).tgz",
+                "containers": $image_list,
+                "github_repository": "bitnami/charts/tree/main/bitnami/\($app)",
+            }
+          }
+          EOF
+          )
+          jq --null-input \
+            --arg platform_id "bitnami-chart-debian-x64" \
+            --arg app "${CHART_NAME}" \
+            --arg app_version "${app_version}" \
+            --arg chart_version "${chart_version}" \
+            --arg bundled_os_version "12" \
+            --argjson image_list "${image_list}" "${json_template}" > "${file_prefix}-bitnami-chart-debian-x64.json"
+          jq --null-input \
+            --arg platform_id "vmware-chart-debian-x64" \
+            --arg app "${CHART_NAME}" \
+            --arg app_version "${app_version}" \
+            --arg chart_version "${chart_version}" \
+            --arg bundled_os_version "12" \
+            --argjson image_list "${image_list}" "${json_template}" | jq '.properties += {"alias_platform_from": "bitnami-chart-debian-x64"}' > "${file_prefix}-vmware-chart-debian-x64.json"
+          # Upload files to the release bucket.
+          aws s3 cp "${file_prefix}-bitnami-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-bitnami-chart-debian-x64.json"
+          aws s3 cp "${file_prefix}-bitnami-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-vmware-chart-debian-x64.json"
+
   # If the CD Pipeline does not succeed we should notify the interested agents
   slack-notif:
     runs-on: ubuntu-latest
     needs:
       - vib-publish
       - update-index
+      - push-promotion
     if: always()
     name: Notify unsuccessful CD run
     steps:
       - name: Notify in Slack channel
-        if: ${{ needs.update-index.result != 'success' }}
+        if: ${{ needs.push-promotion.result != 'success' }}
         uses: slackapi/slack-github-action@70cd7be8e40a46e8b0eced40b0de447bdb42f68e
         with:
           channel-id: ${{ secrets.CD_SLACK_CHANNEL_ID }}
