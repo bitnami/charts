@@ -152,7 +152,7 @@ spec:
             {{- if $.Values.bucketCacheConfig }}
             - --store.caching-bucket.config-file=/conf/cache/bucket-cache.yml
             {{- end }}
-            {{- if or $.Values.storegateway.config $.Values.storegateway.existingConfigmap }}
+            {{- if or (include "thanos.storegateway.createConfigmap" .) .Values.storegateway.existingConfigmap }}
             - --index-cache.config-file=/conf/cache/config.yml
             {{- end }}
             {{- if $.Values.storegateway.grpc.server.tls.enabled }}

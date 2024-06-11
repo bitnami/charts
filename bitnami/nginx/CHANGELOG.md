@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.0.3 (2024-06-10)
+## 18.1.0 (2024-06-11)
 
-* [bitnami/nginx] Release 18.0.3 ([#27083](https://github.com/bitnami/charts/pull/27083))
+* [bitnami/nginx] Allowing for customize dnsPolicy and dnsConfig for nginx ([#26619](https://github.com/bitnami/charts/pull/26619))
+
+## <small>18.0.3 (2024-06-10)</small>
+
+* [bitnami/nginx] Release 18.0.3 (#27083) ([695dc9d](https://github.com/bitnami/charts/commit/695dc9dbc9fe880af6ee5df5b4a45dd894473a6a)), closes [#27083](https://github.com/bitnami/charts/issues/27083)
 
 ## <small>18.0.2 (2024-06-10)</small>
 
