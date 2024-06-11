@@ -268,7 +268,7 @@ jobs:
             --argjson image_list "${image_list}" "${json_template}" | jq '.properties += {"alias_platform_from": "bitnami-chart-debian-x64"}' > "${file_prefix}-vmware-chart-debian-x64.json"
           # Upload files to the release bucket.
           aws s3 cp "${file_prefix}-bitnami-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-bitnami-chart-debian-x64.json"
-          aws s3 cp "${file_prefix}-bitnami-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-vmware-chart-debian-x64.json"
+          aws s3 cp "${file_prefix}-vmware-chart-debian-x64.json" "s3://${AWS_PROMOTION_BUCKET}/releases/${release_date}/${file_prefix}-vmware-chart-debian-x64.json"
 
   # If the CD Pipeline does not succeed we should notify the interested agents
   slack-notif:
