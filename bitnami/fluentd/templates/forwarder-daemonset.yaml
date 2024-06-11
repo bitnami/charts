@@ -77,15 +77,16 @@ spec:
               cd /tmp
 
               # install extra gems
-              {{- range $gem := .Values.forwarder.extraGems }} --no-document
+              {{- range $gem := .Values.forwarder.extraGems }}
               {{- if kindIs "string" $gem }}
-              fluent-gem install {{ $gem }}
+              fluent-gem install {{ $gem }} --no-document
               {{- else }}
               fluent-gem install {{ $gem.name }}{{ if $gem.version }} -v {{ $gem.version }}{{ end }} --no-document
               {{- end }}
               {{- end }}
 
               # copy installed gems to shared dir
+              cp -r /opt/bitnami/fluentd/extensions/* /extensions/
               cp -r /opt/bitnami/fluentd/gems/* /gems/
               cp -r /opt/bitnami/fluentd/specifications/* /specifications/
           {{- if .Values.forwarder.initResources }}
@@ -97,6 +98,9 @@ spec:
             allowPrivilegeEscalation: false
             runAsUser: 0
           volumeMounts:
+            - name: empty-dir
+              mountPath: /extensions
+              subPath: app-extensions-dir
             - name: empty-dir
               mountPath: /gems
               subPath: app-gems-dir
@@ -247,6 +251,9 @@ spec:
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- end }}
             {{- if .Values.forwarder.extraGems }}
+            - name: empty-dir
+              mountPath: /opt/bitnami/fluentd/extensions/
+              subPath: app-extensions-dir
             - name: empty-dir
               mountPath: /opt/bitnami/fluentd/gems/
               subPath: app-gems-dir

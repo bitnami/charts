@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: tensorflow-resnet
-      image: docker.io/bitnami/tensorflow-resnet:2.16.1-debian-12-r3
+      image: docker.io/bitnami/tensorflow-resnet:2.16.1-debian-12-r4
     - name: tensorflow-serving
-      image: docker.io/bitnami/tensorflow-serving:2.16.1-debian-12-r3
+      image: docker.io/bitnami/tensorflow-serving:2.16.1-debian-12-r4
 apiVersion: v2
 appVersion: 2.16.1
 dependencies:
@@ -33,4 +33,4 @@ maintainers:
 name: tensorflow-resnet
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 4.1.0
+version: 4.2.3
