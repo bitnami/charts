@@ -1,12 +1,12 @@
 # Changelog
 
-## 0.4.0 (2024-05-24)
+## 0.4.0 (2024-06-11)
 
 * [bitnami/seaweedfs] Make Mariadb optional ([#26366](https://github.com/bitnami/charts/pull/26366))
 
-## 0.3.6 (2024-06-10)
+## <small>0.3.6 (2024-06-10)</small>
 
-* [bitnami/seaweedfs] Release 0.3.6 ([#27066](https://github.com/bitnami/charts/pull/27066))
+* [bitnami/seaweedfs] Release 0.3.6 (#27066) ([5ee73cf](https://github.com/bitnami/charts/commit/5ee73cfca0e75cabcf4ee7a758b229f3e44d71eb)), closes [#27066](https://github.com/bitnami/charts/issues/27066)
 
 ## <small>0.3.5 (2024-06-06)</small>
 
