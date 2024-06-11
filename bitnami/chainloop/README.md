@@ -37,7 +37,7 @@ This chart comes in **two flavors**, `standard` and [`development`](#development
 
 ### Standard (default)
 
-![Deployment](../../docs/img/deployment.png)
+![Deployment](https://raw.githubusercontent.com/chainloop-dev/chainloop/main/docs/img/deployment.png)
 
 The default deployment mode relies on external dependencies to be available in advance.
 
@@ -144,7 +144,7 @@ To provide an easy way to give Chainloop a try, this Helm Chart has an **opt-in 
 
 > IMPORTANT: DO NOT USE THIS MODE IN PRODUCTION
 
-![Deployment](../../docs/img/deployment-dev.png)
+![Deployment](https://raw.githubusercontent.com/chainloop-dev/chainloop/main/docs/img/deployment-dev.png)
 
 The Helm Chart in this mode includes
 
@@ -664,7 +664,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-<http://www.apache.org/licenses/LICENSE-2.0>
+<https://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
