@@ -228,7 +228,7 @@ containerSecurityContext:
 ## @param containerPorts.https Sets https port inside NGINX container
 ##
 containerPorts:
-  http: 8080
+  http: 8085
   https: ""
 ## @param extraContainerPorts Array of additional container ports for the Nginx container
 ## e.g:
@@ -498,7 +498,7 @@ cloneStaticSiteFromGit:
 ##
 serverBlock: |-
    server {
-     listen 0.0.0.0:8080;
+     listen 0.0.0.0:8085;
      proxy_ssl_verify off;
      location /generic-api {
        proxy_pass https://10.15.10.3;
