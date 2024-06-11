@@ -1,8 +1,12 @@
 # Changelog
 
-## 15.7.3 (2024-06-10)
+## 15.7.4 (2024-06-11)
 
-* [bitnami/thanos] add service monitor labels ([#26880](https://github.com/bitnami/charts/pull/26880))
+* [bitnami/thanos] Fix sharded storegateway cache configs ([#26490](https://github.com/bitnami/charts/pull/26490))
+
+## <small>15.7.3 (2024-06-10)</small>
+
+* [bitnami/thanos] add service monitor labels (#26880) ([162d466](https://github.com/bitnami/charts/commit/162d466ef79df488b418ec184952e04615ed8ec6)), closes [#26880](https://github.com/bitnami/charts/issues/26880)
 
 ## <small>15.7.2 (2024-06-06)</small>
 
