@@ -2,7 +2,7 @@
 
 ## 14.2.5 (2024-06-11)
 
-* Draft: [bitnami/postgresql-ha] Fix postgresql repmgr  generation ([#27095](https://github.com/bitnami/charts/pull/27095))
+* [bitnami/postgresql-ha] Fix postgresql repmgr POSTGRES_POSTGRES_PASSWORD generation ([#27095](https://github.com/bitnami/charts/pull/27095))
 
 ## <small>14.2.4 (2024-06-11)</small>
 
