@@ -1,8 +1,12 @@
 # Changelog
 
-## 29.2.4 (2024-06-06)
+## 29.3.0 (2024-06-11)
 
-* [bitnami/kafka] Release 29.2.4 ([#26966](https://github.com/bitnami/charts/pull/26966))
+* [bitnami/kafka] Custom SANs for auto-generated TLS certificates ([#27092](https://github.com/bitnami/charts/pull/27092))
+
+## <small>29.2.4 (2024-06-06)</small>
+
+* [bitnami/kafka] Release 29.2.4 (#26966) ([92b9deb](https://github.com/bitnami/charts/commit/92b9debcd39ec036754fb3e33d9c171b53ced39f)), closes [#26966](https://github.com/bitnami/charts/issues/26966)
 
 ## <small>29.2.3 (2024-06-06)</small>
 
