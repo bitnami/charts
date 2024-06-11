@@ -1573,6 +1573,466 @@ operator:
       ##
       selector: {}
 
+## @section Envoy Parameters
+##
+envoy:
+  ## Bitnami Envoy image
+  ## ref: https://hub.docker.com/r/bitnami/cilium/tags/
+  ## @param envoy.image.registry [default: REGISTRY_NAME] Envoy image registry
+  ## @param envoy.image.repository [default: REPOSITORY_NAME/cilium] Envoy image repository
+  ## @skip envoy.image.tag Envoy image tag (immutable tags are recommended)
+  ## @param envoy.image.digest Envoy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+  ## @param envoy.image.pullPolicy Envoy image pull policy
+  ## @param envoy.image.pullSecrets Envoy image pull secrets
+  ## @param envoy.image.debug Enable Envoy image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/envoy
+    tag: 1.29.5-debian-12-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    debug: false
+  ## @param envoy.containerPorts.health Envoy health container port
+  ## @param envoy.containerPorts.metrics Envoy metrics container port
+  ##
+  containerPorts:
+    health: 9878
+    metrics: 9964
+  ## @param envoy.extraContainerPorts Optionally specify extra list of additional ports for Envoy containers
+  ## e.g:
+  ## extraContainerPorts:
+  ##   - name: myservice
+  ##     containerPort: 9090
+  ##
+  extraContainerPorts: []
+  ## Configure extra options for Envoy containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param envoy.livenessProbe.enabled Enable livenessProbe on Envoy containers
+  ## @param envoy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param envoy.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param envoy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param envoy.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param envoy.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 10
+    successThreshold: 1
+  ## @param envoy.readinessProbe.enabled Enable readinessProbe on Envoy containers
+  ## @param envoy.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param envoy.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param envoy.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param envoy.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param envoy.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param envoy.startupProbe.enabled Enable startupProbe on Envoy containers
+  ## @param envoy.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param envoy.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param envoy.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param envoy.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param envoy.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 5
+    periodSeconds: 2
+    timeoutSeconds: 1
+    failureThreshold: 100
+    successThreshold: 1
+  ## @param envoy.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param envoy.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param envoy.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Envoy resource requests and limits
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  ## @param envoy.resourcesPreset Set Envoy container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if envoy.resources is set (envoy.resources is recommended for production).
+  ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
+  ##
+  resourcesPreset: "micro"
+  ## @param envoy.resources Set Envoy container requests and limits for different resources like CPU or memory (essential for production workloads)
+  ## Example:
+  ## resources:
+  ##   requests:
+  ##     cpu: 2
+  ##     memory: 512Mi
+  ##   limits:
+  ##     cpu: 3
+  ##     memory: 1024Mi
+  ##
+  resources: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param envoy.podSecurityContext.enabled Enable Envoy pods' Security Context
+  ## @param envoy.podSecurityContext.fsGroupChangePolicy Set filesystem group change policy for Envoy pods
+  ## @param envoy.podSecurityContext.sysctls Set kernel settings using the sysctl interface for Envoy pods
+  ## @param envoy.podSecurityContext.supplementalGroups Set filesystem extra groups for Envoy pods
+  ## @param envoy.podSecurityContext.fsGroup Set fsGroup in Envoy pods' Security Context
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroupChangePolicy: Always
+    sysctls: []
+    supplementalGroups: []
+    fsGroup: 0
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param envoy.containerSecurityContext.enabled Enabled Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in Envoy container
+  ## @param envoy.containerSecurityContext.runAsUser Set runAsUser in Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.runAsGroup Set runAsUser in Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.runAsNonRoot Set runAsNonRoot in Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.privileged Set privileged in Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in Envoy container' Security Context
+  ## @param envoy.containerSecurityContext.capabilities.add List of capabilities to be added in Envoy container
+  ## @param envoy.containerSecurityContext.capabilities.drop List of capabilities to be dropped in Envoy container
+  ## @param envoy.containerSecurityContext.seccompProfile.type Set seccomp profile in Envoy container
+  ##
+  containerSecurityContext:
+    enabled: true
+    ## Running with spc_t type (designed for privileged operations, check capabilities)
+    ## since the container is not executed as a privileged container by default. This
+    ## should prevent issues with SELinux policies.
+    seLinuxOptions:
+      level: 's0'
+      type: 'spc_t'
+    runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+    readOnlyRootFilesystem: true
+    privileged: false
+    allowPrivilegeEscalation: false
+    capabilities:
+      add:
+      - BPF
+      - NET_ADMIN
+      - PERFMON
+      - SYS_ADMIN
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## @param envoy.configuration Specify content for Envoy configuration (basic one auto-generated based on other values otherwise)
+  ##
+  configuration: {}
+  ## @param envoy.overrideConfiguration Envoy configuration override. Values defined here takes precedence over the ones defined at `envoy.configuration`
+  ##
+  overrideConfiguration: {}
+  ## @param envoy.existingConfigmap The name of an existing ConfigMap with your custom Envoy configuration
+  ##
+  existingConfigmap: ""
+  ## @param envoy.logLevel Envoy log level
+  ##
+  logLevel: info
+  ## @param envoy.command Override default Envoy container command (useful when using custom images)
+  ##
+  command: []
+  ## @param envoy.args Override default Envoy container args (useful when using custom images)
+  ##
+  args: []
+  ## @param envoy.extraArgs [array] Extra args passed to Envoy container
+  ##
+  extraArgs: []
+  ## @param envoy.automountServiceAccountToken Mount Service Account token in Envoy pods
+  ##
+  automountServiceAccountToken: true
+  ## @param envoy.hostAliases Envoy pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param envoy.daemonsetAnnotations Annotations for Envoy daemonset
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  daemonsetAnnotations: {}
+  ## @param envoy.podLabels Extra labels for Envoy pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param envoy.podAnnotations Annotations for Envoy pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## Node envoy.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param envoy.nodeAffinityPreset.type Node affinity preset type. Ignored if `envoy.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param envoy.nodeAffinityPreset.key Node label key to match. Ignored if `envoy.affinity` is set
+    ##
+    key: ""
+    ## @param envoy.nodeAffinityPreset.values Node label values to match. Ignored if `envoy.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param envoy.affinity Affinity for Envoy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `envoy.podAffinityPreset`, `envoy.podAntiAffinityPreset`, and `envoy.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param envoy.nodeSelector [object] Node labels for Envoy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  ##
+  nodeSelector:
+    kubernetes.io/os: linux
+  ## @param envoy.tolerations Tolerations for Envoy pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param envoy.updateStrategy.type Envoy daemonset update strategy type
+  ## Can be set to RollingUpdate or OnDelete
+  ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## @param envoy.priorityClassName Envoy pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param envoy.terminationGracePeriodSeconds Seconds Envoy pods need to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: 1
+  ## @param envoy.lifecycleHooks for Envoy containers to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param envoy.extraEnvVars Array with extra environment variables to add to Envoy containers
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param envoy.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Envoy containers
+  ##
+  extraEnvVarsCM: ""
+  ## @param envoy.extraEnvVarsSecret Name of existing Secret containing extra env vars for Envoy containers
+  ##
+  extraEnvVarsSecret: ""
+  ## @param envoy.extraVolumes Optionally specify extra list of additional volumes for the Envoy pods
+  ##
+  extraVolumes: []
+  ## @param envoy.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Envoy containers
+  ##
+  extraVolumeMounts: []
+  ## @param envoy.sidecars Add additional sidecar containers to the Envoy pods
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param envoy.initContainers Add additional init containers to the Envoy pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/autoscaling/
+  ##
+  autoscaling:
+    ## @param envoy.autoscaling.vpa.enabled Enable VPA for Envoy
+    ## @param envoy.autoscaling.vpa.annotations Annotations for VPA resource
+    ## @param envoy.autoscaling.vpa.controlledResources List of resources that the VPA can control. Defaults to cpu and memory
+    ## @param envoy.autoscaling.vpa.maxAllowed VPA max allowed resources for the pod
+    ## @param envoy.autoscaling.vpa.minAllowed VPA min allowed resources for the pod
+    ##
+    vpa:
+      enabled: false
+      annotations: {}
+      controlledResources: []
+      maxAllowed: {}
+      minAllowed: {}
+      ## @param envoy.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy
+      ## Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updatePolicy:
+        updateMode: Auto
+  ## @section Envoy ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param envoy.serviceAccount.create Specifies whether a ServiceAccount should be created for Envoy
+    ##
+    create: true
+    ## @param envoy.serviceAccount.name The name of the ServiceAccount to use for Envoy
+    ## If not set and create is true, a name is generated using the cilium.envoy.fullname template
+    ##
+    name: ""
+    ## @param envoy.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param envoy.serviceAccount.automountServiceAccountToken Automount ServiceAccount token
+    ##
+    automountServiceAccountToken: true
+
+  ## @section Envoy Network Policies Parameters
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param envoy.networkPolicy.enabled Specifies whether a NetworkPolicy should be created for Envoy
+    ##
+    enabled: true
+    ## @param envoy.networkPolicy.allowExternal Don't require server label for connections
+    ## The Policy model to apply. When set to false, only pods with the correct
+    ## server label will have network access to the ports server is listening
+    ## on. When true, server will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param envoy.networkPolicy.allowExternalEgress Allow the Envoy pods to access any range of port and all destinations.
+    ##
+    allowExternalEgress: true
+    ## @param envoy.networkPolicy.addExternalClientAccess Allow access from pods with client label set to "true". Ignored if `envoy.networkPolicy.allowExternal` is true.
+    ##
+    addExternalClientAccess: true
+    ## @param envoy.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    extraIngress: []
+    ## @param envoy.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy (ignored if allowExternalEgress=true)
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param envoy.networkPolicy.ingressPodMatchLabels [object] Labels to match to allow traffic from other pods. Ignored if `envoy.networkPolicy.allowExternal` is true.
+    ## e.g:
+    ## ingressPodMatchLabels:
+    ##   my-client: "true"
+    #
+    ingressPodMatchLabels: {}
+    ## @param envoy.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param envoy.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+
+  ## @section Envoy Metrics Parameters
+  ##
+  metrics:
+    ## @param envoy.metrics.enabled Enable the export of Prometheus metrics for Envoy
+    ##
+    enabled: false
+    ## Metrics service properties
+    ##
+    service:
+      ## @param envoy.metrics.service.port Envoy metrics service port
+      ##
+      port: 9964
+      ## @param envoy.metrics.service.annotations [object] Annotations for the Envoy metrics service.
+      ##
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.envoy.metrics.service.port }}"
+    ## Prometheus Operator ServiceMonitor configuration
+    ##
+    serviceMonitor:
+      ## @param envoy.metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+      ##
+      enabled: false
+      ## @param envoy.metrics.serviceMonitor.namespace Namespace in which Prometheus is running
+      ##
+      namespace: ""
+      ## @param envoy.metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+      ##
+      annotations: {}
+      ## @param envoy.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+      ##
+      labels: {}
+      ## @param envoy.metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
+      ##
+      jobLabel: ""
+      ## @param envoy.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
+      ##
+      honorLabels: false
+      ## @param envoy.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## interval: 10s
+      ##
+      interval: ""
+      ## @param envoy.metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
+      ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ## e.g:
+      ## scrapeTimeout: 10s
+      ##
+      scrapeTimeout: ""
+      ## @param envoy.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param envoy.metrics.serviceMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param envoy.metrics.serviceMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      ## selector:
+      ##   prometheus: my-prometheus
+      ##
+      selector: {}
+
 ## @section Key-Value Store Parameters
 ##
 

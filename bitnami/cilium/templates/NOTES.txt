@@ -36,6 +36,7 @@ IMPORTANT: Please ensure that {{ .Values.agent.cniPlugin.hostCNIBinDir }} and {{
 
 {{- include "common.warnings.rollingTag" .Values.agent.image }}
 {{- include "common.warnings.rollingTag" .Values.operator.image }}
-{{- include "common.warnings.resources" (dict "sections" (list "agent" "agent.defaultInitContainers.buildConfig" "agent.defaultInitContainers.installCniPlugin" "agent.defaultInitContainers.mountBpf" "agent.defaultInitContainers.mountCgroup2" "agent.defaultInitContainers.cleanState" "agent.defaultInitContainers.waitForKubeProxy" "operator") "context" $) }}
+{{- include "common.warnings.rollingTag" .Values.envoy.image }}
+{{- include "common.warnings.resources" (dict "sections" (list "agent" "agent.defaultInitContainers.buildConfig" "agent.defaultInitContainers.installCniPlugin" "agent.defaultInitContainers.mountBpf" "agent.defaultInitContainers.mountCgroup2" "agent.defaultInitContainers.cleanState" "agent.defaultInitContainers.waitForKubeProxy" "operator" "envoy") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.agent.image .Values.operator.image) "context" $) }}
 {{- include "cilium.validateValues" . }}

@@ -9,6 +9,8 @@ annotations:
       image: docker.io/bitnami/cilium:1.15.5-debian-12-r6
     - name: cilium-operator
       image: docker.io/bitnami/cilium-operator:1.15.5-debian-12-r1
+    - name: envoy
+      image: docker.io/bitnami/envoy:1.29.5-debian-12-r0
 apiVersion: v2
 appVersion: 1.15.4
 dependencies:

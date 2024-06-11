@@ -18,6 +18,13 @@ Return the proper Cilium Operator fullname
 {{- end -}}
 
 {{/*
+Return the proper Cilium Envoy fullname
+*/}}
+{{- define "cilium.envoy.fullname" -}}
+{{- printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Return the proper Cilium Agent fullname (with namespace)
 */}}
 {{- define "cilium.agent.fullname.namespace" -}}
@@ -53,10 +60,17 @@ Return the proper Cilium Operator image name
 {{- end -}}
 
 {{/*
+Return the proper Cilium Operator image name
+*/}}
+{{- define "cilium.envoy.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.envoy.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "cilium.imagePullSecrets" -}}
-{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.agent.image .Values.operator.image) "context" $) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.agent.image .Values.operator.image .Values.envoy.image) "context" $) -}}
 {{- end -}}
 
 {{/*
@@ -67,6 +81,17 @@ Return the Cilium configuration configmap.
     {{- print (tpl .Values.existingConfigmap $) -}}
 {{- else -}}
     {{- print (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Cilium configuration configmap.
+*/}}
+{{- define "cilium.envoy.configmapName" -}}
+{{- if .Values.envoy.existingConfigmap -}}
+    {{- print (tpl .Values.envoy.existingConfigmap $) -}}
+{{- else -}}
+    {{- print (include "cilium.envoy.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -89,6 +114,17 @@ Create the name of the service account to use for Cilium Operator
     {{ default (include "cilium.operator.fullname" .) .Values.operator.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.operator.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use for Cilium Envoy
+*/}}
+{{- define "cilium.envoy.serviceAccountName" -}}
+{{- if .Values.envoy.serviceAccount.create -}}
+    {{ default (include "cilium.envoy.fullname" .) .Values.envoy.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.envoy.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

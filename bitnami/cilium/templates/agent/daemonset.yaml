@@ -239,6 +239,8 @@ spec:
             {{- end }}
             - name: cilium-run
               mountPath: /opt/bitnami/cilium/var/run
+            - name: envoy-sockets
+              mountPath: /opt/bitnami/cilium/var/run/envoy/sockets
             - name: host-cni-bin
               mountPath: {{ printf "/host%s" .Values.agent.cniPlugin.hostCNIBinDir }}
             - name: host-cni-conf
@@ -284,6 +286,10 @@ spec:
         - name: cilium-run
           hostPath:
             path: /var/run/cilium
+            type: DirectoryOrCreate
+        - name: envoy-sockets
+          hostPath:
+            path: /var/run/cilium/envoy/sockets
             type: DirectoryOrCreate
         {{- if .Values.agent.bpf.autoMount }}
         # To mount bpf fs on the host

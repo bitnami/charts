@@ -100,6 +100,9 @@ hubble-metrics: ~
 operator-prometheus-serve-addr: {{ printf ":%d" (int .Values.operator.containerPorts.metrics) | quote }}
 {{- end }}
 {{- end }}
+# Envoy configuration
+external-envoy-proxy: "true"
+disable-envoy-version-check: "true"
 # Other configuration
 enable-k8s-networkpolicy: "true"
 synchronize-k8s-nodes: "true"

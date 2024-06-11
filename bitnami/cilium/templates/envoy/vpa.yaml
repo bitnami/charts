@@ -3,42 +3,42 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.agent.autoscaling.vpa.enabled }}
+{{- if and (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.envoy.autoscaling.vpa.enabled }}
 apiVersion: autoscaling.k8s.io/v1
 kind: VerticalPodAutoscaler
 metadata:
-  name: {{ template "cilium.agent.fullname" . }}
+  name: {{ template "cilium.envoy.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: cilium
-    app.kubernetes.io/component: agent
-  {{- if or .Values.agent.autoscaling.vpa.annotations .Values.commonAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.autoscaling.vpa.annotations .Values.commonAnnotations ) "context" . ) }}
+    app.kubernetes.io/component: envoy
+  {{- if or .Values.envoy.autoscaling.vpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.autoscaling.vpa.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   resourcePolicy:
     containerPolicies:
-    - containerName: cilium-agent
-      {{- with .Values.agent.autoscaling.vpa.controlledResources }}
+    - containerName: envoy
+      {{- with .Values.envoy.autoscaling.vpa.controlledResources }}
       controlledResources:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.agent.autoscaling.vpa.maxAllowed }}
+      {{- with .Values.envoy.autoscaling.vpa.maxAllowed }}
       maxAllowed:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.agent.autoscaling.vpa.minAllowed }}
+      {{- with .Values.envoy.autoscaling.vpa.minAllowed }}
       minAllowed:
         {{- toYaml . | nindent 8 }}
       {{- end }}
   targetRef:
     apiVersion: {{ include "common.capabilities.daemonset.apiVersion" . }}
     kind: DaemonSet
-    name: {{ include "cilium.agent.fullname" . }}
-  {{- if .Values.agent.autoscaling.vpa.updatePolicy }}
+    name: {{ include "cilium.envoy.fullname" . }}
+  {{- if .Values.envoy.autoscaling.vpa.updatePolicy }}
   updatePolicy:
-    {{- with .Values.agent.autoscaling.vpa.updatePolicy.updateMode }}
+    {{- with .Values.envoy.autoscaling.vpa.updatePolicy.updateMode }}
     updateMode: {{ . }}
     {{- end }}
   {{- end }}
