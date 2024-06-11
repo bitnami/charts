@@ -1,0 +1,47 @@
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.development }}
+
+###########################################################################
+  DEVELOPMENT MODE
+###########################################################################
+
+██████╗ ███████╗██╗    ██╗ █████╗ ██████╗ ███████╗
+██╔══██╗██╔════╝██║    ██║██╔══██╗██╔══██╗██╔════╝
+██████╔╝█████╗  ██║ █╗ ██║███████║██████╔╝█████╗  
+██╔══██╗██╔══╝  ██║███╗██║██╔══██║██╔══██╗██╔══╝  
+██████╔╝███████╗╚███╔███╔╝██║  ██║██║  ██║███████╗
+╚═════╝ ╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
+                                                  
+Instance running in development mode!
+
+Development mode, by default 
+
+- Runs an insecure, unsealed, non-persistent instance of Vault
+- Is configured with development authentication keys
+
+DO NOT USE IT FOR PRODUCTION PURPOSES
+
+###########################################################################
+  CONFIGURE CLI
+###########################################################################
+
+Configure the CLI to point to this instance, for example
+
+  chainloop --insecure config save \
+    --control-plane my-controlplane.acme.com:80 \
+    --artifact-cas cas.acme.com:80
+
+Refer to this link for more information
+https://docs.chainloop.dev/getting-started/installation#configure-cli-optional 
+
+###########################################################################
+  USEFUL LINKS
+###########################################################################
+
+- GitHub repository: https://github.com/chainloop-dev/chainloop
+- Documentation: https://docs.chainloop.dev 
+
+{{- end }}
+                                           

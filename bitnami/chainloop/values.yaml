@@ -1,0 +1,840 @@
+# Copyright Chainloop, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+## Default values for Chainloop Helm Chart
+
+## @skip global
+global: {}
+
+## @section Common parameters
+##
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+
+## @param development Deploys Chainloop pre-configured FOR DEVELOPMENT ONLY. It includes a Vault instance in development mode and pre-configured authentication certificates and passphrases
+##
+development: false
+
+## @param GKEMonitoring.enabled Enable GKE podMonitoring (prometheus.io scrape) to scrape the controlplane and CAS /metrics endpoints
+GKEMonitoring:
+  enabled: false
+
+## @section Secrets Backend
+##
+
+## Location where to store sensitive data. If development.true? and no overrides provided, the setup will connect to a development instance of Vault
+secretsBackend:
+  ## @param secretsBackend.backend Secrets backend type ("vault", "awsSecretManager" or "gcpSecretManager", "azureKeyVault")
+  ##
+  backend: "vault" # "awsSecretManager | gcpSecretManager | azureKeyVault"
+  ## @param secretsBackend.secretPrefix Prefix that will be pre-pended to all secrets in the storage backend
+  ##
+  secretPrefix: "chainloop"
+
+  ## @extra secretsBackend.vault.address Vault address
+  ## @extra secretsBackend.vault.token Vault authentication token
+  ##
+  # vault:
+  #   address: ""
+  #   token: ""
+
+  ## @extra secretsBackend.awsSecretManager.accessKey AWS Access KEY ID
+  ## @extra secretsBackend.awsSecretManager.secretKey AWS Secret Key
+  ## @extra secretsBackend.awsSecretManager.region AWS Secrets Manager Region
+  ##
+  # awsSecretManager:
+  #   accessKey: ""
+  #   secretKey: ""
+  #   region: ""
+
+  ## @extra secretsBackend.gcpSecretManager.projectId GCP Project ID
+  ## @extra secretsBackend.gcpSecretManager.serviceAccountKey GCP Auth Key
+  ##
+  # gcpSecretManager:
+  #   projectId: ""
+  #   serviceAccountKey: ""
+
+  ## @extra secretsBackend.azureKeyVault.tenantID Active Directory Tenant ID
+  ## @extra secretsBackend.azureKeyVault.clientID Registered application / service principal client ID
+  ## @extra secretsBackend.azureKeyVault.clientSecret Service principal client secret
+  ## @extra secretsBackend.azureKeyVault.vaultURI Azure Key Vault URL
+  ##
+  # azureKeyVault:
+  #   tenantID: ""
+  #   clientID: ""
+  #   clientSecret: ""
+  #   vaultURI: ""
+
+## @section Authentication
+##
+
+## ECDSA (ES512) key-pair used for Controlplane <-> CAS Authentication
+## The controlplane will use the private key to generate a JWT at user request
+## The CAS will use the public key to verify the authenticity of that token
+## If development=true is set, a development key will be configured automatically
+## otherwise you'll need to provide new keys via .Values.casJWTPrivateKey and .Values.cas.casJWTPublicKey
+
+## @param casJWTPrivateKey ECDSA (ES512) private key used for Controlplane <-> CAS Authentication
+##
+## To generate one
+## openssl ecparam -name secp521r1 -genkey -noout -out private.ec.key
+## casJWTPrivateKey: |-
+##   -----BEGIN EC PRIVATE KEY-----
+##   -----END EC PRIVATE KEY-----
+##
+casJWTPrivateKey: ""
+
+## @param casJWTPublicKey ECDSA (ES512) public key
+##
+# openssl ec -in private.ec.key -pubout -out public.pem
+# casJWTPublicKey: |
+#   -----BEGIN PUBLIC KEY-----
+#   -----END PUBLIC KEY-----
+casJWTPublicKey: ""
+
+## @section Control Plane
+###################################
+##          CONTROL PLANE         #
+###################################
+controlplane:
+  ## @param controlplane.replicaCount Number of replicas
+  replicaCount: 2
+
+  ## @param controlplane.image.repository FQDN uri for the image
+  ## @extra controlplane.image.tag Image tag (immutable tags are recommended). If no set chart.appVersion will be used
+  image:
+    repository: ghcr.io/chainloop-dev/chainloop/control-plane
+    # Overrides the image tag whose default is the chart appVersion.
+    # tag: latest
+
+  ## @param controlplane.tlsConfig.secret.name name of a secret containing TLS certificate to be used by the controlplane grpc server.
+  tlsConfig:
+    secret:
+      # the secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
+      name: ""
+
+  ## @param controlplane.pluginsDir Directory where to look for plugins
+  pluginsDir: /plugins
+
+  ## @extra controlplane.referrerSharedIndex Configure the shared, public index API endpoint that can be used to discover metadata referrers
+  ## @param controlplane.referrerSharedIndex.enabled Enable index API endpoint
+  ## @param controlplane.referrerSharedIndex.allowedOrgs List of UUIDs of organizations that are allowed to publish to the shared index
+  referrerSharedIndex:
+    enabled: false
+    allowedOrgs: []
+
+  # Database migration
+  ## @skip controlplane.migration
+  migration:
+    image:
+      repository: ghcr.io/chainloop-dev/chainloop/control-plane-migrations
+      # Overrides the image tag whose default is the chart appVersion.
+    # tag: latest
+    # Run the migration job forcing SSL, required in AWS RDS for PostgreSQL 15
+    ssl: false
+
+  ## @skip controlplane.serviceAccount
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  ## @section Control Plane Database
+
+  ## @extra controlplane.externalDatabase External PostgreSQL configuration. These values are only used when postgresql.enabled is set to false
+  ## @param controlplane.externalDatabase.host Database host
+  ## @param controlplane.externalDatabase.port Database port number
+  ## @param controlplane.externalDatabase.user Non-root username
+  ## @param controlplane.externalDatabase.database Database name
+  ## @param controlplane.externalDatabase.password Password for the non-root username
+  ##
+  externalDatabase:
+    host: ""
+    port: 5432
+    user: ""
+    database: ""
+    password: ""
+
+  sqlProxy:
+    ## @param controlplane.sqlProxy.enabled Enable sidecar to connect to DB via Google Cloud SQL proxy
+    enabled: false
+    ## @param controlplane.sqlProxy.connectionName Google Cloud SQL connection name
+    connectionName: ""
+    ## @param controlplane.sqlProxy.resources Sidecar container resources
+    resources: {}
+
+  ## @section Control Plane Authentication
+  auth:
+    ## @param controlplane.auth.passphrase Passphrase used to sign the Auth Tokens generated by the controlplane. Leave empty for auto-generation
+    ##
+    passphrase: ""
+
+    ## @param controlplane.auth.oidc.url Full authentication path, it should match the issuer URL of the Identity provider (IDp)
+    ## @param controlplane.auth.oidc.clientID  OIDC IDp clientID
+    ## @param controlplane.auth.oidc.clientSecret  OIDC IDp clientSecret
+    oidc:
+      url: ""
+      clientID: ""
+      clientSecret: ""
+
+  ## @section Control Plane Networking
+  service:
+    ## @param controlplane.service.type Service type
+    type: ClusterIP
+    ## @param controlplane.service.port Service port
+    port: 80
+    ## @param controlplane.service.targetPort Service target Port
+    targetPort: http
+    ## @extra controlplane.service.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    # nodePorts:
+    #   http: "30800"
+    annotations:
+      {}
+      ## @skip controlplane.service.annotations
+
+  serviceAPI:
+    ## @param controlplane.serviceAPI.type Service type
+    type: ClusterIP
+    ## @param controlplane.serviceAPI.port Service port
+    port: 80
+    ## @param controlplane.serviceAPI.targetPort Service target Port
+    targetPort: grpc
+    ## @extra controlplane.serviceAPI.annotations Service annotations
+    annotations:
+      ## @skip controlplane.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
+      traefik.ingress.kubernetes.io/service.serversscheme: h2c
+
+    ## @extra controlplane.serviceAPI.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    # nodePorts:
+    #   http: "30900"
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingress:
+    ## @param controlplane.ingress.enabled Enable ingress record generation for %%MAIN_CONTAINER_NAME%%
+    ##
+    enabled: false
+    ## @param controlplane.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param controlplane.ingress.hostname Default host for the ingress record
+    ##
+    hostname: cp.dev.local
+    ## @param controlplane.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param controlplane.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param controlplane.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/controlplane.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param controlplane.ingress.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param controlplane.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param controlplane.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param controlplane.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param controlplane.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param controlplane.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param controlplane.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingressAPI:
+    ## @param controlplane.ingressAPI.enabled Enable ingress record generation for %%MAIN_CONTAINER_NAME%%
+    ##
+    enabled: false
+    ## @param controlplane.ingressAPI.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param controlplane.ingressAPI.hostname Default host for the ingress record
+    ##
+    hostname: api.cp.dev.local
+    ## @param controlplane.ingressAPI.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param controlplane.ingressAPI.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @extra controlplane.ingressAPI.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/controlplane.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations:
+      ## @skip controlplane.ingressAPI.annotations.nginx.ingress.kubernetes.io/backend-protocol
+      ## Tell Nginx Ingress Controller to expect gRPC traffic
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+
+    ## @param controlplane.ingressAPI.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param controlplane.ingressAPI.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param controlplane.ingressAPI.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param controlplane.ingressAPI.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param controlplane.ingressAPI.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param controlplane.ingressAPI.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param controlplane.ingressAPI.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section Controlplane Misc
+
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param controlplane.resources.limits.cpu Container resource limits CPU
+  ## @param controlplane.resources.limits.memory Container resource limits memory
+  ## @param controlplane.resources.requests.cpu Container resource requests CPU
+  ## @param controlplane.resources.requests.memory Container resource requests memory
+  resources:
+    # GKE auto-pilot min
+    # https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests#min-max-requests
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi
+
+  ## Deployment autoscaling
+  ## @param controlplane.autoscaling.enabled Enable deployment autoscaling
+  ## @param controlplane.autoscaling.minReplicas Minimum number of replicas
+  ## @param controlplane.autoscaling.maxReplicas Maximum number of replicas
+  ## @param controlplane.autoscaling.targetCPUUtilizationPercentage Target CPU percentage
+  ## @param controlplane.autoscaling.targetMemoryUtilizationPercentage Target CPU memory
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  ## @param controlplane.sentry.enabled Enable sentry.io alerting
+  ## @param controlplane.sentry.dsn DSN endpoint https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+  ## @param controlplane.sentry.environment Environment tag
+  sentry:
+    enabled: false
+    dsn: ""
+    environment: production
+
+  ## Configuration for keyless signing using one of the supported providers
+  ## @param controlplane.keylessSigning.enabled Activates or deactivates de feature
+  ## @param controlplane.keylessSigning.backend The backend to use. Currently only "fileCA" is supported
+  ## @param controlplane.keylessSigning.fileCA.cert The PEM-encoded certificate of the file based CA
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ## @param controlplane.keylessSigning.fileCA.key The PEM-encoded private key of the file based CA
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ## @param controlplane.keylessSigning.fileCA.keyPass The secret key pass
+  keylessSigning:
+    enabled: false
+    backend: fileCA
+    fileCA:
+      cert: ""
+      key: ""
+      keyPass: ""
+
+## @section Artifact Content Addressable (CAS) API
+##################################
+#         Artifacts CAS          #
+##################################
+cas:
+  ## @param cas.replicaCount Number of replicas
+  replicaCount: 2
+
+  ## @param cas.image.repository FQDN uri for the image
+  ## @extra cas.image.tag Image tag (immutable tags are recommended). If no set chart.appVersion will be used
+  image:
+    repository: ghcr.io/chainloop-dev/chainloop/artifact-cas
+    # Overrides the image tag whose default is the chart appVersion.
+    # tag: latest
+
+  ## @param cas.tlsConfig.secret.name name of a secret containing TLS certificate to be used by the controlplane grpc server.
+  tlsConfig:
+    secret:
+      # the secret must contains 2 keys: tls.crt and tls.key respectively containing the certificate and private key.
+      name: ""
+
+  ## @skip cas.serviceAccount
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  ## @section CAS Networking
+  service:
+    ## @param cas.service.type Service type
+    type: ClusterIP
+    ## @param cas.service.port Service port
+    port: 80
+    ## @param cas.service.targetPort Service target Port
+    targetPort: http
+    ## @extra cas.service.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    # nodePorts:
+    #   http: "30800"
+    annotations:
+      {}
+      ## @skip cas.service.annotations
+
+  serviceAPI:
+    ## @param cas.serviceAPI.type Service type
+    type: ClusterIP
+    ## @param cas.serviceAPI.port Service port
+    port: 80
+    ## @param cas.serviceAPI.targetPort Service target Port
+    targetPort: grpc
+    ## @extra cas.serviceAPI.annotations Service annotations
+    annotations:
+      ## @skip cas.serviceAPI.annotations.traefik.ingress.kubernetes.io/service.serversscheme
+      traefik.ingress.kubernetes.io/service.serversscheme: h2c
+
+    ## @extra cas.serviceAPI.nodePorts.http Node port for HTTP. NOTE: choose port between <30000-32767>
+    # nodePorts:
+    #   http: "30901"
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingress:
+    ## @param cas.ingress.enabled Enable ingress record generation for %%MAIN_CONTAINER_NAME%%
+    ##
+    enabled: false
+    ## @param cas.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param cas.ingress.hostname Default host for the ingress record
+    ##
+    hostname: cas.dev.local
+    ## @param cas.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param cas.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param cas.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/cas.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param cas.ingress.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param cas.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param cas.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param cas.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param cas.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param cas.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param cas.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ingressAPI:
+    ## @param cas.ingressAPI.enabled Enable ingress record generation for %%MAIN_CONTAINER_NAME%%
+    ##
+    enabled: false
+    ## @param cas.ingressAPI.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param cas.ingressAPI.hostname Default host for the ingress record
+    ##
+    hostname: api.cas.dev.local
+    ## @param cas.ingressAPI.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param cas.ingressAPI.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @extra cas.ingressAPI.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/controlplane.ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations:
+      # Nginx Ingress settings
+      ## @skip cas.ingressAPI.annotations.nginx.ingress.kubernetes.io/proxy-body-size
+      # Limit file uploads/downloads to 100MB. Alternatively you can disable this limitation by setting it to 0
+      # Even though we send data in chunks of 1MB, this size refers to all the data sent during the whole streaming session
+      nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+      ## @skip cas.ingressAPI.annotations.nginx.ingress.kubernetes.io/backend-protocol
+      ## Tell Nginx Ingress Controller to expect gRPC traffic
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+      ## @skip cas.ingressAPI.annotations.nginx.ingress.kubernetes.io/client-body-buffer-size
+      # Improve upload speed by adding client buffering used by http2 control-flows
+      # https://github.com/chainloop-dev/chainloop/issues/375
+      nginx.ingress.kubernetes.io/client-body-buffer-size: "3M"
+
+    ## @param cas.ingressAPI.tls Enable TLS configuration for the host defined at `controlplane.ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.controlplane.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `controlplane.ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `controlplane.ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param cas.ingressAPI.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param cas.ingressAPI.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: cp.dev.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param cas.ingressAPI.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param cas.ingressAPI.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - cp.dev.local
+    ##   secretName: cp.dev.local-tls
+    ##
+    extraTls: []
+    ## @param cas.ingressAPI.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: cp.dev.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param cas.ingressAPI.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## @section CAS Misc
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param cas.resources.limits.cpu Container resource limits CPU
+  ## @param cas.resources.limits.memory Container resource limits memory
+  ## @param cas.resources.requests.cpu Container resource requests CPU
+  ## @param cas.resources.requests.memory Container resource requests memory
+  resources:
+    # GKE auto-pilot min
+    # https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests#min-max-requests
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi
+
+  ## Deployment autoscaling
+  ## @param cas.autoscaling.enabled Enable deployment autoscaling
+  ## @param cas.autoscaling.minReplicas Minimum number of replicas
+  ## @param cas.autoscaling.maxReplicas Maximum number of replicas
+  ## @param cas.autoscaling.targetCPUUtilizationPercentage Target CPU percentage
+  ## @param cas.autoscaling.targetMemoryUtilizationPercentage Target CPU memory
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  ## @param cas.sentry.enabled Enable sentry.io alerting
+  ## @param cas.sentry.dsn DSN endpoint https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+  ## @param cas.sentry.environment Environment tag
+  sentry:
+    enabled: false
+    dsn: ""
+    environment: production
+
+## @section Dependencies
+# ##################################
+# #          Dependencies          #
+##################################
+
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
+## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
+## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
+## @param postgresql.auth.username Name for a custom user to create
+## @param postgresql.auth.password Password for the custom user to create
+## @param postgresql.auth.database Name for a custom database to create
+## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
+postgresql:
+  enabled: true
+  auth:
+    enablePostgresUser: false
+    username: "chainloop"
+    password: "chainlooppwd"
+    database: "chainloop-cp"
+    existingSecret: ""
+
+# Vault server running in development mode --set development=true
+# IMPORTANT: This is not meant to run in production
+
+## Bitnami Hashicorp Vault chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/vault/values.yaml
+## @param vault.server.args Arguments to pass to the vault server. This is useful for setting the server in development mode
+## @param vault.server.config Configuration for the vault server. Small override of default Bitnami configuration
+## @param vault.server.extraEnvVars[0].name Root token for the vault server
+## @param vault.server.extraEnvVars[0].value The value of the root token. Default: notasecret
+## @param vault.server.extraEnvVars[1].name Address to listen on development mode
+## @param vault.server.extraEnvVars[1].value The address to listen on. Default: [::]:8200
+vault:
+  server:
+    args: [
+      "server",
+      "-dev"
+    ]
+    extraEnvVars:
+      - name: VAULT_DEV_ROOT_TOKEN_ID
+        value: "notasecret"
+      - name: VAULT_DEV_LISTEN_ADDRESS
+        value: "[::]:8200"
+    config: |
+      storage "inmem" {}
+
+      disable_mlock = true
+      ui = true
+
+      service_registration "kubernetes" {}

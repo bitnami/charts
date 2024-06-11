@@ -1,0 +1,25 @@
+{{- /*
+Copyright Chainloop, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}-api
+  labels:
+    {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+  {{- with .Values.controlplane.serviceAPI.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.controlplane.serviceAPI.type }}
+  ports:
+    - port: {{ .Values.controlplane.serviceAPI.port }}
+      targetPort: {{ .Values.controlplane.serviceAPI.targetPort }}
+      protocol: TCP
+      name: grpc
+      nodePort: {{ include "chainloop.node_port" .Values.controlplane.serviceAPI }}
+  selector:
+    {{- include "chainloop.controlplane.selectorLabels" . | nindent 4 }}

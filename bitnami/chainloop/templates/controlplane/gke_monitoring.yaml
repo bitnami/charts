@@ -1,0 +1,18 @@
+{{- /*
+Copyright Chainloop, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.GKEMonitoring.enabled -}}
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+    {{- include "chainloop.controlplane.selectorLabels" . | nindent 6 }}
+  endpoints:
+  - port: metrics
+    interval: 30s
+{{- end }}

@@ -1,0 +1,13 @@
+{{- if .Values.GKEMonitoring.enabled -}}
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: {{ include "chainloop.cas.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+    {{- include "chainloop.cas.selectorLabels" . | nindent 6 }}
+  endpoints:
+  - port: metrics
+    interval: 30s
+{{- end }}

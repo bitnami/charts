@@ -1,0 +1,22 @@
+{{- /*
+Copyright Chainloop, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if .Values.controlplane.sqlProxy.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chainloop.sql-proxy.fullname" . }}
+  labels:
+    {{- include "chainloop.sql-proxy.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.controlplane.externalDatabase.port }}
+      targetPort: {{ .Values.controlplane.externalDatabase.port }}
+      protocol: TCP
+      name: tpc
+  selector:
+    {{- include "chainloop.sql-proxy.selectorLabels" . | nindent 4 }}
+{{- end }}

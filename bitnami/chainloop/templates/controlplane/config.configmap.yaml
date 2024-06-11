@@ -1,0 +1,44 @@
+{{- /*
+Copyright Chainloop, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}
+  labels:
+    {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+data:
+  {{- if .Values.controlplane.allowList }}
+  allow_list.yaml: |
+    auth:
+      allow_list:
+        {{- range .Values.controlplane.allowList }}
+        - {{ . | quote }}
+        {{- end }}
+  {{- end }}
+  config.yaml: |
+    server:
+      http:
+        addr: 0.0.0.0:8000
+        timeout: 10s
+        external_url: {{ include "chainloop.controlplane.external_url" . }}
+      http_metrics:
+        addr: 0.0.0.0:5000
+      grpc:
+        addr: 0.0.0.0:9000
+        timeout: 10s
+        {{- if .Values.controlplane.tlsConfig.secret.name  }}
+        tls_config:
+          certificate: /data/server-certs/tls.crt
+          private_key: /data/server-certs/tls.key
+        {{- end }}
+    cas_server:
+      grpc:
+        addr: {{ printf "%s-api:%.0f" (include "chainloop.cas.fullname" .) .Values.cas.serviceAPI.port }}
+      insecure: true
+      download_url: {{ include "chainloop.cas.external_url" . }}/download
+    plugins_dir: {{ .Values.controlplane.pluginsDir }}
+    referrer_shared_index:
+      {{- toYaml .Values.controlplane.referrerSharedIndex | nindent 6 }}

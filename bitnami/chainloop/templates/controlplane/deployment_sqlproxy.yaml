@@ -1,0 +1,61 @@
+{{- /*
+Copyright Chainloop, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{ if .Values.controlplane.sqlProxy.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chainloop.sql-proxy.fullname" . }}
+  labels:
+    {{- include "chainloop.sql-proxy.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "chainloop.sql-proxy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: cloud-sql-proxy
+      labels:
+        {{- include "chainloop.sql-proxy.selectorLabels" . | nindent 8 }}
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/component: controlplane
+            topologyKey: kubernetes.io/hostname
+      {{- with .Values.controlplane.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "controlplane.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.controlplane.podSecurityContext | nindent 8 }}
+      containers:
+        
+        - name: cloud-sql-proxy
+          # It is recommended to use the latest version of the Cloud SQL proxy
+          # Make sure to update on a regular schedule!
+          image: gcr.io/cloudsql-docker/gce-proxy:1.33.10 # make sure the use the latest version
+          command:
+            - "/cloud_sql_proxy"
+            # If connecting from a VPC-native GKE cluster, you can use the
+            # following flag to have the proxy connect over private IP
+            # - "-ip_address_types=PRIVATE"
+
+            # By default, the proxy will write all logs to stderr. In some
+            # environments, anything printed to stderr is consider an error. To
+            # disable this behavior and write all logs to stdout (except errors
+            # which will still go to stderr), use:
+            - "-log_debug_stdout"
+            - "-instances={{ .Values.controlplane.sqlProxy.connectionName }}=tcp:0.0.0.0:5432"
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            {{- toYaml .Values.controlplane.sqlProxy.resources | nindent 12 }}
+{{- end }}

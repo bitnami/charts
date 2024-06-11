@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chainloop.cas.fullname" . }}
+  labels:
+    {{- include "chainloop.cas.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.cas.autoscaling.enabled }}
+  replicas: {{ .Values.cas.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "chainloop.cas.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/cas" "/config.configmap.yaml") . | sha256sum }}
+        checksum/config-secret: {{ include (print $.Template.BasePath "/cas" "/config.secret.yaml") . | sha256sum }}
+        checksum/public-key-secret: {{ include (print $.Template.BasePath "/cas" "/jwt_public_key.secret.yaml") . | sha256sum }}
+      labels:
+        {{- include "chainloop.cas.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.cas.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "chainloop.cas.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.cas.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.cas.securityContext | nindent 12 }}
+          image: "{{ .Values.cas.image.repository }}:{{ .Values.cas.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.cas.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: grpc
+              containerPort: 9000
+              protocol: TCP
+            - name: metrics
+              containerPort: 5000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /statusz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /statusz?readiness=1
+              port: http
+          resources:
+            {{- toYaml .Values.cas.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: "/data/conf"
+            - name: jwt-public-key
+              mountPath: "/tmp"
+            {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+            - name: gcp-secretmanager-serviceaccountkey
+              mountPath: /gcp-secrets
+            {{- end }}
+            {{- if .Values.cas.tlsConfig.secret.name  }}
+            - name: server-certs
+              mountPath: /data/server-certs
+            {{- end }}
+      volumes:
+        - name: config
+          projected:
+            sources:
+            - configMap:
+               name: {{ include "chainloop.cas.fullname" . }}
+            - secret:
+               name: {{ include "chainloop.cas.fullname" . }}
+        - name: jwt-public-key
+          secret:
+            secretName: {{ include "chainloop.cas.fullname" . }}-jwt-public-key
+        {{- if .Values.cas.tlsConfig.secret.name  }}
+        - name: server-certs
+          secret:
+            secretName: {{ .Values.cas.tlsConfig.secret.name  }}
+        {{- end }}
+        {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+        - name: gcp-secretmanager-serviceaccountkey
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-gcp-secretmanager-serviceaccountkey
+        {{- end }}

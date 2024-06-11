@@ -1,0 +1,40 @@
+{{- if .Values.cas.autoscaling.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "chainloop.cas.fullname" . }}
+  labels:
+    {{- include "chainloop.cas.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+    kind: Deployment
+    name: {{ include "chainloop.cas.fullname" . }}
+  minReplicas: {{ .Values.cas.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.cas.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.cas.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.cas.autoscaling.targetCPUUtilizationPercentage }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.cas.autoscaling.targetCPUUtilizationPercentage }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.cas.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.cas.autoscaling.targetMemoryUtilizationPercentage }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.cas.autoscaling.targetMemoryUtilizationPercentage }}
+        {{- end }}
+    {{- end }}
+{{- end }}

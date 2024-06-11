@@ -1,0 +1,122 @@
+{{- /*
+Copyright Chainloop, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chainloop.controlplane.fullname" . }}
+  labels:
+    {{- include "chainloop.controlplane.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.controlplane.autoscaling.enabled }}
+  replicas: {{ .Values.controlplane.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "chainloop.controlplane.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/controlplane" "/config.configmap.yaml") . | sha256sum }}
+        checksum/secret-config: {{ include (print $.Template.BasePath "/controlplane" "/config.secret.yaml") . | sha256sum }}
+        checksum/cas-private-key: {{ include (print $.Template.BasePath "/controlplane" "/jwt_cas_private_key.secret.yaml") . | sha256sum }}
+        kubectl.kubernetes.io/default-container: controlplane
+      labels:
+        {{- include "chainloop.controlplane.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.controlplane.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "controlplane.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.controlplane.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: migrate
+          image: "{{ .Values.controlplane.migration.image.repository }}:{{ .Values.controlplane.migration.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          args:
+            - migrate
+            - apply
+            - --url
+            - "{{include "controlplane.database.atlas_connection_string" . }}"
+            - --dir
+            - file:///migrations
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.controlplane.securityContext | nindent 12 }}
+          image: "{{ .Values.controlplane.image.repository }}:{{ .Values.controlplane.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.controlplane.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+            - name: metrics
+              containerPort: 5000
+              protocol: TCP
+            - name: grpc
+              containerPort: 9000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /statusz
+              port: http
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /statusz?readiness=1
+              port: http
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.controlplane.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /data/conf
+            - name: tmp
+              mountPath: /tmp
+            - name: jwt-cas-private-key
+              mountPath: /secrets
+            {{- if .Values.controlplane.keylessSigning.enabled }}
+            - name: file-ca-cert
+              mountPath: /ca_secrets
+            {{- end }}
+            {{- if .Values.controlplane.tlsConfig.secret.name  }}
+            - name: server-certs
+              mountPath: /data/server-certs
+            {{- end }}
+            {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+            - name: gcp-secretmanager-serviceaccountkey
+              mountPath: /gcp-secrets
+            {{- end }}
+      volumes:
+        - name: config
+          projected:
+            sources:
+            - secret:
+                name: {{ include "chainloop.controlplane.fullname" . }}
+            - configMap:
+               name: {{ include "chainloop.controlplane.fullname" . }}
+        # required for the plugins to store the socket files
+        - name: tmp
+          emptyDir: {}
+        - name: jwt-cas-private-key
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-jwt-cas
+        {{- if .Values.controlplane.tlsConfig.secret.name }}
+        - name: server-certs
+          secret:
+            secretName: {{ .Values.controlplane.tlsConfig.secret.name  }}
+        {{- end }}
+        {{- if eq "gcpSecretManager" .Values.secretsBackend.backend  }}
+        - name: gcp-secretmanager-serviceaccountkey
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-gcp-secretmanager-serviceaccountkey
+        {{- end }}
+        {{- if .Values.controlplane.keylessSigning.enabled }}
+        - name: file-ca-cert
+          secret:
+            secretName: {{ include "chainloop.controlplane.fullname" . }}-keyless-file-ca
+        {{- end }}

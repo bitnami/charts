@@ -1,0 +1,27 @@
+# Copyright Chainloop, Inc. All Rights Reserved.
+# SPDX-License-Identifier: APACHE-2.0
+
+apiVersion: v2
+name: chainloop
+description: Chainloop is an open source software supply chain control plane, a single source of truth for artifacts plus a declarative attestation crafting process.
+
+type: application
+# Bump the patch (not minor, not major) version on each change in the Chart Source code
+version: 1.56.1
+# Do not update appVersion, this is handled automatically by the release process
+appVersion: v0.91.1
+
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+  - condition: postgresql.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 12.x.x
+  - condition: development
+    name: vault
+    repository: https://charts.bitnami.com/bitnami
+    version: 1.4.x

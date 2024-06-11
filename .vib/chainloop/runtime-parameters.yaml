@@ -1,0 +1,7 @@
+development: true
+controlplane:
+  auth:
+    oidc:
+      url:
+      clientID:
+      clientSecret: 

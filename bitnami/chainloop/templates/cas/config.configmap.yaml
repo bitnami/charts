@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chainloop.cas.fullname" . }}
+  labels:
+    {{- include "chainloop.cas.labels" . | nindent 4 }}
+data:
+  server.yaml: |
+    server:
+      http:
+        addr: 0.0.0.0:8000
+        # Timeouts for http downloads
+        # grpc downloads/uploads don't require this because they don't have timeouts
+        timeout: 300s
+      grpc:
+        {{- if .Values.cas.tlsConfig.secret.name  }}
+        tls_config:
+          certificate: /data/server-certs/tls.crt
+          private_key: /data/server-certs/tls.key
+        {{- end }}
+        addr: 0.0.0.0:9000
+        # Some unary RPCs are slow, so we need to increase the timeout
+        timeout: 5s
+      http_metrics:
+        addr: 0.0.0.0:5000
