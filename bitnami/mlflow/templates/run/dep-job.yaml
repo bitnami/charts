@@ -44,7 +44,7 @@ spec:
         app.kubernetes.io/part-of: mlflow
         app.kubernetes.io/component: run
     spec:
-      {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
+      {{- include "mlflow.v0.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "mlflow.v0.run.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.run.automountServiceAccountToken }}
       {{- if .Values.run.hostAliases }}
