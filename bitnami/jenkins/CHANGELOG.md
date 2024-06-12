@@ -1,8 +1,12 @@
 # Changelog
 
-## 13.4.3 (2024-06-06)
+## 13.4.4 (2024-06-12)
 
-* [bitnami/jenkins] Release 13.4.3 ([#27032](https://github.com/bitnami/charts/pull/27032))
+* [bitnami/jenkins] Release 13.4.4 ([#27131](https://github.com/bitnami/charts/pull/27131))
+
+## <small>13.4.3 (2024-06-06)</small>
+
+* [bitnami/jenkins] Release 13.4.3 (#27032) ([fcd2916](https://github.com/bitnami/charts/commit/fcd29165e1032de7d36b348421dc8bd699e49179)), closes [#27032](https://github.com/bitnami/charts/issues/27032)
 
 ## <small>13.4.2 (2024-06-06)</small>
 
