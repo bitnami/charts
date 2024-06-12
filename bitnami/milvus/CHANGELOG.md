@@ -1,8 +1,16 @@
 # Changelog
 
+## 8.2.2 (2024-06-12)
+
+* [bitnami/milvus] Release 8.2.2 ([#27115](https://github.com/bitnami/charts/pull/27115))
+
+## <small>8.2.1 (2024-06-12)</small>
+
+* [bitnami/milvus] Release 8.2.1 (#26984) ([2619076](https://github.com/bitnami/charts/commit/26190763c1f425a920268fc19d1a026083cf083d)), closes [#26984](https://github.com/bitnami/charts/issues/26984)
+
 ## 8.2.0 (2024-06-06)
 
-* [bitnami/milvus] feat: config external kafka tls client certs setting… ([#26118](https://github.com/bitnami/charts/pull/26118))
+* [bitnami/milvus] feat: config external kafka tls client certs setting… (#26118) ([43e8796](https://github.com/bitnami/charts/commit/43e87967c4dd409632e37e9eacc1825397de4192)), closes [#26118](https://github.com/bitnami/charts/issues/26118) [bitnami#26110](https://github.com/bitnami/issues/26110)
 
 ## <small>8.1.2 (2024-06-05)</small>
 

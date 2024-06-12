@@ -1,8 +1,12 @@
 # Changelog
 
-## 14.2.4 (2024-06-11)
+## 14.2.5 (2024-06-12)
 
-* [bitnami/postgresql-ha] Release 14.2.4 ([#27094](https://github.com/bitnami/charts/pull/27094))
+* [bitnami/postgresql-ha] Fix postgresql repmgr  generation ([#27095](https://github.com/bitnami/charts/pull/27095))
+
+## <small>14.2.4 (2024-06-11)</small>
+
+* [bitnami/postgresql-ha] Release 14.2.4 (#27094) ([9d0ae2d](https://github.com/bitnami/charts/commit/9d0ae2dc7d1b33faf6850181e5630cfb553bc8d4)), closes [#27094](https://github.com/bitnami/charts/issues/27094)
 
 ## <small>14.2.3 (2024-06-06)</small>
 

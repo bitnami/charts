@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.4.4 (2024-06-06)
+## 1.4.5 (2024-06-12)
 
-* [bitnami/mlflow] Release 1.4.4 ([#27035](https://github.com/bitnami/charts/pull/27035))
+* [bitnami/mlflow] Render imagePullSecrets ([#27126](https://github.com/bitnami/charts/pull/27126))
+
+## <small>1.4.4 (2024-06-06)</small>
+
+* [bitnami/mlflow] Release 1.4.4 (#27035) ([017a475](https://github.com/bitnami/charts/commit/017a4756394b9c887853f961d7c5e9437282dee0)), closes [#27035](https://github.com/bitnami/charts/issues/27035)
 
 ## <small>1.4.3 (2024-06-06)</small>
 
