@@ -10,7 +10,6 @@ containerPorts:
   jmx: 7198
   cql: 9043
   cqlShard: 9099
-  api: 12394
 persistence:
   mountPath: /bitnami/scylladb
 service:
