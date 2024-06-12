@@ -74,6 +74,7 @@ spec:
             - -c
           args:
             - |-
+              set -e
               cd /tmp
 
               # install extra gems
