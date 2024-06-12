@@ -43,7 +43,7 @@ spec:
         app.kubernetes.io/component: tracking
     spec:
       serviceAccountName: {{ include "mlflow.v0.tracking.serviceAccountName" . }}
-      {{- include "mlflow.v0.imagePullSecrets" . | indent 6 }}
+      {{- include "mlflow.v0.imagePullSecrets" . | nindent 6 }}
       automountServiceAccountToken: {{ .Values.tracking.automountServiceAccountToken }}
       {{- if .Values.tracking.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.tracking.hostAliases "context" $) | nindent 8 }}
