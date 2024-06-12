@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.2.5 (2024-06-11)
+## 14.2.5 (2024-06-12)
 
 * [bitnami/postgresql-ha] Fix postgresql repmgr  generation ([#27095](https://github.com/bitnami/charts/pull/27095))
 
