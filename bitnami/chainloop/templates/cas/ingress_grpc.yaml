@@ -1,3 +1,8 @@
+{{- /*
+Copyright Broadcom, Inc. All Rights Reserved.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.cas.ingressAPI.enabled }}
 {{- $fullName := printf "%s-%s" (include "chainloop.cas.fullname" .) "api" -}}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}

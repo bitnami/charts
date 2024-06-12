@@ -1,5 +1,5 @@
 {{- /*
-Copyright Chainloop, Inc. All Rights Reserved.
+Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
