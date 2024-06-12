@@ -549,25 +549,25 @@ chainloop config save \
 
 ### Controlplane Misc
 
-| Name                                                         | Description                                                                | Value        |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------- | ------------ |
-| `controlplane.resources.limits.cpu`                          | Container resource limits CPU                                              | `250m`       |
-| `controlplane.resources.limits.memory`                       | Container resource limits memory                                           | `512Mi`      |
-| `controlplane.resources.requests.cpu`                        | Container resource requests CPU                                            | `250m`       |
-| `controlplane.resources.requests.memory`                     | Container resource requests memory                                         | `512Mi`      |
-| `controlplane.autoscaling.enabled`                           | Enable deployment autoscaling                                              | `false`      |
-| `controlplane.autoscaling.minReplicas`                       | Minimum number of replicas                                                 | `1`          |
-| `controlplane.autoscaling.maxReplicas`                       | Maximum number of replicas                                                 | `100`        |
-| `controlplane.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                                                      | `80`         |
-| `controlplane.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                                                          | `80`         |
-| `controlplane.sentry.enabled`                                | Enable sentry.io alerting                                                  | `false`      |
-| `controlplane.sentry.dsn`                                    | DSN endpoint (https://docs.sentry.io/product/sentry-basics/dsn-explainer/) | `""`         |
-| `controlplane.sentry.environment`                            | Environment tag                                                            | `production` |
-| `controlplane.keylessSigning.enabled`                        | Activates or deactivates de feature                                        | `false`      |
-| `controlplane.keylessSigning.backend`                        | The backend to use. Currently only "fileCA" is supported                   | `fileCA`     |
-| `controlplane.keylessSigning.fileCA.cert`                    | The PEM-encoded certificate of the file based CA                           | `""`         |
-| `controlplane.keylessSigning.fileCA.key`                     | The PEM-encoded private key of the file based CA                           | `""`         |
-| `controlplane.keylessSigning.fileCA.keyPass`                 | The secret key pass                                                        | `""`         |
+| Name                                                         | Description                                              | Value        |
+| ------------------------------------------------------------ | -------------------------------------------------------- | ------------ |
+| `controlplane.resources.limits.cpu`                          | Container resource limits CPU                            | `250m`       |
+| `controlplane.resources.limits.memory`                       | Container resource limits memory                         | `512Mi`      |
+| `controlplane.resources.requests.cpu`                        | Container resource requests CPU                          | `250m`       |
+| `controlplane.resources.requests.memory`                     | Container resource requests memory                       | `512Mi`      |
+| `controlplane.autoscaling.enabled`                           | Enable deployment autoscaling                            | `false`      |
+| `controlplane.autoscaling.minReplicas`                       | Minimum number of replicas                               | `1`          |
+| `controlplane.autoscaling.maxReplicas`                       | Maximum number of replicas                               | `100`        |
+| `controlplane.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                                    | `80`         |
+| `controlplane.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                                        | `80`         |
+| `controlplane.sentry.enabled`                                | Enable sentry.io alerting                                | `false`      |
+| `controlplane.sentry.dsn`                                    | DSN endpoint                                             | `""`         |
+| `controlplane.sentry.environment`                            | Environment tag                                          | `production` |
+| `controlplane.keylessSigning.enabled`                        | Activates or deactivates de feature                      | `false`      |
+| `controlplane.keylessSigning.backend`                        | The backend to use. Currently only "fileCA" is supported | `fileCA`     |
+| `controlplane.keylessSigning.fileCA.cert`                    | The PEM-encoded certificate of the file based CA         | `""`         |
+| `controlplane.keylessSigning.fileCA.key`                     | The PEM-encoded private key of the file based CA         | `""`         |
+| `controlplane.keylessSigning.fileCA.keyPass`                 | The secret key pass                                      | `""`         |
 
 ### Artifact Content Addressable (CAS) API
 
@@ -620,20 +620,20 @@ chainloop config save \
 
 ### CAS Misc
 
-| Name                                                | Description                                                                | Value        |
-| --------------------------------------------------- | -------------------------------------------------------------------------- | ------------ |
-| `cas.resources.limits.cpu`                          | Container resource limits CPU                                              | `250m`       |
-| `cas.resources.limits.memory`                       | Container resource limits memory                                           | `512Mi`      |
-| `cas.resources.requests.cpu`                        | Container resource requests CPU                                            | `250m`       |
-| `cas.resources.requests.memory`                     | Container resource requests memory                                         | `512Mi`      |
-| `cas.autoscaling.enabled`                           | Enable deployment autoscaling                                              | `false`      |
-| `cas.autoscaling.minReplicas`                       | Minimum number of replicas                                                 | `1`          |
-| `cas.autoscaling.maxReplicas`                       | Maximum number of replicas                                                 | `100`        |
-| `cas.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                                                      | `80`         |
-| `cas.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                                                          | `80`         |
-| `cas.sentry.enabled`                                | Enable sentry.io alerting                                                  | `false`      |
-| `cas.sentry.dsn`                                    | DSN endpoint (https://docs.sentry.io/product/sentry-basics/dsn-explainer/) | `""`         |
-| `cas.sentry.environment`                            | Environment tag                                                            | `production` |
+| Name                                                | Description                        | Value        |
+| --------------------------------------------------- | ---------------------------------- | ------------ |
+| `cas.resources.limits.cpu`                          | Container resource limits CPU      | `250m`       |
+| `cas.resources.limits.memory`                       | Container resource limits memory   | `512Mi`      |
+| `cas.resources.requests.cpu`                        | Container resource requests CPU    | `250m`       |
+| `cas.resources.requests.memory`                     | Container resource requests memory | `512Mi`      |
+| `cas.autoscaling.enabled`                           | Enable deployment autoscaling      | `false`      |
+| `cas.autoscaling.minReplicas`                       | Minimum number of replicas         | `1`          |
+| `cas.autoscaling.maxReplicas`                       | Maximum number of replicas         | `100`        |
+| `cas.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage              | `80`         |
+| `cas.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                  | `80`         |
+| `cas.sentry.enabled`                                | Enable sentry.io alerting          | `false`      |
+| `cas.sentry.dsn`                                    | DSN endpoint                       | `""`         |
+| `cas.sentry.environment`                            | Environment tag                    | `production` |
 
 ### Dependencies
 

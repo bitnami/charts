@@ -448,7 +448,7 @@ controlplane:
     targetMemoryUtilizationPercentage: 80
 
   ## @param controlplane.sentry.enabled Enable sentry.io alerting
-  ## @param controlplane.sentry.dsn DSN endpoint (https://docs.sentry.io/product/sentry-basics/dsn-explainer/)
+  ## @param controlplane.sentry.dsn DSN endpoint
   ## @param controlplane.sentry.environment Environment tag
   sentry:
     enabled: false
@@ -780,7 +780,7 @@ cas:
     targetMemoryUtilizationPercentage: 80
 
   ## @param cas.sentry.enabled Enable sentry.io alerting
-  ## @param cas.sentry.dsn DSN endpoint (https://docs.sentry.io/product/sentry-basics/dsn-explainer/)
+  ## @param cas.sentry.dsn DSN endpoint
   ## @param cas.sentry.environment Environment tag
   sentry:
     enabled: false
