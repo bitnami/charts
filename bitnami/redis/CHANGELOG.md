@@ -1,6 +1,6 @@
 # Changelog
 
-## 19.5.3 (2024-06-10)
+## 19.5.3 (2024-06-12)
 
 * [bitnami/redis] Fix sentinel PDB condition ([#27080](https://github.com/bitnami/charts/pull/27080))
 
