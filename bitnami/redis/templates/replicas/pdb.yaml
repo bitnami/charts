@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $pdb := coalesce .Values.replica.pdb .Values.pdb }}
+{{- $pdb := coalesce .Values.pdb .Values.replica.pdb }}
 {{- if and (eq .Values.architecture "replication") (not .Values.sentinel.enabled) $pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
