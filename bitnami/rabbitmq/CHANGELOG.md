@@ -2,10 +2,7 @@
 
 ## 14.4.2 (2024-06-12)
 
-* [bitnami/rabbitmq] Align  default value on 's NAME:
-   runc - Open Container Initiative runtime
-
-runc is a command line client for running applications packaged according to
+* [bitnami/rabbitmq] Align  default value on packaged according to
 the Open Container Initiative (OCI) format and is a compliant implementation of the
 Open Container Initiative specification.
 
