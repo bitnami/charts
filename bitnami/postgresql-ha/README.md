@@ -969,7 +969,7 @@ postgresql-repmgr 13:57:07.50 INFO  ==> ** Starting repmgrd **
 ...
 ```
 
-You will need to perform the following step first, and then continue with the upgrading:
+You will need to perform the following step first, and then continue with the upgrade:
 
 ```console
 $ helm upgrade mypg oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
