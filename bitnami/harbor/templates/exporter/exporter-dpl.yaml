@@ -40,7 +40,7 @@ spec:
         {{- end }}
     spec:
       {{- include "harbor.imagePullSecrets" . | nindent 6 }}
-      automountServiceAccountToken: {{ .Values.exporter.serviceAccount.automountServiceAccountToken }}
+      automountServiceAccountToken: {{ .Values.exporter.automountServiceAccountToken }}
       {{- if .Values.exporter.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.exporter.hostAliases "context" $) | nindent 8 }}
       {{- end }}

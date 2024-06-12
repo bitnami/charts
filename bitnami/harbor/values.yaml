@@ -838,6 +838,9 @@ nginx:
   ## @param nginx.lifecycleHooks LifecycleHook for the NGINX container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
+  ## @param nginx.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Nginx ServiceAccount configuration
   ##
   serviceAccount:
@@ -1298,6 +1301,9 @@ portal:
   ## @param portal.extraVolumes Optionally specify extra list of additional volumes for the Harbor Portal pods
   ##
   extraVolumes: []
+  ## @param portal.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Portal ServiceAccount configuration
   ##
   serviceAccount:
@@ -1723,6 +1729,9 @@ core:
   ## @param core.extraVolumes Optionally specify extra list of additional volumes for the Harbor Core pods
   ##
   extraVolumes: []
+  ## @param core.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Core ServiceAccount configuration
   ##
   serviceAccount:
@@ -2120,6 +2129,9 @@ jobservice:
   ## @param jobservice.extraVolumes Optionally specify extra list of additional volumes for the Harbor Jobservice pods
   ##
   extraVolumes: []
+  ## @param jobservice.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Jobservice ServiceAccount configuration
   ##
   serviceAccount:
@@ -2388,6 +2400,9 @@ registry:
   ## @param registry.extraVolumes Optionally specify extra list of additional volumes for the Harbor Registry pods
   ##
   extraVolumes: []
+  ## @param registry.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Registry ServiceAccount configuration
   ##
   serviceAccount:
@@ -3136,6 +3151,9 @@ trivy:
   ## @param trivy.extraVolumes Optionally specify extra list of additional volumes for the Trivy pods
   ##
   extraVolumes: []
+  ## @param trivy.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Trivy ServiceAccount configuration
   ##
   serviceAccount:
@@ -3482,6 +3500,9 @@ exporter:
   ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
   ##
   sidecars: []
+  ## @param exporter.automountServiceAccountToken Automount service account token
+  ##
+  automountServiceAccountToken: false
   ## Harbor Exporter ServiceAccount configuration
   ##
   serviceAccount:
