@@ -32,7 +32,7 @@ spec:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kubeappsapis
     spec:
-      {{- include "kubeapps.imagePullSecrets" . | indent 6 }}
+      {{- include "kubeapps.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ template "kubeapps.kubeappsapis.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.kubeappsapis.automountServiceAccountToken }}
       {{- if .Values.kubeappsapis.hostAliases }}
