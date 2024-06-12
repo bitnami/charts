@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.2 (2024-06-12)
+## 21.2.3 (2024-06-12)
 
-* [bitnami/elasticsearch] Release 21.2.2 ([#27119](https://github.com/bitnami/charts/pull/27119))
+* [bitnami/elasticsearch] Release 21.2.3 ([#27133](https://github.com/bitnami/charts/pull/27133))
+
+## <small>21.2.2 (2024-06-12)</small>
+
+* [bitnami/elasticsearch] Release 21.2.2 (#27119) ([23a0775](https://github.com/bitnami/charts/commit/23a0775e3825a01aebb13effdc0000ff6aafb620)), closes [#27119](https://github.com/bitnami/charts/issues/27119)
 
 ## <small>21.2.1 (2024-06-06)</small>
 
