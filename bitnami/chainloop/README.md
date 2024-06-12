@@ -561,7 +561,7 @@ chainloop config save \
 | `controlplane.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                                                    | `80`         |
 | `controlplane.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                                                        | `80`         |
 | `controlplane.sentry.enabled`                                | Enable sentry.io alerting                                                | `false`      |
-| `controlplane.sentry.dsn`                                    | [DSN endpoint](https://docs.sentry.io/product/sentry-basics/dsn-explainer) | `""`         |
+| `controlplane.sentry.dsn`                                    | DSN endpoint https://docs.sentry.io/product/sentry-basics/dsn-explainer/ | `""`         |
 | `controlplane.sentry.environment`                            | Environment tag                                                          | `production` |
 | `controlplane.keylessSigning.enabled`                        | Activates or deactivates de feature                                      | `false`      |
 | `controlplane.keylessSigning.backend`                        | The backend to use. Currently only "fileCA" is supported                 | `fileCA`     |
@@ -632,25 +632,31 @@ chainloop config save \
 | `cas.autoscaling.targetCPUUtilizationPercentage`    | Target CPU percentage                                                    | `80`         |
 | `cas.autoscaling.targetMemoryUtilizationPercentage` | Target CPU memory                                                        | `80`         |
 | `cas.sentry.enabled`                                | Enable sentry.io alerting                                                | `false`      |
-| `cas.sentry.dsn`                                    | [DSN endpoint](https://docs.sentry.io/product/sentry-basics/dsn-explainer) | `""`         |
+| `cas.sentry.dsn`                                    | DSN endpoint https://docs.sentry.io/product/sentry-basics/dsn-explainer/ | `""`         |
 | `cas.sentry.environment`                            | Environment tag                                                          | `production` |
 
 ### Dependencies
 
-| Name                                 | Description                                                                                            | Value                                                                                          |
-|--------------------------------------| ------------------------------------------------------------------------------------------------------ |------------------------------------------------------------------------------------------------|
-| `postgresql.enabled`                 | Switch to enable or disable the PostgreSQL helm chart                                                  | `true`                                                                                         |
-| `postgresql.auth.enablePostgresUser` | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user | `false`                                                                                        |
-| `postgresql.auth.username`           | Name for a custom user to create                                                                       | `chainloop`                                                                                    |
-| `postgresql.auth.password`           | Password for the custom user to create                                                                 | `chainlooppwd`                                                                                 |
-| `postgresql.auth.database`           | Name for a custom database to create                                                                   | `chainloop-cp`                                                                                 |
-| `postgresql.auth.existingSecret`     | Name of existing secret to use for PostgreSQL credentials                                              | `""`                                                                                           |
-| `vault.server.args`                  | Arguments to pass to the vault server. This is useful for setting the server in development mode       | `["server","-dev"]`                                                                            |
-| `vault.server.config`                | Configuration for the vault server. Small override of default Bitnami configuration                    | `"inmem" {}</br>disable_mlock = true</br>ui = true</br>service_registration "kubernetes" {}`   |
-| `vault.server.extraEnvVars[0].name`  | Root token for the vault server                                                                        | `VAULT_DEV_ROOT_TOKEN_ID`                                                                      |
-| `vault.server.extraEnvVars[0].value` | The value of the root token. Default: notasecret                                                       | `notasecret`                                                                                   |
-| `vault.server.extraEnvVars[1].name`  | Address to listen on development mode                                                                  | `VAULT_DEV_LISTEN_ADDRESS`                                                                     |
-| `vault.server.extraEnvVars[1].value` | The address to listen on. Default: [::]:8200                                                           | `[::]:8200`                                                                                    |
+| Name                                 | Description                                                                                            | Value                                                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| `postgresql.enabled`                 | Switch to enable or disable the PostgreSQL helm chart                                                  | `true`                                                                                      |
+| `postgresql.auth.enablePostgresUser` | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user | `false`                                                                                     |
+| `postgresql.auth.username`           | Name for a custom user to create                                                                       | `chainloop`                                                                                 |
+| `postgresql.auth.password`           | Password for the custom user to create                                                                 | `chainlooppwd`                                                                              |
+| `postgresql.auth.database`           | Name for a custom database to create                                                                   | `chainloop-cp`                                                                              |
+| `postgresql.auth.existingSecret`     | Name of existing secret to use for PostgreSQL credentials                                              | `""`                                                                                        |
+| `vault.server.args`                  | Arguments to pass to the vault server. This is useful for setting the server in development mode       | `["server","-dev"]`                                                                         |
+| `vault.server.config`                | Configuration for the vault server. Small override of default Bitnami configuration                    | `storage "inmem" {}
+
+disable_mlock = true
+ui = true
+
+service_registration "kubernetes" {}
+` |
+| `vault.server.extraEnvVars[0].name`  | Root token for the vault server                                                                        | `VAULT_DEV_ROOT_TOKEN_ID`                                                                   |
+| `vault.server.extraEnvVars[0].value` | The value of the root token. Default: notasecret                                                       | `notasecret`                                                                                |
+| `vault.server.extraEnvVars[1].name`  | Address to listen on development mode                                                                  | `VAULT_DEV_LISTEN_ADDRESS`                                                                  |
+| `vault.server.extraEnvVars[1].value` | The address to listen on. Default: [::]:8200                                                           | `[::]:8200`                                                                                 |
 
 ## License
 
