@@ -1,8 +1,12 @@
 # Changelog
 
-## 8.2.1 (2024-06-12)
+## 8.2.2 (2024-06-12)
 
-* [bitnami/milvus] Release 8.2.1 ([#26984](https://github.com/bitnami/charts/pull/26984))
+* [bitnami/milvus] Release 8.2.2 ([#27115](https://github.com/bitnami/charts/pull/27115))
+
+## <small>8.2.1 (2024-06-12)</small>
+
+* [bitnami/milvus] Release 8.2.1 (#26984) ([2619076](https://github.com/bitnami/charts/commit/26190763c1f425a920268fc19d1a026083cf083d)), closes [#26984](https://github.com/bitnami/charts/issues/26984)
 
 ## 8.2.0 (2024-06-06)
 
