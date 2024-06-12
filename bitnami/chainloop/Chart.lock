@@ -8,5 +8,8 @@ dependencies:
 - name: vault
   repository: https://charts.bitnami.com/bitnami
   version: 1.4.5
-digest: sha256:f36d00d6d657f2e9f7f1dc6df78e852471cff214b8a7a8ad9722351b978aefdf
-generated: "2024-06-10T14:18:12.118269+02:00"
+- name: dex
+  repository: https://charts.dexidp.io
+  version: 0.18.0
+digest: sha256:4209e844d04d1c15fccdc55572cbf729f5a95766a6720ea24ee7167327007dbb
+generated: "2024-06-12T14:33:53.972613+02:00"

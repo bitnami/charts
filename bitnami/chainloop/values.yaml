@@ -832,3 +832,32 @@ vault:
       - name: VAULT_DEV_LISTEN_ADDRESS
         value: "[::]:8200"
     config: "storage \"inmem\" {}\ndisable_mlock = true\nui = true\nservice_registration \"kubernetes\" {}"
+
+dex:
+  config:
+    issuer: http://chainloop-dex:5556/dex
+
+    storage:
+      type: memory
+
+    web:
+      http: 0.0.0.0:5556
+
+    staticClients:
+      - id: chainloop-dev
+        redirectURIs:
+          - "http://0.0.0.0:8000/auth/callback"
+          - "http://localhost:8000/auth/callback"
+        name: "Chainloop Dev"
+        secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+
+    # required to enable static passwords
+    enablePasswordDB: true
+
+    staticPasswords:
+      - email: "john@chainloop.local"
+        # password: "password"
+        hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+      - email: "sarah@chainloop.local"
+        # password: "password"
+        hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"

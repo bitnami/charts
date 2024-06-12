@@ -25,3 +25,7 @@ dependencies:
     name: vault
     repository: https://charts.bitnami.com/bitnami
     version: 1.4.x
+  - name: dex
+    condition: development
+    repository: https://charts.dexidp.io
+    version: 0.18.0
