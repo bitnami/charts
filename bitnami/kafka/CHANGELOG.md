@@ -1,6 +1,6 @@
 # Changelog
 
-## 29.3.0 (2024-06-11)
+## 29.3.0 (2024-06-12)
 
 * [bitnami/kafka] Custom SANs for auto-generated TLS certificates ([#27092](https://github.com/bitnami/charts/pull/27092))
 
