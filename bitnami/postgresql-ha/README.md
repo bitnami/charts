@@ -958,6 +958,25 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/postgresql-ha \
 > Note: you need to substitute the placeholders *[POSTGRES_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 
+If a message like the following appears in the logs:
+
+```log
+...
+postgresql-repmgr 13:57:07.50 INFO  ==> ** Starting repmgrd **
+[2024-06-12 13:57:07] [NOTICE] repmgrd (repmgrd 5.4.1) starting up
+[2024-06-12 13:57:07] [ERROR] an older version of the "repmgr" extension is installed
+[2024-06-12 13:57:07] [DETAIL] extension version 5.3 is installed but newer version 5.4 is available
+...
+```
+
+You will need to perform the following step first, and then continue with the upgrading:
+
+```console
+$ helm upgrade mypg oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
+  --set postgresql.replicaCount=1 \
+  --set postgresql.upgradeRepmgrExtension=true
+```
+
 ### To 14.0.0
 
 This major bump changes the following security defaults:
