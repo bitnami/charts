@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.4.2 (2024-06-07)
+## 14.4.2 (2024-06-12)
 
 * [bitnami/rabbitmq] Align  default value on 's NAME:
    runc - Open Container Initiative runtime
@@ -34,7 +34,7 @@ VERSION:
    1.1.12
 commit: v1.1.12-0-g51d5e94
 spec: 1.0.2-dev
-go: go1.21.10
+go: go1.21.11
 libseccomp: 2.5.3
 
 COMMANDS:
