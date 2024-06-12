@@ -1,8 +1,12 @@
 # Changelog
 
-## 22.4.8 (2024-06-07)
+## 22.4.9 (2024-06-12)
 
-* [bitnami/wordpress] Release 22.4.8 ([#27055](https://github.com/bitnami/charts/pull/27055))
+* [bitnami/wordpress] Release 22.4.9 ([#27110](https://github.com/bitnami/charts/pull/27110))
+
+## <small>22.4.8 (2024-06-07)</small>
+
+* [bitnami/wordpress] Release 22.4.8 (#27055) ([313aea9](https://github.com/bitnami/charts/commit/313aea9ab4add43d1dac1fe049259a18fce70018)), closes [#27055](https://github.com/bitnami/charts/issues/27055)
 
 ## <small>22.4.7 (2024-06-06)</small>
 
