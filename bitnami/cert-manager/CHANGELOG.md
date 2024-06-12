@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.3 (2024-06-07)
+## 1.3.4 (2024-06-12)
 
-* [bitnami/cert-manager] Release 1.3.3 ([#27047](https://github.com/bitnami/charts/pull/27047))
+* [bitnami/cert-manager] Release 1.3.4 ([#27117](https://github.com/bitnami/charts/pull/27117))
+
+## <small>1.3.3 (2024-06-07)</small>
+
+* [bitnami/cert-manager] Release 1.3.3 (#27047) ([9ba40ab](https://github.com/bitnami/charts/commit/9ba40abd572004e250e24d15c03b4b21a246bc17)), closes [#27047](https://github.com/bitnami/charts/issues/27047)
 
 ## <small>1.3.2 (2024-06-05)</small>
 
