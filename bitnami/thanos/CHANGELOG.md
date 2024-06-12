@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.7.6 (2024-06-11)
+## 15.7.6 (2024-06-12)
 
 *  [bitnami/thanos] Fix sharded storegateway cache configs (again) ([#27101](https://github.com/bitnami/charts/pull/27101))
 
