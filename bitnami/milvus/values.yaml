@@ -87,7 +87,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.4.4-debian-12-r1
+    tag: 2.4.4-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4601,7 +4601,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.4.0-debian-12-r0
+    tag: 2.4.1-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
