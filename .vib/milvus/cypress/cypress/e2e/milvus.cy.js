@@ -41,6 +41,7 @@ it('allows to create a collection', () => {
     cy.get('span').contains('Insert Sample Data').click({force: true});
     cy.get('button[type="submit"]').contains('Import').click({force: true});
     // Check sample data table contains at least 1 entry
+    cy.get('span').contains('Query').click({force: true});
     cy.get('td [type="checkbox"]');
   });
 });
