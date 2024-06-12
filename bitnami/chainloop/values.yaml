@@ -448,7 +448,7 @@ controlplane:
     targetMemoryUtilizationPercentage: 80
 
   ## @param controlplane.sentry.enabled Enable sentry.io alerting
-  ## @param controlplane.sentry.dsn DSN endpoint https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+  ## @param controlplane.sentry.dsn DSN endpoint (https://docs.sentry.io/product/sentry-basics/dsn-explainer/)
   ## @param controlplane.sentry.environment Environment tag
   sentry:
     enabled: false
@@ -780,7 +780,7 @@ cas:
     targetMemoryUtilizationPercentage: 80
 
   ## @param cas.sentry.enabled Enable sentry.io alerting
-  ## @param cas.sentry.dsn DSN endpoint https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+  ## @param cas.sentry.dsn DSN endpoint (https://docs.sentry.io/product/sentry-basics/dsn-explainer/)
   ## @param cas.sentry.environment Environment tag
   sentry:
     enabled: false
@@ -831,10 +831,4 @@ vault:
         value: "notasecret"
       - name: VAULT_DEV_LISTEN_ADDRESS
         value: "[::]:8200"
-    config: |
-      storage "inmem" {}
-
-      disable_mlock = true
-      ui = true
-
-      service_registration "kubernetes" {}
+    config: "storage \"inmem\" {}\ndisable_mlock = true\nui = true\nservice_registration \"kubernetes\" {}"
