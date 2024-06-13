@@ -128,9 +128,14 @@ jobs:
       - id: generate-changelog
         name: Generate changelog
         env:
+          PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
+          PULL_REQUEST_URL: "${{ github.event.pull_request.url }}"
+          GITHUB_TOKEN: "${{ github.token }}"
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
           cd $GITHUB_WORKSPACE/upstream-charts
+          # Get PR title using the API to avoid malicious string substitutions
+          pr_title="$(gh api /repos/${GITHUB_REPOSITORY}/pulls/${PULL_REQUEST_NUMBER} | jq -r '.title')"
           # The generator needs the file to exist
           chart_version="$(yq e '.version' $GITHUB_WORKSPACE/charts/bitnami/${CHART}/Chart.yaml)"
           changelog_file="$GITHUB_WORKSPACE/charts/bitnami/${CHART}/CHANGELOG.md"
@@ -152,7 +157,7 @@ jobs:
           # Include h1 heading and add entry for the current version. There is no tag for the current version (this will be created once merged), so we need to manually add it.
           # We know the final squashed commit title, which will be the PR title. We cannot add a link to the commit in the main branch because it has not been
           # merged yet (this will be corrected once a new version regenerates the changelog). Instead, we add the PR url which contains the exact same information.
-          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${{ github.event.pull_request.title }} ([#${{ github.event.number }}](${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}))\n" > ${changelog_file}
+          echo -e -n "# Changelog\n\n## $chart_version ($(date +'%Y-%m-%d'))\n\n* ${PULL_REQUEST_TITLE} ([#${PULL_REQUEST_NUMBER}](${PULL_REQUEST_URL}))\n" > ${changelog_file}
           cat ${changelog_tmp} >> ${changelog_file}
           rm ${changelog_tmp}
           if git status -s | grep "bitnami/${CHART}/CHANGELOG.md"; then
