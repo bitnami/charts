@@ -312,7 +312,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  nodetool info | grep "Native Transport active: true"
+                  nodetool info -p {{ .Values.containerPorts.api }} | grep "Native Transport active: true"
             {{- else }}
             tcpSocket:
               port: cql
