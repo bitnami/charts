@@ -46,7 +46,7 @@ spec:
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
-      {{- include "schema-registry.imagePullSecrets" . | indent 6 }}
+      {{- include "schema-registry.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "schema-registry.serviceAccountName" . }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
       {{- if .Values.hostAliases }}
