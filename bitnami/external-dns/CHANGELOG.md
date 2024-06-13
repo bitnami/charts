@@ -1,8 +1,12 @@
 # Changelog
 
-## 7.5.5 (2024-06-06)
+## 7.5.6 (2024-06-13)
 
-* [bitnami/external-dns] Release 7.5.5 ([#26948](https://github.com/bitnami/charts/pull/26948))
+* [bitnami/external-dns] add default pihole.password value ([#27158](https://github.com/bitnami/charts/pull/27158))
+
+## <small>7.5.5 (2024-06-06)</small>
+
+* [bitnami/external-dns] Release 7.5.5 (#26948) ([d8def07](https://github.com/bitnami/charts/commit/d8def07c4bdaa2f6809d919bb9a4e5e6818317e3)), closes [#26948](https://github.com/bitnami/charts/issues/26948)
 
 ## <small>7.5.4 (2024-06-05)</small>
 
