@@ -2,7 +2,7 @@
 
 ## 8.2.3 (2024-06-13)
 
-* [bitnami/milvus] Do not expose externalKafka.tls.keyPassword ([#27145](https://api.github.com/repos/bitnami/charts/pulls/27145))
+* [bitnami/milvus] Do not expose externalKafka.tls.keyPassword ([#27145](https://github.com/bitnami/charts/pull/27145))
 
 ## <small>8.2.2 (2024-06-12)</small>
 
