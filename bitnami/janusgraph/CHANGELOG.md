@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.3.8 (2024-06-10)
+## 0.3.9 (2024-06-13)
 
-* [bitnami/janusgraph] Fix storage password secretName helper function ([#27074](https://github.com/bitnami/charts/pull/27074))
+* [bitnami/janusgraph] Fix fullname resolution for cassandra subchart ([#27151](https://github.com/bitnami/charts/pull/27151))
+
+## <small>0.3.8 (2024-06-12)</small>
+
+* [bitnami/janusgraph] Fix storage password secretName helper function (#27074) ([049dc02](https://github.com/bitnami/charts/commit/049dc029ebcb909073aef82189e29aba73746fc9)), closes [#27074](https://github.com/bitnami/charts/issues/27074)
 
 ## <small>0.3.7 (2024-06-06)</small>
 
