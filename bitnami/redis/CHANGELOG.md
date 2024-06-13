@@ -1,8 +1,12 @@
 # Changelog
 
-## 19.5.2 (2024-06-06)
+## 19.5.3 (2024-06-12)
 
-* [bitnami/redis] Release 19.5.2 ([#27012](https://github.com/bitnami/charts/pull/27012))
+* [bitnami/redis] Fix sentinel PDB condition ([#27080](https://github.com/bitnami/charts/pull/27080))
+
+## <small>19.5.2 (2024-06-06)</small>
+
+* [bitnami/redis] Release 19.5.2 (#27012) ([128a592](https://github.com/bitnami/charts/commit/128a59210d13d4619c9c80aa0631897f0d981917)), closes [#27012](https://github.com/bitnami/charts/issues/27012)
 
 ## <small>19.5.1 (2024-06-04)</small>
 
