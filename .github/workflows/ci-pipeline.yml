@@ -129,7 +129,7 @@ jobs:
         name: Generate changelog
         env:
           PULL_REQUEST_NUMBER: "${{ github.event.pull_request.number }}"
-          PULL_REQUEST_URL: "${{ github.event.pull_request.url }}"
+          PULL_REQUEST_URL: "${{ github.server_url }}/${{ github.repository }}/pull/${{ github.event.number }}"
           GITHUB_TOKEN: "${{ github.token }}"
           CHART: ${{ needs.get-chart.outputs.chart }}
         run: |
