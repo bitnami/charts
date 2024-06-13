@@ -24,7 +24,7 @@ command:
     exit-status: 0
     timeout: 20000
   cluster-size:
-    exec: if [ "$(nodetool status | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ $nodes }} ]; then exit 1; fi
+    exec: if [ "$(nodetool status -p {{ .Vars.containerPorts.api }} | grep {{ .Vars.cluster.numTokens }} | wc -l)" -ne {{ $nodes }} ]; then exit 1; fi
     exit-status: 0
     timeout: 20000
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}

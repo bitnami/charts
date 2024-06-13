@@ -1,8 +1,20 @@
 # Changelog
 
-## 2.3.5 (2024-06-12)
+## 2.3.8 (2024-06-17)
 
-* [bitnami/jaeger] Release 2.3.5 ([#27118](https://github.com/bitnami/charts/pull/27118))
+* [bitnami/jaeger] Release 2.3.8 ([#27231](https://github.com/bitnami/charts/pull/27231))
+
+## <small>2.3.7 (2024-06-17)</small>
+
+* [bitnami/jaeger] Release 2.3.7 (#27192) ([d3f69e6](https://github.com/bitnami/charts/commit/d3f69e6c610f0b560bcfdaf165e43ccb45ae7be6)), closes [#27192](https://github.com/bitnami/charts/issues/27192)
+
+## <small>2.3.6 (2024-06-14)</small>
+
+* [bitnami/jaeger] Update query for check_cassandra_keyspace_schema (#27160) ([ad20b5b](https://github.com/bitnami/charts/commit/ad20b5befc669a241afee5795c2928e37af16f7d)), closes [#27160](https://github.com/bitnami/charts/issues/27160)
+
+## <small>2.3.5 (2024-06-12)</small>
+
+* [bitnami/jaeger] Release 2.3.5 (#27118) ([a6ec3ea](https://github.com/bitnami/charts/commit/a6ec3eaf341ed6bd42874bd896d072ec92d7faf6)), closes [#27118](https://github.com/bitnami/charts/issues/27118)
 
 ## <small>2.3.4 (2024-06-06)</small>
 

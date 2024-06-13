@@ -1,8 +1,16 @@
 # Changelog
 
-## 15.7.6 (2024-06-12)
+## 15.7.8 (2024-06-17)
 
-*  [bitnami/thanos] Fix sharded storegateway cache configs (again) ([#27101](https://github.com/bitnami/charts/pull/27101))
+* [bitnami/thanos] fix thanos dual-stack receive monitoring ([#27112](https://github.com/bitnami/charts/pull/27112))
+
+## <small>15.7.7 (2024-06-17)</small>
+
+* [bitnami/thanos] Release 15.7.7 (#27294) ([7e339f1](https://github.com/bitnami/charts/commit/7e339f15ac83263c386d63e2bf68cfd82fca7deb)), closes [#27294](https://github.com/bitnami/charts/issues/27294)
+
+## <small>15.7.6 (2024-06-12)</small>
+
+*  [bitnami/thanos] Fix sharded storegateway cache configs (again) (#27101) ([e6d16b4](https://github.com/bitnami/charts/commit/e6d16b4256f027adbb3610b4e66ee2c05039618f)), closes [#27101](https://github.com/bitnami/charts/issues/27101)
 
 ## <small>15.7.5 (2024-06-11)</small>
 

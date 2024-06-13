@@ -1,0 +1,8 @@
+{
+  "database": {
+    "name": "vib_psql",
+    "queryStart": "SELECT * from",
+    "queryEnd": "cars;",
+    "expectedRes": "Toyota"
+  }
+}

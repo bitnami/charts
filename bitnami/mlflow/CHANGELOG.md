@@ -1,8 +1,28 @@
 # Changelog
 
-## 1.4.5 (2024-06-12)
+## 1.4.10 (2024-06-17)
 
-* [bitnami/mlflow] Render imagePullSecrets ([#27126](https://github.com/bitnami/charts/pull/27126))
+* [bitnami/mlflow] Release 1.4.10 ([#27311](https://github.com/bitnami/charts/pull/27311))
+
+## <small>1.4.9 (2024-06-17)</small>
+
+* [bitnami/mlflow] Release 1.4.9 (#27251) ([2e581c1](https://github.com/bitnami/charts/commit/2e581c17d559f6b295d9ccd5b87785220b1a0e4b)), closes [#27251](https://github.com/bitnami/charts/issues/27251)
+
+## <small>1.4.8 (2024-06-17)</small>
+
+* [bitnami/mlflow] Increase tracking memory (#27194) ([79745a3](https://github.com/bitnami/charts/commit/79745a3cb79a2c249d4653cb9aa666dc692aa84b)), closes [#27194](https://github.com/bitnami/charts/issues/27194)
+
+## <small>1.4.7 (2024-06-14)</small>
+
+* [bitnami/mlflow] Add wait before starting the tests (#27178) ([10d0f98](https://github.com/bitnami/charts/commit/10d0f984612a0b5fe9b411bc6fec36879823a188)), closes [#27178](https://github.com/bitnami/charts/issues/27178)
+
+## <small>1.4.6 (2024-06-14)</small>
+
+* [bitnami/mlflow] Release 1.4.6 (#27176) ([7a481b5](https://github.com/bitnami/charts/commit/7a481b5a18c4f62a2fae53d67921a5d28e03dbc4)), closes [#27176](https://github.com/bitnami/charts/issues/27176)
+
+## <small>1.4.5 (2024-06-12)</small>
+
+* [bitnami/mlflow] Render imagePullSecrets (#27126) ([3c75b41](https://github.com/bitnami/charts/commit/3c75b4159defefb892eed325a3383ca2c9c76aea)), closes [#27126](https://github.com/bitnami/charts/issues/27126)
 
 ## <small>1.4.4 (2024-06-06)</small>
 

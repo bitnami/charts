@@ -1,8 +1,16 @@
 # Changelog
 
-## 29.3.1 (2024-06-13)
+## 29.3.3 (2024-06-17)
 
-* [bitnami/kafka] Fix 'sasl.client.passwords' not working during chart upgrade ([#27097](https://github.com/bitnami/charts/pull/27097))
+* [bitnami/kafka] Release 29.3.3 ([#27236](https://github.com/bitnami/charts/pull/27236))
+
+## <small>29.3.2 (2024-06-14)</small>
+
+* [bitnami/kafka] Release 29.3.2 (#27175) ([82f0e6c](https://github.com/bitnami/charts/commit/82f0e6c052c92a7e92460effe5efe3f88c3222cf)), closes [#27175](https://github.com/bitnami/charts/issues/27175)
+
+## <small>29.3.1 (2024-06-13)</small>
+
+* [bitnami/kafka] Fix 'sasl.client.passwords' not working during chart upgrade (#27097) ([5f2e38d](https://github.com/bitnami/charts/commit/5f2e38d88c5a5f94e3f578744858cc43450a77d1)), closes [#27097](https://github.com/bitnami/charts/issues/27097)
 
 ## 29.3.0 (2024-06-12)
 

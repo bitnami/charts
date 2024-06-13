@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.5 (2024-06-06)
+## 1.3.6 (2024-06-17)
 
-* [bitnami/prometheus] Release 1.3.5 ([#27009](https://github.com/bitnami/charts/pull/27009))
+* [bitnami/prometheus] Release 1.3.6 ([#27272](https://github.com/bitnami/charts/pull/27272))
+
+## <small>1.3.5 (2024-06-06)</small>
+
+* [bitnami/prometheus] Release 1.3.5 (#27009) ([0003767](https://github.com/bitnami/charts/commit/0003767ecfaf276289fbd147cd98c99602b08a09)), closes [#27009](https://github.com/bitnami/charts/issues/27009)
 
 ## <small>1.3.4 (2024-06-05)</small>
 
