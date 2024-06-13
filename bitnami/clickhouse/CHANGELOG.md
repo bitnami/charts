@@ -1,8 +1,12 @@
 # Changelog
 
-## 6.2.4 (2024-06-06)
+## 6.2.5 (2024-06-13)
 
-* [bitnami/clickhouse] Release 6.2.4 ([#26937](https://github.com/bitnami/charts/pull/26937))
+* [bitnami/clickhouse] Release 6.2.5 ([#27155](https://github.com/bitnami/charts/pull/27155))
+
+## <small>6.2.4 (2024-06-06)</small>
+
+* [bitnami/clickhouse] Release 6.2.4 (#26937) ([bb285d0](https://github.com/bitnami/charts/commit/bb285d054bc3b8aaf4db8fbee1e08745bc0f64a8)), closes [#26937](https://github.com/bitnami/charts/issues/26937)
 
 ## <small>6.2.3 (2024-06-05)</small>
 
