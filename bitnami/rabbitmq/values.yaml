@@ -218,7 +218,7 @@ logs: "-"
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
 ## ref: https://www.rabbitmq.com/install-debian.html#kernel-resource-limits
 ##
-ulimitNofiles: "65536"
+ulimitNofiles: "65535"
 ## RabbitMQ maximum available scheduler threads and online scheduler threads. By default it will create a thread per CPU detected, with the following parameters you can tune it manually.
 ## ref: https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html#scheduler-threads
 ## ref: https://github.com/bitnami/charts/issues/2189
