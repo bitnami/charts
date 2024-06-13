@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.4 (2024-06-12)
+## 5.2.4 (2024-06-13)
 
 * [bitnami/sonarqube] Fix issue with volume-permissions ([#27113](https://github.com/bitnami/charts/pull/27113))
 
