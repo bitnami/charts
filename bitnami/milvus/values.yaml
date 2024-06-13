@@ -5262,7 +5262,7 @@ externalEtcd:
     ##
     keyPassword: ""
 ## @section External S3 parameters
-## All of these values are only used when redis.enabled is set to false
+## All of these values are only used when minio.enabled is set to false
 ## @param externalS3.host External S3 host
 ## @param externalS3.port External S3 port number
 ## @param externalS3.accessKeyID External S3 access key ID
