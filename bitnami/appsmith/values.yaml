@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/appsmith
-  tag: 1.26.0-debian-12-r0
+  tag: 1.27.0-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -860,7 +860,7 @@ backend:
     image:
       registry: docker.io
       repository: bitnami/haproxy
-      tag: 3.0.0-debian-12-r0
+      tag: 3.0.1-debian-12-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
