@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: airflow
-      image: docker.io/bitnami/airflow:2.9.2-debian-12-r0
+      image: docker.io/bitnami/airflow:2.9.2-debian-12-r1
     - name: airflow-exporter
       image: docker.io/bitnami/airflow-exporter:0.20220314.0-debian-12-r35
     - name: airflow-scheduler
@@ -47,4 +47,4 @@ maintainers:
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 18.3.1
+version: 18.3.2
