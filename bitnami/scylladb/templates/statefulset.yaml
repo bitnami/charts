@@ -333,7 +333,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  nodetool info -p {{ .Values.containerPorts.jmx }} | grep "Native Transport active: true"
+                  nodetool info -p {{ .Values.containerPorts.api }} | grep "Native Transport active: true"
             {{- else }}
             tcpSocket:
               port: cql
@@ -353,9 +353,9 @@ spec:
                   - -ec
                   # After stopping the node, create a flag file so the JMX Proxy can stop
                   {{- if not .Values.persistence.enabled }}
-                  - nodetool decommission -p {{ .Values.containerPorts.jmx }} && touch /tmp/.node_decommissioned
+                  - nodetool decommission -p {{ .Values.containerPorts.api }} && touch /tmp/.node_decommissioned
                   {{- else }}
-                  - nodetool drain -p {{ .Values.containerPorts.jmx }} && touch /tmp/.node_decommissioned
+                  - nodetool drain -p {{ .Values.containerPorts.api }} && touch /tmp/.node_decommissioned
                   {{- end }}
           {{- else if .Values.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" $) | nindent 12 }}
@@ -538,7 +538,7 @@ spec:
                 - /bin/bash
                 - -ec
                 - |
-                  nodetool info -p {{ .Values.containerPorts.jmx }} | grep "Native Transport active: true"
+                  nodetool info -p {{ .Values.containerPorts.api }} | grep "Native Transport active: true"
             initialDelaySeconds: {{ .Values.jmxProxy.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.jmxProxy.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.jmxProxy.readinessProbe.timeoutSeconds }}
