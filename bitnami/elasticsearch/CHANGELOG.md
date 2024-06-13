@@ -1,8 +1,12 @@
 # Changelog
 
-## 21.2.3 (2024-06-12)
+## 21.2.4 (2024-06-13)
 
-* [bitnami/elasticsearch] Release 21.2.3 ([#27133](https://github.com/bitnami/charts/pull/27133))
+* [bitnami/elasticsearch] Fix ingress backend declaration name ([#27149](https://github.com/bitnami/charts/pull/27149))
+
+## <small>21.2.3 (2024-06-12)</small>
+
+* [bitnami/elasticsearch] Release 21.2.3 (#27133) ([9d5f6ea](https://github.com/bitnami/charts/commit/9d5f6ea656f3616f95decf058e46f6de393478f9)), closes [#27133](https://github.com/bitnami/charts/issues/27133)
 
 ## <small>21.2.2 (2024-06-12)</small>
 
