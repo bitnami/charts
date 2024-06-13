@@ -939,7 +939,7 @@ networkPolicy:
   ingressNSPodMatchLabels: {}
 
 ## @section Cassandra storage sub-chart
-## Controlled by value storage.cassandra.enabled
+## Controlled by value storageBackend.cassandra.enabled
 ##
 cassandra:
   ## @param cassandra.keyspace Name for cassandra's janusgraph keyspace
