@@ -1,8 +1,12 @@
 # Changelog
 
-## 18.2.3 (2024-06-11)
+## 18.2.4 (2024-06-13)
 
-* [bitnami/contour] Fix Envoy livenessProbe typo ([#26525](https://github.com/bitnami/charts/pull/26525))
+* [bitnami/contour] Release 18.2.4 ([#27152](https://github.com/bitnami/charts/pull/27152))
+
+## <small>18.2.3 (2024-06-11)</small>
+
+* [bitnami/contour] Fix Envoy livenessProbe typo (#26525) ([e8c1156](https://github.com/bitnami/charts/commit/e8c1156ac6490f67db026c78290917b59a8e86a3)), closes [#26525](https://github.com/bitnami/charts/issues/26525)
 
 ## <small>18.2.2 (2024-06-06)</small>
 
