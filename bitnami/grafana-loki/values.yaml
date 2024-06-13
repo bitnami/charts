@@ -592,6 +592,11 @@ compactor:
     ## @param compactor.persistence.dataSource PVC data source
     ##
     dataSource: {}
+  ## @param compactor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Compactor Traffic Exposure Parameters
   ##
 
@@ -1012,6 +1017,11 @@ gateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param gateway.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @section Gateway Traffic Exposure Parameters
   ##
 
@@ -1471,6 +1481,11 @@ indexGateway:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param indexGateway.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param indexGateway.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1883,6 +1898,11 @@ distributor:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param distributor.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param distributor.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2260,6 +2280,11 @@ ingester:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ingester.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param ingester.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2676,6 +2701,11 @@ querier:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param querier.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param querier.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3088,6 +3118,11 @@ queryFrontend:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param queryFrontend.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryFrontend.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3470,6 +3505,11 @@ queryScheduler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param queryScheduler.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryScheduler.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3850,6 +3890,11 @@ ruler:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param ruler.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param ruler.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -4265,6 +4310,11 @@ tableManager:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param tableManager.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param tableManager.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -4671,6 +4721,11 @@ promtail:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param promtail.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param promtail.configuration [string] Promtail configuration
   ##
   configuration: |

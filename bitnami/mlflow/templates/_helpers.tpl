@@ -28,7 +28,7 @@ Return the proper image name (for the init container wait-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mlflow.v0.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.waitContainer.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.renderPullSecrets" (dict "images" (list .Values.image .Values.waitContainer.image .Values.volumePermissions.image) "context" $) -}}
 {{- end -}}
 
 {{/*

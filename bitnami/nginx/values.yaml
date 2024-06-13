@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.27.0-debian-12-r0
+  tag: 1.27.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -185,6 +185,28 @@ hostNetwork: false
 ## @param hostIPC Specify if host IPC should be enabled for NGINX pod
 ##
 hostIPC: false
+## DNS-Pod services
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+## @param dnsPolicy Specifies the DNS policy for the NGINX pod
+## DNS policies can be set on a per-Pod basis. Currently Kubernetes supports the following Pod-specific DNS policies.
+## Available options: Default, ClusterFirst, ClusterFirstWithHostNet, None
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ""
+## @param dnsConfig  Allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## Ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## E.g.
+## dnsConfig:
+##   nameservers:
+##     - 192.0.2.1 # this is an example
+##   searches:
+##     - ns1.svc.cluster-domain.example
+##     - my.dns.search.suffix
+##   options:
+##     - name: ndots
+##       value: "2"
+##     - name: edns0
+dnsConfig: {}
 ## @param nodeSelector Node labels for pod assignment. Evaluated as a template.
 ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##

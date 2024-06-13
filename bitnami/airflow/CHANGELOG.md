@@ -1,8 +1,16 @@
 # Changelog
 
+## 18.3.2 (2024-06-13)
+
+* [bitnami/airflow] Release 18.3.2 ([#27137](https://github.com/bitnami/charts/pull/27137))
+
+## <small>18.3.1 (2024-06-10)</small>
+
+* [bitnami/airflow] Release 18.3.1 (#27075) ([af59d63](https://github.com/bitnami/charts/commit/af59d63f6d6708dbebe4420e6bf1e78049a5e5ba)), closes [#27075](https://github.com/bitnami/charts/issues/27075)
+
 ## 18.3.0 (2024-06-06)
 
-* [bitnami/airflow] Enable PodDisruptionBudgets ([#26684](https://github.com/bitnami/charts/pull/26684))
+* [bitnami/airflow] Enable PodDisruptionBudgets (#26684) ([1534ce6](https://github.com/bitnami/charts/commit/1534ce69aa2b96d6c4e0d2b374a8ad77669e954c)), closes [#26684](https://github.com/bitnami/charts/issues/26684)
 
 ## <small>18.2.5 (2024-06-06)</small>
 

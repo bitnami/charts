@@ -1,8 +1,12 @@
 # Changelog
 
-## 4.5.6 (2024-06-06)
+## 4.6.0 (2024-06-10)
 
-* [bitnami/grafana-loki] Release 4.5.6 ([#26955](https://github.com/bitnami/charts/pull/26955))
+* [bitnami/grafana-loki] Allow disabling enableServiceLinks ([#25858](https://github.com/bitnami/charts/pull/25858))
+
+## <small>4.5.6 (2024-06-06)</small>
+
+* [bitnami/grafana-loki] Release 4.5.6 (#26955) ([b7a386f](https://github.com/bitnami/charts/commit/b7a386fcca74bce289524843f0e6bc019d01bcae)), closes [#26955](https://github.com/bitnami/charts/issues/26955)
 
 ## <small>4.5.5 (2024-06-06)</small>
 

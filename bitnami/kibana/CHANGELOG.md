@@ -1,8 +1,16 @@
 # Changelog
 
-## 11.2.4 (2024-06-06)
+## 11.2.6 (2024-06-12)
 
-* [bitnami/kibana] Fix cypress test to skip welcome page ([#26929](https://github.com/bitnami/charts/pull/26929))
+* [bitnami/kibana] Release 11.2.6 ([#27134](https://github.com/bitnami/charts/pull/27134))
+
+## <small>11.2.5 (2024-06-12)</small>
+
+* [bitnami/kibana] Release 11.2.5 (#27111) ([133c50b](https://github.com/bitnami/charts/commit/133c50bc2231cbdb8d727c82f147454288421746)), closes [#27111](https://github.com/bitnami/charts/issues/27111)
+
+## <small>11.2.4 (2024-06-06)</small>
+
+* [bitnami/kibana] Fix cypress test to skip welcome page (#26929) ([b204a6a](https://github.com/bitnami/charts/commit/b204a6a8421bc378ac7586a0555075cfd0330a00)), closes [#26929](https://github.com/bitnami/charts/issues/26929)
 
 ## <small>11.2.3 (2024-06-06)</small>
 

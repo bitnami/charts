@@ -1,8 +1,24 @@
 # Changelog
 
-## 15.7.2 (2024-06-06)
+## 15.7.6 (2024-06-12)
 
-* [bitnami/thanos] Release 15.7.2 ([#27020](https://github.com/bitnami/charts/pull/27020))
+*  [bitnami/thanos] Fix sharded storegateway cache configs (again) ([#27101](https://github.com/bitnami/charts/pull/27101))
+
+## <small>15.7.5 (2024-06-11)</small>
+
+* [bitnami/thanos] only deploy networkPolicy when component is enabled (#27070) ([1bd3b34](https://github.com/bitnami/charts/commit/1bd3b342399ed142ef26f060f63d058e393435c2)), closes [#27070](https://github.com/bitnami/charts/issues/27070)
+
+## <small>15.7.4 (2024-06-11)</small>
+
+* [bitnami/thanos] Fix sharded storegateway cache configs (#26490) ([54afe30](https://github.com/bitnami/charts/commit/54afe30e41e8f5ec81b8bd0c7e523a9d218bded3)), closes [#26490](https://github.com/bitnami/charts/issues/26490)
+
+## <small>15.7.3 (2024-06-10)</small>
+
+* [bitnami/thanos] add service monitor labels (#26880) ([162d466](https://github.com/bitnami/charts/commit/162d466ef79df488b418ec184952e04615ed8ec6)), closes [#26880](https://github.com/bitnami/charts/issues/26880)
+
+## <small>15.7.2 (2024-06-06)</small>
+
+* [bitnami/thanos] Release 15.7.2 (#27020) ([63e189e](https://github.com/bitnami/charts/commit/63e189e67eca6e03ddeac7957c11f008f2676f91)), closes [#27020](https://github.com/bitnami/charts/issues/27020)
 
 ## <small>15.7.1 (2024-06-05)</small>
 

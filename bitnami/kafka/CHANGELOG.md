@@ -1,8 +1,8 @@
 # Changelog
 
-## 29.2.5 (2024-06-11)
+## 29.3.0 (2024-06-12)
 
-* [bitnami/kafka] Fix 'sasl.client.passwords' not working during chart upgrade ([#27097](https://github.com/bitnami/charts/pull/27097))
+* [bitnami/kafka] Custom SANs for auto-generated TLS certificates ([#27092](https://github.com/bitnami/charts/pull/27092))
 
 ## <small>29.2.4 (2024-06-06)</small>
 

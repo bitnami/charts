@@ -1,8 +1,16 @@
 # Changelog
 
-## 2.0.1 (2024-06-06)
+## 2.0.3 (2024-06-11)
 
-* [bitnami/haproxy] Release 2.0.1 ([#26960](https://github.com/bitnami/charts/pull/26960))
+* [bitnami/haproxy] Release 2.0.3 ([#27098](https://github.com/bitnami/charts/pull/27098))
+
+## <small>2.0.2 (2024-06-10)</small>
+
+* [bitnami/haproxy] Release 2.0.2 (#27077) ([7da93c0](https://github.com/bitnami/charts/commit/7da93c0379f6b820a38ef54194f7dfa7fe5408b0)), closes [#27077](https://github.com/bitnami/charts/issues/27077)
+
+## <small>2.0.1 (2024-06-06)</small>
+
+* [bitnami/haproxy] Release 2.0.1 (#26960) ([135f6eb](https://github.com/bitnami/charts/commit/135f6ebac2e2b61a49bbcd4aead0461e5dfbfbe0)), closes [#26960](https://github.com/bitnami/charts/issues/26960)
 
 ## 2.0.0 (2024-06-05)
 
