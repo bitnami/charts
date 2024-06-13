@@ -88,7 +88,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.16.3-debian-12-r1
+    tag: 1.17.0-debian-12-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
