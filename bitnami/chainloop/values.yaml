@@ -833,6 +833,20 @@ vault:
         value: "[::]:8200"
     config: "storage \"inmem\" {}\ndisable_mlock = true\nui = true\nservice_registration \"kubernetes\" {}"
 
+# Dex server running in development mode --set development=true
+# IMPORTANT: This is not meant to run in production
+## @param dex.config.issuer The issuer URL of the Identity provider (IDp)
+## @param dex.config.storage.type Storage type for the dex server
+## @param dex.config.web.http HTTP address for the dex server
+## @param dex.config.staticClients[0].id Client ID for the static client
+## @param dex.config.staticClients[0].redirectURIs Redirect URIs for the static client
+## @param dex.config.staticClients[0].name Name for the static client
+## @param dex.config.staticClients[0].secret Secret for the static client
+## @param dex.config.enablePasswordDB Enable static passwords
+## @param dex.config.staticPasswords[0].email Email for the static password
+## @param dex.config.staticPasswords[0].hash Hash for the static password
+## @param dex.config.staticPasswords[1].email Email for the static password
+## @param dex.config.staticPasswords[1].hash Hash for the static password
 dex:
   config:
     issuer: http://chainloop-dex:5556/dex
