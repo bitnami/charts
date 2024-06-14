@@ -7,9 +7,10 @@ supervisor:
     secret:
       secretName: pinniped-supervisor-default-tls-certificate
   service:
-    type: LoadBalancer
-    ports:
-      https: 443
+    public:
+      type: LoadBalancer
+      ports:
+        https: 443
 concierge:
   enabled: true
   rbac:
