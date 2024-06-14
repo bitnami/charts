@@ -37,7 +37,7 @@
               "path": "/.vib"
             },
             "wait": {
-              "file": "ejbca/goss/goss-wait.yaml"
+              "file": "mlflow/goss/goss-wait.yaml"
             },
             "tests_file": "mlflow/goss/goss.yaml",
             "vars_file": "mlflow/runtime-parameters.yaml",
