@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.0.1 (2024-06-14)
+
+* [bitnami/scylladb] Release 1.0.1 ([#27167](https://github.com/bitnami/charts/pull/27167))
+
 ## 1.0.0 (2024-06-13)
 
-* [bitnami/scylladb] Release 1.0.0 ([#27090](https://github.com/bitnami/charts/pull/27090))
+* [bitnami/scylladb] Release 1.0.0 (#27090) ([e576962](https://github.com/bitnami/charts/commit/e5769627c16a06e3a87e4d4d68dee8519f1bdfcd)), closes [#27090](https://github.com/bitnami/charts/issues/27090)
 
 ## <small>0.1.9 (2024-06-10)</small>
 
