@@ -8,7 +8,7 @@ supervisor:
       secretName: pinniped-supervisor-default-tls-certificate
   service:
     public:
-      type: ClusterIP
+      type: LoadBalancer
       ports:
         https: 443
 concierge:
