@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.6.8 (2024-06-11)
+## 14.6.8 (2024-06-14)
 
 * [bitnami/minio] Release 14.6.8 ([#27089](https://github.com/bitnami/charts/pull/27089))
 
