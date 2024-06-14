@@ -1,6 +1,6 @@
 # Changelog
 
-## 8.2.3 (2024-06-13)
+## 8.2.3 (2024-06-14)
 
 * [bitnami/milvus] Fix milvus externalS3 config, address minor typos ([#27140](https://github.com/bitnami/charts/pull/27140))
 
